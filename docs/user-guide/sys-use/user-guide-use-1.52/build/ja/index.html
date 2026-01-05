@@ -1,0 +1,453 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>利用手引書 －利用およびジョブ実行編－ 1.52版 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=89e52957" />
+    
+    <script src="_static/documentation_options.js?v=c033477b"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=4dbe4bdc"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="1. はじめに" href="Introduction/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Introduction/index.html" title="1. はじめに"
+             accesskey="N">次へ</a></li>
+        <li class="nav-item nav-item-0"><a href="#">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">利用手引書 －利用およびジョブ実行編－ 1.52版</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="version">
+<h1>利用手引書 －利用およびジョブ実行編－ 1.52版<a class="headerlink" href="#version" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">目次:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Introduction/index.html">1. はじめに</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#id2">1.1. 本資料の目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#id3">1.2. 本書で使用する表記</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#id4">1.3. 略称、別名について</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#id5">1.4. 商標について</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#id6">1.5. 更新履歴</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MethodOfUse/index.html">2. 利用方法</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MethodOfUse/index.html#id2">2.1. 概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MethodOfUse/index.html#id3">2.2. マニュアル</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="UsageRules/index.html">3. 利用規則</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UsageRules/index.html#id2">3.1. 概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UsageRules/index.html#id3">3.2. 利用規模／利用環境</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#id4">3.2.1. 利用可能なジョブ規模</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="UsageRules/index.html#id5">3.3. ローカルアカウント管理</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#id6">3.3.1. ログイン</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#id7">3.3.2. クライアント証明書による認証</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#id8">3.3.3. プロジェクト責任者の責任範囲</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#id9">3.3.4. 更新処理</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="UsageRules/index.html#resource">3.4. リソース</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#id11">3.4.1. 計算ノード</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#id13">3.4.2. ジョブ投入数の確認</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#howtospecifyresourcegroups">3.4.3. リソースグループの使用方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#id15">3.4.4. リソースグループの利用状況</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#diskpoints">3.4.5. ディスク</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#id19">3.4.6. ファイル作成とストライプ設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#filesystempoints">3.4.7. ファイルシステム</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#group">3.4.8. グループ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#id26">3.4.9. 並列ジョブの種類</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#id27">3.4.10. ログインノード</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#i-o">3.4.11. I/Oノード</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#estimatingtheamountofmemory">3.4.12. ユーザープログラムが利用可能なメモリ量の見積り</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#id31">3.4.13. 計算資源の利用の定義</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="AccessToTheSystem/index.html">4. システム利用</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="AccessToTheSystem/Overview.html">4.1. 概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AccessToTheSystem/InstallingClientCertificate.html">4.2. クライアント証明書のインストール</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/InstallingClientCertificate.html#firefox-windows">4.2.1. Firefoxへの証明書のインストール（Windows）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/InstallingClientCertificate.html#firefox-mac">4.2.2. Firefoxへの証明書のインストール（Mac）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/InstallingClientCertificate.html#chrome-windows">4.2.3. Chromeへの証明書のインストール（Windows）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/InstallingClientCertificate.html#chrome-mac">4.2.4. Chromeへの証明書のインストール（Mac）</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="AccessToTheSystem/AccessingTheUsersPortal.html">4.3. 富岳ウェブサイトへの接続手順</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html">4.4. ログイン</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html#generatingprivatekeyandpublickey">4.4.1. 鍵ペア（秘密鍵／公開鍵）の作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html#registeringapublickey">4.4.2. 公開鍵登録</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html#id8">4.4.3. アクセス方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html#id12">4.4.4. ファイル転送方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html#id14">4.4.5. ログインシェル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html#id15">4.4.6. 「富岳」運用情報のメール配信</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="AccessToTheSystem/CheckingTheNodeUseStatus.html">4.5. ノード使用状況確認</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AccessToTheSystem/TheEnvironmentModulesPackage.html">4.6. モジュールパッケージ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/TheEnvironmentModulesPackage.html#module">4.6.1. moduleコマンド</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/TheEnvironmentModulesPackage.html#id2">4.6.2. コマンドの使用例</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/TheEnvironmentModulesPackage.html#id4">4.6.3. 言語環境の切換方法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="JobExecution/index.html">5. ジョブ実行</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/Overview.html">5.1. 概要</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/Overview.html#id2">5.1.1. ジョブとは</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/Overview.html#id3">5.1.2. ジョブの種類</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/Overview.html#id4">5.1.3. ジョブスクリプトの作成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/Overview.html#id5">5.1.4. ジョブスクリプトの雛形作成コマンド</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/Overview.html#joballocationoperation">5.1.5. ジョブ振り分け運用</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/NormalJob.html">5.2. 通常ジョブ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NormalJob.html#id2">5.2.1. ジョブの投入</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NormalJob.html#id3">5.2.2. ジョブ実行結果の参照</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NormalJob.html#jobexecutionstatisticalinformation">5.2.3. 統計情報</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/StepJob.html">5.3. ステップジョブ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/StepJob.html#id2">5.3.1. ジョブ投入</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/StepJob.html#id3">5.3.2. ステップジョブオプション</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/StepJob.html#id">5.3.3. サブジョブID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/StepJob.html#id4">5.3.4. ジョブ実行結果の参照</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/StepJob.html#id5">5.3.5. 依存関係のあるジョブ投入例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/BulkJob.html">5.4. バルクジョブ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/BulkJob.html#id2">5.4.1. ジョブの投入</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/BulkJob.html#id3">5.4.2. バルクジョブスクリプト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/BulkJob.html#id">5.4.3. サブジョブID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/BulkJob.html#id4">5.4.4. ジョブ実行結果の参照</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/InteractiveJob.html">5.5. 会話型ジョブ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/InteractiveJob.html#id2">5.5.1. ジョブの投入</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/InteractiveJob.html#id3">5.5.2. コマンド形式</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/InteractiveJob.html#id4">5.5.3. コマンドのオプションブロック</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/InteractiveJob.html#id5">5.5.4. スクリプトファイルブロック</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/WorkflowJob.html">5.6. ワークフロージョブ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/WorkflowJob.html#id2">5.6.1. ジョブの投入</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/MasterWorkerJob.html">5.7. マスタ・ワーカ型ジョブ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/MasterWorkerJob.html#id2">5.7.1. ジョブの投入</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/MasterWorkerJob.html#mswkdynamicprocessgeneration">5.7.2. ワーカプロセスの動的生成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/MasterWorkerJob.html#agent">5.7.3. Agentプロセスによるワーカプロセス生成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/MasterWorkerJob.html#pjaexe">5.7.4. pjaexeコマンドによるワーカプロセス生成</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/MasterWorkerJob.html#id4">5.7.5. ジョブ作成における注意事項</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/MasterWorkerJob.html#id5">5.7.6. システム異常時の影響</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/EnvironmentSettings.html">5.8. 環境設定</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/EnvironmentSettings.html#sort-libp">5.8.1. 動的ライブラリの検索負荷を削減するツール（sort_libp）</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html">5.9. ジョブ実行コマンドのオプション</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html#id2">5.9.1. 基本オプション</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html#jobexecutionresourcespecifications">5.9.2. リソース指定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html#mpi">5.9.3. MPIオプション</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html#id8">5.9.4. ジョブ統計情報</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html#id9">5.9.5. ジョブスクリプト内環境変数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html#id10">5.9.6. MPIプロセスに設定される環境変数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html#id11">5.9.7. 実行開始時刻の指定</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/AllocationOfLargePageArea.html">5.10. ラージページ領域割当て</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/AllocationOfLargePageArea.html#id4">5.10.1. 概要</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/AllocationOfLargePageArea.html#largepageenvironmentvariable">5.10.2. ラージページライブラリ設定用環境変数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/AllocationOfLargePageArea.html#linklargepagelibrary">5.10.3. ラージページライブラリのリンク</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/AllocationOfLargePageArea.html#id8">5.10.4. メモリ断片化の影響緩和</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/CPUcoreMemoryBinding.html">5.11. CPUコアとメモリのバインド</a></li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/DisplayingJobStatus.html">5.12. ジョブ状態の表示</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DisplayingJobStatus.html#id2">5.12.1. 通常ジョブ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DisplayingJobStatus.html#id9">5.12.2. ステップジョブ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DisplayingJobStatus.html#id10">5.12.3. バルクジョブ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DisplayingJobStatus.html#id11">5.12.4. 計算リソース</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DisplayingJobStatus.html#id13">5.12.5. ジョブ統計情報</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DisplayingJobStatus.html#id17">5.12.6. ジョブ状態表示コマンドのオプション</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/DeletingAJobJobOperations.html">5.13. ジョブの削除</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DeletingAJobJobOperations.html#id2">5.13.1. 通常ジョブ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DeletingAJobJobOperations.html#id3">5.13.2. ステップジョブ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DeletingAJobJobOperations.html#id4">5.13.3. バルクジョブ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DeletingAJobJobOperations.html#id5">5.13.4. ジョブ削除コマンドのオプション</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/NotesOnJobOperationCommands.html">5.14. ジョブ操作の留意事項</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NotesOnJobOperationCommands.html#pjdel">5.14.1. ジョブの削除 (pjdel)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NotesOnJobOperationCommands.html#pjhold">5.14.2. ジョブの固定 (pjhold)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NotesOnJobOperationCommands.html#pjrls">5.14.3. ジョブの固定解除 (pjrls)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NotesOnJobOperationCommands.html#pjwait">5.14.4. ジョブの待ち合わせ (pjwait)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NotesOnJobOperationCommands.html#pjsig">5.14.5. ジョブに対するシグナル送信 (pjsig)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NotesOnJobOperationCommands.html#pjalter">5.14.6. ジョブのパラメーター変更 (pjalter)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/HowToUseCustomResource.html">5.15. カスタム資源の利用</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/HowToUseCustomResource.html#id2">5.15.1. 機能概要</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/HowToUseCustomResource.html#id3">5.15.2. 確認方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/HowToUseCustomResource.html#id4">5.15.3. 割り当て方法</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/CheckingAbnormalEndOfJob.html">5.16. ジョブ異常終了時の確認</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/CheckingAbnormalEndOfJob.html#id2">5.16.1. ジョブマネージャの終了コード</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/CheckingAbnormalEndOfJob.html#id3">5.16.2. ジョブ実行時に出力されるメッセージ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/CheckingAbnormalEndOfJob.html#pjm-0079-error-reason">5.16.3. PJM 0079 ERROR REASON一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/CheckingAbnormalEndOfJob.html#cpu">5.16.4. CPUクロック変更（パワーキャッピング）</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/SampleScripts.html">5.17. サンプルスクリプト</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/SampleScripts.html#id2">5.17.1. 通常ジョブ（逐次プログラム）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/SampleScripts.html#mpi-2">5.17.2. 通常ジョブ（MPI／2次元形状）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/SampleScripts.html#mpi-3">5.17.3. 通常ジョブ（MPI／3次元形状）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/SampleScripts.html#id3">5.17.4. 通常ジョブ（スレッド並列（自動並列））</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/SampleScripts.html#openmp">5.17.5. 通常ジョブ（スレッド並列（OpenMP））</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/SampleScripts.html#mpi-1">5.17.6. 通常ジョブ（フラットMPI／1次元形状）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/SampleScripts.html#id4">5.17.7. 通常ジョブ（ハイブリッド並列）</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/TofuStatistics.html">5.18. TofuD TNR 統計情報の取得</a></li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/ShowAffectedJobs.html">5.19. 障害の影響を受けたジョブ一覧表示コマンド</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/ShowAffectedJobs.html#job-events">5.19.1. job_events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/ShowAffectedJobs.html#show-evict-node">5.19.2. show_evict_node</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/JobExecConsiderpoints.html">5.20. 留意事項</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/JobExecConsiderpoints.html#pjrsh">5.20.1. pjrshコマンドの使用方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/JobExecConsiderpoints.html#trial">5.20.2. スタートアップ課題 (trial) におけるジョブ実行</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MPI/index.html">6. MPIジョブ実行</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MPI/Overview.html">6.1. 概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/FormatOfMpiexecCommand.html">6.2. 実行コマンドの形式</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/HowToExecuteABackgroundJob.html">6.3. バックグラウンドジョブの実行方法</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/HowToExecuteABackgroundJob.html#id2">6.3.1. バックグラウンド実行</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/HowToExecuteABackgroundJob.html#id3">6.3.2. ジョブ作成例</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/HowToExecuteABackgroundJob.html#id4">6.3.3. バックグラウンド実行時の留意事項</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/InputOutputRedirection.html">6.4. 標準出力／標準エラー出力／標準入力</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/InputOutputRedirection.html#stdspecmethod">6.4.1. 標準出力／標準エラー出力／標準入力の指定方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/InputOutputRedirection.html#id3">6.4.2. オプション指定による出力表</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/InputOutputRedirection.html#stdoutstderroutforlargejobs">6.4.3. 大規模ジョブ実行時の標準出力／標準エラー出力の指定について</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/SpecificationsForMPIJob.html">6.5. MPIジョブ投入時の指定</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/SpecificationsForMPIJob.html#id1">6.5.1. 静的プロセスの形状指定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/SpecificationsForMPIJob.html#id2">6.5.2. 静的プロセスの最大数指定</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/RankAssignment.html">6.6. ランク割り当て</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-bynode">6.6.1. rank-map-bynode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-bynode-1">6.6.2. rank-map-bynode（1次元）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-bynode-2">6.6.3. rank-map-bynode（2次元）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-bynode-3">6.6.4. rank-map-bynode（3次元）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#id2">6.6.5. rank-map-bynode（ノード内複数プロセス指定（1次元））</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-bychip">6.6.6. rank-map-bychip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-hostfile">6.6.7. rank-map-hostfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-hostfile-1">6.6.8. rank-map-hostfile（1次元）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-hostfile-2">6.6.9. rank-map-hostfile（2次元）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-hostfile-3">6.6.10. rank-map-hostfile（3次元）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#id3">6.6.11. rank-map-hostfile（ノード内複数ランク指定）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-hostfile-rank-map-bychip">6.6.12. rank-map-hostfile／rank-map-bychip（ノード内複数ランク指定）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#id4">6.6.13. ホストマップファイル利用時の注意事項</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/JobShape%28torus%29.html">6.7. ジョブ形状（トーラス）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/pjsubOptions%28MPI-related%29.html">6.8. ジョブ投入コマンドのオプション（MPI）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/DynamicProcessCreation%28MPI_Comm_spawn%29.html">6.9. 動的プロセス生成（MPI_COMM_SPAWN）</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/DynamicProcessCreation%28MPI_Comm_spawn%29.html#id1">6.9.1. ジョブ実行方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/DynamicProcessCreation%28MPI_Comm_spawn%29.html#java">6.9.2. Javaプログラムからの実行</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/DynamicProcessCreation%28MPI_Comm_spawn%29.html#id2">6.9.3. 注意事項</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/RankInquiryFunctions.html">6.10. ランク問い合わせ関数</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankInquiryFunctions.html#mpi-comm-world">6.10.1. MPI_COMM_WORLD に指定した論理次元数と論理形状問い合わせ機能</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankInquiryFunctions.html#mpi">6.10.2. ランク番号によるMPIプログラムの論理座標問い合わせ機能</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankInquiryFunctions.html#id3">6.10.3. 論理座標によるMPIプログラムのランク番号問い合わせ機能</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankInquiryFunctions.html#id4">6.10.4. 関数使用例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/MPIStatisticalInformation.html">6.11. MPI統計情報</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/MPIStatisticalInformation.html#id1">6.11.1. 全体モード</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/MPIStatisticalInformation.html#id2">6.11.2. 区間モード</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/CollectiveCommunicationAlgorithm.html">6.12. MPIの集団通信アルゴリズム（knomial, rabenseifner）</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/CollectiveCommunicationAlgorithm.html#id1">6.12.1. アルゴリズムの指定方法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="PowerControlFunction/index.html">7. 電力制御機能</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="PowerControlFunction/index.html#id2">7.1. 概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PowerControlFunction/index.html#powermodepowerknob">7.2. パワーモード指定（ジョブ実行時のパワーノブ操作）</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#powermodefunction">7.2.1. 機能概要</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#powermodeusage">7.2.2. 使用例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PowerControlFunction/index.html#power-api">7.3. Power API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#id7">7.3.1. 機能概要</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#id8">7.3.2. Power APIプログラムの作成方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#id15">7.3.3. プログラム内からのPower APIの利用方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#id21">7.3.4. 電力計測点</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#id22">7.3.5. 電力制御点</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#id23">7.3.6. 留意事項</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LayeredStorageAndLLIO/index.html">8. 階層化ストレージ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/OverView.html">8.1. 概要</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/OverView.html#id2">8.1.1. IO時間の短縮と領域の選択</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/OverView.html#simultaneousaccesstollio">8.1.2. 全プロセスから共通ファイルへの一斉アクセス</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/WriteForFilesystem.html">8.2. FEFS/LLIOへのファイル操作について</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/WriteForFilesystem.html#writeoneproc">8.2.1. １ファイルに対して１プロセスから書込む場合</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/WriteForFilesystem.html#id2">8.2.2. １ファイルに対して複数プロセスから書込む場合</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/WriteForFilesystem.html#renameexec">8.2.3. ファイル名変更</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/WriteForFilesystem.html#unlinkexec">8.2.4. ファイル削除</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/TheSecondLayerStrage.html">8.3. 第2階層ストレージのキャッシュ領域</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TheSecondLayerStrage.html#volumeofstrage">8.3.1. 第2階層ストレージのキャッシュの容量</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TheSecondLayerStrage.html#fefswritetiming">8.3.2. 第2階層ストレージへの書出しタイミング</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TheSecondLayerStrage.html#id4">8.3.3. ストライプ機能</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TheSecondLayerStrage.html#asynccloseandsyncclose">8.3.4. 非同期クローズ/同期クローズ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TheSecondLayerStrage.html#llio-transfer">8.3.5. 共通ファイル配布機能 (llio_transfer)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TheSecondLayerStrage.html#pjsub-llio">8.3.6. ジョブ投入時（pjsub --llio）のオプション</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/TemporaryAreaInNode.html">8.4. ノード内テンポラリ領域</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TemporaryAreaInNode.html#id2">8.4.1. ノード内テンポラリ領域の容量</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TemporaryAreaInNode.html#id3">8.4.2. 利用方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TemporaryAreaInNode.html#pjsub-llio">8.4.3. ジョブ投入時（pjsub --llio）のオプション</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TemporaryAreaInNode.html#id4">8.4.4. 計算ノード内のキャッシュに関連するオプション</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TemporaryAreaInNode.html#id5">8.4.5. ノード内テンポラリ領域の活用例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/SharedTemporaryArea.html">8.5. 共有テンポラリ領域</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/SharedTemporaryArea.html#stripesettingforsharedtemporaryarea">8.5.1. 共有テンポラリ領域に対するストライプ設定</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/SharedTemporaryArea.html#id3">8.5.2. 共有テンポラリ領域の容量</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/SharedTemporaryArea.html#id4">8.5.3. 利用方法</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/SharedTemporaryArea.html#pjsub-llio">8.5.4. ジョブ投入時（pjsub --llio）のオプション</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/LLIOconsiderpoints.html">8.6. 留意事項</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/LLIOconsiderpoints.html#id2">8.6.1. 高並列ジョブ(1000並列以上)の注意点</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/LLIOconsiderpoints.html#mpi-io">8.6.2. MPI-IO</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/IOprofiling.html">8.7. I/Oのプロファイリング</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/IOprofiling.html#llio">8.7.1. LLIO性能情報</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/IOprofiling.html#darshan">8.7.2. Darshan</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/IOoptimization.html">8.8. I/Oの最適化</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/IOoptimization.html#llio">8.8.1. LLIO性能情報を用いたボトルネックの分析</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/IOoptimization.html#darshani-o">8.8.2. Darshanを用いたI/Oの分析</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/SelectAvailableVolumes.html">8.9. 利用ファイルシステム(volume)の選択</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/SelectAvailableVolumes.html#pjsub">8.9.1. 環境変数およびpjsubオプション</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/SelectAvailableVolumes.html#volumespecificationjobs">8.9.2. ジョブ投入方法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MigrationFromOtherSystems/index.html">9. 他システムからの移行</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MigrationFromOtherSystems/index.html#id2">9.1. 概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MigrationFromOtherSystems/index.html#id3">9.2. 「京」からの移行</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MigrationFromOtherSystems/index.html#id4">9.3. 富士通製他システムからの移行</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MigrationFromOtherSystems/index.html#id5">9.3.1. オプション差異</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MigrationFromOtherSystems/index.html#ocl">9.3.2. 最適化指示子（OCL）差異</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MigrationFromOtherSystems/index.html#id6">9.4. 他社システムからの移行</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MigrationFromOtherSystems/index.html#id7">9.5. エンディアン</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MigrationFromOtherSystems/index.html#id8">9.5.1. 概要</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MigrationFromOtherSystems/index.html#id9">9.5.2. 対象コンパイラ</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="Introduction/index.html"
+                          title="次の章へ"><span class="section-number">1. </span>はじめに</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Introduction/index.html" title="1. はじめに"
+             >次へ</a></li>
+        <li class="nav-item nav-item-0"><a href="#">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">利用手引書 －利用およびジョブ実行編－ 1.52版</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>
