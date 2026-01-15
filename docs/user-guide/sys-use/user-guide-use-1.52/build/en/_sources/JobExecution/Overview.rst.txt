@@ -1,0 +1,395 @@
+.. highlight:: none
+
+Overview
+========
+
+This is to explain job overview.
+
+
+About the jobs
+--------------
+
+In a system with job operation software installed, the user does not directly execute the program, but requests execution to the job operation management function of the job operation software. The job operation management function secures necessary computer resources for the requested program and executes the program.
+
+| The unit for processing this program is a job.
+| A job consists of programs, data, and job scripts.
+
+.. list-table:: 
+   :widths: 1 4
+   :header-rows: 1
+
+   * - Components
+     - Description
+
+   * - Job script
+     - A shell script that describes how to run the program.
+       
+       The job operation software executes jobs based on this job script.
+
+   * - Program
+     - An executable program prepared by the user.
+
+   * - Data
+     - Program input and output.
+       
+       For example, a data file that stores input parameters to a program, an output file that stores processing results, and a program display result.
+
+.. figure:: ./img/WhatAreJobs_01.png
+
+Job execution is a way of following: 
+
+1. Prepare the files necessary for job execution by the user and place them on the login node.
+2. The user requests the job operation management function to execute the job (submit the job). For the job, submit by specifying job script to \ :program:`pjsub`\  command.
+3. The job operation management function allocates computer resources to jobs and executes job scripts.
+4. The program is executed according to the contents of the job script and the execution result is output.
+5. The user checks the job execution result on the login node.
+
+ .. seealso::
+  If an email notification is specified when a job is submitted, the user can be notified of the end of the job script by email.
+
+Types of job
+------------
+
+Jobs are classified into several categories depending on the type of computer resources and programs required.
+Job management software classifies jobs as follows:
+
+.. list-table:: 
+   :widths: 4 6
+   :header-rows: 1
+
+   * - Categories
+     - Type of job
+
+   * - Category based on job construction (job model)
+     - Normal job
+
+   * - 
+     - Bulk job
+
+   * - 
+     - Step job
+
+   * - 
+     - Workflow job
+
+   * - Classification by job execution type (job type)
+     - Batch job
+
+   * - 
+     - Interactive type job
+
+   * - Classification by degree of parallelism
+     - Sequential job
+
+   * - 
+     - Parallel jobs
+
+   * - Classification by required computer resources (node resources)
+     - Single node job
+
+   * - 
+     - Multinode job
+
+   * - Classification by node resource allocation method
+     - Node allocated job (Node-exclusive job)
+
+   * - 
+     - Virtual node allocated job (Node-exclusive job, Node-Sharing job)
+
+
+Create job script
+------------------
+
+The actual job script is a shell script.
+Indicates the job script describing example in below.
+
+For details on creating job scripts, refer to the manual "Job Operation Software End-user's Guide"-"2.1 How to Create a Job".
+
+Specify a project :ref:`group ID <group>`.
+
+Specify the :ref:`usage file system <SelectAvailableVolumes>`.
+
+For the job script file name, the characters available in the job name must be used. Refer to :ref:`Attention <JobScriptattention>`.
+
+- Basic job script example
+
+ .. code-block:: bash
+
+   #!/bin/bash
+   #PJM -L "node=1"               # Number of node
+   #PJM -L "rscgrp=small"         # Specify resource group
+   #PJM -L "elapse=60:00"         # Job run time limit value
+   #PJM -g groupname              # group name
+   #PJM -x PJM_LLIO_GFSCACHE=/vol000N # volume names that job uses
+   #PJM -S                        # Direction of statistic information file output
+   
+   export OMP_NUM_THREADS=12      # Environment variable setting
+   
+   # execute job
+   ./a.out                        # Execute a program
+
+
+- The example of executing MPI job
+
+ For MPI jobs, also specify the number of processes. One node consists of four CMGs (Core Memory Groups). For this reason, we recommend running with 4 processes per node. The following specifies 4 for the number of nodes and 4 for the number of processes per node.
+
+ .. code-block:: bash
+
+   #!/bin/bash
+   #PJM -L "node=4"                  # 4 nodes
+   #PJM -L "rscgrp=small"            # Specify resource group
+   #PJM -L "elapse=00:10:00"         # Job run time limit value
+   #PJM --mpi "max-proc-per-node=4"  # Upper limit of number of MPI process created at 1 node
+   #PJM -g groupname                 # group name
+   #PJM -x PJM_LLIO_GFSCACHE=/vol000N # volume names that job uses
+   #PJM -s
+
+   export PLE_MPI_STD_EMPTYFILE=off # Do not create a file if there is no output to stdout/stderr.
+   export OMP_NUM_THREADS=12
+
+   # execute job
+   mpiexec ./a.out                # Execute with maximum number of available process (16 at this example)
+
+See also :ref:`stdoutstderroutforlargejobs`.
+
+ .. note::
+  
+   When executing MPI job and specifying the number of using process, specify ``-n`` option as following.
+
+   mpiexec -n 16 ./a.out
+
+Some resources specified in ``-L`` in :program:`pjsub` command or job script have default values.
+:ref:`DefaultOfJobResource` is shown below.
+
+   .. _DefaultOfJobResource:
+
+   .. list-table:: Main resource default value
+      :header-rows: 1
+      :widths: 30, 70
+      
+      * - Resource name
+        - Default value
+
+      * - rscgrp
+        - | small (Batch job)
+          | int (Interactive Job)
+
+      * - node
+        - Different for each resource group
+
+      * - elapse
+        - | 1 minute (Batch job)
+          | 10 second (Interactive Job)
+
+.. note::
+
+   The lower limit of elapse is set to the same as the default value.
+   Therefore, do not specify a value smaller than the default value for elapse.
+
+   When specifying a value smaller than the default value for elapse, an error occurs when the :program:`pjsub` command  is executed.
+
+The default value for node is that when executing :program:`pjacl` command in the following format, the information defined for the executed account is displayed.::
+
+   Format: pjacl --rg <Resource group name>
+
+The examples of using :program:`pjacl` command is shown below. The default value of node can be checked from the default column of ``(node =)``.
+
+.. code-block:: console
+   :emphasize-lines: 18
+
+   [_LNlogin]$ pjacl --rg small
+   #
+   # JOBACL information
+   #
+
+   (omitted)
+
+   pjsub option parameters
+       (-L/--rsc-list)                         lower            upper            default
+           (elapse=)                           00:01:00         72:00:00         00:01:00
+           (adaptive elapsed time min)         00:01:00         72:00:00         00:01:00
+           (adaptive elapsed time max)         00:01:01         144:00:00        144:00:00
+           (node elapse)                       1                unlimited        -
+           (adaptive node elapse min)          1                unlimited        -
+           (adaptive node elapse max)          2                unlimited        -
+           (total cores elapse)                1                unlimited        -
+           (total cores)                       1                unlimited        -
+           (node=)                             1                384              1
+           (node-mem=)                         1                unlimited        unlimited
+           (vnode=)                            1                2147483647       1
+           (vnode-core=)                       1                2147483647       1
+           (vnode-mem=)                        1                unlimited        unlimited
+           (proc-core=)                        -                unlimited        0
+           (proc-cpu=)                         -                unlimited        unlimited
+           (proc-crproc=)                      -                4096             4096
+           (proc-data=)                        -                unlimited        unlimited
+           (proc-lockm=)                       -                unlimited        unlimited
+           (proc-msgq=)                        -                unlimited        unlimited
+           (proc-openfd=)                      -                unlimited        1024
+           (proc-psig=)                        -                unlimited        unlimited
+           (proc-filesz=)                      -                unlimited        unlimited
+           (proc-stack=)                       -                unlimited        unlimited
+           (proc-vmem=)                        -                unlimited        unlimited
+           (estimated-power=)                  0                unlimited        0
+           (exepjrsh=)                         0                1                0
+           (nnum_cret=)                        0                unlimited        0
+           (test_rsc01=)                       0                unlimited        0
+
+   (omitted)
+
+.. code-block:: console
+   :emphasize-lines: 18
+
+   [_LNlogin]$ pjacl --rg large
+   #
+   # JOBACL information
+   #
+
+   (omitted)
+   
+   pjsub option parameters
+       (-L/--rsc-list)                         lower            upper            default
+           (elapse=)                           00:01:00         24:00:00         00:01:00
+           (adaptive elapsed time min)         00:01:00         24:00:00         00:01:00
+           (adaptive elapsed time max)         00:01:01         96:00:00         96:00:00
+           (node elapse)                       1                unlimited        -
+           (adaptive node elapse min)          1                unlimited        -
+           (adaptive node elapse max)          2                unlimited        -
+           (total cores elapse)                1                unlimited        -
+           (total cores)                       1                unlimited        -
+           (node=)                             385              12288            385
+           (node-mem=)                         1                unlimited        unlimited
+           (vnode=)                            1                2147483647       1
+           (vnode-core=)                       1                2147483647       1
+           (vnode-mem=)                        1                unlimited        unlimited
+           (proc-core=)                        -                unlimited        0
+           (proc-cpu=)                         -                unlimited        unlimited
+           (proc-crproc=)                      -                4096             4096
+           (proc-data=)                        -                unlimited        unlimited
+           (proc-lockm=)                       -                unlimited        unlimited
+           (proc-msgq=)                        -                unlimited        unlimited
+           (proc-openfd=)                      -                unlimited        1024
+           (proc-psig=)                        -                unlimited        unlimited
+           (proc-filesz=)                      -                unlimited        unlimited
+           (proc-stack=)                       -                unlimited        unlimited
+           (proc-vmem=)                        -                unlimited        unlimited
+           (estimated-power=)                  0                unlimited        0
+           (exepjrsh=)                         0                1                0
+           (nnum_cret=)                        0                unlimited        0
+           (test_rsc01=)                       0                unlimited        0
+
+   (omitted)
+
+.. code-block:: console
+   :emphasize-lines: 17
+
+   [_LNlogin]$ pjacl --rg int
+   #
+   # JOBACL information
+   #
+
+   (omitted)
+   
+       (--interact -L)                         lower            upper            default
+           (elapse=)                           00:00:10         06:00:00         00:00:10
+           (adaptive elapsed time min)         00:00:10         06:00:00         00:00:10
+           (adaptive elapsed time max)         00:00:11         78:00:00         78:00:00
+           (node elapse)                       1                unlimited        -
+           (adaptive node elapse min)          1                unlimited        -
+           (adaptive node elapse max)          2                unlimited        -
+           (total cores elapse)                1                unlimited        -
+           (total cores)                       1                unlimited        -
+           (node=)                             1                12               1
+           (node-mem=)                         1                unlimited        unlimited
+           (vnode=)                            1                2147483647       1
+           (vnode-core=)                       1                2147483647       1
+           (vnode-mem=)                        1                unlimited        unlimited
+           (proc-core=)                        -                unlimited        0
+           (proc-cpu=)                         -                unlimited        unlimited
+           (proc-crproc=)                      -                4096             4096
+           (proc-data=)                        -                unlimited        unlimited
+           (proc-lockm=)                       -                unlimited        unlimited
+           (proc-msgq=)                        -                unlimited        unlimited
+           (proc-openfd=)                      -                unlimited        1024
+           (proc-psig=)                        -                unlimited        unlimited
+           (proc-filesz=)                      -                unlimited        unlimited
+           (proc-stack=)                       -                unlimited        unlimited
+           (proc-vmem=)                        -                unlimited        unlimited
+           (estimated-power=)                  0                unlimited        0
+           (exepjrsh=)                         0                1                0
+           (nnum_cret=)                        0                unlimited        0
+           (test_rsc01=)                       0                unlimited        0
+
+   (omitted)
+
+.. _JobScriptattention:
+
+|
+
+.. attention::
+
+  - The job script file name must use characters available in the job name. The following characters are available.
+   
+    - Any single byte alphanumeric characters, single byte hyphen(-), single byte underscore(_) and single byte dot(.) can be used.
+    - Other characters are not supported.
+
+  - The shell that executes job script is user's login shell unless a shell is specified with "#!" on the first line of the job script.
+  - To start with "#PJM" in the job script, it id possible to describe :program:`pjsub` command argument when submitting a job. According to the specification in a job script, :program:`pjsub` command argument specification is prior.
+  - Once the others than comment line appears, later "#PJM " is simply ignored as a comment line.
+  - Job script needs the reading authority to the user who submits a job. Execution authority is not needed.
+  - In job script, do not redirect to :file:`/dev/stdout` or `/dev/stderr`. If redirected, the standard output file or standard error output file is overwritten from the top.
+
+The command for creating template of job script
+-------------------------------------------------
+
+| A command (make_jobscript) to create a template for a job script has been released.
+| When using the command, use the ``--gname`` option to specify the name of the group on which to run the job.
+
+Usage:
+
+.. code-block:: console
+
+   [_LNlogin]$ make_jobscript [OPTION ...] --gname groupname
+
+.. list-table:: 
+   :widths: 4 8
+   :header-rows: 1
+
+   * - Option
+     - Function
+
+   * - \--distribute-common-file path_to_file1,path_to_file2,...
+     - Specify the common files to be read from all compute nodes.
+
+   * - \--use-directory path_to_directory1,path_to_directory2,...
+     - Specify the directories used in the job.
+
+   * - \--use-spack
+     - Specify if you want to use spack.
+  
+   * - \--gname groupname 
+     - Specify the group name to use in the job.
+
+Descriptions related to options not specified are also output as comments.
+The URL of the reference document is also output, so please refer to it for details.
+
+
+.. _JobAllocationOperation:
+
+Job allocation operation
+------------------------------------
+Fugaku uses job allocation to reduce congestion caused by job submission concentrated in a specific resource group.
+
+In job allocation operation, the system periodically moves submitted jobs to another resource group.
+The job to be moved has a condition, and the system changes the resource group of the submitted job whose condition matches the target resource group.
+There are no parameter changes other than changes to the execution resource group.
+
+For details of the resource groups for which job allocation operation is being performed and the conditions to be allocated
+See `Resource Groups <https://www.fugaku.r-ccs.riken.jp/en/resource_group_config>`_ remarks and the various parameters in the table.
+
+.. attention::
+
+  - The execution resource group changes when job distribution is applied.
+    Therefore, if you limit the available computing resources per resource group on a per-user basis, you will not be able to control them correctly.
+
+

@@ -1,0 +1,105 @@
+Introduction
+============
+
+The purpose of this document.
+-----------------------------
+
+This document describes about the basic use direction of \ |post-k|\.
+
+
+Notation used in this document
+------------------------------
+
+- In command execution, the user terminal and login node to be operated are represented by a prompt.
+  
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3,7
+
+   * - Prompt
+     - Control target
+
+   * - [terminal]
+     - Means to execute the command at the user device
+
+   * - [_LNlogin]
+     - Means to execute the command at the login node (Common)
+
+   * - [_LNIlogin]
+     - Means to execute the command at the login node (Intel)
+
+   * - [_LNAlogin]
+     - Means to execute the command at the login node (Arm)
+     
+   * - [_CNlogin]
+     - Means to execute the command at the computing node
+     
+
+- Home directory indicates with ~ (tilde). 
+- The language environment is described based on the latest version of functions unless otherwise specified.
+
+Abbreviations and aliases
+-------------------------
+
+The used abbreviations in this document is as following.
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 5 5
+
+   * - Name
+     - Abbreviations and aliases
+
+   * - Next-generation ultra-high-speed computer system
+     - \ |post-k|\ 
+
+   * - Computing node
+     - CN 
+
+   * - BIO and computing node
+     - CN/BIO
+
+   * - SIO and computing node
+     - CN/SIO
+
+   * - GIO and computing node
+     - CN/GIO
+
+   * - Login node and file transfer node
+     - Login node or LN
+
+   * - Storage connected to BIO and computing node
+     - System disk
+
+   * - Storage connected to SIO and computing node
+     - First-layer storage
+       
+       First tier SSD or SSD
+
+
+About trademarks
+----------------
+
+Company names and product names in the text may be trademarks or registered trademarks of the respective companies. Other trademarks and registered trademarks are generally trademarks or registered trademarks of their respective companies. Please note that trademark names (TM, (R)) are not always added to system names, product names, etc., described in this document.
+
+
+
+Change log
+--------------
+
+This indicates the update history of this document.
+
+**Version 1.02 Decenbar 26, 2024**
+
+- Modify the sample code in "2.3.1. About Node Temporary Area".
+- Modify the sample code in "2.3.2. About Shared Temporary Area".
+- Modify the sample code in "2.3.3. About Cache Area of Second-Layer Storage".
+
+**Version 1.01 November 29, 2024**
+
+- The description format has been changed.
+
+**Version 1.00 July 12, 2024**
+
+- Create New
+

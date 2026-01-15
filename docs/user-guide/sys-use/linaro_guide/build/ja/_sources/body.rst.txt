@@ -1,0 +1,178 @@
+
+概要
+====
+
+Linaro ForgeはC/C++, Fortran, Pythonで書かれた並列プログラムのデバッグおよび性能解析をGUIで行えるツールです。
+ここでは\ |post-k|\ で、Linaro Forgeを利用したプログラムの実行方法を示します。
+
+Linaro Forgeに関する詳細な情報は、https://www.linaroforge.com/ 等を参考にしてください。
+
+
+クライアントのインストール
+==========================
+
+2024年5月現在、\ |post-k|\ にはLinaro Forge バージョン23.1.2がインストールされています。
+インストール先は以下の通りです。
+
+.. code-block:: bash
+
+  /vol0004/apps/opt/linaro/forge/23.1.2
+
+Linaro Forgeを利用するには各ユーザがクライアントアプリケーションをインストールする必要があります。
+Linaro ForgeクライアントのインストールはWindows, Mac, Linuxそれぞれで行うことができます。
+ご利用のOSに合わせてクライアント用ファイルをダウンロードし、インストールしてください。
+
+.. list-table::
+  :header-rows: 1
+  :widths: 2 10
+
+  * - OS
+    - クライアント用ファイル
+  * - Windows
+    - linaro-forge-client-23.1.2-windows-x86_64.exe
+  * - Mac
+    - linaro-forge-client-23.1.2-macos-x86_64.dmg
+  * - Linux
+    - linaro-forge-23.1.2-linux-x86_64.tar
+
+      linaro-forge-23.1.2-linux-aarch64.tar
+
+      linaro-forge-23.1.2-linux-ppc64le.tar
+
+.. attention::
+ 
+  Linaro Forgeを利用するには、インストールされているバージョンを揃える必要があります。
+  
+クライアント設定
+================
+
+以降の設定、実行についてはOSによる差異があまりないため、Linux版を用いてまとめて解説します。
+
+クライアントの起動に成功すると、下図のような画面が表示されます。
+「Remote Launch」のプルタブから「Configure」を選択し、「Add」で新しい接続設定を追加します。
+
+.. figure:: images/linaro01.png
+   :width: 800px
+
+「Remote Launch」の設定項目では、「Host Name」「Remote Installation Directory」「Private Key」の入力が必須です。
+
+.. figure:: images/linaro02.png
+   :width: 800px
+
+各入力項目は以下のように設定してください。
+
+.. list-table::
+  :header-rows: 1
+  :widths: 4 15
+
+  * - 設定項目
+    - 入力内容
+  * - Host Name
+    - {ユーザID}@fugaku.r-ccs.riken.jp
+  * - Remote Installation Directory
+    - /vol0004/apps/opt/linaro/forge/23.1.2/x86_64  (クライアントがx86_64版の場合）
+
+      /vol0004/apps/opt/linaro/forge/23.1.2/aarch64  (クライアントがaarch64版の場合）
+  * - Private Key
+    - |post-k| のログインノードに接続する際に使用するSSH暗号鍵ファイルのパス
+
+設定が完了したら、「Test Remote Launch」ボタンで接続テストを行うことができます。
+正常に接続テストが成功した場合、下図のように表示されます。
+
+.. figure:: images/linaro03.png
+   :width: 800px
+
+接続設定を作成し、「Remote Launch」で作成した設定を選択すると、 |post-k| へ接続します。
+接続に成功した場合、起動画面の左下にあるライセンス番号が「18054」と表示され、下図のように詳細なライセンス情報を取得できるようになります。
+
+.. figure:: images/linaro04.png
+   :width: 600px
+
+一度接続設定を作成すれば、再度起動した時には作成済みの設定を選択するだけで接続できるようになります。
+
+実行方法
+========
+
+ここではLinaro Forgeを利用したテストプログラムによる\ |post-k|\ での実行方法を示します。
+
+前項のクライアント設定で |post-k| に接続しておき、Linaro ForgeのReverse Connect機能を用いてジョブからクライアントへ接続します。
+ジョブは以下のような形で記述します。例ではLinaro DDTを起動します。
+
+[Linaro DDT]
+
+.. code-block:: bash
+
+  #! /bin/bash -x
+  #PJM -g {groupname}
+  #PJM -L node=1
+  #PJM -L elapse=00:15:00
+  #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+  #PJM --mpi max-proc-per-node=48
+  #PJM --sparam wait-time=60
+  #PJM -j
+  #PJM -s
+  #
+  export OMP_NUM_THREADS=1
+
+  # LinaroForge
+  . /vol0004/apps/opt/linaro/setup-env.sh
+
+  # run
+  ddt --connect --mpi="Generic" --np 48 ./test_c.exe
+
+
+ジョブが実行されると、下図のようにクライアント画面に応答を要求するメッセージが表示されます。
+
+.. figure:: images/linaro05.png
+   :width: 600px
+
+応答を許可すると、実行アプリケーションの情報を取得でき、Runボタンを押すことで実行を開始します。
+
+.. figure:: images/linaro06.png
+   :width: 600px
+
+アプリケーションが実行されると、Linaro Forgeの画面が下図のようになります。
+以降はGUIデバッガとしてアプリケーションのデバッグを行うことができます。
+
+.. figure:: images/linaro07.png
+   :width: 800px
+
+[Linaro MAP]
+
+Linaro DDTと同様に、Linaro MAPを使用することも可能です。
+その場合、ddtではなくmapを指定します。
+
+.. code-block:: bash
+
+  #! /bin/bash -x
+  #PJM -g {groupname}
+  #PJM -L node=1
+  #PJM -L elapse=00:15:00
+  #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+  #PJM --mpi max-proc-per-node=48
+  #PJM --sparam wait-time=60
+  #PJM -j
+  #PJM -s
+  #
+  export OMP_NUM_THREADS=1
+
+  # LinaroForge
+  . /vol0004/apps/opt/linaro/setup-env.sh
+
+  # run
+  map --connect --mpi="Generic" --np 48 ./test_c.exe
+
+
+アプリケーションが実行されると、Linaro Forgeの画面が下図のようになります。
+以降はGUI性能解析ツールとしてアプリケーションの分析を行うことができます。
+一度MAPが正常に実行されるとmapファイルが生成されるので、それを再度読み込むことでジョブを実行せずに分析をし直すこともできます。
+
+.. figure:: images/linaro08.png
+   :width: 800px
+
+.. attention::
+
+  |post-k| で使用可能なLinaro Forgeの最大プロセス数は512となっています。
+  これはLinaro Forgeを使用する全ユーザで共有する数値です。
+  1人が512プロセスを利用するプログラムを実行した場合、その他のユーザはライセンスが解放されるまで待機することになります。
+  現在は1人あたりのプロセス利用数に制限は設けませんが、節度ある利用をお願いいたします。

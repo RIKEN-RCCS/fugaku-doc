@@ -1,0 +1,147 @@
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>プログラミングガイド －IO編－ 1.02版 &#8212; プログラミングガイド IO編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="1. はじめに" href="Introduction/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Introduction/index.html" title="1. はじめに"
+             accesskey="N">次へ</a></li>
+        <li class="nav-item nav-item-0"><a href="#">プログラミングガイド IO編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">プログラミングガイド －IO編－ 1.02版</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="io-version">
+<h1>プログラミングガイド －IO編－ 1.02版<a class="headerlink" href="#io-version" title="この見出しへのパーマリンク">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">目次:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Introduction/index.html">1. はじめに</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#id2">1.1. 本資料の目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#id3">1.2. 本書で使用する表記</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#id4">1.3. 略称、別名について</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#id5">1.4. 商標について</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#id6">1.5. 更新履歴</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="StorageOverview/index.html">2. ストレージの概要</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="StorageOverview/index.html#id2">2.1. ジョブ投入の流れ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="StorageOverview/index.html#id3">2.2. 「富岳」のストレージの構成概要</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="StorageOverview/index.html#id4">2.2.1. 「富岳」で利用可能なファイルシステム</a></li>
+<li class="toctree-l3"><a class="reference internal" href="StorageOverview/index.html#id5">2.2.2. 階層化ストレージとは</a></li>
+<li class="toctree-l3"><a class="reference internal" href="StorageOverview/index.html#id7">2.2.3. 階層化ストレージの使用判断フロー</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="StorageOverview/index.html#id8">2.3. 第1階層ストレージ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="StorageOverview/index.html#nodetemporaryarea">2.3.1. ノード内テンポラリ領域とは</a></li>
+<li class="toctree-l3"><a class="reference internal" href="StorageOverview/index.html#sharedtemporaryarea">2.3.2. 共有テンポラリ領域とは</a></li>
+<li class="toctree-l3"><a class="reference internal" href="StorageOverview/index.html#cacheofsecondlayerstoragearea">2.3.3. 第2階層ストレージキャッシュ領域とは</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="StorageOverview/index.html#id12">2.4. 第2階層ストレージ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CapacitySetting/index.html">3. 容量設定</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CapacitySetting/index.html#firstlayercapacitysetting">3.1. 第1階層ストレージの容量設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CapacitySetting/index.html#id4">3.2. 容量設定例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CapacitySetting/index.html#llio">3.3. LLIOストライプ機能</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SettingsForUsingTheCache/index.html">4. キャッシュを活かした設定</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SettingsForUsingTheCache/index.html#id2">4.1. キャッシュ設定でできること</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SettingsForUsingTheCache/index.html#secondlayerstoragecache">4.2. 第2階層ストレージキャッシュ領域</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SettingsForUsingTheCache/index.html#cacheincomputenode">4.3. 計算ノード内キャッシュ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SettingsForUsingTheCache/index.html#cn-cache-size">4.3.1. cn-cache-size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SettingsForUsingTheCache/index.html#cn-cached-write-size">4.3.2. cn-cached-write-size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SettingsForUsingTheCache/index.html#cn-read-cache">4.3.3. cn-read-cache</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="SettingsForUsingTheCache/index.html#readahead">4.4. 自動先読み機能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SettingsForUsingTheCache/index.html#asyncclose">4.5. 非同期クローズ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SettingsForUsingTheCache/index.html#id7">4.6. 未書出し情報ファイル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SettingsForUsingTheCache/index.html#id9">4.7. LLIO性能情報</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ExlusionControl/index.html">5. 排他制御</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ExlusionControl/index.html#id2">5.1. ディレクトリを用いた排他制御</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ExlusionControl/index.html#id3">5.2. ファイルのロックを用いた排他制御</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="Introduction/index.html"
+                          title="次の章へ"><span class="section-number">1. </span>はじめに</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Introduction/index.html" title="1. はじめに"
+             >次へ</a></li>
+        <li class="nav-item nav-item-0"><a href="#">プログラミングガイド IO編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">プログラミングガイド －IO編－ 1.02版</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

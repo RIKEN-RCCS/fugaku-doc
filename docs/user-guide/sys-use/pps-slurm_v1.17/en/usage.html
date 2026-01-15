@@ -1,0 +1,742 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>3. Login &#8212; Pre/Post Environment Users Guide  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="7. SLURM Commands" href="slurm.html" />
+    <link rel="prev" title="2. System Configuration" href="system.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="slurm.html" title="7. SLURM Commands"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="system.html" title="2. System Configuration"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Pre/Post Environment Users Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>Login</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="login">
+<h1><span class="section-number">3. </span>Login<a class="headerlink" href="#login" title="Permalink to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">The pre/post environment cannot be directly accessed via the Internet. Access to the servers is allowed only via the Fugaku login nodes. Therefore, users need to log in to one of the login nodes as a first step.</div>
+</div>
+<div class="line-block">
+<div class="line">If you have never seen the “<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/">Supercomputer Fugaku Users Guide - Use and job execution -</a>”, we recommend you to see the document before getting started in the following section.</div>
+</div>
+</section>
+<section id="file-transfer">
+<h1><span class="section-number">4. </span>File Transfer<a class="headerlink" href="#file-transfer" title="Permalink to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">The home directory (/home) in the pre/post environment is the same as the one in the Fugaku main system. Therefore, the users can transfer files via the login nodes with the <code class="docutils literal notranslate"><span class="pre">scp</span></code> command. Besides, the storage capacity and the maximum number of files are limited in the same way as in the Fugaku main system.</div>
+</div>
+<div class="line-block">
+<div class="line">Also, see the “<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/">Supercomputer Fugaku Users Guide - Use and job execution -</a>” and “<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/high_speed_io_guide/">Fugaku High Speed Transfer Users Guide</a>” if you need more detailed information about file transfer.</div>
+</div>
+</section>
+<section id="compile">
+<h1><span class="section-number">5. </span>Compile<a class="headerlink" href="#compile" title="Permalink to this heading">¶</a></h1>
+<section id="gcc">
+<h2><span class="section-number">5.1. </span>GCC<a class="headerlink" href="#gcc" title="Permalink to this heading">¶</a></h2>
+<p>The following are examples of using GCC.</p>
+<ul class="simple">
+<li><p>Large Memory Nodes</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p mem1 -n <span class="m">1</span> --mem 22G --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+<span class="gp">[MEM]$ </span>gcc -o a.out sample.c
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPU Nodes</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">1</span> --mem <span class="m">2574</span> --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+<span class="gp">[GPU]$ </span>gcc -o a.out sample.c
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A program compiled on the login nodes by GCC can be executed on the pre/post environemnt.</p>
+</div>
+</section>
+<section id="intel-compiler">
+<h2><span class="section-number">5.2. </span>Intel Compiler<a class="headerlink" href="#intel-compiler" title="Permalink to this heading">¶</a></h2>
+<section id="pre-post-pocessing-nodes">
+<h3><span class="section-number">5.2.1. </span>Pre/Post-Pocessing Nodes<a class="headerlink" href="#pre-post-pocessing-nodes" title="Permalink to this heading">¶</a></h3>
+<p>When using the Intel compiler on the pre/post environment, enter a compute node in the pre/post environment with interactive job mode and set the environment variables.</p>
+<p>The following are examples of using the Intel compiler.</p>
+<ul class="simple">
+<li><p>Large memory nodes</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p mem1 -n <span class="m">1</span> --mem 22G --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+<span class="gp">[MEM]$ </span>. /opt/intel/oneapi/setvars.sh intel64
+<span class="gp">[MEM]$ </span>icc -o a.out sample.c
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPU nodes</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">1</span> --mem <span class="m">2574</span> --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+<span class="gp">[GPU]$ </span>. /opt/intel/oneapi/setvars.sh intel64
+<span class="gp">[GPU]$ </span>icc -o a.out sample.c
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A program compiled on the login nodes by the Intel compiler can be executed on the pre/post environment.</p>
+</div>
+<div class="line-block">
+<div class="line">See the following URL if you need more detailed information about the Intel compiler.</div>
+<div class="line">“<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/lang_latest/CompileforLN/index.html">Supercomputer Fugaku Users Guide - Language and development environment -</a>”</div>
+</div>
+</section>
+</section>
+<section id="nvidia-cuda-compiler">
+<h2><span class="section-number">5.3. </span>NVIDIA CUDA Compiler<a class="headerlink" href="#nvidia-cuda-compiler" title="Permalink to this heading">¶</a></h2>
+<p>Log in to a GPU node with interactive job and set the environment variables.</p>
+<p>The following are examples of using the CUDA compiler.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">1</span> --mem <span class="m">2574</span> --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+<span class="gp">[GPU]$ </span><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/usr/local/cuda/bin<span class="si">${</span><span class="nv">PATH</span><span class="p">:+:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}}</span>
+<span class="gp">[GPU]$ </span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/usr/local/cuda/lib64<span class="si">${</span><span class="nv">LD_LIBRARY_PATH</span><span class="p">:+:</span><span class="si">${</span><span class="nv">LD_LIBRARY_PATH</span><span class="si">}}</span>
+<span class="gp">[GPU]$ </span>nvcc -o a.out sample.cu
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>The NVIDIA CUDA compiler is only available in the GPU nodes.</p>
+<p>To run the compiled a.out, you need to allocate GPU resources by SLURM options. (For details, please see the sections on <a class="reference internal" href="#batchjob"><span class="std std-ref">Batch Job</span></a> and subsequent topics.)</p>
+</div>
+<div class="line-block">
+<div class="line">See the following URL if you need more detailed information about NVIDIA CUDA Compiler.</div>
+<div class="line"><a class="reference external" href="https://developer.nvidia.com/cuda-toolkit-archive">https://developer.nvidia.com/cuda-toolkit-archive</a></div>
+</div>
+</section>
+<section id="fujitsu-compiler-cross-compiler">
+<h2><span class="section-number">5.4. </span>Fujitsu Compiler (cross compiler)<a class="headerlink" href="#fujitsu-compiler-cross-compiler" title="Permalink to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">The Fujitsu compiler (cross compiler) is available in the pre/post environment. We recommend the users to use the pre/post environment if compiling programs on the login nodes is failed due to lack of memory.</div>
+<div class="line">A program compiled by the Fujitsu compiler cannot be executed on the pre/post environemnt.</div>
+</div>
+<div class="line-block">
+<div class="line">See the manual <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/lang_latest/CompileforCN/FujitsuCompiler/index.html">Supercomputer Fugaku Users Guide - Language and development environment -</a> if you need more detailed information about the Fujitsu compiler.</div>
+</div>
+<p>The following are examples of using the Fujitsu compiler.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">1</span> --mem <span class="m">2574</span> --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+<span class="gp">[GPU]$ </span>frtpx -o a.out sample.f90
+</pre></div>
+</div>
+</section>
+</section>
+<section id="job-submission">
+<h1><span class="section-number">6. </span>Job Submission<a class="headerlink" href="#job-submission" title="Permalink to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">There are two ways to execute jobs: batch-job and interactive-job submissions.</div>
+</div>
+<div class="line-block">
+<div class="line">The batch job is a method of submitting jobs using job scripts and is suitable for long-running jobs. On the other hand, interactive jobs can execute commands conversationally and can be used for debugging before submitting batch jobs.</div>
+</div>
+<div class="line-block">
+<div class="line">Job scheduling in the pre/post environment determines the execution order of jobs using the “FairShare” function.</div>
+<div class="line">FairShare is a mechanism that adjusts job priorities based on past resource usage by jobs.</div>
+<div class="line">Users with less resource usage history will have higher priority, and their jobs will be prioritized for execution.</div>
+<div class="line">Conversely, users with extensive usage history will have lower priority, and their jobs will be postponed.</div>
+</div>
+<section id="job-queue-partition">
+<h2><span class="section-number">6.1. </span>Job Queue (Partition)<a class="headerlink" href="#job-queue-partition" title="Permalink to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">To submit jobs to the pre/post environment, the users need to specify a job queue.</div>
+<div class="line">See the sections on batch jobs or interactive jobs for how to specify the queues.</div>
+</div>
+<p>The table below shows the job queues currently available. <a class="footnote-reference brackets" href="#a1" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Queue (PartitionName)</p></th>
+<th class="head"><p>Node (Nodes)</p></th>
+<th class="head"><p>Default elapsed time [h] (DefaultTime)</p></th>
+<th class="head"><p>Maximum elapsed time [h] (MaxTime)</p></th>
+<th class="head"><p>Default #CPUs per job (cpus-per-task)</p></th>
+<th class="head"><p>Maximum #CPUs per job (MaxTRESPerJob=cpu)</p></th>
+<th class="head"><p>Default memory per job (DefMemPerNode)</p></th>
+<th class="head"><p>Maximum memory per job (MaxMemPerNode)</p></th>
+<th class="head"><p>Maximum #jobs per user (MaxJobPerUser)</p></th>
+<th class="head"><p>Maximum #nodes per job (MaxNodes)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>gpu1</p></td>
+<td><div class="line-block">
+<div class="line">pps[01-06]</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">0.5</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">3</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">72</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">2574M</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">185344M</div>
+<div class="line">(181G)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">5</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>gpu2</p></td>
+<td><div class="line-block">
+<div class="line">pps[07-08]</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">0.5</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">24</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">36</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">2574M</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">92672M</div>
+<div class="line">(90G)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>mem1</p></td>
+<td><div class="line-block">
+<div class="line">ppm01</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">0.5</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">3</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">224</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">22863M</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">5121496M <a class="footnote-reference brackets" href="#a2" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></div>
+<div class="line">(5001G)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">5</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>mem2</p></td>
+<td><div class="line-block">
+<div class="line">ppm[02-03]</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">0.5</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">24</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">56</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">22863M</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1536000M</div>
+<div class="line">(1500G)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>ondemand-reserved <a class="footnote-reference brackets" href="#a3" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
+<td><div class="line-block">
+<div class="line">wheel[1-2]</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">0.5</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">720</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">8</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">4096M</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">32768M</div>
+<div class="line">(32G)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">50</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>“gpu1” and “mem1” are prepared as a queue for short-time jobs and “gpu2” and “mem2” for long-time jobs.</p></li>
+<li><p>When a job is submitted without specifying the amount of resources, default values are applied. Please specify the number of CPUs required, amount of memory, and elapsed time in the job script or by Slurm command options.</p></li>
+</ul>
+</div>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="a1" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">1</a><span class="fn-bracket">]</span></span>
+<p>Hyper-Threading (HT) is enabled. (#CPUs = #physical_cores × 2)</p>
+</aside>
+<aside class="footnote brackets" id="a2" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">2</a><span class="fn-bracket">]</span></span>
+<p>The maximum allowed memory size is set smaller than the installed memory size because a portion of the memory is used for the scratch directory.</p>
+</aside>
+<aside class="footnote brackets" id="a3" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">3</a><span class="fn-bracket">]</span></span>
+<p>“ondemand-reserved” is a hidden queue which is set mainly for use from Open OnDemand. It is to run non-compute-intensive jobs such as workflow tools or interactive tools, and the resources are oversubscribed to accept many jobs. Running jobs on this queue may be terminated by operational needs without a prior notification.</p>
+</aside>
+</aside>
+</section>
+<section id="batch-job">
+<span id="batchjob"></span><h2><span class="section-number">6.2. </span>Batch Job<a class="headerlink" href="#batch-job" title="Permalink to this heading">¶</a></h2>
+<p>Basically, to submit a job to the pre/post environment, the users need to make a job script and use SLURM commands on the login node.</p>
+<section id="sequential-job">
+<h3><span class="section-number">6.2.1. </span>Sequential Job<a class="headerlink" href="#sequential-job" title="Permalink to this heading">¶</a></h3>
+<p>The following are examples for sequential jobs.</p>
+<ul class="simple">
+<li><p>Large memory node (1cpu)</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p mem1      # Specifying a queue</span>
+<span class="c1">#SBATCH -n 1         # Specifying the number of CPUs</span>
+<span class="c1">#SBATCH --mem 22G    # Specifying memory usage [GB]</span>
+./a.out
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Large memory node (1node)</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p mem1      # Specifying a queue</span>
+<span class="c1">#SBATCH -n 224       # Specifying the number of CPUs</span>
+<span class="c1">#SBATCH --mem 5001G  # Specifying memory usage [GB]</span>
+./a.out
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPU node (1cpu)</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p gpu1      # Specifying a queue</span>
+<span class="c1">#SBATCH -n 1         # Specifying the number of nodes</span>
+<span class="c1">#SBATCH --mem 2574   # Specifying memory usage [MB]</span>
+./a.out
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPU node (1node)</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p gpu1      # Specifying a queue</span>
+<span class="c1">#SBATCH -n 72        # Specifying the number of CPUs</span>
+<span class="c1">#SBATCH --mem 181G   # Specifying memory usage [GB]</span>
+./a.out
+</pre></div>
+</div>
+</section>
+<section id="openmp">
+<h3><span class="section-number">6.2.2. </span>OpenMP<a class="headerlink" href="#openmp" title="Permalink to this heading">¶</a></h3>
+<p>The following are examples of using OpenMP.</p>
+<ul class="simple">
+<li><p>Intel Compiler + OpenMP</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p gpu1               # Specifying a queue</span>
+<span class="c1">#SBATCH --cpus-per-task=72    # Specifying the number of CPUs to use for each task</span>
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">72</span>
+<span class="nb">export</span> <span class="nv">KMP_AFFINITY</span><span class="o">=</span><span class="nv">granularity</span><span class="o">=</span>fine,compact
+. /opt/intel/oneapi/setvars.sh intel64
+./a.out
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GCC + OpenMP</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p mem1                # Specifying a queue</span>
+<span class="c1">#SBATCH --cpus-per-task=224    # Specifying the number of CPUs to use for each task</span>
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">224</span>
+./a.out
+</pre></div>
+</div>
+</section>
+<section id="mpi">
+<h3><span class="section-number">6.2.3. </span>MPI<a class="headerlink" href="#mpi" title="Permalink to this heading">¶</a></h3>
+<p>The following are examples of using MPI.</p>
+<ul class="simple">
+<li><p>Intel Compiler + Intel MPI</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p mem1                 # Specifying a queue</span>
+<span class="c1">#SBATCH --cpus-per-task=224    # Specifying the number of CPUs to use for each task</span>
+<span class="c1">#SBATCH -t 00:10:00             # Specifying elapsed time limits</span>
+. /opt/intel/oneapi/setvars.sh intel64
+mpiexec -n <span class="m">224</span> ./a.out
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GCC + OpenMPI</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p gpu1                  # Specifying a queue</span>
+<span class="c1">#SBATCH -n 72                    # Specifying the number of tasks</span>
+<span class="c1">#SBATCH -t 00:10:00              # Specifying elapsed time limits</span>
+. /vol0004/apps/oss/spack/share/spack/setup-env.sh
+spack load openmpi@3.1.6%gcc@8.5.0
+mpiexec --use-hwthread-cpus -n <span class="m">72</span> --mca btl_openib_if_include mlx5_0 ./a.out
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>When using GCC + Open MPI, the option <strong>--use-hwthread-cpus</strong> is required if you want to use more than half of the maximum number of cores for each node.</p>
+</div>
+</section>
+<section id="gpu">
+<h3><span class="section-number">6.2.4. </span>GPU<a class="headerlink" href="#gpu" title="Permalink to this heading">¶</a></h3>
+<p>The following are examples of using GPU.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p gpu1                 # Specify a queue</span>
+<span class="c1">#SBATCH --gpus-per-node=1       # Specify the number of GPUs to use</span>
+./a.out
+</pre></div>
+</div>
+<p>To use 2GPUs simultaneously, specify the option <code class="docutils literal notranslate"><span class="pre">--gpus-per-node=2</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p gpu1                 # Specify a queue</span>
+<span class="c1">#SBATCH --gpus-per-node=2       # Specify the number of CPUs per node</span>
+./a.out
+</pre></div>
+</div>
+</section>
+</section>
+<section id="interactive-job">
+<h2><span class="section-number">6.3. </span>Interactive Job<a class="headerlink" href="#interactive-job" title="Permalink to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">The interactive job can execute jobs with specifying required resources directly by a Slurm command via a login node.</div>
+<div class="line">If resources are available, the command prompt will transition to a compute node of the pre/post environment, and then commands can be executed conversationally.</div>
+</div>
+<p>The following are examples of interactive jobs.</p>
+<ul class="simple">
+<li><p>Large memory node (1cpu)</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p mem1 -n <span class="m">1</span> --mem 22G --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Large memory node (1node)</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p mem1 -n <span class="m">224</span> --mem 5001G --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPU node (1cpu without GPUs)</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">1</span> --mem <span class="m">2574</span> --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPU node (1node without GPUs)</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">72</span> --mem 181G --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPU node (1cpu with a GPU)</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">1</span> --mem <span class="m">2574</span> --time<span class="o">=</span><span class="m">5</span> --gpus-per-node<span class="o">=</span><span class="m">1</span> --pty bash -i
+
+<span class="gp">[GPU]$ </span>nvidia-smi
+<span class="go">+---------------------------------------------------------------------------------------+</span>
+<span class="go">| NVIDIA-SMI 535.216.01             Driver Version: 535.216.01   CUDA Version: 12.2     |</span>
+<span class="go">|-----------------------------------------+----------------------+----------------------+</span>
+<span class="go">| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |</span>
+<span class="go">| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |</span>
+<span class="go">|                                         |                      |               MIG M. |</span>
+<span class="go">|=========================================+======================+======================|</span>
+<span class="go">|   0  Tesla V100-PCIE-32GB           Off | 00000000:18:00.0 Off |                    0 |</span>
+<span class="go">| N/A   41C    P0              37W / 250W |      0MiB / 32768MiB |      1%      Default |</span>
+<span class="go">|                                         |                      |                  N/A |</span>
+<span class="go">+-----------------------------------------+----------------------+----------------------+</span>
+
+<span class="go">+---------------------------------------------------------------------------------------+</span>
+<span class="go">| Processes:                                                                            |</span>
+<span class="go">|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |</span>
+<span class="go">|        ID   ID                                                             Usage      |</span>
+<span class="go">|=======================================================================================|</span>
+<span class="go">|  No running processes found                                                           |</span>
+<span class="go">+---------------------------------------------------------------------------------------+</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPU node (1node with 2GPUs)</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">72</span> --mem 181G --time<span class="o">=</span><span class="m">5</span> --gpus-per-node<span class="o">=</span><span class="m">2</span> --pty bash -i
+
+<span class="gp">[GPU]$ </span>nvidia-smi
+<span class="go">+---------------------------------------------------------------------------------------+</span>
+<span class="go">| NVIDIA-SMI 535.216.01             Driver Version: 535.216.01   CUDA Version: 12.2     |</span>
+<span class="go">|-----------------------------------------+----------------------+----------------------+</span>
+<span class="go">| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |</span>
+<span class="go">| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |</span>
+<span class="go">|                                         |                      |               MIG M. |</span>
+<span class="go">|=========================================+======================+======================|</span>
+<span class="go">|   0  Tesla V100-PCIE-32GB           Off | 00000000:18:00.0 Off |                    0 |</span>
+<span class="go">| N/A   39C    P0              39W / 250W |      0MiB / 32768MiB |      0%      Default |</span>
+<span class="go">|                                         |                      |                  N/A |</span>
+<span class="go">+-----------------------------------------+----------------------+----------------------+</span>
+<span class="go">|   1  Tesla V100-PCIE-32GB           Off | 00000000:AF:00.0 Off |                    0 |</span>
+<span class="go">| N/A   38C    P0              38W / 250W |      0MiB / 32768MiB |      1%      Default |</span>
+<span class="go">|                                         |                      |                  N/A |</span>
+<span class="go">+-----------------------------------------+----------------------+----------------------+</span>
+
+<span class="go">+---------------------------------------------------------------------------------------+</span>
+<span class="go">| Processes:                                                                            |</span>
+<span class="go">|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |</span>
+<span class="go">|        ID   ID                                                             Usage      |</span>
+<span class="go">|=======================================================================================|</span>
+<span class="go">|  No running processes found                                                           |</span>
+<span class="go">+---------------------------------------------------------------------------------------+</span>
+</pre></div>
+</div>
+</section>
+<section id="scratch-directory-available-in-the-large-memory-nodes">
+<h2><span class="section-number">6.4. </span>Scratch Directory (available in the large memory nodes)<a class="headerlink" href="#scratch-directory-available-in-the-large-memory-nodes" title="Permalink to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">When a job is submitted to a queue (mem1 or mem2) of the large memory nodes, a work directory is created for each job under <strong>/worktmp</strong>.</div>
+<div class="line">The directory is a memory-based file system that can be used for temporary scratch purposes.</div>
+<div class="line">The working directory created for each job can only be accessed by the user who submitted the job.</div>
+<div class="line">The scratch directory is created only on large memory nodes, not on GPU nodes.</div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>A scratch directory (<strong>/worktmp/${SLURM_JOBID}</strong>) is available for each job.</p></li>
+<li><p>The scratch directory is shared among other jobs/users, with a maximum of 1TB.</p></li>
+<li><p>If the maximum capacity has already been used by other jobs/users, a write access will be failed.</p></li>
+<li><p>After the job is finished, the directory (/worktmp/${SLURM_JOBID}) is automatically deleted.</p></li>
+</ul>
+</div>
+<p>The following is an example of using scratch area.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p mem1</span>
+<span class="c1">#SBATCH -n 1</span>
+<span class="nb">export</span> <span class="nv">TMPDIR</span><span class="o">=</span>/worktmp/<span class="si">${</span><span class="nv">SLURM_JOBID</span><span class="si">}</span>
+dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span><span class="si">${</span><span class="nv">TMPDIR</span><span class="si">}</span>/foo.dat <span class="nv">bs</span><span class="o">=</span>100M <span class="nv">count</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+</section>
+<section id="misc">
+<h2><span class="section-number">6.5. </span>Misc<a class="headerlink" href="#misc" title="Permalink to this heading">¶</a></h2>
+<p>To use the X Window System in the pre/post environment, use interactive mode by the <code class="docutils literal notranslate"><span class="pre">srun</span></code> command with the <code class="docutils literal notranslate"><span class="pre">--x11</span></code> option.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun --x11 -p gpu1 -n <span class="m">1</span> --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3. Login</a></li>
+<li><a class="reference internal" href="#file-transfer">4. File Transfer</a></li>
+<li><a class="reference internal" href="#compile">5. Compile</a><ul>
+<li><a class="reference internal" href="#gcc">5.1. GCC</a></li>
+<li><a class="reference internal" href="#intel-compiler">5.2. Intel Compiler</a><ul>
+<li><a class="reference internal" href="#pre-post-pocessing-nodes">5.2.1. Pre/Post-Pocessing Nodes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#nvidia-cuda-compiler">5.3. NVIDIA CUDA Compiler</a></li>
+<li><a class="reference internal" href="#fujitsu-compiler-cross-compiler">5.4. Fujitsu Compiler (cross compiler)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#job-submission">6. Job Submission</a><ul>
+<li><a class="reference internal" href="#job-queue-partition">6.1. Job Queue (Partition)</a></li>
+<li><a class="reference internal" href="#batch-job">6.2. Batch Job</a><ul>
+<li><a class="reference internal" href="#sequential-job">6.2.1. Sequential Job</a></li>
+<li><a class="reference internal" href="#openmp">6.2.2. OpenMP</a></li>
+<li><a class="reference internal" href="#mpi">6.2.3. MPI</a></li>
+<li><a class="reference internal" href="#gpu">6.2.4. GPU</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#interactive-job">6.3. Interactive Job</a></li>
+<li><a class="reference internal" href="#scratch-directory-available-in-the-large-memory-nodes">6.4. Scratch Directory (available in the large memory nodes)</a></li>
+<li><a class="reference internal" href="#misc">6.5. Misc</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="system.html"
+                          title="previous chapter"><span class="section-number">2. </span>System Configuration</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="slurm.html"
+                          title="next chapter"><span class="section-number">7. </span>SLURM Commands</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="slurm.html" title="7. SLURM Commands"
+             >next</a></li>
+        <li class="right" >
+          <a href="system.html" title="2. System Configuration"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Pre/Post Environment Users Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>Login</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

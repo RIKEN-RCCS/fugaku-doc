@@ -1,0 +1,329 @@
+:tocdepth: 3
+
+.. _CompilerforCNLLVM:
+
+LLVM
+================
+
+LLVMを基盤にもつ、C／C++／Fortran用コンパイラの利用方法を示します。
+計算ノード向けバイナリを出力するLLVMはログインノード(Intel)、計算ノードの双方で利用可能です。
+
+LLVMの利用方法
+---------------
+
+コンパイル環境設定
+^^^^^^^^^^^^^^^^^^^^^
+
+LLVMコンパイラは、
+
+ログインノード(クロス環境)では/vol0004/apps/r/OSS_CN/llvm-21.1.0/cross_clangfxにあります。
+計算ノード(ネイティブ環境)では/vol0004/apps/r/OSS_CN/llvm-21.1.0/own_clangfxにあります。
+
+(今までのバージョンを利用したい方は、':ref:`lvm-v19.1.4 <CompilerforLLVM19>`' をご利用ください。)
+
+コンパイルを実行する前に以下を実行して利用環境を設定してください。
+
+
+ログインノード
+
+.. code-block:: console
+
+   [_LNIlogin]$ module load LLVM/llvmorg-21.1.0
+
+計算ノード
+
+.. code-block:: console
+
+   [_CNlogin]$ module load LLVM/llvmorg-21.1.0
+
+利用できる環境は、以下のとおりです。
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3 2 2 8
+
+   * - ソフトウェア名
+     - 言語
+     - バージョン
+     - コマンド
+
+   * - Clang
+     - C
+     - 21.1.0
+     - clang
+
+   * - Clang++
+     - C++
+     - 21.1.0
+     - clang++
+
+   * - Flang
+     - Fortran
+     - 21.1.0
+     - flang
+
+
+コンパイルコマンド
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+LLVMを使用したC言語プログラムのコンパイル例を示します。
+コマンドはログインノード、計算ノード共通です。
+翻訳時オプションに関しては、LLVMのClang/Flangに準じます。
+
+(特にflangでは翻訳に時間がかかる場合があります。
+計算ノードで実行する際には、下に述べるようにpjsubのオプションでキャッシュ容量を多めに割り当ててください)
+
+【逐次実行】
+
+ログインノード
+ .. code-block:: console
+
+    [_LNIlogin]$ clang -O3  ソースファイル名
+
+
+計算ノード
+ .. code-block:: console
+
+    [_CNlogin]$ clang -O3  ソースファイル名
+
+
+【OpenMP】
+
+OpenMP利用には、"-fopenmp"をご使用ください。
+
+ログインノード
+ .. code-block:: console
+
+    [_LNIlogin]$ clang -O3 -fopenmp ソースファイル名
+
+計算ノード
+ .. code-block:: console
+
+    [_CNlogin]$ clang -O3 -fopenmp ソースファイル名
+
+
+【MPI】
+
+MPIライブラリはmpiclang/mpiclang++/mpiflangコマンドにより利用可能です。
+
+ログインノード
+ .. code-block:: console
+
+    [_LNIlogin]$ mpiclang -O3 -fopenmp source_file
+
+計算ノード
+ .. code-block:: console
+
+    [_CNlogin]$ mpiclang -O3 -fopenmp source_file
+
+.. seealso::
+    
+    上記例は、C++ (mpiclang++), Fortran (mpiflang) の場合も同様の方法となります。
+
+
+ジョブスクリプトによるコンパイル例
+
+計算ノードにジョブを割り当てる際には、pjsubのオプションに--llio cn-cache-size=1Giを指定してください。
+指定しない場合、翻訳時間が長くなる可能性があります。
+
+ .. code-block:: bash
+
+    #!/bin/sh -x
+    #PJM -L  "node=1"
+    #PJM -L  "rscgrp=small"
+    #PJM -L  "elapse=01:00:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+    #PJM -g groupname
+    #PJM --llio cn-cache-size=1Gi
+    #PJM -s
+    #
+
+    module purge
+    module load LLVM/llvmorg-21.1.0
+
+    mpiclang -o sample1.out sample1.c
+
+実行方法
+^^^^^^^^^^^^^^^^^
+
+コンパイルされたプログラムの実行は、ジョブスクリプト、インタラクティブジョブ双方で可能です。
+
+ジョブスクリプト例を示します。
+高並列で実行する場合は、性能向上のため、実行ファイルとLLVMライブラリをllio_transferを使い転送してください。
+
+ .. code-block:: bash
+
+    #!/bin/sh -x
+    #PJM -L  "node=128"
+    #PJM --mpi "max-proc-per-node=4"
+    #PJM -L  "rscgrp=small"
+    #PJM -L  "elapse=01:00:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+    #PJM -g groupname
+    #PJM -s
+    #
+
+    module purge
+    module load LLVM/llvmorg-21.1.0
+    llio_transfer `find ${LLVM_BASEDIR}/lib64 -type f -name \*.so\*`
+    llio_transfer `find ${MPI_HOME}/lib64 -type f -name \*.so\*`
+    llio_transfer sample1.out
+
+    mpiexec ./sample1.out
+
+.. seealso::
+
+    C++, Fortranプログラムの実行も同様の方法となります。
+
+ライブラリの利用
+^^^^^^^^^^^^^^^^^^^^^
+
+このLLVMで利用できるOpenBLAS、 FFTWが用意されています。
+
+こちらのライブラリは他のコンパイラからは使用できません。
+
+OpenBLASの利用方法
+""""""""""""""""""""
+
+格納場所は以下です。
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3 8
+
+   * - ライブラリの分類
+     - インストールディレクトリ
+   
+   *  - LP64, 逐次  
+      - /vol0004/apps/r/OSS_CN/llvm/openblas-seq
+
+   *  - LP64, スレッド並列
+      - /vol0004/apps/r/OSS_CN/llvm/openblas-omp
+  
+   *  - ILP64, 逐次
+      - /vol0004/apps/r/OSS_CN/llvm/openblas-seq-ilp64
+  
+   *  - ILP64, スレッド並列
+      - /vol0004/apps/r/OSS_CN/llvm/openblas-omp-ilp64
+
+
+プログラム翻訳方法
+++++++++++++++++++++
+
+OpenBLASを利用するプログラムを翻訳する場合は、富岳LLVMを使用するための環境設定を行った上で、
+リンク時のオプションに-lopenblasを追加してください。
+
+またスレッド並列ライブラリを利用する場合は、オプションに-fopenmpを追加してください。
+
+さらに言語に応じて、以下のオプションを追加してください。
+
+C/C++の場合:
+
+- -Lオプションおよび-IオプションでOpenBLASをインストールしたディレクトリ(${OPENBLAS_DIR})のライブラリおよびヘッダを指定してください
+- -lflang_rt.runtimeを指定してください
+
+Fortranの場合:
+
+- -LオプションでOpenBLASをインストールしたディレクトリ(${OPENBLAS_DIR})のライブラリを指定してください
+
+プログラム実行方法
+++++++++++++++++++++
+
+OpenBLASを利用するプログラムを実行する場合は、LD_LIBRARY_PATHに${OPENBLAS_DIR}/libを追加してください。
+
+オリジナルOpenBLASからの変更点
+
+オリジナルOpenBLAS 0.3.26に対して、A64FX向けに以下のルーチンをチューニングしています。
+
+- DGEMM
+- SGEMM
+
+FFTWの利用方法
+"""""""""""""""""
+
+FFTWは/vol0004/apps/r/OSS_CN/llvm/fftw3に格納されています(FFTW_DIR)。
+
+FFTWを利用するを利用するプログラムを翻訳する場合は、富岳LLVMを使用するための環境設定を行った上で、
+リンク時のオプションに以下のライブラリを追加してください。
+
+- 単精度の逐次ライブラリ		: -lfftw3f -lm
+- 単精度のスレッド並列ライブラリ	: -lfftw3f_omp -lfftw3f -lm
+- 倍精度の逐次ライブラリ		: -lfftw3 -lm
+- 倍精度のスレッド並列ライブラリ	: -lfftw3_omp -lfftw3 -lm
+
+またスレッド並列ライブラリを利用する場合は、オプションに-fopenmpを追加してください。
+
+さらに言語に応じて、以下のオプションを追加してください。
+
+C/C++の場合:
+
+- -Lオプションおよび-IオプションでFFTWをインストールしたディレクトリ(${FFTW_DIR})のライブラリおよびヘッダを指定してください
+- -lflang_rt.runtimeを指定してください
+
+Fortranの場合:
+
+- -LオプションでFFTWをインストールしたディレクトリ(${FFTW_DIR})のライブラリを指定してください
+
+プログラム実行方法
+++++++++++++++++++++
+
+FFTWを利用するプログラムを実行する場合は、LD_LIBRARY_PATHに${FFTW_DIR}/libを追加してください。
+
+オリジナルFFTWからの変更点
+
+- 各種SIMD命令に対応するためのヘッダファイルをSVE命令に対応
+- プラン生成と呼ばれる自動チューニング機構で、選択されない処理ルートを除去することで効率化を実施
+
+注意事項
+^^^^^^^^^^^^^
+
+REAL(KIND=16) および COMPLEX(KIND=16) 型に関する注意点
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+ログインノード上にあるクロス環境のflangでは、
+REAL(KIND=16)およびCOMPLEX(KIND=16)型を使用したFortranプログラムのコンパイル時に、
+以下のエラーが発生します。
+
+エラーが発生する翻訳例
+
+ .. code-block:: bash
+
+   flang complex16.f90
+   error: Semantic errors in complex16.f90
+    ./complex16.f90:3:3: error: COMPLEX(KIND=16) is not an enabled type for this target
+    complex(kind=16) :: x
+    ^^^^^^^^^^^^^^^^^^^^^
+
+ .. code-block:: bash
+
+   flang real16.f90
+   error: Semantic errors in real16.f90
+    ./real16.f90:3:3: error: REAL(KIND=16) is not an enabled type for this target
+    real(kind=16) :: x, y, z
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+回避方法
+
+この制限はログインノード上にあるクロス環境のflangに特有のものであり、計算ノード上にあるネイティブ環境のflangでは
+正常にコンパイルが可能です。
+そのため、これらの型を使用する場合は、計算ノードにあるネイティブ環境のflangを用いて
+コンパイルを行ってください。
+
+言語間結合における注意事項
+"""""""""""""""""""""""""""""
+
+結合時の翻訳コマンドと必須オプション
+++++++++++++++++++++++++++++++++++++++
+
+LLVMコンパイラで作成したFortran、C、C++のオブジェクトプログラムを組み合わせて結合する際には、以下の点に注意してください。
+
+C++オブジェクト(libstdc++を利用)をリンクする場合
+   コマンド\ :command:`clang`\ または\ :command:`flang`\ を使用してリンクする際は、オプション\ ``-lstdc++``\ を指定してください。
+
+Fortranオブジェクトをリンクする場合
+   コマンド\ :command:`clang`\ または\ :command:`clang++`\ を使用してリンクする際は、以下のオプションを指定してください。
+
+   ``L${LLVM_BASEDIR}/lib64 -lflang_rt.runtime``
+
+
+.. include:: userguid-section3-01.rst.inc
+

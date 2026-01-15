@@ -1,0 +1,182 @@
+
+Introduction
+============
+
+Linaro Forge is a GUI tool for debugging and performance analysis of parallel programs written in C/C++, Fortran and Python.
+This section shows how to run the program using Linaro Forge in |post-k|.
+
+For more information on Linaro Forge, see e.g. https://www.linaroforge.com/.
+
+Client Install
+==============
+
+In May 2024, Linaro Forge has version 23.1.2 installed on |post-k| at follows.
+
+.. code-block:: bash
+
+  /vol0004/apps/opt/linaro/forge/23.1.2
+
+Each user must install a client application to use Linaro Forge.
+The Linaro Forge client can be installed on Windows, Mac and Linux respectively.
+Download and install the client file according to your operating system.
+
+.. list-table::
+  :header-rows: 1
+  :widths: 2 10
+
+  * - OS
+    - client file
+  * - Windows
+    - linaro-forge-client-23.1.2-windows-x86_64.exe
+  * - Mac
+    - linaro-forge-client-23.1.2-macos-x86_64.dmg
+  * - Linux
+    - linaro-forge-23.1.2-linux-x86_64.tar
+
+      linaro-forge-23.1.2-linux-aarch64.tar
+
+      linaro-forge-23.1.2-linux-ppc64le.tar
+
+.. attention::
+ 
+  To use Linaro Forge, you need to have the right version installed.
+  
+
+Client Settings
+===============
+
+As there are few differences between operating systems in the subsequent configuration and execution,
+the Linux version is used to provide a summary explanation.
+
+If the client is successfully started, the screen shown below is displayed.
+Select 'Configure' from the 'Remote Launch' pull-down tab and add new connection settings with 'Add'.
+
+.. figure:: images/linaro01.png
+   :width: 800px
+
+In the 'Remote Launch' configuration section, the 'Host Name', 'Remote Installation Directory' and 'Private Key' must be entered.
+
+.. figure:: images/linaro02.png
+   :width: 800px
+
+Each input field should be set as follows.
+
+.. list-table::
+  :header-rows: 1
+  :widths: 4 15
+
+  * - Option Name
+    - Input detailes
+  * - Host Name
+    - {UserID}@fugaku.r-ccs.riken.jp
+  * - Remote Installation Directory
+    - /vol0004/apps/opt/linaro/forge/23.1.2/x86_64 (If the client is the x86_64 version)
+
+      /vol0004/apps/opt/linaro/forge/23.1.2/aarch64 (If the client is the aarch64 version)
+  * - Private Key
+    - path of the SSH encryption key file used to connect to the login node |post-k|
+
+Once the configuration is complete, you can test the connection using the 'Test Remote Launch' button.
+If the connection test is successful, the display will appear as shown in the figure below.
+
+.. figure:: images/linaro03.png
+   :width: 800px
+
+Create a connection configuration and select the configuration created in 'Remote Launch' to connect to |post-k|.
+If the connection is successful, the licence number in the lower-left corner of the launch screen will be displayed as "18054"
+and detailed licence information can be obtained as shown in the figure below.
+
+.. figure:: images/linaro04.png
+   :width: 600px
+
+Once you have created the connection settings,
+you can simply select the settings you have already created to connect when you start up again.
+
+How to run
+==========
+
+This section shows how to run a test program in |post-k| using Linaro Forge.
+Connect to |post-k| in the client configuration described in the previous section
+and use Linaro Forge's Reverse Connect function to connect from the job to the client.
+The job is described in the following form. In the example, Linaro DDT is started.
+
+[Linaro DDT]
+
+.. code-block:: bash
+
+  #! /bin/bash -x
+  #PJM -g {groupname}
+  #PJM -L node=1
+  #PJM -L elapse=00:15:00
+  #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+  #PJM --mpi max-proc-per-node=48
+  #PJM --sparam wait-time=60
+  #PJM -j
+  #PJM -s
+  #
+  export OMP_NUM_THREADS=1
+
+  # LinaroForge
+  . /vol0004/apps/opt/linaro/setup-env.sh
+
+  # run
+  ddt --connect --mpi="Generic" --np 48 ./test_c.exe
+
+
+When the job is executed, a message requesting a response is displayed on the client screen, as shown below.
+
+.. figure:: images/linaro05.png
+   :width: 600px
+
+If the response is allowed, information on the running application can be obtained
+and execution is started by pressing the Run button.
+
+.. figure:: images/linaro06.png
+   :width: 600px
+
+Once the application is running, the Linaro Forge screen will look like the figure below.
+The application can then be debugged as a GUI debugger.
+
+.. figure:: images/linaro07.png
+   :width: 800px
+
+[Linaro MAP]
+
+As with Linaro DDT, it is also possible to use Linaro MAP.
+In this case, specify map instead of ddt.
+
+.. code-block:: bash
+
+  #! /bin/bash -x
+  #PJM -g {groupname}
+  #PJM -L node=1
+  #PJM -L elapse=00:15:00
+  #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+  #PJM --mpi max-proc-per-node=48
+  #PJM --sparam wait-time=60
+  #PJM -j
+  #PJM -s
+  #
+  export OMP_NUM_THREADS=1
+
+  # LinaroForge
+  . /vol0004/apps/opt/linaro/setup-env.sh
+
+  # run
+  map --connect --mpi="Generic" --np 48 ./test_c.exe
+
+
+Once the application is running, the Linaro Forge screen will look like the figure below.
+The application can be analysed as a GUI performance analysis tool.
+Once the MAP has been successfully executed, a map file is generated,
+which can be re-loaded to re-analyses the job without running it.
+
+.. figure:: images/linaro08.png
+   :width: 800px
+
+.. attention::
+
+  The maximum number of Linaro Forge processes that can be used in |post-k| is 512.
+  This is a number shared by all users of Linaro Forge:
+  if one person runs a program that uses 512 processes, the other users will wait until the licence is released.
+  Currently, there is no limit on the number of processes used per person, but we ask that you use the system in moderation.

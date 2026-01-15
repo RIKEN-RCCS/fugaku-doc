@@ -1,0 +1,222 @@
+.. highlight:: none
+
+.. _InterlanguageLinkage:
+
+言語間結合（オブジェクトの互換性について）
+==========================================
+
+ここでは富士通コンパイラで作成したFotran、C（trad/clang）、C++（trad/clang）の各オブジェクトの互換性とリンクに関する注意事項を示します。
+
+言語間結合の詳細は次のマニュアルを参照ください。
+
+   Fortran使用手引書
+      | 第11章 言語間結合
+      | 第12章 並列化機能
+
+   C言語使用手引書
+      | 第4章 並列化機能
+      | 第7章 言語間結合における注意事項
+      | 9.6 言語間結合における注意事項
+
+   C++言語使用手引書
+      | 第4章 並列化機能
+      | 第7章 言語間結合における注意事項
+      | 9.6 言語間結合およびtradモードのオブジェクトとの結合における注意事項
+
+   プロファイラ使用手引書
+      5.1.6 MPIプログラムの言語間結合
+
+
+オブジェクトの互換性
+---------------------
+
+次のオブジェクトは相互にリンク可能です。
+
+- Fortranで作成したオブジェクト
+- Cのtradモードで作成したオブジェクト
+- Cのclangモードで作成したオブジェクト
+- :ref:`C++のオブジェクト <CppObjects>`\ のどれか一種類
+
+.. _CppObjects:
+
+C++のオブジェクト
+------------------
+
+C++のオブジェクトは同じSTLを使用しているオブジェクトのみがリンク可能です。
+
+使用するSTLは次の3つに分類されます。これらのオブジェクトを混在して使用することはできません。
+
+- C++のtradモードで作成したオブジェクト
+- C++のclangモードでSTLにlibc++を使用し作成したオブジェクト
+- C++のclangモードでSTLにlibstdc++を使用し作成したオブジェクト
+
+言語間結合
+-----------
+
+マニュアル「Fortran使用手引書」「C言語使用手引書」「C++言語使用手引書」を参照ください。
+
+ここではリンク時の翻訳コマンドのみを示します。
+
+言語間結合する場合、リンク時に使用する翻訳コマンドと必須オプションは、結合させる言語により異なります。
+
+下表は、クロスコンパイラを利用する場合の組合せです。
+ネイティブコンパイラを利用する場合は、frtpx/fccpx/FCCpxコマンドをそれぞれfrt/fcc/FCCコマンドに読み替えてください。
+MPIを使用する場合はMPI用のコマンドに読み替えてください。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 30 20 60
+
+   * - リンク時に使用する翻訳コマンド
+     - Fortranオブジェクト
+     - Cオブジェクト
+     - C++オブジェクト
+
+   * - Fortran
+     - frtpx
+     - frtpx
+     - - | C++のオブジェクトをtradモードで作成した場合
+         | ``frtpx --linkstl=libfjc++``
+       - | STLにlibc++を使用し、C++のオブジェクトをclangモードで作成した場合
+         | ``frtpx --linkstl=libc++``
+       - | STLにlibstdc++を使用し、C++のオブジェクトをclangモードで作成した場合
+         | ``frtpx --linkstl=libstdc++``
+
+   * - C
+     - ``fccpx --linkfortran``
+     - fccpx
+     - 未対応。FCCpxを使用する。
+
+   * - C++
+     - ``FCCpx --linkfortran``
+     - FCCpx
+     - FCCpx
+
+リンクの例を以下に示します。
+
+リンク時にFortranを使用し、FortranオブジェクトとCオブジェクトをリンクする場合::
+
+   frtpx -c fortmain.f95
+   fccpx -c cfunc.c
+   frtpx -o a.out fortmain.o cfunc.o
+
+リンク時にFortranを使用し、FortranオブジェクトとCオブジェクトをリンクする場合（Cがmainの場合）::
+
+   frtpx -c fortsub.f95
+   fccpx -c cmain.c
+   frtpx -mlcmain=main -o a.out cmain.o fortsub.o
+
+リンク時にCを使用し、FortranオブジェクトとCオブジェクトをリンクする場合::
+
+   frtpx -c fortmain.f95
+   fccpx -c cfunc.c
+   fccpx --linkfortran -o a.out fortmain.o cfunc.o
+
+リンク時にCを使用し、FortranオブジェクトとCオブジェクトをリンクする場合（Cがmainの場合）::
+
+   frtpx -c fortsub.f95
+   fccpx -c cmain.c
+   fccpx --linkfortran -o a.out cmain.o fortsub.o
+
+リンク時にFortranを使用し、Fortranオブジェクトとtradモードで作成したC++オブジェクトをリンクする場合::
+
+   frtpx -c fortmain.f95
+   FCCpx -c cppfunc.cc
+   frtpx --linkstl=libfjc++ -o a.out fortmain.o cppfunc.o
+
+リンク時にFortranを使用し、Fortranオブジェクトとtradモードで作成したC++オブジェクトをリンクする場合（C++がmainの場合）::
+
+   frtpx -c fortsub.f95
+   FCCpx -c cppmain.cc
+   frtpx -mlcmain=main --linkstl=libfjc++ -o a.out cppmain.o fortsub.o
+
+リンク時にFortranを使用し、Fortranオブジェクトとclangモードにおいて-stdlib=libc++オプションを指定して作成したC++オブジェクトをリンクする場合::
+
+   frtpx -c fortmain.f95
+   FCCpx -Nclang -stdlib=libc++ -c cppfunc.cc
+   frtpx --linkstl=libc++ -o a.out fortmain.o cppfunc.o
+
+リンク時にFortranを使用し、Fortranオブジェクトとclangモードにおいて-stdlib=libstdc++オプションを使用して作成したC++オブジェクトをリンクする場合::
+
+   frtpx -c fortmain.f95
+   FCCpx -Nclang -c cppfunc.cc
+   frtpx --linkstl=libstdc++ -o a.out fortmain.o cppfunc.o
+
+   libstdc++はC++コンパイラのclangモードにおいて、デフォルトで使用されるSTLです。
+
+リンク時にC++を使用し、Fortranオブジェクトとtradモードで作成したC++オブジェクトをリンクする場合::
+
+   frtpx -c fortmain.f95
+   FCCpx -c cppfunc.cc
+   FCCpx --linkfortran -o a.out fortmain.o cppfunc.o
+
+リンク時にC++を使用し、Fortranオブジェクトとtradモードで作成したC++オブジェクトをリンクする場合（C++がmainの場合）::
+
+   frtpx -c fortsub.f95
+   FCCpx -c cppmain.cc
+   FCCpx --linkfortran -o a.out cppmain.o fortsub.o
+
+リンク時にC++を使用し、Fortranオブジェクトとclangモードにおいて-stdlib=libc++オプションを指定して作成したC++オブジェクトをリンクする場合::
+
+   frtpx -c fortmain.f95
+   FCCpx -Nclang -stdlib=libc++ -c cppfunc.cc
+   FCCpx -Nclang -stdlib=libc++ --linkfortran -o a.out fortmain.o cppfunc.o
+
+リンク時にC++を使用し、Fortranオブジェクトとclangモードにおいて-stdlib=libstdc++オプションを使用して作成したC++オブジェクトをリンクする場合::
+
+   frtpx -c fortmain.f95
+   FCCpx -Nclang -c cppfunc.cc
+   FCCpx -Nclang --linkfortran -o a.out fortmain.o cppfunc.o
+
+   libstdc++はC++コンパイラのclangモードにおいて、デフォルトで使用されるSTLです。
+
+リンク時にC++を使用し、Cオブジェクトとtradモードで作成したC++オブジェクトをリンクする場合::
+
+   fccpx -c cmain.c
+   FCCpx -c cppfunc.cc
+   FCCpx -o a.out cmain.o cppfunc.o
+
+リンク時にC++を使用し、Cオブジェクトとclangモードにおいて-stdlib=libc++オプションを指定して作成したC++オブジェクトをリンクする場合::
+
+   fccpx -c cmain.c
+   FCCpx -Nclang -stdlib=libc++ -c cppfunc.cc
+   FCCpx -Nclang -stdlib=libc++ -o a.out cmain.o cppfunc.o
+
+リンク時にC++を使用し、Cオブジェクトとclangモードにおいて-stdlib=libstdc++オプションを使用して作成したC++オブジェクトをリンクする場合::
+
+   fccpx -c cmain.c
+   FCCpx -Nclang -c cppfunc.cc
+   FCCpx -Nclang -o a.out cmain.o cppfunc.o
+
+   libstdc++はC++コンパイラのclangモードにおいて、デフォルトで使用されるSTLです。
+
+MPIプログラムの言語間結合
+--------------------------
+
+MPIプログラムを言語間結合する場合は、リンク時に以下のオプションを指定してください。
+プロファイラを使用するときに必要なライブラリをリンクします。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 100 70
+   
+   * - 使用するリンクコマンド
+     - 指定が必要なオプション
+
+   * - | mpifccpxコマンド(ネイティブコンパイラではmpifccコマンド)
+       | mpiFCCpxコマンド(ネイティブコンパイラではmpiFCCコマンド)
+     - -lfjprofmpifオプション
+
+   * - mpifrtpxコマンド(ネイティブコンパイラではmpifrtコマンド)
+     - -lfjprofmpiオプション
+
+使用例::
+
+   mpifrtpx -o a.out fortmain.o cfunc.o -lfjprofmpi
+   mpifccpx --linkfortran -o a.out fortmain.o cfunc.o -lfjprofmpif
+
+富士通コンパイラと他コンパイラのオブジェクト互換性
+---------------------------------------------------
+
+「\ `プログラミングガイド プログラミング共通編 <https://www.fugaku.r-ccs.riken.jp/docs/guides_r01#programing-guide>`_\ 」の「富士通コンパイラと他コンパイラが生成するオブジェクトの互換性について」を参照ください。
+

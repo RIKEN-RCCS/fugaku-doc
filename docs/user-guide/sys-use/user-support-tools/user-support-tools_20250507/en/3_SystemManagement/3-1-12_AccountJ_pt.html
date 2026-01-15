@@ -1,0 +1,306 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>3.1.12. Displaying Fugaku Points &#8212; User support tools User&#39;s Guide (for User)  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="3.1.11. Change the disk quota limit on each VOLUME" href="3-1-11_Chgdisklimit.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-11_Chgdisklimit.html" title="3.1.11. Change the disk quota limit on each VOLUME"
+             accesskey="P">previous</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" accesskey="U"><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.12. </span>Displaying Fugaku Points</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="displaying-fugaku-points">
+<h1><span class="section-number">3.1.12. </span>Displaying Fugaku Points<a class="headerlink" href="#displaying-fugaku-points" title="Permalink to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[Name]</strong></div>
+<div class="line">　accountj_pt - Display Fugaku Points</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Style]</strong></div>
+<div class="line">　accountj_pt [-g group name] [-c]</div>
+<div class="line">　accountj_pt [-a] [-b generation number] [-c]</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Description]</strong></div>
+<div class="line">　Displays Fugaku Points that are awarded based on the amount of electricity saved through energy conservation.</div>
+<div class="line">　You can execute a priority, up to the amount of computational resources corresponding to Fugaku Points you have earned.</div>
+<div class="line">　Fee-based Access Projects are ineligible for point distribution.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[How to calculate Fugaku points]</strong></div>
+</div>
+<ul class="simple">
+<li><p>　Calculate points based on power reduced when you execute jobs.</p></li>
+<li><p>　The Standard Power Consumption per Node Time Product  = distributed power/distributed computing resources</p></li>
+<li><p>　point = (Node Time Product of Executed Jobs * Standard Power Consumption per Node Time Product - Power Consumption of Executed Jobs) / Standard Power Consumption per Node Time Productur</p></li>
+<li><p>　For jobs that consume a lot of electricity, the Fugaku point may be negative.</p></li>
+</ul>
+<div class="line-block">
+<div class="line">　<strong>[Priority job execution]</strong></div>
+</div>
+<ul class="simple">
+<li><p>　Priority job executions are carried out on working days excluding March and September and are valid only durring the designated project period.</p></li>
+<li><p>　Set up a dedicated f-pt resource group that can execute jobs preferentially, up to the amount of computing resources allocated to the group.</p></li>
+<li><p>　No node-time product is added to the f-pt resource group. It cannot be executed when the amount of computing resources for the project is exhausted.</p></li>
+<li><p>　You can use the accountj command to check the limits and usage of allocated resources obtained by points.</p></li>
+<li><p>　For jobs in QUEUED status in the f-pt resource group, the job is automatically canceled if AVAILABLE becomes negative beyond the LIMIT value.</p></li>
+<li><p>　If the allocated priority use calculation resources are not fully used, no transfer will be made to the next fiscal year.</p></li>
+</ul>
+<div class="line-block">
+<div class="line">　<strong>[Option]</strong></div>
+<div class="line">　-g group name</div>
+<div class="line">　Specify group name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.</div>
+<div class="line">　When not specified, job accounting information for all groups to which the user belongs is displayed.</div>
+</div>
+<div class="line-block">
+<div class="line">　-c</div>
+<div class="line">　Outputs the search results in CSV format.</div>
+</div>
+<div class="line-block">
+<div class="line">　-a</div>
+<div class="line">　Points are aggregated for all groups. Groups that do not belong are masked with asterisks, and only points can be checked.</div>
+</div>
+<div class="line-block">
+<div class="line">　-b</div>
+<div class="line">　Can be specified only when the -a option is specified. Specify the number of past generations to be displayed.</div>
+<div class="line">　If this option is not specified, the latest information is displayed.</div>
+<div class="line">　The totaled for fiscal year 2023 and earlier are not available.</div>
+</div>
+<div class="line-block">
+<div class="line">　--help</div>
+<div class="line">　Display command help contents.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Return value]</strong></div>
+<div class="line">　Noprmal: 0</div>
+<div class="line">　Abnormal: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　Indicates the explanation of displaying item.</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 28.6%" />
+<col style="width: 71.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SUBTHEME</p></td>
+<td><p>Displays the name of the sub-theme</p></td>
+</tr>
+<tr class="row-odd"><td><p>SUBTHEME</p></td>
+<td><p>Displays the name of the group</p></td>
+</tr>
+<tr class="row-even"><td><p>PARENT</p></td>
+<td><p>Name of the parent hierarchy</p></td>
+</tr>
+<tr class="row-odd"><td><p>PERIOD</p></td>
+<td><p>Indicates the period in which resources are managed for each period</p></td>
+</tr>
+<tr class="row-even"><td><p>USAGE(N)</p></td>
+<td><p>Amount of used resources [Node Second]</p></td>
+</tr>
+<tr class="row-odd"><td><p>LIMIT(N)</p></td>
+<td><p>Amount of allocated resources [Node Second]</p></td>
+</tr>
+<tr class="row-even"><td><p>USAGE(E)</p></td>
+<td><p>Amount of power consumption [watt-hour (Wh)]</p></td>
+</tr>
+<tr class="row-odd"><td><p>LIMIT(E)</p></td>
+<td><p>Amount of assigned power [Wh]</p></td>
+</tr>
+<tr class="row-even"><td><p>POINT</p></td>
+<td><p>Fugaku Points(Truncation after decimal point)[*1]</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">　[*1]The decimal point is displayed as 0, but the resource is allocated.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Note]</strong></div>
+<div class="line">　None.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Use example]</strong></div>
+<div class="line">　【Example 1】Display the information that the group they are belonging to.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">  [login2]$ accountj_pt</span>
+<span class="go"> COLLECTDATE : 2024-02-08 17:18:26  unit[Node Second,Wh]</span>
+<span class="go"> *--------------------------------[ SUBTHEME ]------------------------------------------------------------------*</span>
+<span class="go"> SUBTHEME                     PARENT               LIMIT(N)          USAGE(N)          LIMIT(E)          USAGE(E)</span>
+<span class="go"> group001                    Y23FM01          2,231,676,000     1,160,135,414        67,849,149     5,001,217,071</span>
+<span class="go"> *--------------------------------[ SUBTHEME_PERIOD ]-----------------------------------------------------------*</span>
+<span class="go"> SUBTHEME                          PERIOD          LIMIT(N)          USAGE(N)          LIMIT(E)          USAGE(E)</span>
+<span class="go"> group001      20230401-20230930        1     1,115,838,000        85,942,585        33,924,574         2,388,876</span>
+<span class="go"> group001      20231001-20240331        2     1,115,838,000        44,297,414        33,924,574         1,217,071</span>
+<span class="go"> *--------------------------------[ f-pt RESOURCE GROUP ]------------------------------------------------------*</span>
+<span class="go"> GROUP                  POINT               LIMIT(N)                   USAGE(N)                      AVAILABLE(N)</span>
+<span class="go"> group001               1,299                   200                        100                                100</span>
+<span class="go">*--------------------------------[ SUBTHEME ]------------------------------------------------------------------*</span>
+<span class="go"> SUBTHEME                     PARENT               LIMIT(N)          USAGE(N)          LIMIT(E)          USAGE(E)</span>
+<span class="go"> group002                    Y23FM02              3,600,000             9,704           109,450               250</span>
+<span class="go"> *--------------------------------[ f-pt RESOURCE GROUP ]------------------------------------------------------*</span>
+<span class="go"> GROUP                  POINT               LIMIT(N)                   USAGE(N)                      AVAILABLE(N)</span>
+<span class="go"> group002                 600                    100                         50                                50</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　【Example 2】Display the information for the group to which you belong.(Period managed groups)</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go"> [login]$ accountj_pt -g group001</span>
+<span class="go">COLLECTDATE : 2024-02-08 17:18:26  unit[Node Second,Wh]</span>
+<span class="go">*--------------------------------[ SUBTHEME ]------------------------------------------------------------------*</span>
+<span class="go">SUBTHEME                     PARENT               LIMIT(N)          USAGE(N)          LIMIT(E)          USAGE(E)</span>
+<span class="go">group001                    Y23FM01          2,231,676,000     1,160,135,414        67,849,149     5,001,217,071</span>
+<span class="go">*--------------------------------[ SUBTHEME_PERIOD ]-----------------------------------------------------------*</span>
+<span class="go">SUBTHEME                          PERIOD          LIMIT(N)          USAGE(N)          LIMIT(E)          USAGE(E)</span>
+<span class="go">group001      20230401-20230930        1     1,115,838,000        85,942,585        33,924,574         2,388,876</span>
+<span class="go">group001      20231001-20240331        2     1,115,838,000        44,297,414        33,924,574         1,217,071</span>
+<span class="go">*--------------------------------[ f-pt RESOURCE GROUP ]------------------------------------------------------*</span>
+<span class="go">GROUP                 POINT               LIMIT(N)                  USAGE(N)                        AVAILABLE(N)</span>
+<span class="go">group001              1,299                   200                        100                                 100</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　【Example 3】Display the information for the group to which you belong.(One year projects)</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go"> [login]$ accountj_pt -g group002</span>
+<span class="go">COLLECTDATE : 2024-02-08 17:18:26  unit[Node Second,Wh]</span>
+<span class="go">*--------------------------------[ SUBTHEME ]------------------------------------------------------------------*</span>
+<span class="go">SUBTHEME                     PARENT               LIMIT(N)          USAGE(N)          LIMIT(E)          USAGE(E)</span>
+<span class="go">group002                     Y23FM01         2,231,676,000     1,160,135,414        67,849,149     5,001,217,071</span>
+<span class="go">*--------------------------------[ f-pt RESOURCE GROUP ]------------------------------------------------------*</span>
+<span class="go">GROUP                 POINT               LIMIT(N)                  USAGE(N)                        AVAILABLE(N)</span>
+<span class="go">group002              1,299                   200                        100                                 100</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　【Example 4】Display the information for the group to which you belong.(Fee-based Access Projects)</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountj_pt<span class="w"> </span>-g<span class="w"> </span>group003
+<span class="go">COLLECTDATE : 2024-02-08 17:18:26  unit[Node Second,Wh]</span>
+<span class="go">*--------------------------------[ SUBTHEME ]------------------------------------------------------------------*</span>
+<span class="go">SUBTHEME                     PARENT               LIMIT(N)          USAGE(N)          LIMIT(E)          USAGE(E)</span>
+<span class="go">group003                     Y23FM01         2,231,676,000     1,160,135,414        67,849,149     5,001,217,071</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　[f-pt RESOURCE GROUP] is not displayed because Fee-based Access Projects are not subject to Fugaku points.</div>
+</div>
+<div class="line-block">
+<div class="line">　【Example 5】Fugaku points earned by each project will be totaled.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go"> [login]$ accountj_pt -a</span>
+<span class="go">COLLECTDATE : 2024/03/07 14:36:50 unit[Node Second,Wh]</span>
+<span class="go">*----------[ GROUP_POINT ]-----------------*</span>
+<span class="go">P   GROUP      SUBTHEME                POINT</span>
+<span class="go">*   ********   ********                1,772</span>
+<span class="go">*   ********   ********                1,631</span>
+<span class="go">*   ********   ********                1,546</span>
+<span class="go">*   ********   ********                1,483</span>
+<span class="go">*   ********   ********                1,424</span>
+<span class="go">A   group001   group001                1,299</span>
+<span class="go">*   ********   ********                1,097</span>
+<span class="go">B   group003   group003                1,015</span>
+<span class="go">*   ********   ********                    0</span>
+<span class="go">*   ********   ********                    0</span>
+<span class="go">*   ********   ********                    0</span>
+<span class="go">*   ********   ********                    0</span>
+<span class="go">Z   group003   group003                    0</span>
+<span class="go">*   ********   ********                    0</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　Column P in the first column indicates A for period A, B for period B, and Z for One year projects.</div>
+<div class="line">　-b option to aggregate past generation points.</div>
+<div class="line">　The totaled for fiscal year 2023 and earlier are not available.</div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="3-1-11_Chgdisklimit.html"
+                          title="previous chapter"><span class="section-number">3.1.11. </span>Change the disk quota limit on each VOLUME</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-11_Chgdisklimit.html" title="3.1.11. Change the disk quota limit on each VOLUME"
+             >previous</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" ><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.12. </span>Displaying Fugaku Points</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Potal Top</a>
+    </div>
+  </body>
+</html>

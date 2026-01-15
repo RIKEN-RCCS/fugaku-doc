@@ -1,0 +1,1121 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3. Usage rule &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. System Use" href="../AccessToTheSystem/index.html" />
+    <link rel="prev" title="2. Use direction" href="../MethodOfUse/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../AccessToTheSystem/index.html" title="4. System Use"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../MethodOfUse/index.html" title="2. Use direction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>Usage rule</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="usage-rule">
+<h1><span class="section-number">3. </span>Usage rule<a class="headerlink" href="#usage-rule" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2><span class="section-number">3.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>Here indicates basic topic about the Fugaku use.</p>
+</section>
+<section id="use-scale-use-environment">
+<h2><span class="section-number">3.2. </span>Use scale/Use environment<a class="headerlink" href="#use-scale-use-environment" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">Usable function, use scale (usable computing node) and file system type/size is indicated in the following table.</div>
+<div class="line">Compiler, MPI library, math library, program development support tool (profiler / debugger), operation software (job submission / job status display / job deletion) may differ from the version described in this document due to system maintenance etc. . When we update these editions, we will publicize them separately.</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>Contents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Number of computing node</p></td>
+<td><p>158,976</p></td>
+</tr>
+<tr class="row-odd"><td><p>Language software</p></td>
+<td><p>Technical Computing Suite V4.0L20A Development Studio</p></td>
+</tr>
+<tr class="row-even"><td><p>Program development</p></td>
+<td><p>Login node</p></td>
+</tr>
+<tr class="row-odd"><td><p>Job submission</p></td>
+<td><p>Login node</p></td>
+</tr>
+<tr class="row-even"><td><p>Home area</p></td>
+<td><p>2nd layer storage system (FEFS)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Data area</p></td>
+<td><p>2nd layer storage system (FEFS)</p></td>
+</tr>
+</tbody>
+</table>
+<section id="usable-job-scale">
+<h3><span class="section-number">3.2.1. </span>Usable job scale<a class="headerlink" href="#usable-job-scale" title="Link to this heading">¶</a></h3>
+<p>1~82,944 nodes</p>
+<p>Usable job scale depends on the resource group.</p>
+<p>Please refer to the Fugaku website (<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/resource_group_config">Resource group configuration</a>) for resource group.</p>
+</section>
+</section>
+<section id="local-account-management">
+<h2><span class="section-number">3.3. </span>Local account management<a class="headerlink" href="#local-account-management" title="Link to this heading">¶</a></h2>
+<p>This indicates about local account management.</p>
+<p>To use  the Fugaku, we explain about Fugaku original local account to login to Fugaku</p>
+<section id="login">
+<h3><span class="section-number">3.3.1. </span>Login<a class="headerlink" href="#login" title="Link to this heading">¶</a></h3>
+<p>Login to the system using local account is SSH public key authentication.</p>
+</section>
+<section id="authentication-by-client-certification">
+<h3><span class="section-number">3.3.2. </span>Authentication by client certification<a class="headerlink" href="#authentication-by-client-certification" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">To access to the Fugaku website such as refering the manual, it is authentication by the client certification.</div>
+<div class="line">Client certification is sent to the user once user registration is completed.</div>
+</div>
+</section>
+<section id="system-project-manager-responsiblity-scope">
+<h3><span class="section-number">3.3.3. </span>System project manager responsiblity scope<a class="headerlink" href="#system-project-manager-responsiblity-scope" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">It is the responsibility person who proceed each application.</div>
+<div class="line">Project manager’s confirmation is required when applying for disk area extention or so on.</div>
+</div>
+</section>
+<section id="update-process">
+<h3><span class="section-number">3.3.4. </span>Update process<a class="headerlink" href="#update-process" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">If continue the task beyond the finantial year, proceed the new finantial year use application.</div>
+<div class="line">Once it is comfirmed, the current using task and account can be used continually.</div>
+<div class="line">If you use a single account and have new tasks, add them to the single account’s secondary group.</div>
+</div>
+<div class="line-block">
+<div class="line">If the task is closed soon, you can login after the task close up to 1 month.</div>
+<div class="line">Please complete data gathering during this period of time.</div>
+<div class="line">If you use a single account, delete the task from the secondary group for the single account one month after the task period ends. As a result, if a single account no longer has tasks to which it belongs, the single account itself will be suspended and you will not be able to log in.</div>
+</div>
+</section>
+</section>
+<section id="resource">
+<span id="id1"></span><h2><span class="section-number">3.4. </span>Resource<a class="headerlink" href="#resource" title="Link to this heading">¶</a></h2>
+<p>This indicates the usable number of computing node and disk.</p>
+<section id="compute-node">
+<h3><span class="section-number">3.4.1. </span>Compute node<a class="headerlink" href="#compute-node" title="Link to this heading">¶</a></h3>
+<p>The minimum and maximum number of compute nodes that can be specified are different for each resource group.</p>
+<p>The maximum value of job shape that can be specified (1D, 2D and 3D) is different for each resource group.
+About 2D and 3D, replacement of each axis is possible.
+For example, if the maximum value of each axis is <code class="docutils literal notranslate"><span class="pre">4x6x16</span></code>, the shape of <code class="docutils literal notranslate"><span class="pre">16x4x6</span></code> is also available.</p>
+<p>Node allocation method (noncont, mesh and torus) that can be specified is different for each resource group.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>For the resource groups that more than 385 nodes can be used, only torus is availble. The default is torus.</p></li>
+<li><p>For the resource groups that 384 nodes or less can be used, we provide resource groups that noncont (Default), mesh, and torus are available and resource groups that only torus is available.If mesh or torus is specified, the wait time before running the job is longer than noncont (Default).</p></li>
+<li><p>Resource groups that include non-contiguous mode (noncont) may be affected by non-contiguous mode jobs even if you specify mesh or torus. Use a resource group that only torus can be specified for strict performance measurements such as benchmark.</p></li>
+</ul>
+</div></blockquote>
+<p>Please refer to the Fugaku website (<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/resource_group_config">Resource group configuration</a>) for the resource group.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>The job shape has a maximum value for each axis. When submitting a job, you must specify that the maximum value for this axis not be exceeded.</p>
+</div>
+</section>
+<section id="confirmation-of-number-of-job-submission">
+<h3><span class="section-number">3.4.2. </span>Confirmation of number of job submission<a class="headerlink" href="#confirmation-of-number-of-job-submission" title="Link to this heading">¶</a></h3>
+<p>On <strong class="program">pjstat</strong> command’s <code class="docutils literal notranslate"><span class="pre">--limit</span></code> option, of the contents that displayed with <strong class="program">pjacl</strong> command, you can check the resource limit value and the current quota for the user’s job submission.</p>
+<p>[Resouce limit value and assign size in the resource unit]</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span>--limit
+<span class="go">System Resource Information:</span>
+<span class="go">RSCUNIT: rscunit_ft01</span>
+<span class="go">USER: user1</span>
+<span class="go"> LIMIT-NAME                    LIMIT  ALLOC</span>
+<span class="go"> ru-accept                       100      0   #1</span>
+<span class="go"> ru-accept-allsubjob       unlimited      0   #2</span>
+<span class="go"> ru-accept-bulksubjob      unlimited      0   #3</span>
+<span class="go"> ru-accept-stepsubjob      unlimited      0   #4</span>
+<span class="go"> ru-run-job                unlimited      0   #5</span>
+<span class="go"> ru-run-bulksubjob         unlimited      0   #6</span>
+<span class="go"> ru-use-node               unlimited      0   #7</span>
+<span class="go"> ru-interact-accept        unlimited      0   #8</span>
+<span class="go"> ru-interact-run-job       unlimited      0   #9</span>
+<span class="go"> ru-interact-use-node      unlimited      0   #10</span>
+<span class="go"> ru-use-core               unlimited      0   #11</span>
+<span class="go"> ru-interact-use-core      unlimited      0   #12</span>
+<span class="go">GROUP: group1</span>
+<span class="go"> LIMIT-NAME                    LIMIT  ALLOC</span>
+<span class="go"> ru-accept                 unlimited      0</span>
+<span class="go"> ru-accept-allsubjob       unlimited      0</span>
+<span class="go"> ru-accept-bulksubjob      unlimited      0</span>
+<span class="go"> ru-accept-stepsubjob      unlimited      0</span>
+<span class="go"> ru-run-job                unlimited      0</span>
+<span class="go"> ru-run-bulksubjob         unlimited      0</span>
+<span class="go"> ru-use-node               unlimited      0</span>
+<span class="go"> ru-interact-accept        unlimited      0</span>
+<span class="go"> ru-interact-run-job       unlimited      0</span>
+<span class="go"> ru-interact-use-node      unlimited      0</span>
+<span class="go"> ru-use-core               unlimited      0</span>
+<span class="go"> ru-interact-use-core      unlimited      0</span>
+<span class="go">ALL:</span>
+<span class="go"> LIMIT-NAME                    LIMIT  ALLOC</span>
+<span class="go"> ru-accept                 unlimited      0</span>
+<span class="go"> ru-accept-allsubjob       unlimited      0</span>
+<span class="go"> ru-accept-bulksubjob      unlimited      0</span>
+<span class="go"> ru-accept-stepsubjob      unlimited      0</span>
+<span class="go"> ru-run-job                unlimited      0</span>
+<span class="go"> ru-run-bulksubjob         unlimited      0</span>
+<span class="go"> ru-use-node               unlimited      0</span>
+<span class="go"> ru-interact-accept        unlimited      1</span>
+<span class="go"> ru-interact-run-job       unlimited      0</span>
+<span class="go"> ru-interact-use-node      unlimited      0</span>
+<span class="go"> ru-use-core               unlimited      0</span>
+<span class="go"> ru-interact-use-core      unlimited      0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ol class="arabic simple">
+<li><p>Number of batch job acceptance at the same time</p></li>
+<li><p>Limit number of bulk job and step job’s sub job acceptance at the same time</p></li>
+<li><p>Limit number of bulk job’s sub job acceptance at the same time</p></li>
+<li><p>Limit number of step job’s sub job acceptance at the same time</p></li>
+<li><p>Number of batch job execution at the same time</p></li>
+<li><p>Limit number of bulk job’s sub job execution at the same time</p></li>
+<li><p>Number of batch job’s node use at the same time</p></li>
+<li><p>Number of interactive job acceptance at the same time</p></li>
+<li><p>Number of interactive job execution at the same time</p></li>
+<li><p>Number of interactive job’s node use at the same time</p></li>
+<li><p>Number of batch job’s CPU core use at the same time</p></li>
+<li><p>Number of interactive job’s CPU core use at the same time</p></li>
+</ol>
+</div>
+</div></blockquote>
+<p><strong class="program">pjstat</strong> command’s <code class="docutils literal notranslate"><span class="pre">--limit</span></code> option displays the following item and contents.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LIMIT-NAME</p></td>
+<td><p>Limit value name</p></td>
+</tr>
+<tr class="row-odd"><td><p>RSCUNIT</p></td>
+<td><p>Resource unit name</p></td>
+</tr>
+<tr class="row-even"><td><p>GROUP</p></td>
+<td><p>Group name on OS</p></td>
+</tr>
+<tr class="row-odd"><td><p>LIMIT</p></td>
+<td><p>Limit value</p></td>
+</tr>
+<tr class="row-even"><td><p>ALLOC</p></td>
+<td><p>Current assigning value</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>[About the lower limit setting of resource group]</p>
+<blockquote>
+<div><p>To resource group, there is the lower limit to the specificable number of node. If specified lower number of node than the lower limit, the following error message displays when executed <strong class="program">pjsub</strong> and the job cannot be accepted.</p>
+<p>The error display when the specification of number of node is lower than the limit is as following.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;rscgrp=large&quot;</span><span class="w"> </span>sample.sh
+<span class="go">[ERR.] PJM 0054 pjsub node=1 is less than the lower limit (385).</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="how-to-use-resource-group">
+<span id="howtospecifyresourcegroups"></span><h3><span class="section-number">3.4.3. </span>How to use resource group<a class="headerlink" href="#how-to-use-resource-group" title="Link to this heading">¶</a></h3>
+<p>To use a resource group, it is required to specify a resource name.</p>
+<p>[Execution command example by resource group small]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;rscgrp=small&quot;</span><span class="w"> </span>sample.sh
+</pre></div>
+</div>
+</section>
+<section id="resource-group-use-status">
+<h3><span class="section-number">3.4.4. </span>Resource group use status<a class="headerlink" href="#resource-group-use-status" title="Link to this heading">¶</a></h3>
+<p>About the resouce use status on the system, it’s checked with <strong class="program">pjshowrsc</strong> command.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If you are using a single account, use the newgrp command to change to an individual issue group (for example, hpxxxxxx) and then run the pjshowrsc command.</p>
+</div>
+<ul class="simple">
+<li><p>Display summary per resource group</p></li>
+</ul>
+<blockquote>
+<div><p>If specify  <code class="docutils literal notranslate"><span class="pre">--rscgrp</span></code> option without argument, displays about all resource group.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjshowrsc<span class="w"> </span>--rscgrp
+<span class="go">[ CLST: clst ]</span>
+<span class="go">[ RSCUNIT: rscunit_ft01 ]</span>
+<span class="go">RSCGRP  NODE</span>
+<span class="go">       TOTAL FREE ALLOC</span>
+<span class="go">group1     36    24   12</span>
+<span class="go">group2     36    24   12</span>
+<span class="go">group3     36    24   12</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>Display summary on specific resource group</p></li>
+</ul>
+<blockquote>
+<div><p>If specify resource group name to <code class="docutils literal notranslate"><span class="pre">--rscgrp</span></code> option’s argument, displays specified resource group information.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjshowrsc<span class="w"> </span>--rscgrp<span class="w"> </span>group2
+<span class="go">[ CLST: clst ]</span>
+<span class="go">[ RSCUNIT: rscunit_ft01 ]</span>
+<span class="go">RSCGRP  NODE</span>
+<span class="go">        TOTAL FREE ALLOC</span>
+<span class="go">group2     36    24   12</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="disk">
+<span id="diskpoints"></span><h3><span class="section-number">3.4.5. </span>Disk<a class="headerlink" href="#disk" title="Link to this heading">¶</a></h3>
+<p>This indicates the type of file system.</p>
+<ul class="simple">
+<li><p>There are 5 types for the disk area : home area, data area, share area, tmpfs area, and 2ndfs area.</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Area</p></th>
+<th class="head"><p>File system</p></th>
+<th class="head"><p>Allocation volume</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Home area</p></td>
+<td><p>Global file system (FEFS,LLIO)</p></td>
+<td><p>/vol0002,/vol0003,/vol0004,/vol0005,/vol0006</p></td>
+</tr>
+<tr class="row-odd"><td><p>Data area</p></td>
+<td><p>Global file system (FEFS,LLIO)</p></td>
+<td><p>same as above</p></td>
+</tr>
+<tr class="row-even"><td><p>Share area</p></td>
+<td><p>Global file system (FEFS,LLIO)</p></td>
+<td><p>same as above</p></td>
+</tr>
+<tr class="row-odd"><td><p>tmpfs area</p></td>
+<td><p>tmpfs</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-even"><td><p>2ndfs area</p></td>
+<td><p>Global file system (FEFS)</p></td>
+<td><p>/vol0001</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Fugaku system does not collect user data backups. Data management (backup, etc.) is self-managed by the user.</p>
+<p>If you open or close hundreds of thousands of files in a short period of time, the execution node may run out of memory.</p>
+<p>Please refrain from the operations 1 to 3 below because they may place a heavy load on the entire file system.</p>
+<ol class="arabic simple">
+<li><p>Simultaneous file creation from more than 1000 processes in the same directory</p></li>
+<li><p>Create more than 100,000 files in the same directory in the home area and data area</p></li>
+<li><p>The following operations performed simultaneously on the same directory from multiple compute nodes</p></li>
+</ol>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p>Create or delete files and directories</p></li>
+<li><p>Refer to files and directories</p></li>
+</ol>
+</div></blockquote>
+<p>Avoid the third one in particular as it can slow down the file system or bring down compute nodes.</p>
+<p>Example) Run more than 1,000 small jobs (or processes) in the same directory, then create files and directories during the job or output job results and statistics.</p>
+<p>To prevent multiple compute nodes from accessing the same directory simultaneously, the following actions are recommended to make job execution easier.</p>
+<ul class="simple">
+<li><p>Separate output directories for each job</p></li>
+<li><p>Hierarchize directories to separate reference and output directories</p></li>
+</ul>
+</div>
+</div></blockquote>
+<ul>
+<li><p>About directory name</p>
+<p>The home directory, data directory, share directory, and 2ndfs directory are created using the following symbolic link names. In some cases, such as job logs and Fugaku websites, the actual path (path described in the Allocation volume) is displayed.</p>
+<ul class="simple">
+<li><p>Home directory  :  <code class="file docutils literal notranslate"><span class="pre">/home/username/</span></code></p></li>
+<li><p>Data directory  :  <code class="file docutils literal notranslate"><span class="pre">/vol0n0m/data/groupname/</span></code></p></li>
+<li><p>Share directory :  <code class="file docutils literal notranslate"><span class="pre">/vol0n0m/share/groupname/</span></code></p></li>
+<li><p>tmpfs directory  :  <code class="file docutils literal notranslate"><span class="pre">/worktmp/</span></code></p></li>
+<li><p>2ndfs directory  :  <code class="file docutils literal notranslate"><span class="pre">/2ndfs/groupname/</span></code></p></li>
+</ul>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>n</em>:volume number(2～6)</div>
+<div class="line"><em>m</em>:MDT number(0～7)</div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Data directory, share directory, and 2ndfs directory assigns to group. Please use with group members. The share directory can be referenced from the above path only from the login node.</div>
+<div class="line">For 2ndfs, refer to <a class="reference internal" href="#filesystempoints"><span class="std std-ref">File system</span></a>.</div>
+</div>
+</div></blockquote>
+<ul>
+<li><p>Use of share area (/vol0n0m/share/groupname/)</p>
+<p>An area where you can share data between specific groups and members. Unlike the home area and data area, all users can access under <code class="file docutils literal notranslate"><span class="pre">/vol0n0m/share/groupname/</span></code>. You are able to create a directory freely for each group or member you want to share.</p>
+</li>
+<li><p>Use of tmpfs area (/worktmp/)</p>
+<div class="line-block">
+<div class="line">This is a temporary file area accessible only from compute nodes during job execution.</div>
+<div class="line">The tmpfs area consumes memory (job memory) on the compute node, providing a maximum of 20GiB.</div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If you need to use temporary files larger than 20GiB, consider using <a class="reference internal" href="../LayeredStorageAndLLIO/TemporaryAreaInNode.html#temporaryareainnode"><span class="std std-ref">Node Temporary Area</span></a>.</p>
+</div>
+</li>
+</ul>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#method-of-using-share-area-vol0n0m-share-groupname" id="id6">Method of using share area (/vol0n0m/share/groupname/)</a></p>
+<ul>
+<li><p><a class="reference internal" href="#acl-function" id="id7">ACL function</a></p></li>
+<li><p><a class="reference internal" href="#file-sharing-examples-of-using-acl" id="id8">File sharing examples of using ACL</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#method-of-using-tmpfs-area-worktmp" id="id9">Method of using tmpfs area (/worktmp/)</a></p></li>
+</ul>
+</nav>
+<section id="method-of-using-share-area-vol0n0m-share-groupname">
+<h4><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">3.4.5.1. </span>Method of using share area (/vol0n0m/share/groupname/)</a><a class="headerlink" href="#method-of-using-share-area-vol0n0m-share-groupname" title="Link to this heading">¶</a></h4>
+<section id="acl-function">
+<h5><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">3.4.5.1.1. </span>ACL function</a><a class="headerlink" href="#acl-function" title="Link to this heading">¶</a></h5>
+<p>In FEFS, the following ACL function can be used, similar to file systems such as ext4.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>setfacl ACL settings by the command</p></li>
+<li><p>getfacl Displaying ACL information by the command</p></li>
+</ul>
+</div></blockquote>
+<p>Flexible file access control settings can be made by using the ACL function.</p>
+</section>
+<section id="file-sharing-examples-of-using-acl">
+<h5><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">3.4.5.1.2. </span>File sharing examples of using ACL</a><a class="headerlink" href="#file-sharing-examples-of-using-acl" title="Link to this heading">¶</a></h5>
+<p>Displaying examples of file sharing with different groups. For other setting examples, please refer to the <strong class="command">man {setfacl | getfacl }</strong> command for detailed information.</p>
+<blockquote>
+<div><p>Create an directory.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span><span class="nb">cd</span><span class="w"> </span>/vol0n0m/share/&lt;yourgroup&gt;
+<span class="gp">[_LNlogin]$ </span>mkdir<span class="w">   </span>toGroupA
+<span class="gp">[_LNlogin]$ </span>getfacl<span class="w"> </span>toGroupA
+<span class="gp"># </span>file:<span class="w"> </span>toGroupA
+<span class="gp"># </span>owner:<span class="w"> </span>you
+<span class="gp"># </span>group:<span class="w"> </span>yourgroup
+<span class="gp"># </span>flags:<span class="w"> </span>-s-
+<span class="go">user::rwx</span>
+<span class="go">group::rwx</span>
+<span class="go">other::---</span>
+<span class="go">default:user::rwx</span>
+<span class="go">default:group::rwx</span>
+<span class="go">default:other::---</span>
+</pre></div>
+</div>
+<p>Note that after simply executing <strong class="command">mkdir</strong>, only the members of the group can access the directory.
+Please grant <code class="docutils literal notranslate"><span class="pre">rx</span></code> rights to the target group <code class="docutils literal notranslate"><span class="pre">GroupA</span></code> you want to share.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>setfacl<span class="w"> </span>-m<span class="w"> </span>g:GroupA:rx<span class="w">   </span>toGroupA
+</pre></div>
+</div>
+<p>When creating files or directories under the created directory, set the default ACL to inherit permissions.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>setfacl<span class="w"> </span>-m<span class="w"> </span>d:g:GroupA:rx<span class="w"> </span>toGroupA
+</pre></div>
+</div>
+<p>You can see that the access permissions are inherited by creating a directory  <code class="docutils literal notranslate"><span class="pre">foo</span></code>  shared with  <code class="docutils literal notranslate"><span class="pre">GroupA</span></code>  and a file  <code class="docutils literal notranslate"><span class="pre">bar</span></code>  under the directory  <code class="docutils literal notranslate"><span class="pre">toGroupA</span></code>  which created and set earlier, then checking the access permissions.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span><span class="nb">cd</span><span class="w"> </span>toGroupA
+<span class="gp">[_LNlogin]$ </span>mkdir<span class="w">   </span>foo
+<span class="gp">[_LNlogin]$ </span>touch<span class="w">   </span>bar
+<span class="gp">[_LNlogin]$ </span>getfacl<span class="w"> </span>foo
+<span class="gp"># </span>file:<span class="w"> </span>foo
+<span class="gp"># </span>owner:<span class="w"> </span>you
+<span class="gp"># </span>group:<span class="w"> </span>yourgroup
+<span class="gp"># </span>flags:<span class="w"> </span>-s-
+<span class="go">user::rwx</span>
+<span class="go">group::rwx</span>
+<span class="go">group:GroupA:r-x</span>
+<span class="go">mask::rwx</span>
+<span class="go">other::---</span>
+<span class="go">default:user::rwx</span>
+<span class="go">default:group::rwx</span>
+<span class="go">default:group:GroupA:r-x</span>
+<span class="go">default:mask::rwx</span>
+<span class="go">default:other::---</span>
+
+<span class="gp">[_LNlogin]$ </span>getfacl<span class="w"> </span>bar
+<span class="gp"># </span>file:<span class="w"> </span>bar
+<span class="gp"># </span>owner:<span class="w"> </span>you
+<span class="gp"># </span>group:<span class="w"> </span>yourgroup
+<span class="go">user::rw-</span>
+<span class="gp">group::rwx                      #</span>effective:rw-
+<span class="gp">group:GroupA:r-x                #</span>effective:r--
+<span class="go">mask::rw-</span>
+<span class="go">other::---</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>Please be careful when sharing files. Do not grant access to unnecessary groups or <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p></li>
+<li><p>When FEFS is mounted with ACL function disactivated due to the system problems or maintenance, the ACL settings will be inactive, and only standard file permissions will be managed. In this case, sharing between groups is not available.</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="method-of-using-tmpfs-area-worktmp">
+<h4><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">3.4.5.2. </span>Method of using tmpfs area (/worktmp/)</a><a class="headerlink" href="#method-of-using-tmpfs-area-worktmp" title="Link to this heading">¶</a></h4>
+<p>You can create, read and write files, and start executable files in the same way as a normal file system.</p>
+<p>Please note the following points when using.</p>
+<ul>
+<li><div class="line-block">
+<div class="line">An area is allocated for each job. It can be used only from the start of job execution to the end of job execution.</div>
+<div class="line">It cannot be referenced from another job of the same user or a job of another user.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">An area is assigned on a node-by-node basis. Only available within the same node. It cannot be referenced from other nodes.</div>
+<div class="line">For example, when executed in 1 node and 4 processes, 4 processes in the same node refer to the same area.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">A capacity of 20GiB is provided.</div>
+<div class="line">However, the usable tmpfs area depends on the following conditions:</div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Upper limit of used capacity (approximate) = Maximum amount of job memory - Memory usage by job   (1)
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If the result of equation (1) is 20GiB or more: 20GiB</p></li>
+<li><p>If the result of equation (1) is less than 20GiB: The result of equation (1)</p></li>
+</ul>
+<div class="line-block">
+<div class="line">For details about the maximum amount of job memory and the amount of memory used by jobs (the amount of memory used by user programs), see <a class="reference internal" href="#estimatingtheamountofmemory"><span class="std std-ref">Estimating the amount of memory available to user programs</span></a> .</div>
+</div>
+</li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Attempting to place files larger than the upper limit of usable capacity into the tmpfs area will result in a write error.</p>
+<p>Also, if the sum of “Memory usage by job” and “tmpfs area usage” approaches the “Maximum amount of job memory,” an OOM (Out Of Memory) error may occur.</p>
+<p>It is recommended to execute the job once and use it after understanding the maximum memory usage for each node.</p>
+</div>
+</section>
+</section>
+<section id="file-creation-and-stripe-setting">
+<h3><span class="section-number">3.4.6. </span>File creation and stripe setting<a class="headerlink" href="#file-creation-and-stripe-setting" title="Link to this heading">¶</a></h3>
+<p>You can set stripe settings for files created in the home area and data area. By performing stripe settings, access to the OST (Object Storage Target) that composes the global file system is distributed and efficient use is possible.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If a compute node writes a file larger than 1GB in size, use stripe settings to avoid loading a specific OST.</p>
+</div>
+<nav class="contents local" id="id3">
+<ul class="simple">
+<li><p><a class="reference internal" href="#stripe-setting" id="id10">Stripe setting</a></p></li>
+<li><p><a class="reference internal" href="#confirm-stripe" id="id11">Confirm stripe</a></p></li>
+</ul>
+</nav>
+<section id="stripe-setting">
+<h4><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">3.4.6.1. </span>Stripe setting</a><a class="headerlink" href="#stripe-setting" title="Link to this heading">¶</a></h4>
+<p>To set a stripe, use  <strong class="program">lfs setstripe</strong> command.  This indicates  <strong class="program">lfs setstripe</strong> command style. Please see the manual”FEFS User’s Guide” for more detail.</p>
+<blockquote>
+<div><p>Style</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>lfs setstripe [options] &lt;dirname|filename&gt;
+</pre></div>
+</div>
+<p>Option</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[--stripe-count | -c stripe_count]
+</pre></div>
+</div>
+<p>Set number of stripe. Specify 1~48.</p>
+<dl>
+<dt>&lt;dirname&gt;</dt><dd><p>Specify an existing directory name. A stripe is set in the directory. After setting, stripe settings are inherited for files and directories created under this directory.</p>
+</dd>
+<dt>&lt;filename&gt;</dt><dd><p>Specify a new file name. Create an empty file with stripes. An existing file cannot be specified. You cannot change the stripe settings of an existing file.</p>
+</dd>
+<dt>Stripe setting direction</dt><dd><p>This section describes the procedure for creating a directory and setting a stripe in the created directory. It is recommended that you use stripes in directories instead of files.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mkdir<span class="w"> </span>&lt;dirname&gt;
+<span class="gp">[_LNlogin]$ </span>lfs<span class="w"> </span>setstripe<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><span class="w"> </span>&lt;dirname&gt;
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<div class="line-block">
+<div class="line">When you use the <strong class="program">lfs</strong> command for 2ndfs on the compute node, you must specify the full path <strong class="program">/usr/bin/lfs</strong> .</div>
+<div class="line">When you use the <strong class="program">lfs</strong> command for the second-layer storage cashe on the compute node, you must specify the <strong class="program">lfs</strong> default path.</div>
+</div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="confirm-stripe">
+<h4><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">3.4.6.2. </span>Confirm stripe</a><a class="headerlink" href="#confirm-stripe" title="Link to this heading">¶</a></h4>
+<p>To check stripe, use  <strong class="program">lfs getstripe</strong> command. Please see the manual”FEFS User’s Guide” for more detail.</p>
+<blockquote>
+<div><dl>
+<dt>How to confirm stripe</dt><dd><p>Here indicates the steps to check stripe setting of directory and file. Confirm stripe_count or lmm_stripe_count displayed as next.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>lfs<span class="w"> </span>getstripe<span class="w"> </span>-d<span class="w"> </span>&lt;dirname&gt;
+<span class="go">&lt;dirname&gt;</span>
+<span class="go">stripe_count:   4 stripe_size:    0 stripe_offset:  -1</span>
+<span class="gp">[_LNlogin]$ </span>lfs<span class="w"> </span>getstripe<span class="w"> </span>&lt;dirname&gt;/&lt;filename&gt;
+<span class="go">&lt;dirname&gt;/&lt;filename&gt;</span>
+<span class="go">lmm_stripe_count:   4</span>
+<span class="go">lmm_stripe_size:    1048576</span>
+<span class="go">lmm_stripe_offset:  ...</span>
+<span class="go">        obdidx           objid          objid            group</span>
+<span class="go">....</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<div class="line-block">
+<div class="line">When you use the <strong class="program">lfs</strong> command for 2ndfs on the compute node, you must specify the full path <strong class="program">/usr/bin/lfs</strong> .</div>
+<div class="line">When you use the <strong class="program">lfs</strong> command for the second-layer storage cashe on the compute node, you must specify the <strong class="program">lfs</strong> default path.</div>
+</div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</section>
+<section id="file-system">
+<span id="filesystempoints"></span><h3><span class="section-number">3.4.7. </span>File system<a class="headerlink" href="#file-system" title="Link to this heading">¶</a></h3>
+<p>Job operation software supports job execution in “tiered storage”. Tiered storage is a file system that has a hierarchical structure with the following first-tier storage and second-layer storage.</p>
+<figure class="align-default">
+<img alt="../_images/HierarchyFilesystem_01.png" src="../_images/HierarchyFilesystem_01.png" />
+</figure>
+<ul>
+<li><p>The first-layer storage</p>
+<p>The first-layer storage is a high-speed file system using Lightweight Layered IO-Accelerator (LLIO) technology. first-layer storage is sometimes called LLIO. In tiered storage, it is this first-layer storage that can be accessed directly from the compute nodes.</p>
+<p>For the first-layer storage, there are 3 type of areas.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Temporary area in node</dt><dd><p>The local area that can be used on each computing node that is assigned to job.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Shared temporary area</dt><dd><p>The area that assigned to node and is able to share within nodes. If it is the same job process, accessable from any computing nodes.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>The second-layer storage cashe</dt><dd><p>Although it appears as a second-layer storage to the job, internally it accesses the second-layer storage cache on the first-layer storage instead of directly accessing the second-layer storage. A temporary work area in the node and a shared temporary area are reserved for each job, and can be used only by that job. These areas are reserved at the start of the job and are deleted when the job ends.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>About the first-layer storage’s detail, please see the manual “LLIO User’s Guide”.</p>
+</div>
+</li>
+<li><p>The second-layer storage</p>
+<p>The second-layer storage uses the distributed file system FEFS and is shared by the login node and each computing node. Before submitting a job, the user places files such as job scripts required to execute the job in this file system. Access from the job on the compute node to the second-layer storage is internally to the cache on the first-layer storage.</p>
+<p>Home area (/home), data area (/vol0<em>n</em>0<em>m</em>/data), share area (/vol0<em>n</em>0<em>m</em>/share), and 2ndfs area (/2ndfs) is created to the second-layer storage.</p>
+<p>2ndfs provides direct access to tier second-layer storage without going through tier first-layer storage.</p>
+<div class="line-block">
+<div class="line"><em>n</em>:volume number(2～6)</div>
+<div class="line"><em>m</em>:MDT number(0～7)</div>
+</div>
+<ul>
+<li><p>Disk size/Number of file limit</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>home area</p></th>
+<th class="head"><p>data + share area</p></th>
+<th class="head"><p>2ndfs area</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Size limit</p></td>
+<td><p>20GiB/User</p></td>
+<td><p>5TiB/Group</p></td>
+<td><p>5TiB/Group</p></td>
+</tr>
+<tr class="row-odd"><td><p>Number of file limit</p></td>
+<td><p>200K/User</p></td>
+<td><p>1.5M/Group</p></td>
+<td><p>1.5M/Group</p></td>
+</tr>
+<tr class="row-even"><td><p>Block size</p></td>
+<td><p>4KiB</p></td>
+<td><p>4KiB</p></td>
+<td><p>4KiB</p></td>
+</tr>
+<tr class="row-odd"><td><p>Stripe count</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Strpe size</p></td>
+<td><p>1MiB</p></td>
+<td><p>1MiB</p></td>
+<td><p>1MiB</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p>The /vol0002 area is intended to be used for issues that require particularly large use of i-nodes.
+A permission system will be applied to use the system for tasks appropriate to each field.
+Please describe the reason why you use a large number of inodes at the time of application.
+Group that are not being used in accordance with the investment policy in this area may be discontinued and a request to move to a normal area may be made.</p>
+<ul>
+<li><p>Disk size/Number of file limit</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>data + share area(/vol0002)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Size limit</p></td>
+<td><p>5TiB/Group</p></td>
+</tr>
+<tr class="row-odd"><td><p>Number of file limit</p></td>
+<td><p>9.0M/Group</p></td>
+</tr>
+<tr class="row-even"><td><p>Block size</p></td>
+<td><p>4KiB</p></td>
+</tr>
+<tr class="row-odd"><td><p>Stripe count</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Strpe size</p></td>
+<td><p>1MiB</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p>Please check <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/application">here</a>for the application.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Please see the manual “FEFS User’s Guide” for more detail about FEFS.</p>
+</div>
+</li>
+</ul>
+<section id="client-cache-of-the-compute-node-and-io-peformance">
+<h4><span class="section-number">3.4.7.1. </span>Client cache of the compute node and IO peformance<a class="headerlink" href="#client-cache-of-the-compute-node-and-io-peformance" title="Link to this heading">¶</a></h4>
+<p>In the compute node, the client cache used for I/O is limited to 128MiB, Therefore, if a record length is greater than 128MiB, the read performance for files on the second-layer storage can be severely degraded. When you design I/O or migrate from other systems, you should set the length of a record to be less than or equal to 128MiB.</p>
+<ul>
+<li><p>C/C++</p>
+<p>Adjust the read size in user programs. For example, when using fread, set the arguments so that size*num should be less than or equal to 128MiB:</p>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">fread</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">num</span><span class="p">,</span><span class="w"> </span><span class="n">fp</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Fortran</p>
+<p>The record length depends on the I/O buffer size of Fortran. By default, this I/O buffer size is 8MiB and such case does not have the problem with client cache. If you specify the I/O buffer size at runtime using the -Wl,-g option, for instance, set the vlaue to be less than or equal to 128MiB.</p>
+</li>
+</ul>
+<p>Also, if you unzip a file larger than 128MiB using gzip/gunzip, it may take a long time to wait for the cache output. If you unzip a large number of files on the second-layer storage, consider using a login node with a large client cache.</p>
+</section>
+</section>
+<section id="group">
+<span id="id4"></span><h3><span class="section-number">3.4.8. </span>Group<a class="headerlink" href="#group" title="Link to this heading">¶</a></h3>
+<p>You must specify a group ID when you submit a job.</p>
+<div class="line-block">
+<div class="line">Each project has a Project ID, and the group ID is the Project ID when each project was adopted in the first year (The Project ID changes every year, but the group ID does not.)</div>
+<div class="line">You can use the <strong class="command">userinfo</strong> command to see the group IDs to which the account belongs. Use this command to see the group ID of the Project ID.</div>
+</div>
+<p>Example: <strong class="command">userinfo</strong> command</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>userinfo<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>groupList
+<span class="go">groupList=hp210xxx,hp220xxx,fugaku</span>
+</pre></div>
+</div>
+<p>If multiple group IDs are displayed and you can not know the group ID that corresponds to the target Project ID, please ask the Project manager.</p>
+<p>The group list may contain <code class="docutils literal notranslate"><span class="pre">'fugaku'</span></code>, where <code class="docutils literal notranslate"><span class="pre">'fugaku'</span></code> is the group ID to which all single accounts belong.
+You can not specify <code class="docutils literal notranslate"><span class="pre">'fugaku'</span></code> as a group ID when you submit a job.</p>
+<p>Example job script</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span><span class="nb">cd</span><span class="w"> </span>/vol0n0m/data/groupname/username
+
+<span class="gp">[_LNlogin]$ </span>vi<span class="w"> </span>jobscript
+<span class="gp">#</span>!/bin/bash
+<span class="gp">#</span>PJM<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;node=4&quot;</span>
+<span class="gp">#</span>PJM<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;rscgrp=small&quot;</span>
+<span class="gp">#</span>PJM<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;elapse=1:00:00&quot;</span>
+<span class="gp">#</span>PJM<span class="w"> </span>--mpi<span class="w"> </span><span class="s2">&quot;max-proc-per-node=4&quot;</span>
+<span class="gp">#</span>PJM<span class="w"> </span>-x<span class="w"> </span><span class="nv">PJM_LLIO_GFSCACHE</span><span class="o">=</span>/vol0005
+<span class="gp">#</span>PJM<span class="w"> </span>-g<span class="w"> </span>groupname
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">You must also specify the file system (volume) to be used by the job.</div>
+<div class="line">For volume, refer to <a class="reference internal" href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html#selectavailablevolumes"><span class="std std-ref">Selecting a usage file system (volume)</span></a>.</div>
+</div>
+</section>
+<section id="type-of-parallel-job">
+<h3><span class="section-number">3.4.9. </span>Type of parallel job<a class="headerlink" href="#type-of-parallel-job" title="Link to this heading">¶</a></h3>
+<p>With the Fugaku, computing program executes as job unit. Jobs are classified into single node jobs and multi node jobs according to the number of nodes required.</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">Mult node job</div>
+<div class="line">The job that executes by using the multiple computing nodes. This applies to process parallel programs that cross nodes.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Single node job</div>
+<div class="line">The job that executes on 1 device computing node. Sequential job becomes single node job. A parallel job is one that uses multiple processes or threads within a node.</div>
+</div>
+</li>
+</ol>
+</section>
+<section id="login-node">
+<h3><span class="section-number">3.4.10. </span>Login node<a class="headerlink" href="#login-node" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">On login node, the limitation of resource is set by using Linux standard function.</div>
+<div class="line">By using  <strong class="command">ulimit</strong> command, it is possible to check the available resource.</div>
+</div>
+<p><strong class="command">ulimit</strong> command execution example</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span><span class="nb">ulimit</span><span class="w"> </span>-a
+<span class="go">core file size          (blocks, -c) unlimited</span>
+<span class="go">data seg size           (kbytes, -d) unlimited</span>
+<span class="go">scheduling priority             (-e) 0</span>
+<span class="go">file size               (blocks, -f) unlimited</span>
+<span class="go">pending signals                 (-i) 377308</span>
+<span class="go">max locked memory       (kbytes, -l) unlimited</span>
+<span class="go">max memory size         (kbytes, -m) unlimited</span>
+<span class="go">open files                      (-n) 1024</span>
+<span class="go">pipe size            (512 bytes, -p) 8</span>
+<span class="go">POSIX message queues     (bytes, -q) 819200</span>
+<span class="go">real-time priority              (-r) 0</span>
+<span class="go">stack size              (kbytes, -s) 8192</span>
+<span class="go">cpu time               (seconds, -t) 604800</span>
+<span class="go">max user processes              (-u) 4096</span>
+<span class="go">virtual memory          (kbytes, -v) 41943040</span>
+<span class="go">file locks                      (-x) unlimited</span>
+</pre></div>
+</div>
+<p>If you are using more than the following resources per Fugaku Login Node, please consider running jobs on multiple Fugaku Login Nodes, <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/pps-slurm/">Pre/Post Environment</a>, or Fugaku compute nodes.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Resource</p></th>
+<th class="head"><p>available</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>number of threads</p></td>
+<td><p>8 threads</p></td>
+</tr>
+<tr class="row-odd"><td><p>Memory capacity</p></td>
+<td><p>12GiB</p></td>
+</tr>
+</tbody>
+</table>
+<p>See also “<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/operation/20211028_01">Notes on using the Fugaku Login Node</a>” on the Fugaku website.</p>
+</section>
+<section id="i-o-node">
+<span id="usagerulesionode"></span><h3><span class="section-number">3.4.11. </span>I/O node<a class="headerlink" href="#i-o-node" title="Link to this heading">¶</a></h3>
+<p>In the Fugaku, some of the computing node serve as the I/O node.</p>
+<p>There are three types of I/O nodes.</p>
+<dl class="simple">
+<dt>BIO(Boot I/O node)</dt><dd><p>I/O node that acts as the boot server of nodes.
+There is 1 node in 16 nodes(1BoB).</p>
+</dd>
+<dt>SIO(Storage I/O node)</dt><dd><p>I/O node responsible for input/output for first-layer storage
+The storage I/O node is connected to a disk drive (SSD) composing first-layer storage.
+There is 1 node in 16 nodes(1BoB).</p>
+</dd>
+<dt>GIO(Global I/O node)</dt><dd><p>Node for relaying input/output for second-layer storage(FEFS).
+There is 1 node in 192 nodes.</p>
+</dd>
+</dl>
+<figure class="align-center" id="id5">
+<a class="reference internal image-reference" href="../_images/IOnode_01.png"><img alt="Placement overview of the I/O node" src="../_images/IOnode_01.png" style="width: 565.0px; height: 251.0px;" /></a>
+<figcaption>
+<p><span class="caption-text">Placement overview of the I/O node</span><a class="headerlink" href="#id5" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The CPU frequency of the I/O node is fixed to 2.2 GHz.</p>
+<p>You can identify the I/O node from NODE ID output in the job statistics information.</p>
+<p>The method of identifying the I/O node</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">BIO: NODE ID ending 01</div>
+<div class="line">SIO: NODE ID ending 02</div>
+<div class="line">GIO: Please refer to NODE ID list of <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/contents/0603-2020/GIO_LIST.txt">GIO_list.txt</a></div>
+</div>
+</div></blockquote>
+<p>Please refer to ‘job Operation Software Overview’ to see the function of  BIO,SIO,GIO,BoB.</p>
+<p>An <strong class="program">idcheck</strong> command is provided to display the I/O node from the NODE ID on the login node.</p>
+<ol class="arabic">
+<li><p>The command with the <code class="docutils literal notranslate"><span class="pre">-h</span></code> option shows help menu</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>idcheck<span class="w"> </span>-h
+<span class="go">Usage: idcheck [OPTION]...</span>
+<span class="go"> -h Display help</span>
+<span class="go"> -n nodeid[,...] Search node type from node ID</span>
+<span class="go"> -f &lt;FILE&gt; This option executes the process for node IDs written in the file that is specified by filename.</span>
+<span class="go"> [Example]</span>
+<span class="go"> 0x01010001</span>
+<span class="go"> 0x01010002</span>
+<span class="go"> 0x01010003</span>
+<span class="go"> 0x01010004</span>
+</pre></div>
+</div>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">-n</span></code> option, followed by single NODEID or multiple NODEIDs separated by ‘,’ shows each node information as follows.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>idcheck<span class="w"> </span>-n<span class="w"> </span>0x01010001,0x01010002,0x01010003,0x01010004
+<span class="go">0x01010001 BIO</span>
+<span class="go">0x01010002 SIO</span>
+<span class="go">0x01010003 GIO</span>
+<span class="go">0x01010004 CN</span>
+</pre></div>
+</div>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">-f</span></code> option, followed by a filename that describes NODEIDs shows each node information as follows.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>cat<span class="w"> </span>aaa
+<span class="go">0x01010001</span>
+<span class="go">0x01010002</span>
+<span class="go">0x01010003</span>
+<span class="go">0x01010004</span>
+<span class="gp">[_LNlogin]$ </span>idcheck<span class="w"> </span>-f<span class="w"> </span>aaa
+<span class="go">0x01010001 BIO</span>
+<span class="go">0x01010002 SIO</span>
+<span class="go">0x01010003 GIO</span>
+<span class="go">0x01010004 CN</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="estimating-the-amount-of-memory-available-to-user-programs">
+<span id="estimatingtheamountofmemory"></span><h3><span class="section-number">3.4.12. </span>Estimating the amount of memory available to user programs<a class="headerlink" href="#estimating-the-amount-of-memory-available-to-user-programs" title="Link to this heading">¶</a></h3>
+<p>With Fugaku, the system sets an upper limit on the amount of job memory a job can use on a node.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>NodeType</p></th>
+<th class="head"><p>Maximum amount of job memory(byte)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BIO/SIO/GIO</p></td>
+<td><p>30,739,267,584</p></td>
+</tr>
+<tr class="row-odd"><td><p>CN</p></td>
+<td><p>30,739,333,120</p></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line">The maximum amount of job memory cannot be exceeded for job execution.</div>
+<div class="line">Also, if the memory fragmentation of the Linux OS running on the compute node increases, the job may terminate even if the amount of memory used by the job does not reach the limit.</div>
+<div class="line">The estimated upper limit of job memory that can be used stably is approximately 25GB (23.2GiB). (Depending on the memory fragmentation, it may not be possible to use even this amount of memory.)</div>
+</div>
+<p>The amount of memory available to the user program is as follows:</p>
+<p>Estimate fomula:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>AM = MJM - MPI
+
+  AM  : Amount of memory that can be used by the application per node (byte)
+  MJM : Maximum amount of job memory (byte)
+  MPI : Amount of memory that used by MPI (byte)
+</pre></div>
+</div>
+<p>For information about estimating memory usage for MPI libraries, refer to the “6.11 Memory Usage Estimation Formulae and Tuning Guidelines” in the Development Studio MPI User’s Guide.</p>
+</section>
+<section id="definition-of-used-computational-resource">
+<h3><span class="section-number">3.4.13. </span>Definition of used computational resource<a class="headerlink" href="#definition-of-used-computational-resource" title="Link to this heading">¶</a></h3>
+<figure class="align-default">
+<img alt="../_images/DefinitionOfUsedComputationalResource_01.png" src="../_images/DefinitionOfUsedComputationalResource_01.png" />
+</figure>
+<p><strong># of assigned nodes to n-th job</strong></p>
+<div class="line-block">
+<div class="line">= # of nodes assigned by the scheduler</div>
+<div class="line">≠ # of requested nodes that is defined in job script or option of pjsub command</div>
+<div class="line">≠ # of nodes used by job</div>
+</div>
+<ul class="simple">
+<li><p>In case of jobs with less than 385 nodes, # of assigned nodes varies by specified node allocation mode.</p>
+<ul>
+<li><p>torus : node allocation unit is 12 nodes (2*3*2).
+Therefore, a job may have more nodes than you specified when you submitted the job.</p></li>
+<li><p>mesh : # of nodes needed to make specified mesh pattern is assigned to the job.
+Therefore, a job may have more nodes than you specified when you submitted the job.</p></li>
+<li><p>noncont(default) : Specified # of nodes is assigned to the job. Adjacent nodes may not always be allocated to the jobs. thus, inter-node communication may be disturbed by other jobs.</p></li>
+</ul>
+</li>
+<li><p>In case of jobs with more than 384 nodes, node allocation unit is 48 nodes (2*3*8).
+Therefore, # of assigned nodes is sometimes larger than # of requested nodes.
+You can minimize # of unused nodes by requesting nodes consisting of 48 nodes (2*3*8).
+The job can occupy the 1st layer storage that assigned to it.</p></li>
+<li><p># of assigned nodes varies when you submit job because the scheduler allocates nodes to job with rotation depending on scheduling status.
+You can prevent this rotation using <code class="docutils literal notranslate"><span class="pre">:strict</span></code> option, but the start time of job may be postponed.
+Jobs that do not have noncont enabled are affected by rotation.</p></li>
+</ul>
+<p>The number of nodes that the scheduler has allocated to a job can be viewed with the <code class="docutils literal notranslate"><span class="pre">pjstat</span> <span class="pre">-v</span> <span class="pre">--choose</span> <span class="pre">jid,nnuma</span></code> command or with the Job Statistical Information <code class="docutils literal notranslate"><span class="pre">NODE</span> <span class="pre">NUM</span> <span class="pre">(ALLOC)</span></code>.</p>
+<p>[Example of pjstat command display]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span>-v<span class="w"> </span>--choose<span class="w"> </span>jid,nnuma
+<span class="go">JOB_ID     NODE_ALLOC</span>
+<span class="go">13132535   432:6x9x8</span>
+<span class="go">14049234   216</span>
+</pre></div>
+</div>
+<p><strong>Elapsed time of n-th job</strong></p>
+<div class="line-block">
+<div class="line">= running time of job</div>
+<div class="line">= time with “RUN” state (if re-run, time is sum of all runs.)</div>
+<div class="line">≠ requested time that is defined in job script or option of pjsub command</div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>Used computational resource will NOT be refunded under any condition.</p></li>
+</ul>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3. Usage rule</a><ul>
+<li><a class="reference internal" href="#overview">3.1. Overview</a></li>
+<li><a class="reference internal" href="#use-scale-use-environment">3.2. Use scale/Use environment</a><ul>
+<li><a class="reference internal" href="#usable-job-scale">3.2.1. Usable job scale</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#local-account-management">3.3. Local account management</a><ul>
+<li><a class="reference internal" href="#login">3.3.1. Login</a></li>
+<li><a class="reference internal" href="#authentication-by-client-certification">3.3.2. Authentication by client certification</a></li>
+<li><a class="reference internal" href="#system-project-manager-responsiblity-scope">3.3.3. System project manager responsiblity scope</a></li>
+<li><a class="reference internal" href="#update-process">3.3.4. Update process</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#resource">3.4. Resource</a><ul>
+<li><a class="reference internal" href="#compute-node">3.4.1. Compute node</a></li>
+<li><a class="reference internal" href="#confirmation-of-number-of-job-submission">3.4.2. Confirmation of number of job submission</a></li>
+<li><a class="reference internal" href="#how-to-use-resource-group">3.4.3. How to use resource group</a></li>
+<li><a class="reference internal" href="#resource-group-use-status">3.4.4. Resource group use status</a></li>
+<li><a class="reference internal" href="#disk">3.4.5. Disk</a><ul>
+<li><a class="reference internal" href="#method-of-using-share-area-vol0n0m-share-groupname">3.4.5.1. Method of using share area (/vol0n0m/share/groupname/)</a><ul>
+<li><a class="reference internal" href="#acl-function">3.4.5.1.1. ACL function</a></li>
+<li><a class="reference internal" href="#file-sharing-examples-of-using-acl">3.4.5.1.2. File sharing examples of using ACL</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#method-of-using-tmpfs-area-worktmp">3.4.5.2. Method of using tmpfs area (/worktmp/)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#file-creation-and-stripe-setting">3.4.6. File creation and stripe setting</a><ul>
+<li><a class="reference internal" href="#stripe-setting">3.4.6.1. Stripe setting</a></li>
+<li><a class="reference internal" href="#confirm-stripe">3.4.6.2. Confirm stripe</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#file-system">3.4.7. File system</a><ul>
+<li><a class="reference internal" href="#client-cache-of-the-compute-node-and-io-peformance">3.4.7.1. Client cache of the compute node and IO peformance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#group">3.4.8. Group</a></li>
+<li><a class="reference internal" href="#type-of-parallel-job">3.4.9. Type of parallel job</a></li>
+<li><a class="reference internal" href="#login-node">3.4.10. Login node</a></li>
+<li><a class="reference internal" href="#i-o-node">3.4.11. I/O node</a></li>
+<li><a class="reference internal" href="#estimating-the-amount-of-memory-available-to-user-programs">3.4.12. Estimating the amount of memory available to user programs</a></li>
+<li><a class="reference internal" href="#definition-of-used-computational-resource">3.4.13. Definition of used computational resource</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../MethodOfUse/index.html"
+                          title="previous chapter"><span class="section-number">2. </span>Use direction</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../AccessToTheSystem/index.html"
+                          title="next chapter"><span class="section-number">4. </span>System Use</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../AccessToTheSystem/index.html" title="4. System Use"
+             >next</a></li>
+        <li class="right" >
+          <a href="../MethodOfUse/index.html" title="2. Use direction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>Usage rule</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

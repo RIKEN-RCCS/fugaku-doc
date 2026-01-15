@@ -1,0 +1,373 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6.4. 標準出力／標準エラー出力／標準入力 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="6.5. MPIジョブ投入時の指定" href="SpecificationsForMPIJob.html" />
+    <link rel="prev" title="6.3. バックグラウンドジョブの実行方法" href="HowToExecuteABackgroundJob.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="SpecificationsForMPIJob.html" title="6.5. MPIジョブ投入時の指定"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="HowToExecuteABackgroundJob.html" title="6.3. バックグラウンドジョブの実行方法"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">6. </span>MPIジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.4. </span>標準出力／標準エラー出力／標準入力</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="stdoutstderroutstdin">
+<span id="id1"></span><h1><span class="section-number">6.4. </span>標準出力／標準エラー出力／標準入力<a class="headerlink" href="#stdoutstderroutstdin" title="Link to this heading">¶</a></h1>
+<p>MPIプログラムの標準出力／標準エラー出力／標準入力の指定方法を示します。</p>
+<section id="stdspecmethod">
+<span id="id2"></span><h2><span class="section-number">6.4.1. </span>標準出力／標準エラー出力／標準入力の指定方法<a class="headerlink" href="#stdspecmethod" title="Link to this heading">¶</a></h2>
+<p><strong class="program">mpiexec</strong>では、標準出力／標準エラー出力をファイルに出力するオプション、ファイルから標準入力を読み込むオプションを用意しています。</p>
+<ul>
+<li><div class="line-block">
+<div class="line">各並列プロセスと<strong class="program">mpiexec</strong>コマンドの標準出力／標準エラー出力は、通常はジョブ運用ソフトウェアによって生成される<strong class="program">mpiexec</strong>コマンド実行結果ファイルに出力されます。</div>
+<div class="line">デフォルト（出力オプション指定なし）の場合、カレントディレクトリに以下の命名規則で標準出力／標準エラー出力ファイルが生成されます。</div>
+<div class="line"><br /></div>
+<div class="line">[標準出力ファイルの命名規則]</div>
+<div class="line-block">
+<div class="line">./output.<em>jobid</em>/<em>1000_ranks</em>/<em>mpiexec</em>/stdout.<em>mpiexec</em>.<em>rank</em></div>
+</div>
+<div class="line">[標準エラー出力ファイルの命名規則]</div>
+<div class="line-block">
+<div class="line">./output.<em>jobid</em>/<em>1000_ranks</em>/<em>mpiexec</em>/stderr.<em>mpiexec</em>.<em>rank</em></div>
+<div class="line"><br /></div>
+</div>
+<div class="line">「./output.<em>jobid</em>」配下には1000ランク毎にディレクトリが分割生成されます。1000ランク毎のディレクトリ配下には<strong class="program">mpiexec</strong>コマンドを実行した回数分のディレクトリが生成されます。</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><em>jobid</em> の文字列は、ジョブIDを表したものです。</p>
+<p><em>1000_ranks</em> の文字列は、ランク番号やspawn番号を1000単位で切り捨てた番号を表したものです。</p>
+<p><em>mpiexec</em> の文字列は、ジョブスクリプト内で何回目の <strong class="program">mpiexec</strong>コマンドの実行であるかを表したものです。</p>
+<p><em>rank</em> の文字列は、実際の MPI_COMM_WORLD でのランクを表したものです。</p>
+</div>
+<div class="line-block">
+<div class="line">例１：ジョブID=9999、mpiexec実行1回目、ランク番号100の場合の標準出力ファイルパス</div>
+<div class="line-block">
+<div class="line">./output.9999/0/1/stdout.1.100</div>
+</div>
+<div class="line">例２：ジョブID=9999、mpiexec実行2回目、ランク番号1500の場合の標準出力ファイルパス</div>
+<div class="line-block">
+<div class="line">./output.9999/1000/2/stdout.2.1500</div>
+</div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec ./a.out
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>ls<span class="w"> </span>-F<span class="w"> </span>output.9999/
+<span class="go">0/  1000/  2000/  3000/  ...</span>
+<span class="gp">[_LNlogin]$ </span>ls<span class="w"> </span>-F<span class="w"> </span>output.jobid/0/
+<span class="go">1/  2/</span>
+<span class="gp">[_LNlogin]$ </span>ls<span class="w"> </span>-F<span class="w"> </span>output.jobid/0/1/
+<span class="go">stderr.1.0 stderr.1.1 ... stderr.1.999</span>
+<span class="go">stdout.1.0 stdout.1.1 ... stdout.1.999</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong class="program">mpiexec</strong>コマンドのオプション(<code class="docutils literal notranslate"><span class="pre">-std-proc/-of-proc</span></code>、<code class="docutils literal notranslate"><span class="pre">-stdout-proc/-ofout-proc</span></code>、<code class="docutils literal notranslate"><span class="pre">-stderr-proc/-oferr-proc</span></code>)を指定して標準出力／標準エラー出力の出力先を変更した場合は、オプションを指定した<strong class="program">mpiexec</strong>コマンドで実行する実行可能ファイルに対してのみ有効です。</p></li>
+<li><p><strong class="program">mpiexec</strong>コマンドのリダイレクション指定による標準入力は、各並列プロセスの標準入力として使用することはできません。</p></li>
+</ul>
+<blockquote>
+<div><div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><strong class="program">mpiexec</strong>コマンドの出力オプション<code class="docutils literal notranslate"><span class="pre">-of/-std</span></code>、<code class="docutils literal notranslate"><span class="pre">-ofout/-stdout</span></code>、<code class="docutils literal notranslate"><span class="pre">-oferr/-stderr</span></code>は指定できません。</div>
+<div class="line">指定した場合は<strong class="program">mpiexec</strong>コマンド実行時に以下のエラーが出力され、デフォルト設定が適用されます（ジョブ受付は可能）。</div>
+<div class="line">[WARN] PLE 0605 plexec ignore option -ofout/-stdout(stdout outputs to &lt;file_path&gt;).</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><strong class="program">mpiexec</strong>コマンドの出力オプション<code class="docutils literal notranslate"><span class="pre">-std-proc/-of-proc</span></code>、<code class="docutils literal notranslate"><span class="pre">-stdout-proc/-ofout-proc</span></code>、<code class="docutils literal notranslate"><span class="pre">-stderr-proc/-oferr-proc</span></code>は指定可能です。指定した場合の動作は後述の1～3を参照ください。</div>
+</div>
+</li>
+</ul>
+</div>
+</div></blockquote>
+<ol class="arabic">
+<li><p>各並列プロセスの標準出力を別ファイルに出力します。</p>
+<p>各並列プロセスからの標準出力は、<code class="docutils literal notranslate"><span class="pre">-stdout-proc</span></code>に指定したファイル名に、mpiexec実行回数とランク番号が付加された名前で出力されます。</p>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span>-stdout-proc<span class="w"> </span>file_stdout<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>./a.out
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../_images/InputOutputRedirection_04.png" src="../_images/InputOutputRedirection_04.png" />
+</figure>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>上記例の場合は標準エラー出力オプションが省略されているため、標準エラー出力についてはデフォルトのファイルパスで出力されます。</p>
+</div>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><p>各並列プロセスの標準エラー出力を別ファイルに出力します。</p>
+<p>各並列プロセスからの標準エラー出力は、<code class="docutils literal notranslate"><span class="pre">-stderr-proc</span></code>に指定したファイル名に、mpiexec実行回数とランク番号が付加された名前で出力されます。</p>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span>-stderr-proc<span class="w"> </span>file_stderr<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>./a.out
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../_images/InputOutputRedirection_05.png" src="../_images/InputOutputRedirection_05.png" />
+</figure>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>上記例の場合は標準出力オプションが省略されているため、標準出力についてはデフォルトのファイルパスで出力されます。</p>
+</div>
+</div></blockquote>
+<ol class="arabic" start="3">
+<li><p>各並列プロセスの標準出力および標準エラー出力を別ファイルに出力します。</p>
+<p>各並列プロセスからの標準出力／標準エラー出力は、<code class="docutils literal notranslate"><span class="pre">-std-proc</span></code>に指定したファイル名に、mpiexec実行回数とランク番号が付加された名前で出力されます。</p>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span>-std-proc<span class="w"> </span>file_outfile<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>./a.out
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../_images/InputOutputRedirection_06.png" src="../_images/InputOutputRedirection_06.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic" start="4">
+<li><p>並列プロセスの標準入力を指定ファイルから入力します。</p>
+<p>標準入力を、<code class="docutils literal notranslate"><span class="pre">file_stdin</span></code>から入力する例を示します。</p>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span>-stdin<span class="w"> </span>file_stdin<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>./a.out
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../_images/InputOutputRedirection_07.png" src="../_images/InputOutputRedirection_07.png" />
+</figure>
+</div></blockquote>
+</section>
+<section id="id3">
+<h2><span class="section-number">6.4.2. </span>オプション指定による出力表<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p><strong class="program">mpiexec</strong>コマンドの出力オプション指定の有無による、並列プロセスの標準出力と標準エラー出力の出力先の一覧を下表に示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 27.8%" />
+<col style="width: 16.7%" />
+<col style="width: 27.8%" />
+<col style="width: 27.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>mpiexecオプション指定</p></th>
+<th class="head"><p>利用可否</p></th>
+<th class="head"><p>標準出力</p></th>
+<th class="head"><p>標準エラー出力</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>オプション指定なし</p></td>
+<td><p>-</p></td>
+<td><p><a class="reference internal" href="#stdspecmethod"><span class="std std-ref">標準出力／標準エラー出力／標準入力の指定方法</span></a>の&quot;標準出力ファイルの命名規則&quot;を参照(*1)</p></td>
+<td><p><a class="reference internal" href="#stdspecmethod"><span class="std std-ref">標準出力／標準エラー出力／標準入力の指定方法</span></a>の&quot;標準エラー出力ファイルの命名規則&quot;を参照(*2)</p></td>
+</tr>
+<tr class="row-odd"><td><p>-of/-std</p></td>
+<td><p>不可</p></td>
+<td><p>*1と同様の出力(指定は無効)</p></td>
+<td><p>*2と同様の出力(指定は無効)</p></td>
+</tr>
+<tr class="row-even"><td><p>-ofout/-stdout</p></td>
+<td><p>不可</p></td>
+<td><p>*1と同様の出力(指定は無効)</p></td>
+<td><p>*2と同様の出力(指定は無効)</p></td>
+</tr>
+<tr class="row-odd"><td><p>-oferr/-stderr</p></td>
+<td><p>不可</p></td>
+<td><p>*1と同様の出力(指定は無効)</p></td>
+<td><p>*2と同様の出力(指定は無効)</p></td>
+</tr>
+<tr class="row-even"><td><p>-of-proc/-std-proc</p></td>
+<td><p>可能</p></td>
+<td><p><em>指定したファイル名.mpiexec.rank</em></p></td>
+<td><p><em>指定したファイル名.mpiexec.rank</em></p></td>
+</tr>
+<tr class="row-odd"><td><p>-ofout-proc/-stdout-proc</p></td>
+<td><p>可能</p></td>
+<td><p><em>指定したファイル名.mpiexec.rank</em></p></td>
+<td><p>*2と同様の出力</p></td>
+</tr>
+<tr class="row-even"><td><p>-oferr-proc/-stderr-proc</p></td>
+<td><p>可能</p></td>
+<td><p>*1と同様の出力</p></td>
+<td><p><em>指定したファイル名.mpiexec.rank</em></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p><strong class="program">mpiexec</strong>コマンドのオプション設定については <strong class="program">pjacl</strong>コマンドで参照可能です。</p>
+<p>ユーザ側で <strong class="program">mpiexec</strong>コマンドのオプション設定を変更することはできません。</p>
+</div>
+</section>
+<section id="stdoutstderroutforlargejobs">
+<span id="id4"></span><h2><span class="section-number">6.4.3. </span>大規模ジョブ実行時の標準出力／標準エラー出力の指定について<a class="headerlink" href="#stdoutstderroutforlargejobs" title="Link to this heading">¶</a></h2>
+<p>「富岳」で、1万プロセス以上の大規模ジョブを実行する際は、大量のプロセスによる単一ファイルや同一ディレクトリへのアクセスの集中を防ぐための考慮が必要です。</p>
+<div class="line-block">
+<div class="line">出力するランクを利用者プログラムが限定している場合でも、エラーが発生した場合は全ランクからメッセージが出力される場合があります。このためランクごとに標準出力／標準エラー出力のファイルを分けるように設定してください。</div>
+<div class="line">※デフォルトは1000ランクごと、mpiexec実行回数ごとにディレクトリが分割されます。</div>
+</div>
+<p>デフォルトでは標準出力/標準エラー出力への出力がない場合はファイルを作成しません。
+空ファイルを作成するか作成しないかは環境変数<code class="docutils literal notranslate"><span class="pre">PLE_MPI_STD_EMPTYFILE={on|off}</span></code>により設定することができます(デフォルトはoff)。</p>
+<p>また、メタ文字を利用して出力先のディレクトリを分けることができます。ディレクトリを分けて、１ディレクトリ内のファイル数が多くならないように調整してください。
+<code class="docutils literal notranslate"><span class="pre">PLE_MPI_STD_EMPTYFILE=off</span></code>(デフォルト)でもディレクトリは作成されます。</p>
+<div class="line-block">
+<div class="line">ここでは以下の条件に従ってファイル出力する例を示します。</div>
+<div class="line">- ジョブIDごとのディレクトリを生成</div>
+<div class="line">- mpiexec実行回数ごとのディレクトリを生成</div>
+<div class="line">- 500ランク単位ごとのディレクトリを生成</div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec -stdout-proc ./output.%j/%m/%/500r/stdout -stderr-proc ./output.%j/%m/%/500r/stderr ./a.out
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>ls<span class="w"> </span>-F<span class="w"> </span>output.jobid/
+<span class="go">1/  2/</span>
+<span class="gp">[_LNlogin]$ </span>ls<span class="w"> </span>-F<span class="w"> </span>output.jobid/1/
+<span class="go">0/  500/  1000/  1500/  ...</span>
+<span class="gp">[_LNlogin]$ </span>ls<span class="w"> </span>-F<span class="w"> </span>output.jobid/1/0/
+<span class="go">stderr.1.0 stderr.1.1 ... stderr.1.499</span>
+<span class="go">stdout.1.0 stdout.1.1 ... stdout.1.499</span>
+</pre></div>
+</div>
+<p>ここで使用したメタ文字の意味は次の通りです。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>メタ文字</p></th>
+<th class="head"><p>意味</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>%j</p></td>
+<td><p>ジョブID</p></td>
+</tr>
+<tr class="row-odd"><td><p>%m</p></td>
+<td><p>mpiexec実行回数</p></td>
+</tr>
+<tr class="row-even"><td><p>%r</p></td>
+<td><div class="line-block">
+<div class="line">ランク番号とspawn番号</div>
+<div class="line">静的プロセスの場合:ランク番号</div>
+<div class="line">動的プロセスの場合:ランク番号&#64;spawn番号</div>
+<div class="line">出力先がmpiexecコマンド単位の場合は、空文</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>%/Nr</p></td>
+<td><div class="line-block">
+<div class="line">ランク番号やspawn番号を数値N単位で切り捨てます</div>
+<div class="line">上記の例ではN=500として使用しています</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>mpiexecコマンドの出力先ファイル名で使用できるメタ文字の詳細については、マニュアル「ジョブ運用ソフトウェア エンドユーザ向けガイド」の「2.3.6.9 mpiexecコマンドの標準出力/標準エラー出力 [FX]」を参照ください。</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">6.4. 標準出力／標準エラー出力／標準入力</a><ul>
+<li><a class="reference internal" href="#stdspecmethod">6.4.1. 標準出力／標準エラー出力／標準入力の指定方法</a></li>
+<li><a class="reference internal" href="#id3">6.4.2. オプション指定による出力表</a></li>
+<li><a class="reference internal" href="#stdoutstderroutforlargejobs">6.4.3. 大規模ジョブ実行時の標準出力／標準エラー出力の指定について</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="HowToExecuteABackgroundJob.html"
+                          title="前の章へ"><span class="section-number">6.3. </span>バックグラウンドジョブの実行方法</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="SpecificationsForMPIJob.html"
+                          title="次の章へ"><span class="section-number">6.5. </span>MPIジョブ投入時の指定</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="SpecificationsForMPIJob.html" title="6.5. MPIジョブ投入時の指定"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="HowToExecuteABackgroundJob.html" title="6.3. バックグラウンドジョブの実行方法"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">6. </span>MPIジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.4. </span>標準出力／標準エラー出力／標準入力</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

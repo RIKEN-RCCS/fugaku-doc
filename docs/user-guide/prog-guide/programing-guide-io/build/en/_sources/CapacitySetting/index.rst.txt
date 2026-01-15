@@ -1,0 +1,101 @@
+Capacity Setting
+================
+
+.. _FirstLayerCapacitySetting:
+
+First-Layer Storage Capacity Settings
+-------------------------------------
+
+| You can allocate approximately 87GiB of capacity per compute node.
+| You can use 87GiB of capacity per compute node divided into 3 regions.
+
+.. figure:: img/CapacitySetting_01.png
+
+The table below shows how to specify the size of each area.
+
++---------------------------------------+-------------------------+-------------------+
+| Area Name                             |option of "pjsub -–llio" | Setting range     |
++=======================================+=========================+===================+
+| Node temporary area                   | localtmp-size           | 0MiB～87GiB       |
++---------------------------------------+-------------------------+-------------------+
+| Shared temporary area\*1              | sharedtmp-size          | 0MiB～87GiB       |
++---------------------------------------+-------------------------+-------------------+
+| Cache area of second-layer storage\*1 | NONE\*2                 | 128MiB～89406MiB  |
++---------------------------------------+-------------------------+-------------------+
+
+\*1  The value you specify is per node, and the available area size in the job is the configured value x the number of compute nodes.
+
+\*2 87GiB - (set value of “localtmp-size” + set value of “sharedtmp-size”)
+    For capacity setting, also check the note of \ `Users Guide - Use and job execution. <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/LayeredStorageAndLLIO/TheSecondLayerStrage.html#volumeofstrage>`_\ .
+
+Example of Capacity Setting
+---------------------------
+
+The following shows an example of whether the capacity can be set. If it cannot be set, an error occurs at pjsub as shown in the following example.
+
+.. code-block:: none
+
+  [ERR.] PJM 0049 pjsub Option argument is invalid. sharedtmp-size + localtmp-size must be less than or equal to 93615751168: --llio sharedtmp-size=XXX, localtmp-size=XXX.
+
++---------------+----------------+------------------------+----------------------+---------------------------------+--------------+
+| Set value                      | Allocated size of the space                                                     | Set up Yes No|
++---------------+----------------+------------------------+----------------------+---------------------------------+              +
+| localtmp-size | sharedtmp-size | Node temporary area    | Shared temporary area| Cache of second-layer storage   |              |
++===============+================+========================+======================+=================================+==============+
+| 0Mi           | 0Mi            | 0MiB                   | 0MiB                 | 87GiB \*                        | YES          |
++---------------+----------------+------------------------+----------------------+---------------------------------+--------------+
+| 10Gi          | 10Gi           | 10GiB                  | 10GiB \*             | 67GiB \*                        | YES          |
++---------------+----------------+------------------------+----------------------+---------------------------------+--------------+
+| 87Gi          | 0Mi            | 87GiB                  | 0MiB                 | 128MiB \*                       | YES          |
++---------------+----------------+------------------------+----------------------+---------------------------------+--------------+
+| **88Gi**      | 0Mi            | **88GiB**              | 0MiB                 | 128MiB \*                       | **NO**       |
++---------------+----------------+------------------------+----------------------+---------------------------------+--------------+
+| 0Mi           | 87Gi           | 0MiB                   | 87GiB \*             | 128MiB \*                       | YES          |
++---------------+----------------+------------------------+----------------------+---------------------------------+--------------+
+| 0Mi           | **88Gi**       | 0MiB                   | **88GiB** \*         | 128MiB \*                       | **NO**       |
++---------------+----------------+------------------------+----------------------+---------------------------------+--------------+
+| 44Gi          | 44Gi           | 44GiB                  | 44GiB \*             | 128MiB \*                       | YES          |
++---------------+----------------+------------------------+----------------------+---------------------------------+--------------+
+| **45Gi**      | **44Gi**       | **45GiB**              | **44GiB** \*         | 128MiB \*                       | **NO**       |
++---------------+----------------+------------------------+----------------------+---------------------------------+--------------+
+
+\* Available capacity is multiplied by the number of compute nodes.
+
+
+LLIO stripe feature
+-------------------
+
+The stripe setting produces the following effects.
+
+- You can create files larger than the size specified in the job parameters.
+
+- By distributing a single file across multiple first-tier storage, you can expect to increase file access bandwidth.
+
+Areas covered include.
+
+- Shared temporary area
+
+- Cache area of second-layer storage
+
+Example of writing a 4GiB file from a 4-node job with "shared temporary area"=2GiB, "stripe count"=4, "stripe size"=1GiB.
+
+.. figure:: img/LLIOStripe_01.png
+
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 30 15 50 
+
+  * - Option of “pjsub –llio” 
+    - Range
+    - Description
+
+  * - stripe-count=count 
+    - 1-24
+    - Specifies the number of stripes per file when distributing files on first-layer storage.
+
+  * - stripe-size=size 
+    - 64KiB-4194240KiB
+    - Specifies the stripe size for distributing files on first-layer storage.
+
+

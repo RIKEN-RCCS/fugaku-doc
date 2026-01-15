@@ -1,0 +1,427 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8.9. Selecting a usage file system (volume) &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="9. Migration from other systems" href="../MigrationFromOtherSystems/index.html" />
+    <link rel="prev" title="8.8. I/O optimization" href="IOoptimization.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../MigrationFromOtherSystems/index.html" title="9. Migration from other systems"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="IOoptimization.html" title="8.8. I/O optimization"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">8. </span>Layered storage</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.9. </span>Selecting a usage file system (volume)</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="selecting-a-usage-file-system-volume">
+<span id="selectavailablevolumes"></span><h1><span class="section-number">8.9. </span>Selecting a usage file system (volume)<a class="headerlink" href="#selecting-a-usage-file-system-volume" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">When submitting a job, the user must specify an additional file system (hereafter referred to as volume) to be used by the job.</div>
+<div class="line">Before the job starts running, it mounts the user-specified file system on the compute node to establish access to the second-layer storage cache area.</div>
+</div>
+<blockquote>
+<div><dl class="simple">
+<dt>volume specified at job submission</dt><dd><ul class="simple">
+<li><p>Data area required for job execution (/vol0002-6)</p></li>
+<li><p>Spack space (/ vol0004) for system-provided Spack (public instance)</p></li>
+</ul>
+</dd>
+<dt>volume that you do not need to specify at job submission time</dt><dd><ul class="simple">
+<li><p>2ndfs (/ vol0001)</p></li>
+<li><p>volume of home area</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Do not use home space as a job execution environment because there is less space available(The home space is as small as 20 GiB).</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul>
+<li><div class="line-block">
+<div class="line">The paths to the user’s data area (/vol0<em>n</em>0<em>m</em>/data/&lt;<em>groupname</em>&gt;) are symbolic links.</div>
+<div class="line">The meaning of the path name is as follows.</div>
+<div class="line-block">
+<div class="line"><em>n</em>:volume number(2～6)</div>
+<div class="line"><em>m</em>:MDT number(0～7)</div>
+</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">The volume number of the data area must be specified in the PJM_LLIO_GFSCACHE environment variable in step <a class="reference internal" href="#volumespecificationjobs"><span class="std std-ref">Job submission method</span></a>.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">See also <a class="reference internal" href="../UsageRules/index.html#diskpoints"><span class="std std-ref">Disk</span></a>.</div>
+</div>
+</li>
+</ul>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<section id="environment-variables-and-pjsub-options">
+<span id="environmentvariablesandpjsuboptions"></span><h2><span class="section-number">8.9.1. </span>Environment Variables and pjsub Options<a class="headerlink" href="#environment-variables-and-pjsub-options" title="Link to this heading">¶</a></h2>
+<p>Use the following environment variables and the pjsub option to specify the volume used by the job.</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Environment variables that can be specified when a job is submitted</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 37.5%" />
+<col style="width: 62.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Environment variable name</p></th>
+<th class="head"><p>Details</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PJM_LLIO_GFSCACHE</p></td>
+<td><div class="line-block">
+<div class="line">Specifies the volume to be used as the second-layer storage cache area in the <code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">-x</span></code> option or job script.</div>
+<div class="line">Specify PJM_LLIO_GFSCACHE=pathname</div>
+<div class="line">The possible path name is /vol0002,/vol0003,/vol0004,/vol0005,/vol0006.</div>
+<div class="line">To specify more than one, delimiting them with “:”.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>PJM_LLIO_SHAREDTMP</p></td>
+<td><div class="line-block">
+<div class="line">Specifies the volume to be used as the MDT for the shared temporary area in the <code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">-x</span></code> option or job script.</div>
+<div class="line">Specify PJM_LLIO_SHAREDTMP=pathname</div>
+<div class="line">The possible path name is /vol0002,/vol0003,/vol0004,/vol0005,/vol0006.</div>
+<div class="line">To specify more than one, delimiting them with “:”.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">pjsub options that can be specified when submitting a job</span><a class="headerlink" href="#id2" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 37.5%" />
+<col style="width: 62.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>pjsub options</p></th>
+<th class="head"><p>Details</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>–all-mount-gfscache</p></td>
+<td><div class="line-block">
+<div class="line">All volumes are assumed to be specified in the environment variable (PJM_LLIO_GFSCACHE). Synonymous with the following settings:.</div>
+<div class="line">PJM_LLIO_GFSCACHE=/vol0002:/vol0003:/vol0004:/vol0005:/vol0006</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>–no-check-gfscache</p></td>
+<td><div class="line-block">
+<div class="line">The setting status of the environment variable (PJM_LLIO_GFSCACHE) is not checked when a job is submitted.</div>
+<div class="line">Submit the job regardless of the environment variable (PJM_LLIO_GFSCACHE).</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>–no-check-directory</p></td>
+<td><div class="line-block">
+<div class="line">The current directory is not checked when a job is submitted.</div>
+<div class="line">If you want to submit jobs outside of the group data area, specify this option.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>The pjsub options <code class="docutils literal notranslate"><span class="pre">--all-mount-gfscache</span></code> , <code class="docutils literal notranslate"><span class="pre">--no-check-gfscache``and</span> <span class="pre">``--no-check-directory</span></code> cannot be specified in a job script. If you specify this option, an error occurs when the job is submitted, so specify this option on the command line.</p></li>
+</ul>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p>Although you can specify multiple volumes in the environment variable (PJM_LLIO_GFSCACHE and PJM_LLIO_SHAREDTMP), you should specify as few volumes as necessary to make them less susceptible to failures.</p></li>
+</ul>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+<section id="job-submission-method">
+<span id="volumespecificationjobs"></span><h2><span class="section-number">8.9.2. </span>Job submission method<a class="headerlink" href="#job-submission-method" title="Link to this heading">¶</a></h2>
+<p>To submit a job by specifying the volume to be used by the job:.</p>
+<p>[When specified with pjsub options]</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>pjsub<span class="w"> </span>-x<span class="w"> </span><span class="nv">PJM_LLIO_GFSCACHE</span><span class="o">=</span>/vol0004:/vol0005
+</pre></div>
+</div>
+</div></blockquote>
+<p>[When specifying in a job script]</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004:/vol0005</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>[When specifying in a job script : When using a single account]</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004:/vol0005</span>
+<span class="c1">#PJM -g groupname     # Specifying a group when using a single account</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Example.1) Submitting a job from a volume in the data area</p>
+<ol class="arabic simple">
+<li><p>Check the pathname of the volume in the data area where the job resides.</p></li>
+</ol>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Get the volume number from the data area path (/vol0<em>n</em>0<em>m</em>/data/&lt;<em>groupname</em>&gt;).</div>
+<div class="line">If the path of the data area is /vol0501/data/&lt;<em>groupname</em>&gt;, the part 5 of /vol05 is the volume number, and the path name set to PJM_LLIO_GFSCACHE is “/vol0005”.</div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Specifies the path name of the volume to be used for the job script.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/vol0n0m/data/groupname/username
+
+login$<span class="w"> </span>vi<span class="w"> </span>jobscript
+<span class="c1">#!/bin/bash</span>
+<span class="c1">#PJM -L &quot;node=4&quot;</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0005     # Set /vol0005</span>
+<span class="c1">#PJM -g groupname</span>
+
+llio_transfer<span class="w"> </span>./a.out
+mpiexec<span class="w"> </span>./a.out
+llio_transfer<span class="w"> </span>--purge<span class="w"> </span>./a.out
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Submit the job.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>pjsub<span class="w"> </span>jobscript
+</pre></div>
+</div>
+</div></blockquote>
+<p></p>
+<blockquote>
+<div><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p>You do not need to specify a path name if the data area to be used is the same volume as the home area.</p></li>
+</ul>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Example.2) Submit a job utilizing the Spack (public instance) provided by the system</p>
+<ol class="arabic simple">
+<li><p>Specifies the path name of the volume to be used for the job script. (When using Spack, specify /vol0004.)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/vol0n0m/data/groupname/username
+
+login$<span class="w"> </span>vi<span class="w"> </span>jobscript
+<span class="c1">#!/bin/bash</span>
+<span class="c1">#PJM -L &quot;node=4&quot;</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004     # Set /vol0004</span>
+<span class="c1">#PJM -g groupname</span>
+
+.<span class="w"> </span>/vol0004/apps/oss/spack/share/spack/setup-env.sh
+<span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/lib64:<span class="nv">$LD_LIBRARY_PATH</span>
+spack<span class="w"> </span>load<span class="w"> </span>gromacs@2021.3
+
+...
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Submit the job.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>pjsub<span class="w"> </span>jobscript
+</pre></div>
+</div>
+</div></blockquote>
+<p></p>
+<blockquote>
+<div><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p>You do not need to specify this if /vol0004 is the pathname of the volume where the home directory resides. You can use it without specifying it.</p></li>
+</ul>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Example.3) Specifying the pjsub option “–all-mount-gfscache” or “–no-check-gfscache”</p>
+<ol class="arabic simple">
+<li><p>Creating a Job Script (Do not specify the PJM_LLIO_GFSCACHE environment variable.)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>vi<span class="w"> </span>jobscript
+<span class="c1">#!/bin/bash</span>
+<span class="c1">#PJM -L &quot;node=4&quot;</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+
+llio_transfer<span class="w"> </span>./a.out
+mpiexec<span class="w"> </span>./a.out
+llio_transfer<span class="w"> </span>--purge<span class="w"> </span>./a.out
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>job submission</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>pjsub<span class="w"> </span>--all-mount-gfscache<span class="w"> </span>jobscript
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>pjsub<span class="w"> </span>--no-check-gfscache<span class="w"> </span>jobscript
+</pre></div>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If the volume required to run the job is not set in the environment variable, the following error occurs:.</p>
+<ul>
+<li><div class="line-block">
+<div class="line">If you place and submit a job in a different volume than the one that contains the home directory, an error occurs when you submit the job.</div>
+<div class="line">The current directory is contained in vol000X, so set PJM_LLIO_GFSCACHE to vol000X.(ex. -x PJM_LLIO_GFSCACHE=/vol000X)</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">If /vol0004 is not specified in the environment variable for a job that uses Spack, an error occurs when the job is submitted.</div>
+<div class="line">If you use Spack, set PJM_LLIO_GFSCACHE to vol0004.(ex. pjsub -x PJM_LLIO_GFSCACHE=/vol0004)</div>
+<div class="line">Specify –no-check-gfscache option if you do not want to use Spack and want to submit jobs.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">If you do not specify a valid volume in the environment variable (for example, if you specify a volume that does not exist), an error occurs when the job is submitted.</div>
+<div class="line">[ERR.] PJM 0045 pjsub path isn’t on the global file system.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">If the environment variable specifies a volume that has failed and is no longer operational, the job fails with PJM CODE=180.</div>
+</div>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">8.9. Selecting a usage file system (volume)</a><ul>
+<li><a class="reference internal" href="#environment-variables-and-pjsub-options">8.9.1. Environment Variables and pjsub Options</a></li>
+<li><a class="reference internal" href="#job-submission-method">8.9.2. Job submission method</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="IOoptimization.html"
+                          title="previous chapter"><span class="section-number">8.8. </span>I/O optimization</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../MigrationFromOtherSystems/index.html"
+                          title="next chapter"><span class="section-number">9. </span>Migration from other systems</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../MigrationFromOtherSystems/index.html" title="9. Migration from other systems"
+             >next</a></li>
+        <li class="right" >
+          <a href="IOoptimization.html" title="8.8. I/O optimization"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">8. </span>Layered storage</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.9. </span>Selecting a usage file system (volume)</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

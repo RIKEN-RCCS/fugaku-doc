@@ -1,0 +1,471 @@
+.. _AccessToTheSystemLogin:
+
+ログイン
+===========
+
+
+ローカルアカウントを使用して「富岳」へログインするには、ログインノードにSSH Version2（公開鍵認証）でログインします。
+
+事前に利用者の端末にてSSHの鍵ペア（公開鍵と秘密鍵）を作成し、公開鍵を富岳ウェブサイト画面から登録してください。
+登録するのは公開鍵のみです。秘密鍵が登録された場合、安全対策としてログインの一時停止等の処理を実施する場合があります。
+
+.. note::
+
+   ログインノードのホームディレクトリ配下の次に示すディレクトリ、および、ファイルのパーミッションを変更するとsshでログインできなくなります。
+
+   - ホームディレクトリのパーミッション（700）
+   - ~/.ssh ディレクトリのパーミッション（700）
+   - ~/.ssh/authorized_keys のパーミッション（600）
+
+   これらのパーミッションを変更しないように注意してください。
+
+.. _GeneratingPrivateKeyAndPublicKey:
+
+鍵ペア（秘密鍵／公開鍵）の作成
+-------------------------------
+
+「富岳」を利用する場合は利用者端末で秘密鍵と公開鍵のペアを作成します。生成する鍵の種類は次のいずれかを推奨します。
+
+- Ed25519
+- ECDSA（NIST P 521）
+- RSA（鍵長 2048bit以上）: RSA鍵の利用は富岳ウェブサイトの「\ `ログインノードのsshアクセスに関する運用変更 <https://www.fugaku.r-ccs.riken.jp/operation/20230210_01>`_\ 」も参照ください。
+
+UNIX／Linux（OpenSSH）およびWindows（puttygen）を使用したEd25519の鍵ペア（公開鍵／秘密鍵）の作成手順を示します。puttygenを使用する場合には、ターミナルエミュレータPuTTY（パティ）を事前にインストールする必要があります。
+
+.. contents::
+   :local:
+
+.. _UnixLinuxMacOpenSSH:
+
+Unix／Linux／Mac (OpenSSH)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+利用者の端末にて :command:`ssh-keygen`\ コマンドを実行し、秘密鍵と公開鍵のペアを作成します。
+
+1. ターミナルを起動して、:command:`ssh-keygen`\ コマンドを実行します。
+
+  - Mac（OS X）の場合は、Terminal（:menuselection:`アプリケーション --> ユーティリティ --> ターミナル`\ ）を起動して\ :command:`ssh-keygen`\ コマンドを実行します。
+  - UNIX／Linuxの場合は、端末エミュレータを起動して :command:`ssh-keygen`\ コマンドを実行します。
+
+
+  .. code-block:: console
+
+    [terminal]$ ssh-keygen -t ed25519
+    Generating public/private ed25519 key pair.
+    Enter file in which to save the key (/home/username/.ssh/id_ed25519):
+    Enter passphrase (empty for no passphrase):  # パスフレーズを入力
+    Enter same passphrase again:                 # もう一度同じパスフレーズを入力
+    Your identification has been saved in /home/username/.ssh/id_ed25519.
+    Your public key has been saved in /home/username/.ssh/id_ed25519.pub.
+    The key fingerprint is:
+    SHA256:khbWyIyUqMnyjK1Ok78l8EivKbQLNgP3vyhjYBgvif8 namehostname
+    The key's randomart image is:
+    +--[ED25519 256]--+
+    |   ...           |
+    |  ...+ o         |
+    |.o  . * .        |
+    |=.   . o         |
+    |=@    + S        |
+    |@o%  . .         |
+    |=%.= .           |
+    |*=O =            |
+    |+=+=Eo.          |
+    +----[SHA256]-----+
+
+  .. note::
+
+    - パスフレーズはパスワード同様に他人が推測しにくい文字列を設定してください。また、必ずパスフレーズを設定するようお願い致します。パスフレーズの長さは15文字以上を推奨します。
+
+2. | :command:`ssh-keygen`\ を実行すると、ホームディレクトリ配下の\ :file:`.ssh`\ ディレクトリに秘密鍵（id_ed25519）と公開鍵（id_ed25519.pub）の2種類が作成されます。
+   | 公開鍵（id_ed25519.pub）を富岳ウェブサイトを利用して登録します。
+
+
+Windows (PuTTYgen)
+^^^^^^^^^^^^^^^^^^^
+
+PuTTY／WinSCPで利用可能な秘密鍵／公開鍵を puttygenにより作成します。
+
+1. | puttygenを起動します。
+   | 鍵の種類（Type of key to generate）として\ :guilabel:`「EdDSA」`\ を選択し\ :guilabel:`「Ed25519 (255 bits)」`\ カーブを選択し、 :guilabel:`「Generate」`\ ボタンをクリックします。
+
+  .. figure:: ./img/GeneratingPrivateKeyAndPublicKey_01.png
+     :scale: 70
+     :align: center
+
+2. マウスカーソルをランダムに動かします。
+
+  .. figure:: ./img/GeneratingPrivateKeyAndPublicKey_02.png
+     :scale: 70
+     :align: center
+
+3. | 公開鍵を保管します。
+   | 「Public key for pasting in to OpenSSH authorized_keys file:」に表示される内容を、クリップボードにコピーします（メモ帳を起動し貼り付けておくことをお勧めします）。
+   | クリップボードに張り付けた内容（公開鍵となります）を、富岳ウェブサイトを利用して登録します。
+
+  .. figure:: ./img/GeneratingPrivateKeyAndPublicKey_05.png
+     :scale: 70
+     :align: center
+
+4. :guilabel:`「Key passphrase」`\ および\ :guilabel:`「Confirm passphrase」`\ に、パスフレーズを入力します。入力後、:guilabel:`「Save private key」`\ ボタンをクリックし、秘密鍵を保管します。パスフレーズは、ログインノードへのログイン時に入力を求められますので、忘れないようにしてください。
+
+  .. figure:: ./img/GeneratingPrivateKeyAndPublicKey_03.png
+     :scale: 70
+     :align: center
+
+  .. Attention::
+
+    パスフレーズはパスワード同様に他人が推測しにくい文字列を設定してください。また、必ずパスフレーズを設定するようお願い致します。パスフレーズの長さは15文字以上を推奨します。
+
+
+5. 秘密鍵を保管するファイル名を\ :guilabel:`「ファイル名(N)」`\ に入力し、:guilabel:`「保存(S)」`\ ボタンをクリックします。秘密鍵が保管されます。
+
+  .. figure:: ./img/GeneratingPrivateKeyAndPublicKey_04.png
+     :scale: 70
+     :align: center
+
+.. _RegisteringAPublicKey:
+
+公開鍵登録
+-----------
+
+.. contents::
+   :local:
+
+富岳ウェブサイトを利用した登録
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. 富岳ウェブサイト（https://www.fugaku.r-ccs.riken.jp/）にログインし、メニューから\ :guilabel:`[利用者ポータル]`\ をクリックします。
+
+.. figure:: ./img/RegisteringAPublicKey_01.png
+   :scale: 40
+   :align: center
+
+2. メニューから\ :guilabel:`[Publickey registration]`\ をクリックします。
+
+.. figure:: ./img/RegisteringAPublicKey_02.png
+   :scale: 40
+   :align: center
+   
+3. :guilabel:`「Publickey Registration」`\ 欄に利用する公開鍵をコピー＆ペーストします。
+
+.. figure:: ./img/RegisteringAPublicKey_03.png
+   :scale: 40
+   :align: center
+
+4. :guilabel:`[Register]`\ ボタンを押します。
+
+5. 内容を確認のうえ\ :guilabel:`[Register]`\ ボタンを押します。
+
+.. figure:: ./img/RegisteringAPublicKey_04.png
+   :scale: 35
+   :align: center
+
+6. 「Registration has been completed.」の画面が表示されると、公開鍵の登録作業は終りです。
+
+.. figure:: ./img/RegisteringAPublicKey_06.png
+   :scale: 35
+   :align: center
+
+..
+
+ .. note::
+
+   公開鍵は1回の操作で1個しか登録できません。2回目以降の操作では、追加登録となります。2個以上の公開鍵を登録したい場合には、同様の操作を繰り返してください。
+
+7. 公開鍵が正しくない場合はエラーメッセージが表示されます。公開鍵を確認して再度登録処理を実行してください。
+
+.. figure:: ./img/RegisteringAPublicKey_07.png
+   :scale: 35
+   :align: center
+   
+
+公開鍵の追加登録
+^^^^^^^^^^^^^^^^^
+
+| ログインノードに公開鍵を追加登録する手順を示します。
+| 富岳ウェブサイトを利用して追加登録する方法と、ログインノードにログインして直接ファイルを編集する方法があります。ここでは、ログインノードでファイルを編集する方法を示します。
+
+
+1. ログインノードで\ :file:`~/.ssh/authorized_keys`\を編集します。
+
+  .. code-block:: console
+  
+    [_LNlogin]$ vi  ~/.ssh/authorized_keys
+    
+    
+    [i] キーを押下し、vi エディタのインサートモードにします
+    マウスの右クリックを押下し、.ssh/id_ed25519.pubの内容を貼り付けます
+    
+    [esc] キーを押下し、[wq!] を入力し、[Enter] キーを押下します
+
+2. 公開鍵を登録した\ :file:`authorized_keys`\ のパーミッションを変更します。
+
+  .. code-block:: console
+  
+    [_LNlogin]$ chmod  600  ~/.ssh/authorized_keys
+
+アクセス方法
+-------------
+
+
+| 「富岳」へのアクセス方法を示します。
+| ログインノードにログインするには、「\ :ref:`GeneratingPrivateKeyAndPublicKey`\ 」の手順を実施し、ログインノードに公開鍵が登録されている必要があります。
+| プログラム開発（プログラム作成／コンパイル）およびジョブ操作（ジョブ投入／ジョブ状態表示／ジョブ削除）は、ログインノードから実施します。
+
+.. contents::
+   :local:
+
+ログインノード
+^^^^^^^^^^^^^^^
+
+利用者の端末から、次のホスト名でアクセスします
+
+ホスト名：``login.fugaku.r-ccs.riken.jp``
+
+
+:command:`ssh`\ コマンドの実行例を示します。
+
+
+【公開鍵認証】
+
+.. code-block:: console
+
+  [terminal]$ ssh  username@login.fugaku.r-ccs.riken.jp
+  The authenticity of host 'XXXXXX (nnn.nnn.nnn.nnn)' can't be established.
+  XXXXX key fingerprint is XX: XX: XX: XX: XX: XX: XX: XX: XX:XX:XX:XX:XX:XX:XX:XX.
+  Are you sure you want to continue connecting (yes/no)? yes   # yesを入力（初回）
+  Enter passphrase for key '/home/groupname/username/.ssh/id_ed25519':  # パスフレーズを入力
+  [_LNlogin]$ 
+
+
+1. 初回ログイン時、ホスト鍵の登録について、確認のメッセージ（Are you sure you want to continue connecting）が表示されます。「yes」を入力します。
+#. ログインノードへの接続時に X11 Forwarding 機能を有効とする場合は、:command:`ssh`\のオプション\ ``-X``\を指定してください。
+#. ログインノードへの接続時に SSH Agent-forwarding 機能を有効とする場合は、:command:`ssh`\のオプション\ ``-A``\を指定してください。
+#. 複数台のログインノードを運用しています。ホーム領域（:file:`/home`）、データ領域（:file:`/vol0n0m/data`）は、各ログインノードで共用します。また、言語ソフトウェアの環境も同じです。
+
+.. note::
+
+   :ref:`鍵ペアの作成時<UnixLinuxMacOpenSSH>`\ に鍵ファイルのファイル名を入力して作成した場合は、\ :command:`ssh`\ コマンドの\ ``-i``\ オプションで鍵ファイルのファイル名を指定してください。
+   
+   ``[terminal]$ ssh -i key_filename username@login.fugaku.r-ccs.riken.jp``
+
+.. _LoginNodePuTTYSetup:
+
+ログインノード（PuTTY）
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Windows（PuTTY）を使用して、ログインノードにログインする方法を示します。
+
+
+1. | PuTTYを起動します。利用者の端末に保管されている秘密鍵を設定します。
+   | :menuselection:`「Connection」 --> 「SSH」 --> 「Auth」 --> 「Credentials」`\から\ :guilabel:`「Browse」`\ボタンをクリックします。
+   | puttygenで作成した秘密鍵を選択します。
+
+  .. figure:: ./img/AccessingTheKComputer_01.png
+     :align: center
+
+2. | :guilabel:`「Session」`\を選択します。
+   | :guilabel:`「Host Name(or IP address)」`\に、ログインノードのホスト名\ ``login.fugaku.r-ccs.riken.jp``\ を入力します。設定した内容を保管するため、:guilabel:`「Saved Sessions」`\に保管する名前を入力し、 :guilabel:`「Save」`\ボタンをクリックします。2回目以降のログイン時は保存した名前を選択し、:guilabel:`「Load」`\ボタンをクリックします。
+
+  .. figure:: ./img/AccessingTheKComputer_03.png
+     :align: center
+
+3. ログインノードへ接続時にX11 forwarding 機能を有効とする場合は\ :guilabel:`「Open」`\をクリックする前に\ :menuselection:`「Connection」 --> 「SSH」 --> 「X11」`\を開き\ :guilabel:`「Enable X11 forwarding」`\にチェックを入れてください。
+
+  .. figure:: ./img/AccessingTheKComputer_04.png
+     :align: center
+
+4. ログインノードへ接続時にAgent-forwarding 機能を有効とする場合は\ :guilabel:`「Open」`\をクリックする前に\ :menuselection:`「Connection」 --> 「SSH」 --> 「Auth」`\を開き\ :guilabel:`「Allow agent forwarding」`\にチェックを入れて下さい。
+
+  .. figure:: ./img/AccessingTheKComputer_05.png
+     :align: center
+
+5. :guilabel:`「Open」`\ボタンをクリックします。ログインノードへの接続が開始されます。
+
+
+6. 初回ログイン時、ホスト鍵の登録について、確認画面が表示されます。\ :guilabel:`「はい(Y)」`\をクリックします。
+
+  .. figure:: ./img/AccessingTheKComputer_06.png
+     :align: center
+
+
+8. ローカルアカウント名とパスフレーズを入力し、ログインノードにログインします。
+
+  .. code-block:: console
+
+    login as: username                                        # ローカルアカウント名を入力
+    Authenticating with public key "imported-openssh-key"
+    Passphrase for key "imported-openssh-key": passphrase     # パスフレーズを入力
+    Last login: Tue Mar 27 09:57:12 2018 from xxx.xxx.xxx.xxx
+    login$
+
+
+ログインノードを直接指定する方法
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ログインノードへのアクセスとして\ ``login.fugaku.r-ccs.riken.jp``\ をご利用いただいております。
+本ホスト名でつながりにくい場合、個別にログインノードを指定してアクセスしてください。
+
+ログインノードを直接指定する場合は以下のホスト名をご利用ください。
+
+.. code-block:: none
+
+   login1 : login1.fugaku.r-ccs.riken.jp
+   login2 : login2.fugaku.r-ccs.riken.jp
+   login3 : login3.fugaku.r-ccs.riken.jp
+   login4 : login4.fugaku.r-ccs.riken.jp
+   login5 : login5.fugaku.r-ccs.riken.jp
+   login6 : login6.fugaku.r-ccs.riken.jp
+
+
+Armログインノード
+^^^^^^^^^^^^^^^^^^
+
+ArmログインノードはArmv8ベースのArmプロセッサを搭載したログインノードです。
+
+Armログインノードは通常のログインノード(Interl製CPUを利用)を経由してログインします。
+インターネットからArmログインノードに直接ログインすることはできません。
+
+ログインノードから\ ``ssh arm1``\ を実行してログインしてください。
+ログインノードとArmログインノードの間はホストベース認証を行うため、利用者による認証は不要です。
+
+.. code-block:: console
+
+   [_LNIlogin]$ ssh arm1
+   Last login: XXX MMM DD HH:MM:SS 2020 from 10.4.254.NN
+   [_LNAlogin]$
+
+Armログインノードは次のように設定しています。
+
+- ホーム領域、データ領域は他のログインノードと共通です。ただしNFSマウントになります。
+- pjsub、pjstatなどは利用できません。
+- インターネットに直接アクセス可能です。Proxyの設定は不要です。
+- コンパイラはArm社コンパイラとLLVM10.0.0(asisでビルドしたもの)をインストールしています。
+- コンパイラ利用時は\ ``module avail``\ でモジュールファイルを確認し適宜環境設定をして利用してください。
+
+ファイル転送方法
+-----------------
+
+| 利用者端末にインストールされているファイル転送プログラム（scp／sftp）を利用して、ログインノードを経由したファイル転送が可能です。転送には\ ``login.fugaku.r-ccs.riken.jp``\ を使用できます。
+| セキュリティに脆弱性のあるプロトコル（ftp／r系コマンド）の利用は禁止しています。
+| ファイル転送は「\ :ref:`GeneratingPrivateKeyAndPublicKey`\ 」の手順を実施し、ログインノードに公開鍵が登録されている必要があります。
+
+.. contents::
+   :local:
+
+ファイル転送（sftp）
+^^^^^^^^^^^^^^^^^^^^^
+
+1. :program:`sftp`\ コマンドの実行例
+
+  .. code-block:: console
+
+    [terminal]$ sftp username@login.fugaku.r-ccs.riken.jp
+    Enter passphrase for key '/home/groupname/username/.ssh/id_ed25519':  # パスフレーズを入力
+    sftp>
+
+2. ファイル転送例（:program:`put`\ ）
+
+  .. code-block:: console
+
+    sftp> put a.f90  
+    Uploading a.f90 to /home/groupname/username/a.f90
+    sample.f90                                         100%   18     0.0KB/s   00:00
+    sftp>
+
+3. ファイル転送例（:program:`get`\ ）
+
+  .. code-block:: console
+
+    sftp> get sample.sh.o9110  
+    Fetching sample.sh.o9110 to /home/groupname/username/sample.sh.o9110
+    sample.sh.o9110                                    100%   18     0.0KB/s   00:00
+    sftp> 
+
+
+ファイル転送（scp）
+^^^^^^^^^^^^^^^^^^^^
+
+1. :program:`scp`\ コマンドの実行例を示します。（端末からログインノードへ）
+
+  .. code-block:: console
+
+    [terminal]$ scp  local_file  username@login.fugaku.r-ccs.riken.jp:remote_file
+    Enter passphrase for key '/home/groupname/username/.ssh/id_ed25519':  #  パスフレーズを入力
+    [terminal]$ 
+
+2. :program:`scp`\ コマンドの実行例を示します。（ログインノードから端末へ）
+
+  .. code-block:: console
+
+    [terminal]$ scp  username@login.fugaku.r-ccs.riken.jp:remote_file  local_file  
+    Enter passphrase for key '/home/groupname/username/.ssh/id_ed25519': #   パスフレーズを入力
+    [terminal]$ 
+
+
+
+Windows (WinSCP)
+^^^^^^^^^^^^^^^^^
+
+Windows系の場合、WinSCPなどのファイル転送プログラムを使用して、ログインノードへファイルを転送します。WinSCPでの接続例を示します。
+
+1. WinSCPを起動し、\ :guilabel:`[New Site]`\ を選びます。
+#. :guilabel:`「Host name」`\ にログインノードのホスト名（\ ``login.fugaku.r-ccs.riken.jp``\ ）を入力します。
+#. :guilabel:`「User name」`\ にユーザ名を入力します。
+#. :guilabel:`[Advanced...]`\ をクリックします。
+
+.. figure:: ./img/FileTransfer_01.png
+   :align: center
+   :scale: 70
+
+5. :guilabel:`[Authentication]`\ の\ :guilabel:`「Private key file」`\ にputtyの秘密鍵ファイル名を設定し、\ :guilabel:`[OK]`\ をクリックします。
+
+.. figure:: ./img/FileTransfer_02.png
+   :align: center
+   :scale: 70
+
+
+6. :guilabel:`「Save」`\ をクリックし、設定値を保存します。
+
+.. figure:: ./img/FileTransfer_03.png
+   :align: center
+   :scale: 70
+
+７. 保存した設定値を選択し、\ :guilabel:`「Login」`\ をクリックし接続します。
+
+.. figure:: ./img/FileTransfer_04.png
+   :align: center
+   :scale: 70
+
+8. 接続完了後、エクスプローラに似た画面が表示され、ファイルをドラッグ＆ドロップして転送できるようになります。
+
+
+ログインシェル
+---------------
+
+ログインシェルは :file:`/bin/bash` です。
+
+「富岳」運用情報のメール配信
+----------------------------
+
+| 運用情報に関するメールが「富岳」のアカウント（uid）宛に配信されます。
+| 受信するためには、ユーザ自身で転送先のメールアドレスを登録する必要があります（登録しない場合、メールは廃棄されます）。
+
+下記の運用情報に関するメールを配信します。配信内容は順次拡充します。
+
+- システム障害の影響を受けたジョブ情報
+- お知らせ情報
+- その他
+
+【メールアドレスの登録方法】
+
+ユーザのホームディレクトリに「\ :file:`.forward`\ 」ファイルを作成し、転送先のメールアドレスを記載してください。
+「\ :file:`.forward`\ 」の記載例やフィルタリングの設定例などは\ `FAQ <https://www.fugaku.r-ccs.riken.jp/faq/20220324_01>`_\ を確認してください。
+
+.. code-block:: console
+
+   [_LNlogin]$ vi ~/.forward
+   *****@*****.com
+
+
+

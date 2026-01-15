@@ -1,0 +1,212 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.11. CPU core and memory binding &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.12. Displaying a job status" href="DisplayingJobStatus.html" />
+    <link rel="prev" title="5.10. Large page space allocation" href="AllocationOfLargePageArea.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DisplayingJobStatus.html" title="5.12. Displaying a job status"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="AllocationOfLargePageArea.html" title="5.10. Large page space allocation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.11. </span>CPU core and memory binding</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cpu-core-and-memory-binding">
+<h1><span class="section-number">5.11. </span>CPU core and memory binding<a class="headerlink" href="#cpu-core-and-memory-binding" title="Link to this heading">¶</a></h1>
+<p>When a job is executed by default, memory near the CPU core (with the same CMG) is preferentially secured, but if it cannot be acquired, memory is acquired from a CMG different from the CPU core.
+If you want to limit the CMG that gets the memory, use the numctl command to bind the memory.</p>
+<div class="line-block">
+<div class="line">IF you want to limit CMG to get memory, use  <strong class="program">numctl</strong> command and binde a memory.</div>
+<div class="line">For MPI job, binde with a memory with using MCA parameter  <code class="docutils literal notranslate"><span class="pre">plm_ple_memory_allocation_policy</span></code>.</div>
+</div>
+<ol class="arabic simple">
+<li><p>numactl use</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>The CPU core, CPU node and memory node numbers used in the numactl command are as follows:</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>CMG</p></th>
+<th class="head"><p>CPU core number</p></th>
+<th class="head"><p>CPU node number</p></th>
+<th class="head"><p>memory node</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CMG0</p></td>
+<td><p>12 - 13</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>CMG1</p></td>
+<td><p>24 - 35</p></td>
+<td><p>5</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-even"><td><p>CMG2</p></td>
+<td><p>36 - 47</p></td>
+<td><p>6</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-odd"><td><p>CMG3</p></td>
+<td><p>48 - 59</p></td>
+<td><p>7</p></td>
+<td><p>7</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li><p>IF using CPU and memory of CMG0</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>numactl<span class="w"> </span>--cpunodebind<span class="w"> </span><span class="m">4</span><span class="w"> </span>--membind<span class="w"> </span><span class="m">4</span><span class="w"> </span>./a.out
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>MCA parameter use (MPI job)</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>If using MCA parameter on MPI job.</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span>-mca<span class="w"> </span>plm_ple_memory_allocation_policy<span class="w"> </span>bind_local<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If using MCA parameter as environment variable on MPI job.</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_MCA_plm_ple_memory_allocation_policy</span><span class="o">=</span>bind_local
+<span class="gp">$ </span>mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<p>[Set value of MCA parameter (plm_ple_memory_allocation_policy)]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Setting value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>bind_local</p></td>
+<td><div class="line-block">
+<div class="line">Allocate memory in ascending order of node ID on each NUMA node belonging to the local node set of the process. If there is no free memory in the NUMA node belonging to the local node set, allocation will fail. The default value is localalloc.</div>
+<div class="line">The “local node set” is the union of NUMA nodes to which each CPU (core) to which a process has been assigned belongs.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>localalloc</p></td>
+<td><p>Allocate memory from the NUMA node to which the CPU (core) on which the process is running belongs. If there is no free memory in the NUMA node to which the CPU (core) belongs, memory is allocated in ascending order of the access cost from the CPU (core).</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>When memory is bound, the program terminates abnormally if the required amount of memory cannot be obtained in the bound memory node.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>[An error when cannot obtain a memory]</p>
+<p>When you bind memory and make a request that exceeds the amount of available memory, the OOM killer will process pruning. This causes the program to end abnormally. When the process ends abnormally, PJM CODE = 23 is recorded.</p>
+<p>PJM CODE can be check on thejob script or job statistic information that is output when specify <code class="docutils literal notranslate"><span class="pre">-s</span></code> or  <code class="docutils literal notranslate"><span class="pre">-S</span></code> to  <strong class="program">pjsub</strong>  command option .</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="AllocationOfLargePageArea.html"
+                          title="previous chapter"><span class="section-number">5.10. </span>Large page space allocation</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="DisplayingJobStatus.html"
+                          title="next chapter"><span class="section-number">5.12. </span>Displaying a job status</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DisplayingJobStatus.html" title="5.12. Displaying a job status"
+             >next</a></li>
+        <li class="right" >
+          <a href="AllocationOfLargePageArea.html" title="5.10. Large page space allocation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.11. </span>CPU core and memory binding</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,140 @@
+
+======
+Qulacs
+======
+
+Overview
+============
+Qulacs is a Python/C++ library for high-speed simulations of quantum circuits. 
+This document will explain how to use Qulacs on Fugaku.
+
+The supported version of Qulacs on Fugaku is v0.5.5.
+
+For more information about Qulacs, refer to `the official website <http://docs.qulacs.org/en/latest/index.html>`_.
+
+|
+
+How to use Qulacs
+====================
+Qulacs is available through Spack, a software package management system for high performance computing.
+
+|
+
+Preparation of Spack environment
+-------------------------------------
+The Spack environment on Fugaku can be constructed based on `Fugaku Spack User Guide <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/FugakuSpackGuide/>`_.
+
+This document explains how to use Qulacs assuming the use of public instances of Spack.
+
+|
+
+Loading Qulacs
+-------------------
+If you use Qulacs, load it with the following command. ::
+
+$ spack load qulacs %fj
+
+|
+
+Unloading Qulacs
+---------------------
+If you do not use Qulacs, unload it with the following command. ::
+
+$ spack unload qulacs %fj
+
+|
+
+Example of Usage
+====================
+This section shows an example of running Qulacs in a batch job on Fugaku.
+
+Here we will use a sample program (main.cpp) that creates a quantum state called the Bell state, which is a typical quantum entangled state. ::
+
+ $ cat main.cpp
+ #include <iostream>
+ #include <cppsim/state.hpp>
+ #include <cppsim/circuit.hpp>
+ #include <cppsim/observable.hpp>
+ #include <cppsim/gate_factory.hpp>
+ #include <cppsim/gate_merge.hpp>
+
+ int main(){
+     QuantumState state(2);
+     state.set_computational_basis(0b00);
+
+     QuantumCircuit circuit(2);
+     circuit.add_H_gate(0);
+     circuit.add_CNOT_gate(0,1);
+     circuit.update_quantum_state(&state);
+
+     std::cout << state << std::endl;
+
+     Observable observable(2);
+     observable.add_operator(1.0, "Z 1 X 0");
+
+     auto value = observable.get_expectation_value(&state);
+     std::cout << value << std::endl;
+
+     return 0;
+ }
+
+
+|
+
+
+Creating batch job script
+------------------------------
+
+The following batch job script (run.sh) is an example for running Qulacs on Fugaku.
+
+※ For single account users, the execution group id (check with the id command) must be specified in run.sh.
+
+（Example: #PJM -g hp*****） ::
+
+
+ $ cat run.sh
+ #!/bin/sh
+ #PJM -g hp*****
+ #PJM -L "node=1"
+ #PJM -L "rscgrp=small"
+ #PJM -L "elapse=00:20:00"
+ #PJM --mpi "max-proc-per-node=12"
+ #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+ #PJM -S
+ 
+ export PATH=/opt/FJSVxtclanga/tcsds-1.2.36/bin:$PATH
+ export LD_LIBRARY_PATH=/opt/FJSVxtclanga/tcsds-1.2.36/lib64:$LD_LIBRARY_PATH
+ . /vol0004/apps/oss/spack/share/spack/setup-env.sh
+ spack load qulacs %fj
+
+ FCC -Nclang -O2 main.cpp -fopenmp -lcppsim_static -lcsim_static
+ ./a.out
+
+|
+
+Execution of batch job
+---------------------------
+Please submit the batch job script (run.sh) by the following command. ::
+
+$ pjsub run.sh
+
+|
+
+Confirmation of result
+---------------------------
+If you obtain the following result in run.sh.job-id.out, Qulacs is working without problems. ::
+
+  *** Quantum State ***
+  * Qubit Count : 2
+  * Dimension   : 4
+  * State vector :
+ (0.707107,0)
+        (0,0)
+        (0,0)
+ (0.707107,0)
+ 
+ (0,0)
+
+.. toctree::
+   :maxdepth: 2	
+   :caption: Contents..

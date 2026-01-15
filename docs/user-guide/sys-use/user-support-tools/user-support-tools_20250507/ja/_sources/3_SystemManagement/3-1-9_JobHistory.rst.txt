@@ -1,0 +1,64 @@
+ジョブ状態遷移履歴表示
+=======================
+
+| 　**[名前]**
+| 　jobhistory - ジョブの状態遷移履歴を表示する
+
+| 　**[書式]**
+| 　jobhistory  -j  ジョブID  [-d 過去に遡る日数]
+
+| 　**[説明]**
+| 　jobhistory コマンドは、ジョブを投入してから終了するまでの状態遷移履歴を時系列に表示する。
+
+| 　利用者は自分自身のジョブに関してのみ、状態遷移履歴を確認することができる。システム管理者はシステムに登録されている全メンバの状態遷移履歴を表示可能である。
+ 　
+| 　**[オプション]**
+| 　-j  ジョブID
+| 　ジョブIDを指定する。特定のサブジョブのみを指定することはできない。
+
+| 　-d  過去に遡る日数
+| 　過去に遡る日数を指定することで、指定された日数だけ過去に遡り情報を出力できる。
+| 　投入されているジョブに加えて、処理が終了したジョブ (EXIT、CANCEL 状態) の情報を出力する。過去に遡る日数は 1 から 90 の整数である。
+ 　
+| 　**[復帰値]**
+| 　正常時: 0
+| 　異常時: 1
+
+| 　**[備考]**
+| 　なし。
+
+| 　**[使用例]**
+| 　【例1】	現在実行中のジョブID が 8000 の状態遷移履歴を表示する。
+
+.. code-block:: console 
+
+   [login]$ jobhistory -j 8000
+   ['2022-02-12 12:17:47'][jobid=8000][stepno=0][blkno=0]ACCEPT[-]
+   ['2022-02-12 12:17:47'][jobid=8000][stepno=0][blkno=0]QUEUED[-]
+   ['2022-02-12 12:26:22'][jobid=8000][stepno=0][blkno=0]RUNNING_A[-]
+   ['2022-02-12 12:26:58'][jobid=8000][stepno=0][blkno=0]RUNNING_P[-]
+   ['2022-02-12 12:34:18'][jobid=8000][stepno=0][blkno=0]RUNNING[job_start='2022-02-12 12:34:18']
+   [login]$
+
+　【例2】	5日前に終了したジョブID が 5579 の状態遷移履歴を表示する。
+
+.. code-block:: console 
+
+   [login]$ jobhistory -j 5579 -d 5
+   ['2022-02-07 17:50:28'][jobid=5579][stepno=0][blkno=0]ACCEPT[-]
+   ['2022-02-07 17:50:28'][jobid=5579][stepno=0][blkno=0]QUEUED[-]
+   ['2022-02-07 17:50:28'][jobid=5579][stepno=0][blkno=0]RUNNING_A[-]
+   ['2022-02-07 17:50:28'][jobid=5579][stepno=0][blkno=0]RUNNING[job_start='2022-02-07 17:50:28']
+   ['2022-02-07 17:50:38'][jobid=5579][stepno=0][blkno=0]RUNOUT[-]
+   ['2022-02-07 17:50:38'][jobid=5579][stepno=0][blkno=0]EXIT[-]
+   [login]$
+
+
+| 　表示形式をもとに項目の説明を示する。
+
+| 　　表示形式：['YYYY-MM-DD HH:MM:SS'][jobid=value][stepno=value][blkno=value]state[-]
+
+.. figure:: img/3_SystemManagement_17_1.png
+
+.. figure:: img/3_SystemManagement_17_2.png
+

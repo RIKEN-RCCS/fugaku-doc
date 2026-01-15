@@ -1,0 +1,207 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.8. Environment setting &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.9. Job execution command options" href="pjsubCommandOptions.html" />
+    <link rel="prev" title="5.7. Master-worker type job" href="MasterWorkerJob.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="pjsubCommandOptions.html" title="5.9. Job execution command options"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="MasterWorkerJob.html" title="5.7. Master-worker type job"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.8. </span>Environment setting</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="environment-setting">
+<h1><span class="section-number">5.8. </span>Environment setting<a class="headerlink" href="#environment-setting" title="Link to this heading">¶</a></h1>
+<p>When a job is executed, the default language environment is set automatically.
+When using a language environment other than the default, use the module command to set another language environment.</p>
+<p>Please refer to <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/lang_latest/">Supercomputer Fugaku Users Guide - Language and development environment -</a> for the language setting.</p>
+<p>Please note the following about setting the environment variable (LD_LIBRARY_PATH, PATH).</p>
+<ul>
+<li><p>Searching LD_LIBRARY_PATH or PATH may affect the execution time of large parallel jobs using 10,000 processes or more. In order to search for paths efficiently, you should register only the required paths without duplication, or set the path that is searched frequently to the top.</p></li>
+<li><p>When multiple libraries are included in the LD_LIBRARY_PATH for search such as spack, transferring library files as common files with llio_transfer improves the search cost. For information of llio_transfer, please see <a class="reference internal" href="../LayeredStorageAndLLIO/TheSecondLayerStrage.html#llio-transfer"><span class="std std-ref">Common file distribution function (llio_transfer)</span></a>.</p></li>
+<li><p>Please set /lib64 to the beginning of LD_LIBRARY_PATH.</p>
+<p>Example)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">export LD_LIBRARY_PATH=/lib64:$LD_LIBRARY_PATH</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<section id="tools-to-reduce-search-load-on-dynamic-libraries-sort-libp">
+<span id="sort-libp"></span><h2><span class="section-number">5.8.1. </span>Tools to reduce search load on dynamic libraries(sort_libp)<a class="headerlink" href="#tools-to-reduce-search-load-on-dynamic-libraries-sort-libp" title="Link to this heading">¶</a></h2>
+<p>Changing the dynamic library searching path (LD_LIBRARY_PATH) can reduce system load and search time. At Fugaku, the search time can be reduced by specifying a local path with a shorter access time at the biginning and specifying the second layer storage cache with a slower access time behind. In order to reduce search time, we provide a script (/home/system/tool/sort_libp) to add /lib64, eliminate path deduplication, and output a search path that the paths of 2ndfs and the second layer storage cache are reordered to backward. If the libraries required for the application cannot be searched due to the change of search order, please adjust the order of paths by referring to the script output.</p>
+<p>Example)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">export LD_LIBRARY_PATH=`/home/system/tool/sort_libp`</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">All files under each directory specified in “LD_LIBRARY_PATH” can be transferred to LLIO as common files by specifying the following option.</div>
+<div class="line">When using it, please check the precautions of <a class="reference internal" href="../LayeredStorageAndLLIO/TheSecondLayerStrage.html#llio-transfer"><span class="std std-ref">Common file distribution function (llio_transfer)</span></a> and <a class="reference internal" href="../LayeredStorageAndLLIO/TheSecondLayerStrage.html#dir-transfer"><span class="std std-ref">Tool(dir_transfer) to transfer directories using llio_transfer command</span></a>.</div>
+</div>
+<p>Synopsis</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Transfer spack libraries:</span>
+<span class="go"> /home/system/tool/sort_libp -s [-l dirname]</span>
+
+<span class="go">Transfer non-spack libraries:</span>
+<span class="go"> /home/system/tool/sort_libp -a [-l dirname]</span>
+
+<span class="go">Transfer all libraries:</span>
+<span class="go"> /home/system/tool/sort_libp -s -a [-l dirname]</span>
+</pre></div>
+</div>
+<p>Options</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Options</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-s</p></td>
+<td><div class="line-block">
+<div class="line">Transfer the spack libraries (libraries under /vol0004/apps/oss/) in the environment variable LD_LIBRARY_PATH.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-a</p></td>
+<td><div class="line-block">
+<div class="line">Transfer the libraries (libraries under /vol000[2-6]/, /home/) other than spack in the environment variable LD_LIBRARY_PATH.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-l dirname</p></td>
+<td><div class="line-block">
+<div class="line">The dirname argument specifies the directory where the llio_transfer log is stored.</div>
+<div class="line">The default is “./sort_libp.${PJM_SUBJOBID}”.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-h</p></td>
+<td><div class="line-block">
+<div class="line">Shows how to use the command.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line">The following shows an example of a job script.</div>
+<div class="line">If the option is specified, the result of reordering LD_LIBRARY_PATH will be printed, but it is recommended to reorder the path after error handling of the transfer is done according to the example.</div>
+<div class="line">If a common file is not distributed correctly and many processes access the file, I/O may slow down.</div>
+</div>
+<p>Example of job script description</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Remove<span class="w"> </span>duplicate<span class="w"> </span>pathes,<span class="w"> </span>sort,<span class="w"> </span>and<span class="w"> </span><span class="nb">set</span><span class="w"> </span>/lib64<span class="w"> </span>to<span class="w"> </span>LD_LIBRARY_PATH
+<span class="go">export LD_LIBRARY_PATH=`/home/system/tool/sort_libp`</span>
+<span class="gp"># </span>Transfer<span class="w"> </span>library<span class="w"> </span>and<span class="w"> </span>store<span class="w"> </span>transfer<span class="w"> </span>log<span class="w"> </span><span class="k">in</span><span class="w"> </span>LOG_DIR/
+<span class="go">/home/system/tool/sort_libp -s -a -l LOG_DIR/</span>
+
+<span class="gp"># </span>Error<span class="w"> </span>Handling<span class="w"> </span><span class="k">for</span><span class="w"> </span>Transfers
+<span class="go">if [ $? -eq 0 ]; then</span>
+<span class="go">:</span>
+<span class="go">else</span>
+<span class="go">    echo &quot;[ERROR] Error in sort_libp.&quot;</span>
+<span class="go">    exit 1</span>
+<span class="go">fi</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.8. Environment setting</a><ul>
+<li><a class="reference internal" href="#tools-to-reduce-search-load-on-dynamic-libraries-sort-libp">5.8.1. Tools to reduce search load on dynamic libraries(sort_libp)</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="MasterWorkerJob.html"
+                          title="previous chapter"><span class="section-number">5.7. </span>Master-worker type job</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="pjsubCommandOptions.html"
+                          title="next chapter"><span class="section-number">5.9. </span>Job execution command options</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="pjsubCommandOptions.html" title="5.9. Job execution command options"
+             >next</a></li>
+        <li class="right" >
+          <a href="MasterWorkerJob.html" title="5.7. Master-worker type job"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.8. </span>Environment setting</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

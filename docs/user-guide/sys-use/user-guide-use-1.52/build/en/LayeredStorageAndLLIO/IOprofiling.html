@@ -1,0 +1,284 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8.7. I/O profiling &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="8.8. I/O optimization" href="IOoptimization.html" />
+    <link rel="prev" title="8.6. Important Notices" href="LLIOconsiderpoints.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="IOoptimization.html" title="8.8. I/O optimization"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="LLIOconsiderpoints.html" title="8.6. Important Notices"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">8. </span>Layered storage</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.7. </span>I/O profiling</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="i-o-profiling">
+<span id="ioprofiling"></span><h1><span class="section-number">8.7. </span>I/O profiling<a class="headerlink" href="#i-o-profiling" title="Link to this heading">¶</a></h1>
+<p>An example of getting I/O profiling data is shown in this section.</p>
+<p>Please refer to  <a class="reference internal" href="IOoptimization.html#iooptimization"><span class="std std-ref">the next chapter</span></a> for examples of data analysis.</p>
+<section id="llio-performance-information">
+<h2><span class="section-number">8.7.1. </span>LLIO performance information<a class="headerlink" href="#llio-performance-information" title="Link to this heading">¶</a></h2>
+<p>You can specify the <code class="docutils literal notranslate"><span class="pre">--llio</span> <span class="pre">perf</span></code> option at job submission to obtain LLIO performance information as job output.
+This allows you to later analyze how the job is accessing the first-layer storage.</p>
+<p>Here are some examples of bottlenecks (meta access) identified and improved using LLIO performance information.
+For more information on LLIO performance information, refer to “2.7. 2 LLIO Performance Information” in the LLIO User’s Guide.</p>
+<p>Do not specify the <code class="docutils literal notranslate"><span class="pre">--llio</span> <span class="pre">perf</span></code> option for jobs that require large compute nodes. Please refer to: <a class="reference internal" href="LLIOconsiderpoints.html#llioconsiderpoints"><span class="std std-ref">Important Notices</span></a> .</p>
+<ol class="arabic">
+<li><p>Runs the job with the <code class="docutils literal notranslate"><span class="pre">--llio</span> <span class="pre">perf</span></code> option when the job is submitted.</p></li>
+<li><dl class="simple">
+<dt>After the job completes, verify that the LLIO performance information is being output.</dt><dd><p>Example) &lt;jobname&gt;.&lt;jobid&gt;.llio_perf</p>
+</dd>
+</dl>
+</li>
+<li><p>Calculate the time taken by each of the three LLIO functions from the LLIO performance information.</p>
+<p>Prepare a consolidation script similar to the following:.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>cat<span class="w"> </span>sample.awk
+<span class="go">/^SIO Infomation/,/END/ {</span>
+<span class="go">   sumflg=1</span>
+<span class="go">}</span>
+<span class="go">/^I\/O     2ndLayerCache   NodeTotal/,/^I\/O     2ndLayerCache   ComputeNode/ {</span>
+<span class="go">   if($3 == &quot;Sum&quot; &amp;&amp; sumflg == 1){sum1 += $6}</span>
+<span class="go">}</span>
+<span class="go">/^I\/O     SharedTmp       NodeTotal/,/^I\/O     SharedTmp       ComputeNode/ {</span>
+<span class="go">   if($3 == &quot;Sum&quot; &amp;&amp; sumflg == 1){sum2 += $6}</span>
+<span class="go">}</span>
+<span class="go">/^I\/O     LocalTmp        NodeTotal/,/^I\/O     LocalTmp        ComputeNode/ {</span>
+<span class="go">   if($3 == &quot;Sum&quot; &amp;&amp; sumflg == 1){sum3 += $6}</span>
+<span class="go">}</span>
+<span class="go">/^Meta    2ndLayerCache   NodeTotal/,/^Meta    SharedTmp       NodeTotal/ {</span>
+<span class="go">   if(NF == 3 &amp;&amp; sumflg == 1){sum4 += $3}</span>
+<span class="go">}</span>
+<span class="go">/^Meta    SharedTmp       NodeTotal/,/^Meta    LocalTmp        NodeTotal/ {</span>
+<span class="go">   if(NF == 3 &amp;&amp; sumflg == 1){sum5 += $3}</span>
+<span class="go">}</span>
+<span class="go">/^Meta    LocalTmp        NodeTotal/,/^Resource        2ndLayerCache   CacheOperation/ {</span>
+<span class="go">   if(NF == 3 &amp;&amp; sumflg == 1){sum6 += $3}</span>
+<span class="go">}</span>
+<span class="go">END {</span>
+<span class="go">   total = sum1+sum2+sum3+sum4+sum5+sum6;</span>
+<span class="go">   printf(&quot;%-20s %20s %15s\n&quot;, &quot;     Area&quot;,&quot;Time(us)&quot;, &quot;% of Time&quot;);</span>
+<span class="go">   printf(&quot;%-20s %20d %15.1f\n&quot;, &quot;Meta 2ndLayerCache&quot;, sum4, (sum4/total)*100);</span>
+<span class="go">   printf(&quot;%-20s %20d %15.1f\n&quot;, &quot;     SharedTmp&quot;, sum5, (sum5/total)*100);</span>
+<span class="go">   printf(&quot;%-20s %20d %15.1f\n&quot;, &quot;     LocalTmp&quot;, sum6,(sum6/total)*100);</span>
+<span class="go">   printf(&quot;%-20s %20d %15.1f\n&quot;, &quot;I/O  2ndLayerCache&quot;, sum1,(sum1/total)*100);</span>
+<span class="go">   printf(&quot;%-20s %20d %15.1f\n&quot;, &quot;     SharedTmp&quot;, sum2,(sum2/total)*100);</span>
+<span class="go">   printf(&quot;%-20s %20d %15.1f\n&quot;, &quot;     LocalTmp&quot;, sum3,(sum3/total)*100);</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>Execute with LLIO performance information specified as an argument.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>awk<span class="w"> </span>-f<span class="w"> </span>sample.awk<span class="w"> </span>&lt;jobname&gt;.&lt;jobid&gt;.llio_perf
+</pre></div>
+</div>
+</li>
+<li><p>Compare the times(microsecond) calculated above.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>      Area                        Time(us)       % of Time
+Meta  2ndLayerCache           670517500351             4.0
+      SharedTmp             15490822246315            92.7
+      LocalTmp                 32396742469             0.2
+I/O   2ndLayerCache           357836957071             2.1
+      SharedTmp               108339293976             0.6
+      LocalTmp                 50591120306             0.3
+</pre></div>
+</div>
+<p>You can determine that meta-access to shared temporary area accounts for more than 90% of the total.</p>
+</li>
+</ol>
+</section>
+<section id="darshan">
+<h2><span class="section-number">8.7.2. </span>Darshan<a class="headerlink" href="#darshan" title="Link to this heading">¶</a></h2>
+<p>Darshan is a scalable HPC I/O characterization tool.
+This tool is provided by Spack and can be used as a job I/O analysis.
+For more information, please refer to the following URL:</p>
+<p><a class="reference external" href="https://www.mcs.anl.gov/research/projects/darshan/">https://www.mcs.anl.gov/research/projects/darshan/</a></p>
+<ol class="arabic">
+<li><p>Getting data summarizing the I/O activity</p>
+<p>Here is an example of how to get the data.
+Load Darshan from Spack to get I/O profiling data for a program running on mpiexec.
+For <code class="docutils literal notranslate"><span class="pre">darshan-runtime</span></code> to be load, <code class="docutils literal notranslate"><span class="pre">scheduler=fj</span></code>, which retains the job ID information, is recommended.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>spack<span class="w"> </span>find<span class="w"> </span>-lv<span class="w">  </span>darshan-runtime
+<span class="go">-- linux-rhel8-a64fx / fj@4.10.0 --------------------------------</span>
+<span class="go">kkioahn darshan-runtime@3.4.0~apmpi~apmpi_sync~apxc~hdf5+mpi build_system=autotools scheduler=NONE</span>
+<span class="go">czlow63 darshan-runtime@3.4.0~apmpi~apmpi_sync~apxc~hdf5+mpi build_system=autotools scheduler=fj</span>
+<span class="go">==&gt; 2 installed packages</span>
+</pre></div>
+</div>
+<p>Job script description</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.<span class="w"> </span>/vol0004/apps/oss/spack/share/spack/setup-env.sh
+spack<span class="w"> </span>load<span class="w"> </span>/czlow63
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">DARSHAN_LOG_DIR_PATH</span><span class="o">=</span>/2ndfs/group/your_dir/<span class="w">       </span><span class="c1"># a</span>
+<span class="c1"># export DARSHAN_ENABLE_NONMPI=1                         # b</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="sb">`</span>/home/system/tool/sort_libp<span class="sb">`</span><span class="w">     </span><span class="c1"># c</span>
+/home/system/tool/sort_libp<span class="w"> </span>-s<span class="w"> </span>-a<span class="w">                        </span><span class="c1">#</span>
+
+mpiexec<span class="w"> </span>-stdout-proc<span class="w"> </span>./%n.output.%j/%/1000r/stdout<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-stderr-proc<span class="w"> </span>./%n.output.%j/%/1000r/stderr<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-x<span class="w"> </span><span class="nv">LD_PRELOAD</span><span class="o">=</span>libdarshan.so<span class="w">  </span>./a.out
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ol class="loweralpha">
+<li><div class="line-block">
+<div class="line">Use /2ndfs area as the data output destination. By default, profiling data is accessed by all compute nodes. If the output is on a scale of several thousand nodes or more, <a class="reference internal" href="LLIOconsiderpoints.html#llioconsiderpoints"><span class="std std-ref">LLIO limitations</span></a> may be exceeded and the node may slow down.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">If non-MPI, <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">DARSHAN_ENABLE_NONMPI=1</span></code> and enable LD_PRELOAD.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">For the purpose of reducing the search load for dynamic libraries, /lib64 is added, duplicate paths is eliminated, and paths in 2ndfs and the cache area of the second-layer storage are reordered backward. The command also transfers Darshan’s library as a common file with llio_transfer. For details, see <a class="reference internal" href="../JobExecution/EnvironmentSettings.html#sort-libp"><span class="std std-ref">sort_libp</span></a>.</div>
+</div>
+</li>
+</ol>
+</div>
+<ol class="arabic" start="2">
+<li><p>Checking data</p>
+<p>After the job is executed, check that profiling data is output to the directory specified in the DARSHAN_LOG_DIR_PATH environment variable.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>ls<span class="w"> </span>-l<span class="w"> </span>/2ndfs/group/your_dir/
+<span class="go">-r-------- 1 usr   group   13701394 Nov 18 08:08 usr_a.out_JOBID.darshan</span>
+</pre></div>
+</div>
+<p>Verify that profiling data can be extracted from the login node.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>spack<span class="w"> </span>find<span class="w"> </span>-lv<span class="w"> </span>darshan-util
+<span class="go">-- linux-rhel8-cascadelake / gcc@13.2.0 -------------------------</span>
+<span class="go">dnpyrbu darshan-util@3.4.0~apmpi~apxc~bzip2 build_system=autotools</span>
+<span class="go">euiezk6 darshan-util@3.4.4~apmpi~apxc~bzip2 build_system=autotools</span>
+<span class="go">==&gt; 2 installed packages</span>
+<span class="gp">[_LNIlogin]$ </span>spack<span class="w"> </span>load<span class="w"> </span>/euiezk6
+<span class="gp">[_LNIlogin]$ </span>darshan-parser<span class="w">  </span>usr_a.out_JOBID.darshan<span class="w"> </span><span class="p">|</span><span class="w"> </span>less
+</pre></div>
+</div>
+<p>Example of output</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>...
+# description of columns:
+#   &lt;module&gt;: module responsible for this I/O record.
+#   &lt;rank&gt;: MPI rank.  -1 indicates that the file is shared
+#      across all processes and statistics are aggregated.
+#   &lt;record id&gt;: hash of the record&#39;s file path
+#   &lt;counter name&gt; and &lt;counter value&gt;: statistical counters.
+#      A value of -1 indicates that Darshan could not monitor
+#      that counter, and its value should be ignored.
+#   &lt;file name&gt;: full file path for the record.
+...
+#&lt;module&gt; &lt;rank&gt;  &lt;record id&gt;    &lt;counter&gt;                  &lt;value&gt;     &lt;file name&gt; ...
+POSIX     -1      0123456789123  POSIX_OPENS                    18432    /vol0n0m/data/group/config
+POSIX     -1      0123456789123  POSIX_F_FASTEST_RANK_TIME   0.019958    /vol0n0m/data/group/config
+POSIX     -1      0123456789123  POSIX_F_SLOWEST_RANK_TIME  52.856744    /vol0n0m/data/group/config
+...
+POSIX      0      1234567891234  POSIX_OPENS                        1    /vol0n0m/data/group/tmp.00000
+...
+POSIX      1      1234567891234  POSIX_OPENS                        1    /vol0n0m/data/group/dat.00001
+POSIX      1      1234567891234  POSIX_F_READ_TIME          32.124292    /vol0n0m/data/group/dat.00001
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>If LLIO asynchronous close is enabled, the I/O time may not be measured because close may return immediately even if the file has not yet been written to the cache area of the second-layer storage.</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">8.7. I/O profiling</a><ul>
+<li><a class="reference internal" href="#llio-performance-information">8.7.1. LLIO performance information</a></li>
+<li><a class="reference internal" href="#darshan">8.7.2. Darshan</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="LLIOconsiderpoints.html"
+                          title="previous chapter"><span class="section-number">8.6. </span>Important Notices</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="IOoptimization.html"
+                          title="next chapter"><span class="section-number">8.8. </span>I/O optimization</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="IOoptimization.html" title="8.8. I/O optimization"
+             >next</a></li>
+        <li class="right" >
+          <a href="LLIOconsiderpoints.html" title="8.6. Important Notices"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">8. </span>Layered storage</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.7. </span>I/O profiling</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

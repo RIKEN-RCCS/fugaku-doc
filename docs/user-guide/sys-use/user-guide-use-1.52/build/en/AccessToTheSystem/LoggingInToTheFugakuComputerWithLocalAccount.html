@@ -1,0 +1,628 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4.4. Login &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4.5. Check node usage" href="CheckingTheNodeUseStatus.html" />
+    <link rel="prev" title="4.3. Accessing steps to the Fugaku website" href="AccessingTheUsersPortal.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CheckingTheNodeUseStatus.html" title="4.5. Check node usage"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="AccessingTheUsersPortal.html" title="4.3. Accessing steps to the Fugaku website"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">4. </span>System Use</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.4. </span>Login</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="login">
+<span id="accesstothesystemlogin"></span><h1><span class="section-number">4.4. </span>Login<a class="headerlink" href="#login" title="Link to this heading">¶</a></h1>
+<p>Loggin to to the Fugaku by using local account,  logging to login node with using SSH Version2 (Publick key authentication).</p>
+<p>Create an SSH key pair (public key and private key) on the user terminal in advance and register the public key from the Fugaku website screen.
+Register only the public key. When a private key is registered, processing such as temporary suspension of login may be performed as a security measure.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you change the permissions of the following directories and files under the home directory of the login node, you will not be able to login using ssh.</p>
+<ul class="simple">
+<li><p>home directory  permission (700)</p></li>
+<li><p>~/.ssh directory permission (700)</p></li>
+<li><p>~/.ssh/authorized_keys permission (600)</p></li>
+</ul>
+<p>Do not change these permissions.</p>
+</div>
+<section id="private-key-public-key-creation">
+<span id="generatingprivatekeyandpublickey"></span><h2><span class="section-number">4.4.1. </span>Private key/Public key creation<a class="headerlink" href="#private-key-public-key-creation" title="Link to this heading">¶</a></h2>
+<p>To use  the Fugaku,  create the pair of private key and public key on the user device. Recommended creating type is from following.</p>
+<ul class="simple">
+<li><p>Ed25519</p></li>
+<li><p>ECDSA (NIST P 521)</p></li>
+<li><p>RSA (Key long more than 2048bit) : For how to use RSA keys, refer to “<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/operation/20230210_01">Operation change regarding ssh access to login nodes</a>” on the Fugaku website.</p></li>
+</ul>
+<p>This section describes the procedure for creating key pair of Ed25519 (public / private keys) using UNIX / Linux (OpenSSH) and Windows (puttygen). To use puttygen, it is necessary to install the terminal emulator PuTTY (patty) in advance.</p>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#unix-linux-mac-openssh" id="id4">Unix/Linux/Mac (OpenSSH)</a></p></li>
+<li><p><a class="reference internal" href="#windows-puttygen" id="id5">Windows (PuTTYgen)</a></p></li>
+</ul>
+</nav>
+<section id="unix-linux-mac-openssh">
+<span id="unixlinuxmacopenssh"></span><h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">4.4.1.1. </span>Unix/Linux/Mac (OpenSSH)</a><a class="headerlink" href="#unix-linux-mac-openssh" title="Link to this heading">¶</a></h3>
+<p>Execute a command <strong class="command">ssh-keygen</strong> on the user’s device, create a private / public key pair.</p>
+<ol class="arabic simple">
+<li><p>Start terminal and execute a command <strong class="command">ssh-keygen</strong>.</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>If Mac(OS X), start Terminal(<span class="menuselection">Application ‣ Utility ‣ Terminal</span>)  and execute a command <strong class="command">ssh-keygen</strong>.</p></li>
+<li><p>If UNIX/Linux, start terminal emulator and execute a command <strong class="command">ssh-keygen</strong>.</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[terminal]$ </span>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519
+<span class="go">Generating public/private ed25519 key pair.</span>
+<span class="go">Enter file in which to save the key (/home/username/.ssh/id_ed25519):</span>
+<span class="go">Enter passphrase (empty for no passphrase):  # Enter passphrase</span>
+<span class="go">Enter same passphrase again:                 # Re-enter the same passphrase</span>
+<span class="go">Your identification has been saved in /home/username/.ssh/id_ed25519.</span>
+<span class="go">Your public key has been saved in /home/username/.ssh/id_ed25519.pub.</span>
+<span class="go">The key fingerprint is:</span>
+<span class="go">SHA256:khbWyIyUqMnyjK1Ok78l8EivKbQLNgP3vyhjYBgvif8 namehostname</span>
+<span class="go">The key&#39;s randomart image is:</span>
+<span class="go">+--[ED25519 256]--+</span>
+<span class="go">|   ...           |</span>
+<span class="go">|  ...+ o         |</span>
+<span class="go">|.o  . * .        |</span>
+<span class="go">|=.   . o         |</span>
+<span class="go">|=@    + S        |</span>
+<span class="go">|@o%  . .         |</span>
+<span class="go">|=%.= .           |</span>
+<span class="go">|*=O =            |</span>
+<span class="go">|+=+=Eo.          |</span>
+<span class="go">+----[SHA256]-----+</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Set a passphrase that is difficult for others to guess, just like a password. Please be sure to set a passphrase. We recommend a passphrase length of at least 15 characters.</p></li>
+</ul>
+</div>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><div class="line-block">
+<div class="line">Once execute <strong class="command">ssh-keygen</strong>, two types are created: a private key (id_ed25519) and a public key (id_ed25519.pub) on <code class="file docutils literal notranslate"><span class="pre">.ssh</span></code> directory under the home directory.</div>
+<div class="line">Register the public key (id_ed25519.pub) using the Fugaku website.</div>
+</div>
+</li>
+</ol>
+</section>
+<section id="windows-puttygen">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">4.4.1.2. </span>Windows (PuTTYgen)</a><a class="headerlink" href="#windows-puttygen" title="Link to this heading">¶</a></h3>
+<p>Create a private / public key that can be used with PuTTY / WinSCP with puttygen.</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">Start puttygen.</div>
+<div class="line">Select <span class="guilabel">“EdDSA”</span> for type of key and select <span class="guilabel">“Ed25519 (255 bits)”</span> to generate, then click <span class="guilabel">“Generate”</span>.</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/GeneratingPrivateKeyAndPublicKey_01.png"><img alt="../_images/GeneratingPrivateKeyAndPublicKey_01.png" src="../_images/GeneratingPrivateKeyAndPublicKey_01.png" style="width: 491.4px; height: 334.59999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Move the mouse cursor randomly.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/GeneratingPrivateKeyAndPublicKey_02.png"><img alt="../_images/GeneratingPrivateKeyAndPublicKey_02.png" src="../_images/GeneratingPrivateKeyAndPublicKey_02.png" style="width: 491.4px; height: 334.59999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic" start="3">
+<li><div class="line-block">
+<div class="line">Save the public key.</div>
+<div class="line">Copy the displayed contents on “Public key for pasting in to OpenSSH authorized_keys file:” to the clip board (It is recommended to paste on the notepad).</div>
+<div class="line">The contents pasted on the clip board (Public key) is registered with using the Fugaku website.</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/GeneratingPrivateKeyAndPublicKey_05.png"><img alt="../_images/GeneratingPrivateKeyAndPublicKey_05.png" src="../_images/GeneratingPrivateKeyAndPublicKey_05.png" style="width: 491.4px; height: 334.59999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Input a passphrase to both <span class="guilabel">“Key passphrase”</span> and <span class="guilabel">“Confirm passphrase”</span>. After inputting, click <span class="guilabel">“Save private key”</span> and save the private key. Remember to enter your passphrase when you log in to the login node.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/GeneratingPrivateKeyAndPublicKey_03.png"><img alt="../_images/GeneratingPrivateKeyAndPublicKey_03.png" src="../_images/GeneratingPrivateKeyAndPublicKey_03.png" style="width: 491.4px; height: 334.59999999999997px;" /></a>
+</figure>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Set a passphrase that is difficult for others to guess, just like a password. Please be sure to set a passphrase. We recommend a passphrase length of at least 15 characters.</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>Input a file name for storing the private key to <span class="guilabel">“File name(N)”</span>, click <span class="guilabel">“Save(S)”</span>. The private key is stored.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/GeneratingPrivateKeyAndPublicKey_04.png"><img alt="../_images/GeneratingPrivateKeyAndPublicKey_04.png" src="../_images/GeneratingPrivateKeyAndPublicKey_04.png" style="width: 611.8px; height: 281.4px;" /></a>
+</figure>
+</div></blockquote>
+</section>
+</section>
+<section id="public-key-registration">
+<span id="registeringapublickey"></span><h2><span class="section-number">4.4.2. </span>Public key registration<a class="headerlink" href="#public-key-registration" title="Link to this heading">¶</a></h2>
+<nav class="contents local" id="id1">
+<ul class="simple">
+<li><p><a class="reference internal" href="#registration-using-fugaku-website" id="id6">Registration using Fugaku website</a></p></li>
+<li><p><a class="reference internal" href="#additional-registration-of-public-key" id="id7">Additional registration of public key</a></p></li>
+</ul>
+</nav>
+<section id="registration-using-fugaku-website">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">4.4.2.1. </span>Registration using Fugaku website</a><a class="headerlink" href="#registration-using-fugaku-website" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Log in to the Fugaku website(<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en">https://www.fugaku.r-ccs.riken.jp/en</a>),  then click <span class="guilabel">[User Portal]</span>  from menu.</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RegisteringAPublicKey_01.png"><img alt="../_images/RegisteringAPublicKey_01.png" src="../_images/RegisteringAPublicKey_01.png" style="width: 506.8px; height: 247.60000000000002px;" /></a>
+</figure>
+<ol class="arabic simple" start="2">
+<li><p>Click <span class="guilabel">[Publickey registration]</span>  from menu.</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RegisteringAPublicKey_02.png"><img alt="../_images/RegisteringAPublicKey_02.png" src="../_images/RegisteringAPublicKey_02.png" style="width: 506.8px; height: 230.4px;" /></a>
+</figure>
+<ol class="arabic simple" start="3">
+<li><p>Copy and paste the public key to be used to <span class="guilabel">“Publickey registration”</span> area.</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RegisteringAPublicKey_03.png"><img alt="../_images/RegisteringAPublicKey_03.png" src="../_images/RegisteringAPublicKey_03.png" style="width: 505.6px; height: 300.0px;" /></a>
+</figure>
+<ol class="arabic simple" start="4">
+<li><p>Click <span class="guilabel">[Registar]</span>then register.</p></li>
+<li><p>Confirm the content and click on  <span class="guilabel">[Register]</span>.</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RegisteringAPublicKey_04.png"><img alt="../_images/RegisteringAPublicKey_04.png" src="../_images/RegisteringAPublicKey_04.png" style="width: 443.09999999999997px; height: 215.95px;" /></a>
+</figure>
+<ol class="arabic simple" start="6">
+<li><p>When the “Registration has been Completed.” screen appears, the public key registration is complete.</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RegisteringAPublicKey_06.png"><img alt="../_images/RegisteringAPublicKey_06.png" src="../_images/RegisteringAPublicKey_06.png" style="width: 443.09999999999997px; height: 215.95px;" /></a>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only one public key can be registered per operation. For the second and subsequent operations, additional registration is required. If you want to register two or more public keys, repeat the same operation.</p>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>If the public key is incorrect, an error message will be displayed. Check the public key and execute the registration process again.</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RegisteringAPublicKey_07.png"><img alt="../_images/RegisteringAPublicKey_07.png" src="../_images/RegisteringAPublicKey_07.png" style="width: 402.15px; height: 180.6px;" /></a>
+</figure>
+</section>
+<section id="additional-registration-of-public-key">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">4.4.2.2. </span>Additional registration of public key</a><a class="headerlink" href="#additional-registration-of-public-key" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">This section describes the procedure for registering additional public keys in the login node.</div>
+<div class="line">There are a method of registering additionally using the Fugaku website and a method of editing the file directly by logging in to the login node. This section shows how to edit a file on the login node.</div>
+</div>
+<ol class="arabic simple">
+<li><p>Edit <code class="file docutils literal notranslate"><span class="pre">~/.ssh/authorized_keys</span></code> on login node.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>vi<span class="w">  </span>~/.ssh/authorized_keys
+
+
+<span class="go">Press [i] key to enter vi editor insert mode.</span>
+<span class="go">Click the right mouse button and paste the contents of .ssh / id_rsa.pub.</span>
+
+<span class="go">Press the [esc] key, enter [wq!], and press the [Enter] key.</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Change permission of private key registered <code class="file docutils literal notranslate"><span class="pre">authorized_keys</span></code>.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>chmod<span class="w">  </span><span class="m">600</span><span class="w">  </span>~/.ssh/authorized_keys
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+<section id="accessing-direction">
+<h2><span class="section-number">4.4.3. </span>Accessing direction<a class="headerlink" href="#accessing-direction" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">This indicates how to access to  the Fugaku.</div>
+<div class="line">To login to the login node, execute the steps of “<a class="reference internal" href="#generatingprivatekeyandpublickey"><span class="std std-ref">Private key/Public key creation</span></a>“ and it is required that the public key is registered to login node.</div>
+<div class="line">Program development (Creating program/Compiling) and job controlling (Job submission/Job status display/Job deleting) are proceeded from login node.</div>
+</div>
+<nav class="contents local" id="id2">
+<ul class="simple">
+<li><p><a class="reference internal" href="#login-node" id="id8">Login node</a></p></li>
+<li><p><a class="reference internal" href="#login-node-putty" id="id9">Login node (PuTTY)</a></p></li>
+<li><p><a class="reference internal" href="#how-to-directly-specify-a-login-node" id="id10">How to directly specify a login node</a></p></li>
+<li><p><a class="reference internal" href="#arm-login-node" id="id11">Arm login node</a></p></li>
+</ul>
+</nav>
+<section id="login-node">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">4.4.3.1. </span>Login node</a><a class="headerlink" href="#login-node" title="Link to this heading">¶</a></h3>
+<p>Access by the following host name from the user device</p>
+<p>Host name : <code class="docutils literal notranslate"><span class="pre">login.fugaku.r-ccs.riken.jp</span></code></p>
+<p>This indicates the execution example of <strong class="command">ssh</strong> command.</p>
+<p>[Public key authentication]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[terminal]$ </span>ssh<span class="w">  </span>username@login.fugaku.r-ccs.riken.jp
+<span class="go">The authenticity of host &#39;XXXXXX (nnn.nnn.nnn.nnn)&#39; can&#39;t be established.</span>
+<span class="go">XXXXX key fingerprint is XX: XX: XX: XX: XX: XX: XX: XX: XX:XX:XX:XX:XX:XX:XX:XX.</span>
+<span class="go">Are you sure you want to continue connecting (yes/no)? yes   # Enter yes (Initial)</span>
+<span class="go">Enter passphrase for key &#39;/home/groupname/username/.ssh/id_ed25519&#39;:  # Enter pass phrase</span>
+<span class="gp">[_LNlogin]$</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>When the first loggin in, the confirmation message about registering the host key (Are you sure you want to continue connecting) is displayed. Enter “yes”.</p></li>
+<li><p>Specify <strong class="command">ssh</strong>’s option <code class="docutils literal notranslate"><span class="pre">-X</span></code>  to enable X11 Forwarding function when connecting to the login node.</p></li>
+<li><p>Specify  <strong class="command">ssh</strong>’s  <code class="docutils literal notranslate"><span class="pre">-A</span></code> to enable SSH Agent-forwarding function when connecting to the login node.</p></li>
+<li><p>Operating the multiple device’s login node. About home area (<code class="file docutils literal notranslate"><span class="pre">/home</span></code>) and deta area (<code class="file docutils literal notranslate"><span class="pre">/vol0n0m/data</span></code>), share with the each login node. It is the same with the language software environmet.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you <a class="reference internal" href="#unixlinuxmacopenssh"><span class="std std-ref">created the key pair</span></a> by entering the file name of the key file, specify the file name of the key file in the <code class="docutils literal notranslate"><span class="pre">-i</span></code> option of the <strong class="command">ssh</strong> command.</p>
+<p><code class="docutils literal notranslate"><span class="pre">[terminal]$</span> <span class="pre">ssh</span> <span class="pre">-i</span> <span class="pre">key_filename</span> <span class="pre">username&#64;login.fugaku.r-ccs.riken.jp</span></code></p>
+</div>
+</section>
+<section id="login-node-putty">
+<span id="loginnodeputtysetup"></span><h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">4.4.3.2. </span>Login node (PuTTY)</a><a class="headerlink" href="#login-node-putty" title="Link to this heading">¶</a></h3>
+<p>This indicates how to login to the login node with using Windows (PuTTY).</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">Start PuTTY. Set the private key which stored in the user device.</div>
+<div class="line">Click on <span class="guilabel">[Browse]</span> from  <span class="menuselection">[Connection] ‣ [SSH] ‣ [Auth] ‣ [Credentials]</span>.</div>
+<div class="line">Select the pribate key created with puttygen.</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../_images/AccessingTheKComputer_01.png" src="../_images/AccessingTheKComputer_01.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><div class="line-block">
+<div class="line">Select  <span class="guilabel">[Session]</span>.</div>
+<div class="line">To  <span class="guilabel">[Host Name(or IP address)]</span>, enter login node host name <code class="docutils literal notranslate"><span class="pre">login.fugaku.r-ccs.riken.jp</span></code>. To save the set contents, input the name to save to  <span class="guilabel">[Saved Sessions]</span> and click on  <span class="guilabel">[Save]</span>. From the second logging in, select the saved name and click  <span class="guilabel">[Load]</span>.</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../_images/AccessingTheKComputer_03.png" src="../_images/AccessingTheKComputer_03.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>To enable X11 forwarding function when connecting to the login node, before click <span class="guilabel">[Open]</span>,  open  <span class="menuselection">[Connection] ‣ [SSH] ‣ [X11]</span> and  put the check to <span class="guilabel">[Enable X11 forwarding]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../_images/AccessingTheKComputer_04.png" src="../_images/AccessingTheKComputer_04.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>To enable Agent-forwarding function when connecting to the login node, before click <span class="guilabel">[Open]</span>, open <span class="menuselection">[Connection] ‣ [SSH] ‣ [Auth]</span> and  put the check to <span class="guilabel">[Allow agent forwarding]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../_images/AccessingTheKComputer_05.png" src="../_images/AccessingTheKComputer_05.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>Click on <span class="guilabel">[Open]</span>. It starts connecting to the login node.</p></li>
+<li><p>When the first login, about the host key registration, the confirmation screen will be shown. Click on <span class="guilabel">“Yes(Y)”</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../_images/AccessingTheKComputer_06.png" src="../_images/AccessingTheKComputer_06.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>Input local account name and pass phrase and loging to the login node.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">login as: username                                       # Enter a local account</span>
+<span class="go">Authenticating with public key &quot;imported-openssh-key&quot;</span>
+<span class="go">Passphrase for key &quot;imported-openssh-key&quot;: passphrase     # Enter a pass phrase</span>
+<span class="go">Last login: Tue Mar 27 09:57:12 2018 from xxx.xxx.xxx.xxx</span>
+<span class="go">login$</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="how-to-directly-specify-a-login-node">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">4.4.3.3. </span>How to directly specify a login node</a><a class="headerlink" href="#how-to-directly-specify-a-login-node" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">You are currently using <code class="docutils literal notranslate"><span class="pre">login.fugaku.r-ccs.riken.jp</span></code> to access a login node.</div>
+<div class="line">If it is difficult to connect with this hostname, specify a login node individually and access.</div>
+</div>
+<p>To specify the login node directly, use the following hostname:.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>login1 : login1.fugaku.r-ccs.riken.jp
+login2 : login2.fugaku.r-ccs.riken.jp
+login3 : login3.fugaku.r-ccs.riken.jp
+login4 : login4.fugaku.r-ccs.riken.jp
+login5 : login5.fugaku.r-ccs.riken.jp
+login6 : login6.fugaku.r-ccs.riken.jp
+</pre></div>
+</div>
+</section>
+<section id="arm-login-node">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">4.4.3.4. </span>Arm login node</a><a class="headerlink" href="#arm-login-node" title="Link to this heading">¶</a></h3>
+<p>The Arm login node is a login node with an Armv8-based Arm processor.</p>
+<p>The Arm login node is logged in via the normal login node with Intel CPU.
+Users cannot log in directly to the Arm login node from the Internet.</p>
+<p>Please execute <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">arm1</span></code> on the login node to log in.
+The host-based authentication is used for the connection between the login node and the Arm login node, so authentication by users is not required .</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>ssh<span class="w"> </span>arm1
+<span class="go">Last login: XXX MMM DD HH:MM:SS 2020 from 10.4.254.NN</span>
+<span class="gp">[_LNAlogin]$</span>
+</pre></div>
+</div>
+<p>The Arm login node is configured as follows:</p>
+<ul class="simple">
+<li><p>home area and data area are common to other login nodes. However, NFS mount is used.</p></li>
+<li><p>Commands such as pjsub and pjstat are not available.</p></li>
+<li><p>Provides direct Internet access. Proxy setting is not required.</p></li>
+<li><p>The Arm compiler and LLVM10.0.0 (build with asis) is installed.</p></li>
+<li><p>When using the compiler, check the module file by executing <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">avail</span></code> and set the environment settings properly.</p></li>
+</ul>
+</section>
+</section>
+<section id="file-transfer-method">
+<h2><span class="section-number">4.4.4. </span>File transfer method<a class="headerlink" href="#file-transfer-method" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">Files can be transferred via the login node using the file transfer program (scp / sftp) installed on the user terminal. You can use  <code class="docutils literal notranslate"><span class="pre">login.fugaku.r-ccs.riken.jp</span></code> for transfer.</div>
+<div class="line">Use of protocols (ftp / r commands) that are vulnerable to security is prohibited.</div>
+<div class="line">For file transfer, the procedure for “  <a class="reference internal" href="#generatingprivatekeyandpublickey"><span class="std std-ref">Private key/Public key creation</span></a>“ must be performed, and the public key must be registered on the login node.</div>
+</div>
+<nav class="contents local" id="id3">
+<ul class="simple">
+<li><p><a class="reference internal" href="#file-transfer-sftp" id="id12">File transfer (sftp)</a></p></li>
+<li><p><a class="reference internal" href="#file-transfer-scp" id="id13">File transfer (scp)</a></p></li>
+<li><p><a class="reference internal" href="#windows-winscp" id="id14">Windows (WinSCP)</a></p></li>
+</ul>
+</nav>
+<section id="file-transfer-sftp">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">4.4.4.1. </span>File transfer (sftp)</a><a class="headerlink" href="#file-transfer-sftp" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong class="program">sftp</strong> command execution example</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[terminal]$ </span>sftp<span class="w"> </span>username@k-10g.r-ccs.riken.jp
+<span class="go">Enter passphrase for key &#39;/home/groupname/username/.ssh/id_rsa&#39;:  # input passphrase</span>
+<span class="go">sftp&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>File transfer example (<strong class="program">put</strong>)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sftp&gt; put a.f90</span>
+<span class="go">Uploading a.f90 to /home/groupname/username/a.f90</span>
+<span class="go">sample.f90                                         100%   18     0.0KB/s   00:00</span>
+<span class="go">sftp&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>File transfer example (<strong class="program">get</strong>)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sftp&gt; get sample.sh.o9110</span>
+<span class="go">Fetching sample.sh.o9110 to /home/groupname/username/sample.sh.o9110</span>
+<span class="go">sample.sh.o9110                                    100%   18     0.0KB/s   00:00</span>
+<span class="go">sftp&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="file-transfer-scp">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">4.4.4.2. </span>File transfer (scp)</a><a class="headerlink" href="#file-transfer-scp" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong class="program">scp</strong> example of command execution is shown below. (From terminal to login node)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[terminal]$ </span>scp<span class="w">  </span>local_file<span class="w">  </span>username@k-10g.r-ccs.riken.jp:remote_file
+<span class="go">Enter passphrase for key &#39;/home/groupname/username/.ssh/id_rsa&#39;:  #  Input passphrase</span>
+<span class="gp">[terminal]$</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p><strong class="program">scp</strong> example of command execution is shown below. (Login node to terminal)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[terminal]$ </span>scp<span class="w">  </span>username@k-10g.r-ccs.riken.jp:remote_file<span class="w">  </span>local_file
+<span class="go">Enter passphrase for key &#39;/home/groupname/username/.ssh/id_rsa&#39;: #   Input passphrase</span>
+<span class="gp">[terminal]$</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="windows-winscp">
+<h3><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">4.4.4.3. </span>Windows (WinSCP)</a><a class="headerlink" href="#windows-winscp" title="Link to this heading">¶</a></h3>
+<p>For Windows, use a file transfer program such as WinSCP to transfer the file to the login node. An example of connection with WinSCP is shown below.</p>
+<ol class="arabic simple">
+<li><p>Start WinSCP and select  <span class="guilabel">[New Site]</span>.</p></li>
+<li><p>Input login node host name (<code class="docutils literal notranslate"><span class="pre">login.fugaku.r-ccs.riken.jp</span></code>) to  <span class="guilabel">“Host name”</span>.</p></li>
+<li><p>Input the user name to  <span class="guilabel">“User name”</span>.</p></li>
+<li><p>Click on  <span class="guilabel">[Advanced…]</span>.</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/FileTransfer_01.png"><img alt="../_images/FileTransfer_01.png" src="../_images/FileTransfer_01.png" style="width: 599.9px; height: 401.09999999999997px;" /></a>
+</figure>
+<ol class="arabic simple" start="5">
+<li><p>Set the putty private key file name to  <span class="guilabel">[Authentication]</span>‘s  <span class="guilabel">“Private key file”</span> and click on  <span class="guilabel">[OK]</span>.</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/FileTransfer_02.png"><img alt="../_images/FileTransfer_02.png" src="../_images/FileTransfer_02.png" style="width: 484.4px; height: 395.5px;" /></a>
+</figure>
+<ol class="arabic simple" start="6">
+<li><p>Click on  <span class="guilabel">“Save”</span> and save the setting value.</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/FileTransfer_03.png"><img alt="../_images/FileTransfer_03.png" src="../_images/FileTransfer_03.png" style="width: 599.9px; height: 401.09999999999997px;" /></a>
+</figure>
+<ol class="arabic simple" start="7">
+<li><p>Select the saved setting value and connect by clicking  <span class="guilabel">“Login”</span>.</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/FileTransfer_04.png"><img alt="../_images/FileTransfer_04.png" src="../_images/FileTransfer_04.png" style="width: 599.9px; height: 401.09999999999997px;" /></a>
+</figure>
+<ol class="arabic simple" start="8">
+<li><p>After the connection is completed, a screen similar to Explorer will be displayed, and you can transfer files by dragging and dropping them.</p></li>
+</ol>
+</section>
+</section>
+<section id="login-shell">
+<h2><span class="section-number">4.4.5. </span>Login shell<a class="headerlink" href="#login-shell" title="Link to this heading">¶</a></h2>
+<p>Login shell is   <code class="file docutils literal notranslate"><span class="pre">/bin/bash</span></code> .</p>
+</section>
+<section id="e-mail-distribution-of-fugaku-operation-information">
+<h2><span class="section-number">4.4.6. </span>E-mail distribution of Fugaku operation information<a class="headerlink" href="#e-mail-distribution-of-fugaku-operation-information" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">An operation information mail is delivered to Fugaku account (uid).</div>
+<div class="line">In order to receive the mail, the user must register the forwarding destination mail address. (If you do not register, the mail is discarded.)</div>
+</div>
+<p>We will send you an email about the following operation information. The content of distribution will be gradually expanded.</p>
+<ul class="simple">
+<li><p>Information of jobs affected by a system failure.</p></li>
+<li><p>Operation information</p></li>
+<li><p>Others</p></li>
+</ul>
+<p>[How to register your e-mail address]</p>
+<p>Create a “<code class="file docutils literal notranslate"><span class="pre">.forward</span></code>” file in the user’s home directory and register the email address that you want to receive.
+Examples of “<code class="file docutils literal notranslate"><span class="pre">.forward</span></code>” and filtering configurations will be in the <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/faq/20220324_01">FAQ</a>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>vi<span class="w"> </span>~/.forward
+<span class="go">*****@*****.com</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">4.4. Login</a><ul>
+<li><a class="reference internal" href="#private-key-public-key-creation">4.4.1. Private key/Public key creation</a><ul>
+<li><a class="reference internal" href="#unix-linux-mac-openssh">4.4.1.1. Unix/Linux/Mac (OpenSSH)</a></li>
+<li><a class="reference internal" href="#windows-puttygen">4.4.1.2. Windows (PuTTYgen)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#public-key-registration">4.4.2. Public key registration</a><ul>
+<li><a class="reference internal" href="#registration-using-fugaku-website">4.4.2.1. Registration using Fugaku website</a></li>
+<li><a class="reference internal" href="#additional-registration-of-public-key">4.4.2.2. Additional registration of public key</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#accessing-direction">4.4.3. Accessing direction</a><ul>
+<li><a class="reference internal" href="#login-node">4.4.3.1. Login node</a></li>
+<li><a class="reference internal" href="#login-node-putty">4.4.3.2. Login node (PuTTY)</a></li>
+<li><a class="reference internal" href="#how-to-directly-specify-a-login-node">4.4.3.3. How to directly specify a login node</a></li>
+<li><a class="reference internal" href="#arm-login-node">4.4.3.4. Arm login node</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#file-transfer-method">4.4.4. File transfer method</a><ul>
+<li><a class="reference internal" href="#file-transfer-sftp">4.4.4.1. File transfer (sftp)</a></li>
+<li><a class="reference internal" href="#file-transfer-scp">4.4.4.2. File transfer (scp)</a></li>
+<li><a class="reference internal" href="#windows-winscp">4.4.4.3. Windows (WinSCP)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#login-shell">4.4.5. Login shell</a></li>
+<li><a class="reference internal" href="#e-mail-distribution-of-fugaku-operation-information">4.4.6. E-mail distribution of Fugaku operation information</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="AccessingTheUsersPortal.html"
+                          title="previous chapter"><span class="section-number">4.3. </span>Accessing steps to the Fugaku website</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CheckingTheNodeUseStatus.html"
+                          title="next chapter"><span class="section-number">4.5. </span>Check node usage</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CheckingTheNodeUseStatus.html" title="4.5. Check node usage"
+             >next</a></li>
+        <li class="right" >
+          <a href="AccessingTheUsersPortal.html" title="4.3. Accessing steps to the Fugaku website"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">4. </span>System Use</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.4. </span>Login</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

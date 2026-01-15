@@ -1,0 +1,627 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4.4. ログイン &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="4.5. ノード使用状況確認" href="CheckingTheNodeUseStatus.html" />
+    <link rel="prev" title="4.3. 富岳ウェブサイトへの接続手順" href="AccessingTheUsersPortal.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CheckingTheNodeUseStatus.html" title="4.5. ノード使用状況確認"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="AccessingTheUsersPortal.html" title="4.3. 富岳ウェブサイトへの接続手順"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">4. </span>システム利用</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.4. </span>ログイン</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="accesstothesystemlogin">
+<span id="id1"></span><h1><span class="section-number">4.4. </span>ログイン<a class="headerlink" href="#accesstothesystemlogin" title="Link to this heading">¶</a></h1>
+<p>ローカルアカウントを使用して「富岳」へログインするには、ログインノードにSSH Version2（公開鍵認証）でログインします。</p>
+<p>事前に利用者の端末にてSSHの鍵ペア（公開鍵と秘密鍵）を作成し、公開鍵を富岳ウェブサイト画面から登録してください。
+登録するのは公開鍵のみです。秘密鍵が登録された場合、安全対策としてログインの一時停止等の処理を実施する場合があります。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>ログインノードのホームディレクトリ配下の次に示すディレクトリ、および、ファイルのパーミッションを変更するとsshでログインできなくなります。</p>
+<ul class="simple">
+<li><p>ホームディレクトリのパーミッション（700）</p></li>
+<li><p>~/.ssh ディレクトリのパーミッション（700）</p></li>
+<li><p>~/.ssh/authorized_keys のパーミッション（600）</p></li>
+</ul>
+<p>これらのパーミッションを変更しないように注意してください。</p>
+</div>
+<section id="generatingprivatekeyandpublickey">
+<span id="id2"></span><h2><span class="section-number">4.4.1. </span>鍵ペア（秘密鍵／公開鍵）の作成<a class="headerlink" href="#generatingprivatekeyandpublickey" title="Link to this heading">¶</a></h2>
+<p>「富岳」を利用する場合は利用者端末で秘密鍵と公開鍵のペアを作成します。生成する鍵の種類は次のいずれかを推奨します。</p>
+<ul class="simple">
+<li><p>Ed25519</p></li>
+<li><p>ECDSA（NIST P 521）</p></li>
+<li><p>RSA（鍵長 2048bit以上）: RSA鍵の利用は富岳ウェブサイトの「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/operation/20230210_01">ログインノードのsshアクセスに関する運用変更</a>」も参照ください。</p></li>
+</ul>
+<p>UNIX／Linux（OpenSSH）およびWindows（puttygen）を使用したEd25519の鍵ペア（公開鍵／秘密鍵）の作成手順を示します。puttygenを使用する場合には、ターミナルエミュレータPuTTY（パティ）を事前にインストールする必要があります。</p>
+<nav class="contents local" id="id3">
+<ul class="simple">
+<li><p><a class="reference internal" href="#unix-linux-mac-openssh" id="id16">Unix／Linux／Mac (OpenSSH)</a></p></li>
+<li><p><a class="reference internal" href="#windows-puttygen" id="id17">Windows (PuTTYgen)</a></p></li>
+</ul>
+</nav>
+<section id="unix-linux-mac-openssh">
+<span id="unixlinuxmacopenssh"></span><h3><a class="toc-backref" href="#id16" role="doc-backlink"><span class="section-number">4.4.1.1. </span>Unix／Linux／Mac (OpenSSH)</a><a class="headerlink" href="#unix-linux-mac-openssh" title="Link to this heading">¶</a></h3>
+<p>利用者の端末にて <strong class="command">ssh-keygen</strong>コマンドを実行し、秘密鍵と公開鍵のペアを作成します。</p>
+<ol class="arabic simple">
+<li><p>ターミナルを起動して、<strong class="command">ssh-keygen</strong>コマンドを実行します。</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>Mac（OS X）の場合は、Terminal（<span class="menuselection">アプリケーション ‣ ユーティリティ ‣ ターミナル</span>）を起動して<strong class="command">ssh-keygen</strong>コマンドを実行します。</p></li>
+<li><p>UNIX／Linuxの場合は、端末エミュレータを起動して <strong class="command">ssh-keygen</strong>コマンドを実行します。</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[terminal]$ </span>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519
+<span class="go">Generating public/private ed25519 key pair.</span>
+<span class="go">Enter file in which to save the key (/home/username/.ssh/id_ed25519):</span>
+<span class="go">Enter passphrase (empty for no passphrase):  # パスフレーズを入力</span>
+<span class="go">Enter same passphrase again:                 # もう一度同じパスフレーズを入力</span>
+<span class="go">Your identification has been saved in /home/username/.ssh/id_ed25519.</span>
+<span class="go">Your public key has been saved in /home/username/.ssh/id_ed25519.pub.</span>
+<span class="go">The key fingerprint is:</span>
+<span class="go">SHA256:khbWyIyUqMnyjK1Ok78l8EivKbQLNgP3vyhjYBgvif8 namehostname</span>
+<span class="go">The key&#39;s randomart image is:</span>
+<span class="go">+--[ED25519 256]--+</span>
+<span class="go">|   ...           |</span>
+<span class="go">|  ...+ o         |</span>
+<span class="go">|.o  . * .        |</span>
+<span class="go">|=.   . o         |</span>
+<span class="go">|=@    + S        |</span>
+<span class="go">|@o%  . .         |</span>
+<span class="go">|=%.= .           |</span>
+<span class="go">|*=O =            |</span>
+<span class="go">|+=+=Eo.          |</span>
+<span class="go">+----[SHA256]-----+</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<ul class="simple">
+<li><p>パスフレーズはパスワード同様に他人が推測しにくい文字列を設定してください。また、必ずパスフレーズを設定するようお願い致します。パスフレーズの長さは15文字以上を推奨します。</p></li>
+</ul>
+</div>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><div class="line-block">
+<div class="line"><strong class="command">ssh-keygen</strong>を実行すると、ホームディレクトリ配下の<code class="file docutils literal notranslate"><span class="pre">.ssh</span></code>ディレクトリに秘密鍵（id_ed25519）と公開鍵（id_ed25519.pub）の2種類が作成されます。</div>
+<div class="line">公開鍵（id_ed25519.pub）を富岳ウェブサイトを利用して登録します。</div>
+</div>
+</li>
+</ol>
+</section>
+<section id="windows-puttygen">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink"><span class="section-number">4.4.1.2. </span>Windows (PuTTYgen)</a><a class="headerlink" href="#windows-puttygen" title="Link to this heading">¶</a></h3>
+<p>PuTTY／WinSCPで利用可能な秘密鍵／公開鍵を puttygenにより作成します。</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">puttygenを起動します。</div>
+<div class="line">鍵の種類（Type of key to generate）として<span class="guilabel">「EdDSA」</span>を選択し<span class="guilabel">「Ed25519 (255 bits)」</span>カーブを選択し、 <span class="guilabel">「Generate」</span>ボタンをクリックします。</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/GeneratingPrivateKeyAndPublicKey_01.png"><img alt="../_images/GeneratingPrivateKeyAndPublicKey_01.png" src="../_images/GeneratingPrivateKeyAndPublicKey_01.png" style="width: 491.4px; height: 334.59999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>マウスカーソルをランダムに動かします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/GeneratingPrivateKeyAndPublicKey_02.png"><img alt="../_images/GeneratingPrivateKeyAndPublicKey_02.png" src="../_images/GeneratingPrivateKeyAndPublicKey_02.png" style="width: 491.4px; height: 334.59999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic" start="3">
+<li><div class="line-block">
+<div class="line">公開鍵を保管します。</div>
+<div class="line">「Public key for pasting in to OpenSSH authorized_keys file:」に表示される内容を、クリップボードにコピーします（メモ帳を起動し貼り付けておくことをお勧めします）。</div>
+<div class="line">クリップボードに張り付けた内容（公開鍵となります）を、富岳ウェブサイトを利用して登録します。</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/GeneratingPrivateKeyAndPublicKey_05.png"><img alt="../_images/GeneratingPrivateKeyAndPublicKey_05.png" src="../_images/GeneratingPrivateKeyAndPublicKey_05.png" style="width: 491.4px; height: 334.59999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p><span class="guilabel">「Key passphrase」</span>および<span class="guilabel">「Confirm passphrase」</span>に、パスフレーズを入力します。入力後、<span class="guilabel">「Save private key」</span>ボタンをクリックし、秘密鍵を保管します。パスフレーズは、ログインノードへのログイン時に入力を求められますので、忘れないようにしてください。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/GeneratingPrivateKeyAndPublicKey_03.png"><img alt="../_images/GeneratingPrivateKeyAndPublicKey_03.png" src="../_images/GeneratingPrivateKeyAndPublicKey_03.png" style="width: 491.4px; height: 334.59999999999997px;" /></a>
+</figure>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>パスフレーズはパスワード同様に他人が推測しにくい文字列を設定してください。また、必ずパスフレーズを設定するようお願い致します。パスフレーズの長さは15文字以上を推奨します。</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>秘密鍵を保管するファイル名を<span class="guilabel">「ファイル名(N)」</span>に入力し、<span class="guilabel">「保存(S)」</span>ボタンをクリックします。秘密鍵が保管されます。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/GeneratingPrivateKeyAndPublicKey_04.png"><img alt="../_images/GeneratingPrivateKeyAndPublicKey_04.png" src="../_images/GeneratingPrivateKeyAndPublicKey_04.png" style="width: 611.8px; height: 281.4px;" /></a>
+</figure>
+</div></blockquote>
+</section>
+</section>
+<section id="registeringapublickey">
+<span id="id4"></span><h2><span class="section-number">4.4.2. </span>公開鍵登録<a class="headerlink" href="#registeringapublickey" title="Link to this heading">¶</a></h2>
+<nav class="contents local" id="id5">
+<ul class="simple">
+<li><p><a class="reference internal" href="#id6" id="id18">富岳ウェブサイトを利用した登録</a></p></li>
+<li><p><a class="reference internal" href="#id7" id="id19">公開鍵の追加登録</a></p></li>
+</ul>
+</nav>
+<section id="id6">
+<h3><a class="toc-backref" href="#id18" role="doc-backlink"><span class="section-number">4.4.2.1. </span>富岳ウェブサイトを利用した登録</a><a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>富岳ウェブサイト（<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/">https://www.fugaku.r-ccs.riken.jp/</a>）にログインし、メニューから<span class="guilabel">[利用者ポータル]</span>をクリックします。</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RegisteringAPublicKey_01.png"><img alt="../_images/RegisteringAPublicKey_01.png" src="../_images/RegisteringAPublicKey_01.png" style="width: 506.8px; height: 320.40000000000003px;" /></a>
+</figure>
+<ol class="arabic simple" start="2">
+<li><p>メニューから<span class="guilabel">[Publickey registration]</span>をクリックします。</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RegisteringAPublicKey_02.png"><img alt="../_images/RegisteringAPublicKey_02.png" src="../_images/RegisteringAPublicKey_02.png" style="width: 506.8px; height: 230.4px;" /></a>
+</figure>
+<ol class="arabic simple" start="3">
+<li><p><span class="guilabel">「Publickey Registration」</span>欄に利用する公開鍵をコピー＆ペーストします。</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RegisteringAPublicKey_03.png"><img alt="../_images/RegisteringAPublicKey_03.png" src="../_images/RegisteringAPublicKey_03.png" style="width: 505.6px; height: 300.0px;" /></a>
+</figure>
+<ol class="arabic simple" start="4">
+<li><p><span class="guilabel">[Register]</span>ボタンを押します。</p></li>
+<li><p>内容を確認のうえ<span class="guilabel">[Register]</span>ボタンを押します。</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RegisteringAPublicKey_04.png"><img alt="../_images/RegisteringAPublicKey_04.png" src="../_images/RegisteringAPublicKey_04.png" style="width: 443.09999999999997px; height: 215.95px;" /></a>
+</figure>
+<ol class="arabic simple" start="6">
+<li><p>「Registration has been completed.」の画面が表示されると、公開鍵の登録作業は終りです。</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RegisteringAPublicKey_06.png"><img alt="../_images/RegisteringAPublicKey_06.png" src="../_images/RegisteringAPublicKey_06.png" style="width: 443.09999999999997px; height: 215.95px;" /></a>
+</figure>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>公開鍵は1回の操作で1個しか登録できません。2回目以降の操作では、追加登録となります。2個以上の公開鍵を登録したい場合には、同様の操作を繰り返してください。</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="7">
+<li><p>公開鍵が正しくない場合はエラーメッセージが表示されます。公開鍵を確認して再度登録処理を実行してください。</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RegisteringAPublicKey_07.png"><img alt="../_images/RegisteringAPublicKey_07.png" src="../_images/RegisteringAPublicKey_07.png" style="width: 402.15px; height: 180.6px;" /></a>
+</figure>
+</section>
+<section id="id7">
+<h3><a class="toc-backref" href="#id19" role="doc-backlink"><span class="section-number">4.4.2.2. </span>公開鍵の追加登録</a><a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">ログインノードに公開鍵を追加登録する手順を示します。</div>
+<div class="line">富岳ウェブサイトを利用して追加登録する方法と、ログインノードにログインして直接ファイルを編集する方法があります。ここでは、ログインノードでファイルを編集する方法を示します。</div>
+</div>
+<ol class="arabic simple">
+<li><p>ログインノードで<code class="file docutils literal notranslate"><span class="pre">~/.ssh/authorized_keys</span></code>を編集します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>vi<span class="w">  </span>~/.ssh/authorized_keys
+
+
+<span class="go">[i] キーを押下し、vi エディタのインサートモードにします</span>
+<span class="go">マウスの右クリックを押下し、.ssh/id_ed25519.pubの内容を貼り付けます</span>
+
+<span class="go">[esc] キーを押下し、[wq!] を入力し、[Enter] キーを押下します</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>公開鍵を登録した<code class="file docutils literal notranslate"><span class="pre">authorized_keys</span></code>のパーミッションを変更します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>chmod<span class="w">  </span><span class="m">600</span><span class="w">  </span>~/.ssh/authorized_keys
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+<section id="id8">
+<h2><span class="section-number">4.4.3. </span>アクセス方法<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">「富岳」へのアクセス方法を示します。</div>
+<div class="line">ログインノードにログインするには、「<a class="reference internal" href="#generatingprivatekeyandpublickey"><span class="std std-ref">鍵ペア（秘密鍵／公開鍵）の作成</span></a>」の手順を実施し、ログインノードに公開鍵が登録されている必要があります。</div>
+<div class="line">プログラム開発（プログラム作成／コンパイル）およびジョブ操作（ジョブ投入／ジョブ状態表示／ジョブ削除）は、ログインノードから実施します。</div>
+</div>
+<nav class="contents local" id="id9">
+<ul class="simple">
+<li><p><a class="reference internal" href="#id10" id="id20">ログインノード</a></p></li>
+<li><p><a class="reference internal" href="#putty" id="id21">ログインノード（PuTTY）</a></p></li>
+<li><p><a class="reference internal" href="#id11" id="id22">ログインノードを直接指定する方法</a></p></li>
+<li><p><a class="reference internal" href="#arm" id="id23">Armログインノード</a></p></li>
+</ul>
+</nav>
+<section id="id10">
+<h3><a class="toc-backref" href="#id20" role="doc-backlink"><span class="section-number">4.4.3.1. </span>ログインノード</a><a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<p>利用者の端末から、次のホスト名でアクセスします</p>
+<p>ホスト名：<code class="docutils literal notranslate"><span class="pre">login.fugaku.r-ccs.riken.jp</span></code></p>
+<p><strong class="command">ssh</strong>コマンドの実行例を示します。</p>
+<p>【公開鍵認証】</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[terminal]$ </span>ssh<span class="w">  </span>username@login.fugaku.r-ccs.riken.jp
+<span class="go">The authenticity of host &#39;XXXXXX (nnn.nnn.nnn.nnn)&#39; can&#39;t be established.</span>
+<span class="go">XXXXX key fingerprint is XX: XX: XX: XX: XX: XX: XX: XX: XX:XX:XX:XX:XX:XX:XX:XX.</span>
+<span class="go">Are you sure you want to continue connecting (yes/no)? yes   # yesを入力（初回）</span>
+<span class="go">Enter passphrase for key &#39;/home/groupname/username/.ssh/id_ed25519&#39;:  # パスフレーズを入力</span>
+<span class="gp">[_LNlogin]$</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>初回ログイン時、ホスト鍵の登録について、確認のメッセージ（Are you sure you want to continue connecting）が表示されます。「yes」を入力します。</p></li>
+<li><p>ログインノードへの接続時に X11 Forwarding 機能を有効とする場合は、<strong class="command">ssh</strong>のオプション<code class="docutils literal notranslate"><span class="pre">-X</span></code>を指定してください。</p></li>
+<li><p>ログインノードへの接続時に SSH Agent-forwarding 機能を有効とする場合は、<strong class="command">ssh</strong>のオプション<code class="docutils literal notranslate"><span class="pre">-A</span></code>を指定してください。</p></li>
+<li><p>複数台のログインノードを運用しています。ホーム領域（<code class="file docutils literal notranslate"><span class="pre">/home</span></code>）、データ領域（<code class="file docutils literal notranslate"><span class="pre">/vol0n0m/data</span></code>）は、各ログインノードで共用します。また、言語ソフトウェアの環境も同じです。</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><a class="reference internal" href="#unixlinuxmacopenssh"><span class="std std-ref">鍵ペアの作成時</span></a>に鍵ファイルのファイル名を入力して作成した場合は、<strong class="command">ssh</strong>コマンドの<code class="docutils literal notranslate"><span class="pre">-i</span></code>オプションで鍵ファイルのファイル名を指定してください。</p>
+<p><code class="docutils literal notranslate"><span class="pre">[terminal]$</span> <span class="pre">ssh</span> <span class="pre">-i</span> <span class="pre">key_filename</span> <span class="pre">username&#64;login.fugaku.r-ccs.riken.jp</span></code></p>
+</div>
+</section>
+<section id="putty">
+<span id="loginnodeputtysetup"></span><h3><a class="toc-backref" href="#id21" role="doc-backlink"><span class="section-number">4.4.3.2. </span>ログインノード（PuTTY）</a><a class="headerlink" href="#putty" title="Link to this heading">¶</a></h3>
+<p>Windows（PuTTY）を使用して、ログインノードにログインする方法を示します。</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">PuTTYを起動します。利用者の端末に保管されている秘密鍵を設定します。</div>
+<div class="line"><span class="menuselection">「Connection」 ‣ 「SSH」 ‣ 「Auth」 ‣ 「Credentials」</span>から<span class="guilabel">「Browse」</span>ボタンをクリックします。</div>
+<div class="line">puttygenで作成した秘密鍵を選択します。</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../_images/AccessingTheKComputer_01.png" src="../_images/AccessingTheKComputer_01.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><div class="line-block">
+<div class="line"><span class="guilabel">「Session」</span>を選択します。</div>
+<div class="line"><span class="guilabel">「Host Name(or IP address)」</span>に、ログインノードのホスト名<code class="docutils literal notranslate"><span class="pre">login.fugaku.r-ccs.riken.jp</span></code>を入力します。設定した内容を保管するため、<span class="guilabel">「Saved Sessions」</span>に保管する名前を入力し、 <span class="guilabel">「Save」</span>ボタンをクリックします。2回目以降のログイン時は保存した名前を選択し、<span class="guilabel">「Load」</span>ボタンをクリックします。</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../_images/AccessingTheKComputer_03.png" src="../_images/AccessingTheKComputer_03.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>ログインノードへ接続時にX11 forwarding 機能を有効とする場合は<span class="guilabel">「Open」</span>をクリックする前に<span class="menuselection">「Connection」 ‣ 「SSH」 ‣ 「X11」</span>を開き<span class="guilabel">「Enable X11 forwarding」</span>にチェックを入れてください。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../_images/AccessingTheKComputer_04.png" src="../_images/AccessingTheKComputer_04.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>ログインノードへ接続時にAgent-forwarding 機能を有効とする場合は<span class="guilabel">「Open」</span>をクリックする前に<span class="menuselection">「Connection」 ‣ 「SSH」 ‣ 「Auth」</span>を開き<span class="guilabel">「Allow agent forwarding」</span>にチェックを入れて下さい。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../_images/AccessingTheKComputer_05.png" src="../_images/AccessingTheKComputer_05.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p><span class="guilabel">「Open」</span>ボタンをクリックします。ログインノードへの接続が開始されます。</p></li>
+<li><p>初回ログイン時、ホスト鍵の登録について、確認画面が表示されます。<span class="guilabel">「はい(Y)」</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../_images/AccessingTheKComputer_06.png" src="../_images/AccessingTheKComputer_06.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>ローカルアカウント名とパスフレーズを入力し、ログインノードにログインします。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">login as: username                                        # ローカルアカウント名を入力</span>
+<span class="go">Authenticating with public key &quot;imported-openssh-key&quot;</span>
+<span class="go">Passphrase for key &quot;imported-openssh-key&quot;: passphrase     # パスフレーズを入力</span>
+<span class="go">Last login: Tue Mar 27 09:57:12 2018 from xxx.xxx.xxx.xxx</span>
+<span class="go">login$</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="id11">
+<h3><a class="toc-backref" href="#id22" role="doc-backlink"><span class="section-number">4.4.3.3. </span>ログインノードを直接指定する方法</a><a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<p>ログインノードへのアクセスとして<code class="docutils literal notranslate"><span class="pre">login.fugaku.r-ccs.riken.jp</span></code>をご利用いただいております。
+本ホスト名でつながりにくい場合、個別にログインノードを指定してアクセスしてください。</p>
+<p>ログインノードを直接指定する場合は以下のホスト名をご利用ください。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>login1 : login1.fugaku.r-ccs.riken.jp
+login2 : login2.fugaku.r-ccs.riken.jp
+login3 : login3.fugaku.r-ccs.riken.jp
+login4 : login4.fugaku.r-ccs.riken.jp
+login5 : login5.fugaku.r-ccs.riken.jp
+login6 : login6.fugaku.r-ccs.riken.jp
+</pre></div>
+</div>
+</section>
+<section id="arm">
+<h3><a class="toc-backref" href="#id23" role="doc-backlink"><span class="section-number">4.4.3.4. </span>Armログインノード</a><a class="headerlink" href="#arm" title="Link to this heading">¶</a></h3>
+<p>ArmログインノードはArmv8ベースのArmプロセッサを搭載したログインノードです。</p>
+<p>Armログインノードは通常のログインノード(Interl製CPUを利用)を経由してログインします。
+インターネットからArmログインノードに直接ログインすることはできません。</p>
+<p>ログインノードから<code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">arm1</span></code>を実行してログインしてください。
+ログインノードとArmログインノードの間はホストベース認証を行うため、利用者による認証は不要です。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>ssh<span class="w"> </span>arm1
+<span class="go">Last login: XXX MMM DD HH:MM:SS 2020 from 10.4.254.NN</span>
+<span class="gp">[_LNAlogin]$</span>
+</pre></div>
+</div>
+<p>Armログインノードは次のように設定しています。</p>
+<ul class="simple">
+<li><p>ホーム領域、データ領域は他のログインノードと共通です。ただしNFSマウントになります。</p></li>
+<li><p>pjsub、pjstatなどは利用できません。</p></li>
+<li><p>インターネットに直接アクセス可能です。Proxyの設定は不要です。</p></li>
+<li><p>コンパイラはArm社コンパイラとLLVM10.0.0(asisでビルドしたもの)をインストールしています。</p></li>
+<li><p>コンパイラ利用時は<code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">avail</span></code>でモジュールファイルを確認し適宜環境設定をして利用してください。</p></li>
+</ul>
+</section>
+</section>
+<section id="id12">
+<h2><span class="section-number">4.4.4. </span>ファイル転送方法<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">利用者端末にインストールされているファイル転送プログラム（scp／sftp）を利用して、ログインノードを経由したファイル転送が可能です。転送には<code class="docutils literal notranslate"><span class="pre">login.fugaku.r-ccs.riken.jp</span></code>を使用できます。</div>
+<div class="line">セキュリティに脆弱性のあるプロトコル（ftp／r系コマンド）の利用は禁止しています。</div>
+<div class="line">ファイル転送は「<a class="reference internal" href="#generatingprivatekeyandpublickey"><span class="std std-ref">鍵ペア（秘密鍵／公開鍵）の作成</span></a>」の手順を実施し、ログインノードに公開鍵が登録されている必要があります。</div>
+</div>
+<nav class="contents local" id="id13">
+<ul class="simple">
+<li><p><a class="reference internal" href="#sftp" id="id24">ファイル転送（sftp）</a></p></li>
+<li><p><a class="reference internal" href="#scp" id="id25">ファイル転送（scp）</a></p></li>
+<li><p><a class="reference internal" href="#windows-winscp" id="id26">Windows (WinSCP)</a></p></li>
+</ul>
+</nav>
+<section id="sftp">
+<h3><a class="toc-backref" href="#id24" role="doc-backlink"><span class="section-number">4.4.4.1. </span>ファイル転送（sftp）</a><a class="headerlink" href="#sftp" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong class="program">sftp</strong>コマンドの実行例</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[terminal]$ </span>sftp<span class="w"> </span>username@login.fugaku.r-ccs.riken.jp
+<span class="go">Enter passphrase for key &#39;/home/groupname/username/.ssh/id_ed25519&#39;:  # パスフレーズを入力</span>
+<span class="go">sftp&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>ファイル転送例（<strong class="program">put</strong>）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sftp&gt; put a.f90</span>
+<span class="go">Uploading a.f90 to /home/groupname/username/a.f90</span>
+<span class="go">sample.f90                                         100%   18     0.0KB/s   00:00</span>
+<span class="go">sftp&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>ファイル転送例（<strong class="program">get</strong>）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sftp&gt; get sample.sh.o9110</span>
+<span class="go">Fetching sample.sh.o9110 to /home/groupname/username/sample.sh.o9110</span>
+<span class="go">sample.sh.o9110                                    100%   18     0.0KB/s   00:00</span>
+<span class="go">sftp&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="scp">
+<h3><a class="toc-backref" href="#id25" role="doc-backlink"><span class="section-number">4.4.4.2. </span>ファイル転送（scp）</a><a class="headerlink" href="#scp" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p><strong class="program">scp</strong>コマンドの実行例を示します。（端末からログインノードへ）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[terminal]$ </span>scp<span class="w">  </span>local_file<span class="w">  </span>username@login.fugaku.r-ccs.riken.jp:remote_file
+<span class="go">Enter passphrase for key &#39;/home/groupname/username/.ssh/id_ed25519&#39;:  #  パスフレーズを入力</span>
+<span class="gp">[terminal]$</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p><strong class="program">scp</strong>コマンドの実行例を示します。（ログインノードから端末へ）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[terminal]$ </span>scp<span class="w">  </span>username@login.fugaku.r-ccs.riken.jp:remote_file<span class="w">  </span>local_file
+<span class="go">Enter passphrase for key &#39;/home/groupname/username/.ssh/id_ed25519&#39;: #   パスフレーズを入力</span>
+<span class="gp">[terminal]$</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="windows-winscp">
+<h3><a class="toc-backref" href="#id26" role="doc-backlink"><span class="section-number">4.4.4.3. </span>Windows (WinSCP)</a><a class="headerlink" href="#windows-winscp" title="Link to this heading">¶</a></h3>
+<p>Windows系の場合、WinSCPなどのファイル転送プログラムを使用して、ログインノードへファイルを転送します。WinSCPでの接続例を示します。</p>
+<ol class="arabic simple">
+<li><p>WinSCPを起動し、<span class="guilabel">[New Site]</span>を選びます。</p></li>
+<li><p><span class="guilabel">「Host name」</span>にログインノードのホスト名（<code class="docutils literal notranslate"><span class="pre">login.fugaku.r-ccs.riken.jp</span></code>）を入力します。</p></li>
+<li><p><span class="guilabel">「User name」</span>にユーザ名を入力します。</p></li>
+<li><p><span class="guilabel">[Advanced...]</span>をクリックします。</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/FileTransfer_01.png"><img alt="../_images/FileTransfer_01.png" src="../_images/FileTransfer_01.png" style="width: 599.9px; height: 401.09999999999997px;" /></a>
+</figure>
+<ol class="arabic simple" start="5">
+<li><p><span class="guilabel">[Authentication]</span>の<span class="guilabel">「Private key file」</span>にputtyの秘密鍵ファイル名を設定し、<span class="guilabel">[OK]</span>をクリックします。</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/FileTransfer_02.png"><img alt="../_images/FileTransfer_02.png" src="../_images/FileTransfer_02.png" style="width: 484.4px; height: 395.5px;" /></a>
+</figure>
+<ol class="arabic simple" start="6">
+<li><p><span class="guilabel">「Save」</span>をクリックし、設定値を保存します。</p></li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/FileTransfer_03.png"><img alt="../_images/FileTransfer_03.png" src="../_images/FileTransfer_03.png" style="width: 599.9px; height: 401.09999999999997px;" /></a>
+</figure>
+<p>７. 保存した設定値を選択し、<span class="guilabel">「Login」</span>をクリックし接続します。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/FileTransfer_04.png"><img alt="../_images/FileTransfer_04.png" src="../_images/FileTransfer_04.png" style="width: 599.9px; height: 401.09999999999997px;" /></a>
+</figure>
+<ol class="arabic simple" start="8">
+<li><p>接続完了後、エクスプローラに似た画面が表示され、ファイルをドラッグ＆ドロップして転送できるようになります。</p></li>
+</ol>
+</section>
+</section>
+<section id="id14">
+<h2><span class="section-number">4.4.5. </span>ログインシェル<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h2>
+<p>ログインシェルは <code class="file docutils literal notranslate"><span class="pre">/bin/bash</span></code> です。</p>
+</section>
+<section id="id15">
+<h2><span class="section-number">4.4.6. </span>「富岳」運用情報のメール配信<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">運用情報に関するメールが「富岳」のアカウント（uid）宛に配信されます。</div>
+<div class="line">受信するためには、ユーザ自身で転送先のメールアドレスを登録する必要があります（登録しない場合、メールは廃棄されます）。</div>
+</div>
+<p>下記の運用情報に関するメールを配信します。配信内容は順次拡充します。</p>
+<ul class="simple">
+<li><p>システム障害の影響を受けたジョブ情報</p></li>
+<li><p>お知らせ情報</p></li>
+<li><p>その他</p></li>
+</ul>
+<p>【メールアドレスの登録方法】</p>
+<p>ユーザのホームディレクトリに「<code class="file docutils literal notranslate"><span class="pre">.forward</span></code>」ファイルを作成し、転送先のメールアドレスを記載してください。
+「<code class="file docutils literal notranslate"><span class="pre">.forward</span></code>」の記載例やフィルタリングの設定例などは<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/faq/20220324_01">FAQ</a>を確認してください。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>vi<span class="w"> </span>~/.forward
+<span class="go">*****@*****.com</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">4.4. ログイン</a><ul>
+<li><a class="reference internal" href="#generatingprivatekeyandpublickey">4.4.1. 鍵ペア（秘密鍵／公開鍵）の作成</a><ul>
+<li><a class="reference internal" href="#unix-linux-mac-openssh">4.4.1.1. Unix／Linux／Mac (OpenSSH)</a></li>
+<li><a class="reference internal" href="#windows-puttygen">4.4.1.2. Windows (PuTTYgen)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#registeringapublickey">4.4.2. 公開鍵登録</a><ul>
+<li><a class="reference internal" href="#id6">4.4.2.1. 富岳ウェブサイトを利用した登録</a></li>
+<li><a class="reference internal" href="#id7">4.4.2.2. 公開鍵の追加登録</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id8">4.4.3. アクセス方法</a><ul>
+<li><a class="reference internal" href="#id10">4.4.3.1. ログインノード</a></li>
+<li><a class="reference internal" href="#putty">4.4.3.2. ログインノード（PuTTY）</a></li>
+<li><a class="reference internal" href="#id11">4.4.3.3. ログインノードを直接指定する方法</a></li>
+<li><a class="reference internal" href="#arm">4.4.3.4. Armログインノード</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id12">4.4.4. ファイル転送方法</a><ul>
+<li><a class="reference internal" href="#sftp">4.4.4.1. ファイル転送（sftp）</a></li>
+<li><a class="reference internal" href="#scp">4.4.4.2. ファイル転送（scp）</a></li>
+<li><a class="reference internal" href="#windows-winscp">4.4.4.3. Windows (WinSCP)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id14">4.4.5. ログインシェル</a></li>
+<li><a class="reference internal" href="#id15">4.4.6. 「富岳」運用情報のメール配信</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="AccessingTheUsersPortal.html"
+                          title="前の章へ"><span class="section-number">4.3. </span>富岳ウェブサイトへの接続手順</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="CheckingTheNodeUseStatus.html"
+                          title="次の章へ"><span class="section-number">4.5. </span>ノード使用状況確認</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CheckingTheNodeUseStatus.html" title="4.5. ノード使用状況確認"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="AccessingTheUsersPortal.html" title="4.3. 富岳ウェブサイトへの接続手順"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">4. </span>システム利用</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.4. </span>ログイン</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

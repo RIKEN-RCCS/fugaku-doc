@@ -1,0 +1,1189 @@
+SLURM Commands
+--------------
+
+The following are SLURM commands commonly used on the login node.
+
+.. attention::
+
+    See the URL if you need more detailed informatin about SLURM commands.
+
+    https://slurm.schedmd.com/documentation.html
+
+
+.. list-table::
+   :header-rows: 1
+   :widths: 5 10 40
+
+   * - NO.
+     - SLURM command
+     - Explanation
+
+   * - 1
+     - sbatch
+     - Submit a batch job
+   
+   * - 2
+     - srun
+     - Submit a job
+   
+   * - 3
+     - scancel
+     - Cancel a job
+   
+   * - 4
+     - sstat
+     - Display information about a job
+   
+   * - 5
+     - sacct
+     - Display job accounting information
+   
+   * - 6
+     - squeue
+     - Display status of job queue
+   
+   * - 7
+     - sinfo
+     - Display status of compute nodes
+     
+   * - 8
+     - sbcast
+     - Transfer files to a node to which a job is assigned
+
+
+Submit a batch job (sbatch)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``sbatch`` is a command to submit a batch script to Slurm.
+
+Format
+
+**sbatch** [*OPTIONS(0)*...] [ : [*OPTIONS(N)*...]] *script(0)* [*args(0)*...]
+
+Command example (Script file is job.sh)
+
+.. code-block:: console
+
+   [Login]$ sbatch job.sh
+
+The main options are shown below.
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 20 
+
+   * - | -J,
+       | \--job-name=<jobname> 
+     - Specify a name for the job. The specified name will appear along with the job id number when querying running jobs on the system. The default is a name of the batch script.
+    
+   * - | -p,
+       | \--partition=<partition_names>	
+     - Specify a specific queue (partition) for resource allocation.
+    
+   * - | -c,
+       | \--cpus-per-task=<ncpus>	
+     - Specify the number of CPUs running on one node required for one task (process).
+    
+   * - | -N, 
+       | \--nodes=<minnodes[-maxnodes]>	
+     - Specify the number of nodes to allocate. The default is one node per task (process).
+    
+   * - | -n,
+       | \--ntasks=<number> 
+     - Specify the number of tasks (process).
+    
+   * - | -o,
+       | \--output=<filename pattern>	
+     - Specifies to write the standard output of the batch script to <filename pattern>. By default, both standard output and standard error output are written to the same file. The default file name is "slurm-%j.out" and "%j" is replaced with the job ID.
+    
+   * - | -e,
+       | \--error=<filename pattern>>	
+     - | Specifies to write standard error of batch script to <filename pattern>. By default, both standard output and standard error output are written to the same file. The default file name is "slurm-%j.out" and "%j" is replaced with the job ID.
+    
+   * - | \--mem=<size[units]> 
+     - | Specifies the amount of memory to allocate. The default unit is MB. K, M, G, or T are also available.
+       | Example using 10 GB
+       | #SBATCH \--mem=10G
+
+
+The main options when using GPU are shown below.
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 20 
+
+   * - \--gpus
+     - | Specify the number of GPUs required for each job.
+       | Example: \--gpus=1
+
+   * - \--gpus-per-node
+     - Specify the number of GPUs required for each node.
+
+   * - \--gpus-per-task
+     - Specify the number of GPUs required for each task. Need to specify the number of tasks for the job.
+
+
+
+The detailed options are shown below.
+
+.. code-block:: console
+
+   [Login]$ sbatch --help
+   Usage: sbatch [OPTIONS(0)...] [ : [OPTIONS(N)...]] script(0) [args(0)...]
+
+   Parallel run options:
+     -a, --array=indexes         job array index values
+     -A, --account=name          charge job to specified account
+         --bb=<spec>             burst buffer specifications
+         --bbf=<file_name>       burst buffer specification file
+     -b, --begin=time            defer job until HH:MM MM/DD/YY
+         --comment=name          arbitrary comment
+         --cpu-freq=min[-max[:gov]] requested cpu frequency (and governor)
+     -c, --cpus-per-task=ncpus   number of cpus required per task
+     -d, --dependency=type:jobid[:time] defer job until condition on jobid is satisfied
+         --deadline=time         remove the job if no ending possible before
+                                 this deadline (start > (deadline - time[-min]))
+         --delay-boot=mins       delay boot for desired node features
+     -D, --chdir=directory       set working directory for batch script
+     -e, --error=err             file for batch script's standard error
+         --export[=names]        specify environment variables to export
+         --export-file=file|fd   specify environment variables file or file
+                                 descriptor to export
+         --get-user-env          load environment from local cluster
+         --gid=group_id          group ID to run job as (user root only)
+         --gres=list             required generic resources
+         --gres-flags=opts       flags related to GRES management
+     -H, --hold                  submit job in held state
+         --ignore-pbs            Ignore #PBS and #BSUB options in the batch script
+     -i, --input=in              file for batch script's standard input
+     -J, --job-name=jobname      name of job
+     -k, --no-kill               do not kill job on node failure
+     -L, --licenses=names        required license, comma separated
+     -M, --clusters=names        Comma separated list of clusters to issue
+                                 commands to.  Default is current cluster.
+                                 Name of 'all' will submit to run on all clusters.
+                                 NOTE: SlurmDBD must up.
+         --container             Path to OCI container bundle
+         --container-id          OCI container ID
+     -m, --distribution=type     distribution method for processes to nodes
+                                 (type = block|cyclic|arbitrary)
+         --mail-type=type        notify on state change: BEGIN, END, FAIL or ALL
+         --mail-user=user        who to send email notification for job state
+                                 changes
+         --mcs-label=mcs         mcs label if mcs plugin mcs/group is used
+     -n, --ntasks=ntasks         number of tasks to run
+         --nice[=value]          decrease scheduling priority by value
+         --no-requeue            if set, do not permit the job to be requeued
+         --ntasks-per-node=n     number of tasks to invoke on each node
+     -N, --nodes=N               number of nodes on which to run (N = min[-max])
+     -o, --output=out            file for batch script's standard output
+     -O, --overcommit            overcommit resources
+     -p, --partition=partition   partition requested
+         --parsable              outputs only the jobid and cluster name (if present),
+                                 separated by semicolon, only on successful submission.
+         --power=flags           power management options
+         --priority=value        set the priority of the job to value
+         --profile=value         enable acct_gather_profile for detailed data
+                                 value is all or none or any combination of
+                                 energy, lustre, network or task
+         --propagate[=rlimits]   propagate all [or specific list of] rlimits
+     -q, --qos=qos               quality of service
+     -Q, --quiet                 quiet mode (suppress informational messages)
+         --reboot                reboot compute nodes before starting job
+         --requeue               if set, permit the job to be requeued
+     -s, --oversubscribe         over subscribe resources with other jobs
+     -S, --core-spec=cores       count of reserved cores
+         --signal=[[R][B]:]num[@time] send signal when time limit within time seconds
+         --spread-job            spread job across as many nodes as possible
+         --switches=max-switches{@max-time-to-wait}
+                                 Optimum switches and max time to wait for optimum
+         --thread-spec=threads   count of reserved threads
+     -t, --time=minutes          time limit
+         --time-min=minutes      minimum time limit (if distinct)
+         --tres-per-task=list    list of tres required per task
+         --uid=user_id           user ID to run job as (user root only)
+         --use-min-nodes         if a range of node counts is given, prefer the
+                                 smaller count
+     -v, --verbose               verbose mode (multiple -v's increase verbosity)
+     -W, --wait                  wait for completion of submitted job
+         --wckey=wckey           wckey to run job under
+         --wrap[=command string] wrap command string in a sh script and submit
+
+   Constraint options:
+         --cluster-constraint=[!]list specify a list of cluster constraints
+         --contiguous            demand a contiguous range of nodes
+     -C, --constraint=list       specify a list of constraints
+     -F, --nodefile=filename     request a specific list of hosts
+         --mem=MB                minimum amount of real memory
+         --mincpus=n             minimum number of logical processors (threads)
+                                 per node
+         --reservation=name      allocate resources from named reservation
+         --tmp=MB                minimum amount of temporary disk
+     -w, --nodelist=hosts...     request a specific list of hosts
+     -x, --exclude=hosts...      exclude a specific list of hosts
+
+   Consumable resources related options:
+         --exclusive[=user]      allocate nodes in exclusive mode when
+                                 cpu consumable resource is enabled
+         --exclusive[=mcs]       allocate nodes in exclusive mode when
+                                 cpu consumable resource is enabled
+                                 and mcs plugin is enabled
+         --mem-per-cpu=MB        maximum amount of real memory per allocated
+                                 cpu required by the job.
+                                 --mem >= --mem-per-cpu if --mem is specified.
+
+   Affinity/Multi-core options: (when the task/affinity plugin is enabled)
+                                 For the following 4 options, you are
+                                 specifying the minimum resources available for
+                                 the node(s) allocated to the job.
+         --sockets-per-node=S    number of sockets per node to allocate
+         --cores-per-socket=C    number of cores per socket to allocate
+         --threads-per-core=T    number of threads per core to allocate
+     -B  --extra-node-info=S[:C[:T]]  combine request of sockets per node,
+                                 cores per socket and threads per core.
+                                 Specify an asterisk (*) as a placeholder,
+                                 a minimum value, or a min-max range.
+
+         --ntasks-per-core=n     number of tasks to invoke on each core
+         --ntasks-per-socket=n   number of tasks to invoke on each socket
+         --hint=                 Bind tasks according to application hints
+                                 (see "--hint=help" for options)
+         --mem-bind=             Bind memory to locality domains (ldom)
+                                 (see "--mem-bind=help" for options)
+
+   GPU scheduling options:
+         --cpus-per-gpu=n        number of CPUs required per allocated GPU
+     -G, --gpus=n                count of GPUs required for the job
+         --gpu-bind=...          task to gpu binding options
+         --gpu-freq=...          frequency and voltage of GPUs
+         --gpus-per-node=n       number of GPUs required per allocated node
+         --gpus-per-socket=n     number of GPUs required per allocated socket
+         --gpus-per-task=n       number of GPUs required per spawned task
+         --mem-per-gpu=n         real memory required per allocated GPU
+
+   Help options:
+     -h, --help                  show this help message
+         --usage                 display brief usage message
+
+   Other options:
+     -V, --version               output version information and exit
+
+
+| Use the ``man`` command to check all the parameters that can be specified.
+| https://slurm.schedmd.com/sbatch.html
+
+
+
+Submit a job (srun)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``srun`` is a command to execute a parallel job. 
+
+Format
+
+**srun** [OPTIONS(0)... [executable(0) [args(0)...]]] [ : [OPTIONS(N)...]] executable(N) [args(N)...]
+
+Command example (Execution program is a.out)
+
+.. code-block:: console
+
+   [Login]$ srun a.out
+
+The main options are shown below.
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 20
+ 
+   * - | -J,
+       | \--job-name=<jobname>
+     - | Specify a name for the job. The specified name will appear along with the job id number when querying running jobs on the system. The default is a name of the batch script.
+       | Note: Do not specify a half-width space to the job name.
+    
+   * - | -p,
+       | \--partition=<partition_names>
+     - Specify a specific queue (partition) for resource allocation.
+    
+   * - | -c,
+       | \--cpus-per-task=<ncpus>	
+     - Specify the CPU to be allocated for each task (process).
+    
+   * - | -n,
+       | \--ntasks=<number>
+     - Specify the number of tasks to execute. The default is one task (process) for each node.
+    
+   * - | -o,
+       | \--output=<filename pattern>
+     - | Specifies to write standard output to <filename pattern>. The default interactive mode returns standard output for all tasks to the terminal.
+       | When ``-e`` is not specified, both standard output and standard error output are written to the <filename pattern> specified here.
+    
+   * - | -e,
+       | \--error=<filename pattern>	
+     - Specifies to write standard error output to <filename pattern>. By default in interactive mode, standard error output is redirected to the same file as standard output.
+
+   * - | \--mem=<size[units]>
+     - | Specifies the amount of memory to allocate. The default unit is MB. K, M, G, or T are also available.
+       | Example using 10 GB:
+       | srun -p ppmq -N 1 \--mem=10G \--time=00:05:00 \--pty bash -i
+
+
+The main options when using GPU are shown below.
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 20 
+
+   * - \--gpus
+     - | Specify the number of GPUs required for each job.
+       | Example: \--gpus=1
+
+   * - \--gpus-per-node
+     - Specify the number of GPUs required for each node.
+
+   * - \--gpus-per-task
+     - Specify the number of GPUs required for each task. Need to specify the number of tasks for the job.
+
+
+The detailed options are shown below.
+
+.. code-block:: console
+
+   [Login]$ srun --help
+   Usage: srun [OPTIONS(0)... [executable(0) [args(0)...]]] [ : [OPTIONS(N)...]] executable(N) [args(N)...]
+
+   Parallel run options:
+     -A, --account=name          charge job to specified account
+         --acctg-freq=<datatype>=<interval> accounting and profiling sampling
+                                 intervals. Supported datatypes:
+                                 task=<interval> energy=<interval>
+                                 network=<interval> filesystem=<interval>
+         --bb=<spec>             burst buffer specifications
+         --bbf=<file_name>       burst buffer specification file
+         --bcast=<dest_path>     Copy executable file to compute nodes
+         --bcast-exclude=<paths> Shared object directory paths to exclude
+     -b, --begin=time            defer job until HH:MM MM/DD/YY
+     -c, --cpus-per-task=ncpus   number of cpus required per task
+         --comment=name          arbitrary comment
+         --compress[=library]    data compression library used with --bcast
+         --container             Path to OCI container bundle
+         --container-id          OCI container ID
+         --cpu-freq=min[-max[:gov]] requested cpu frequency (and governor)
+     -d, --dependency=type:jobid[:time] defer job until condition on jobid is satisfied
+         --deadline=time         remove the job if no ending possible before
+                                 this deadline (start > (deadline - time[-min]))
+         --delay-boot=mins       delay boot for desired node features
+     -D, --chdir=path            change remote current working directory
+         --export=env_vars|NONE  environment variables passed to launcher with
+                                 optional values or NONE (pass no variables)
+     -e, --error=err             location of stderr redirection
+         --epilog=program        run "program" after launching job step
+     -E, --preserve-env          env vars for node and task counts override
+                                 command-line flags
+         --gres=list             required generic resources
+         --gres-flags=opts       flags related to GRES management
+     -H, --hold                  submit job in held state
+     -i, --input=in              location of stdin redirection
+     -I, --immediate[=secs]      exit if resources not available in "secs"
+         --jobid=id              run under already allocated job
+     -J, --job-name=jobname      name of job
+     -k, --no-kill               do not kill job on node failure
+     -K, --kill-on-bad-exit      kill the job if any task terminates with a
+                                 non-zero exit code
+     -l, --label                 prepend task number to lines of stdout/err
+     -L, --licenses=names        required license, comma separated
+     -M, --clusters=names        Comma separated list of clusters to issue
+                                 commands to.  Default is current cluster.
+                                 Name of 'all' will submit to run on all clusters.
+                                 NOTE: SlurmDBD must up.
+     -m, --distribution=type     distribution method for processes to nodes
+                                 (type = block|cyclic|arbitrary)
+         --mail-type=type        notify on state change: BEGIN, END, FAIL or ALL
+         --mail-user=user        who to send email notification for job state
+                                 changes
+         --mcs-label=mcs         mcs label if mcs plugin mcs/group is used
+         --mpi=type              type of MPI being used
+         --multi-prog            if set the program name specified is the
+                                 configuration specification for multiple programs
+     -n, --ntasks=ntasks         number of tasks to run
+         --nice[=value]          decrease scheduling priority by value
+         --ntasks-per-node=n     number of tasks to invoke on each node
+     -N, --nodes=N               number of nodes on which to run (N = min[-max])
+     -o, --output=out            location of stdout redirection
+     -O, --overcommit            overcommit resources
+         --overlap               Allow other steps to overlap this step
+         --het-group=value       hetjob component allocation(s) in which to launch
+                                 application
+     -p, --partition=partition   partition requested
+         --power=flags           power management options
+         --priority=value        set the priority of the job to value
+         --prolog=program        run "program" before launching job step
+         --profile=value         enable acct_gather_profile for detailed data
+                                 value is all or none or any combination of
+                                 energy, lustre, network or task
+         --propagate[=rlimits]   propagate all [or specific list of] rlimits
+         --pty[=fd]              run task zero in pseudo terminal [or in requested terminal given by fd]
+         --quit-on-interrupt     quit on single Ctrl-C
+     -q, --qos=qos               quality of service
+     -Q, --quiet                 quiet mode (suppress informational messages)
+         --reboot                reboot block before starting job
+     -r, --relative=n            run job step relative to node n of allocation
+     -s, --oversubscribe         over-subscribe resources with other jobs
+     -S, --core-spec=cores       count of reserved cores
+         --send-libs[=yes|no]    autodetect and broadcast shared objects
+         --signal=[R:]num[@time] send signal when time limit within time seconds
+         --slurmd-debug=level    slurmd debug level
+         --spread-job            spread job across as many nodes as possible
+         --switches=max-switches{@max-time-to-wait}
+                                 Optimum switches and max time to wait for optimum
+         --task-epilog=program   run "program" after launching task
+         --task-prolog=program   run "program" before launching task
+         --thread-spec=threads   count of reserved threads
+     -T, --threads=threads       set srun launch fanout
+     -t, --time=minutes          time limit
+         --time-min=minutes      minimum time limit (if distinct)
+         --tres-per-task=list    list of tres required per task
+     -u, --unbuffered            do not line-buffer stdout/err
+         --use-min-nodes         if a range of node counts is given, prefer the
+                                 smaller count
+     -v, --verbose               verbose mode (multiple -v's increase verbosity)
+     -W, --wait=sec              seconds to wait after first task exits
+                                 before killing job
+         --wckey=wckey           wckey to run job under
+     -X, --disable-status        Disable Ctrl-C status feature
+
+   Constraint options:
+         --cluster-constraint=list specify a list of cluster-constraints
+         --contiguous            demand a contiguous range of nodes
+     -C, --constraint=list       specify a list of constraints
+         --mem=MB                minimum amount of real memory
+         --mincpus=n             minimum number of logical processors (threads)
+                                 per node
+         --reservation=name      allocate resources from named reservation
+         --tmp=MB                minimum amount of temporary disk
+     -w, --nodelist=hosts...     request a specific list of hosts
+     -x, --exclude=hosts...      exclude a specific list of hosts
+     -Z, --no-allocate           don't allocate nodes (must supply -w)
+
+   Consumable resources related options:
+         --exact                 use only the resources requested for the step
+                                 (by default, all non-gres resources on each node
+                                 in the allocation will be used in the step)
+         --exclusive[=user]      for job allocation, this allocates nodes in
+                                 in exclusive mode
+                                 for job steps, this is equivalent to --exact
+         --exclusive[=mcs]       allocate nodes in exclusive mode when
+                                 cpu consumable resource is enabled
+                                 and mcs plugin is enabled (--exact implied)
+                                 or don't share CPUs for job steps
+         --mem-per-cpu=MB        maximum amount of real memory per allocated
+                                 cpu required by the job.
+                                 --mem >= --mem-per-cpu if --mem is specified.
+         --resv-ports            reserve communication ports
+
+   Affinity/Multi-core options: (when the task/affinity plugin is enabled)
+                                 For the following 4 options, you are
+                                 specifying the minimum resources available for
+                                 the node(s) allocated to the job.
+         --sockets-per-node=S    number of sockets per node to allocate
+         --cores-per-socket=C    number of cores per socket to allocate
+         --threads-per-core=T    number of threads per core to allocate
+     -B  --extra-node-info=S[:C[:T]]  combine request of sockets per node,
+                                 cores per socket and threads per core.
+                                 Specify an asterisk (*) as a placeholder,
+                                 a minimum value, or a min-max range.
+
+         --ntasks-per-core=n     number of tasks to invoke on each core
+         --ntasks-per-socket=n   number of tasks to invoke on each socket
+         --cpu-bind=             Bind tasks to CPUs
+                                 (see "--cpu-bind=help" for options)
+         --hint=                 Bind tasks according to application hints
+                                 (see "--hint=help" for options)
+         --mem-bind=             Bind memory to locality domains (ldom)
+                                 (see "--mem-bind=help" for options)
+
+   GPU scheduling options:
+         --cpus-per-gpu=n        number of CPUs required per allocated GPU
+     -G, --gpus=n                count of GPUs required for the job
+         --gpu-bind=...          task to gpu binding options
+         --gpu-freq=...          frequency and voltage of GPUs
+         --gpus-per-node=n       number of GPUs required per allocated node
+         --gpus-per-socket=n     number of GPUs required per allocated socket
+         --gpus-per-task=n       number of GPUs required per spawned task
+         --mem-per-gpu=n         real memory required per allocated GPU
+
+   Help options:
+     -h, --help                  show this help message
+         --usage                 display brief usage message
+
+   Other options:
+     -V, --version               output version information and exit
+
+
+| Use the ``man`` command to check all the parameters that can be specified.
+| https://slurm.schedmd.com/srun.html
+
+
+
+Cancel a job (scancel)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``scancel`` is a command to cancel a job. 
+
+Format
+
+**scancel** [OPTIONS...] [job_id[_array_id][.step_id]] [job_id[_array_id][.step_id]...]
+
+Command example (Job ID to delete is xxxxx）
+
+.. code-block:: console
+
+   [Login]$ scancel xxxxx
+
+
+The detailed options are shown below.
+
+.. code-block:: console
+
+   [Login$]$ scancel --help
+   Usage: scancel [OPTIONS] [job_id[_array_id][.step_id]]
+     -A, --account=account           act only on jobs charging this account
+     -b, --batch                     signal batch shell for specified job
+     -c, --cron                      cancel an scrontab job
+     -f, --full                      signal batch shell and all steps for specified job
+     -H, --hurry                     avoid burst buffer stage out
+     -i, --interactive               require response from user for each job
+     -M, --clusters                  clusters to issue commands to.
+                                     NOTE: SlurmDBD must be up.
+     -n, --name=job_name             act only on jobs with this name
+     -p, --partition=partition       act only on jobs in this partition
+     -Q, --quiet                     disable warnings
+     -q, --qos=qos                   act only on jobs with this quality of service
+     -R, --reservation=reservation   act only on jobs with this reservation
+         --sibling=cluster_name      remove an active sibling job from a federated job
+     -s, --signal=name | integer     signal to send to job, default is SIGKILL
+     -t, --state=states              act only on jobs in this state.  Valid job
+                                     states are PENDING, RUNNING and SUSPENDED
+     -u, --user=user_name            act only on jobs of this user
+     -V, --version                   output version information and exit
+     -v, --verbose                   verbosity level
+     -w, --nodelist                  act only on jobs on these nodes
+         --wckey=wckey               act only on jobs with this workload
+                                     charactization key
+
+   Help options:
+     --help                          show this help message
+     --usage                         display brief usage message
+
+
+| Use the ``man`` command to check all the parameters that can be specified.
+| https://slurm.schedmd.com/scancel.html
+
+
+
+Display job information (sstat)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``sstat`` is a command that displays the status of executing jobs.
+
+.. attention:: 
+
+   Only the status of your own job is displayed. 
+
+Format
+
+**sstat** [OPTIONS...]
+
+Command example (Job Id to display status is xxxxx)
+
+.. code-block:: console
+
+   [Login]$ sstat -j xxxxx -o AveCPU,JobID,AveRss
+
+
+The main options are shown below.
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 30
+ 
+   * - | -j,
+       | \--jobs	
+     - | Specify job ID to display the status.
+       | This option is required. 
+    
+   * - | -o,
+       | \--format, \--fields
+     - | Specify items to be displayed.
+       | You can check items that can be displayed with ``-e`` or ``--helpformat``.
+       | Item examples:
+       | ・AveCPU: Average CPU time for all tasks in a job
+       | ・JobID: Assigned job ID
+       | ・AveRSS: Average physical memory size for all tasks in a job
+
+The detailed options are shown below.
+
+.. code-block:: console
+
+   [Login]$ sstat --help
+   sstat [<OPTION>] -j <job(.stepid)>
+       Valid <OPTION> values are:
+         -a, --allsteps:
+                      Print all steps for the given job(s) when no step is
+                      specified.
+         -e, --helpformat:
+                      Print a list of fields that can be specified with the
+                      '--format' option
+        -h, --help:   Print this description of use.
+        -i, --pidformat:
+                      Predefined format to list the pids running for each
+                      job step.  (JobId,Nodes,Pids)
+        -j, --jobs:
+                      Format is <job(.step)>. Stat this job step
+                      or comma-separated list of job steps. This option is
+                      required.  The step portion will default to the lowest
+                      numbered (not batch, extern, etc) step running if not
+                      specified, unless the --allsteps flag is set where not
+                      specifying a step will result in all running steps
+                      to be displayed. A step id of 'batch' will display the
+                      information about the batch step. A step id of 'extern'
+                      will display the information about the extern step
+                      when using PrologFlags=contain.
+        -n, --noheader:
+                      No header will be added to the beginning of output.
+                      The default is to print a header.
+        --noconvert:  Don't convert units from their original type
+                      (e.g. 2048M won't be converted to 2G).
+        -o, --format:
+                      Comma separated list of fields. (use "--helpformat"
+                      for a list of available fields).
+        -p, --parsable: output will be '|' delimited with a '|' at the end
+        -P, --parsable2: output will be '|' delimited without a '|' at the end
+        --usage:      Display brief usage message.
+        -v, --verbose:
+                      Primarily for debugging purposes, report the state of
+                      various variables during processing.
+        -V, --version: Print version.
+   
+   [Login]$ sstat -e
+   AveCPU              AveCPUFreq          AveDiskRead         AveDiskWrite
+   AvePages            AveRSS              AveVMSize           ConsumedEnergy
+   ConsumedEnergyRaw   JobID               MaxDiskRead         MaxDiskReadNode
+   MaxDiskReadTask     MaxDiskWrite        MaxDiskWriteNode    MaxDiskWriteTask
+   MaxPages            MaxPagesNode        MaxPagesTask        MaxRSS
+   MaxRSSNode          MaxRSSTask          MaxVMSize           MaxVMSizeNode
+   MaxVMSizeTask       MinCPU              MinCPUNode          MinCPUTask
+   Nodelist            NTasks              Pids                ReqCPUFreq
+   ReqCPUFreqMin       ReqCPUFreqMax       ReqCPUFreqGov       TRESUsageInAve
+   TRESUsageInMax      TRESUsageInMaxNode  TRESUsageInMaxTask  TRESUsageInMin
+   TRESUsageInMinNode  TRESUsageInMinTask  TRESUsageInTot      TRESUsageOutAve
+   TRESUsageOutMax     TRESUsageOutMaxNode TRESUsageOutMaxTask TRESUsageOutMin
+   TRESUsageOutMinNode TRESUsageOutMinTask TRESUsageOutTot
+
+
+| Use the ``man`` command to check all the parameters that can be specified.
+| https://slurm.schedmd.com/sstat.html
+
+
+
+
+
+Display job accounting information (sacct)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``sacct`` is a conmmand that displays job accounting information. 
+
+.. attention::  
+
+   Only accounting information for your job is displayed.
+
+Format
+
+**sacct** [OPTIONS...]
+
+
+Command example (Display accounting information for started and finished jobs in yyyy/mm/dd~YYYY/MM/DD)
+
+.. code-block:: console
+
+   [Login]$ sacct -S yyyy-mm-dd -E YYYY-MM-DD
+
+
+The main options are shown below. 
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 30
+ 
+   * - | -S,
+       | \--starttime
+     - | Specify a job in any state after the specified time.
+       | 00:00:00 is specidied as default. 
+       | Format examples are as follows.
+       | ・HH:MM[:SS][AM|PM]
+       | ・MMDD[YY][-HH:MM[:SS]]
+       | ・MM.DD[.YY][-HH:MM[:SS]]
+       | ・MM/DD[/YY][-HH:MM[:SS]]
+       | ・YYYY-MM-DD[THH:MM[:SS]]
+     
+   * - | -E end_time,
+       | \--endtime=end_time
+     - | Specify a job in any state after the specified time.
+       | 00:00:00 is specidied as default.
+       | Format examples are as follows.
+       | ・HH:MM[:SS][AM|PM]
+       | ・MMDD[YY][-HH:MM[:SS]]
+       | ・MM.DD[.YY][-HH:MM[:SS]]
+       | ・MM/DD[/YY][-HH:MM[:SS]]
+       | ・YYYY-MM-DD[THH:MM[:SS]]
+    
+   * - | -o,
+       | \--format
+     - | Specify items to be displayed.
+       | When specifying multiple items, separate them with commas.
+       | Use ``-e`` or ``--helpformat`` for available items.
+
+
+The detailed options are shown below.
+
+.. code-block:: console
+
+   [Login]$ sacct --help
+   sacct [<OPTION>]
+        Valid <OPTION> values are:
+        -a, --allusers:
+                      Display jobs for all users. By default, only the
+                      current user's jobs are displayed.  If ran by user root
+                      this is the default.
+        -A, --accounts:
+                      Use this comma separated list of accounts to select jobs
+                      to display.  By default, all accounts are selected.
+        --array:
+                      Expand job arrays. Display array tasks on separate lines
+                      instead of consolidating them to a single line.
+        -b, --brief:
+                      Equivalent to '--format=jobstep,state,error'.
+        -B, --batch-script:
+                      Print batch script of job.
+                      NOTE: AccountingStoreFlags=job_script is required for this
+                      NOTE: Requesting specific job(s) with '-j' is required
+                            for this.
+        -c, --completion: Use job completion instead of accounting data.
+            --delimiter:
+                      ASCII characters used to separate the fields when
+                      specifying the  -p  or  -P options. The default delimiter
+                      is a '|'. This options is ignored if -p or -P options
+                      are not specified.
+        -D, --duplicates:
+                      If Slurm job ids are reset, some job numbers may
+                      appear more than once referring to different jobs.
+                      Without this option only the most recent jobs will be
+                      displayed.
+        -e, --helpformat:
+                      Print a list of fields that can be specified with the
+                      '--format' option
+        -E, --endtime:
+                      Select jobs eligible before this time.  If states are
+                      given with the -s option return jobs in this state before
+                      this period.
+            --env-vars:
+                      Print the environment to launch the batch script of job.
+                      NOTE: AccountingStoreFlags=job_env is required for this
+                      NOTE: Requesting specific job(s) with '-j' is required
+                            for this.
+            --federation: Report jobs from federation if a member of a one.
+        -f, --file=file:
+                      Read data from the specified file, rather than Slurm's
+                      current accounting log file. (Only appliciable when
+                      running the jobcomp/filetxt plugin.)
+        -g, --gid, --group:
+                      Use this comma separated list of gids or group names
+                      to select jobs to display.  By default, all groups are
+                      selected.
+        -h, --help:   Print this description of use.
+        -i, --nnodes=N:
+                      Return jobs which ran on this many nodes (N = min[-max])
+        -I, --ncpus=N:
+                      Return jobs which ran on this many cpus (N = min[-max])
+        -j, --jobs:
+                      Format is <job(.step)>. Display information about this
+                      job or comma-separated list of jobs. The default is all
+                      jobs. Adding .step will display the specific job step of
+                      that job. (A step id of 'batch' will display the
+                      information about the batch step.)
+        --json:
+                      Produce JSON output
+        -k, --timelimit-min:
+                      Only send data about jobs with this timelimit.
+                      If used with timelimit_max this will be the minimum
+                      timelimit of the range.  Default is no restriction.
+        -K, --timelimit-max:
+                      Ignored by itself, but if timelimit_min is set this will
+                      be the maximum timelimit of the range.  Default is no
+                      restriction.
+            --local   Report information only about jobs on the local cluster.
+                      Overrides --federation.
+        -l, --long:
+                      Equivalent to specifying
+                      '--format=jobid,jobidraw,jobname,partition,maxvmsize,
+                                maxvmsizenode,maxvmsizetask,avevmsize,maxrss,
+                                maxrssnode,maxrsstask,averss,maxpages,
+                                maxpagesnode,maxpagestask,avepages,mincpu,
+                                mincpunode,mincputask,avecpu,ntasks,alloccpus,
+                                elapsed,state,exitcode,avecpufreq,reqcpufreqmin,
+                                reqcpufreqmax,reqcpufreqgov,reqmem,
+                                consumedenergy,maxdiskread,maxdiskreadnode,
+                                maxdiskreadtask,avediskread,maxdiskwrite,
+                                maxdiskwritenode,maxdiskwritetask,avediskwrite,
+                                reqtres,alloctres,
+                                tresusageinave,tresusageinmax,tresusageinmaxn,
+                                tresusageinmaxt,tresusageinmin,tresusageinminn,
+                                tresusageinmint,tresusageintot,tresusageoutmax,
+                                tresusageoutmaxn,tresusageoutmaxt,
+                                tresusageoutave,tresusageouttot
+        -L, --allclusters:
+                      Display jobs ran on all clusters. By default, only jobs
+                      ran on the cluster from where sacct is called are
+                      displayed.
+        -M, --clusters:
+                      Only send data about these clusters. Use "all" for all
+                      clusters.
+        -n, --noheader:
+                      No header will be added to the beginning of output.
+                      The default is to print a header.
+        --noconvert:
+                      Don't convert units from their original type
+                      (e.g. 2048M won't be converted to 2G).
+        -N, --nodelist:
+                      Display jobs that ran on any of these nodes,
+                      can be one or more using a ranged string.
+        --name:
+                      Display jobs that have any of these name(s).
+        -o, --format:
+                      Comma separated list of fields. (use "--helpformat"
+                      for a list of available fields).
+        -p, --parsable: output will be '|' delimited with a '|' at the end
+        -P, --parsable2: output will be '|' delimited without a '|' at the end
+        -q, --qos:
+                      Only send data about jobs using these qos.  Default is all.
+        -r, --partition:
+                      Comma separated list of partitions to select jobs and
+                      job steps from. The default is all partitions.
+        -s, --state:
+                      Select jobs based on their current state or the state
+                      they were in during the time period given: running (r),
+                      completed (cd), failed (f), timeout (to), resizing (rs),
+                      deadline (dl) and node_fail (nf).
+        -S, --starttime:
+                      Select jobs eligible after this time.  Default is
+                      00:00:00 of the current day, unless '-s' is set then
+                      the default is 'now'.
+        -T, --truncate:
+                      Truncate time.  So if a job started before --starttime
+                      the start time would be truncated to --starttime.
+                      The same for end time and --endtime.
+        -u, --uid, --user:
+                      Use this comma separated list of uids or user names
+                      to select jobs to display.  By default, the running
+                      user's uid is used.
+        --units=[KMGTP]:
+                      Display values in specified unit type. Takes precedence
+                      over --noconvert option.
+        --usage:      Display brief usage message.
+        -v, --verbose:
+                      Primarily for debugging purposes, report the state of
+                      various variables during processing.
+        -V, --version: Print version.
+        -W, --wckeys:
+                      Only send data about these wckeys.  Default is all.
+        --whole-hetjob[=yes|no]:
+                      If set to 'yes' (or no argument), then information about
+                      all the heterogeneous components will be retrieved. If
+                      set to 'no' only the specific filtered components will
+                      be retrieved. The default behavior without this option is
+                      that all components are retrieved only if filtering the
+                      leader component with --jobs.
+        -x, --associations:
+                      Only send data about these association id.  Default is all.
+        -X, --allocations:
+                      Only show statistics relevant to the job allocation
+                      itself, not taking steps into consideration.
+        --yaml:
+                      Produce YAML output
+
+        Note, valid start/end time formats are...
+                      HH:MM[:SS] [AM|PM]
+                      MMDD[YY] or MM/DD[/YY] or MM.DD[.YY]
+                      MM/DD[/YY]-HH:MM[:SS]
+                      YYYY-MM-DD[THH:MM[:SS]]
+                      now[{+|-}count[seconds(default)|minutes|hours|days|weeks]]
+
+
+| Use the ``man`` command to check all the parameters that can be specified.
+| https://slurm.schedmd.com/sacct.html
+
+
+Display the status of Job queue (squeue)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``squeue`` is a command to display scheduled job information.
+
+Format 
+
+**squeue** [OPTIONS...]
+
+Command example
+
+.. code-block:: console
+
+   [Login]$ squeue
+
+
+The main options are shown below.  
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 30
+  
+   * - | -O <output_format>,
+       | \--Format=<output_format>
+     - | Specify information to be displayed. 
+       | The default display is as follows.
+       | ・JOBID: Assigned job ID
+       | ・PARTITION: Queue that submitted a job
+       | ・NAME: Job name
+       | ・USER: User name that submitted a job
+       | ・ST: Job status
+       | ・TIME: Job execution time 
+       | ・NODES: Number of nodes assigned to a job
+       | ・NODELIST(REASON): List of nodes assigned to a job
+
+
+The main STs (job status) are shown below. For details of ST other than the following, please refer to the manual.
+
+- PD(PENDING): Job is waiting for resource allocation.
+- R (RUNNING): Job is executing.
+- S (SUSPENDED): Job is assigned but execution is suspended.
+- CG(COMPLETING): The job is being completed. Some processes may still be active.
+- CD(COMPLETED): The job has completed all processes on all nodes
+
+The detailed options are shown below.
+
+.. code-block:: console
+
+   [Login]$ squeue --help
+   Usage: squeue [OPTIONS]
+     -A, --account=account(s)        comma separated list of accounts
+                                     to view, default is all accounts
+     -a, --all                       display jobs in hidden partitions
+         --federation                Report federated information if a member
+                                     of one
+     -h, --noheader                  no headers on output
+         --hide                      do not display jobs in hidden partitions
+     -i, --iterate=seconds           specify an interation period
+     -j, --job=job(s)                comma separated list of jobs IDs
+                                     to view, default is all
+         --json                      Produce JSON output
+         --local                     Report information only about jobs on the
+                                     local cluster. Overrides --federation.
+     -l, --long                      long report
+     -L, --licenses=(license names)  comma separated list of license names to view
+     -M, --clusters=cluster_name     cluster to issue commands to.  Default is
+                                     current cluster.  cluster with no name will
+                                     reset to default. Implies --local.
+     -n, --name=job_name(s)          comma separated list of job names to view
+         --noconvert                 don't convert units from their original type
+                                     (e.g. 2048M won't be converted to 2G).
+     -o, --format=format             format specification
+     -O, --Format=format             format specification
+     -p, --partition=partition(s)    comma separated list of partitions
+                                     to view, default is all partitions
+     -q, --qos=qos(s)                comma separated list of qos's
+                                     to view, default is all qos's
+     -R, --reservation=name          reservation to view, default is all
+     -r, --array                     display one job array element per line
+         --sibling                   Report information about all sibling jobs
+                                     on a federated cluster. Implies --federation.
+     -s, --step=step(s)              comma separated list of job steps
+                                     to view, default is all
+     -S, --sort=fields               comma separated list of fields to sort on
+         --start                     print expected start times of pending jobs
+     -t, --states=states             comma separated list of states to view,
+                                     default is pending and running,
+                                     '--states=all' reports all states
+     -u, --user=user_name(s)         comma separated list of users to view
+         --name=job_name(s)          comma separated list of job names to view
+     -v, --verbose                   verbosity level
+     -V, --version                   output version information and exit
+     -w, --nodelist=hostlist         list of nodes to view, default is
+                                     all nodes
+         --yaml                      Produce YAML output
+
+   Help options:
+     --help                          show this help message
+     --usage                         display a brief summary of squeue options
+
+
+| Use the ``man`` command to check all the parameters that can be specified.
+| https://slurm.schedmd.com/squeue.html
+
+
+
+
+Display the status of compute node (sinfo)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``sinfo`` is a command to display node and queue information.
+
+Format
+
+**sinfo** [OPTIONS...]
+
+Command example
+
+.. code-block:: console
+
+   [Login]$ sinfo
+
+The main options are shown below.
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 20
+
+   * - | -o <output_format>,
+       | \--format=<output_format>
+     - | Specify information to be displayed. 
+       | 
+       | The default display is as follows.
+       | 
+       | ・PARTITION: Queue name (Partition name)
+       | ・AVAIL: Queue (partition) status
+       |    ・UP: New jobs can be queued, nodes can be allocated
+       |    ・DOWN: New jobs can be queued, "Unable" to allocate node
+       |    ・DRAIN: "Unable" to queue new jobs
+       |    ・INACTIVE: New job cannot be queued, node cannot be assigned
+       | ・TIMELIMIT: Maximum job usage time (Format: hours:minutes:seconds)
+       | ・NODES: Node number  
+       | ・STATE: Node status
+       | ・NODELIST: Node list 
+
+
+The AVAIL (partition status) are shown below. Please refer to the manual for details.
+
+- UP: Designates that new jobs may be queued on the partition, and that jobs may be allocated nodes and run from the partition.
+- DOWN:	Designates that new jobs may be queued on the partition, but queued jobs may not be allocated nodes and run from the partition. Jobs already running on the partition continue to run.
+- DRAIN: Designates that no new jobs may be queued on the partition. Jobs already queued on the partition may be allocated nodes and run.
+- INACTIVE: Designates that no new jobs may be queued on the partition, and jobs already queued may not be allocated nodes and run. 
+
+The main STATE (node states) are shown below. For details and STATE other than the following, refer to the manual.
+
+- IDLE: Node is not assigned to any job and is available
+- ALLOCATED: Node is assigned to one or more jobs
+- DOWN: Node is not available
+- MAINT: Under maintenance
+
+
+The detailed options are shown below. 
+
+.. code-block:: console
+
+   [Login]$ sinfo --help
+   Usage: sinfo [OPTIONS]
+     -a, --all                  show all partitions (including hidden and those
+                                not accessible)
+     -d, --dead                 show only non-responding nodes
+     -e, --exact                group nodes only on exact match of configuration
+         --federation           Report federated information if a member of one
+     -F, --future               Report information about nodes in "FUTURE" state.
+     -h, --noheader             no headers on output
+     --hide                     do not show hidden or non-accessible partitions
+     -i, --iterate=seconds      specify an iteration period
+         --json                 Produce JSON output
+         --local                show only local cluster in a federation.
+                                Overrides --federation.
+     -l, --long                 long output - displays more information
+     -M, --clusters=names       clusters to issue commands to. Implies --local.
+                                NOTE: SlurmDBD must be up.
+     -n, --nodes=NODES          report on specific node(s)
+     --noconvert                don't convert units from their original type
+                                (e.g. 2048M won't be converted to 2G).
+     -N, --Node                 Node-centric format
+     -o, --format=format        format specification
+     -O, --Format=format        long format specification
+     -p, --partition=PARTITION  report on specific partition
+     -r, --responding           report only responding nodes
+     -R, --list-reasons         list reason nodes are down or drained
+     -s, --summarize            report state summary only
+     -S, --sort=fields          comma separated list of fields to sort on
+     -t, --states=node_state    specify the what states of nodes to view
+     -T, --reservation          show only reservation information
+     -v, --verbose              verbosity level
+     -V, --version              output version information and exit
+         --yaml                 Produce YAML output
+
+   Help options:
+     --help                     show this help message
+     --usage                    display brief usage message
+
+
+| Use the ``man`` command to check all the parameters that can be specified.
+| https://slurm.schedmd.com/sinfo.html
+
+
+
+Transfer files to the node to which a job is assigned (sbcast)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``sbcast`` is a command that sends a file to the node assigned to the job.
+
+Format
+
+| **sbcast** [-OPTIONS] SOURCE DEST
+|  SOURCE: File name on a node 
+|  DEST: Fully qualified pathname of the file copy created on each node
+
+Command example
+
+.. code-block:: console
+
+  [PP]$ sbcast sample.txt /tmp/sample.txt
+
+
+The main option is shown below.
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 30
+
+   * - | -f,
+       | \--force
+     - | When the file already exists at the transfer destination, it will be overwritten
+
+
+The detailed options are shown below.
+
+.. code-block:: console
+
+   [Login]$ sbcast --help
+   Usage: sbcast [OPTIONS] SOURCE DEST
+     -C, --compress[=lib]  compress the file being transmitted
+     --exclude=<path_list> shared object paths to be excluded
+     -f, --force           replace destination file as required
+     -F, --fanout=num      specify message fanout
+     -j, --jobid=#[+#][.#] specify job ID with optional hetjob offset and/or step ID
+     -p, --preserve        preserve modes and times of source file
+     --send-libs[=yes|no]  autodetect and broadcast executable's shared objects
+     -s, --size=num        block size in bytes (rounded off)
+     -t, --timeout=secs    specify message timeout (seconds)
+     -v, --verbose         provide detailed event logging
+     -V, --version         print version information and exit
+
+   Help options:
+     --help                show this help message
+     --usage               display brief usage message
+
+
+| Use the ``man`` command to check all the parameters that can be specified.
+| https://slurm.schedmd.com/sbcast.html
+
+

@@ -1,0 +1,847 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>3. WebAPI仕様 &#8212; WebAPI User Guide  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="prev" title="2. 認可について" href="authorization.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="authorization.html" title="2. 認可について"
+             accesskey="P">前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">WebAPI User Guide  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>WebAPI仕様</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="webapi">
+<h1><span class="section-number">3. </span>WebAPI仕様<a class="headerlink" href="#webapi" title="この見出しへのパーマリンク">¶</a></h1>
+<p><a class="reference download internal" download="" href="../_downloads/ddca63ab12941975bbb5f6cae4de5814/client-api.yml"><code class="xref download docutils literal notranslate"><span class="pre">Swagger</span> <span class="pre">WebAPI仕様書</span></code></a></p>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--command-machine">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/command/{machine}</span></span><a class="headerlink" href="#post--command-machine" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><strong>指定したコマンドを実行</strong></p>
+<div class="line-block">
+<div class="line">指定したコマンドの実行</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/command/computer/ -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X POST -d <span class="s1">&#39;{&quot;command&quot;: &quot;mkdir -p ~/job-script; ls -ld ~/job-script&quot;}&#39;</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">マシン名</div>
+<div class="line">全マシン状態の取得(/status/)で得られるマシン名のいずれか。通常は、&quot;computer&quot;を指定する。</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>command</strong> (<em>string</em>) -- (required)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> -- コマンド実行完了</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> -- 認証エラー</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc4918#section-11.2">422 Unprocessable Entity</a></span> -- 必須パラメータエラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> -- 内部サーバエラー</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>error</strong> (<em>string</em>) -- エラーID
+ (required)</p></li>
+<li><p><strong>output</strong> (<em>string</em>) -- コマンド出力結果
+ (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) -- ステータス
+ (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--status-">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/status/</span></span><a class="headerlink" href="#get--status-" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><strong>全マシン状態の取得</strong></p>
+<div class="line-block">
+<div class="line">全マシン状態の取得  </div>
+<div class="line">サーバが管理している全マシンの状態を出力する。  </div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/status -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X GET
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Status Codes</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> -- 全マシン状態</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> -- 認証エラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> -- 内部サーバエラー</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>[].machine</strong> (<em>string</em>) -- マシン名
+ (required)</p></li>
+<li><p><strong>[].status</strong> (<em>string</em>) -- ステータス
+ (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--status-machine">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/status/{machine}</span></span><a class="headerlink" href="#get--status-machine" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><strong>指定マシン状態の取得</strong></p>
+<div class="line-block">
+<div class="line">指定マシン状態の取得  </div>
+<div class="line">指定されたマシンの状態を出力する。  </div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl -ik https://api.fugaku.r-ccs.riken.jp/api/status/computer/ -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X GET
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) -- マシン名
+全マシン状態の取得(/status/)で得られるマシン名のいずれか。通常は、&quot;computer&quot;を指定する。</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> -- 特定マシン状態</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> -- 認証エラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> -- 内部サーバエラー</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) -- マシン名
+ (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) -- ステータス
+ (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--file-machine-file_path">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/file/{machine}/{file_path}</span></span><a class="headerlink" href="#post--file-machine-file_path" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><strong>ファイルアップロード</strong></p>
+<div class="line-block">
+<div class="line">新規ファイルアップロード  </div>
+<div class="line">指定したマシン名、ファイルパスにファイルをアップロードする。  </div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/file/computer/home/hpcadmin/xxxxfile -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X POST -d @xxxxfile
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">マシン名</div>
+<div class="line">全マシン状態の取得(/status/)で得られるマシン名のいずれか。通常は、&quot;computer&quot;を指定する。</div>
+</div>
+</p></li>
+<li><p><strong>file_path</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">アップロードファイルパス  </div>
+<div class="line">ファイル名を指定する。</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> -- ファイルアップロード完了</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> -- 認証エラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.10">409 Conflict</a></span> -- コンフリクトエラー</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc4918#section-11.2">422 Unprocessable Entity</a></span> -- 必須パラメータエラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> -- 内部サーバエラー</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--file-machine-file_path">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/file/{machine}/{file_path}</span></span><a class="headerlink" href="#get--file-machine-file_path" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><strong>ファイルダウンロード</strong></p>
+<div class="line-block">
+<div class="line">ファイルダウンロード  </div>
+<div class="line">指定したマシン名、ファイルパスのファイルをダウンロードする。  </div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/file/computer/home/hpcadmin/xxxxfile -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">マシン名</div>
+<div class="line">全マシン状態の取得(/status/)で得られるマシン名のいずれか。通常は、&quot;computer&quot;を指定する。</div>
+</div>
+</p></li>
+<li><p><strong>file_path</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">ダウンロードファイルパス</div>
+<div class="line">ファイル名またはフォルダを指定する。</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>view</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">ファイル情報取得可否  </div>
+<div class="line">パラメータにreadを指定していない場合、file_pathで指定したファイルをダウンロードする。  </div>
+<div class="line">パラメータにreadを指定している場合、指定したディレクトリのファイルリストを出力する。</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> -- <div class="line-block">
+<div class="line">ファイルダウンロード完了</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>example</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>read指定なしの場合：ファイルデータ (binary形式)</p></td>
+</tr>
+<tr class="row-odd"><td><p>read指定ありの場合：{&quot;status&quot;: &quot;OK&quot;, &quot;output&quot;:-rw-rw-r-- 1 f00156 f00156   119 2019-05-16 16:24 test.shn, &quot;error&quot;:&quot;&quot;}</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> -- パラメータエラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> -- 認証エラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> -- 内部サーバエラー</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--file-machine-file_path">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/file/{machine}/{file_path}</span></span><a class="headerlink" href="#put--file-machine-file_path" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><strong>ファイル作成/変更</strong></p>
+<div class="line-block">
+<div class="line">ファイルアップロード/変更  </div>
+<div class="line">指定したマシン名、ファイルパスにファイルをアップロード(更新)する。  </div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/file/computer/home/hpcadmin/xxxxfile -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X PUT -d @xxxxfile
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">マシン名</div>
+<div class="line">全マシン状態の取得(/status/)で得られるマシン名のいずれか。通常は、&quot;computer&quot;を指定する。</div>
+</div>
+</p></li>
+<li><p><strong>file_path</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">ファイルパス</div>
+<div class="line">ファイル名を指定する。</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> -- ファイル作成/変更完了</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> -- パラメータエラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> -- 認証エラー</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc4918#section-11.2">422 Unprocessable Entity</a></span> -- 必須パラメータエラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> -- 内部サーバエラー</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--queue-machine">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/queue/{machine}</span></span><a class="headerlink" href="#get--queue-machine" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><strong>実行中ジョブ一覧取得</strong></p>
+<div class="line-block">
+<div class="line">実行中ジョブの一覧獲得API  </div>
+<div class="line">対象マシン上で、ジョブスケジューラから実行中のジョブ一覧を取得する。  </div>
+<div class="line">ジョブIDが指定された場合は、ジョブIDのサブジョブ一覧を取得する。  </div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/queue/computer/ -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X GET
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">マシン名</div>
+<div class="line">全マシン状態の取得(/status/)で得られるマシン名のいずれか。通常は、&quot;computer&quot;を指定する。</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>index</strong> (<em>integer</em>) -- <div class="line-block">
+<div class="line">ファーストレコードのインデックス</div>
+<div class="line">ページングが必要な場合、limitと合わせて指定する。</div>
+</div>
+</p></li>
+<li><p><strong>limit</strong> (<em>integer</em>) -- <div class="line-block">
+<div class="line">最大取得レコード数</div>
+<div class="line">条件に合う件数がlimitを超過する場合、ジョブの投入時間でソートした古いものから返却する。</div>
+</div>
+</p></li>
+<li><p><strong>status</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">ジョブの現在の処理状態</div>
+<div class="line">指定された処理状態のジョブのみを返却する。</div>
+</div>
+</p></li>
+<li><p><strong>jobid</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">ジョブID </div>
+<div class="line">このパラメータが指定された場合、ジョブIDのサブジョブ一覧を取得する。</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> -- ジョブ一覧取得処理結果</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> -- 認証エラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> -- 内部サーバエラー</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>error</strong> (<em>string</em>) -- エラー内容
+ (required)</p></li>
+<li><p><strong>output[].accept_time</strong> (<em>string</em>) -- 投入時間（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].bulkno</strong> (<em>string</em>) -- バルク番号</p></li>
+<li><p><strong>output[].cpu_num</strong> (<em>integer</em>) -- 利用CPU数</p></li>
+<li><p><strong>output[].elapse</strong> (<em>string</em>) -- 経過時間</p></li>
+<li><p><strong>output[].elapse_limit</strong> (<em>string</em>) -- 経過時間制限</p></li>
+<li><p><strong>output[].end_code</strong> (<em>string</em>) -- 終了コード</p></li>
+<li><p><strong>output[].end_time</strong> (<em>string</em>) -- 終了時間（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].exit_subjob_num</strong> (<em>string</em>) -- 完了サブジョブ数</p></li>
+<li><p><strong>output[].group</strong> (<em>string</em>) -- ユーザグループ名</p></li>
+<li><p><strong>output[].jid</strong> (<em>string</em>) -- JID</p></li>
+<li><p><strong>output[].job_type</strong> (<em>string</em>) -- ジョブタイプ</p></li>
+<li><p><strong>output[].jobid</strong> (<em>string</em>) -- ジョブID
+ (required)</p></li>
+<li><p><strong>output[].name</strong> (<em>integer</em>) -- 名称
+ (required)</p></li>
+<li><p><strong>output[].node_num</strong> (<em>integer</em>) -- ノード形状/ノード数</p></li>
+<li><p><strong>output[].pjm_code</strong> (<em>string</em>) -- PJMコード</p></li>
+<li><p><strong>output[].queue</strong> (<em>string</em>) -- キュー
+ (required)</p></li>
+<li><p><strong>output[].rsc_grp</strong> (<em>string</em>) -- リソースグループ
+ (required)</p></li>
+<li><p><strong>output[].start_time</strong> (<em>string</em>) -- 開始時間（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].status</strong> (<em>string</em>) -- ジョブの現在の処理状態 ACC　:　ジョブの投入が受け入れられた状態 RJT　:　投入が受付けられなかった状態 QUE　:　ジョブ実行待ち状態 RNA　:　ジョブ実行に必要な資源を獲得中 RNP　:　プロローグ実行中 RUN　:　ジョブ実行中 RNE　:　エピローグ実行中 RNO　:　ジョブ終了処理完了待ち状態 EXT　:　ジョブ終了処理完了 CCL　:　ジョブ実行中止による終了 HLD　:　ユーザによる固定状態 ERR　:　エラーによる固定状態 (required)</p></li>
+<li><p><strong>output[].stepno</strong> (<em>string</em>) -- ステップ番号</p></li>
+<li><p><strong>output[].subjob_depend</strong> (<em>string</em>) -- サブジョブ依存判定式</p></li>
+<li><p><strong>output[].subjob_num</strong> (<em>string</em>) -- サブジョブ数</p></li>
+<li><p><strong>output[].subjobid</strong> (<em>string</em>) -- サブジョブID</p></li>
+<li><p><strong>output[].timeuse</strong> (<em>string</em>) -- 利用時間
+ (required)</p></li>
+<li><p><strong>output[].user</strong> (<em>string</em>) -- ユーザ名
+ (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) -- ステータス
+ (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--queue-machine">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/queue/{machine}</span></span><a class="headerlink" href="#post--queue-machine" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><strong>ジョブ投入</strong></p>
+<div class="line-block">
+<div class="line">ジョブ投入API  </div>
+<div class="line">指定したマシンから、ジョブスケジューラに対してジョブ投入命令を実行する。  </div>
+<div class="line">パラメータはjobfile,jobscriptのいずれかを指定する。</div>
+<div class="line">(両方指定された場合はjobfileパラメータを優先する)  </div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 85%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>パラメータ</p></th>
+<th class="head"><p>操作例</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>jobfile</p></td>
+<td><p>/home/user01/test.sh&lt;br&gt;(スクリプトファイルを指定する)</p></td>
+</tr>
+<tr class="row-odd"><td><p>jobscript</p></td>
+<td><p>/home/user01/a.out &lt; stdin.dat&lt;br&gt;(スクリプトコマンドを指定する)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/queue/computer/ -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X POST -d <span class="s1">&#39;{&quot;jobfile&quot;: &quot;/home/hpcadmin/aaa.sh&quot;, &quot;qopt&quot;: &quot;jid=100&quot;}&#39;</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">マシン名</div>
+<div class="line">全マシン状態の取得(/status/)で得られるマシン名のいずれか。通常は、&quot;computer&quot;を指定する。</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> -- <div class="line-block">
+<div class="line">ジョブ投入処理の完了</div>
+<div class="line">outputにジョブIDが出力される</div>
+</div>
+</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> -- パラメータエラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> -- 認証エラー</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc4918#section-11.2">422 Unprocessable Entity</a></span> -- 必須パラメータエラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> -- 内部サーバエラー</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>error</strong> (<em>string</em>) -- エラー内容
+ (required)</p></li>
+<li><p><strong>output</strong> (<em>string</em>) -- ジョブID
+ (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) -- ステータス
+ (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--queue-machine-sacct">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/queue/{machine}/sacct</span></span><a class="headerlink" href="#get--queue-machine-sacct" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><strong>完了済みジョブ一覧取得</strong></p>
+<div class="line-block">
+<div class="line">対象マシン上で、ジョブスケジューラから24時間以内に完了したジョブの一覧を取得する。  </div>
+<div class="line">ジョブIDが指定された場合は、ジョブIDのサブジョブ一覧を取得する。  </div>
+<div class="line"><br /></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/queue/computer/sacct -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">マシン名</div>
+<div class="line">全マシン状態の取得(/status/)で得られるマシン名のいずれか。通常は、&quot;computer&quot;を指定する。</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>index</strong> (<em>integer</em>) -- <div class="line-block">
+<div class="line">ファーストレコードのインデックス</div>
+<div class="line">ページングが必要な場合、limitと合わせて指定する。</div>
+</div>
+</p></li>
+<li><p><strong>limit</strong> (<em>integer</em>) -- <div class="line-block">
+<div class="line">最大取得レコード数</div>
+<div class="line">条件に合う件数がlimitを超過する場合、ジョブの投入時間でソートした古いものから返却する。</div>
+</div>
+</p></li>
+<li><p><strong>status</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">ジョブの現在の処理状態</div>
+<div class="line">指定された処理状態のジョブのみを返却する。</div>
+</div>
+</p></li>
+<li><p><strong>jobid</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">ジョブID  </div>
+<div class="line">このパラメータが指定された場合、ジョブIDのサブジョブ一覧を取得する。</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> -- 完了済みジョブ一覧取得処理の完了</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> -- 認証エラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> -- 内部サーバエラー</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>error</strong> (<em>string</em>) -- エラー内容
+ (required)</p></li>
+<li><p><strong>output[].accept_time</strong> (<em>string</em>) -- 投入時間（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].bulkno</strong> (<em>string</em>) -- バルク番号</p></li>
+<li><p><strong>output[].cpu_num</strong> (<em>integer</em>) -- 利用CPU数</p></li>
+<li><p><strong>output[].elapse</strong> (<em>string</em>) -- 経過時間</p></li>
+<li><p><strong>output[].elapse_limit</strong> (<em>string</em>) -- 経過時間制限</p></li>
+<li><p><strong>output[].end_code</strong> (<em>string</em>) -- 終了コード</p></li>
+<li><p><strong>output[].end_time</strong> (<em>string</em>) -- 終了時間（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].exit_subjob_num</strong> (<em>string</em>) -- 完了サブジョブ数</p></li>
+<li><p><strong>output[].group</strong> (<em>string</em>) -- ユーザグループ名</p></li>
+<li><p><strong>output[].jid</strong> (<em>string</em>) -- JID</p></li>
+<li><p><strong>output[].job_type</strong> (<em>string</em>) -- ジョブタイプ</p></li>
+<li><p><strong>output[].jobid</strong> (<em>string</em>) -- ジョブID
+ (required)</p></li>
+<li><p><strong>output[].name</strong> (<em>integer</em>) -- 名称
+ (required)</p></li>
+<li><p><strong>output[].node_num</strong> (<em>integer</em>) -- ノード形状/ノード数</p></li>
+<li><p><strong>output[].pjm_code</strong> (<em>string</em>) -- PJMコード</p></li>
+<li><p><strong>output[].queue</strong> (<em>string</em>) -- キュー
+ (required)</p></li>
+<li><p><strong>output[].rsc_grp</strong> (<em>string</em>) -- リソースグループ
+ (required)</p></li>
+<li><p><strong>output[].start_time</strong> (<em>string</em>) -- 開始時間（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].status</strong> (<em>string</em>) -- ジョブの現在の処理状態 ACC　:　ジョブの投入が受け入れられた状態 RJT　:　投入が受付けられなかった状態 QUE　:　ジョブ実行待ち状態 RNA　:　ジョブ実行に必要な資源を獲得中 RNP　:　プロローグ実行中 RUN　:　ジョブ実行中 RNE　:　エピローグ実行中 RNO　:　ジョブ終了処理完了待ち状態 EXT　:　ジョブ終了処理完了 CCL　:　ジョブ実行中止による終了 HLD　:　ユーザによる固定状態 ERR　:　エラーによる固定状態 (required)</p></li>
+<li><p><strong>output[].stepno</strong> (<em>string</em>) -- ステップ番号</p></li>
+<li><p><strong>output[].subjob_depend</strong> (<em>string</em>) -- サブジョブ依存判定式</p></li>
+<li><p><strong>output[].subjob_num</strong> (<em>string</em>) -- サブジョブ数</p></li>
+<li><p><strong>output[].subjobid</strong> (<em>string</em>) -- サブジョブID</p></li>
+<li><p><strong>output[].timeuse</strong> (<em>string</em>) -- 利用時間
+ (required)</p></li>
+<li><p><strong>output[].user</strong> (<em>string</em>) -- ユーザ名
+ (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) -- ステータス
+ (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--queue-machine-jobid">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/queue/{machine}/{jobid}</span></span><a class="headerlink" href="#get--queue-machine-jobid" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><strong>ジョブ詳細情報取得</strong></p>
+<div class="line-block">
+<div class="line">ジョブの詳細情報取得API  </div>
+<div class="line">指定したジョブIDまたはサブジョブIDに該当するジョブの詳細情報を取得する。  </div>
+<div class="line"><br /></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/queue/computer/<span class="o">{</span>jobid<span class="o">}</span>  -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X GET
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">マシン名</div>
+<div class="line">全マシン状態の取得(/status/)で得られるマシン名のいずれか。通常は、&quot;computer&quot;を指定する。</div>
+</div>
+</p></li>
+<li><p><strong>jobid</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">ジョブID</div>
+<div class="line">詳細情報を取得するジョブIDを指定する。</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> -- ジョブ情報取得処理の完了</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> -- 認証エラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> -- 内部サーバエラー</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>error</strong> (<em>string</em>) -- エラー内容
+ (required)</p></li>
+<li><p><strong>output[].accept_time</strong> (<em>string</em>) -- 投入時間（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].bulkno</strong> (<em>string</em>) -- バルク番号</p></li>
+<li><p><strong>output[].cpu_num</strong> (<em>integer</em>) -- 利用CPU数</p></li>
+<li><p><strong>output[].elapse</strong> (<em>string</em>) -- 経過時間</p></li>
+<li><p><strong>output[].elapse_limit</strong> (<em>string</em>) -- 経過時間制限</p></li>
+<li><p><strong>output[].end_code</strong> (<em>string</em>) -- 終了コード</p></li>
+<li><p><strong>output[].end_time</strong> (<em>string</em>) -- 終了時間（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].exit_subjob_num</strong> (<em>string</em>) -- 完了サブジョブ数</p></li>
+<li><p><strong>output[].group</strong> (<em>string</em>) -- ユーザグループ名</p></li>
+<li><p><strong>output[].jid</strong> (<em>string</em>) -- JID</p></li>
+<li><p><strong>output[].job_type</strong> (<em>string</em>) -- ジョブタイプ</p></li>
+<li><p><strong>output[].jobid</strong> (<em>string</em>) -- ジョブID
+ (required)</p></li>
+<li><p><strong>output[].name</strong> (<em>integer</em>) -- 名称
+ (required)</p></li>
+<li><p><strong>output[].node_num</strong> (<em>integer</em>) -- ノード形状/ノード数</p></li>
+<li><p><strong>output[].pjm_code</strong> (<em>string</em>) -- PJMコード</p></li>
+<li><p><strong>output[].queue</strong> (<em>string</em>) -- キュー
+ (required)</p></li>
+<li><p><strong>output[].rsc_grp</strong> (<em>string</em>) -- リソースグループ
+ (required)</p></li>
+<li><p><strong>output[].start_time</strong> (<em>string</em>) -- 開始時間（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].status</strong> (<em>string</em>) -- ジョブの現在の処理状態 ACC　:　ジョブの投入が受け入れられた状態 RJT　:　投入が受付けられなかった状態 QUE　:　ジョブ実行待ち状態 RNA　:　ジョブ実行に必要な資源を獲得中 RNP　:　プロローグ実行中 RUN　:　ジョブ実行中 RNE　:　エピローグ実行中 RNO　:　ジョブ終了処理完了待ち状態 EXT　:　ジョブ終了処理完了 CCL　:　ジョブ実行中止による終了 HLD　:　ユーザによる固定状態 ERR　:　エラーによる固定状態 (required)</p></li>
+<li><p><strong>output[].stepno</strong> (<em>string</em>) -- ステップ番号</p></li>
+<li><p><strong>output[].subjob_depend</strong> (<em>string</em>) -- サブジョブ依存判定式</p></li>
+<li><p><strong>output[].subjob_num</strong> (<em>string</em>) -- サブジョブ数</p></li>
+<li><p><strong>output[].subjobid</strong> (<em>string</em>) -- サブジョブID</p></li>
+<li><p><strong>output[].timeuse</strong> (<em>string</em>) -- 利用時間
+ (required)</p></li>
+<li><p><strong>output[].user</strong> (<em>string</em>) -- ユーザ名
+ (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) -- ステータス
+ (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--queue-machine-jobid">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/queue/{machine}/{jobid}</span></span><a class="headerlink" href="#delete--queue-machine-jobid" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><strong>ジョブキャンセル</strong></p>
+<div class="line-block">
+<div class="line">指定したジョブIDに該当するジョブをキャンセルする。  </div>
+<div class="line">&quot;-(ハイフン)&quot;を使用することによって、ジョブIDの範囲指定が可能です。サブジョブIDも同様に範囲指定が可能です。 </div>
+<div class="line"><br /></div>
+<div class="line">例：ジョブID 1 から 100 までを範囲指定する場合 </div>
+<div class="line"><br /></div>
+<div class="line">1-100 </div>
+<div class="line"><br /></div>
+<div class="line">例：ステップジョブ(ジョブID=100)のステップ番号 1 から 10 までを範囲指定する場合 </div>
+<div class="line"><br /></div>
+<div class="line">100_1-10  </div>
+<div class="line"><br /></div>
+<div class="line">例：バルクジョブ(ジョブID=101)のバルク番号 1 から 10 までを範囲指定する場合 </div>
+<div class="line"><br /></div>
+<div class="line">101[1-10] </div>
+<div class="line"><br /></div>
+<div class="line">範囲指定する場合、範囲内に以下のようなジョブが含まれていてもエラーにせず、そのジョブを無視して処理を継続します。 </div>
+<div class="line"><br /></div>
+<div class="line">存在しないジョブ , ユーザに権限が無いジョブ , 指定できない状態のジョブ</div>
+<div class="line"><br /></div>
+<div class="line">成功した場合、キャンセル無視の有無を問わず指定した全ジョブIDを返します。</div>
+<div class="line"><br /></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/queue/computer/<span class="o">{</span>jobid<span class="o">}</span>  -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span>  -X delete
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">マシン名</div>
+<div class="line">全マシン状態の取得(/status/)で得られるマシン名のいずれか。通常は、&quot;computer&quot;を指定する。</div>
+</div>
+</p></li>
+<li><p><strong>jobid</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">ジョブID</div>
+<div class="line">キャンセルするジョブIDを指定する。</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> -- ジョブキャンセル処理の完了</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> -- 内部サーバエラー</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>error</strong> (<em>string</em>) -- エラー内容
+ (required)</p></li>
+<li><p><strong>output</strong> (<em>string</em>) -- ジョブキャンセル出力結果(jobid)
+ (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) -- ステータス
+ (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--queue-machine-jobscript">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/queue/{machine}/jobscript</span></span><a class="headerlink" href="#put--queue-machine-jobscript" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><strong>ジョブ実行スクリプトの生成/変更</strong></p>
+<div class="line-block">
+<div class="line">ジョブ実行スクリプトの生成/変更API  </div>
+<div class="line">対象マシン上にジョブ実行スクリプトを作成する。同名のファイルが存在する場合は、上書きする。</div>
+<div class="line">バルクジョブ、ステップジョブを作成する場合は、COMMON_DATAのJTYPEを指定する。</div>
+<div class="line"><br /></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/queue/computer/jobscript -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X PUT -d <span class="s1">&#39;{&quot;script&quot;:{&quot;APP_DATA&quot;:{&quot;ProgramGroupList&quot;:{&quot;ProgramGroup&quot;:[{&quot;ProgramList&quot;:{&quot;Program&quot;:[{&quot;Type&quot;:&quot;mpi&quot;,&quot;FileName&quot;:&quot;a.sh&quot;,&quot;ThreadMode&quot;:&quot;parallel&quot;,&quot;Threads&quot;:&quot;100&quot;}]},&quot;GroupType&quot;:&quot;serialgroup&quot;}]}},&quot;COMMON_DATA&quot;:{}}}&#39;</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) -- <div class="line-block">
+<div class="line">マシン名</div>
+<div class="line">全マシン状態の取得(/status/)で得られるマシン名のいずれか。通常は、&quot;computer&quot;を指定する</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>filename</strong> (<em>string</em>) -- </p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.GroupType</strong> (<em>string</em>) -- </p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.Argument</strong> (<em>string</em>) -- 実行プログラムの引数</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileInfoList[].Collect</strong> (<em>integer</em>) -- 各ランクからステージアウトされたファイルを区別しない場合：1 (指定されない場合はステージアウトされたファイル名の末尾にランク番号が付与される)</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileInfoList[].FileName</strong> (<em>string</em>) -- 実行プログラムが入出力するファイル。</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileInfoList[].IsDirectory</strong> (<em>integer</em>) -- ディレクトリをファイルステージングさせる場合：1</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileInfoList[].Rank</strong> (<em>string</em>) -- ステージング対象のランク番号を指定する。</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileInfoList[].StageIn</strong> (<em>integer</em>) -- ファイルをステージインさせる場合：1</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileInfoList[].StageOut</strong> (<em>integer</em>) -- ファイルをステージアウトさせる場合：1</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileInfoList[].UnitNo</strong> (<em>string</em>) -- 実行プログラムが入出力するファイルに対応する装置番号を指定する。 実行プログラムがFortranである場合のみ有効。</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileName</strong> (<em>string</em>) -- 実行プログラム名
+ (required)</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.Procs</strong> (<em>string</em>) -- プロセス当たりのスレッド数。 実行プログラムがスレッド並列の場合にのみ有効。</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.StdInFileName</strong> (<em>string</em>) -- 標準入力ファイル名</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.StdInRank</strong> (<em>string</em>) -- 標準入力ファイルを対象とするファイルステージングノードのランク番号。</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.StdOutCollect</strong> (<em>integer</em>) -- <a href="#id1"><span class="problematic" id="id2">*</span></a>各ランクからステージアウトされたファイルを区別しない場合：1 <a href="#id3"><span class="problematic" id="id4">*</span></a>指定されない場合はステージアウトされたファイル名の末尾にランク番号が付与される。</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.StdOutFileName</strong> (<em>string</em>) -- 標準出力ファイル名</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.StdOutRank</strong> (<em>string</em>) -- 標準出力ファイルを対象とするファイルステージングノードのランク番号。</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.ThreadMode</strong> (<em>string</em>) -- ・自動並列の場合：&quot;parallel&quot; ・OpenMPの場合：&quot;omp&quot; ・1スレッドプロセスの場合：指定しない</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.Threads</strong> (<em>integer</em>) -- プログラム実行スレッド数</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.Type</strong> (<em>string</em>) -- ・単体プログラムとして実行する場合：&quot;serial&quot; ・MPI並列プログラムとして実行する場合：&quot;mpi&quot;</p></li>
+<li><p><strong>script.COMMON_DATA.DEPEND_JID</strong> (<em>string</em>) -- 依存ジョブID指定。 ジョブタイプ識別子に&quot;S&quot;が指定されている場合のみ有効。</p></li>
+<li><p><strong>script.COMMON_DATA.ELAPSE</strong> (<em>string</em>) -- ジョブの最大実行時間設定。 3パターンでの指定方法が可能。 ①&quot;HHHH:MM:SS&quot; ②&quot;HHHH:MM&quot; ③&quot;HHHH&quot;</p></li>
+<li><p><strong>script.COMMON_DATA.JGRP</strong> (<em>string</em>) -- ジョブ課金グループ指定。</p></li>
+<li><p><strong>script.COMMON_DATA.JNAME</strong> (<em>string</em>) -- 名称: 半角英数記号で63文字まで指定できる。 先頭文字は、半角英字のみ。 記号は、&quot;-_&#64;.&quot;の4種類とする。</p></li>
+<li><p><strong>script.COMMON_DATA.JTYPE</strong> (<em>string</em>) -- ジョブタイプ識別子: <a href="#id5"><span class="problematic" id="id6">*</span></a>通常ジョブの場合：指定しない <a href="#id7"><span class="problematic" id="id8">*</span></a>バルクジョブの場合：&quot;B&quot; <a href="#id9"><span class="problematic" id="id10">*</span></a>ステップジョブの場合:&quot;S&quot;</p></li>
+<li><p><strong>script.COMMON_DATA.NODE</strong> (<em>string</em>) -- ジョブに割当てるノード形状を指定する。 X, XxY, XxYxZのいずれかの形式で指定する。</p></li>
+<li><p><strong>script.COMMON_DATA.NODES</strong> (<em>integer</em>) -- 実行プログラムがMPI並列プログラムの場合に、静的に起動するMPIプロセス数。</p></li>
+<li><p><strong>script.COMMON_DATA.QOPT</strong> (<em>string</em>) -- キューのオプション指定。</p></li>
+<li><p><strong>script.COMMON_DATA.QUEUE</strong> (<em>string</em>) -- ジョブを投入するリソースのグループ名指定。</p></li>
+<li><p><strong>script.COMMON_DATA.QUOTA</strong> (<em>string</em>) -- ジョブが使用するディスク使用料の最大値(GB単位)。</p></li>
+<li><p><strong>script.COMMON_DATA.QUOTA_TYPE</strong> (<em>string</em>) -- クォータの型指定。</p></li>
+<li><p><strong>script.COMMON_DATA.SNUM</strong> (<em>string</em>) -- 自サブジョブ番号。 ジョブタイプ識別子に&quot;S&quot;が指定されている場合のみ有効。</p></li>
+<li><p><strong>script.COMMON_DATA.STEP_CODE</strong> (<em>string</em>) -- 依存するサブジョブID。 ジョブタイプ識別子に&quot;S&quot;が指定されている場合のみ有効。</p></li>
+<li><p><strong>script.COMMON_DATA.STEP_CONDITION</strong> (<em>string</em>) -- 依存関係式。 ジョブタイプ識別子に&quot;S&quot;が指定されている場合のみ有効。</p></li>
+<li><p><strong>script.COMMON_DATA.SUBJOBS_NODE</strong> (<em>integer</em>) -- バルクジョブノード数。 ジョブタイプ識別子に&quot;B&quot;が指定されている場合のみ有効。</p></li>
+<li><p><strong>script.COMMON_DATA.SUBJOB_END</strong> (<em>string</em>) -- バルクジョブ終了番号。 ジョブタイプ識別子に&quot;B&quot;が指定されている場合のみ有効。</p></li>
+<li><p><strong>script.COMMON_DATA.SUBJOB_START</strong> (<em>string</em>) -- バルクジョブ開始番号。 ジョブタイプ識別子に&quot;B&quot;が指定されている場合のみ有効。</p></li>
+<li><p><strong>script.COMMON_DATA.SYSTEM</strong> (<em>string</em>) -- ジョブを投入するリソースのユニット名指定。</p></li>
+<li><p><strong>script.COMMON_DATA.USE_RANK_DIR</strong> (<em>string</em>) -- ユーザランクディレクトリの仕様有無フラグ。</p></li>
+<li><p><strong>script.COMMON_DATA.USE_RANL_DIR</strong> (<em>boolean</em>) -- ランク番号ディレクトリを使用する場合：true</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> -- ジョブ実行スクリプトの生成完了</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> -- パラメータエラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> -- 認証エラー</p></li>
+<li><p><span><a class="reference external" href="https://tools.ietf.org/html/rfc4918#section-11.2">422 Unprocessable Entity</a></span> -- 必須パラメータエラー</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> -- 内部サーバエラー</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>error</strong> (<em>string</em>) -- エラー内容
+ (required)</p></li>
+<li><p><strong>output</strong> (<em>string</em>) -- ジョブ実行スクリプト生成結果
+ (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) -- ステータス
+ (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="authorization.html"
+                          title="前の章へ"><span class="section-number">2. </span>認可について</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="authorization.html" title="2. 認可について"
+             >前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">WebAPI User Guide  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>WebAPI仕様</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN R-CCS.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

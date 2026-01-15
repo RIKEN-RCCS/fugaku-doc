@@ -1,0 +1,33 @@
+Overview
+========
+
+To use the Fugaku, use login node or Fugaku website.
+
+This section describes how to install the client certificate required when using the Fugaku website, and how to create and register the SSH public key required to connect to the login node.
+
+The flow of setting is as follows:.
+
+.. figure:: ./img/AccessToTheSystemOveview_01.png
+   :align: center
+
+.. list-table::
+   :header-rows: 1
+
+   * - Item
+     - Reference to
+
+   * - Client Certification Installation
+     - :ref:`InstallingClientCertificate`
+
+   * - Private key/Public key creation
+     - :ref:`GeneratingPrivateKeyAndPublicKey`
+
+   * - Public key registration
+     - :ref:`RegisteringAPublicKey`
+
+   * - Terminal software settings
+     - :ref:`LoginNodePuTTYSetup`
+
+   * - Login
+     - :ref:`LoginNodePuTTYSetup`
+

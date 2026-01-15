@@ -1,0 +1,51 @@
+Workflow job
+============
+
+| A workflow job is a collection of multiple jobs that perform execution control (conditional branching and repetition) on a job-by-job basis.
+| Like step jobs, this is used when the next job to be executed is determined according to the execution result of a job. However, depending on the contents of the shell script that controls execution, you can control with more flexibility than step jobs.
+
+.. seealso::
+   
+   Workflow jobs are not exactly job types, but a way for users to control the submission of multiple jobs using shell scripts.
+
+
+Job submission
+---------------
+
+In workflow jobs, the user submits the job with a shell script.
+
+| For example, a shell script can automatically perform the process of waiting for the end of a specific job and submitting another job, or selecting the next job to submit based on the result of a job.
+| User proceed job submitting control with using  \ :program:`pjwait`\  command which offered by the job operation software.
+
+- Waiting for job completion
+   You can wait for the end of one or more jobs in a shell script with using  :program:`pjwait`\  command.
+- Get job execution results
+   You can obtain the job end code (job manager processing result), job script end status, and signal number when the job script ends with using  :program:`pjwait`\  command.
+
+The following is a workflow job flow diagram.
+
+.. figure:: ./img/SubmittingAWorkFlowJob_01.png
+..  :align: left
+
+When this workflow job is described in a shell script, it will be as follows.
+
+.. code-block:: bash
+    
+    #!/bin/sh
+    for no in 1 2 3                       # Put in order job script job1.sh, job2.sh, job3.sh
+    do
+      JID=`pjsub -z jid job${no}.sh`      # Display job ID with -z option and assign to shell variable JID
+      if [ $? -ne 0 ]; then               # If the job submission result is other than 0, the workflow job ends
+        exit 1
+      fi
+      set -- `pjwait $JID`                # Wait for the job to finish and assign the output result to the position parameter (Note)
+      if [ $2 != "0" -o $3 != "0" ]; then # If either the job exit code ($ 2) or the job script exit status ($ 3) is not 0, 
+        exit 1                            # the workflow job is terminated.
+      fi
+    done                                  # Go to execute next job
+
+
+.. attention::
+
+  Depending on the type of job and how to specify the job ID, the output result may be multiple lines so arrangement is needed. About output, refer to  \ :command:`man`\  manual of  \ :program:`pjwait`\  command.
+

@@ -1,0 +1,203 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6.5. Specification when submitting an MPI job &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6.6. Rank assignment" href="RankAssignment.html" />
+    <link rel="prev" title="6.4. Standard output / Standard error output / Standard input" href="InputOutputRedirection.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="RankAssignment.html" title="6.6. Rank assignment"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="InputOutputRedirection.html" title="6.4. Standard output / Standard error output / Standard input"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.5. </span>Specification when submitting an MPI job</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="specification-when-submitting-an-mpi-job">
+<span id="specificationsformpijobmpi"></span><h1><span class="section-number">6.5. </span>Specification when submitting an MPI job<a class="headerlink" href="#specification-when-submitting-an-mpi-job" title="Link to this heading">¶</a></h1>
+<p>When submitting MPI job, by using  <strong class="program">pjsub</strong> command’s  <code class="docutils literal notranslate"><span class="pre">--mpi</span></code> option, you can specify the process shape to be started statically, the maximum value of the static process to be started, and the rank assignment rule.</p>
+<ol class="arabic simple">
+<li><p>Statically activated process shapes</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">--mpi</span> <span class="pre">shape</span></code></p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Maximum number of static processes to launch</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">--mpi</span> <span class="pre">proc</span></code></p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Rules for assigning ranks of processes to be created</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">--mpi</span> <span class="pre">rank-map-bynode</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">--mpi</span> <span class="pre">rank-map-hostfile</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">--mpi</span> <span class="pre">rank-map-bychip</span></code></p></li>
+</ul>
+</div></blockquote>
+<section id="static-process-shape-specification">
+<h2><span class="section-number">6.5.1. </span>Static process shape specification<a class="headerlink" href="#static-process-shape-specification" title="Link to this heading">¶</a></h2>
+<p>By using  <strong class="program">pjsub</strong>command (<code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>) you can specify the shape of the process to be started statically.</p>
+<div class="line-block">
+<div class="line">The shape of the process must be the same number of dimensions as the node shape specified by the  <code class="docutils literal notranslate"><span class="pre">node</span></code> parameter of  <code class="docutils literal notranslate"><span class="pre">-L</span></code> in 1D, 2D and 3D shapes. If  <code class="docutils literal notranslate"><span class="pre">--mpi</span></code> option’s  <code class="docutils literal notranslate"><span class="pre">shape</span></code> parameter is omitted, <code class="docutils literal notranslate"><span class="pre">-L</span></code> option’s  <code class="docutils literal notranslate"><span class="pre">node</span></code> parameter value is used.</div>
+<div class="line">Dynamic processes are created outside the range specified by <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>.</div>
+</div>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">shape</span></code> parameter specification example</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 42.9%" />
+<col style="width: 57.1%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>[1 dimention format]</p></td>
+<td><p>–mpi “shape=X”</p></td>
+</tr>
+<tr class="row-even"><td><p>[2 dimentions format]</p></td>
+<td><p>–mpi “shape=XxY”</p></td>
+</tr>
+<tr class="row-odd"><td><p>[3 dimentions format]</p></td>
+<td><p>–mpi “shape=XxYxZ”</p></td>
+</tr>
+</tbody>
+</table>
+<p>To MPI program (<code class="file docutils literal notranslate"><span class="pre">a.out</span></code>), the following is an example of specifying a 3D process shape (X axis 4, Y axis 3, Z axis 2).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L &quot;node=4x3x2&quot;               # Specify number of node (3 dimentions specification)</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;             # Specify resource group</span>
+<span class="c1">#PJM --mpi &quot;shape=4x3x2&quot;           # Static process shape</span>
+<span class="c1">#PJM -g groupname                  # group name</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N # volume names that job uses</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">24</span><span class="w"> </span>./a.out<span class="w">              </span><span class="c1">#Execute a.out as parallel process number 24</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="specify-the-maximum-number-of-static-processes">
+<h2><span class="section-number">6.5.2. </span>Specify the maximum number of static processes<a class="headerlink" href="#specify-the-maximum-number-of-static-processes" title="Link to this heading">¶</a></h2>
+<p>Maximum number of processes created at program startup is specified as  <code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">--mpi</span> <span class="pre">proc</span></code>.</p>
+<ul class="simple">
+<li><p>The number of processes that can be specified in  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">proc</span></code> is less than “the value specified in  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code> x 48 “.</p></li>
+<li><p>If specify larger value than  the specified value in “<code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>x48” to  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">proc</span></code>, job acceptance will be rejected.</p></li>
+<li><p>If  omitted  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">proc</span></code>, the product of the values specified in <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>(the number of nodes obtained from the shape) is used. If also omitted  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>, the specified number of node at  <code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code> is used.</p></li>
+<li><p>When specifying  <code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">vnode</span></code>, if specified larger value than specified at  <code class="docutils literal notranslate"><span class="pre">vnode</span></code> to  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">proc</span></code>, job acceptance will be rejected.</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=4&quot;            # Assign node 4 node (1 dimention format)</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;      # Specify resource group</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;   # Elapsed time limit 1 hour</span>
+<span class="c1">#PJM --mpi &quot;shape=4&quot;         # Static process shape</span>
+<span class="c1">#PJM --mpi &quot;proc=4&quot;          # Maximum number of static processes 4</span>
+<span class="c1">#PJM -g groupname            # group name</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N # volume names that job uses</span>
+<span class="c1">#PJM -s                      # Statistical information output</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">4</span><span class="w"> </span>./a.out<span class="w">         </span><span class="c1"># Execute a.out</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">6.5. Specification when submitting an MPI job</a><ul>
+<li><a class="reference internal" href="#static-process-shape-specification">6.5.1. Static process shape specification</a></li>
+<li><a class="reference internal" href="#specify-the-maximum-number-of-static-processes">6.5.2. Specify the maximum number of static processes</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="InputOutputRedirection.html"
+                          title="previous chapter"><span class="section-number">6.4. </span>Standard output / Standard error output / Standard input</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="RankAssignment.html"
+                          title="next chapter"><span class="section-number">6.6. </span>Rank assignment</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="RankAssignment.html" title="6.6. Rank assignment"
+             >next</a></li>
+        <li class="right" >
+          <a href="InputOutputRedirection.html" title="6.4. Standard output / Standard error output / Standard input"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.5. </span>Specification when submitting an MPI job</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

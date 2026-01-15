@@ -1,0 +1,293 @@
+System Configuration
+====================
+
+Overview
+--------
+
+The pre/post environment consists of several nodes as shown in the figure below.
+
+.. figure:: img/01en.png
+
+Compute Nodes
+-------------
+
+| The compute nodes in the pre/post environment consist of three types of servers (GPU and large memory nodes).
+| By using SLURM commands on the login nodes, users can assign workloads on the pre/post compute nodes.
+| All the compute nodes are connected by EDR-enabled InfiniBand.
+
+- GPU node: x86_64-based 2-CPU node with 192GB memory
+- Large memory node: x86_64-based 4-CPU node with 6TB memory
+- WHEEL node: x86_64-based 2-CPU node with 256GB memory
+
+
+.. list-table::
+   :header-rows: 1
+
+   * - Node Type
+     - Node Name
+   
+   * - GPU node
+     - pps01
+    
+   * - GPU node
+     - pps02
+    
+   * - GPU node
+     - pps03
+    
+   * - GPU node
+     - pps04
+    
+   * - GPU node
+     - pps05
+    
+   * - GPU node
+     - pps06
+    
+   * - GPU node
+     - pps07
+    
+   * - GPU node
+     - pps08
+    
+   * - Large memory node
+     - ppm01
+    
+   * - Large memory node
+     - ppm02
+    
+   * - Large memory node
+     - ppm03
+    
+   * - WHEEL node
+     - wheel1
+    
+   * - WHEEL node
+     - wheel2
+
+
+GPU Nodes
+^^^^^^^^^
+
+The hardware specifications of a GPU node are as follows.
+
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 30 
+
+   * - Server
+     - FUJITSU Server PRIMERGY RX2540 M5
+   
+   * - CPU
+     - Intel Xeon Gold 6240 (2.60GHz/18core), Equipped with 2
+
+   * - Memory
+     - 192GB memory (16GB 2933 RDIMM x12)
+
+   * - System disk
+     - SAS 600GB/10krpm x2 (RAID1)
+	
+   * - InfiniBand network
+     - For EDR(100Gbps) x1
+    
+   * - Ethernet network
+     - 10Gbps(SFP+) x1, 1Gbps(RJ-45) x2
+    
+   * - GPU accelerator
+     - NVIDIA Tesla V100(32GB) x2
+    
+   * - OS
+     - RHEL 8.10 (kernel 4.18.0-553)
+
+
+Large Memory Nodes
+^^^^^^^^^^^^^^^^^^
+
+The hardware specifications of a large memory node are as follows.
+
+- Large memory node #1,#2
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 30 
+
+   * - Server	
+     - FUJITSU Server PRIMERGY RX4770 M5
+    
+   * - CPU
+     - Intel Xeon Platinum 8280L (2.70GHz/28core), Equipped with 4
+    
+   * - Memory
+     - 6,144GB memory (128GB 2933 LRDIMM x48)
+   
+   * - System disk
+     - SAS 600GB/10krpm x2 (RAID1)
+   
+   * - InfiniBand network
+     - For EDR(100Gbps) x1
+    
+   * - Ethernet network
+     - 10Gbps(SFP+) x2, 1Gbps(RJ-45) x4
+    
+   * - OS
+     - RHEL 8.10 (kernel 4.18.0-553)
+
+
+- Large memory node #3
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 30 
+
+   * - Server	
+     - FUJITSU Server PRIMERGY RX4770 M6
+    
+   * - CPU
+     - Intel Xeon Platinum 8360HL (3.00GHz/24core), Equipped with 4
+    
+   * - Memory
+     - 6,144GB memory (128GB 3200 LRDIMM x48)
+   
+   * - System disk
+     - SAS 900GB/10krpm x2 (RAID1)
+   
+   * - InfiniBand network
+     - For EDR(100Gbps) x1
+    
+   * - Ethernet network
+     - 1Gbps(RJ-45) x4
+    
+   * - OS
+     - RHEL 8.10 (kernel 4.18.0-553)
+
+
+WHEEL Nodes
+^^^^^^^^^^^
+
+The hardware specifications of a WHEEL node are as follows.
+
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 30 
+
+   * - Server
+     - FUJITSU Server PRIMERGY RX2540 M6
+   
+   * - CPU
+     - Intel Xeon Gold 6338 (2GHz/32core), Equipped with 2
+
+   * - Memory
+     - 256GB memory (16GB 3200 RDIMM x 16)
+
+   * - System disk
+     - SAS 900GB/10krpm x2 (RAID1)
+	
+   * - InfiniBand network
+     - For EDR(100Gbps) x1
+    
+   * - Ethernet network
+     - 10Gbps(SFP+) x1, 1Gbps(RJ-45) x4
+    
+   * - OS
+     - RHEL 8.10 (kernel 4.18.0-553)
+
+
+Management Nodes
+----------------
+
+| The pre/post management nodes consist of two servers, and the SLURM job manager has a redundant configuration with the servers.
+| Also, the job management DB system is running on the management nodes.
+
+
+.. list-table::
+   :header-rows: 1
+
+   * - Node Type
+     - Node Name
+
+   * - Management node #1 (primary)
+     - ppctl1
+
+   * - Management node #2 (secondary)
+     - ppctl2
+
+
+Software
+--------
+
+The main software components used in the pre/post environment are shown as follows.
+
+
+.. list-table::
+   :header-rows: 0
+
+   * - OS
+     - RHEL 8.10 (kernel 4.18.0-553)
+    
+   * - SLURM software
+     - Slurm version 24.05.3
+    
+   * - DB software (SLURM)
+     - MariaDB Server 10.3
+    
+   * - Fugaku operation software (Use some functions)
+     - FUJITSU Software Technical Computing Suite V4.0L20A
+  
+   * - CUDA Toolkit
+     - 12.8
+
+
+
+Compilers
+^^^^^^^^^
+
+GCC, Intel compiler, NVIDIA CUDA Compiler [#C1]_ and Fujitsu compiler [#C2]_ are available in the pre/post environment.
+
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 8 25 8
+
+   * - Name
+     - Language
+     - Version
+     - Command (examples)
+
+   * - GCC (RHEL 8.10 Provided as standard)
+     - | Fortran
+       | C	
+       | C++
+     - | 8.5.0 20210514 (Red Hat 8.5.0-26)	
+     - | g++
+       | gfortran
+       | gcc
+     
+   * - | Intel oneAPI Base & HPC Toolkit
+       |
+     - | Fortran
+       | C		
+       | C++
+     - | Refer to the FAQ: "`Compiler on login node <https://www.fugaku.r-ccs.riken.jp/en/faq/20210701_01>`_"
+     - | ifort
+       | icc
+       | icpc
+
+   * - NVIDIA CUDA Compiler
+     - | C/C++
+     - | Build cuda_12.8.r12.8/compiler.35404655_0
+     - | nvcc
+
+   * - Fujitsu compiler (cross compiler)
+     - | Fortran
+       | C
+       | C++
+     - | Refer to the manual: "`Supercomputer Fugaku Users Guide - Language and development environment - <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/lang_latest/CompileforCN/FujitsuCompiler/index.html>`_"
+     - | frtpx
+       | fccpx
+       | FCCpx
+
+.. [#C1] NVIDIA CUDA Compiler is available on the GPU nodes.
+
+.. [#C2] Fujitsu compiler is a cross compiler as same as one on the login nodes.

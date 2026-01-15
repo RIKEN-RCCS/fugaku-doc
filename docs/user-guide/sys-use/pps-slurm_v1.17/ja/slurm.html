@@ -1,0 +1,1349 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>7. SLURMコマンド &#8212; プリポスト環境 利用手引書  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="prev" title="3. ログイン" href="usage.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="usage.html" title="3. ログイン"
+             accesskey="P">前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">プリポスト環境 利用手引書  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7. </span>SLURMコマンド</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="slurm">
+<h1><span class="section-number">7. </span>SLURMコマンド<a class="headerlink" href="#slurm" title="この見出しへのパーマリンク">¶</a></h1>
+<p>ログインノードから実行可能なSlurmコマンドを以下に示します。</p>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>各SLURMのコマンドの詳細については以下ドキュメントをご参照ください。</p>
+<p><a class="reference external" href="https://slurm.schedmd.com/documentation.html">https://slurm.schedmd.com/documentation.html</a></p>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 9.1%" />
+<col style="width: 18.2%" />
+<col style="width: 72.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>NO.</p></th>
+<th class="head"><p>SLURMコマンド</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>sbatch</p></td>
+<td><p>バッチジョブを投入する</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>srun</p></td>
+<td><p>ジョブを投入する</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>scancel</p></td>
+<td><p>ジョブをキャンセルする</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>sstat</p></td>
+<td><p>ジョブに関する情報を表示する</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>sacct</p></td>
+<td><p>ジョブのアカウンティング情報を表示する</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>squeue</p></td>
+<td><p>ジョブキューの状態を表示する</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>sinfo</p></td>
+<td><p>計算ノードの状態を表示する</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>sbcast</p></td>
+<td><p>ジョブが割り当てられたノードへファイルを転送する</p></td>
+</tr>
+</tbody>
+</table>
+<section id="sbatch">
+<h2><span class="section-number">7.1. </span>バッチジョブを投入する（sbatch）<a class="headerlink" href="#sbatch" title="この見出しへのパーマリンク">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">sbatch</span></code>はSlurmへバッチスクリプトをサブミットするコマンドです。</p>
+<p>書式</p>
+<p><strong>sbatch</strong> [<em>OPTIONS(0)</em>...] [ : [<em>OPTIONS(N)</em>...]] <em>script(0)</em> [<em>args(0)</em>...]</p>
+<p>コマンドの例（スクリプトファイルがjob.shの場合）</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>sbatch job.sh
+</pre></div>
+</div>
+<p>主なオプションを以下に示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-J,</div>
+<div class="line">--job-name=&lt;jobname&gt;</div>
+</div>
+</td>
+<td><p>ジョブ割り当ての名前を指定します。指定した名前は、システムで実行中のジョブを照会するときに、ジョブID番号とともに表示されます。 デフォルトはバッチスクリプトの名前です。</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-p,</div>
+<div class="line">--partition=&lt;partition_names&gt;</div>
+</div>
+</td>
+<td><p>リソース割り当てのために特定のキュー（パーティション）を指定します。</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-c,</div>
+<div class="line">--cpus-per-task=&lt;ncpus&gt;</div>
+</div>
+</td>
+<td><p>1タスク（プロセス）あたりに必要な、1つのノード上で動くCPU数を指定します。</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-N,</div>
+<div class="line">--nodes=&lt;minnodes[-maxnodes]&gt;</div>
+</div>
+</td>
+<td><p>割り当てるノード数を指定します。デフォルトは1タスク（プロセス）あたり1ノードです。</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-n,</div>
+<div class="line">--ntasks=&lt;number&gt;</div>
+</div>
+</td>
+<td><p>タスク（プロセス）数を指定します。</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-o,</div>
+<div class="line">--output=&lt;filename pattern&gt;</div>
+</div>
+</td>
+<td><p>バッチスクリプトの標準出力を&lt;filename pattern&gt;に書き込むように指定します。デフォルトでは、標準出力と標準エラー出力の両方が同じファイルに書き込まれます。デフォルトのファイル名は「slurm-％j.out」で、「％j」はジョブIDに置き換えられます。</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-e,</div>
+<div class="line">--error=&lt;filename pattern&gt;&gt;</div>
+</div>
+</td>
+<td><p>バッチスクリプトの標準エラーを&lt;filename pattern&gt;に書き込むように指定します。デフォルトでは、標準出力と標準エラー出力の両方が同じファイルに書き込まれます。デフォルトのファイル名は「slurm-％j.out」で、「％j」はジョブIDに置き換えられます。</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">--mem=&lt;size[units]&gt;</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">割り当てるメモリ量を指定します。デフォルトの単位はMBです。単位はK,M,G,Tが使用できます。</div>
+<div class="line">（例）10GBを指定する場合</div>
+<div class="line">#SBATCH --mem=10G</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>GPUを利用する場合の主なオプションを以下に示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>--gpus</p></td>
+<td><div class="line-block">
+<div class="line">ジョブごとに必要なGPU数を指定します。</div>
+<div class="line">例：--gpus=1</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>--gpus-per-node</p></td>
+<td><p>ノードごとに必要なGPU数を指定します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>--gpus-per-task</p></td>
+<td><p>タスクごとに必要なGPU数を指定します。ジョブにタスク数を指定する必要があります。</p></td>
+</tr>
+</tbody>
+</table>
+<p>詳細なオプションを以下に示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>sbatch --help
+<span class="go">Usage: sbatch [OPTIONS(0)...] [ : [OPTIONS(N)...]] script(0) [args(0)...]</span>
+
+<span class="go">Parallel run options:</span>
+<span class="go">  -a, --array=indexes         job array index values</span>
+<span class="go">  -A, --account=name          charge job to specified account</span>
+<span class="go">      --bb=&lt;spec&gt;             burst buffer specifications</span>
+<span class="go">      --bbf=&lt;file_name&gt;       burst buffer specification file</span>
+<span class="go">  -b, --begin=time            defer job until HH:MM MM/DD/YY</span>
+<span class="go">      --comment=name          arbitrary comment</span>
+<span class="go">      --cpu-freq=min[-max[:gov]] requested cpu frequency (and governor)</span>
+<span class="go">  -c, --cpus-per-task=ncpus   number of cpus required per task</span>
+<span class="go">  -d, --dependency=type:jobid[:time] defer job until condition on jobid is satisfied</span>
+<span class="go">      --deadline=time         remove the job if no ending possible before</span>
+<span class="go">                              this deadline (start &gt; (deadline - time[-min]))</span>
+<span class="go">      --delay-boot=mins       delay boot for desired node features</span>
+<span class="go">  -D, --chdir=directory       set working directory for batch script</span>
+<span class="go">  -e, --error=err             file for batch script&#39;s standard error</span>
+<span class="go">      --export[=names]        specify environment variables to export</span>
+<span class="go">      --export-file=file|fd   specify environment variables file or file</span>
+<span class="go">                              descriptor to export</span>
+<span class="go">      --get-user-env          load environment from local cluster</span>
+<span class="go">      --gid=group_id          group ID to run job as (user root only)</span>
+<span class="go">      --gres=list             required generic resources</span>
+<span class="go">      --gres-flags=opts       flags related to GRES management</span>
+<span class="go">  -H, --hold                  submit job in held state</span>
+<span class="go">      --ignore-pbs            Ignore #PBS and #BSUB options in the batch script</span>
+<span class="go">  -i, --input=in              file for batch script&#39;s standard input</span>
+<span class="go">  -J, --job-name=jobname      name of job</span>
+<span class="go">  -k, --no-kill               do not kill job on node failure</span>
+<span class="go">  -L, --licenses=names        required license, comma separated</span>
+<span class="go">  -M, --clusters=names        Comma separated list of clusters to issue</span>
+<span class="go">                              commands to.  Default is current cluster.</span>
+<span class="go">                              Name of &#39;all&#39; will submit to run on all clusters.</span>
+<span class="go">                              NOTE: SlurmDBD must up.</span>
+<span class="go">      --container             Path to OCI container bundle</span>
+<span class="go">      --container-id          OCI container ID</span>
+<span class="go">  -m, --distribution=type     distribution method for processes to nodes</span>
+<span class="go">                              (type = block|cyclic|arbitrary)</span>
+<span class="go">      --mail-type=type        notify on state change: BEGIN, END, FAIL or ALL</span>
+<span class="go">      --mail-user=user        who to send email notification for job state</span>
+<span class="go">                              changes</span>
+<span class="go">      --mcs-label=mcs         mcs label if mcs plugin mcs/group is used</span>
+<span class="go">  -n, --ntasks=ntasks         number of tasks to run</span>
+<span class="go">      --nice[=value]          decrease scheduling priority by value</span>
+<span class="go">      --no-requeue            if set, do not permit the job to be requeued</span>
+<span class="go">      --ntasks-per-node=n     number of tasks to invoke on each node</span>
+<span class="go">  -N, --nodes=N               number of nodes on which to run (N = min[-max])</span>
+<span class="go">  -o, --output=out            file for batch script&#39;s standard output</span>
+<span class="go">  -O, --overcommit            overcommit resources</span>
+<span class="go">  -p, --partition=partition   partition requested</span>
+<span class="go">      --parsable              outputs only the jobid and cluster name (if present),</span>
+<span class="go">                              separated by semicolon, only on successful submission.</span>
+<span class="go">      --power=flags           power management options</span>
+<span class="go">      --priority=value        set the priority of the job to value</span>
+<span class="go">      --profile=value         enable acct_gather_profile for detailed data</span>
+<span class="go">                              value is all or none or any combination of</span>
+<span class="go">                              energy, lustre, network or task</span>
+<span class="go">      --propagate[=rlimits]   propagate all [or specific list of] rlimits</span>
+<span class="go">  -q, --qos=qos               quality of service</span>
+<span class="go">  -Q, --quiet                 quiet mode (suppress informational messages)</span>
+<span class="go">      --reboot                reboot compute nodes before starting job</span>
+<span class="go">      --requeue               if set, permit the job to be requeued</span>
+<span class="go">  -s, --oversubscribe         over subscribe resources with other jobs</span>
+<span class="go">  -S, --core-spec=cores       count of reserved cores</span>
+<span class="go">      --signal=[[R][B]:]num[@time] send signal when time limit within time seconds</span>
+<span class="go">      --spread-job            spread job across as many nodes as possible</span>
+<span class="go">      --switches=max-switches{@max-time-to-wait}</span>
+<span class="go">                              Optimum switches and max time to wait for optimum</span>
+<span class="go">      --thread-spec=threads   count of reserved threads</span>
+<span class="go">  -t, --time=minutes          time limit</span>
+<span class="go">      --time-min=minutes      minimum time limit (if distinct)</span>
+<span class="go">      --tres-per-task=list    list of tres required per task</span>
+<span class="go">      --uid=user_id           user ID to run job as (user root only)</span>
+<span class="go">      --use-min-nodes         if a range of node counts is given, prefer the</span>
+<span class="go">                              smaller count</span>
+<span class="go">  -v, --verbose               verbose mode (multiple -v&#39;s increase verbosity)</span>
+<span class="go">  -W, --wait                  wait for completion of submitted job</span>
+<span class="go">      --wckey=wckey           wckey to run job under</span>
+<span class="go">      --wrap[=command string] wrap command string in a sh script and submit</span>
+
+<span class="go">Constraint options:</span>
+<span class="go">      --cluster-constraint=[!]list specify a list of cluster constraints</span>
+<span class="go">      --contiguous            demand a contiguous range of nodes</span>
+<span class="go">  -C, --constraint=list       specify a list of constraints</span>
+<span class="go">  -F, --nodefile=filename     request a specific list of hosts</span>
+<span class="go">      --mem=MB                minimum amount of real memory</span>
+<span class="go">      --mincpus=n             minimum number of logical processors (threads)</span>
+<span class="go">                              per node</span>
+<span class="go">      --reservation=name      allocate resources from named reservation</span>
+<span class="go">      --tmp=MB                minimum amount of temporary disk</span>
+<span class="go">  -w, --nodelist=hosts...     request a specific list of hosts</span>
+<span class="go">  -x, --exclude=hosts...      exclude a specific list of hosts</span>
+
+<span class="go">Consumable resources related options:</span>
+<span class="go">      --exclusive[=user]      allocate nodes in exclusive mode when</span>
+<span class="go">                              cpu consumable resource is enabled</span>
+<span class="go">      --exclusive[=mcs]       allocate nodes in exclusive mode when</span>
+<span class="go">                              cpu consumable resource is enabled</span>
+<span class="go">                              and mcs plugin is enabled</span>
+<span class="go">      --mem-per-cpu=MB        maximum amount of real memory per allocated</span>
+<span class="go">                              cpu required by the job.</span>
+<span class="go">                              --mem &gt;= --mem-per-cpu if --mem is specified.</span>
+
+<span class="go">Affinity/Multi-core options: (when the task/affinity plugin is enabled)</span>
+<span class="go">                              For the following 4 options, you are</span>
+<span class="go">                              specifying the minimum resources available for</span>
+<span class="go">                              the node(s) allocated to the job.</span>
+<span class="go">      --sockets-per-node=S    number of sockets per node to allocate</span>
+<span class="go">      --cores-per-socket=C    number of cores per socket to allocate</span>
+<span class="go">      --threads-per-core=T    number of threads per core to allocate</span>
+<span class="go">  -B  --extra-node-info=S[:C[:T]]  combine request of sockets per node,</span>
+<span class="go">                              cores per socket and threads per core.</span>
+<span class="go">                              Specify an asterisk (*) as a placeholder,</span>
+<span class="go">                              a minimum value, or a min-max range.</span>
+
+<span class="go">      --ntasks-per-core=n     number of tasks to invoke on each core</span>
+<span class="go">      --ntasks-per-socket=n   number of tasks to invoke on each socket</span>
+<span class="go">      --hint=                 Bind tasks according to application hints</span>
+<span class="go">                              (see &quot;--hint=help&quot; for options)</span>
+<span class="go">      --mem-bind=             Bind memory to locality domains (ldom)</span>
+<span class="go">                              (see &quot;--mem-bind=help&quot; for options)</span>
+
+<span class="go">GPU scheduling options:</span>
+<span class="go">      --cpus-per-gpu=n        number of CPUs required per allocated GPU</span>
+<span class="go">  -G, --gpus=n                count of GPUs required for the job</span>
+<span class="go">      --gpu-bind=...          task to gpu binding options</span>
+<span class="go">      --gpu-freq=...          frequency and voltage of GPUs</span>
+<span class="go">      --gpus-per-node=n       number of GPUs required per allocated node</span>
+<span class="go">      --gpus-per-socket=n     number of GPUs required per allocated socket</span>
+<span class="go">      --gpus-per-task=n       number of GPUs required per spawned task</span>
+<span class="go">      --mem-per-gpu=n         real memory required per allocated GPU</span>
+
+<span class="go">Help options:</span>
+<span class="go">  -h, --help                  show this help message</span>
+<span class="go">      --usage                 display brief usage message</span>
+
+<span class="go">Other options:</span>
+<span class="go">  -V, --version               output version information and exit</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">指定可能なすべてのパラメタについては、<code class="docutils literal notranslate"><span class="pre">man</span></code>コマンドでご確認ください。</div>
+<div class="line"><a class="reference external" href="https://slurm.schedmd.com/sbatch.html">https://slurm.schedmd.com/sbatch.html</a></div>
+</div>
+</section>
+<section id="srun">
+<h2><span class="section-number">7.2. </span>ジョブを投入する（srun）<a class="headerlink" href="#srun" title="この見出しへのパーマリンク">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">srun</span></code>は並列ジョブを実行するコマンドです。</p>
+<p>書式</p>
+<p><strong>srun</strong> [OPTIONS(0)... [executable(0) [args(0)...]]] [ : [OPTIONS(N)...]] executable(N) [args(N)...]</p>
+<p>コマンドの例（実行プログラムがa.outの場合）</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun a.out
+</pre></div>
+</div>
+<p>主なオプションを以下に示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-J,</div>
+<div class="line">--job-name=&lt;jobname&gt;</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">ジョブの名前を指定します。指定した名前は、システムで実行中のジョブを照会するときに、ジョブID番号とともに表示されます。デフォルトは実行プログラムの名前です。</div>
+<div class="line">注意：ジョブ名に半角スペースは指定しないでください。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-p,</div>
+<div class="line">--partition=&lt;partition_names&gt;</div>
+</div>
+</td>
+<td><p>リソース割り当てのために特定のキュー（パーティション）を指定します。</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-c,</div>
+<div class="line">--cpus-per-task=&lt;ncpus&gt;</div>
+</div>
+</td>
+<td><p>タスク（プロセス）ごとに割り当てるCPUを指定します。</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-n,</div>
+<div class="line">--ntasks=&lt;number&gt;</div>
+</div>
+</td>
+<td><p>実行するタスク数を指定します。デフォルトはノードごとに１タスク（プロセス）です。</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-o,</div>
+<div class="line">--output=&lt;filename pattern&gt;</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">標準出力を&lt;filename pattern&gt;に書き込むように指定します。デフォルトの対話モードでは、全てのタスクの標準出力を端末に返します。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-e</span></code>を指定していない場合、標準出力と標準エラー出力の両方がここで指定された&lt;filename pattern&gt;に書き込まれます。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-e,</div>
+<div class="line">--error=&lt;filename pattern&gt;</div>
+</div>
+</td>
+<td><p>標準エラー出力を&lt;filename pattern&gt;に書き込むように指定します。デフォルトの対話モードでは、標準エラー出力は標準出力と同じファイルにリダイレクトされます。</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">--mem=&lt;size[units]&gt;</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">割り当てるメモリ量を指定します。デフォルトの単位はMBです。単位はK,M,G,Tが使用できます。</div>
+<div class="line">（例）10GBを指定する場合</div>
+<div class="line">srun -p ppmq -N 1 --mem=10G --time=00:05:00 --pty bash -i</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>GPUを利用する場合の主なオプションを以下に示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>--gpus</p></td>
+<td><div class="line-block">
+<div class="line">ジョブごとに必要なGPU数を指定します。</div>
+<div class="line">例：--gpus=1</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>--gpus-per-node</p></td>
+<td><p>ノードごとに必要なGPU数を指定します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>--gpus-per-task</p></td>
+<td><p>タスクごとに必要なGPU数を指定します。ジョブにタスク数を指定する必要があります。</p></td>
+</tr>
+</tbody>
+</table>
+<p>詳細なオプションを以下に示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun --help
+<span class="go">Usage: srun [OPTIONS(0)... [executable(0) [args(0)...]]] [ : [OPTIONS(N)...]] executable(N) [args(N)...]</span>
+
+<span class="go">Parallel run options:</span>
+<span class="go">  -A, --account=name          charge job to specified account</span>
+<span class="go">      --acctg-freq=&lt;datatype&gt;=&lt;interval&gt; accounting and profiling sampling</span>
+<span class="go">                              intervals. Supported datatypes:</span>
+<span class="go">                              task=&lt;interval&gt; energy=&lt;interval&gt;</span>
+<span class="go">                              network=&lt;interval&gt; filesystem=&lt;interval&gt;</span>
+<span class="go">      --bb=&lt;spec&gt;             burst buffer specifications</span>
+<span class="go">      --bbf=&lt;file_name&gt;       burst buffer specification file</span>
+<span class="go">      --bcast=&lt;dest_path&gt;     Copy executable file to compute nodes</span>
+<span class="go">      --bcast-exclude=&lt;paths&gt; Shared object directory paths to exclude</span>
+<span class="go">  -b, --begin=time            defer job until HH:MM MM/DD/YY</span>
+<span class="go">  -c, --cpus-per-task=ncpus   number of cpus required per task</span>
+<span class="go">      --comment=name          arbitrary comment</span>
+<span class="go">      --compress[=library]    data compression library used with --bcast</span>
+<span class="go">      --container             Path to OCI container bundle</span>
+<span class="go">      --container-id          OCI container ID</span>
+<span class="go">      --cpu-freq=min[-max[:gov]] requested cpu frequency (and governor)</span>
+<span class="go">  -d, --dependency=type:jobid[:time] defer job until condition on jobid is satisfied</span>
+<span class="go">      --deadline=time         remove the job if no ending possible before</span>
+<span class="go">                              this deadline (start &gt; (deadline - time[-min]))</span>
+<span class="go">      --delay-boot=mins       delay boot for desired node features</span>
+<span class="go">  -D, --chdir=path            change remote current working directory</span>
+<span class="go">      --export=env_vars|NONE  environment variables passed to launcher with</span>
+<span class="go">                              optional values or NONE (pass no variables)</span>
+<span class="go">  -e, --error=err             location of stderr redirection</span>
+<span class="go">      --epilog=program        run &quot;program&quot; after launching job step</span>
+<span class="go">  -E, --preserve-env          env vars for node and task counts override</span>
+<span class="go">                              command-line flags</span>
+<span class="go">      --gres=list             required generic resources</span>
+<span class="go">      --gres-flags=opts       flags related to GRES management</span>
+<span class="go">  -H, --hold                  submit job in held state</span>
+<span class="go">  -i, --input=in              location of stdin redirection</span>
+<span class="go">  -I, --immediate[=secs]      exit if resources not available in &quot;secs&quot;</span>
+<span class="go">      --jobid=id              run under already allocated job</span>
+<span class="go">  -J, --job-name=jobname      name of job</span>
+<span class="go">  -k, --no-kill               do not kill job on node failure</span>
+<span class="go">  -K, --kill-on-bad-exit      kill the job if any task terminates with a</span>
+<span class="go">                              non-zero exit code</span>
+<span class="go">  -l, --label                 prepend task number to lines of stdout/err</span>
+<span class="go">  -L, --licenses=names        required license, comma separated</span>
+<span class="go">  -M, --clusters=names        Comma separated list of clusters to issue</span>
+<span class="go">                              commands to.  Default is current cluster.</span>
+<span class="go">                              Name of &#39;all&#39; will submit to run on all clusters.</span>
+<span class="go">                              NOTE: SlurmDBD must up.</span>
+<span class="go">  -m, --distribution=type     distribution method for processes to nodes</span>
+<span class="go">                              (type = block|cyclic|arbitrary)</span>
+<span class="go">      --mail-type=type        notify on state change: BEGIN, END, FAIL or ALL</span>
+<span class="go">      --mail-user=user        who to send email notification for job state</span>
+<span class="go">                              changes</span>
+<span class="go">      --mcs-label=mcs         mcs label if mcs plugin mcs/group is used</span>
+<span class="go">      --mpi=type              type of MPI being used</span>
+<span class="go">      --multi-prog            if set the program name specified is the</span>
+<span class="go">                              configuration specification for multiple programs</span>
+<span class="go">  -n, --ntasks=ntasks         number of tasks to run</span>
+<span class="go">      --nice[=value]          decrease scheduling priority by value</span>
+<span class="go">      --ntasks-per-node=n     number of tasks to invoke on each node</span>
+<span class="go">  -N, --nodes=N               number of nodes on which to run (N = min[-max])</span>
+<span class="go">  -o, --output=out            location of stdout redirection</span>
+<span class="go">  -O, --overcommit            overcommit resources</span>
+<span class="go">      --overlap               Allow other steps to overlap this step</span>
+<span class="go">      --het-group=value       hetjob component allocation(s) in which to launch</span>
+<span class="go">                              application</span>
+<span class="go">  -p, --partition=partition   partition requested</span>
+<span class="go">      --power=flags           power management options</span>
+<span class="go">      --priority=value        set the priority of the job to value</span>
+<span class="go">      --prolog=program        run &quot;program&quot; before launching job step</span>
+<span class="go">      --profile=value         enable acct_gather_profile for detailed data</span>
+<span class="go">                              value is all or none or any combination of</span>
+<span class="go">                              energy, lustre, network or task</span>
+<span class="go">      --propagate[=rlimits]   propagate all [or specific list of] rlimits</span>
+<span class="go">      --pty[=fd]              run task zero in pseudo terminal [or in requested terminal given by fd]</span>
+<span class="go">      --quit-on-interrupt     quit on single Ctrl-C</span>
+<span class="go">  -q, --qos=qos               quality of service</span>
+<span class="go">  -Q, --quiet                 quiet mode (suppress informational messages)</span>
+<span class="go">      --reboot                reboot block before starting job</span>
+<span class="go">  -r, --relative=n            run job step relative to node n of allocation</span>
+<span class="go">  -s, --oversubscribe         over-subscribe resources with other jobs</span>
+<span class="go">  -S, --core-spec=cores       count of reserved cores</span>
+<span class="go">      --send-libs[=yes|no]    autodetect and broadcast shared objects</span>
+<span class="go">      --signal=[R:]num[@time] send signal when time limit within time seconds</span>
+<span class="go">      --slurmd-debug=level    slurmd debug level</span>
+<span class="go">      --spread-job            spread job across as many nodes as possible</span>
+<span class="go">      --switches=max-switches{@max-time-to-wait}</span>
+<span class="go">                              Optimum switches and max time to wait for optimum</span>
+<span class="go">      --task-epilog=program   run &quot;program&quot; after launching task</span>
+<span class="go">      --task-prolog=program   run &quot;program&quot; before launching task</span>
+<span class="go">      --thread-spec=threads   count of reserved threads</span>
+<span class="go">  -T, --threads=threads       set srun launch fanout</span>
+<span class="go">  -t, --time=minutes          time limit</span>
+<span class="go">      --time-min=minutes      minimum time limit (if distinct)</span>
+<span class="go">      --tres-per-task=list    list of tres required per task</span>
+<span class="go">  -u, --unbuffered            do not line-buffer stdout/err</span>
+<span class="go">      --use-min-nodes         if a range of node counts is given, prefer the</span>
+<span class="go">                              smaller count</span>
+<span class="go">  -v, --verbose               verbose mode (multiple -v&#39;s increase verbosity)</span>
+<span class="go">  -W, --wait=sec              seconds to wait after first task exits</span>
+<span class="go">                              before killing job</span>
+<span class="go">      --wckey=wckey           wckey to run job under</span>
+<span class="go">  -X, --disable-status        Disable Ctrl-C status feature</span>
+
+<span class="go">Constraint options:</span>
+<span class="go">      --cluster-constraint=list specify a list of cluster-constraints</span>
+<span class="go">      --contiguous            demand a contiguous range of nodes</span>
+<span class="go">  -C, --constraint=list       specify a list of constraints</span>
+<span class="go">      --mem=MB                minimum amount of real memory</span>
+<span class="go">      --mincpus=n             minimum number of logical processors (threads)</span>
+<span class="go">                              per node</span>
+<span class="go">      --reservation=name      allocate resources from named reservation</span>
+<span class="go">      --tmp=MB                minimum amount of temporary disk</span>
+<span class="go">  -w, --nodelist=hosts...     request a specific list of hosts</span>
+<span class="go">  -x, --exclude=hosts...      exclude a specific list of hosts</span>
+<span class="go">  -Z, --no-allocate           don&#39;t allocate nodes (must supply -w)</span>
+
+<span class="go">Consumable resources related options:</span>
+<span class="go">      --exact                 use only the resources requested for the step</span>
+<span class="go">                              (by default, all non-gres resources on each node</span>
+<span class="go">                              in the allocation will be used in the step)</span>
+<span class="go">      --exclusive[=user]      for job allocation, this allocates nodes in</span>
+<span class="go">                              in exclusive mode</span>
+<span class="go">                              for job steps, this is equivalent to --exact</span>
+<span class="go">      --exclusive[=mcs]       allocate nodes in exclusive mode when</span>
+<span class="go">                              cpu consumable resource is enabled</span>
+<span class="go">                              and mcs plugin is enabled (--exact implied)</span>
+<span class="go">                              or don&#39;t share CPUs for job steps</span>
+<span class="go">      --mem-per-cpu=MB        maximum amount of real memory per allocated</span>
+<span class="go">                              cpu required by the job.</span>
+<span class="go">                              --mem &gt;= --mem-per-cpu if --mem is specified.</span>
+<span class="go">      --resv-ports            reserve communication ports</span>
+
+<span class="go">Affinity/Multi-core options: (when the task/affinity plugin is enabled)</span>
+<span class="go">                              For the following 4 options, you are</span>
+<span class="go">                              specifying the minimum resources available for</span>
+<span class="go">                              the node(s) allocated to the job.</span>
+<span class="go">      --sockets-per-node=S    number of sockets per node to allocate</span>
+<span class="go">      --cores-per-socket=C    number of cores per socket to allocate</span>
+<span class="go">      --threads-per-core=T    number of threads per core to allocate</span>
+<span class="go">  -B  --extra-node-info=S[:C[:T]]  combine request of sockets per node,</span>
+<span class="go">                              cores per socket and threads per core.</span>
+<span class="go">                              Specify an asterisk (*) as a placeholder,</span>
+<span class="go">                              a minimum value, or a min-max range.</span>
+<span class="go">      --ntasks-per-core=n     number of tasks to invoke on each core</span>
+<span class="go">      --ntasks-per-socket=n   number of tasks to invoke on each socket</span>
+<span class="go">      --cpu-bind=             Bind tasks to CPUs</span>
+<span class="go">                              (see &quot;--cpu-bind=help&quot; for options)</span>
+<span class="go">      --hint=                 Bind tasks according to application hints</span>
+<span class="go">                              (see &quot;--hint=help&quot; for options)</span>
+<span class="go">      --mem-bind=             Bind memory to locality domains (ldom)</span>
+<span class="go">                              (see &quot;--mem-bind=help&quot; for options)</span>
+
+<span class="go">GPU scheduling options:</span>
+<span class="go">      --cpus-per-gpu=n        number of CPUs required per allocated GPU</span>
+<span class="go">  -G, --gpus=n                count of GPUs required for the job</span>
+<span class="go">      --gpu-bind=...          task to gpu binding options</span>
+<span class="go">      --gpu-freq=...          frequency and voltage of GPUs</span>
+<span class="go">      --gpus-per-node=n       number of GPUs required per allocated node</span>
+<span class="go">      --gpus-per-socket=n     number of GPUs required per allocated socket</span>
+<span class="go">      --gpus-per-task=n       number of GPUs required per spawned task</span>
+<span class="go">      --mem-per-gpu=n         real memory required per allocated GPU</span>
+
+<span class="go">Help options:</span>
+<span class="go">  -h, --help                  show this help message</span>
+<span class="go">      --usage                 display brief usage message</span>
+
+<span class="go">Other options:</span>
+<span class="go">  -V, --version               output version information and exit</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">指定可能なすべてのパラメタについては、<code class="docutils literal notranslate"><span class="pre">man</span></code>コマンドでご確認ください。</div>
+<div class="line"><a class="reference external" href="https://slurm.schedmd.com/srun.html">https://slurm.schedmd.com/srun.html</a></div>
+</div>
+</section>
+<section id="scancel">
+<h2><span class="section-number">7.3. </span>ジョブをキャンセルする（scancel）<a class="headerlink" href="#scancel" title="この見出しへのパーマリンク">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">scancel</span></code>はジョブをキャンセルするコマンドです。</p>
+<p>書式</p>
+<p><strong>scancel</strong> [OPTIONS...] [job_id[_array_id][.step_id]] [job_id[_array_id][.step_id]...]</p>
+<p>コマンドの例（削除するジョブIDがxxxxxの場合）</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>scancel xxxxx
+</pre></div>
+</div>
+<p>詳細なオプションを以下に示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>scancel --help
+<span class="go">Usage: scancel [OPTIONS] [job_id[_array_id][.step_id]]</span>
+<span class="go">  -A, --account=account           act only on jobs charging this account</span>
+<span class="go">  -b, --batch                     signal batch shell for specified job</span>
+<span class="go">  -c, --cron                      cancel an scrontab job</span>
+<span class="go">  -f, --full                      signal batch shell and all steps for specified job</span>
+<span class="go">  -H, --hurry                     avoid burst buffer stage out</span>
+<span class="go">  -i, --interactive               require response from user for each job</span>
+<span class="go">  -M, --clusters                  clusters to issue commands to.</span>
+<span class="go">                                  NOTE: SlurmDBD must be up.</span>
+<span class="go">  -n, --name=job_name             act only on jobs with this name</span>
+<span class="go">  -p, --partition=partition       act only on jobs in this partition</span>
+<span class="go">  -Q, --quiet                     disable warnings</span>
+<span class="go">  -q, --qos=qos                   act only on jobs with this quality of service</span>
+<span class="go">  -R, --reservation=reservation   act only on jobs with this reservation</span>
+<span class="go">      --sibling=cluster_name      remove an active sibling job from a federated job</span>
+<span class="go">  -s, --signal=name | integer     signal to send to job, default is SIGKILL</span>
+<span class="go">  -t, --state=states              act only on jobs in this state.  Valid job</span>
+<span class="go">                                  states are PENDING, RUNNING and SUSPENDED</span>
+<span class="go">  -u, --user=user_name            act only on jobs of this user</span>
+<span class="go">  -V, --version                   output version information and exit</span>
+<span class="go">  -v, --verbose                   verbosity level</span>
+<span class="go">  -w, --nodelist                  act only on jobs on these nodes</span>
+<span class="go">      --wckey=wckey               act only on jobs with this workload</span>
+<span class="go">                                  charactization key</span>
+
+<span class="go">Help options:</span>
+<span class="go">  --help                          show this help message</span>
+<span class="go">  --usage                         display brief usage message</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">指定可能なすべてのパラメタについては、<code class="docutils literal notranslate"><span class="pre">man</span></code>コマンドでご確認ください。</div>
+<div class="line"><a class="reference external" href="https://slurm.schedmd.com/scancel.html">https://slurm.schedmd.com/scancel.html</a></div>
+</div>
+</section>
+<section id="sstat">
+<h2><span class="section-number">7.4. </span>ジョブに関する情報を表示する（sstat）<a class="headerlink" href="#sstat" title="この見出しへのパーマリンク">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">sstat</span></code>は実行中のジョブのステータスを表示するコマンドです。</p>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>自身のジョブのステータスのみ表示されます。</p>
+</div>
+<p>書式</p>
+<p><strong>sstat</strong> [OPTIONS...]</p>
+<p>コマンドの例（ステータスを表示するジョブIDがxxxxxの場合）</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>sstat -j xxxxx -o AveCPU,JobID,AveRss
+</pre></div>
+</div>
+<p>主なオプションを以下に示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-j,</div>
+<div class="line">--jobs</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">ステータスを表示するジョブIDを指定します。</div>
+<div class="line">このオプションは必須です。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-o,</div>
+<div class="line">--format, --fields</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">表示する項目を指定します。</div>
+<div class="line">表示できる項目は<code class="docutils literal notranslate"><span class="pre">-e</span></code>または<code class="docutils literal notranslate"><span class="pre">--helpformat</span></code>で確認できます。</div>
+<div class="line">項目の例：</div>
+<div class="line">・AveCPU：ジョブ内のすべてのタスクの平均CPU時間</div>
+<div class="line">・JobID：割り当てられたジョブID</div>
+<div class="line">・AveRSS：ジョブ内のすべてのタスクの平均物理メモリサイズ</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>詳細なオプションを以下に示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>sstat --help
+<span class="go">sstat [&lt;OPTION&gt;] -j &lt;job(.stepid)&gt;</span>
+<span class="go">    Valid &lt;OPTION&gt; values are:</span>
+<span class="go">     -a, --allsteps:</span>
+<span class="go">                   Print all steps for the given job(s) when no step is</span>
+<span class="go">                   specified.</span>
+<span class="go">     -e, --helpformat:</span>
+<span class="go">                   Print a list of fields that can be specified with the</span>
+<span class="go">                   &#39;--format&#39; option</span>
+<span class="go">     -h, --help:   Print this description of use.</span>
+<span class="go">     -i, --pidformat:</span>
+<span class="go">                   Predefined format to list the pids running for each</span>
+<span class="go">                   job step.  (JobId,Nodes,Pids)</span>
+<span class="go">     -j, --jobs:</span>
+<span class="go">                   Format is &lt;job(.step)&gt;. Stat this job step</span>
+<span class="go">                   or comma-separated list of job steps. This option is</span>
+<span class="go">                   required.  The step portion will default to the lowest</span>
+<span class="go">                   numbered (not batch, extern, etc) step running if not</span>
+<span class="go">                   specified, unless the --allsteps flag is set where not</span>
+<span class="go">                   specifying a step will result in all running steps</span>
+<span class="go">                   to be displayed. A step id of &#39;batch&#39; will display the</span>
+<span class="go">                   information about the batch step. A step id of &#39;extern&#39;</span>
+<span class="go">                   will display the information about the extern step</span>
+<span class="go">                   when using PrologFlags=contain.</span>
+<span class="go">     -n, --noheader:</span>
+<span class="go">                   No header will be added to the beginning of output.</span>
+<span class="go">                   The default is to print a header.</span>
+<span class="go">     --noconvert:  Don&#39;t convert units from their original type</span>
+<span class="go">                   (e.g. 2048M won&#39;t be converted to 2G).</span>
+<span class="go">     -o, --format:</span>
+<span class="go">                   Comma separated list of fields. (use &quot;--helpformat&quot;</span>
+<span class="go">                   for a list of available fields).</span>
+<span class="go">     -p, --parsable: output will be &#39;|&#39; delimited with a &#39;|&#39; at the end</span>
+<span class="go">     -P, --parsable2: output will be &#39;|&#39; delimited without a &#39;|&#39; at the end</span>
+<span class="go">     --usage:      Display brief usage message.</span>
+<span class="go">     -v, --verbose:</span>
+<span class="go">                   Primarily for debugging purposes, report the state of</span>
+<span class="go">                   various variables during processing.</span>
+<span class="go">     -V, --version: Print version.</span>
+
+<span class="gp">[Login]$ </span>sstat -e
+<span class="go">AveCPU              AveCPUFreq          AveDiskRead         AveDiskWrite</span>
+<span class="go">AvePages            AveRSS              AveVMSize           ConsumedEnergy</span>
+<span class="go">ConsumedEnergyRaw   JobID               MaxDiskRead         MaxDiskReadNode</span>
+<span class="go">MaxDiskReadTask     MaxDiskWrite        MaxDiskWriteNode    MaxDiskWriteTask</span>
+<span class="go">MaxPages            MaxPagesNode        MaxPagesTask        MaxRSS</span>
+<span class="go">MaxRSSNode          MaxRSSTask          MaxVMSize           MaxVMSizeNode</span>
+<span class="go">MaxVMSizeTask       MinCPU              MinCPUNode          MinCPUTask</span>
+<span class="go">Nodelist            NTasks              Pids                ReqCPUFreq</span>
+<span class="go">ReqCPUFreqMin       ReqCPUFreqMax       ReqCPUFreqGov       TRESUsageInAve</span>
+<span class="go">TRESUsageInMax      TRESUsageInMaxNode  TRESUsageInMaxTask  TRESUsageInMin</span>
+<span class="go">TRESUsageInMinNode  TRESUsageInMinTask  TRESUsageInTot      TRESUsageOutAve</span>
+<span class="go">TRESUsageOutMax     TRESUsageOutMaxNode TRESUsageOutMaxTask TRESUsageOutMin</span>
+<span class="go">TRESUsageOutMinNode TRESUsageOutMinTask TRESUsageOutTot</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">指定可能なすべてのパラメタについては、<code class="docutils literal notranslate"><span class="pre">man</span></code>コマンドでご確認ください。</div>
+<div class="line"><a class="reference external" href="https://slurm.schedmd.com/sstat.html">https://slurm.schedmd.com/sstat.html</a></div>
+</div>
+</section>
+<section id="sacct">
+<h2><span class="section-number">7.5. </span>ジョブのアカウンティング情報を表示する（sacct）<a class="headerlink" href="#sacct" title="この見出しへのパーマリンク">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">sacct</span></code>はジョブのアカウンティング情報を表示するコマンドです。</p>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>自身のジョブのアカウンティング情報のみ表示されます。</p>
+</div>
+<p>書式</p>
+<p><strong>sacct</strong> [OPTIONS...]</p>
+<p>コマンドの例（yyyy/mm/dd～YYYY/MM/DDに開始・終了したジョブのアカウンティング情報を表示する場合）</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>sacct -S yyyy-mm-dd -E YYYY-MM-DD
+</pre></div>
+</div>
+<p>主なオプションを以下に示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-S,</div>
+<div class="line">--starttime</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">指定された時間以降の任意の状態のジョブを指定します。</div>
+<div class="line">デフォルトでは00:00:00が指定されます。</div>
+<div class="line">フォーマットの例は以下の通りです。</div>
+<div class="line">・HH:MM[:SS][AM|PM]</div>
+<div class="line">・MMDD[YY][-HH:MM[:SS]]</div>
+<div class="line">・MM.DD[.YY][-HH:MM[:SS]]</div>
+<div class="line">・MM/DD[/YY][-HH:MM[:SS]]</div>
+<div class="line">・YYYY-MM-DD[THH:MM[:SS]]</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-E end_time,</div>
+<div class="line">--endtime=end_time</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">指定された時間以前の任意の状態のジョブを指定します。</div>
+<div class="line">デフォルトでは00:00:00が指定されます。</div>
+<div class="line">フォーマットの例は以下の通りです。</div>
+<div class="line">・HH:MM[:SS][AM|PM]</div>
+<div class="line">・MMDD[YY][-HH:MM[:SS]]</div>
+<div class="line">・MM.DD[.YY][-HH:MM[:SS]]</div>
+<div class="line">・MM/DD[/YY][-HH:MM[:SS]]</div>
+<div class="line">・YYYY-MM-DD[THH:MM[:SS]]</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-o,</div>
+<div class="line">--format</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">表示させる項目を指定します。</div>
+<div class="line">複数の項目を指定する場合はカンマで区切ってください。</div>
+<div class="line">使用可能な項目は<code class="docutils literal notranslate"><span class="pre">-e</span></code>または<code class="docutils literal notranslate"><span class="pre">--helpformat</span></code>を使用してください。</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>詳細なオプションを以下に示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>sacct --help
+<span class="go">sacct [&lt;OPTION&gt;]</span>
+<span class="go">     Valid &lt;OPTION&gt; values are:</span>
+<span class="go">     -a, --allusers:</span>
+<span class="go">                   Display jobs for all users. By default, only the</span>
+<span class="go">                   current user&#39;s jobs are displayed.  If ran by user root</span>
+<span class="go">                   this is the default.</span>
+<span class="go">     -A, --accounts:</span>
+<span class="go">                   Use this comma separated list of accounts to select jobs</span>
+<span class="go">                   to display.  By default, all accounts are selected.</span>
+<span class="go">     --array:</span>
+<span class="go">                   Expand job arrays. Display array tasks on separate lines</span>
+<span class="go">                   instead of consolidating them to a single line.</span>
+<span class="go">     -b, --brief:</span>
+<span class="go">                   Equivalent to &#39;--format=jobstep,state,error&#39;.</span>
+<span class="go">     -B, --batch-script:</span>
+<span class="go">                   Print batch script of job.</span>
+<span class="go">                   NOTE: AccountingStoreFlags=job_script is required for this</span>
+<span class="go">                   NOTE: Requesting specific job(s) with &#39;-j&#39; is required</span>
+<span class="go">                         for this.</span>
+<span class="go">     -c, --completion: Use job completion instead of accounting data.</span>
+<span class="go">         --delimiter:</span>
+<span class="go">                   ASCII characters used to separate the fields when</span>
+<span class="go">                   specifying the  -p  or  -P options. The default delimiter</span>
+<span class="go">                   is a &#39;|&#39;. This options is ignored if -p or -P options</span>
+<span class="go">                   are not specified.</span>
+<span class="go">     -D, --duplicates:</span>
+<span class="go">                   If Slurm job ids are reset, some job numbers may</span>
+<span class="go">                   appear more than once referring to different jobs.</span>
+<span class="go">                   Without this option only the most recent jobs will be</span>
+<span class="go">                   displayed.</span>
+<span class="go">     -e, --helpformat:</span>
+<span class="go">                   Print a list of fields that can be specified with the</span>
+<span class="go">                   &#39;--format&#39; option</span>
+<span class="go">     -E, --endtime:</span>
+<span class="go">                   Select jobs eligible before this time.  If states are</span>
+<span class="go">                   given with the -s option return jobs in this state before</span>
+<span class="go">                   this period.</span>
+<span class="go">         --env-vars:</span>
+<span class="go">                   Print the environment to launch the batch script of job.</span>
+<span class="go">                   NOTE: AccountingStoreFlags=job_env is required for this</span>
+<span class="go">                   NOTE: Requesting specific job(s) with &#39;-j&#39; is required</span>
+<span class="go">                         for this.</span>
+<span class="go">         --federation: Report jobs from federation if a member of a one.</span>
+<span class="go">     -f, --file=file:</span>
+<span class="go">                   Read data from the specified file, rather than Slurm&#39;s</span>
+<span class="go">                   current accounting log file. (Only appliciable when</span>
+<span class="go">                   running the jobcomp/filetxt plugin.)</span>
+<span class="go">     -g, --gid, --group:</span>
+<span class="go">                   Use this comma separated list of gids or group names</span>
+<span class="go">                   to select jobs to display.  By default, all groups are</span>
+<span class="go">                   selected.</span>
+<span class="go">     -h, --help:   Print this description of use.</span>
+<span class="go">     -i, --nnodes=N:</span>
+<span class="go">                   Return jobs which ran on this many nodes (N = min[-max])</span>
+<span class="go">     -I, --ncpus=N:</span>
+<span class="go">                   Return jobs which ran on this many cpus (N = min[-max])</span>
+<span class="go">     -j, --jobs:</span>
+<span class="go">                   Format is &lt;job(.step)&gt;. Display information about this</span>
+<span class="go">                   job or comma-separated list of jobs. The default is all</span>
+<span class="go">                   jobs. Adding .step will display the specific job step of</span>
+<span class="go">                   that job. (A step id of &#39;batch&#39; will display the</span>
+<span class="go">                   information about the batch step.)</span>
+<span class="go">     --json:</span>
+<span class="go">                   Produce JSON output</span>
+<span class="go">     -k, --timelimit-min:</span>
+<span class="go">                   Only send data about jobs with this timelimit.</span>
+<span class="go">                   If used with timelimit_max this will be the minimum</span>
+<span class="go">                   timelimit of the range.  Default is no restriction.</span>
+<span class="go">     -K, --timelimit-max:</span>
+<span class="go">                   Ignored by itself, but if timelimit_min is set this will</span>
+<span class="go">                   be the maximum timelimit of the range.  Default is no</span>
+<span class="go">                   restriction.</span>
+<span class="go">         --local   Report information only about jobs on the local cluster.</span>
+<span class="go">                   Overrides --federation.</span>
+<span class="go">     -l, --long:</span>
+<span class="go">                   Equivalent to specifying</span>
+<span class="go">                   &#39;--format=jobid,jobidraw,jobname,partition,maxvmsize,</span>
+<span class="go">                             maxvmsizenode,maxvmsizetask,avevmsize,maxrss,</span>
+<span class="go">                             maxrssnode,maxrsstask,averss,maxpages,</span>
+<span class="go">                             maxpagesnode,maxpagestask,avepages,mincpu,</span>
+<span class="go">                             mincpunode,mincputask,avecpu,ntasks,alloccpus,</span>
+<span class="go">                             elapsed,state,exitcode,avecpufreq,reqcpufreqmin,</span>
+<span class="go">                             reqcpufreqmax,reqcpufreqgov,reqmem,</span>
+<span class="go">                             consumedenergy,maxdiskread,maxdiskreadnode,</span>
+<span class="go">                             maxdiskreadtask,avediskread,maxdiskwrite,</span>
+<span class="go">                             maxdiskwritenode,maxdiskwritetask,avediskwrite,</span>
+<span class="go">                             reqtres,alloctres,</span>
+<span class="go">                             tresusageinave,tresusageinmax,tresusageinmaxn,</span>
+<span class="go">                             tresusageinmaxt,tresusageinmin,tresusageinminn,</span>
+<span class="go">                             tresusageinmint,tresusageintot,tresusageoutmax,</span>
+<span class="go">                             tresusageoutmaxn,tresusageoutmaxt,</span>
+<span class="go">                             tresusageoutave,tresusageouttot</span>
+<span class="go">     -L, --allclusters:</span>
+<span class="go">                   Display jobs ran on all clusters. By default, only jobs</span>
+<span class="go">                   ran on the cluster from where sacct is called are</span>
+<span class="go">                   displayed.</span>
+<span class="go">     -M, --clusters:</span>
+<span class="go">                   Only send data about these clusters. Use &quot;all&quot; for all</span>
+<span class="go">                   clusters.</span>
+<span class="go">     -n, --noheader:</span>
+<span class="go">                   No header will be added to the beginning of output.</span>
+<span class="go">                   The default is to print a header.</span>
+<span class="go">     --noconvert:</span>
+<span class="go">                   Don&#39;t convert units from their original type</span>
+<span class="go">                   (e.g. 2048M won&#39;t be converted to 2G).</span>
+<span class="go">     -N, --nodelist:</span>
+<span class="go">                   Display jobs that ran on any of these nodes,</span>
+<span class="go">                   can be one or more using a ranged string.</span>
+<span class="go">     --name:</span>
+<span class="go">                   Display jobs that have any of these name(s).</span>
+<span class="go">     -o, --format:</span>
+<span class="go">                   Comma separated list of fields. (use &quot;--helpformat&quot;</span>
+<span class="go">                   for a list of available fields).</span>
+<span class="go">     -p, --parsable: output will be &#39;|&#39; delimited with a &#39;|&#39; at the end</span>
+<span class="go">     -P, --parsable2: output will be &#39;|&#39; delimited without a &#39;|&#39; at the end</span>
+<span class="go">     -q, --qos:</span>
+<span class="go">                   Only send data about jobs using these qos.  Default is all.</span>
+<span class="go">     -r, --partition:</span>
+<span class="go">                   Comma separated list of partitions to select jobs and</span>
+<span class="go">                   job steps from. The default is all partitions.</span>
+<span class="go">     -s, --state:</span>
+<span class="go">                   Select jobs based on their current state or the state</span>
+<span class="go">                   they were in during the time period given: running (r),</span>
+<span class="go">                   completed (cd), failed (f), timeout (to), resizing (rs),</span>
+<span class="go">                   deadline (dl) and node_fail (nf).</span>
+<span class="go">     -S, --starttime:</span>
+<span class="go">                   Select jobs eligible after this time.  Default is</span>
+<span class="go">                   00:00:00 of the current day, unless &#39;-s&#39; is set then</span>
+<span class="go">                   the default is &#39;now&#39;.</span>
+<span class="go">     -T, --truncate:</span>
+<span class="go">                   Truncate time.  So if a job started before --starttime</span>
+<span class="go">                   the start time would be truncated to --starttime.</span>
+<span class="go">                   The same for end time and --endtime.</span>
+<span class="go">     -u, --uid, --user:</span>
+<span class="go">                   Use this comma separated list of uids or user names</span>
+<span class="go">                   to select jobs to display.  By default, the running</span>
+<span class="go">                   user&#39;s uid is used.</span>
+<span class="go">     --units=[KMGTP]:</span>
+<span class="go">                   Display values in specified unit type. Takes precedence</span>
+<span class="go">                   over --noconvert option.</span>
+<span class="go">     --usage:      Display brief usage message.</span>
+<span class="go">     -v, --verbose:</span>
+<span class="go">                   Primarily for debugging purposes, report the state of</span>
+<span class="go">                   various variables during processing.</span>
+<span class="go">     -V, --version: Print version.</span>
+<span class="go">     -W, --wckeys:</span>
+<span class="go">                   Only send data about these wckeys.  Default is all.</span>
+<span class="go">     --whole-hetjob[=yes|no]:</span>
+<span class="go">                   If set to &#39;yes&#39; (or no argument), then information about</span>
+<span class="go">                   all the heterogeneous components will be retrieved. If</span>
+<span class="go">                   set to &#39;no&#39; only the specific filtered components will</span>
+<span class="go">                   be retrieved. The default behavior without this option is</span>
+<span class="go">                   that all components are retrieved only if filtering the</span>
+<span class="go">                   leader component with --jobs.</span>
+<span class="go">     -x, --associations:</span>
+<span class="go">                   Only send data about these association id.  Default is all.</span>
+<span class="go">     -X, --allocations:</span>
+<span class="go">                   Only show statistics relevant to the job allocation</span>
+<span class="go">                   itself, not taking steps into consideration.</span>
+<span class="go">     --yaml:</span>
+<span class="go">                   Produce YAML output</span>
+
+<span class="go">     Note, valid start/end time formats are...</span>
+<span class="go">                   HH:MM[:SS] [AM|PM]</span>
+<span class="go">                   MMDD[YY] or MM/DD[/YY] or MM.DD[.YY]</span>
+<span class="go">                   MM/DD[/YY]-HH:MM[:SS]</span>
+<span class="go">                   YYYY-MM-DD[THH:MM[:SS]]</span>
+<span class="go">                   now[{+|-}count[seconds(default)|minutes|hours|days|weeks]]</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">指定可能なすべてのパラメタについては、<code class="docutils literal notranslate"><span class="pre">man</span></code>コマンドでご確認ください。</div>
+<div class="line"><a class="reference external" href="https://slurm.schedmd.com/sacct.html">https://slurm.schedmd.com/sacct.html</a></div>
+</div>
+</section>
+<section id="squeue">
+<h2><span class="section-number">7.6. </span>ジョブキューの状態を表示する (squeue)<a class="headerlink" href="#squeue" title="この見出しへのパーマリンク">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">squeue</span></code>はスケジュールされているジョブ情報を表示するコマンドです。</p>
+<p>書式</p>
+<p><strong>squeue</strong> [OPTIONS...]</p>
+<p>コマンドの例</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>squeue
+</pre></div>
+</div>
+<p>主なオプションを以下に示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-O &lt;output_format&gt;,</div>
+<div class="line">--Format=&lt;output_format&gt;</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">表示する情報を指定します。</div>
+<div class="line">デフォルトの表示は以下の通りです。</div>
+<div class="line">・JOBID：割り当てられたジョブID</div>
+<div class="line">・PARTITION：ジョブを投入したキュー</div>
+<div class="line">・NAME：ジョブ名</div>
+<div class="line">・USER：ジョブを投入したユーザ名</div>
+<div class="line">・ST：ジョブの状態</div>
+<div class="line">・TIME：ジョブの実行時間</div>
+<div class="line">・NODES：ジョブに割り当てられたノード数</div>
+<div class="line">・NODELIST(REASON)：ジョブに割り当てられたノードのリスト</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>主なST（ジョブの状態）を以下に示します。下記以外のSTの詳細は <a class="reference external" href="https://slurm.schedmd.com/squeue.html">マニュアル</a> を参照してください。</p>
+<ul class="simple">
+<li><p>PD(PENDING)：  ジョブはリソースの割り当てを待っています</p></li>
+<li><p>R (RUNNING)：  ジョブは実行中です</p></li>
+<li><p>S (SUSPENDED)：        ジョブは割り当てられていますが、実行が一時停止されています</p></li>
+<li><p>CG(COMPLETING)：       ジョブは完了処理中です。一部のプロセスはまだアクティブである可能性があります</p></li>
+<li><p>CD(COMPLETED)：        ジョブは全ノード上の全プロセスが完了しています</p></li>
+</ul>
+<p>詳細なオプションを以下に示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>squeue --help
+<span class="go">Usage: squeue [OPTIONS]</span>
+<span class="go">  -A, --account=account(s)        comma separated list of accounts</span>
+<span class="go">                                  to view, default is all accounts</span>
+<span class="go">  -a, --all                       display jobs in hidden partitions</span>
+<span class="go">      --federation                Report federated information if a member</span>
+<span class="go">                                  of one</span>
+<span class="go">  -h, --noheader                  no headers on output</span>
+<span class="go">      --hide                      do not display jobs in hidden partitions</span>
+<span class="go">  -i, --iterate=seconds           specify an interation period</span>
+<span class="go">  -j, --job=job(s)                comma separated list of jobs IDs</span>
+<span class="go">                                  to view, default is all</span>
+<span class="go">      --json                      Produce JSON output</span>
+<span class="go">      --local                     Report information only about jobs on the</span>
+<span class="go">                                  local cluster. Overrides --federation.</span>
+<span class="go">  -l, --long                      long report</span>
+<span class="go">  -L, --licenses=(license names)  comma separated list of license names to view</span>
+<span class="go">  -M, --clusters=cluster_name     cluster to issue commands to.  Default is</span>
+<span class="go">                                  current cluster.  cluster with no name will</span>
+<span class="go">                                  reset to default. Implies --local.</span>
+<span class="go">  -n, --name=job_name(s)          comma separated list of job names to view</span>
+<span class="go">      --noconvert                 don&#39;t convert units from their original type</span>
+<span class="go">                                  (e.g. 2048M won&#39;t be converted to 2G).</span>
+<span class="go">  -o, --format=format             format specification</span>
+<span class="go">  -O, --Format=format             format specification</span>
+<span class="go">  -p, --partition=partition(s)    comma separated list of partitions</span>
+<span class="go">                                  to view, default is all partitions</span>
+<span class="go">  -q, --qos=qos(s)                comma separated list of qos&#39;s</span>
+<span class="go">                                  to view, default is all qos&#39;s</span>
+<span class="go">  -R, --reservation=name          reservation to view, default is all</span>
+<span class="go">  -r, --array                     display one job array element per line</span>
+<span class="go">      --sibling                   Report information about all sibling jobs</span>
+<span class="go">                                  on a federated cluster. Implies --federation.</span>
+<span class="go">  -s, --step=step(s)              comma separated list of job steps</span>
+<span class="go">                                  to view, default is all</span>
+<span class="go">  -S, --sort=fields               comma separated list of fields to sort on</span>
+<span class="go">      --start                     print expected start times of pending jobs</span>
+<span class="go">  -t, --states=states             comma separated list of states to view,</span>
+<span class="go">                                  default is pending and running,</span>
+<span class="go">                                  &#39;--states=all&#39; reports all states</span>
+<span class="go">  -u, --user=user_name(s)         comma separated list of users to view</span>
+<span class="go">      --name=job_name(s)          comma separated list of job names to view</span>
+<span class="go">  -v, --verbose                   verbosity level</span>
+<span class="go">  -V, --version                   output version information and exit</span>
+<span class="go">  -w, --nodelist=hostlist         list of nodes to view, default is</span>
+<span class="go">                                  all nodes</span>
+<span class="go">      --yaml                      Produce YAML output</span>
+
+<span class="go">Help options:</span>
+<span class="go">  --help                          show this help message</span>
+<span class="go">  --usage                         display a brief summary of squeue options</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">指定可能なすべてのパラメタについては、<code class="docutils literal notranslate"><span class="pre">man</span></code>コマンドでご確認ください。</div>
+<div class="line"><a class="reference external" href="https://slurm.schedmd.com/squeue.html">https://slurm.schedmd.com/squeue.html</a></div>
+</div>
+</section>
+<section id="sinfo">
+<h2><span class="section-number">7.7. </span>計算ノードの状態を表示する (sinfo)<a class="headerlink" href="#sinfo" title="この見出しへのパーマリンク">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">sinfo</span></code>はノードおよびキュー情報を表示するコマンドです。</p>
+<p>書式</p>
+<p><strong>sinfo</strong> [OPTIONS...]</p>
+<p>コマンドの例</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>sinfo
+</pre></div>
+</div>
+<p>主なオプションを以下に示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-o &lt;output_format&gt;,</div>
+<div class="line">--format=&lt;output_format&gt;</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">表示する情報を指定します。</div>
+<div class="line"><br /></div>
+<div class="line">デフォルトの表示は以下の通りです。</div>
+<div class="line"><br /></div>
+<div class="line">・PARTITION：キュー名（パーティション名）</div>
+<div class="line">・AVAIL：キュー（パーティション）の状態</div>
+<div class="line">　・UP：新しいジョブをキュー可能、ノード割り当て可能</div>
+<div class="line">　・DOWN：新しいジョブをキュー可能、ノード割り当て”不可”</div>
+<div class="line">　・DRAIN：新しいジョブをキュー”不可”</div>
+<div class="line">　・INACTIVE：新しいジョブをキュー”不可”、ノード割り当て”不可</div>
+<div class="line">・TIMELIMIT：ジョブの最大使用時間（形式：hours:minutes:seconds）</div>
+<div class="line">・NODES：ノード数</div>
+<div class="line">・STATE：ノードの状態</div>
+<div class="line">・NODELIST：ノードの一覧</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>AVAIL（パーティションの状態）を以下に示します。詳細は <a class="reference external" href="https://slurm.schedmd.com/sinfo.html">マニュアル</a> を参照してください。</p>
+<ul class="simple">
+<li><p>UP:   新しいジョブをパーティションでキューに入れることができ、ジョブにノードを割り当ててパーティションから実行できます。</p></li>
+<li><p>DOWN: 新しいジョブをパーティションでキューに入れることができますが、キューに入れられたジョブにノードを割り当ててパーティションから実行することはできません。パーティションですでに実行されているジョブは引き続き実行されます。</p></li>
+<li><p>DRAIN：        パーティションで新しいジョブをキューに入れることはできません。パーティションですでにキューに入れられているジョブはノードを割り当てて実行できます。</p></li>
+<li><p>INACTIVE：     パーティションで新しいジョブをキューに入れることはできず、すでにキューに入れられているジョブは実行されない可能性がありあます。</p></li>
+</ul>
+<p>主なSTATE（ノードの状態）を以下に示します。詳細および下記以外のSTATEは <a class="reference external" href="https://slurm.schedmd.com/sinfo.html">マニュアル</a> を参照してください。</p>
+<ul class="simple">
+<li><p>IDLE：         ノードはどのジョブにも割り当てられておらず、使用可能です</p></li>
+<li><p>ALLOCATED：    ノードは1つ以上のジョブに割り当てられています</p></li>
+<li><p>DOWN：         ノードは使用できません</p></li>
+<li><p>MAINT：                メンテナンス中です</p></li>
+</ul>
+<p>詳細なオプションを以下に示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>sinfo --help
+<span class="go">Usage: sinfo [OPTIONS]</span>
+<span class="go">  -a, --all                  show all partitions (including hidden and those</span>
+<span class="go">                             not accessible)</span>
+<span class="go">  -d, --dead                 show only non-responding nodes</span>
+<span class="go">  -e, --exact                group nodes only on exact match of configuration</span>
+<span class="go">      --federation           Report federated information if a member of one</span>
+<span class="go">  -F, --future               Report information about nodes in &quot;FUTURE&quot; state.</span>
+<span class="go">  -h, --noheader             no headers on output</span>
+<span class="go">  --hide                     do not show hidden or non-accessible partitions</span>
+<span class="go">  -i, --iterate=seconds      specify an iteration period</span>
+<span class="go">      --json                 Produce JSON output</span>
+<span class="go">      --local                show only local cluster in a federation.</span>
+<span class="go">                             Overrides --federation.</span>
+<span class="go">  -l, --long                 long output - displays more information</span>
+<span class="go">  -M, --clusters=names       clusters to issue commands to. Implies --local.</span>
+<span class="go">                             NOTE: SlurmDBD must be up.</span>
+<span class="go">  -n, --nodes=NODES          report on specific node(s)</span>
+<span class="go">  --noconvert                don&#39;t convert units from their original type</span>
+<span class="go">                             (e.g. 2048M won&#39;t be converted to 2G).</span>
+<span class="go">  -N, --Node                 Node-centric format</span>
+<span class="go">  -o, --format=format        format specification</span>
+<span class="go">  -O, --Format=format        long format specification</span>
+<span class="go">  -p, --partition=PARTITION  report on specific partition</span>
+<span class="go">  -r, --responding           report only responding nodes</span>
+<span class="go">  -R, --list-reasons         list reason nodes are down or drained</span>
+<span class="go">  -s, --summarize            report state summary only</span>
+<span class="go">  -S, --sort=fields          comma separated list of fields to sort on</span>
+<span class="go">  -t, --states=node_state    specify the what states of nodes to view</span>
+<span class="go">  -T, --reservation          show only reservation information</span>
+<span class="go">  -v, --verbose              verbosity level</span>
+<span class="go">  -V, --version              output version information and exit</span>
+<span class="go">      --yaml                 Produce YAML output</span>
+
+<span class="go">Help options:</span>
+<span class="go">  --help                     show this help message</span>
+<span class="go">  --usage                    display brief usage message</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">指定可能なすべてのパラメタについては、<code class="docutils literal notranslate"><span class="pre">man</span></code>コマンドでご確認ください。</div>
+<div class="line"><a class="reference external" href="https://slurm.schedmd.com/sinfo.html">https://slurm.schedmd.com/sinfo.html</a></div>
+</div>
+</section>
+<section id="sbcast">
+<h2><span class="section-number">7.8. </span>ジョブが割り当てられたノードへファイルを転送する (sbcast)<a class="headerlink" href="#sbcast" title="この見出しへのパーマリンク">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">sbcast</span></code>はジョブに割り当てられたノードにファイルを送信するコマンドです。</p>
+<p>書式</p>
+<div class="line-block">
+<div class="line"><strong>sbcast</strong> [-OPTIONS] SOURCE DEST</div>
+<div class="line-block">
+<div class="line">SOURCE：ノード上のファイル名</div>
+<div class="line">DEST：各ノードで作成されるファイルコピーの完全修飾パス名</div>
+</div>
+</div>
+<p>コマンドの例</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[PP]$ </span>sbcast sample.txt /tmp/sample.txt
+</pre></div>
+</div>
+<p>主なオプションを以下に示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-f,</div>
+<div class="line">--force</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">転送先に既にファイルが存在する場合、上書きします。</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>詳細なオプションを以下に示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>sbcast --help
+<span class="go">Usage: sbcast [OPTIONS] SOURCE DEST</span>
+<span class="go">  -C, --compress[=lib]  compress the file being transmitted</span>
+<span class="go">  --exclude=&lt;path_list&gt; shared object paths to be excluded</span>
+<span class="go">  -f, --force           replace destination file as required</span>
+<span class="go">  -F, --fanout=num      specify message fanout</span>
+<span class="go">  -j, --jobid=#[+#][.#] specify job ID with optional hetjob offset and/or step ID</span>
+<span class="go">  -p, --preserve        preserve modes and times of source file</span>
+<span class="go">  --send-libs[=yes|no]  autodetect and broadcast executable&#39;s shared objects</span>
+<span class="go">  -s, --size=num        block size in bytes (rounded off)</span>
+<span class="go">  -t, --timeout=secs    specify message timeout (seconds)</span>
+<span class="go">  -v, --verbose         provide detailed event logging</span>
+<span class="go">  -V, --version         print version information and exit</span>
+
+<span class="go">Help options:</span>
+<span class="go">  --help                show this help message</span>
+<span class="go">  --usage               display brief usage message</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">指定可能なすべてのパラメタについては、<code class="docutils literal notranslate"><span class="pre">man</span></code>コマンドでご確認ください。</div>
+<div class="line"><a class="reference external" href="https://slurm.schedmd.com/sbcast.html">https://slurm.schedmd.com/sbcast.html</a></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">7. SLURMコマンド</a><ul>
+<li><a class="reference internal" href="#sbatch">7.1. バッチジョブを投入する（sbatch）</a></li>
+<li><a class="reference internal" href="#srun">7.2. ジョブを投入する（srun）</a></li>
+<li><a class="reference internal" href="#scancel">7.3. ジョブをキャンセルする（scancel）</a></li>
+<li><a class="reference internal" href="#sstat">7.4. ジョブに関する情報を表示する（sstat）</a></li>
+<li><a class="reference internal" href="#sacct">7.5. ジョブのアカウンティング情報を表示する（sacct）</a></li>
+<li><a class="reference internal" href="#squeue">7.6. ジョブキューの状態を表示する (squeue)</a></li>
+<li><a class="reference internal" href="#sinfo">7.7. 計算ノードの状態を表示する (sinfo)</a></li>
+<li><a class="reference internal" href="#sbcast">7.8. ジョブが割り当てられたノードへファイルを転送する (sbcast)</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="usage.html"
+                          title="前の章へ"><span class="section-number">3. </span>ログイン</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="usage.html" title="3. ログイン"
+             >前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">プリポスト環境 利用手引書  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7. </span>SLURMコマンド</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

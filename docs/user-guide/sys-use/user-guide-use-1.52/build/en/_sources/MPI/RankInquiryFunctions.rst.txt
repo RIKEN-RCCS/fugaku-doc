@@ -1,0 +1,664 @@
+.. _RankInquiryFunctionsMPI:
+
+Rank inquiry functions
+======================
+
+| When executing the MPI program, one to three dimensional torus coordinates are set according to the shape specified in the job script. In this chapter, torus coordinates are referred to as "logical coordinates".
+| Logical coordinates is assigned to each rank.
+| Preparing the function to ask for support of rank and logical coordinates. For the style of each function, please refer to the manual "Rank inquiry interface" in "MPI User's Guide".
+| Also, this function cannot be used in dynamic process creation.
+
+
+Inquiry function of logical dimention number and logical form specified to MPI_COMM_WORLD
+-----------------------------------------------------------------------------------------
+
+Depending on the number of logical dimensions, logical shapes, and processes specified during job execution,  \ ``MPI_COMM_WORLD``\  is created. The function can obtain the specified number of logical dimensions and logical shape.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 2 3
+   
+   * - MPI function
+     - Description
+
+   * - FJMPI_TOPOLOGY_GET_DIMENSION
+     - Obtain the number of dimention assigned to  \ ``MPI_COMM_WORLD``\
+
+   * - FJMPI_TOPOLOGY_GET_SHAPE
+     - Obtain the process form assigned to  \ ``MPI_COMM_WORLD``\ 
+
+.. contents::
+   :local:
+
+FJMPI_TOPOLOGY_GET_DIMENSION
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+<Style>
+
+- C language style
+
+ .. code-block:: c
+
+  #include <mpi-ext.h>
+  int FJMPI_Topology_get_dimension(int *size)
+
+
+- Fortran (USE mpi_f08_ext) style
+
+ .. code-block:: fortran
+
+  USE mpi_f08_ext
+  FJMPI_Topology_get_dimension(size, ierror)
+  INTEGER, INTENT(OUT) :: size
+  INTEGER, OPTIONAL, INTENT(OUT) :: ierror
+
+- Fortran (USE mpi_ext) style
+
+ .. code-block:: fortran
+
+  USE MPI_EXT
+  FJMPI_TOPOLOGY_GET_DIMENSION(SIZE, IERROR)
+  INTEGER SIZE, IERROR
+
+
+<Explanation>
+ Returns the number of dimensions of the process shape in which the MPI process belonging to  \ ``MPI_COMM_WORLD``\  that is generated internally when the  \ ``MPI_INIT``\  routine is executed is located.
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 1 1 5 1
+   
+   * - Type
+     - Variable
+     - Description
+     - IN/OUT
+
+   * - int :superscript:`*`
+     - size
+     - Number of dimention of process shape that  \ ``MPI_COMM_WORLD``\ has
+     - OUT
+
+<Return value>
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 1 4 4
+
+   * - Status
+     - Return value
+     - Description
+
+   * - When normal
+     - FJMPI_SUCCESS
+     - \-
+
+   * - When abnormal
+     - FJMPI_ERR_TOPOLOGY_INVALID_COMM
+     - If this routine is called from MPI process which is dynamic created
+
+   * - When abnormal
+     - FJMPI_ERR_TOPOLOGY_NODE_SHARED_JOB
+     - | When the job type is Node-sharing job
+       | (For details on Node-sharing jobs, see the manual for the job operation software)
+
+<Notes>
+
+- When the situation of one of these below, operation is undefined and is not guaranteed.
+
+  - This routine is called before executing  \ ``MPI_INIT``\  routine
+  - This routine is called after executing  \ ``MPI_FINALIZE``\  routine
+
+
+FJMPI_TOPOLOGY_GET_SHAPE
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+<Style>
+
+- C language style
+
+ .. code-block:: c
+
+  #include <mpi-ext.h>
+  int FJMPI_Topology_get_shape(int *x, int *y, int *z)
+
+- Fortran (USE mpi_f08_ext) style
+
+ .. code-block:: fortran
+
+  USE mpi_f08_ext
+  FJMPI_Topology_get_shape(x, y, z, ierror)
+  INTEGER, INTENT(OUT) :: x, y, z
+  INTEGER, OPTIONAL, INTENT(OUT) :: ierror
+
+- Fortran (USE mpi_ext) style
+
+ .. code-block:: fortran
+
+  USE MPI_EXT
+  FJMPI_TOPOLOGY_GET_SHAPE(X, Y, Z, IERROR)
+  INTEGER X, Y, Z, IERROR
+
+
+<Explanation>
+ Returns the shape XYZ of the MPI parallel process given to  \ ``MPI_COMM_WORLD``\  which is internally generated when the  \ ``MPI_INIT``\  routine is executed. 
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 1 1 5 2
+   
+   * - Type
+     - Variable
+     - Description
+     - IN/OUT
+
+   * - int :superscript:`*`
+     - x
+     - X-axis size of process shape assigned to  \ ``MPI_COMM_WORLD``\ 
+     - OUT
+
+   * - int :superscript:`*`
+     - y
+     - Y-axis size of process shape assigned to  \ ``MPI_COMM_WORLD``\ 
+     - OUT
+
+   * - int :superscript:`*`
+     - z
+     - Z-axis size of process shape assigned to  \ ``MPI_COMM_WORLD``\ 
+     - OUT
+
+
+<Return value>
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 1 4 4
+
+   * - Status
+     - Return value
+     - Description
+
+   * - When normal
+     - FJMPI_SUCCESS
+     - \-
+
+   * - When abnormal
+     - FJMPI_ERR_TOPOLOGY_INVALID_COMM
+     - When this routine is called from a dynamically created MPI process
+
+   * - When abnormal
+     - FJMPI_ERR_TOPOLOGY_NODE_SHARED_JOB
+     - | When the job type is Node-sharing job
+       | (For details on Node-sharing jobs, see the manual for the job operation software)
+
+<Note>
+
+ If the process shape is one-dimensional, the Y-axis and Z-axis values are 0. In the case of two dimensions, the value of the Z axis is 0.
+
+- When the situation of one of these below, operation is undefined and is not guaranteed.
+
+  - This routine is called before executing  \ ``MPI_INIT``\  routine
+  - This routine is called after executing  \ ``MPI_FINALIZE``\  routine
+
+
+Inquiry function of logical coordinates of MPI program by rank number
+---------------------------------------------------------------------
+
+Logical coordinates are assigned to each rank. The function can get the assigned logical coordinates from the rank number.
+
+
+.. list-table::
+   :header-rows: 1
+   :widths: 2 3
+   
+   * - MPI function
+     - Description
+
+   * - FJMPI_TOPOLOGY_GET_COORDS
+     - Obtain coordinates from rank
+
+FJMPI_TOPOLOGY_GET_COORDS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+<Style>
+
+- C language style
+
+ .. code-block:: c
+
+  #include <mpi-ext.h>
+  int FJMPI_Topology_get_coords(MPI_Comm comm, int rank, int view, int maxdims, int coords[])
+
+
+- Fortran (USE mpi_f08_ext) style
+
+ .. code-block:: fortran
+
+  USE mpi_f08_ext
+  FJMPI_Topology_get_coords(comm, rank, view, maxdims, coords, ierror)
+  TYPE(MPI_Comm), INTENT(IN) :: comm
+  INTEGER, INTENT(IN) :: rank, view, maxdims
+  INTEGER, INTENT(OUT) :: coords(maxdims)
+  INTEGER, OPTIONAL, INTENT(OUT) :: ierror
+
+
+- Fortran (USE mpi_ext) style
+
+ .. code-block:: fortran
+
+  USE MPI_EXT
+  FJMPI_TOPOLOGY_GET_COORDS(COMM, RANK, VIEW, MAXDIMS, COORDS, IERROR)
+  INTEGER COMM, RANK, VIEW, MAXDIMS, COORDS(*), IERROR
+
+<Explanation>
+ Obtain the logical or Tofu coordinates corresponding to the specified communicator and the rank of the process in that communicator.
+
+- If obtain logical coordinates
+   Specify  \ ``view = FJMPI_LOGICAL``\ ,  \ ``maxdims = 1~3``\ . The logical X coordinate, logical Y coordinate, and logical Z coordinate values of the nodes corresponding to the specified  \ ``comm``\  and  \ ``rank``\  are stored in coords [0], coords [1], and coords [2], respectively.
+
+- If obtain Tofu coordinates (actual assigned coordinates)
+   Specify  \ ``view = FJMPI_TOFU_SYS``\ ,  \ ``maxdims = 6``\ . The Tofu X coordinate, Y coordinate, Z coordinate, A coordinate, B coordinate, C coordinate  values of the nodes corresponding to the specified  \ ``comm``\  and  \ ``rank``\  are stored in coords[0], coords[1], coords[2], coords[3], coords[4], coords[5] , respectively.
+
+- If obtain Tofu coordinates (Relative coordinates with respect to rank 0 of the argument  \ ``comm``\, if \ ``comm``\ is an inter-group communicator, relative coordinates based on rank 0 of the remote group)
+   Specify  \ ``view = FJMPI_TOFU_REL``\ , \ ``maxdims = 6``\ . The Tofu X coordinate, Y coordinate, Z coordinate, A coordinate, B coordinate, C coordinate (relative coordinates based on rank 0 of argument  \ ``comm``\) values of the nodes corresponding to the specified  \ ``comm``\  and  \ ``rank``\  are stored in coords[0], coords[1], coords[2], coords[3], coords[4], coords[5], respectively.
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 1 1 5 2
+   
+   * - Type
+     - Variable
+     - Description
+     - IN/OUT
+
+   * - MPI_Comm
+     - comm
+     - Specify communicator
+     - IN
+
+   * - int
+     - rank
+     - | Specify the rank in communicator
+       | If specififed in between group communicator to argument  \ ``comm``\, specify remote group rank
+     - IN
+
+   * - int
+     - view
+     - | Specify a macro to indicate logical coordinates or Tofu coordinates
+       | ``FJMPI_LOGICAL``\ : logical coordinates
+       | ``FJMPI_TOFU_SYS``\ : Tofu coordinates (Actual assigned coordinates)
+       | ``FJMPI_TOFU_REL``\ : Tofu coordinates(Relative coordinates with respect to rank 0 of the argument  \ ``comm``\, if \ ``comm``\ is an inter-group communicator, relative coordinates based on rank 0 of the remote group)
+     - IN
+
+   * - int
+     - maxdims
+     - | Specify number of dimention of the coordinates to obtain
+       | If  \ ``view``\  is  \ ``FJMPI_LOGICAL``\  : Specify 1~3
+       | If  \ ``view``\  is other than  \ ``FJMPI_LOGICAL``\  : Specify 1~6
+     - IN
+
+   * - int[]
+     - coords
+     - Array of coordinates corresponding to communicator and rank
+     - OUT
+
+<Return value>
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 1 4 4
+
+   * - Status
+     - Return value
+     - Description
+
+   * - When normal
+     - FJMPI_SUCCESS
+     - \-
+
+   * - When abnormal
+     - FJMPI_ERR_TOPOLOGY_NODE_SHARED_JOB
+     - When the job type is Node-sharing job (for details on Node-sharing jobs, see the manual for the job operation software)
+
+<Notes>
+
+- Number of elements in array to specify to the argument  \ ``coords``\  must be larger than the argument  \ ``maxdims``\.
+- Rank to specify to the argument  \ ``rank``\  must be within the rank of the process in the communicator specified in the argument  \ ``comm``\.
+- If specified  \ ``FJMPI_LOGICAL``\  to the argument\ ``view``\, it is ok that the argument  \ ``maxdims``\  value and job style is different. In that case, the coordinates of the same number of dimensions as the smaller value of the two are obtained.
+- When the situation of one of these below, operation is undefined and is not guaranteed.
+
+  - This routine is called before executing  \ ``MPI_INIT``\  routine
+  - This routine is called after executing  \ ``MPI_FINALIZE``\  routine
+
+
+Inquiry function of rank number of MPI program by logical coordinates
+---------------------------------------------------------------------
+
+The function can get the assigned rank number from the logical coordinates.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 2 3
+   
+   * - MPI function
+     - Description
+
+   * - FJMPI_TOPOLOGY_GET_RANKS
+     - Obtain rank from coordinates
+
+
+FJMPI_TOPOLOGY_GET_RANKS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+<Style>
+
+- C language style
+
+ .. code-block:: c
+
+  #include <mpi-ext.h>
+  int FJMPI_Topology_get_ranks(MPI_Comm comm, int view, int coords[], int maxppn, int *outppn, int ranks[])
+
+
+- Fortran (USE mpi_f08_ext) style
+
+ .. code-block:: fortran
+
+  USE mpi_f08_ext
+  FJMPI_Topology_get_ranks(comm, view, coords, maxppn, outppn, ranks, ierror)
+  TYPE(MPI_Comm), INTENT(IN) :: comm
+  INTEGER, INTENT(IN) :: view, coords(*), maxppn
+  INTEGER, INTENT(OUT) :: outppn, ranks(maxppn)
+  INTEGER, OPTIONAL, INTENT(OUT) :: ierror
+
+- Fortran (USE mpi_ext) style
+
+ .. code-block:: fortran
+
+  USE MPI_EXT
+  FJMPI_TOPOLOGY_GET_RANKS(COMM, VIEW, COORDS, MAXPPN, OUTPPN, RANKS, IERROR)
+  INTEGER COMM, VIEW, COORDS(*), MAXPPN, OUTPPN, RANKS(*), IERROR
+
+<Explanation>
+ Obtain the rank of the process that is assigned to the specified communicator among the processes that exist at the specified logical coordinates or Tofu coordinates. For maximum, Gets the ranks of processes for the number specified in the argument  \ ``maxppn``\ . The number of ranks actually obtained is stored in the argument A  \ ``outppn``\. An example of using this routine is shown below.
+
+- When logical coordinates are the target and one process exists at the target coordinates
+   Specify the larger value from  \ ``view = FJMPI_LOGICAL``\  and  \ ``maxppn = 1``\ . In addition, specify the values of logical X coordinate, logical Y coordinate, and logical Z coordinate in coords [0], coords [1], and coords [2], respectively. Process rank, existing in specified  \ ``comm``\  and  \ ``coords``\  is  stored in  \ ``ranks[0]``\ . 1 is stored to  \ ``outppn``\ .
+
+- When Tofu coordinates are the target and there are 4 processes at the target coordinates
+   Specify the larger value from  \ ``view = FJMPI_TOFU_SYS``\,  \ ``FJMPI_TOFU_REL``\  or  \ ``maxppn = 4``\ . Also, the values of the X, Y, Z, A, B, and C coordinates of the Tofu coordinates are coords [0], coords [1], coords [2], coords [3], and coords [4], respectively. , Coords [5]. Process rank, existing in specified  \ ``comm``\  and  \ ``coords``\  is  stored in ranks[0], ranks[1], ranks[2], ranks[3]. 4 is stored to  \ ``outppn``\ .
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 1 1 7 1
+  
+   * - Type
+     - Variable
+     - Description
+     - IN/OUT
+
+   * - MPI_Comm
+     - comm
+     - Specify communicator
+     - IN
+
+   * - int
+     - view
+     - | Specify a macro to indicate logical coordinates or Tofu coordinates
+       | ``FJMPI_LOGICAL``\ : logical coordinates
+       | ``FJMPI_TOFU_SYS``\ :Tofu coordinates (Actual assigned coordinates)
+       | ``FJMPI_TOFU_REL``\ :Tofu coordinates(Relative coordinates with respect to rank 0 of the argument  \ ``comm``\, if \ ``comm``\ is an inter-group communicator, relative coordinates based on rank 0 of the remote group)
+     - IN
+
+   * - int[]
+     - coords
+     - Specify the coordinate value to which the process of the rank to get is assigned
+     - IN
+
+   * - int
+     - maxppn
+     - Specify the maximum number of processes to get the rank
+     - IN
+
+   * - int :superscript:`*`
+     - outppn
+     - Number of processes that obtained the rank
+     - OUT
+
+   * - int[]
+     - ranks
+     - | Array that stores the obtained rank
+       | If a group communicator is specified, the rank of the remote group is stored
+     - OUT
+
+
+<Return value>
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 1 4 4
+
+   * - Status
+     - Return value
+     - Description
+
+   * - When normal
+     - FJMPI_SUCCESS
+     - \-
+
+   * - When abnormal
+     - FJMPI_ERR_TOPOLOGY_NO_PROCESS
+     - When the parallel process is not located at the specified coordinates
+
+   * - When abnormal
+     - FJMPI_ERR_TOPOLOGY_NODE_SHARED_JOB
+     - When the job type is Node-sharing job (For details on Node-sharing jobs, see the manual for the job operation software)
+
+<Notes>
+
+- About the argument  \ ``coords``\ , if specified  \ ``FJMPI_LOGICAL``\  to the argument  \ ``view``\ , the value must be set for the same number of dimensions as the job. If specified  \ ``FJMPI_TOFU_SYS``\  or  \ ``FJMPI_TOFU_REL``\ to the argument  \ ``view``\ , you need to set values for 6 elements. If not set correctly, the operation is undefined and is not guaranteed.
+
+- To obtain the actual number of processes at the coordinates specified in argument  \ ``coords``\,  execute this routine with the status of making the value of argument  \ ``maxppn``\ bigger, and refer to the value of argument  \ ``outppn``\.
+
+- Depending on how many processes actually exist, the value stored to the argument  \ ``outppn``\  becomes smaller than the specified value to argument  \ ``maxppn``\ . In this case, the value in the array specified in argument \ ``ranks``\ is updated as the same number of elements of  \ ``outppn``\  value.
+
+- When the situation of one of these below, operation is undefined and is not guaranteed.
+
+  - This routine is called before executing  \ ``MPI_INIT``\  routine
+  - This routine is called after executing  \ ``MPI_FINALIZE``\  routine
+
+
+Function use example
+--------------------
+
+As function use example, this indicates how to research logical coordinates from rank.
+
+[Sample program (C)]
+
+.. code-block:: c
+
+  #include <stdio.h>
+  #include <mpi.h>
+  #include <mpi-ext.h>              // Include header file
+  #define LDIM 3
+  #define TDIM 6
+
+  int main(int argc, char *argv[])
+  {
+    int size, myrank, i, j, x, y, z;
+    int mydimension;
+    int coords[LDIM], tcoords[TDIM];
+
+    MPI_Init(&argc, &argv);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
+
+    FJMPI_Topology_get_dimension(&mydimension);
+    FJMPI_Topology_get_shape(&x, &y, &z);
+
+    if (myrank == 0) {
+       printf("My Dimension= %d\n",mydimension);
+       printf("My Shape: X= %d", x);
+       if (y != 0) printf(", Y= %d", y);
+       if (z != 0) printf(", Z= %d", z);
+       printf("\n\n");
+       for ( i=0; i < size ; i++){
+         FJMPI_Topology_get_coords(MPI_COMM_WORLD, i, FJMPI_LOGICAL, mydimension, coords);
+         FJMPI_Topology_get_coords(MPI_COMM_WORLD, i, FJMPI_TOFU_SYS, TDIM, tcoords);
+         switch(mydimension) {
+           case 1:
+                  printf("rank to x : rank= %d, (X)=( %d ) ",i, coords[0]);
+                  break;
+           case 2:
+                  printf("rank to xy : rank= %d, (X,Y)=( %d, %d ) ",i, coords[0], coords[1]);
+                  break;
+           case 3:
+                  printf("rank to xyz : rank= %d, (X,Y,Z)=( %d, %d, %d ) ", i, coords[0], coords[1], coords[2]);
+                  break;
+           default:
+                  break;
+          }
+         printf("(x,y,z,a,b,c)=(");
+         for ( j=0; j < TDIM-1; j++) {
+  		printf("%d,", tcoords[j]);
+         }
+         printf("%d)\n",tcoords[TDIM-1]);
+       }
+    }
+
+    MPI_Finalize();
+    return 0;
+  }
+
+
+.. contents::
+   :local:
+
+
+Execution example (1 dimention)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following shows an example of a job script and execution results when executing the sample program in a one-dimensional shape.
+
+
+[Job script]
+
+ .. code-block:: bash
+
+  #!/bin/bash -x
+  #
+  #PJM -L "node=12"               # Specify 1 dimention shape
+  #PJM -L "elapse=01:00:00"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -s
+  #
+  
+  mpiexec ./a.out
+
+
+[Output result]
+
+ .. code-block:: none
+
+  My Dimension= 1
+  My Shape: X= 12
+
+  rank to x : rank= 0, (X)=( 0 ) (x,y,z,a,b,c)=(18,19,19,0,1,1)
+  rank to x : rank= 1, (X)=( 1 ) (x,y,z,a,b,c)=(18,19,19,0,2,1)
+  rank to x : rank= 2, (X)=( 2 ) (x,y,z,a,b,c)=(18,19,19,1,1,1)
+  rank to x : rank= 3, (X)=( 3 ) (x,y,z,a,b,c)=(18,19,19,1,2,1)
+  rank to x : rank= 4, (X)=( 4 ) (x,y,z,a,b,c)=(19,19,19,0,1,0)
+  rank to x : rank= 5, (X)=( 5 ) (x,y,z,a,b,c)=(19,19,19,0,2,1)
+  rank to x : rank= 6, (X)=( 6 ) (x,y,z,a,b,c)=(19,19,19,1,0,0)
+  rank to x : rank= 7, (X)=( 7 ) (x,y,z,a,b,c)=(19,19,19,1,1,0)
+  rank to x : rank= 8, (X)=( 8 ) (x,y,z,a,b,c)=(19,19,19,1,2,1)
+  rank to x : rank= 9, (X)=( 9 ) (x,y,z,a,b,c)=(20,19,19,0,0,0)
+  rank to x : rank= 10, (X)=( 10 ) (x,y,z,a,b,c)=(20,19,19,0,1,0)
+  rank to x : rank= 11, (X)=( 11 ) (x,y,z,a,b,c)=(20,19,19,1,1,0)
+
+Execution example (2 dimentions)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following shows an example of a job script and execution results when executing the sample program in a two-dimensional shape.
+
+[Job script]
+
+ .. code-block:: bash
+
+  #!/bin/bash -x
+  #
+  #PJM -L "node=4x3"              # Specify 2 dimentions shape
+  #PJM -L "elapse=01:00:00"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -s
+  #
+  
+  mpiexec ./a.out
+
+
+[Output result]
+
+ .. code-block:: none
+
+  My Dimension= 2
+  My Shape: X= 4, Y= 3
+
+  rank to xy : rank= 0, (X,Y)=( 0, 0 ) (x,y,z,a,b,c)=(14,21,19,0,0,0)
+  rank to xy : rank= 1, (X,Y)=( 1, 0 ) (x,y,z,a,b,c)=(14,21,19,0,1,1)
+  rank to xy : rank= 2, (X,Y)=( 2, 0 ) (x,y,z,a,b,c)=(14,21,19,1,0,0)
+  rank to xy : rank= 3, (X,Y)=( 3, 0 ) (x,y,z,a,b,c)=(14,21,19,1,1,1)
+  rank to xy : rank= 4, (X,Y)=( 0, 1 ) (x,y,z,a,b,c)=(14,21,19,0,0,1)
+  rank to xy : rank= 5, (X,Y)=( 1, 1 ) (x,y,z,a,b,c)=(14,21,19,0,2,0)
+  rank to xy : rank= 6, (X,Y)=( 2, 1 ) (x,y,z,a,b,c)=(14,21,19,1,0,1)
+  rank to xy : rank= 7, (X,Y)=( 3, 1 ) (x,y,z,a,b,c)=(14,21,19,1,2,0)
+  rank to xy : rank= 8, (X,Y)=( 0, 2 ) (x,y,z,a,b,c)=(14,21,19,0,1,0)
+  rank to xy : rank= 9, (X,Y)=( 1, 2 ) (x,y,z,a,b,c)=(14,21,19,0,2,1)
+  rank to xy : rank= 10, (X,Y)=( 2, 2 ) (x,y,z,a,b,c)=(14,21,19,1,1,0)
+  rank to xy : rank= 11, (X,Y)=( 3, 2 ) (x,y,z,a,b,c)=(14,21,19,1,2,1)
+
+
+Execution example (3 dimentions)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following shows an example of a job script and execution results when executing the sample program in a three-dimensional shape.
+
+[Job script]
+
+ .. code-block:: bash
+
+  #!/bin/bash -x
+  #
+  #PJM -L "node=2x3x2"            # Specify 3 dimentions shape
+  #PJM -L "elapse=01:00:00"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -s
+  #
+  
+  mpiexec ./a.out
+
+
+[Output result]
+
+ .. code-block:: none
+
+  My Dimension= 3
+  My Shape: X= 2, Y= 3, Z= 2
+
+  rank to xyz : rank= 0, (X,Y,Z)=( 0, 0, 0 ) (x,y,z,a,b,c)=(16,17,18,0,0,0)
+  rank to xyz : rank= 1, (X,Y,Z)=( 1, 0, 0 ) (x,y,z,a,b,c)=(16,17,18,1,1,0)
+  rank to xyz : rank= 2, (X,Y,Z)=( 0, 1, 0 ) (x,y,z,a,b,c)=(16,17,18,0,1,0)
+  rank to xyz : rank= 3, (X,Y,Z)=( 1, 1, 0 ) (x,y,z,a,b,c)=(17,17,18,0,0,0)
+  rank to xyz : rank= 4, (X,Y,Z)=( 0, 2, 0 ) (x,y,z,a,b,c)=(16,17,18,1,0,0)
+  rank to xyz : rank= 5, (X,Y,Z)=( 1, 2, 0 ) (x,y,z,a,b,c)=(17,17,18,1,0,0)
+  rank to xyz : rank= 6, (X,Y,Z)=( 0, 0, 1 ) (x,y,z,a,b,c)=(16,17,18,0,0,1)
+  rank to xyz : rank= 7, (X,Y,Z)=( 1, 0, 1 ) (x,y,z,a,b,c)=(16,17,18,1,2,0)
+  rank to xyz : rank= 8, (X,Y,Z)=( 0, 1, 1 ) (x,y,z,a,b,c)=(16,17,18,0,2,0)
+  rank to xyz : rank= 9, (X,Y,Z)=( 1, 1, 1 ) (x,y,z,a,b,c)=(17,17,18,0,1,0)
+  rank to xyz : rank= 10, (X,Y,Z)=( 0, 2, 1 ) (x,y,z,a,b,c)=(16,17,18,1,0,1)
+  rank to xyz : rank= 11, (X,Y,Z)=( 1, 2, 1 ) (x,y,z,a,b,c)=(17,17,18,1,1,0)
+
+
+
+

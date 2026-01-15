@@ -1,0 +1,474 @@
+ユーザ課金情報表示（ジョブ）
+=============================
+
+| 　**[名前]**
+| 　accountj - 利用者のジョブに関する課金情報を表示する
+
+| 　**[書式]**
+| 　accountj  -t テーマ名  [-r 資源種別]  [-s]  [-h]  [-b 世代数]  [-c]
+| 　accountj  [-r 表示種別]  [-s]  [-h]  [-g グループ名]  [-E[-u ユーザ名]]  [-c]
+| 　accountj  -g グループ名  [-r 資源種別]  [-s]  [-h]  [-E[-u ユーザ名]]  [-b 世代数]  [-c]
+| 　※-g, -uの複合指定はAND検索になる。
+
+| 　**[説明]**
+| 　accountj コマンドは、利用したジョブに関する課金情報を表示する。課金情報は所属するグループ毎に表示する。
+| 　ジョブに関する課金情報は、ノード時間積（ノード数×実行経過時間×課金単価係数）および消費電力が管理されている。
+| 　消費電力はpjstataコマンドのACCT_ECONの値が基である。
+| 　課題に割り当てられたリソースの使用率が確認できるため、ジョブの投入可否を判断する際にも使用できる。
+| 　表示する資源の種別を指定する事で、資源毎に詳細に課金情報を表示する。
+
+| 　テーマ／サブテーマ／グループ単位については、年度毎の割当資源量からの使用率に加えて、半期毎に資源が割当てられている場合は、半期毎の使用状況も確認できる。
+
+| 　利用者およびプロジェクト責任者はグループに属するメンバのジョブ課金情報を表示可能である。
+
+| 　**[オプション]**
+| 　-t  テーマ名
+| 　テーマ名を指定する。スペースに続けての複数指定、アスタリスクを使用した前方／中間／後方一致指定はできない。単一、完全一致指定のみ可能である。
+ 　
+| 　-g  グループ名
+| 　グループ名を指定する。スペースに続けての複数指定、アスタリスクを使用した前方／中間／後方一致指定はできない。単一、完全一致指定のみ可能である。
+| 　未指定時は所属する全グループのジョブ課金情報を表示する。
+ 　
+| 　-E
+| 　情報表示範囲を全階層（グループの所属経路のみ）に変更する。
+| 　　　-u  ユーザ名
+| 　　　ユーザ名を指定する。スペースに続けての複数指定、アスタリスクを使用した前方／中間／後方一致指定はできない。単一、完全一致指定のみ可能である。
+| 　　　このオプションは、-Eオプションを指定した場合に有効になります。
+ 　
+| 　-r 資源種別
+| 　情報表示の資源を以下から選択する。-rオプション省略時は全資源が表示対象となる。
+| 　1|n|N:ノード時間積表示
+| 　2|e|E:電力表示
+ 　
+| 　-s
+| 　ノード時間積の表示単位がデフォルトのメガ秒[Ms]から秒[s]になる。
+| 　消費電力の表示単位がデフォルトのメガワットアワー[MWh]からワットアワー[Wh]になる。
+ 　
+| 　-h
+| 　ノード時間積の表示単位がデフォルトのメガ秒[Ms]から時間[h]になる。
+| 　表示種別にノード時間積を指定した場合のみ有効。
+ 　
+| 　-c
+| 　検索結果をCSV形式で標準出力する。
+| 　当オプションを指定した場合、ノード時間積の表示単位が秒[s]、電力の表示単位がワットアワー[Wh]になる。
+ 　
+| 　-b  世代数
+| 　-gオプション指定時のみ指定可能。表示対象としたい過去の世代数を指定する。本オプションを指定しない場合は、最新の情報が表示対象になる。
+| 　情報の表示権限についてはコマンド実行時点の権限に従う。
+ 　
+| 　--help
+| 　コマンドのヘルプ内容を表示する。
+ 　
+| 　**[復帰値]**
+| 　正常時: 0
+| 　異常時: 1
+
+| 　**[備考]**
+| 　なし。
+
+| 　**[表示内容]**
+| 　課金情報はテーマやサブテーマ、グループ等の管理単位ごとに表示する。
+| 　表示の区切りでは、その下に表示する管理単位が何であるかを示す。
+
+.. figure:: img/3_SystemManagement_18.png
+
+| 　管理単位毎の項目については以下の通り。
+| 　THEME：テーマ単位での割当資源量や資源消費を表示
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - 項目名
+      - 説明
+  
+    * - THEME
+      - テーマ名
+  
+    * - LIMIT
+      - 割当資源量
+  
+    * - USAGE
+      - 使用済資源量
+  
+    * - RUNNING
+      - 投入中・実行中資源量
+
+    * - AVAILABLE
+      - 使用可能資源量
+
+    * - USAGE_RATE
+      - 使用済資源量の割合（USAGE / LIMIT）
+
+| 　THEME_PERIOD：テーマの期毎での割当資源量や資源消費を表示
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - 項目名
+      - 説明
+  
+    * - PERIOD
+      - 期毎資源管理されている場合に何期目かを表す
+  
+    * - LIMIT
+      - 期毎の割当資源量
+  
+    * - USAGE
+      - 期毎の使用済資源量の内、期毎の割当資源量内で使用した値
+  
+    * - ADVANCE
+      - 期毎の使用済資源量の内、期毎の割当資源量を超過して使用した値
+
+    * - AVAILABLE
+      - | 過去の期：期毎の割当資源量の内、消費不可となった資源量
+        | 現在および未来の期：期毎の割当資源量内の、使用可能資源量
+
+    * - USAGE_TOTAL
+      - 期毎の使用済資源量
+
+| 　SUBTHEME：テーマ単位での割当資源量や資源消費を表示
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - 項目名
+      - 説明
+  
+    * - SUBTHEME
+      - サブテーマ名
+  
+    * - PARENT
+      - 親階層名
+  
+    * - LIMIT
+      - 割当資源量
+  
+    * - USAGE
+      - 使用済資源量
+  
+    * - RUNNING
+      - 投入中・実行中資源量
+
+    * - AVAILABLE
+      - 使用可能資源量
+
+    * - USAGE_RATE
+      - 使用済資源量の割合（USAGE / LIMIT）
+
+| 　SUBTHEME_PERIOD：サブテーマの期毎での割当資源量や資源消費を表示
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - 項目名
+      - 説明
+  
+    * - PERIOD
+      - 期毎資源管理されている場合に何期目かを表す
+  
+    * - LIMIT
+      - 期毎の割当資源量
+  
+    * - USAGE
+      - 期毎の使用済資源量の内、期毎の割当資源量内で使用した値
+  
+    * - ADVANCE
+      - 期毎の使用済資源量の内、期毎の割当資源量を超過して使用した値
+
+    * - AVAILABLE
+      - | 過去の期：期毎の割当資源量の内、消費不可となった資源量
+        | 現在および未来の期：期毎の割当資源量内の、使用可能資源量
+
+    * - USAGE_TOTAL
+      - 期毎の使用済資源量
+
+| 　GROUP：グループ単位での割当資源量や資源消費を表示
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - 項目名
+      - 説明
+  
+    * - GROUP
+      - グループ名
+  
+    * - PARENT
+      - 親階層名
+  
+    * - LIMIT
+      - 割当資源量
+  
+    * - USAGE
+      - 使用済資源量
+  
+    * - RUNNING
+      - 投入中・実行中資源量
+
+    * - AVAILABLE
+      - 使用可能資源量
+
+    * - USAGE_RATE
+      - 使用済資源量の割合（USAGE / LIMIT）
+
+| 　RESOURCE_GROUP：リソースグループ単位での資源消費状況を表示
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - 項目名
+      - 説明
+  
+    * - RESOURCE_GROUP
+      - リソースグループ名
+  
+    * - LIMIT
+      - 割当資源量
+  
+    * - USAGE
+      - 使用済資源量
+  
+    * - RUNNING
+      - 投入中・実行中資源量
+
+    * - AVAILABLE
+      - 使用可能資源量
+
+    * - USAGE_RATE
+      - 使用済資源量の割合（USAGE / LIMIT）
+
+| 　USER：ユーザ単位での資源消費状況を表示
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - 項目名
+      - 説明
+  
+    * - USER
+      - ユーザ名
+  
+    * - LIMIT
+      - 割当資源量
+  
+    * - USAGE
+      - 使用済資源量
+  
+    * - RUNNING
+      - 投入中・実行中資源量
+
+    * - AVAILABLE
+      - 使用可能資源量
+
+    * - USAGE_RATE
+      - 使用済資源量の割合（USAGE / LIMIT）
+
+| 　USER_RESOURCEGROUP：ユーザおよびリソースグループ単位での資源消費状況を表示
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - 項目名
+      - 説明
+  
+    * - USER_RESOURCEGROUP
+      - ユーザ名＋リソースグループ名
+  
+    * - LIMIT
+      - 割当資源量
+  
+    * - USAGE
+      - 使用済資源量
+  
+    * - RUNNING
+      - 投入中・実行中資源量
+
+    * - AVAILABLE
+      - 使用可能資源量
+
+    * - USAGE_RATE
+      - 使用済資源量の割合（USAGE / LIMIT）
+
+| 　**[使用例]**
+| 　【例1】	実行したユーザが所属するグループの課金情報を表示する
+
+.. code-block:: console 
+
+   [login]$ accountj
+   COLLECTDATE : 2021-03-09 10:30:00   unit[Ms,MWh]
+   *-----[ SUBTHEME ]---------------------------------------------------------------------*
+   SUBTHEME                 PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+   group001                Y20HP00          2,000             0         2,000             0
+   *-----[ SUBTHEME_PERIOD ]--------------------------------------------------------------*
+                            PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+   group001                      1          1,000             0         1,000             0
+   group001                      2          1,000             0         1,000             0
+   *-----[ GROUP ]------------------------------------------------------------------------*
+   GROUP                    PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+   group001               group001      unlimited             0     unlimited             0
+
+   *-----[ SUBTHEME ]---------------------------------------------------------------------*
+   SUBTHEME                 PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+   group002                Y20HP01          1,000             0         1,000             0
+   *-----[ SUBTHEME_PERIOD ]--------------------------------------------------------------*
+                            PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+   group002                      1            500             0           500             0
+   group002                      2            500             0           500             0
+   *-----[ GROUP ]------------------------------------------------------------------------*
+   GROUP                    PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+   group002               group002      unlimited             0     unlimited             0
+
+| 　実行したユーザが所属するすべてのグループとその上位のサブテーマ層の資源割当情報が表示される。
+| 　ノード時間積(N)と電力(E)の各資源毎に、上限値と消費状況が表示される。
+| 　課題で使用可能な資源の上限値はサブテーマ層に設定されるため、[SUBTHEME]に資源の上限値と消費状況が表示される。
+| 　また、期毎に資源が割当てられる場合は、[SUBTHEME_PERIOD]に期毎の上限値と消費状況が表示される。
+
+| 　【例2】実行したユーザが所属するグループの電力課金情報を表示する
+
+.. code-block:: console 
+
+   [login]$ accountj -g group001 -r 2
+   COLLECTDATE : 2021-03-09 10:30:00   unit[MWh]
+   *-----[ SUBTHEME ]--------------------------------------------------------------------------------------------------*
+   SUBTHEME              PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE
+   group001             Y20HP00            1,000                 0                 0             1,000            0.000%
+   *-----[ SUBTHEME_PERIOD ]-------------------------------------------------------------------------------------------*
+                           PERIOD          LIMIT             USAGE           ADVANCE         AVAILABLE       USAGE_TOTAL
+   group001                     1            500                 0                 0               500                 0
+   group001                     2            500                 0               ---               500                 0
+   *-----[ GROUP ]-----------------------------------------------------------------------------------------------------*
+   GROUP                 PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE
+   group001            group001        unlimited                 0                 0               ---               ---
+
+| 　指定したグループの電力課金情報が表示される。
+
+| 　【例3】	実行したユーザが所属するグループの前世代のジョブ課金情報を表示する
+
+.. code-block:: console 
+
+   [login]$ accountj -g group001 -b 1
+
+　-bオプションを使用することで、過去世代のジョブ課金情報を表示することができる。当該オプションを指定しない場合は、最新の課金情報が表示される。
+
+| 　【例4】	表示単位をデフォルトのメガ秒[Ms]およびメガワットアワー[MWh]で表示する
+
+.. figure:: img/3_SystemManagement_11.png
+
+| 　制限値(LIMIT)、使用量(USAGE)、投入中ジョブ使用予定量（RUNNING）、使用可能量(AVAILABLE)の値が、すべて『0（ゼロ）』で表示される場合は、表示単位を変更してみること。本件は、メガ秒[Ms]やメガワットアワー[MWh]に満たないことが原因の可能性がある。
+　
+| 　【例5】	表示単位をメガ秒[Ms]から秒[Node Second]、メガワットアワー[MWh]からワットアワー[Wh]に変更して表示する
+
+.. figure:: img/3_SystemManagement_12.png
+
+| 　-sオプションを使用することで、表示単位を秒[Node Second]やワットアワー[Wh]に変更することができる。なお、単位の切り替えは1K (1,000)で計算される。単位切り替えによる端数は制限値(LIMIT)が小数点以下切り捨て、使用量(USAGE)が小数点以下切り上げて表示される。使用可能残量(AVAILABLE)は、制限値(LIMIT)から使用量(USAGE)と投入中ジョブ使用予定量（RUNNING）を差し引いた値としている。
+| 　投入中ジョブ使用予定量（RUNNING）は実行中ジョブのほか、実行待ちジョブの資源量も含む。
+| 　使用率(USAGE_RATE)は小数点以下第2位で四捨五入としている。
+| 　
+| 　【例6】	表示単位をメガ秒[Ms]から時間[h]に変更して表示する
+
+.. figure:: img/3_SystemManagement_13.png
+
+| 　-hオプションを使用することで、ノード時間積の表示単位をデフォルトのメガ秒[Ms]から時間[h]に変更することができる。単位切り替えによる端数は制限値(LIMIT)が小数点以下切り捨て、使用量(USAGE)が小数点以下切り上げて表示される。使用可能残量(AVAILABLE)は、制限値(LIMIT)から使用量(USAGE)と投入中ジョブ使用予定量（RUNNING）を差し引いた値としている。
+| 　投入中ジョブ使用予定量（RUNNING）は実行中ジョブのほか、実行待ちジョブの資源量も含む。
+| 　使用率(USAGE_RATE)は小数点以下第2位で四捨五入としている。
+
+| 　
+| 　【例7】	全階層（グループの所属経路のみ）を表示する
+
+.. code-block:: console 
+
+  [login]$ accountj -E
+  COLLECTDATE : 2023-08-25 16:35:44   unit[Ms,MWh]
+  *-----[ THEME ]--------------------------------------------------------------------------*
+  THEME                                   LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  Y23FM00                           10,000,000,000            40     1,000,000             1
+  [20230401-20240331]
+  *-----[ THEME_PERIOD ]-------------------------------------------------------------------*
+                            PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  20230401-20230930               1  5,000,000,000            40       500,000             1
+  20231001-20240331               2  5,000,000,000             0       500,000             0
+  *-----[ SUBTHEME ]-----------------------------------------------------------------------*
+  SUBTHEME                   PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  group001                  Y23FM00          2,231            40        10,000             1
+  *-----[ SUBTHEME_PERIOD ]----------------------------------------------------------------*
+                            PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  group001                       1          1,115            40         5,000             1
+  group001                       2          1,115             0         5,000             0
+  *-----[ GROUP ]--------------------------------------------------------------------------*
+  GROUP                      PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  group001                 group001      unlimited            40     unlimited             1
+  *-----[ RESOURCE_GROUP ]-----------------------------------------------------------------*
+  RESOURCE_GROUP                          LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  small                                  unlimited             0     unlimited             0
+  int                                    unlimited             0     unlimited             0
+  large                                  unlimited            10     unlimited             0
+  pt-Aug                                         0             0     unlimited             0
+  pt-Feb                                         0             0     unlimited             0
+  *-----[ USER ]---------------------------------------------------------------------------*
+  USER                                    LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  user1                                  unlimited             0     unlimited             0
+  user2                                  unlimited             0     unlimited             0
+  user3                                  unlimited             0     unlimited             0
+  *-----[ USER_RESOURCEGROUP ]-------------------------------------------------------------*
+  USER                                    LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  user1_int                              unlimited             0     unlimited             0
+  user1_large                            unlimited             0     unlimited             0
+  user1_small                            unlimited             0     unlimited             0
+  user2_int                              unlimited             0     unlimited             0
+  user2_large                            unlimited             0     unlimited             0
+  user2_small                            unlimited             0     unlimited             0
+  user3_int                              unlimited             0     unlimited             0
+  user3_large                            unlimited             0     unlimited             0
+  user3_small                            unlimited             0     unlimited             0
+
+| 　-Eオプションを使用することで全階層の情報を確認することができる。リソースグループ毎の利用状況の確認もすることができる。
+
+| 　【例8】	指定したユーザのジョブ課金情報を表示する
+
+.. code-block:: console 
+
+  [login]$ accountj -E -u user1
+  COLLECTDATE : 2023-08-25 16:35:44   unit[Ms,MWh]
+  *-----[ THEME ]--------------------------------------------------------------------------*
+  THEME                                   LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  Y23FM00                           10,000,000,000            40     1,000,000             1
+  [20230401-20240331]
+  *-----[ THEME_PERIOD ]-------------------------------------------------------------------*
+                            PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  20230401-20230930               1  5,000,000,000            40       500,000             1
+  20231001-20240331               2  5,000,000,000             0       500,000             0
+  *-----[ SUBTHEME ]-----------------------------------------------------------------------*
+  SUBTHEME                   PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  group001                  Y23FM00          2,231            40        10,000             1
+  *-----[ SUBTHEME_PERIOD ]----------------------------------------------------------------*
+                            PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  group001                       1          1,115            40         5,000             1
+  group001                       2          1,115             0         5,000             0
+  *-----[ GROUP ]--------------------------------------------------------------------------*
+  GROUP                      PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  group001                 group001      unlimited            40     unlimited             1
+  *-----[ RESOURCE_GROUP ]-----------------------------------------------------------------*
+  RESOURCE_GROUP                          LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  small                                  unlimited             0     unlimited             0
+  int                                    unlimited             0     unlimited             0
+  large                                  unlimited            10     unlimited             0
+  pt-Aug                                         0             0     unlimited             0
+  pt-Feb                                         0             0     unlimited             0
+  *-----[ USER ]---------------------------------------------------------------------------*
+  USER                                    LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  user1                                  unlimited             0     unlimited             0
+  *-----[ USER_RESOURCEGROUP ]-------------------------------------------------------------*
+  USER                                    LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  user1_int                              unlimited             0     unlimited             0
+  user1_large                            unlimited             0     unlimited             0
+  user1_small                            unlimited             0     unlimited             0
+
+| 　指定したユーザのジョブ課金情報が、所属するすべてのグループ毎に表示される。

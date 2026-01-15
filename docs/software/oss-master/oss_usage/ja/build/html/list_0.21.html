@@ -1,0 +1,1319 @@
+
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4. Spack v0.21 &#8212; OSSの利用  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=89e52957" />
+    
+    <script src="_static/documentation_options.js?v=c033477b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=4755f45a"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="5. Spack v0.19" href="list_0.19.html" />
+    <link rel="prev" title="1. はじめに" href="oss.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="list_0.19.html" title="5. Spack v0.19"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="oss.html" title="1. はじめに"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OSSの利用  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4. </span>Spack v0.21</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="spack-v0-21">
+<h1><span class="section-number">4. </span>Spack v0.21<a class="headerlink" href="#spack-v0-21" title="Link to this heading">¶</a></h1>
+<section id="oss">
+<h2><span class="section-number">4.1. </span>ログインノードにインストール済みOSS一覧表<a class="headerlink" href="#oss" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>名称</p></td>
+<td><p>バージョン</p></td>
+<td><p>コンパイラ</p></td>
+<td><p>備考</p></td>
+</tr>
+<tr class="row-even"><td><p>boost</p></td>
+<td><p>1.83.0</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>cmake</p></td>
+<td><p>3.27.7</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>darshan-util</p></td>
+<td><p>3.4.4</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>global</p></td>
+<td><p>6.6.7</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>gmt</p></td>
+<td><p>6.2.0</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>gnuplot</p></td>
+<td><p>5.4.3</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>hdf5</p></td>
+<td><p>1.14.3</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>imagemagick</p></td>
+<td><p>7.1.1-11</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>libxml2</p></td>
+<td><p>2.9.7</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>llvm</p></td>
+<td><p>17.0.4</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>mercurial</p></td>
+<td><p>6.4.5</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>mesa</p></td>
+<td><p>23.0.3</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ncview</p></td>
+<td><p>2.1.9</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>netcdf-c</p></td>
+<td><p>4.9.2</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>netcdf-fortran</p></td>
+<td><p>4.6.1</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>openfoam</p></td>
+<td><p>2306</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>openfoam</p></td>
+<td><p>2312</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>openfoam-org</p></td>
+<td><p>10</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>openfoam-org</p></td>
+<td><p>11</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>openjdk</p></td>
+<td><p>11.0.20.1_1</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>paraview</p></td>
+<td><p>5.11.2</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>py-pip</p></td>
+<td><p>23.1.2</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>python</p></td>
+<td><p>3.11.6</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>screen</p></td>
+<td><p>4.9.1</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>tmux</p></td>
+<td><p>3.3a</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>xterm</p></td>
+<td><p>353</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>zsh</p></td>
+<td><p>5.8</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>gcc</p></td>
+<td><p>13.2.0</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>hdf5</p></td>
+<td><p>1.12.2</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>omni-compiler</p></td>
+<td><p>1.3.3</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>openfoam</p></td>
+<td><p>2012</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>openfoam</p></td>
+<td><p>2106</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>openfoam</p></td>
+<td><p>2112</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>openfoam</p></td>
+<td><p>2206</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>openfoam</p></td>
+<td><p>2212</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>openfoam-org</p></td>
+<td><p>8</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>openfoam-org</p></td>
+<td><p>9</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>openmpi</p></td>
+<td><p>3.1.6</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>py-mpi4py</p></td>
+<td><p>3.1.4</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>py-phonopy</p></td>
+<td><p>2.12.0</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>py-phonopy</p></td>
+<td><p>2.20.0</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id1">
+<h2><span class="section-number">4.2. </span>計算ノードにインストール済みOSS一覧表<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>名称</p></td>
+<td><p>バージョン</p></td>
+<td><p>コンパイラ</p></td>
+<td><p>備考</p></td>
+</tr>
+<tr class="row-even"><td><p>abinitmp</p></td>
+<td><p>1-22</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>abinitmp</p></td>
+<td><p>2-4</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>abinitmp</p></td>
+<td><p>2-8</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>adios2</p></td>
+<td><p>2.9.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>akaikkr</p></td>
+<td><p>2002v010</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>akaikkr</p></td>
+<td><p>2021v001</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>akaikkr</p></td>
+<td><p>2021v002</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>alamode</p></td>
+<td><p>1.3.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>alamode</p></td>
+<td><p>1.4.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>alamode</p></td>
+<td><p>1.5.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>batchedblas</p></td>
+<td><p>1.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bcftools</p></td>
+<td><p>1.12</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bedtools2</p></td>
+<td><p>2.31.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>biobambam2</p></td>
+<td><p>2.0.177</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>blitz</p></td>
+<td><p>1.0.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>boost</p></td>
+<td><p>1.83.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>boost</p></td>
+<td><p>1.85.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>braket</p></td>
+<td><p>1.6.0</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bwa</p></td>
+<td><p>0.7.17</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>cbc</p></td>
+<td><p>2.10.9</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>cblas</p></td>
+<td><p>2015-06-06</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>cmake</p></td>
+<td><p>3.17.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>cmake</p></td>
+<td><p>3.21.4</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>cmake</p></td>
+<td><p>3.27.7</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>cp2k</p></td>
+<td><p>2023.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>smm=libxsmm</p></td>
+</tr>
+<tr class="row-odd"><td><p>cp2k</p></td>
+<td><p>2023.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>smm=blas</p></td>
+</tr>
+<tr class="row-even"><td><p>cp2k</p></td>
+<td><p>2023.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>smm=libsmm</p></td>
+</tr>
+<tr class="row-odd"><td><p>cpmd</p></td>
+<td><p>4.3</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>~mpi~omp</p></td>
+</tr>
+<tr class="row-even"><td><p>cpmd</p></td>
+<td><p>4.3</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td><p>+mpi+omp</p></td>
+</tr>
+<tr class="row-odd"><td><p>darshan-runtime</p></td>
+<td><p>3.4.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>dssp</p></td>
+<td><p>3.1.4</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>eigen</p></td>
+<td><p>3.4.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>eigenexa</p></td>
+<td><p>2.6</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>ermod</p></td>
+<td><p>0.3.6</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>fds</p></td>
+<td><p>6.7.9</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>fds</p></td>
+<td><p>6.8.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ffb</p></td>
+<td><p>9.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>ffvhc-ace</p></td>
+<td><p>0.1</p></td>
+<td><p>fj&#64;4.8.1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ffx</p></td>
+<td><p>03.01</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>frontistr</p></td>
+<td><p>5.4</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>frontistr</p></td>
+<td><p>5.5</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>fugaku-frontistr</p></td>
+<td><p>master</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>fujitsu-fftw</p></td>
+<td><p>1.1.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>fujitsu-mpi</p></td>
+<td><p>head</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>fujitsu-mpi</p></td>
+<td><p>head</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>fujitsu-ssl2</p></td>
+<td><p>head</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>gcc</p></td>
+<td><p>10.5.0</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>gcc</p></td>
+<td><p>11.4.0</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>gcc</p></td>
+<td><p>12.2.0</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>gcc</p></td>
+<td><p>13.2.0</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>genesis</p></td>
+<td><p>2.1.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>+mixed</p></td>
+</tr>
+<tr class="row-odd"><td><p>genesis</p></td>
+<td><p>2.1.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>~mixed</p></td>
+</tr>
+<tr class="row-even"><td><p>genesis</p></td>
+<td><p>2.1.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>+mixed</p></td>
+</tr>
+<tr class="row-odd"><td><p>genesis</p></td>
+<td><p>2.1.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>~mixed</p></td>
+</tr>
+<tr class="row-even"><td><p>genesis</p></td>
+<td><p>2.1.3</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td><p>~mixed</p></td>
+</tr>
+<tr class="row-odd"><td><p>genesis</p></td>
+<td><p>2.1.3</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td><p>+mixed</p></td>
+</tr>
+<tr class="row-even"><td><p>genesis</p></td>
+<td><p>2.1.4</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td><p>+mixed</p></td>
+</tr>
+<tr class="row-odd"><td><p>genesis</p></td>
+<td><p>2.1.4</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td><p>~mixed</p></td>
+</tr>
+<tr class="row-even"><td><p>gmt</p></td>
+<td><p>6.2.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>gmt</p></td>
+<td><p>6.2.0</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>grads</p></td>
+<td><p>2.2.3</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>gromacs</p></td>
+<td><p>2020.6</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>gromacs</p></td>
+<td><p>2021.5</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>gromacs</p></td>
+<td><p>2022.4</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>gromacs</p></td>
+<td><p>2022.4</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>gromacs</p></td>
+<td><p>2023.4</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>gromacs</p></td>
+<td><p>2023.5</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>gromacs</p></td>
+<td><p>2024.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>gromacs</p></td>
+<td><p>2024.2</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>gromacs</p></td>
+<td><p>2024</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>hdf5</p></td>
+<td><p>1.14.3</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>hphi</p></td>
+<td><p>3.5.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>htslib</p></td>
+<td><p>1.12</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>improved-rdock</p></td>
+<td><p>main</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>julia</p></td>
+<td><p>1.10.2</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>julia</p></td>
+<td><p>1.9.3</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>kiertaa</p></td>
+<td><p>1.0.0b</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>kokkos</p></td>
+<td><p>3.7.00</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>kokkos</p></td>
+<td><p>4.2.01</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>lammps</p></td>
+<td><p>20201029</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>lammps</p></td>
+<td><p>20220623.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>lammps</p></td>
+<td><p>20230802.3</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>libxc</p></td>
+<td><p>6.2.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>lis</p></td>
+<td><p>2.1.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>llvm</p></td>
+<td><p>17.0.4</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>mapsplice2</p></td>
+<td><p>2.2.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>mesa</p></td>
+<td><p>23.0.3</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>modylas-new</p></td>
+<td><p>1.1.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>ff=gaff</p></td>
+</tr>
+<tr class="row-even"><td><p>modylas-new</p></td>
+<td><p>1.1.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>ff=charmm</p></td>
+</tr>
+<tr class="row-odd"><td><p>modylas-new</p></td>
+<td><p>1.1.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>ff=oplsaa</p></td>
+</tr>
+<tr class="row-even"><td><p>mpich-tofu</p></td>
+<td><p>1.0</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td><p>~mt</p></td>
+</tr>
+<tr class="row-odd"><td><p>mpich-tofu</p></td>
+<td><p>1.0</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td><p>+mt</p></td>
+</tr>
+<tr class="row-even"><td><p>mpich-tofu</p></td>
+<td><p>master</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td><p>~mt</p></td>
+</tr>
+<tr class="row-odd"><td><p>mpich-tofu</p></td>
+<td><p>master</p></td>
+<td><p>gcc&#64;8.5.0</p></td>
+<td><p>+mt</p></td>
+</tr>
+<tr class="row-even"><td><p>mptensor</p></td>
+<td><p>0.3.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>mvmc</p></td>
+<td><p>1.2.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>n2p2</p></td>
+<td><p>2.1.4</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>nemo</p></td>
+<td><p>4.2.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>netcdf-c</p></td>
+<td><p>4.9.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>netcdf-cxx</p></td>
+<td><p>4.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>netcdf-cxx4</p></td>
+<td><p>4.3.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>netcdf-fortran</p></td>
+<td><p>4.6.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>netlib-lapack</p></td>
+<td><p>3.10.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>netlib-scalapack</p></td>
+<td><p>2.2.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ntchem</p></td>
+<td><p>24.04</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>nwchem</p></td>
+<td><p>master</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>octa</p></td>
+<td><p>8.4</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>onednn</p></td>
+<td><p>3.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>openblas</p></td>
+<td><p>0.3.21</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>opencv</p></td>
+<td><p>4.8.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>openfdtd</p></td>
+<td><p>3.1.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>openfoam</p></td>
+<td><p>2012</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>openfoam</p></td>
+<td><p>2106</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>openfoam</p></td>
+<td><p>2112</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>openfoam</p></td>
+<td><p>2206</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>openfoam</p></td>
+<td><p>2212</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>openfoam</p></td>
+<td><p>2306</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>openfoam</p></td>
+<td><p>2312</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>openfoam-org</p></td>
+<td><p>10</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>openfoam-org</p></td>
+<td><p>11</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>openfoam-org</p></td>
+<td><p>8</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>openfoam-org</p></td>
+<td><p>9</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>openjdk</p></td>
+<td><p>11.0.20.1_1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>openmx</p></td>
+<td><p>3.9.9</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>parallel-netcdf</p></td>
+<td><p>1.12.3</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>paraview</p></td>
+<td><p>5.11.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>~osmesa+python</p></td>
+</tr>
+<tr class="row-even"><td><p>paraview</p></td>
+<td><p>5.11.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>+osmesa~python</p></td>
+</tr>
+<tr class="row-odd"><td><p>paraview</p></td>
+<td><p>5.11.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>+osmesa+python</p></td>
+</tr>
+<tr class="row-even"><td><p>parmetis</p></td>
+<td><p>4.0.3</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>petsc</p></td>
+<td><p>3.19.6</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>pfapack</p></td>
+<td><p>2014-09-17</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>phase0</p></td>
+<td><p>2021.02</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>type=2d</p></td>
+</tr>
+<tr class="row-even"><td><p>phase0</p></td>
+<td><p>2021.02</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>type=3d</p></td>
+</tr>
+<tr class="row-odd"><td><p>phase0</p></td>
+<td><p>2023.01</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>type=2d</p></td>
+</tr>
+<tr class="row-even"><td><p>phase0</p></td>
+<td><p>2023.01</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td><p>type=3d</p></td>
+</tr>
+<tr class="row-odd"><td><p>picard</p></td>
+<td><p>3.0.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>povray</p></td>
+<td><p>3.7.0.8</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>py-ase</p></td>
+<td><p>3.21.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>py-dask</p></td>
+<td><p>2022.10.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>py-devito</p></td>
+<td><p>4.8.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>py-h5py</p></td>
+<td><p>3.8.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>py-hypothesis</p></td>
+<td><p>6.23.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>py-jupyterhub</p></td>
+<td><p>0.9.4</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>py-keras</p></td>
+<td><p>2.4.3</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>py-matplotlib</p></td>
+<td><p>3.3.4</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>py-mpi4py</p></td>
+<td><p>3.1.4</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>py-netcdf4</p></td>
+<td><p>1.6.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>py-numpy</p></td>
+<td><p>1.25.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>py-pandas</p></td>
+<td><p>2.1.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>py-pydmd</p></td>
+<td><p>0.3</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>py-pygps</p></td>
+<td><p>1.3.5</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>py-pymol</p></td>
+<td><p>2.5.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>py-pysam</p></td>
+<td><p>0.21.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>py-pytest</p></td>
+<td><p>7.3.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>py-pytoml</p></td>
+<td><p>0.1.21</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>py-scikit-learn</p></td>
+<td><p>1.3.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>py-scipy</p></td>
+<td><p>1.8.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>py-seaborn</p></td>
+<td><p>0.12.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>py-spglib</p></td>
+<td><p>2.0.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>python</p></td>
+<td><p>3.11.6</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>py-toml</p></td>
+<td><p>0.10.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>py-xarray</p></td>
+<td><p>2023.7.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>quantum-espresso</p></td>
+<td><p>6.5</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>quantum-espresso</p></td>
+<td><p>6.6</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>quantum-espresso</p></td>
+<td><p>6.7</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>quantum-espresso</p></td>
+<td><p>6.8</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>quantum-espresso</p></td>
+<td><p>7.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>quantum-espresso</p></td>
+<td><p>7.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>quantum-espresso</p></td>
+<td><p>7.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>quantum-espresso</p></td>
+<td><p>7.3</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>qulacs</p></td>
+<td><p>0.5.5</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>qulacs</p></td>
+<td><p>0.5.6</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>r</p></td>
+<td><p>4.3.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>raja</p></td>
+<td><p>2022.10.4</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>rdkit</p></td>
+<td><p>2023_03_1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>rist-fftw</p></td>
+<td><p>3.3.9-272-g63d6bd70</p></td>
+<td><p>fj&#64;4.11.1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ruby</p></td>
+<td><p>3.1.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>rust</p></td>
+<td><p>1.70.0</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>rust</p></td>
+<td><p>1.78.0</p></td>
+<td><p>gcc&#64;13.2.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>salmon-tddft</p></td>
+<td><p>2.0.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>salmon-tddft</p></td>
+<td><p>2.1.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>salmon-tddft</p></td>
+<td><p>2.2.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>samtools</p></td>
+<td><p>1.12</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>scale</p></td>
+<td><p>5.5.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>scale</p></td>
+<td><p>5.5.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>screen</p></td>
+<td><p>4.9.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>scsumma25d</p></td>
+<td><p>1.0a</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>siesta</p></td>
+<td><p>4.0.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>siesta-relmax3</p></td>
+<td><p>rel-MaX-3</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>smash</p></td>
+<td><p>3.0.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>smash</p></td>
+<td><p>3.0.2</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>star</p></td>
+<td><p>2.7.10b</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>suite-sparse</p></td>
+<td><p>5.13.0</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>tmux</p></td>
+<td><p>3.3a</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>wrf</p></td>
+<td><p>4.5.1</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>zpares</p></td>
+<td><p>0.9.6a</p></td>
+<td><p>fj&#64;4.10.0</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">4. Spack v0.21</a><ul>
+<li><a class="reference internal" href="#oss">4.1. ログインノードにインストール済みOSS一覧表</a></li>
+<li><a class="reference internal" href="#id1">4.2. 計算ノードにインストール済みOSS一覧表</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="oss.html"
+                          title="前の章へ"><span class="section-number">1. </span>はじめに</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="list_0.19.html"
+                          title="次の章へ"><span class="section-number">5. </span>Spack v0.19</a></p>
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="list_0.19.html" title="5. Spack v0.19"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="oss.html" title="1. はじめに"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OSSの利用  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4. </span>Spack v0.21</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

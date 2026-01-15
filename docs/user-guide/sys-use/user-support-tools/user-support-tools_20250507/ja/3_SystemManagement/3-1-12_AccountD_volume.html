@@ -1,0 +1,401 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>3.1.12. ディスク情報表示 &#8212; 利用者支援ツール 使用手引書 (利用者編)  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="3.1.13. ユーザ課金情報表示（2022年度下期の電力課金）" href="3-1-13_AccountJ_wh.html" />
+    <link rel="prev" title="3.1.11. データ領域割当変更" href="3-1-11_Chgdisklimit.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-13_AccountJ_wh.html" title="3.1.13. ユーザ課金情報表示（2022年度下期の電力課金）"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="3-1-11_Chgdisklimit.html" title="3.1.11. データ領域割当変更"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>システム管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" accesskey="U"><span class="section-number">3.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.12. </span>ディスク情報表示</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">3.1.12. </span>ディスク情報表示<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[名前]</strong></div>
+<div class="line">　accountd_volume - 利用者のディスクに関する情報を表示する</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[書式]</strong></div>
+<div class="line">　accountd_volume  [オプション]</div>
+<div class="line">　※-u, -gの複合指定はAND検索になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[説明]</strong></div>
+<div class="line">　accountd_volume コマンドは、利用者／課題単位に各VOLUEMディスクの利用状況を表示する。</div>
+<div class="line">　利用者はグループに属するメンバのディスク情報を表示可能である。システム管理者はシステムに登録されている全メンバのディスク情報を表示可能である。ただし、 システム管理機能 に記載されている管理者権限が付与されている必要がある。なお、オプション指定なしの場合は、システム管理者であっても自身のディスク情報のみ表示可能である。また、システム管理者ではなくても、設定により他ユーザのディスク情報を参照可能にすることができる。設定方法については 設定によるアクセス認可 を参照すること。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[オプション]</strong></div>
+<div class="line">　-u  ユーザ名</div>
+<div class="line">　ユーザ名を指定する。スペースに続けての複数指定、アスタリスクを使用した前方／中間／後方一致指定はできない。単一、完全一致指定のみ可能である。</div>
+</div>
+<div class="line-block">
+<div class="line">　-g  グループ名</div>
+<div class="line">　グループ名を指定する。スペースに続けての複数指定、アスタリスクを使用した前方／中間／後方一致指定はできない。単一、完全一致指定のみ可能である。</div>
+</div>
+<div class="line-block">
+<div class="line">　-a</div>
+<div class="line">　すべてのグループのディスク情報を表示する。-aオプション指定時は、-u, -gオプションは無効になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-s</div>
+<div class="line">　ディスク使用量の表示単位がデフォルトのギビバイト[GiB]からキビバイト[KiB]になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-c</div>
+<div class="line">　検索結果をCSV形式で標準出力する。リダイレクション機能を使用することでファイルに保存することもできる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-f  ファイルシステム名</div>
+<div class="line">　ファイルシステム名を指定する。表示対象にしたいマウントポイントを指定する。</div>
+<div class="line">　　完全一致指定      /vol0001</div>
+</div>
+<div class="line-block">
+<div class="line">　-h</div>
+<div class="line">　課題作成時に割り当てたファイルシステムに絞り込んで表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　-i</div>
+<div class="line">　inode使用量を表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　--help</div>
+<div class="line">　コマンドのヘルプ内容を表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[復帰値]</strong></div>
+<div class="line">　正常時: 0</div>
+<div class="line">　異常時: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[備考]</strong></div>
+<div class="line">　なし。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[使用例]</strong></div>
+<div class="line">　【例1】 利用者が課題のディスク情報を表示する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountd_volume<span class="w"> </span>-g<span class="w"> </span>group1
+<span class="go">COLLECTDATE : 2022/06/10 13:23:27    unit[GiB]</span>
+<span class="go">*--------------------------------------------------[GROUP]-----------------------------------------------------*</span>
+<span class="go">GROUP           FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE</span>
+<span class="go">group1          /vol0001                     5,120                 1             5,119             770      0.0%</span>
+<span class="go">group1          /vol0003                 unlimited                 1         unlimited           5,197       ---</span>
+<span class="go">group1          /vol0004                 unlimited            47,529         unlimited      31,646,353       ---</span>
+<span class="go">group1          /vol0005                 unlimited                 1         unlimited             143       ---</span>
+<span class="go">group1          /vol0006                 unlimited                 1         unlimited              11       ---</span>
+<span class="go">*--------------------------------------------------[USER]------------------------------------------------------*</span>
+<span class="go">USER            FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE</span>
+<span class="go">u10001          /vol0001                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10001          /vol0003                 unlimited                 1         unlimited               1       ---</span>
+<span class="go">u10001          /vol0004                 unlimited                 2         unlimited             146       ---</span>
+<span class="go">u10001          /vol0005                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10001          /vol0006                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10002          /vol0001                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10002          /vol0003                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10002          /vol0004                 unlimited                 1         unlimited               1       ---</span>
+<span class="go">u10002          /vol0005                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10002          /vol0006                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10003          /vol0001                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10003          /vol0003                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10003          /vol0004                 unlimited                 4         unlimited          86,426       ---</span>
+<span class="go">u10003          /vol0005                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10003          /vol0006                 unlimited                 0         unlimited               0       ---</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　-gで指定した課題及びこれに所属しているすべての利用者のディスクの使用状況が確認できる。</div>
+<div class="line">　ディスク使用量の表示単位はデフォルトでギビバイト[GiB]になる。表示単位をキビバイト[KiB]に変更したい場合には -sオプションを指定する。なお、単位の切り替えは1KiB(1,024B)で計算される。単位切り替えによる端数は制限値(LIMIT)が小数点以下切り捨て、使用量(USAGE)が小数点以下切り上げて表示される。使用可能残量(AVAILABLE)は、制限値(LIMIT)から使用量(USAGE)を差し引いた値としている。</div>
+</div>
+<div class="line-block">
+<div class="line">　【例2】 自分自身のディスクに関する情報を表示する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountd_volume<span class="w"> </span>-u<span class="w"> </span>u10001
+<span class="go">COLLECTDATE : 2022/06/08 15:14:21    unit[GiB]</span>
+<span class="go">USER : u10001</span>
+<span class="go">*--------------------------------------------------[GROUP]-----------------------------------------------------*</span>
+<span class="go">GROUP           FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE</span>
+<span class="go">group1          /vol0001                     5,120                 1             5,119             770      0.0%</span>
+<span class="go">group1          /vol0003                 unlimited                 1         unlimited           5,197       ---</span>
+<span class="go">group1          /vol0004                 unlimited            47,529         unlimited      31,649,071       ---</span>
+<span class="go">group1          /vol0005                 unlimited                 1         unlimited             143       ---</span>
+<span class="go">group1          /vol0006                 unlimited                 1         unlimited              11       ---</span>
+<span class="go">*--------------------------------------------------[USER]------------------------------------------------------*</span>
+<span class="go">USER            FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE</span>
+<span class="go">u10001          /vol0001                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10001          /vol0003                 unlimited                 1         unlimited               1       ---</span>
+<span class="go">u10001          /vol0004                 unlimited                 1         unlimited             323       ---</span>
+<span class="go">u10001          /vol0005                 unlimited                 1         unlimited               8       ---</span>
+<span class="go">u10001          /vol0006                 unlimited                 0         unlimited               0       ---</span>
+
+<span class="go">*--------------------------------------------------[GROUP]-----------------------------------------------------*</span>
+<span class="go">GROUP           FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE</span>
+<span class="go">*fugaku         /vol0001                 unlimited                88         unlimited         583,517       ---</span>
+<span class="go">*fugaku         /vol0003                 unlimited             6,495         unlimited       3,916,642       ---</span>
+<span class="go">*fugaku         /vol0004                 unlimited             7,901         unlimited       1,973,899       ---</span>
+<span class="go">*fugaku         /vol0005                 unlimited            79,976         unlimited       5,438,315       ---</span>
+<span class="go">*fugaku         /vol0006                 unlimited            18,223         unlimited       1,229,654       ---</span>
+
+<span class="go">*--------------------------------------------------[USER]------------------------------------------------------*</span>
+<span class="go">USER            FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE</span>
+<span class="go">u10001          /vol0001                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10001          /vol0003                 unlimited                 1         unlimited               1       ---</span>
+<span class="go">u10001          /vol0004                 unlimited                 1         unlimited             323       ---</span>
+<span class="go">u10001          /vol0005                 unlimited                 1         unlimited               8       ---</span>
+<span class="go">u10001          /vol0006                 unlimited                 0         unlimited               0       ---</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　グループ名の先頭の *（アスタリスク）は、ユーザのプライマリグループを示している。</div>
+</div>
+<div class="line-block">
+<div class="line">　指定したユーザの所属するすべてのグループに関するディスク情報が表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　【例3】 システム管理者がすべての課題のディスクに関する情報を表示する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountd_volume<span class="w"> </span>-a
+<span class="go">COLLECTDATE : 2022/06/08 15:01:22    unit[GiB]</span>
+<span class="go">*--------------------------------------------------[GROUP]-----------------------------------------------------*</span>
+<span class="go">GROUP           FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE</span>
+<span class="go">group1          /vol0001                     5,120                 1             5,119          12,889      0.0%</span>
+<span class="go">group1          /vol0003                 unlimited                 1         unlimited               8       ---</span>
+<span class="go">group1          /vol0004                 unlimited            15,845         unlimited      41,742,218       ---</span>
+<span class="go">group1          /vol0005                 unlimited                 1         unlimited               8       ---</span>
+<span class="go">group1          /vol0006                 unlimited                 1         unlimited               8       ---</span>
+<span class="go">group2          /vol0001                     5,120                 1             5,119             770      0.0%</span>
+<span class="go">group2          /vol0003                 unlimited                 1         unlimited           5,197       ---</span>
+<span class="go">group2          /vol0004                 unlimited            47,529         unlimited      31,649,065       ---</span>
+<span class="go">group2          /vol0005                 unlimited                 1         unlimited             143       ---</span>
+<span class="go">group2          /vol0006                 unlimited                 1         unlimited              11       ---</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　すべての課題の課題に割り当てられているディスクの使用状況が確認できる。グループ名をキーとして昇順に表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　【例4】 システム管理者がすべての課題のディスクに関する情報をCSV形式で表示する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountd_volume<span class="w"> </span>-a<span class="w"> </span>-c
+<span class="go">INFO_H,COLLECT_DATE</span>
+<span class="go">&quot;INFO&quot;,&quot;2022/06/08 15:10:28&quot;</span>
+<span class="go">GROUP_H,GROUP,FILESYSTEM,LIMIT,USAGE,AVAILABLE,FILES,USAGE_RATE</span>
+<span class="go">&quot;GROUP&quot;,&quot;group1&quot;,&quot;/vol0001&quot;,&quot;5120&quot;,&quot;1&quot;,&quot;5119&quot;,&quot;12889&quot;,&quot;0.000&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group1&quot;,&quot;/vol0003&quot;,&quot;unlimited&quot;,&quot;1&quot;,&quot;unlimited&quot;,&quot;8&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group1&quot;,&quot;/vol0004&quot;,&quot;unlimited&quot;,&quot;15845&quot;,&quot;unlimited&quot;,&quot;41742218&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group1&quot;,&quot;/vol0005&quot;,&quot;unlimited&quot;,&quot;1&quot;,&quot;unlimited&quot;,&quot;8&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group1&quot;,&quot;/vol0006&quot;,&quot;unlimited&quot;,&quot;1&quot;,&quot;unlimited&quot;,&quot;8&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group2&quot;,&quot;/vol0001&quot;,&quot;5120&quot;,&quot;1&quot;,&quot;5119&quot;,&quot;770&quot;,&quot;0.000&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group2&quot;,&quot;/vol0003&quot;,&quot;unlimited&quot;,&quot;1&quot;,&quot;unlimited&quot;,&quot;5197&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group2&quot;,&quot;/vol0004&quot;,&quot;unlimited&quot;,&quot;47529&quot;,&quot;unlimited&quot;,&quot;31649067&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group2&quot;,&quot;/vol0005&quot;,&quot;unlimited&quot;,&quot;1&quot;,&quot;unlimited&quot;,&quot;143&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group2&quot;,&quot;/vol0006&quot;,&quot;unlimited&quot;,&quot;1&quot;,&quot;unlimited&quot;,&quot;11&quot;,&quot;---&quot;</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　USAGE_RATEの表示は、ディスクに関する制限が設定されている、もしくは設定されていない（LIMITがunlimitedになっている）のであれば-（ハイフン）で表示される。CSV形式ではない【例1】の場合も同様である。</div>
+</div>
+<div class="line-block">
+<div class="line">　表示項目の説明を示する。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 20.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>No</p></th>
+<th class="head"><p>項目名</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>COLLECT DATE</p></td>
+<td><p>データ収集日時</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>USER</p></td>
+<td><p>ユーザ名</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>GROUP</p></td>
+<td><p>グループ名</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>FILESYSTEM</p></td>
+<td><p>ファイルシステム名</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>LIMIT</p></td>
+<td><div class="line-block">
+<div class="line">制限値</div>
+<div class="line">　情報の単位は表示単位に従う。</div>
+<div class="line">unit[表示単位]</div>
+<div class="line"><br /></div>
+<div class="line">　　＜表示単位＞</div>
+<div class="line">　　　unit[GiB]　デフォルトはギビバイト表示</div>
+<div class="line">　　　unit[KiB]　 -sオプション指定時はキビバイト表示</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>USAGE</p></td>
+<td><div class="line-block">
+<div class="line">ディスクの使用量</div>
+<div class="line">　情報の単位は表示単位に従う。</div>
+<div class="line">unit[表示単位]</div>
+<div class="line"><br /></div>
+<div class="line">　　＜表示単位＞</div>
+<div class="line">　　　unit[GiB]　デフォルトはギビバイト表示</div>
+<div class="line">　　　unit[KiB]　 -sオプション指定時はキビバイト表示</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>AVAILABLE</p></td>
+<td><div class="line-block">
+<div class="line">ディスクの使用可能残量</div>
+<div class="line">　情報の単位は表示単位に従う。</div>
+<div class="line">unit[表示単位]</div>
+<div class="line"><br /></div>
+<div class="line">　　＜表示単位＞</div>
+<div class="line">　　　unit[GiB]　デフォルトはギビバイト表示</div>
+<div class="line">　　　unit[KiB]　 -sオプション指定時はキビバイト表示</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>FILES</p></td>
+<td><div class="line-block">
+<div class="line">ファイルシステムに作成されているファイル数</div>
+<div class="line">　1 ファイルを 1 個とカウントする</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>USAGE RATE</p></td>
+<td><div class="line-block">
+<div class="line">制限値に対するディスクの使用率</div>
+<div class="line">　この項目は、CSV形式のときに表示します。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>USE RATE</p></td>
+<td><div class="line-block">
+<div class="line">制限値に対するディスクの使用率</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>[GROUP]</p></td>
+<td><p>グループに関する情報表示</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>[USER]</p></td>
+<td><p>ユーザに関する情報表示</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="3-1-11_Chgdisklimit.html"
+                          title="前の章へ"><span class="section-number">3.1.11. </span>データ領域割当変更</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="3-1-13_AccountJ_wh.html"
+                          title="次の章へ"><span class="section-number">3.1.13. </span>ユーザ課金情報表示（2022年度下期の電力課金）</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-13_AccountJ_wh.html" title="3.1.13. ユーザ課金情報表示（2022年度下期の電力課金）"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="3-1-11_Chgdisklimit.html" title="3.1.11. データ領域割当変更"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>システム管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" ><span class="section-number">3.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.12. </span>ディスク情報表示</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

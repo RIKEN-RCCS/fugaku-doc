@@ -1,0 +1,292 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>3.1.10. Displaying quotas on data area &#8212; User support tools User&#39;s Guide (for User)  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.1.11. Change the disk quota limit on each VOLUME" href="3-1-11_Chgdisklimit.html" />
+    <link rel="prev" title="3.1.9. Job status transition history displaying" href="3-1-9_JobHistory.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-11_Chgdisklimit.html" title="3.1.11. Change the disk quota limit on each VOLUME"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="3-1-9_JobHistory.html" title="3.1.9. Job status transition history displaying"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" accesskey="U"><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.10. </span>Displaying quotas on data area</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="displaying-quotas-on-data-area">
+<h1><span class="section-number">3.1.10. </span>Displaying quotas on data area<a class="headerlink" href="#displaying-quotas-on-data-area" title="Permalink to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[Name]</strong></div>
+<div class="line">　chkdiskspace -  Display groups disk usage and limits on data area</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Style]</strong></div>
+<div class="line">　chkdiskspace  [Option]</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Description]</strong></div>
+<div class="line">　chkdiskspace command can display the disk usage and limits for each group. Since disk capacity and disk usage</div>
+<div class="line">　of each VOLUME can be confirmed, it can be used to determine which VOLUME stores the data.</div>
+<div class="line">　Group managers and system administrators can display disk quota limit on each VOLUME, but users cannot.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Option]</strong></div>
+<div class="line">　  -c</div>
+<div class="line">　        Print results in CSV format.</div>
+<div class="line"><br /></div>
+<div class="line">　  -g GROUP_NAME</div>
+<div class="line">　        Specify group name. You can specify only a single name and exact matching.</div>
+<div class="line"><br /></div>
+<div class="line">　 –help</div>
+<div class="line">　        Display this help and exit.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Return value]</strong></div>
+<div class="line">　Noprmal: 0</div>
+<div class="line">　Abnormal: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Note]</strong></div>
+<div class="line">　None.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Use example]</strong></div>
+<div class="line">　【Example 1】  Group managers and system administrators display the disk usage and limits.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>chkdiskspace<span class="w"> </span>-g<span class="w"> </span>group001
+<span class="go">COLLECTDATE : 2022/02/20 11:27:36    unit[TiB]</span>
+<span class="go">[group001] LIMIT:10 ALLOC:5</span>
+<span class="go">*----------------[SYSTEM]-----------------|-----------------------------[GROUP]--------------------------------------*</span>
+<span class="go">VOLUME          SIZE            FREE            LIMIT     USAGE  USE_RATE            ILIMIT           FILES IUSE_RATE</span>
+<span class="go">vol0300         7,000           6,990             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0301         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0302         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0303         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0400         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0401         7,000           6,995             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0402         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0403         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0500         7,000           7,000               5      0.01      0.0%         1,500,000              64      0.0%</span>
+<span class="go">vol0501         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0502         3,000           2,995             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0503         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0600         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0601         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0602         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0603         3,000           2,995             ---      0.01       ---               ---               1       ---</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">　【Example 2】  Group managers and system administrators display the disk usage and limits as CSV format</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>chkdiskspace<span class="w"> </span>-g<span class="w"> </span>group001<span class="w"> </span>-c
+<span class="go">INFO_H,COLLECT_DATE</span>
+<span class="go">&quot;INFO&quot;,&quot;2022/02/20 11:46:00&quot;</span>
+<span class="go">GROUPTOTAL_H,GROUP,LIMIT,ALLOC</span>
+<span class="go">GROUPTOTAL,&quot;group301&quot;,&quot;10&quot;,&quot;5&quot;</span>
+<span class="go">GROUP_H,VOLUME,SIZE,FREE,LIMIT,USAGE,USE_RATE,ILIMIT,FILES,IUSE_RATE</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0200&quot;,&quot;7000&quot;,&quot;6990&quot;,&quot;---&quot;,&quot;0.01&quot;,&quot;---&quot;,&quot;---&quot;,&quot;1&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0201&quot;,&quot;7000&quot;,&quot;7000&quot;,&quot;---&quot;,&quot;0.01&quot;,&quot;---&quot;,&quot;---&quot;,&quot;1&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0202&quot;,&quot;3000&quot;,&quot;3000&quot;,&quot;---&quot;,&quot;0.01&quot;,&quot;---&quot;,&quot;---&quot;,&quot;1&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0203&quot;,&quot;3000&quot;,&quot;3000&quot;,&quot;---&quot;,&quot;0.01&quot;,&quot;---&quot;,&quot;---&quot;,&quot;1&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0400&quot;,&quot;7000&quot;,&quot;7000&quot;,&quot;---&quot;,&quot;0.01&quot;,&quot;---&quot;,&quot;---&quot;,&quot;1&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0401&quot;,&quot;7000&quot;,&quot;6995&quot;,&quot;---&quot;,&quot;0.01&quot;,&quot;---&quot;,&quot;---&quot;,&quot;1&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0402&quot;,&quot;3000&quot;,&quot;3000&quot;,&quot;---&quot;,&quot;0.01&quot;,&quot;---&quot;,&quot;---&quot;,&quot;1&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0403&quot;,&quot;3000&quot;,&quot;3000&quot;,&quot;---&quot;,&quot;0.01&quot;,&quot;---&quot;,&quot;---&quot;,&quot;1&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0500&quot;,&quot;7000&quot;,&quot;7000&quot;,&quot;5&quot;,&quot;0.01&quot;,&quot;0.000&quot;,&quot;1500000&quot;,&quot;64&quot;,&quot;0.000&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0501&quot;,&quot;7000&quot;,&quot;7000&quot;,&quot;---&quot;,&quot;0.01&quot;,&quot;---&quot;,&quot;---&quot;,&quot;1&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0502&quot;,&quot;3000&quot;,&quot;2995&quot;,&quot;---&quot;,&quot;0.01&quot;,&quot;---&quot;,&quot;---&quot;,&quot;1&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0503&quot;,&quot;3000&quot;,&quot;3000&quot;,&quot;---&quot;,&quot;0.01&quot;,&quot;---&quot;,&quot;---&quot;,&quot;1&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0600&quot;,&quot;7000&quot;,&quot;7000&quot;,&quot;---&quot;,&quot;0.01&quot;,&quot;---&quot;,&quot;---&quot;,&quot;1&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0601&quot;,&quot;7000&quot;,&quot;7000&quot;,&quot;---&quot;,&quot;0.01&quot;,&quot;---&quot;,&quot;---&quot;,&quot;1&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0602&quot;,&quot;3000&quot;,&quot;3000&quot;,&quot;---&quot;,&quot;0.01&quot;,&quot;---&quot;,&quot;---&quot;,&quot;1&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;vol0603&quot;,&quot;3000&quot;,&quot;2995&quot;,&quot;---&quot;,&quot;0.01&quot;,&quot;---&quot;,&quot;---&quot;,&quot;1&quot;,&quot;---&quot;</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 20.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>No</p></th>
+<th class="head"><p>Item name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>COLLECT DATE</p></td>
+<td><p>Data gathering date and time</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>GROUPTOTAL</p></td>
+<td><div class="line-block">
+<div class="line">You can check the total quota for a specified group.</div>
+<div class="line">　 [groupname] LIMIT:value1 ALLOC:value2</div>
+<div class="line">　 LIMIT is the maximum amount of disk space allocated to the group.</div>
+<div class="line">　 ALLOC is the sum of quota allocated to each VOLUME.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>VOLUME</p></td>
+<td><div class="line-block">
+<div class="line">The first two digits represent the VOLUME number and the last two digits represent the MDT number.</div>
+<div class="line">　【Example】vol0401</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>SIZE</p></td>
+<td><p>Volume capacity</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>FREE</p></td>
+<td><p>Available capacity</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>LIMIT</p></td>
+<td><div class="line-block">
+<div class="line">Limit value</div>
+<div class="line">The display unit of disk usage is Terabyte [TiB].</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>USAGE</p></td>
+<td><div class="line-block">
+<div class="line">Disk usage</div>
+<div class="line">The display unit of disk usage is Terabyte [TiB].</div>
+<div class="line">　Rounded to the third decimal place</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>USE_RATE</p></td>
+<td><div class="line-block">
+<div class="line">Disk use rate to the limit value</div>
+<div class="line">　Rounded to the second decimal place</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>ILIMIT</p></td>
+<td><div class="line-block">
+<div class="line">Inode Limit</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>FILES</p></td>
+<td><div class="line-block">
+<div class="line">The number of files created in volume</div>
+<div class="line">　Count 1 file as 1 item</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>IUSE_RATE</p></td>
+<td><div class="line-block">
+<div class="line">Inode usage rate to the limit value</div>
+<div class="line">　Rounded to the second decimal place</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="3-1-9_JobHistory.html"
+                          title="previous chapter"><span class="section-number">3.1.9. </span>Job status transition history displaying</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="3-1-11_Chgdisklimit.html"
+                          title="next chapter"><span class="section-number">3.1.11. </span>Change the disk quota limit on each VOLUME</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-11_Chgdisklimit.html" title="3.1.11. Change the disk quota limit on each VOLUME"
+             >next</a></li>
+        <li class="right" >
+          <a href="3-1-9_JobHistory.html" title="3.1.9. Job status transition history displaying"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" ><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.10. </span>Displaying quotas on data area</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Potal Top</a>
+    </div>
+  </body>
+</html>

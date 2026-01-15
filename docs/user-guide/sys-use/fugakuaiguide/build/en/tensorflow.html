@@ -1,0 +1,285 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>2. TensorFlow on the Fugaku &#8212; AI framework on the FUGAKU Users Guide  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3. Chainer for K on the Fugaku" href="chainer.html" />
+    <link rel="prev" title="1. PyTorch on the Fugaku" href="pytorch.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="chainer.html" title="3. Chainer for K on the Fugaku"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="pytorch.html" title="1. PyTorch on the Fugaku"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">AI framework on the FUGAKU Users Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>TensorFlow on the Fugaku</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="tensorflow-on-the-fugaku">
+<h1><span class="section-number">2. </span>TensorFlow on the Fugaku<a class="headerlink" href="#tensorflow-on-the-fugaku" title="Permalink to this headline">¶</a></h1>
+<section id="license">
+<h2><span class="section-number">2.1. </span>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>The patches and procedures are scheduled to be provided (Upstream) to the OSS, PyTorch will comply with the Apache License2.0 license.</p>
+</section>
+<section id="references">
+<h2><span class="section-number">2.2. </span>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Github <a class="reference external" href="https://github.com/fujitsu/tensorflow">https://github.com/fujitsu/tensorflow</a></p></li>
+<li><p>TensorFlow-2.11.0 Documents  <a class="reference external" href="https://github.com/fujitsu/tensorflow/wiki/TensorFlow-oneDNN-build-manual-for-FUJITSU-Software-Compiler-Package-(TensorFlow-v2.11.0">https://github.com/fujitsu/tensorflow/wiki/TensorFlow-oneDNN-build-manual-for-FUJITSU-Software-Compiler-Package-(TensorFlow-v2.11.0</a>)</p></li>
+<li><p>TensorFlow-2.7.0  Documents  <a class="reference external" href="https://github.com/fujitsu/tensorflow/wiki/TensorFlow-oneDNN-build-manual-for-FUJITSU-Software-Compiler-Package-(TensorFlow-v2.7.0">https://github.com/fujitsu/tensorflow/wiki/TensorFlow-oneDNN-build-manual-for-FUJITSU-Software-Compiler-Package-(TensorFlow-v2.7.0</a>)</p></li>
+<li><p>TensorFlow-2.2.0  Documents  <a class="reference external" href="https://github.com/fujitsu/tensorflow/wiki/TensorFlow-oneDNN-build-manual-for-FUJITSU-Software-Compiler-Package-(TensorFlow-v2.2.0">https://github.com/fujitsu/tensorflow/wiki/TensorFlow-oneDNN-build-manual-for-FUJITSU-Software-Compiler-Package-(TensorFlow-v2.2.0</a>)</p></li>
+</ul>
+</section>
+<section id="installed-version-cf-checkout-sh-site-packages-and-so-on">
+<h2><span class="section-number">2.3. </span>Installed version (Cf. checkout.sh, site-packages and so on.)<a class="headerlink" href="#installed-version-cf-checkout-sh-site-packages-and-so-on" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>TensorFlow ver.2.11.0</p>
+<ul>
+<li><p>Horovod ver.0.26.1</p></li>
+<li><p>oneDNN ver.2.7.0</p></li>
+<li><p>tensorboard ver.2.11.2</p></li>
+<li><p>bazel ver.5.3.0</p></li>
+</ul>
+</li>
+<li><p>Python ver.3.9.x more over</p>
+<ul>
+<li><p>numpy ver.1.22.x more over</p></li>
+<li><p>scipy ver.1.7.x more over</p></li>
+<li><p>h5py ver.3.8.0</p></li>
+</ul>
+</li>
+<li><p>batchedBLAS ber.1.0</p></li>
+</ul>
+</section>
+<section id="files">
+<h2><span class="section-number">2.4. </span>Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h2>
+<p>The latest version should be built in the user environment according to the above GitHub procedure.
+On the 2nd storage, we have published the version of TensorFlow-2.2.0 or earlier.
+Sample problems are not compatible. In the following description, please refer to how to execute and how to acquire performance.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/apps/oss/TensorFlow-2.2.0
+  bin: binaries
+  lib,lib64: libraries
+    lib/python3.8/site-packages: TensorFlow and Python modules
+  include: include files
+  build: scripts, patches and so on.
+  example: examples of ResNet-50, OpenNMT, Bert and OpenNMT
+  docs: documents
+  old: old versions
+</pre></div>
+</div>
+</section>
+<section id="build">
+<h2><span class="section-number">2.5. </span>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h2>
+<p>If you build by yourself, please refer the directory <code class="file docutils literal notranslate"><span class="pre">build</span></code>. The procedure is described in the above reference. Please use it after adjusting the paths <code class="file docutils literal notranslate"><span class="pre">$PATH</span></code> and so on, require a timely correction. It takes about 3 hours to build and half day to execute examples.
+The latest version is installed on the Fugaku sequentially.
+However, due to the structural change in the TensorFlow, tuning patches for the Fugaku may not work.
+For detailed restrictions on each version, please refer to the abobe wiki.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/fujitsu/tensorflow.git
+$ cd tensorflow                      # From now on, we&#39;ll call this directory TENSORFLOW_TOP
+$ git checkout -b r2.11_for_a64fx origin/r2.11_for_a64fx
+$ cd fcc_build_script
+$ bash 01_python_build.sh
+$         ...
+</pre></div>
+</div>
+<p>The versions on the 2nd strage are built without VENV published on the GitHub. As we adjusted so as not to embed absolute paths as much as possible, it is possible to copy and staging for <code class="file docutils literal notranslate"><span class="pre">$HOME</span></code>.</p>
+</section>
+<section id="execution">
+<h2><span class="section-number">2.6. </span>Execution<a class="headerlink" href="#execution" title="Permalink to this headline">¶</a></h2>
+<p>This environment can be performed anywhere by setting <code class="file docutils literal notranslate"><span class="pre">$PATH</span></code> . Because Python module has a large number of files, MDS access high loads will take the <strong class="program">importlib</strong> time due to MDS access high load. You can use staging by coping common binaries by using <strong class="command">llio_transfer</strong> refering <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/LyeredStorageAndLLIO/TheSecondLayerStrage.html#tips-for-common-file-distribution">8.2.4.2. Tips for common file distribution</a> of the <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/">Users Guide</a> .
+You can also uce staging by deploying all files with <strong class="command">tar</strong> and expanding using <strong class="command">llio_transfer</strong>.</p>
+<p>You can see some examples of the Resnet-50 dry benchmark under the <code class="file docutils literal notranslate"><span class="pre">example</span></code> directory. In addition, examples such as OpenNMT, BERT of natural language processing and MASK R-CNN of object detection are also included, and performance tuned library can be read.</p>
+<p>The procedure is described in the above reference. Please use it after adjusting the paths.</p>
+</section>
+<section id="limitations">
+<h2><span class="section-number">2.7. </span>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h2>
+<p>Due to not be able to use the patches for the Fugaku because of the change of specifications of TensorFlow, it was difficult to maintain performance due to the update of the version.</p>
+<ul class="simple">
+<li><p>build problems</p>
+<ol class="arabic simple">
+<li><p><strong class="command">Bazel</strong> is not automatically seek the dependency. If you create a <strong class="command">Bazel</strong> configuration file yourself, you may need to reconstruct the configuration files by trial and error (about 100 times).</p></li>
+</ol>
+</li>
+</ul>
+<p>The way of holding the data has been changed, and many sample problems may deteriorates to about 1/8 on the TensorFlw-2.11.0. This problems can be seen on the Intel CPU as well.</p>
+<ul class="simple">
+<li><p>attentions for execution</p>
+<ol class="arabic simple">
+<li><p>The API change for each version is large in the TensorFlow, so the samples can not be executed as it is. It is necessary to rewrite the training codes etc. along with the version you use.</p></li>
+<li><p>HW counter information such as fipp, fapp and PA disaled. =&gt; It takes time to support.</p></li>
+<li><p>If <strong class="command">ulimit -h 8092</strong> is not set, the number of samples that will become SEGV has increased.</p></li>
+</ol>
+</li>
+<li><p>performance problems</p>
+<ol class="arabic simple">
+<li><p>The Fujitsu compiler will be dumped the core with a new specification of <strong class="command">C++17</strong> “Structured and Binding”. We needed to modify three codes.</p></li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="notes">
+<h2><span class="section-number">2.8. </span>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>In order to speed up, <code class="docutils literal notranslate"><span class="pre">DNNL_AARCH64</span> <span class="pre">(oneDNN-2.1.0L1)</span></code> developed by Fujitsu Laboratory is incorporated into the framework.
+The calculations of image recognition, natural language processing analysis, object detection, and so on are fast by this library.
+Depending on the network used, it may not work correct or fast, so please change to some other functions.</p>
+<p>Please contact your support desk (R-CCS support desk or HPCI support desk) for questions for performances and requirements of the versions and python modules, and so on, providing your network scripts. Please note that there are several months to support.</p>
+</section>
+<section id="future-plan">
+<h2><span class="section-number">2.9. </span>Future plan<a class="headerlink" href="#future-plan" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>support of the Mask R-CNN example (April 2021 Done)</p></li>
+<li><p>cancel of the OpenNMT restriction (April 2021 Done)</p></li>
+<li><p>addition the optional python module: TensoFlow_CC.so, OpenCV, Keras-2 (April 2021 Done)</p></li>
+<li><p>addition the optional python module: mpi4py (April 2021 Done)</p></li>
+<li><p>addition the optional python module: netcdf (April 2021 Done)</p></li>
+<li><p>support of old versions (about the second half of 2021)</p></li>
+<li><p>support HW counter of fipp, fapp and PA (about the second half of 2021)</p></li>
+<li><p>build on the Spack environment (about the second half of 2021)</p></li>
+<li><p>provide the Singularity container (about the second half of 2021)</p></li>
+<li><p>follow-up the versions of the Fujitsu language environments (as needed)</p></li>
+<li><p>follow-up the versions of the TensorFlow and oneDNN (as needed)</p></li>
+<li><p>support of the other python modules (as needed)</p></li>
+<li><p>support on the FX700 system (about the second half of 2021)</p></li>
+</ol>
+</section>
+<section id="id1">
+<h2><span class="section-number">2.10. </span>履歴<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>September 08, 2020 (Tue) release of TensorFlow-2.1.0</p>
+<ul>
+<li><p>support of the ImagNet examples, build under the tcsds-1.2.26</p></li>
+</ul>
+</li>
+<li><p>February 13, 2021 (Sat) release of TensorFlow-2.2.0</p>
+<ul>
+<li><p>build under the tcsds-1.2.29</p></li>
+<li><p>support of the OpenNMT, Bert examples</p></li>
+<li><p>add the python modules of the mpi4py, pandas</p></li>
+</ul>
+</li>
+<li><p>February 21, 2021 (Sun) build under the tcsds-1.3.30a</p></li>
+<li><p>May 20, 2020 (Thu) support of Mask R-CNN examples using oneDNN-2.1.0L1</p>
+<ul>
+<li><p>build under the tcsds-1.3.31</p></li>
+<li><p>modify the NaN problem of OpenNMT example</p></li>
+</ul>
+</li>
+<li><p>October 15, 2021 (Fri) release these documents (Ver.1.0)</p></li>
+<li><p>December 07, 2021 (Tue) update these documents (Ver.1.1) addition the usage of llio</p></li>
+<li><p>December 23, 2021 (Wed) build under the tcsds-1.2.34</p>
+<ul>
+<li><p>01_resnet: spack sample, llio sample are not compatible</p></li>
+<li><p>04_Mask-R-CNN: OpenCV are not compatible</p></li>
+</ul>
+</li>
+<li><p>December 26, 2021 (Sun) modify of libTensorFlow_cc, 04_Mask-R-CNN</p>
+<ul>
+<li><p>follow up for other than vol0004 users, sample test under the general user permissions</p></li>
+<li><p>01_resnet: spack sample, llio sample are not supported</p></li>
+</ul>
+</li>
+<li><p>January 03, 2022 (Mon) 01_resnet: spack sample, llio sample are supported</p></li>
+<li><p>January 04, 2022 (Tue) 01_resnet: tf.profiler, cProfile sample are supported</p></li>
+<li><p>February 28, 2022 (Mon) update Japanese documents (Ver.1.2) addition the tutorial in Japanese</p></li>
+<li><p>July 13, 2023 (Thu) update English documents (Ver.1.3) addition the document for new version (TesorFlow-2.11.0 etc)</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">2. TensorFlow on the Fugaku</a><ul>
+<li><a class="reference internal" href="#license">2.1. License</a></li>
+<li><a class="reference internal" href="#references">2.2. References</a></li>
+<li><a class="reference internal" href="#installed-version-cf-checkout-sh-site-packages-and-so-on">2.3. Installed version (Cf. checkout.sh, site-packages and so on.)</a></li>
+<li><a class="reference internal" href="#files">2.4. Files</a></li>
+<li><a class="reference internal" href="#build">2.5. Build</a></li>
+<li><a class="reference internal" href="#execution">2.6. Execution</a></li>
+<li><a class="reference internal" href="#limitations">2.7. Limitations</a></li>
+<li><a class="reference internal" href="#notes">2.8. Notes</a></li>
+<li><a class="reference internal" href="#future-plan">2.9. Future plan</a></li>
+<li><a class="reference internal" href="#id1">2.10. 履歴</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="pytorch.html"
+                          title="previous chapter"><span class="section-number">1. </span>PyTorch on the Fugaku</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="chainer.html"
+                          title="next chapter"><span class="section-number">3. </span>Chainer for K on the Fugaku</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="chainer.html" title="3. Chainer for K on the Fugaku"
+             >next</a></li>
+        <li class="right" >
+          <a href="pytorch.html" title="1. PyTorch on the Fugaku"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">AI framework on the FUGAKU Users Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>TensorFlow on the Fugaku</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, RIKEN R-CCS.
+    </div>
+  </body>
+</html>

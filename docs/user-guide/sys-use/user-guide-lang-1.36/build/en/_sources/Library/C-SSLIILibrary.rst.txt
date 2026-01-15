@@ -1,0 +1,156 @@
+C-SSL II library
+================
+
+The C-SSL II library provides interface routines for the C language to a subset of the SSL II rich subroutine group used in the Fortran language, making it available in the C / C ++ language.
+
+ 1. Linear calculation
+ #. Eigenvalue eigenvector
+ #. Nonlinear calculation
+ #. Extreme value problem
+ #. Interpolation, approximation
+ #. Conversion
+ #. Numerical calculus
+ #. Differential equation
+ #. Special functions
+ #. Pseudo random number
+ #. Auxiliary routine
+
+
+How to compile C language
+-------------------------
+
+To use C-SSL II library, specify  \ ``-SSL2``\  or  \ ``-SSL2BLAMP``\  option.
+
+To link SSL II/MPI library, specify  \ ``-SSL2MPI``\  option to  \ :program:`mpiFCCpx`\  command, and also specify  \ ``-SSL2``\  or  \ ``-SSL2BLAMP``\.
+
+
+Compile example is as following:
+
+
+1. MPI / Auto parallel / SSL II (Mainly multi node job)
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx  -Kfast,parallel,SVE sample.c -SSL2MPI -SSL2
+
+
+2. MPI / OpenMP / SSL II (Mainly multi node job)
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Kfast,parallel,openmp,SVE sample.c -SSL2MPI -SSL2
+
+
+3. Sequential / SSL II (Single node job)
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,SVE sample.c -SSL2
+
+
+4. Auto parallel / SSL II (Single node job)
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,parallel,SVE sample.c -SSL2
+
+
+5. OpenMP / SSL II (Single node job)
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,openmp,SVE sample.c -SSL2
+
+.. seealso::
+
+   - When conbine with login node, if  \ ``-KSVE``\  is enabled, combine libraries using  \ ``SVE``\.
+   - When conbine with login node, if  \ ``-KNOSVE``\  is enabled, combine general purpose libraries.
+   - When conbine with computing node, specifying  \ ``-KSVE``\  or  \ ``-KNOSVE``\  combines libraries using  \ ``SVE``\.
+   - ``-KSVE``\  option's default (when omitted) will be  \ ``-KSVE``\ .
+   - To translate the user program with the native compiler and combine C-SSL II, use  \ :program:`FCC`\  command.
+   - To translate a user program written in MPI using a native compiler and combine SSL II/MPI, use  \ :program:`mpiFCC`\  command.
+
+
+Sample program (C-SSL II/C)
+---------------------------
+
+This indicates a example of compiling to job execution using sample program.
+
+
+1. | Prepare a source program.
+   | Prepare a sample program as  \ :file:`/home/system/sample/CSSL2/sample(C-SSLII-C).c`\.
+   | :download:`(Download a sample code) <./src/sample_C-SSLII-C.c>`
+
+2. Compile a sample program.
+
+ .. code-block:: console
+
+    [_LNlogin]$ fccpx -V -Kfast,optmsg=2 -Nlst=t -o sample_C-SSLII-C sample_C-SSLII-C.c -SSL2
+
+3. | Prepare a job script.
+   | Prepare a job script as \ :file:`/home/system/sample/CSSL2/sample_C-SSLII-C.sh`\.
+   | :download:`(Download a sample code) <./src/sample_C-SSLII-C.sh>`
+
+4. Submit a job with  \ :program:`pjsub`\  command.
+
+ .. code-block:: console
+
+    [_LNlogin]$ pjsub sample_C-SSLII-C.sh
+    [INFO] PJM 0000 pjsub Job 138 submitted.
+
+
+How to compile C++
+------------------
+
+To use C-SSL II library, specify  \ ``-SSL2``\  or  \ ``-SSL2BLAMP``\  option.
+
+To link SSL II/MPI library, specify  \ ``-SSL2MPI``\  option to  \ :program:`mpiFCCpx`\  command, and also specify  \ ``-SSL2``\  or  \ ``-SSL2BLAMP``\.
+
+
+Compile example is as following:
+
+
+1. MPI / Auto parallel / SSL II (Mainly multi node job)
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpiFCCpx -Kfast,parallel,SVE sample.cc -SSL2MPI -SSL2
+
+
+2. MPI / OpenMP / SSL II (Mainly multi node job)
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpiFCCpx -Kfast,parallel,openmp,SVE sample.cc -SSL2MPI -SSL2
+
+
+3. Sequential / SSL II (Single node job)
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,SVE sample.cc -SSL2
+
+
+4. Auto parallel / SSL II (Single node job)
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,parallel,SVE sample.cc -SSL2
+
+
+5. OpenMP / SSL II (Single node job)
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,openmp,SVE sample.cc -SSL2
+
+
+.. seealso::
+
+   - When conbine with login node, if  \ ``-KSVE``\  is enabled, combine libraries using  \ ``SVE``\.
+   - When conbine with login node, if  \ ``-KNOSVE``\  is enabled, combine general purpose libraries.
+   - When conbine with computing node, specifying  \ ``-KSVE``\  or  \ ``-KNOSVE``\  combines libraries using  \ ``SVE``\.
+   - ``-KSVE``\  option's default (when omitted) will be  \ ``-KSVE``\ .
+   - To translate the user program with the native compiler and combine C-SSL II, use  \ :program:`FCC`\  command.
+   - To translate a user program written in MPI using a native compiler and combine SSL II/MPI, use  \ :program:`mpiFCC`\  command.
+

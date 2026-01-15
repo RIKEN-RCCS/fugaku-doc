@@ -1,0 +1,58 @@
+.. _EnvironmentSettings:
+
+Compiler Environment Settings
+=============================
+
+To use Fortran/C/C++ compiler, it is needed to set the path which corresponds to the using version, to the environment variable PATH,LD_LIBRARY_PATH.
+
+On |post-k|, since the default language environment (standard environment) is set at login, it is not necessary to set environment variables after login.
+
+However it is available to set the environmet that corresponds to each version. We indicate the module file name that corresponds to each version in the below table.
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 50, 50
+
+
+  * - Version level
+    - Module file name
+
+  * - 4.12.1 tcsds-1.2.42
+    - lang/tcsds-1.2.42 (default)
+
+  * - 4.12.0 tcsds-1.2.41
+    - lang/tcsds-1.2.41
+
+  * - 4.11.2 tcsds-1.2.40
+    - lang/tcsds-1.2.40
+
+Default module file can be confirmed by mentioning as :command:`module avail` of the list displayed by executing the  ``(default)``  command.
+
+.. code-block:: console
+
+  $ module avail
+  
+  ------------------------------- /work/Fugaku-environment/modulefiles -------------------------------
+  lang/tcsds-1.2.40  lang/tcsds-1.2.41  lang/tcsds-1.2.42(default)
+
+
+- Environment setting file use example
+
+ This is the example of if using version level 4.12.0 tcsds-1.2.41 environment.
+
+ .. code-block:: console
+
+   [_LNlogin]$ module switch lang/tcsds-1.2.41
+   [_LNlogin]$ module list
+   Currently Loaded Modulefiles:
+     1) lang/tcsds-1.2.41
+
+ Environment is defined by loading environment setting file with :command:`module load` command.
+
+ .. Attention::
+
+    If a module file with a different version level has already been loaded, an error will occur when loading. Use the **module switch** command as shown above or use the **module unload** command to release the settings before executing.
+
+     | [_LNlogin]$ module unload lang/tcsds-1.2.42
+     | [_LNlogin]$ module load lang/tcsds-1.2.41
+

@@ -1,0 +1,316 @@
+
+Overview
+========
+
+VeloC (Very Low Overhead Checkpointing System) is a multi-level checkpointing/restart tool for large calculations [#veloc]_.
+By properly implementing the VeloC API in your program, you can perform fast checkpointing/restarting.
+This section shows how to compile and link C/C++ and Fortran programs using VeloC on \ |post-k|\ .
+
+Please refer to https://veloc.readthedocs.io/ for more information about VeloC.
+
+
+Implementation example
+======================
+
+for C/C++
+---------
+
+This section explains the important parts of the VeloC implementation with reference to the VeloC test program,
+which is available on GitHub (https://github.com/ECP-VeloC/VELOC/tree/main/test).
+This section describes how to implement the VeloC API with reference to "heatdis_mem.c".
+
+First, we include the VeloC header file to call the VeloC API.
+
+.. code-block:: bash
+
+  6 #include "include/veloc.h"
+
+
+Next, "VELOC_Init" is implemented to initialize VeloC.
+
+.. code-block:: bash
+
+  91     if (VELOC_Init(MPI_COMM_WORLD, argv[2]) != VELOC_SUCCESS) {
+  92       printf("Error initializing VELOC! Aborting...\n");
+  93       exit(2);
+  94     }
+
+
+Here, "MPI_COMM_WORLD" in "VELOC_Init" is the MPI communicator, and "argv[2]" is the name of the VeloC configuration file.
+In "heatdis_mem.c", the configuration file name is given from the standard input. For details on this configuration file, see "VeloC Configuration" below.
+
+The registration of variables and arrays to be checked by VeloC is done through "VELOC_Mem_protect" as follows:
+
+.. code-block:: bash
+
+  110     VELOC_Mem_protect(0, &i, 1, sizeof(int));
+  111     VELOC_Mem_protect(1, h, M * nbLines, sizeof(double));
+  112     VELOC_Mem_protect(2, g, M * nbLines, sizeof(double));
+
+where the first argument of VELOC_Mem_protect is an ID to identify the memory area, the second is a pointer to a variable or array,
+the third is the number of elements, and the fourth is the size of the elements.
+
+The restart part by VeloC is implemented as follows:
+
+.. code-block:: bash
+
+  115     int v = VELOC_Restart_test("heatdis", 0);
+  116     if (v > 0) {
+  117       printf("Previous checkpoint found at iteration %d, initiating restart...\n", v);
+  118       // v can be any version, independent of what VELOC_Restart_test is returning
+  119       assert(VELOC_Restart("heatdis", v) == VELOC_SUCCESS);
+  120     } else
+
+
+where "VELOC_Restart_test" confirms whether or not a restart is possible. The first argument "heatdis" is the checkpoint label.
+The second argument specifies the version of the checkpoint to be used for the restart.
+Here, "0" corresponds to the latest version. The return value of this function is the checkpoint version.
+Next, "VELOC_Restart" is called to restore the registered variables and arrays.
+Here, "heatdis" is the checkpoint label and "v" is the checkpoint version.
+
+To generate checkpoints, “VELOC_Checkpoint" is called at appropriate times as follows:
+
+.. code-block:: bash
+
+  122     while(i < ITER_TIMES) {
+  123         localerror = doWork(nbProcs, rank, M, nbLines, g, h);
+  124         if (((i % ITER_OUT) == 0) && (rank == 0))
+  125           printf("Step : %d, error = %f\n", i, globalerror);
+  126         if ((i % REDUCE) == 0)
+  127           MPI_Allreduce(&localerror, &globalerror, 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
+  128         if (globalerror < PRECISION)
+  129           break;
+  130         i++;
+  131         if (i % CKPT_FREQ == 0)
+  132           assert(VELOC_Checkpoint("heatdis", i) == VELOC_SUCCESS);
+  133     }
+
+where "heatdis" in "VELOC_Checkpoint" is the checkpoint label and "i" is the checkpoint version.
+
+Finally, "VELOC_Finalize" is called to terminate VeloC.
+
+.. code-block:: bash
+
+  139     VELOC_Finalize(1); // wait for checkpoints to finish
+
+
+for Fortran
+-----------
+
+Sample source code is available at https://github.com/ECP-VeloC/VELOC/blob/fortran/test/fheatdis.f90.
+Based on this sample source code, we will show the important aspects of the VeloC implementation.
+
+Load the VeloC module to use variables and functions related to VeloC.
+
+.. code-block:: bash
+
+  5   use VELOC
+
+
+Calls the VeloC initialization function, where comm is the MPI communicator and fheatdis.cfg is the name of the configuration file.
+The contents of the configuration file are described in the execution section.
+
+.. code-block:: bash
+
+  29   call VELOC_Init(comm, 'fheatdis.cfg', err) !see with argc argv
+
+
+The VELOC_Mem_protect function is used to register variables and arrays.
+Arrays can be registered as is, but variables must be pointers.
+
+.. code-block:: bash
+
+  46   ptriter => i
+  47   call VELOC_Mem_protect(0, ptriter, err)
+  48   call VELOC_Mem_protect(1, h, err)
+  49   call VELOC_Mem_protect(2, g, err)
+
+
+The VELOC_Restart_test function is used to determine whether or not a restart has occurred.
+If so, the VELOC_Recover_mem function is used to restore the registered variables and arrays to their original state.
+
+.. code-block:: bash
+
+  56   call VELOC_Restart_test("fheatdis", 0, restart_iter)
+  57   print '("test restart", I5)', restart_iter
+  58   if (restart_iter > 0) then
+  59       print '("Previous checkpoint found at iteration ",I5," initiating restart...")', restart_iter
+  60       call VELOC_Restart_begin("fheatdis", restart_iter, err)
+  61       call VELOC_Recover_mem(err)
+  62       call VELOC_Restart_end(restart_success, err)
+  63   else
+  64       i = 1
+  65   endif
+
+
+In the main loop, the VELOC_Checkpoint function is called at an appropriate timing to generate checkpoints.
+
+.. code-block:: bash
+
+  80     if (mod(i, CKPT_FREQ) == 0) then
+  81         call VELOC_Checkpoint_wait(err)
+  82         call VELOC_Checkpoint_begin("fheatdis", i, err)
+  83         call VELOC_Checkpoint_mem(err)
+  84
+  85         call VELOC_Checkpoint_end(ckpt_success, err)
+  86
+  87         if (err /= VELOC_SCES ) then
+  88           print '("Error during checkpoint: ", I5)', err
+  89           exit
+  90         endif
+  91     endif  
+
+
+The VELOC_Finalize function is used to perform the termination process.
+
+.. code-block:: bash
+
+  102   call VELOC_Finalize(0, err)
+
+
+Compiling link
+==============
+
+Indicates options that must be specified when compiling and linking.
+
+1. Options required during compilation
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 2 7
+   
+    * - Language
+      - Option
+
+    * - C/C++
+      - ``-I/vol0004/apps/oss/veloc``
+
+    * - Fortran
+      - ``-I/vol0004/apps/oss/veloc/include``
+
+2. Options required during linking
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 2 7
+   
+    * - Language
+      - Option
+
+    * - C/C++
+      - \-L/vol0004/apps/oss/veloc/lib64 \-lveloc-client \-lveloc-modules \-ler \-laxl \-lkvtree \-lshuffile \-lredset \-lrankstr
+
+    * - Fortran
+      - \-L/vol0004/apps/oss/veloc/lib64 \-lveloc-client \-lveloc-modules \-ler \-laxl \-lkvtree \-lshuffile \-lredset \-lrankstr \-lvelocf
+
+
+The following are examples of compilation in each language.
+
+1. C/C++ compiling example
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -o heatdis_mem -Kfast,parallel,optmsg=2 heatdis_mem.c -I/vol0004/apps/oss/veloc -L/vol0004/apps/oss/veloc/lib64 -lveloc-client -lveloc-modules -ler -laxl -lkvtree -lshuffile -lredset -lrankstr
+
+2. Fortran compiling example
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -o fheatdis -Kfast,parallel,optmsg=2 fheatdis.f90 -I/vol0004/apps/oss/veloc/include -L/vol0004/apps/oss/veloc/lib64 -lveloc-client -lveloc-modules -ler -laxl -lkvtree -lshuffile -lredset -lrankstr -lvelocf
+
+
+How to execute
+==============
+
+This indicates the program execution example of using VeloC.
+
+[Preparation (C/C++, Fortran)]
+
+Describe the configuration file for VeloC.
+The configuration file, heatdis.cfg in C/C++, or fheatdis.cfg in Fortran, is specified in the sample source code, but the file name can be set freely.
+
+.. code-block:: bash
+
+  scratch = tmp/scratch
+  persistent = tmp/persistent
+  meta = tmp/meta
+  max_versions = 2
+  scratch_versions = 1
+  mode = async
+  chksum = true
+
+These settings are as follows：
+
+* scratch = <path> (node-local path where VELOC can save temporary checkpoints that live for the duration of the reservation)
+* persistent = <path> (persistent path where VELOC can save durable checkpoints that live indefinitely)
+* meta = <path> (persistent path where VELOC will save checksumming information)
+* max_versions = <int> (number of previous checkpoints to keep on persistent, default: 0 - keep all)
+* scratch_versions = <int> (number of previous checkpoints to keep on scratch, default: 0 - keep all)
+* mode = async (configurable mode of operation)
+* chksum = <boolean> (activates checksum calculation and verification for checkpoints, default: false)
+
+For other settings, refer to the User Guide on the official website.
+
+Before executing a job, generate a directory to write data to.
+
+ .. code-block:: console
+
+  [_LNlogin]$ rm -rf tmp/scratch tmp/persistent tmp/meta
+  [_LNlogin]$ mkdir -p tmp/scratch tmp/persistent tmp/meta
+
+
+Jobs are described in the following manner.
+
+[C/C++ Execution example]
+
+.. code-block:: bash
+
+  #! /bin/bash -x
+  #PJM -L node=1
+  #PJM -L elapse=00:10:00
+  #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+  #PJM -g groupname
+  #PJM -s
+  #
+  export PARALLEL=1
+  export OMP_NUM_THREADS=1
+  
+  BINDIR=/vol0004/apps/oss/veloc/bin
+  LIBDIR=/vol0004/apps/oss/veloc/lib64
+  export LD_LIBRARY_PATH=$LIBDIR:$LD_LIBRARY_PATH
+  export VELOC_BIN=$BINDIR
+  
+  mpiexec ./heatdis_mem 1 heatdis.cfg
+
+
+[Fortran Execution example]
+
+.. code-block:: bash
+
+  #! /bin/bash -x
+  #PJM -L node=4
+  #PJM -L elapse=00:10:00
+  #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+  #PJM -g groupname
+  #PJM -s
+  #
+  export PARALLEL=1
+  export OMP_NUM_THREADS=1
+  
+  BINDIR=/vol0004/apps/oss/veloc/bin
+  LIBDIR=/vol0004/apps/oss/veloc/lib64
+  export LD_LIBRARY_PATH=$LIBDIR:$LD_LIBRARY_PATH
+  export VELOC_BIN=$BINDIR
+  
+  mpiexec ./fheatdis
+  
+
+.. attention::
+ 
+ - If the directory to write data for Checkpoint/restart is not generated, data may not be written out correctly.
+
+
+.. rubric:: Footnote
+
+.. [#veloc] Nicolae, B., Moody, A., Gonsiorowski, E., Mohror, K. and Cappello, F. 2019. VeloC: Towards High Performance Adaptive Asynchronous Checkpointing at Large Scale. IPDPS 19: The 2019 IEEE International Parallel and Distributed Processing Symposium, pp. 911-920, Rio de Janeiro, Brazil, (2019).
+

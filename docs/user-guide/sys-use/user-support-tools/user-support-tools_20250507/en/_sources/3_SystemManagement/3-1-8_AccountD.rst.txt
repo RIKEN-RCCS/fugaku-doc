@@ -1,0 +1,243 @@
+User payment information displaying (disk)
+==========================================
+
+| 　**[Name]**
+| 　accountd - Display the user payment information for disk
+
+| 　**[Style]**
+| 　accountd  [Option]
+
+| 　**[Description]**
+| 　accountd command displays accounting related to the disk used for each user / group. The accounting about the disk is managed as the used capacity of the disk. Since the disk usage rate of the home directory assigned to the user and the data directory assigned to the assignment can be confirmed, it can be used to determine whether or not the source can be created and the data can be stored.
+| 　The system administrator can display the disk charging information of all members registered in the system. However, it is required to be given the administorator authority describes in  System management function . If no option is specified, even the project manager and system administrator can display only their own disk accounting.
+| 　If the disk or inode usage exceeded the limit, appended to the usage with * (asterisk).
+| 　※The accountd_volume command is deprecated.
+
+| 　**[Option]**
+| 　-E  
+| 　Displays the access paths of the directories assigned to groups and users.
+
+| 　-g  group name 　
+| 　Specify group name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.
+
+| 　-m 　
+| 　Displays the disk usage of the users belonging to the group.
+| 　The -m option is specified, the -g option must specify group name.
+| 　The data collect cycle is about 3 weeks. The collection period may vary depending on the load condition of the system.
+
+| 　-s
+| 　The disk usage display unit is changed from the default Gibibyte [GiB] to Kibibyte [KiB].
+ 　
+| 　-c
+| 　Standard output of search results in CSV format. You can also save to a file by using the redirection function.
+ 　
+| 　-f  volume name
+| 　Specify volume name. Specify the mount point you want to display. You can specify prefix matching using * (asterisk).
+| 　　Exact match specification	/vol0301
+| 　　Head match specification	‘/vol03*’
+
+| 　-h
+| 　Display the disk usage of all the VOLUME.
+
+| 　-i
+| 　Display inode usage.
+
+| 　&#45;-help
+| 　Display command help contents.
+
+| 　**[Return value]**
+| 　Noprmal: 0
+| 　Abnormal: 1
+
+| 　**[Note]**
+| 　None.
+
+| 　**[Use example]**
+| 　【Example 1】	Check the disk usage status of the data, share, and home areas assigned to groups and users
+
+.. code-block:: console
+
+   [login]$ accountd
+      COLLECTDATE : 2022/04/01 10:10:10    unit[GiB]
+   USER : t00040
+   *--------------------------------------------------[GROUP]-----------------------------------------------------*
+   GROUP           VOLUME                    LIMIT            USAGE         AVAILABLE           FILES  USE_RATE   
+   group302        vol0301                 5120000          2560000           2560000          300000     50.0%
+   *--------------------------------------------------[GROUP]-----------------------------------------------------*
+   GROUP           VOLUME                    LIMIT            USAGE         AVAILABLE           FILES  USE_RATE
+   group302        vol0400                 5120000          2560000           2560000          300000     50.0%
+   *--------------------------------------------------[USER]------------------------------------------------------*
+   USER            VOLUME                    LIMIT            USAGE         AVAILABLE           FILES  USE_RATE
+   t00040          vol0400                       0                1                 0              55      3.1%
+   [login]$
+
+
+| 　You can check the disk usage status of the data, share, and home areas assigned to groups and users.
+| 　The display unit of disk usage is Gibibyte [GiB] by default. If you want to change the display unit to Kibibyte [KiB], specify the -s option. The unit switching is calculated as 1 KiB (1,024B). The fraction due to unit switching is displayed with the limit value (LIMIT) rounded down and the usage (USAGE) rounded up. The remaining usable amount (AVAILABLE) is a value obtained by subtracting the usage amount (USAGE) from the limit value (LIMIT).
+| 　The usage rate (USAGE_RATE) is rounded off to the second decimal place.
+| 　Note that home data areas that are not assigned to assignments / users are displayed as “-” (hyphen) in LIMIT and AVAILABLE in the meaning of being unavailable. Even in the home data area assigned to the assignment / user, the end assignment associated with the end of the assignment execution period may be displayed with LIMIT and AVAILABLE as-(hyphen).
+
+| 　【Example 2】	Displays the access paths of the directories assigned to groups and users.
+
+.. code-block:: console
+
+   [login]$ accountd -E
+      COLLECTDATE : 2022/04/01 10:10:10    unit[GiB]
+   USER : t00040
+   *--------------------------------------------------[GROUP]-----------------------------------------------------*
+   GROUP           VOLUME                     LIMIT            USAGE         AVAILABLE           FILES  USE_RATE   
+   group302        vol0301                  5120000          2560000           2560000          300000     50.0%
+     /vol0200/data/group301
+   *--------------------------------------------------[GROUP]-----------------------------------------------------*
+   GROUP           VOLUME                     LIMIT            USAGE         AVAILABLE           FILES  USE_RATE
+   group302        vol0400                  5120000          2560000           2560000          300000     50.0%
+     /vol0401/data/group302
+   *--------------------------------------------------[USER]------------------------------------------------------*
+   USER            VOLUME                     LIMIT            USAGE         AVAILABLE           FILES  USE_RATE
+   t00040          vol0400                        0                1                 0              55      3.1%
+     /vol0401/fugaku/t00040
+   [login]$
+
+
+
+| 　【Example 3】	The system administrator displays the accounting information that concerns all group disk
+
+.. code-block:: console
+
+   [login]$ accountd -a 
+   COLLECTDATE : 2022/02/21 18:13:59    unit[GiB]
+   *--------------------------------------------------[GROUP]-----------------------------------------------------*
+   GROUP           VOLUME                       LIMIT             USAGE         AVAILABLE           FILES  USE_RATE
+   group301        vol0200                     5120000          2560000           2560000          300000     50.0%
+   group302        vol0401                     5120000          2560000           2560000          300000     50.0%
+   [login]$
+
+
+| 　You can check the disk usage status assigned to all groups. Displayed in ascending order with group names as keys.
+
+| 　【Example 4】	The system administrator displays the accounting information that concerns all group disk as CSV format
+
+.. code-block:: console
+
+   [login]$ accountd -a -c
+   INFO_H,COLLECT_DATE
+   "INFO","2021/04/01 01:23:45"
+   GROUP_H,GROUP,VOLUME,LIMIT,USAGE,AVAILABLE,FILES,USAGE_RATE
+   "GROUP","group1","/vol0300","5120000","2560000","2560000","300000","0.500"
+   "GROUP","group2","/vol0300","5120000","2560000","2560000","300000","0.500"
+   "GROUP","group3","/vol0300","5120000","2560000","2560000","300000","0.500"
+   "GROUP","group4","/vol0600","2000000","1000000","1000000","150000","0.500"
+   [login]$
+
+| 　【Example 5】	Displays the disk usage of the users belonging to the group
+.. code-block:: console
+
+   [login]$ accountd -g group304 -m
+   COLLECTDATE : 2023/01/18 12:34:56    unit[GiB]
+   *-------------------------------[USER]-------------------------------*
+   VOLUME          USER                       FILES             USAGE
+   vol0300         u10001                64,786,325           310,433
+   vol0300         u10002                53,095,673           300,886
+   vol0300         u10003                        39                 4
+   vol0300         u10004                         1                 0
+   vol0501         u10001                64,786,325           310,433
+   vol0501         u10002                53,095,673           300,886
+   vol0501         u10003                        39                 4
+   vol0501         u10004                         1                 0
+   [login]$
+
+| 　The result of the -m option is regularly collected data.
+| 　The COLLECTDATE is different from the execution date of the accountd command, and is the first date of each VOLUME data gathering date.
+
+| 　【Example 6】	Displays the disk usage of the users belonging to the group as CSV format
+.. code-block:: console
+
+   [login]$ accountd -g group304 -m -c
+   INFO_H,COLLECT_DATE
+   "INFO","2023/01/18 12:34:56"
+   USER_H,VOLUME,USER,FILES,USAGE
+   "USER","vol0300","u10001","64786325","310433"
+   "USER","vol0300","u10002","53095673","300886"
+   "USER","vol0300","u10003","39","4"
+   "USER","vol0300","u10004","1","0"
+   "USER","vol0501","u10001","64786325","310433"
+   "USER","vol0501","u10002","53095673","300886"
+   "USER","vol0501","u10003","39","4"
+   "USER","vol0501","u10004","1","0"
+   [login]$
+
+| 　Indicates the explanation of displaying item.
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 10 20 70
+
+  * - No
+    - Item name
+    - Description
+
+  * - 1
+    - COLLECT DATE
+    - Data gathering date and time
+
+  * - 2
+    - USER
+    - User name
+
+  * - 3
+    - GROUP
+    - Group name
+
+  * - 4
+    - VOLUME
+    - | The first two digits represent the VOLUME number and the last two digits represent the MDT number.
+      | 　【Example】vol0401
+
+  * - 5
+    - LIMIT
+    - | Limit value
+      | 　The unit of information follows the display unit.
+      | unit[Display unit]
+      | 
+      | 　　＜Display unit＞
+      | 　　　unit[GiB]　Default is gibibyte display
+      | 　　　unit[KiB]　 Millibyte display when -s option is specified
+
+  * - 6
+    - USAGE
+    - | Disk usage
+      | 　The unit of information follows the display unit.
+      | unit[Display unit]
+      | 
+      | 　　＜Display unit＞
+      | 　　　unit[GiB]　Default is gibibyte display
+      | 　　　unit[KiB]　 Millibyte display when -s option is specified
+
+  * - 7
+    - AVAILABLE
+    - | Disk available usage
+      | 　The unit of information follows the display unit.
+      | unit[Display unit]
+      | 
+      | 　　＜Display unit＞
+      | 　　　unit[GiB]　Default is gibibyte display
+      | 　　　unit[KiB]　 Millibyte display when -s option is specified
+
+  * - 8
+    - FILES
+    - | The number of files created in file system
+      | 　Count 1 file as 1 item
+
+  * - 9
+    - USAGE RATE
+    - | Disk use rate to the limit value
+      | 　Rounded to the second decimal place
+
+  * - 10
+    - [GROUP]
+    - Display information about groups
+
+  * - 11
+    - [USER]
+    - Display information about user
+

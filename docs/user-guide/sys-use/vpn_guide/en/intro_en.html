@@ -1,0 +1,458 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>1. Overview &#8212; The Use of Fugaku VPN Service  documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="The Use of Fugaku VPN Service" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="The Use of Fugaku VPN Service"
+             accesskey="P">previous</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">The Use of Fugaku VPN Service  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. Overview</a></li>
+<li><a class="reference internal" href="#client-certification-installation">2. Client Certification Installation</a><ul>
+<li><a class="reference internal" href="#installing-the-certificate-windows">2.1. Installing the certificate (Windows)</a></li>
+<li><a class="reference internal" href="#installing-the-certificate-macos">2.2. Installing the certificate (MacOS)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#vpn-connection-setting-procedure">3. VPN Connection Setting Procedure</a><ul>
+<li><a class="reference internal" href="#vpn-connection-setting-procedure-windowsos">3.1. VPN Connection Setting Procedure (WindowsOS)</a><ul>
+<li><a class="reference internal" href="#download-the-installer-for-the-vpn-connection-tool-forticlient">3.1.1. Download the installer for the VPN connection tool “FortiClient”.</a></li>
+<li><a class="reference internal" href="#vpn-tool-forticlient-installation-procedure">3.1.2. VPN Tool (FortiClient) Installation Procedure</a></li>
+<li><a class="reference internal" href="#vpn-new-setting-procedure">3.1.3. VPN New Setting Procedure</a></li>
+<li><a class="reference internal" href="#vpn-connection-procedure">3.1.4. VPN Connection Procedure</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#vpn-connection-setting-procedure-macos">3.2. VPN Connection Setting Procedure (MacOS)</a><ul>
+<li><a class="reference internal" href="#id1">3.2.1. Download the installer for the VPN connection tool “FortiClient”.</a></li>
+<li><a class="reference internal" href="#id3">3.2.2. VPN Tool (FortiClient) Installation Procedure</a></li>
+<li><a class="reference internal" href="#id4">3.2.3. VPN New Setting Procedure</a></li>
+<li><a class="reference internal" href="#id5">3.2.4. VPN Connection Procedure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#hostname-for-the-compute-nodes-and-pre-post-nodes">4. Hostname for the compute nodes and Pre/Post nodes</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">The Use of Fugaku VPN Service</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="overview">
+<h1>1. Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<p>This is a service that allows users to directly access compute nodes through a VPN connection between
+Supercomputer Fugaku and the user.</p>
+</div>
+<div class="section" id="client-certification-installation">
+<h1>2. Client Certification Installation<a class="headerlink" href="#client-certification-installation" title="Permalink to this headline">¶</a></h1>
+<p>Client certificate is used when accessing via VPN.
+Please install it on the OS you want to access via VPN.</p>
+<p>This indicates how to install the required client certificate to access to the Supercomputer Fugaku via VPN.
+Please prepare the followings before installing the client certificate.</p>
+<ul class="simple">
+<li><p>Client certificate :”user account name .p12” file</p></li>
+<li><p>Client certificate pathphrase</p></li>
+</ul>
+<p><strong>Client certificate</strong>
+Once the account issue is compleded, the client certificate is sent via e-mail to the e-mail
+address you entered when applying. Please save the attached “local account name.p12” file to the device
+(e.g. PC) which installs the client certificate. To “local account name.p12” file, the client private key, the
+client certificate (a public key) and the route certificate of the client certificate issuing authority.</p>
+<p><strong>Client certificate pathphrase</strong>
+The passphrase is sent in written form or PDF file separately from the client certificate.
+It will be required when installing the client certificate. Please store at the safe place</p>
+<p>This section describes the procedure for registering a client certificate on your PC.</p>
+<div class="section" id="installing-the-certificate-windows">
+<h2>2.1. Installing the certificate (Windows)<a class="headerlink" href="#installing-the-certificate-windows" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Save a client certificate (“.p12” file) to any location on your device, and then double-click on it.</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/211.png"><img alt="_images/211.png" src="_images/211.png" style="width: 100px;" /></a>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Select “ <strong>Current User</strong> ” on the Certificate Import Wizard screen, and then [ <strong>Next</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/212.png"><img alt="_images/212.png" src="_images/212.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Click on [ <strong>Next</strong> ] on the File Specification screen.</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/213.png"><img alt="_images/213.png" src="_images/213.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Enter the <strong>Client certificate pathphrase</strong>  and click on [ <strong>Next</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/214.png"><img alt="_images/214.png" src="_images/214.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Select “ <strong>Automatically select the certificate store based on the type of certificate</strong> ” and click on [ <strong>Next</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/215.png"><img alt="_images/215.png" src="_images/215.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>Click on [ <strong>Finish</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/216.png"><img alt="_images/216.png" src="_images/216.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>If a security warning dialog is displayed, confirm that the Issuer (the following red-letter) is“ <strong>RIKEN R-CCS</strong> ” and click on [ <strong>Yes</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/217.png"><img alt="_images/217.png" src="_images/217.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="8">
+<li><p>Click on [ <strong>OK</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/218.png"><img alt="_images/218.png" src="_images/218.png" style="width: 200px;" /></a>
+</div>
+<p>That’s the end of Client certificate installation procedure.</p>
+</div>
+<div class="section" id="installing-the-certificate-macos">
+<h2>2.2. Installing the certificate (MacOS)<a class="headerlink" href="#installing-the-certificate-macos" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Save a client certificate (“.p12” file) to any location on your device, and then double-click on it.</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/221.png"><img alt="_images/221.png" src="_images/221.png" style="width: 100px;" /></a>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>If a dialog about certificate addition is displayed, confirm that Keychain is “ <strong>login</strong> ” and click on [ <strong>Add</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/222.png"><img alt="_images/222.png" src="_images/222.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Enter  <strong>Client certificate pathphrase</strong>  into a password dialog and click on [ <strong>OK</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/223.png"><img alt="_images/223.png" src="_images/223.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Select “ <strong>login</strong> ” in Keychain and “ <strong>Certificates</strong> ” in Category at the left pane, and then doubleclick on “ <strong>RIKEN R-CCS</strong> ” at the right pane.</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/224.png"><img alt="_images/224.png" src="_images/224.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Select “ <strong>Always Trust</strong> ” in “ When using this certificate ”, and close this window.</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/225.png"><img alt="_images/225.png" src="_images/225.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>If a password dialog is displayed, enter the password of your device and click on [ <strong>Update Settings</strong> ]. After update, please confirm that the blue plus icon is displayed at the bottom left of“ <strong>RIKEN R-CCS</strong> ”</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/226.png"><img alt="_images/226.png" src="_images/226.png" style="width: 1000px;" /></a>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>Click on disclosure triangle at the left your client certificate and double-click on <strong>private key (key mark)</strong> .</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/227.png"><img alt="_images/227.png" src="_images/227.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="8">
+<li><p>Change “Name” to <strong>the same name of your client certificate</strong> , click on [ <strong>Save Changes</strong> ] and closethis window.</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/228.png"><img alt="_images/228.png" src="_images/228.png" style="width: 400px;" /></a>
+</div>
+<p>That’s the end of installation procedure.</p>
+</div>
+</div>
+<div class="section" id="vpn-connection-setting-procedure">
+<h1>3. VPN Connection Setting Procedure<a class="headerlink" href="#vpn-connection-setting-procedure" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="vpn-connection-setting-procedure-windowsos">
+<h2>3.1. VPN Connection Setting Procedure (WindowsOS)<a class="headerlink" href="#vpn-connection-setting-procedure-windowsos" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="download-the-installer-for-the-vpn-connection-tool-forticlient">
+<h3>3.1.1. Download the installer for the VPN connection tool “FortiClient”.<a class="headerlink" href="#download-the-installer-for-the-vpn-connection-tool-forticlient" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Access <a class="reference external" href="https://www.fortinet.com/support/product-downloads">https://www.fortinet.com/support/product-downloads</a> with a web browser.</p></li>
+<li><p>From 「 <strong>FortiClient VPN</strong> 」select your OS type ( <strong>Windows</strong> ) and click DOWNLOAD.</p></li>
+</ol>
+<p>　　　※ Download <strong>FortiClient VPN</strong>, not 「 FortiClient 」.</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3111.png"><img alt="_images/3111.png" src="_images/3111.png" style="width: 600px;" /></a>
+</div>
+<p>　That’s the end of download procedure.</p>
+</div>
+<div class="section" id="vpn-tool-forticlient-installation-procedure">
+<h3>3.1.2. VPN Tool (FortiClient) Installation Procedure<a class="headerlink" href="#vpn-tool-forticlient-installation-procedure" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Save a VPN Tool“ <strong>FortiClient VPN</strong> ”installer, to any location on your device, and then double-click on it.</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3121.png"><img alt="_images/3121.png" src="_images/3121.png" style="width: 100px;" /></a>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>When the FortiClient Setup Wizard screen opens, check the box for “ <strong>Yes, I have read and accept the License Agreement</strong> ”, and then click on [ <strong>Next</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3122.png"><img alt="_images/3122.png" src="_images/3122.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Click on [ <strong>Next</strong> ] on the Destination Folder screen.</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3123.png"><img alt="_images/3123.png" src="_images/3123.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Click on [ <strong>Install</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3124.png"><img alt="_images/3124.png" src="_images/3124.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Click on [ <strong>Finish</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3125.png"><img alt="_images/3125.png" src="_images/3125.png" style="width: 400px;" /></a>
+</div>
+<p>That’s the end of installation procedure.</p>
+</div>
+<div class="section" id="vpn-new-setting-procedure">
+<h3>3.1.3. VPN New Setting Procedure<a class="headerlink" href="#vpn-new-setting-procedure" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Startup ”FortiClient” from “All Programs”</p></li>
+<li><p>Click on [ <strong>Configure VPN</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3132.png"><img alt="_images/3132.png" src="_images/3132.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Click on [ <strong>SSL-VPN</strong> ] tab in “New VPN Connection”. Then, fill “Connection Name”, ”Description” and Enter [ <strong>vpn.fugaku.r-ccs.riken.jp</strong> ] in the “Remote Gateway” field.</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3133.png"><img alt="_images/3133.png" src="_images/3133.png" style="width: 600px;" /></a>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Next, select the installed client certificate from the pull-down menu in the “Client Certificate” field. After selecting, select [ <strong>Disable</strong> ] in the “Authentication” and click [ <strong>Save</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3134.png"><img alt="_images/3134.png" src="_images/3134.png" style="width: 600px;" /></a>
+</div>
+<p>That’s the end of VPN new setting procedure.</p>
+</div>
+<div class="section" id="vpn-connection-procedure">
+<h3>3.1.4. VPN Connection Procedure<a class="headerlink" href="#vpn-connection-procedure" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Click the “VPN Name” pull-down, select the connection destination.</p></li>
+</ol>
+<blockquote>
+<div><p>( Make sure that the client certificate of Supercomputer Fugaku is selected.)</p>
+</div></blockquote>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3141.png"><img alt="_images/3141.png" src="_images/3141.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Click [ <strong>Connect</strong> ].</p></li>
+<li><p>When the screen below is displayed, the VPN connection is successful.</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3143.png"><img alt="_images/3143.png" src="_images/3143.png" style="width: 400px;" /></a>
+</div>
+</div>
+</div>
+<div class="section" id="vpn-connection-setting-procedure-macos">
+<h2>3.2. VPN Connection Setting Procedure (MacOS)<a class="headerlink" href="#vpn-connection-setting-procedure-macos" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>3.2.1. Download the installer for the VPN connection tool “FortiClient”.<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Access <a class="reference external" href="https://www.fortinet.com/support/product-downloads">https://www.fortinet.com/support/product-downloads</a> with a web browser.</p></li>
+<li><p>From 「 <strong>FortiClient VPN</strong> 」select your OS type ( <strong>MacOS</strong> ) and click DOWNLOAD.</p></li>
+</ol>
+<p>　　　※ Download <strong>FortiClient VPN</strong>, not 「 FortiClient 」.</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3211.png"><img alt="_images/3211.png" src="_images/3211.png" style="width: 600px;" /></a>
+</div>
+<p>That’s the end of download procedure.</p>
+</div>
+<div class="section" id="id3">
+<h3>3.2.2. VPN Tool (FortiClient) Installation Procedure<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Save a VPN Tool“ <strong>FortiClient VPN</strong> ”installer, to any location on your device, and then double-click on it.</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3221.png"><img alt="_images/3221.png" src="_images/3221.png" style="width: 100px;" /></a>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>If a warning dialog is displayed, click on [ <strong>Open</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3222.png"><img alt="_images/3222.png" src="_images/3222.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Click on [ <strong>Install</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3223.png"><img alt="_images/3223.png" src="_images/3223.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Click on [ <strong>Continue</strong> ] on the Introduction screen.</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3224.png"><img alt="_images/3224.png" src="_images/3224.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Click on [ <strong>Continue</strong> ] on the License screen.</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3225.png"><img alt="_images/3225.png" src="_images/3225.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>Click on [ <strong>Agree</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3226.png"><img alt="_images/3226.png" src="_images/3226.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>Click on [ <strong>Install</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3227.png"><img alt="_images/3227.png" src="_images/3227.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="8">
+<li><p>If a password dialog is displayed, enter the password of your device and click on [ <strong>Install Software</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3228.png"><img alt="_images/3228.png" src="_images/3228.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="9">
+<li><p>Click on [ <strong>Close</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3229.png"><img alt="_images/3229.png" src="_images/3229.png" style="width: 400px;" /></a>
+</div>
+<p>That’s the end of installation procedure.</p>
+</div>
+<div class="section" id="id4">
+<h3>3.2.3. VPN New Setting Procedure<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Startup ” <strong>FortiClient</strong> ” by double click on ”FortiClient” from “Application”.</p></li>
+<li><p>Click on [ <strong>Configure VPN</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3232.png"><img alt="_images/3232.png" src="_images/3232.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Click on [ <strong>SSL-VPN</strong> ] tab in “New VPN Connection”. Then, fill “Connection Name”, ”Description”and Enter [ <strong>vpn.fugaku.r-ccs.riken.jp</strong> ] in the “Remote Gateway” field.</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3233.png"><img alt="_images/3233.png" src="_images/3233.png" style="width: 600px;" /></a>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Next, select the installed client certificate from the pull-down menu in the “Client Certificate” field. After selecting, select [ <strong>Disable</strong> ] in the “ <strong>Authentication</strong> ” and click [ <strong>Save</strong> ].</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3234.png"><img alt="_images/3234.png" src="_images/3234.png" style="width: 600px;" /></a>
+</div>
+<p>That’s the end of VPN new setting procedure.</p>
+</div>
+<div class="section" id="id5">
+<h3>3.2.4. VPN Connection Procedure<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>1.Startup ”<strong>FortiClient</strong>” by double click on ”FortiClient” from “Application”.</p>
+<p>2.Click the “VPN Name” pull-down, select the connection destination.</p>
+<blockquote>
+<div><p>( Make sure that the client certificate of Supercomputer Fugaku is selected.)</p>
+</div></blockquote>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3242.png"><img alt="_images/3242.png" src="_images/3242.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>When the screen below is displayed, the VPN connection is successful.</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3243.png"><img alt="_images/3243.png" src="_images/3243.png" style="width: 400px;" /></a>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="hostname-for-the-compute-nodes-and-pre-post-nodes">
+<h1>4. Hostname for the compute nodes and Pre/Post nodes<a class="headerlink" href="#hostname-for-the-compute-nodes-and-pre-post-nodes" title="Permalink to this headline">¶</a></h1>
+<p>When the VPN connection is used, users can access compute nodes and prepost nodes via following hostname.</p>
+<ul class="simple">
+<li><p>Compute node</p></li>
+</ul>
+<p>FQDN is the host name followed by <strong>cn.fugaku.r-ccs.riken.jp</strong></p>
+<p>Example) d22-6008c.cn.fugaku.r-ccs.riken.jp</p>
+<ul class="simple">
+<li><p>PrePost node</p></li>
+</ul>
+<p>FQDN is the host name followed by <strong>pp.fugaku.r-ccs.riken.jp</strong></p>
+<p>Example) pps06.pp.fugaku.r-ccs.riken.jp</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="The Use of Fugaku VPN Service"
+             >previous</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">The Use of Fugaku VPN Service  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, RIKEN R-CCS.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Potal Top</a>
+    </div>
+  </body>
+</html>

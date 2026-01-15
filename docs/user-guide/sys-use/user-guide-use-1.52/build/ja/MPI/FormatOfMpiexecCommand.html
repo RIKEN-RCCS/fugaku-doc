@@ -1,0 +1,187 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6.2. 実行コマンドの形式 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="6.3. バックグラウンドジョブの実行方法" href="HowToExecuteABackgroundJob.html" />
+    <link rel="prev" title="6.1. 概要" href="Overview.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="HowToExecuteABackgroundJob.html" title="6.3. バックグラウンドジョブの実行方法"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="6.1. 概要"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">6. </span>MPIジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.2. </span>実行コマンドの形式</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">6.2. </span>実行コマンドの形式<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p><strong class="program">mpiexec</strong>コマンドによるMPIプログラム実行形式は以下のとおりです。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w">  </span>オプション<span class="w">　</span>実行モジュール<span class="w">　</span>実行モジュールのオプション
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><strong class="program">mpiexec</strong>の非互換項目</p>
+<p>「富岳」では、運用に合わせてカスタマイズした<strong class="program">mpiexec</strong>コマンドを提供しています。
+カスタマイズにより、マニュアル「MPI使用手引書」の記載と非互換となる項目があります。
+ここでは、マニュアルと非互換となる項目について説明します。</p>
+<p>アプリケーション情報の収集</p>
+<blockquote>
+<div><p>「富岳」の運用改善のため、実行するアプリケーションに対して、以下の情報を収集します。</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>コンパイラ情報</p></li>
+<li><p>シンボルテーブル</p></li>
+<li><p>共有ライブラリ情報</p></li>
+<li><p>MD5ハッシュチェックサム</p></li>
+<li><p>実行ファイルの種類や文字列</p></li>
+</ul>
+</div></blockquote>
+<p>アプリケーション情報の収集を回避するには、ジョブ実行時に以下の環境変数を定義してください。:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#PJM -x &quot;APPLOG=NO&quot;
+</pre></div>
+</div>
+<p>収集は<strong class="program">mpiexec</strong>の開始時のみに行うため、実行中のジョブの性能に影響は出ません。
+また収集によるジョブの実行時間への影響は、ほとんどありません。</p>
+</div></blockquote>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong class="program">mpiexec</strong>コマンドのオプション指定例</p>
+<ul class="simple">
+<li><p>MPIプログラムを8並列（<code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">8</span></code>）で実行する場合</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>-std-proc<span class="w"> </span>procfile<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><code class="docutils literal notranslate"><span class="pre">-n</span></code>オプション省略時はデフォルト値が誘導されます。</p>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>JavaのMPIプログラムを8並列（<code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">8</span></code>）で実行する場合</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>-std-proc<span class="w"> </span>procfile<span class="w"> </span>java<span class="w"> </span>-classpath<span class="w"> </span>./dir<span class="w"> </span>JavaTest
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>クラスパスは、javaコマンドの<code class="docutils literal notranslate"><span class="pre">-classpath</span></code>オプションで指定します。</p>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>MPIジョブを同時に複数実行する場合</p></li>
+</ul>
+<blockquote>
+<div><ol class="arabic">
+<li><p>MPMD</p>
+<p>実行単位をコロン &quot;:&quot; で区切ることで複数のプログラムを実行することができます。
+<code class="docutils literal notranslate"><span class="pre">-n</span></code>の総和は、<code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">proc=N</span></code>を超えないように設定します。</p>
+<p>[書式]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span><span class="o">[</span>global<span class="w"> </span>options<span class="o">]</span><span class="w"> </span>-n<span class="w"> </span>N1<span class="w"> </span><span class="o">[</span><span class="nb">local</span><span class="w"> </span>options<span class="o">]</span><span class="w"> </span>実行ファイル1<span class="w"> </span>:<span class="w"> </span>-n<span class="w"> </span>N2<span class="w"> </span><span class="o">[</span><span class="nb">local</span><span class="w"> </span>options<span class="o">]</span><span class="w"> </span>実行ファイル2<span class="w"> </span>:<span class="w"> </span>…
+</pre></div>
+</div>
+<p>[例]</p>
+<p>MPIプログラムの実行可能ファイル <code class="file docutils literal notranslate"><span class="pre">a.out</span></code>、<code class="file docutils literal notranslate"><span class="pre">b.out</span></code>、<code class="file docutils literal notranslate"><span class="pre">c.out</span></code>をそれぞれ 2、4、6の並列プロセス数で実行</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span>-std-proc<span class="w"> </span>procfile<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span>./a.out<span class="w"> </span>:<span class="w"> </span>-n<span class="w"> </span><span class="m">4</span><span class="w"> </span>./b.out<span class="w"> </span>:<span class="w"> </span>-n<span class="w"> </span><span class="m">6</span><span class="w"> </span>./c.out
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>Javaプログラムの場合、MPMDモデルでの実行は保証されません。</p>
+</div>
+</li>
+<li><p>バックグラウンドジョブ</p>
+<p>バックグラウンドジョブを同時に複数実行する場合は、<code class="docutils literal notranslate"><span class="pre">-vcoordfile</span></code>オプションを指定して使用するノードの座標を指定します。同時に動かすジョブ間で使用するノードが重ならないように留意ください。同時にバックグラウンドで実行できる数は、128までです。</p>
+</li>
+</ol>
+</div></blockquote>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="Overview.html"
+                          title="前の章へ"><span class="section-number">6.1. </span>概要</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="HowToExecuteABackgroundJob.html"
+                          title="次の章へ"><span class="section-number">6.3. </span>バックグラウンドジョブの実行方法</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="HowToExecuteABackgroundJob.html" title="6.3. バックグラウンドジョブの実行方法"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="6.1. 概要"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">6. </span>MPIジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.2. </span>実行コマンドの形式</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

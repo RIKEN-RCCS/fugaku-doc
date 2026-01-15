@@ -1,0 +1,129 @@
+SSL II library
+==============
+
+| The SSL II library is a thread-safe numerical calculation library that provides 10 sub-routines.
+| The thread parallel version is provided with parallel processing algorithms and interfaces for important functions that can have parallel effects.
+
+
+ 1. Linear calculation
+ #. Eigenvalue eigenvector
+ #. Nonlinear calculation
+ #. Extreme value problem
+ #. Interpolation, approximation
+ #. Conversion
+ #. Numerical calculus
+ #. Differential equation
+ #. Special functions
+ #. Pseudo random number
+
+
+How to Fortran compile
+----------------------
+
+To use SSL II from a Fortran program, specify  \ ``-SSL2``\  or  \ ``-SSL2BLAMP``\  option.
+
+To link SSL II/MPI library, specify  \ ``-SSL2MPI``\  option to   \ :program:`mpifrtpx`\  command and also specify  \ ``-SSL2``\  or  \ ``-SSL2BLAMP``\.
+
+
+
+Compile example is as following:
+
+
+1. MPI / Auto parallel / SSL II (Mainly multi node job)
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -Kfast,parallel,SVE sample.f90 -SSL2MPI -SSL2
+
+
+2. MPI / OpenMP / SSL II (Mainly multi node job)
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -Kfast,parallel,openmp,SVE sample.f90 -SSL2MPI -SSL2
+
+
+3. Sequential / SSL II (Single node job)
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx  -Kfast,SVE sample.f90  -SSL2
+
+
+4. Auto parallel / SSL II (Single node job)
+
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx  -Kfast,parallel,SVE sample.f90 -SSL2
+
+
+5. OpenMP / SSL II (Single node job)
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,openmp,SVE sample.f90 -SSL2
+
+.. seealso::
+
+   - The subroutine name and interface of the SSL II subroutine are different between the thread parallel version and the serial version.
+   - When performing separate compilation, specify these options when linking.
+   - When joining with a login node, if  \ ``–KSVE``\  is enabled, combine libraries that are using  \ ``SVE``\ .
+   - When joining with a login node, if  \ ``–KNOSVE``\  is enabled, combine general purpose libraries.
+   - If combine with computing node, specifying  \ ``-KSVE``\  or  \ ``-KNOSVE``\  combine library using  \ ``SVE``\.
+   - ``-KSVE``\  option's default (when omitted) will be  \ ``-KSVE``\ .
+   - To translate the user program with the native compiler and combine SSL II, use  \ :program:`frt`\  command.
+   - To translate a user program written in MPI using a native compiler and combine SSL II / MPI, use  \ :program:`mpifrt`\  command.
+
+
+Sample program (SSL2 / Fortran)
+-------------------------------
+
+This indicates compile example using sample program.
+
+1. | Prepare a source program.
+   | Prepare a sample program as :file:`/home/system/sample/SSL2/sample_SSL2.f`\.
+   | :download:`(Download a sample code) <./src/sample_SSL2.f>`
+
+2. Compile a sample program.
+
+  .. code-block:: console
+
+   [_LNlogin]$ frtpx -V -Kfast,optmsg=2,SVE -Nlst=t -o sample_SSL2 sample_SSL2.f -SSL2
+
+3. | Prepare a job script.
+   | Prepare a job script as :file:`/home/system/sample/SSL2/sample_SSL2.sh`\.
+   | :download:`(Download a sample code) <./src/sample_SSL2.sh>`
+
+4. Submit a job with  \ :program:`pjsub`\  command.
+
+ .. code-block:: console
+
+   [_LNlogin]$ pjsub sample_SSL2.sh
+   [INFO] PJM 0000 pjsub Job 140 submitted.
+
+
+Program return value when used from C language
+----------------------------------------------
+
+| SSL II is a Fortran library, but it can also be used from the C language.
+| When SSL II is used from C language, the return value of the program differs depending on the function name executed at the beginning of C.
+| Keep this in mind if you want to use the C return value.
+| For details, refer to "7.2 Linking with Fortran" in the "C User's Guide".
+
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 2, 4
+
+
+   * - Function name
+     - Return value of program
+
+   * - main
+     - C return value
+
+   * - \MAIN__
+     - | Fortran return value
+       | However, if the Fortran return value is 0, the C return value is returned.
+

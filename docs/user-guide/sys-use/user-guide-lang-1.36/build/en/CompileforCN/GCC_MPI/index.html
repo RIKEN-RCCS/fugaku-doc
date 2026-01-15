@@ -1,0 +1,303 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.2. Combination of GNU Compiler Collection and Fujitsu MPI &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=f85107c5" />
+    
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="3.3. LLVM" href="../LLVM/index.html" />
+    <link rel="prev" title="3.1.14. Mixed Language Programming (About Object Compatibility)" href="../FujitsuCompiler/InterlanguageLinkage/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../LLVM/index.html" title="3.3. LLVM"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../FujitsuCompiler/InterlanguageLinkage/index.html" title="3.1.14. Mixed Language Programming (About Object Compatibility)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U"><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.2. </span>Combination of GNU Compiler Collection and Fujitsu MPI</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="combination-of-gnu-compiler-collection-and-fujitsu-mpi">
+<span id="gcc-mpi"></span><h1><span class="section-number">3.2. </span>Combination of GNU Compiler Collection and Fujitsu MPI<a class="headerlink" href="#combination-of-gnu-compiler-collection-and-fujitsu-mpi" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2><span class="section-number">3.2.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This feature allows you to combine the compilers in GNU Compiler
+Collection (GCC) and Fujitsu MPI.</p>
+<p>There are two ways to use it:
+one is to cross-compile the program for the computation node on the login node,
+and the other is to compile it on the computation node.</p>
+</section>
+<section id="compiling-on-a-login-node">
+<h2><span class="section-number">3.2.2. </span>Compiling on a Login Node<a class="headerlink" href="#compiling-on-a-login-node" title="Link to this heading">¶</a></h2>
+<p>A cross-compatible GCC compiler is available at /vol0004/apps/oss/gcc-arm-11.2.1 (or older version: gcc-arm-10.3.1).</p>
+<p>Before running the compilation, run the following to set up the usage environment.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_LNlogin]$ . /vol0004/apps/oss/gcc-arm-11.2.1/setup-env.sh
+</pre></div>
+</div>
+<p>The compiler versions that can be used in this way are as follows.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 13.3%" />
+<col style="width: 13.3%" />
+<col style="width: 53.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Software</p></th>
+<th class="head"><p>Language</p></th>
+<th class="head"><p>Version</p></th>
+<th class="head"><p>Command</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>gcc (GCC)</p></td>
+<td><p>C</p></td>
+<td><p>10.3.1 or 11.2.1</p></td>
+<td><p>gcc</p></td>
+</tr>
+<tr class="row-odd"><td><p>g++ (GCC)</p></td>
+<td><p>C++</p></td>
+<td><p>10.3.1 or 11.2.1</p></td>
+<td><p>g++</p></td>
+</tr>
+<tr class="row-even"><td><p>GNU Fortran (GCC)</p></td>
+<td><p>Fortran</p></td>
+<td><p>10.3.1 or 11.2.1</p></td>
+<td><p>gfortran</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>To cross-compile with these compilers, do the following as an example.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_LNlogin]$ gcc -c test.c -o test.o
+[_LNlogin]$ mpifccpx test.o -o test.exe
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>When using the option -std=c++17 in version 11.2.1, the -lstdc++ path must be added as follows.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_LNlogin]$ export LOPT=&quot;-L/vol0004/apps/oss/spack-v0.19/opt/spack/linux-rhel8-a64fx/gcc-8.5.0/gcc-12.2.0-sxcx7kmt3qiktffgzzvrj2wmup3g32bc/lib64 -lstdc++&quot;
+[_LNlogin]$ g++ -std=c++17 -fopenmp -c test.cpp -o test.o
+[_LNlogin]$ mpiFCCpx ${LOPT} -fopenmp test.o -o test.exe
+</pre></div>
+</div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If linking with mpiFCCpx using version 11.2.1 results in an error with an undefined reference to ‘__libc_single_threaded’,
+downgrading to version 10.3.1 may solve the problem.</p>
+</div>
+<p>If you use Fortran, do the following as an example.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_LNlogin]$ gfortran -c test.f90 -o test.o \
+              -I/vol0004/apps/oss/mpigcc/fjmpi-gcc11/include \
+              -I/vol0004/apps/oss/mpigcc/fjmpi-gcc11/include/mpi/fujitsu
+[_LNlogin]$ mpifrtpx test.o -o test.exe \
+              -L/opt/FJSVxtclanga/tcsds-latest/lib64
+</pre></div>
+</div>
+<p>If you are running setup-env.sh above,
+you can use the environment variables that set the include path and library path.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_LNlogin]$ $FC -c test.f90 -o test.o
+[_LNlogin]$ $MPIFC test.o -o test.exe
+</pre></div>
+</div>
+<p>By compiling object files with GCC and using the Fujitsu compiler as the linker,
+it is possible to work with Fujitsu MPI.</p>
+</section>
+<section id="compiling-on-a-computation-node">
+<h2><span class="section-number">3.2.3. </span>Compiling on a Computation Node<a class="headerlink" href="#compiling-on-a-computation-node" title="Link to this heading">¶</a></h2>
+<p>Execute the following commands on the command line in an interactive
+job or put them in your job script to set the required environment
+variables <a class="footnote-reference brackets" href="#spack" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> ,</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_CNlogin]$ . /vol0004/apps/oss/spack/share/spack/setup-env.sh
+[_CNlogin]$ spack load fujitsu-mpi%gcc@8.5.0
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_CNlogin]$ spack load fujitsu-mpi%gcc@12.2.0
+</pre></div>
+</div>
+<p>and the following compiler commands are available.
+They are only available on compute nodes and cannot be cross-compiled.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mpicc</span></code> for C</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mpicxx</span></code> for C++</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mpifort</span></code> for Fortran</p></li>
+</ul>
+<p>These commands work as wrappers of <code class="docutils literal notranslate"><span class="pre">gcc</span></code>, <code class="docutils literal notranslate"><span class="pre">g++</span></code>, and <code class="docutils literal notranslate"><span class="pre">gfortran</span></code>
+of GCC, respectively, and therefore accept the same options as the
+underlying commands do.</p>
+<p>The compiler versions that can be used in this way are as follows.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 13.3%" />
+<col style="width: 13.3%" />
+<col style="width: 53.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Software</p></th>
+<th class="head"><p>Language</p></th>
+<th class="head"><p>Version</p></th>
+<th class="head"><p>Command</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>gcc (GCC)</p></td>
+<td><p>C</p></td>
+<td><p>8.5.0 or 12.2.0</p></td>
+<td><p>gcc</p></td>
+</tr>
+<tr class="row-odd"><td><p>g++ (GCC)</p></td>
+<td><p>C++</p></td>
+<td><p>8.5.0 or 12.2.0</p></td>
+<td><p>g++</p></td>
+</tr>
+<tr class="row-even"><td><p>GNU Fortran (GCC)</p></td>
+<td><p>Fortran</p></td>
+<td><p>8.5.0 or 12.2.0</p></td>
+<td><p>gfortran</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="run">
+<h2><span class="section-number">3.2.4. </span>Run<a class="headerlink" href="#run" title="Link to this heading">¶</a></h2>
+<p>For sequential execution, add the GCC cross-compiler library
+to the LD_LIBRARY_PATH environment variable and run it.</p>
+<p>MPI programs generated by the above commands can be executed with
+the <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code> command, just like the ones by the Fujitsu compilers.
+Unlike the sequential execution, the environment variable LD_LIBRARY_PATH is not required.
+The format of <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code> (e.g. options) and the runtime setting
+(e.g. MCA parameters) for this feature are the same as for the Fujitsu
+compilers.</p>
+<p>[Sequential execution]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=1&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">GCC</span><span class="o">=</span><span class="s2">&quot;/vol0004/apps/oss/gcc-arm-11.2.1&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$LD_LIBRARY_PATH</span><span class="s2">:</span><span class="nv">$GCC</span><span class="s2">/aarch64-linux-gnu/lib:</span><span class="nv">$GCC</span><span class="s2">/aarch64-linux-gnu/lib64&quot;</span>
+
+./a.out
+</pre></div>
+</div>
+<p>[MPI parallel execution]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=12&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<p class="rubric">Footnote</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="spack" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>The package management tool Spack is used to set up this
+feature. For more details of Spack, please refer to
+<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/FugakuSpackGuide/">Fugaku Spack User Guide</a>.</p>
+</aside>
+</aside>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3.2. Combination of GNU Compiler Collection and Fujitsu MPI</a><ul>
+<li><a class="reference internal" href="#overview">3.2.1. Overview</a></li>
+<li><a class="reference internal" href="#compiling-on-a-login-node">3.2.2. Compiling on a Login Node</a></li>
+<li><a class="reference internal" href="#compiling-on-a-computation-node">3.2.3. Compiling on a Computation Node</a></li>
+<li><a class="reference internal" href="#run">3.2.4. Run</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../FujitsuCompiler/InterlanguageLinkage/index.html"
+                          title="previous chapter"><span class="section-number">3.1.14. </span>Mixed Language Programming (About Object Compatibility)</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../LLVM/index.html"
+                          title="next chapter"><span class="section-number">3.3. </span>LLVM</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../LLVM/index.html" title="3.3. LLVM"
+             >next</a></li>
+        <li class="right" >
+          <a href="../FujitsuCompiler/InterlanguageLinkage/index.html" title="3.1.14. Mixed Language Programming (About Object Compatibility)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.2. </span>Combination of GNU Compiler Collection and Fujitsu MPI</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

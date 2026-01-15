@@ -1,0 +1,93 @@
+.. highlight:: none
+
+Collective Communication Algorithms(knomial, rabenseifner) in MPI
+==================================================================
+
+| Starting with language environment tcsds-1.2.42, we have added the Knomial algorithm for Bcast and the Rabenseifner algorithm for Reduce and Allreduce. These algorithms are faster than existing algorithms in certain areas.
+| If the communication of the application program you are using utilizes this high-speed area, performance may be improved by employing the added algorithm.
+
+| The Knomial algorithm is an evolution of the traditional Binomial algorithm, promising more efficient broadcast communication.
+| It has also been confirmed to be faster than existing algorithms in the small message size domain at bychip.
+| The Rabenseifner algorithm is implemented using a combination of recursive vector halving and recursive distance doubling for the Reduce-scatter phase, followed by either Binomial Gather or Recursive Doubling Allgather.
+
+| The Knomial and Rabenseifner algorithms are particularly effective when the job shape is not specified and a 3D shape has not been assigned.
+| On the other hand, for 3D jobs, performance may be lower than existing algorithms, so please exercise caution when using them.
+
+| When using the Knomial algorithm or the Rabenseifner algorithm, the algorithm must be specified.
+| If thsese algorithm is not specified, the system selects high-speed algorithms available prior to tcsds-1.2.41 according to such information as the argument of the collective communication routine and the shape of the communicator, when the blocking collective communication routine is called.
+
+As reference information for selecting the Knomial algorithm and Rabenseifner algorithm, measurement results using Intel(R) MPI Benchmarks 2021.3 are published in the `FAQ How to use Collective Communication Algorithms(knomial, rabenseifner) in MPI <https://www.fugaku.r-ccs.riken.jp/en/faq/20251104_01>`_.
+
+How to Specify Algorithms
+--------------------------
+
+There are three methods for specifying algorithms:
+
+1. Specify MCA parameters
+#. Specify using an Info object
+#. Select algorithms using external input file
+
+For details on the specification method, refer to Chapter 8 "Speeding Up Blocking Collective Communication" in `Manuals <https://www.fugaku.r-ccs.riken.jp/en/docs/manuals_r01#LANGMAN>`_ "MPI User's Guide". 
+
+MCA parameters
++++++++++++++++++
+
+Specifies the algorithm to use for the MCA parameter at the time of execution. This selection method does not require retranslation of the application program.
+
+Example to specify the Knomial algorithm as the algorithm of the Bcast routine::
+
+   mpiexec --mca coll_select_bcast_algorithm knomial ./a.out
+
+Example to specify the Rabenseifner algorithm as the algorithm of the Reduce routine::
+
+   mpiexec --mca coll_select_reduce_algorithm rabenseifner ./a.out
+
+Example to specify the Rabenseifner algorithm as the algorithm of the Allreduce routine::
+
+   mpiexec --mca coll_select_allreduce_algorithm rabenseifner ./a.out
+
+Specify using an Info object
++++++++++++++++++++++++++++++
+
+| Specify the algorithm to be used for the info object within the application program. This selection method requires retranslation of the application program.
+| For details, refer to Section 8.3.1.4 "Selecting Algorithms by Info Object" in `Manuals <https://www.fugaku.r-ccs.riken.jp/en/docs/manuals_r01#LANGMAN>`_ "MPI User's Guide".
+
+The following is an example of part of a program that specifies the Rabenseifer algorithm during the Reduce routine for the communicator MPI_COMM_WORLD.
+
+.. code-block:: c
+
+   MPI_Info info;
+   MPI_Info_create(&amp;info);
+   MPI_Info_set(info, "reduce_rules", "rabenseifner");
+   MPI_Comm_set_info(MPI_COMM_WORLD, info);
+
+Select algorithms using external input file
++++++++++++++++++++++++++++++++++++++++++++++
+
+| Specify the algorithm in an external input file, and designate the external input file using the MCA parameter during execution.
+| For details, refer to Section 8.3.1.5 "Selecting Algorithms by External Input File" in `Manuals <https://www.fugaku.r-ccs.riken.jp/en/docs/manuals_r01#LANGMAN>`_ "MPI User's Guide".
+
+
+The following is an example of the external input file described the rules to select algorithms entered for using Knomial as the Bcast algorithm and specifying the segment size.
+
+.. code-block:: none
+
+   header:
+     version: 1.0
+     require: mtofu,base
+
+   bcast:
+     knomial(segsize=65536)
+
+The external input files is used by specifying the filename with the MCA parameter during execution.
+The following is an example specification for using the /path/to/my_rules.conf file as an external input file.
+
+.. code-block:: none
+
+   mpiexec --mca coll_select_dectree_file /path/to/my_rules.conf ./a.out
+
+Notes
++++++++++
+
+If the language environment used at the time of execution is earlier than version tcsds-1.2.42, the Knomial algorithm and Rabenseifner algorithm cannot be used. If it cannot be used, the message is putput in the standard error output, the algorithm specification is ignored.
+

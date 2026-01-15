@@ -1,0 +1,453 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Supercomputer Fugaku User Guide - Use and job execution - Version 1.52 &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=f85107c5" />
+    
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Introduction" href="Introduction/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Introduction/index.html" title="1. Introduction"
+             accesskey="N">next</a></li>
+        <li class="nav-item nav-item-0"><a href="#">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Supercomputer Fugaku User Guide - Use and job execution - Version 1.52</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="supercomputer-fugaku-user-guide-use-and-job-execution-version-version">
+<h1>Supercomputer Fugaku User Guide - Use and job execution - Version 1.52<a class="headerlink" href="#supercomputer-fugaku-user-guide-use-and-job-execution-version-version" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Index:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Introduction/index.html">1. Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#the-purpose-of-this-document">1.1. The purpose of this document.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#notation-used-in-this-document">1.2. Notation used in this document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#abbreviations-and-aliases">1.3. Abbreviations and aliases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#about-trademarks">1.4. About trademarks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#change-log">1.5. Change log</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MethodOfUse/index.html">2. Use direction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MethodOfUse/index.html#overview">2.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MethodOfUse/index.html#manual">2.2. Manual</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="UsageRules/index.html">3. Usage rule</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="UsageRules/index.html#overview">3.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="UsageRules/index.html#use-scale-use-environment">3.2. Use scale/Use environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#usable-job-scale">3.2.1. Usable job scale</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="UsageRules/index.html#local-account-management">3.3. Local account management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#login">3.3.1. Login</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#authentication-by-client-certification">3.3.2. Authentication by client certification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#system-project-manager-responsiblity-scope">3.3.3. System project manager responsiblity scope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#update-process">3.3.4. Update process</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="UsageRules/index.html#resource">3.4. Resource</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#compute-node">3.4.1. Compute node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#confirmation-of-number-of-job-submission">3.4.2. Confirmation of number of job submission</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#how-to-use-resource-group">3.4.3. How to use resource group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#resource-group-use-status">3.4.4. Resource group use status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#disk">3.4.5. Disk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#file-creation-and-stripe-setting">3.4.6. File creation and stripe setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#file-system">3.4.7. File system</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#group">3.4.8. Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#type-of-parallel-job">3.4.9. Type of parallel job</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#login-node">3.4.10. Login node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#i-o-node">3.4.11. I/O node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#estimating-the-amount-of-memory-available-to-user-programs">3.4.12. Estimating the amount of memory available to user programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="UsageRules/index.html#definition-of-used-computational-resource">3.4.13. Definition of used computational resource</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="AccessToTheSystem/index.html">4. System Use</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="AccessToTheSystem/Overview.html">4.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AccessToTheSystem/InstallingClientCertificate.html">4.2. Client Certification Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/InstallingClientCertificate.html#installing-the-certificate-to-firefox-windows">4.2.1. Installing the certificate to Firefox (Windows)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/InstallingClientCertificate.html#installing-the-certificate-on-firefox-mac">4.2.2. Installing the certificate on Firefox (Mac)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/InstallingClientCertificate.html#installing-the-certificate-to-chrome-windows">4.2.3. Installing the certificate to Chrome (Windows)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/InstallingClientCertificate.html#installing-the-certificate-to-chrome-mac">4.2.4. Installing the certificate to Chrome (Mac)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="AccessToTheSystem/AccessingTheUsersPortal.html">4.3. Accessing steps to the Fugaku website</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html">4.4. Login</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html#private-key-public-key-creation">4.4.1. Private key/Public key creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html#public-key-registration">4.4.2. Public key registration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html#accessing-direction">4.4.3. Accessing direction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html#file-transfer-method">4.4.4. File transfer method</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html#login-shell">4.4.5. Login shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html#e-mail-distribution-of-fugaku-operation-information">4.4.6. E-mail distribution of Fugaku operation information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="AccessToTheSystem/CheckingTheNodeUseStatus.html">4.5. Check node usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AccessToTheSystem/TheEnvironmentModulesPackage.html">4.6. Module package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/TheEnvironmentModulesPackage.html#module-command">4.6.1. Module command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/TheEnvironmentModulesPackage.html#example-of-command-use">4.6.2. Example of command use</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AccessToTheSystem/TheEnvironmentModulesPackage.html#how-to-change-language-environment">4.6.3. How to change language environment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="JobExecution/index.html">5. Job execution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/Overview.html">5.1. Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/Overview.html#about-the-jobs">5.1.1. About the jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/Overview.html#types-of-job">5.1.2. Types of job</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/Overview.html#create-job-script">5.1.3. Create job script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/Overview.html#the-command-for-creating-template-of-job-script">5.1.4. The command for creating template of job script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/Overview.html#job-allocation-operation">5.1.5. Job allocation operation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/NormalJob.html">5.2. Normal job</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NormalJob.html#submitting-a-job">5.2.1. Submitting a job</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NormalJob.html#refer-to-job-execution-result">5.2.2. Refer to job execution result</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NormalJob.html#statistical-information">5.2.3. Statistical information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/StepJob.html">5.3. Step job</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/StepJob.html#job-submitting">5.3.1. Job submitting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/StepJob.html#step-job-option">5.3.2. Step job option</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/StepJob.html#sub-job-id">5.3.3. Sub job ID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/StepJob.html#referencing-job-execution-results">5.3.4. Referencing job execution results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/StepJob.html#job-submission-example-with-dependency">5.3.5. Job submission example with dependency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/BulkJob.html">5.4. Bulk Job</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/BulkJob.html#job-submission">5.4.1. Job submission</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/BulkJob.html#bulk-job-script">5.4.2. Bulk job script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/BulkJob.html#sub-job-id">5.4.3. Sub job ID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/BulkJob.html#referencing-job-execution-results">5.4.4. Referencing job execution results</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/InteractiveJob.html">5.5. Interactive job</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/InteractiveJob.html#job-submission">5.5.1. Job submission</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/InteractiveJob.html#command-format">5.5.2. Command format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/InteractiveJob.html#command-option-block">5.5.3. Command option block</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/InteractiveJob.html#script-file-block">5.5.4. Script file block</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/WorkflowJob.html">5.6. Workflow job</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/WorkflowJob.html#job-submission">5.6.1. Job submission</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/MasterWorkerJob.html">5.7. Master-worker type job</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/MasterWorkerJob.html#job-submission">5.7.1. Job Submission</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/MasterWorkerJob.html#dynamic-generation-of-worker-processes">5.7.2. Dynamic generation of worker processes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/MasterWorkerJob.html#worker-process-creation-request-to-agent-prosess">5.7.3. Worker process creation request to Agent prosess</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/MasterWorkerJob.html#worker-process-generation-by-pjaexe-command">5.7.4. Worker process generation by pjaexe command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/MasterWorkerJob.html#notes-on-job-creation">5.7.5. Notes on job creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/MasterWorkerJob.html#impact-when-system-failure">5.7.6. Impact when system failure</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/EnvironmentSettings.html">5.8. Environment setting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/EnvironmentSettings.html#tools-to-reduce-search-load-on-dynamic-libraries-sort-libp">5.8.1. Tools to reduce search load on dynamic libraries(sort_libp)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html">5.9. Job execution command options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html#basic-option">5.9.1. Basic option</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html#resource-specification">5.9.2. Resource specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html#mpi-option">5.9.3. MPI option</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html#job-statistical-information">5.9.4. Job statistical information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html#environment-variables-in-job-scripts">5.9.5. Environment variables in job scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html#environment-variables-in-mpi-processes">5.9.6. Environment variables in MPI processes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/pjsubCommandOptions.html#specifying-an-execution-start-time">5.9.7. Specifying an execution start time</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/AllocationOfLargePageArea.html">5.10. Large page space allocation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/AllocationOfLargePageArea.html#overview">5.10.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/AllocationOfLargePageArea.html#environment-variable-for-large-page-library-setting">5.10.2. Environment variable for large page library setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/AllocationOfLargePageArea.html#large-page-library-linking">5.10.3. Large page library linking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/AllocationOfLargePageArea.html#mitigating-memory-fragmentation">5.10.4. Mitigating Memory Fragmentation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/CPUcoreMemoryBinding.html">5.11. CPU core and memory binding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/DisplayingJobStatus.html">5.12. Displaying a job status</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DisplayingJobStatus.html#normal-job">5.12.1. Normal job</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DisplayingJobStatus.html#step-job">5.12.2. Step job</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DisplayingJobStatus.html#bulk-job">5.12.3. Bulk job</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DisplayingJobStatus.html#computer-resources">5.12.4. Computer resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DisplayingJobStatus.html#the-job-statistic-information">5.12.5. The job statistic information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DisplayingJobStatus.html#job-status-display-command-options">5.12.6. Job status display command options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/DeletingAJobJobOperations.html">5.13. Deleting a job</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DeletingAJobJobOperations.html#normal-job">5.13.1. Normal job</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DeletingAJobJobOperations.html#step-job">5.13.2. Step job</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DeletingAJobJobOperations.html#bulk-job">5.13.3. Bulk job</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/DeletingAJobJobOperations.html#job-delete-command-options">5.13.4. Job delete command options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/NotesOnJobOperationCommands.html">5.14. Notes on job operations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NotesOnJobOperationCommands.html#delete-job-pjdel">5.14.1. Delete job (pjdel)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NotesOnJobOperationCommands.html#job-hold-pjhold">5.14.2. Job hold (pjhold)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NotesOnJobOperationCommands.html#unpin-a-job-pjrls">5.14.3. Unpin a job (pjrls)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NotesOnJobOperationCommands.html#wait-for-job-pjwait">5.14.4. Wait for job (pjwait)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NotesOnJobOperationCommands.html#send-signal-to-job-pjsig">5.14.5. Send signal to job (pjsig)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/NotesOnJobOperationCommands.html#job-parameter-change-pjalter">5.14.6. Job parameter change (pjalter)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/HowToUseCustomResource.html">5.15. Use of custom resource</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/HowToUseCustomResource.html#function-overview">5.15.1. Function overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/HowToUseCustomResource.html#how-to-check">5.15.2. How to check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/HowToUseCustomResource.html#assign-method">5.15.3. Assign method</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/CheckingAbnormalEndOfJob.html">5.16. Checking when a job ends abnormally</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/CheckingAbnormalEndOfJob.html#job-manager-exit-code">5.16.1. Job manager exit code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/CheckingAbnormalEndOfJob.html#message-output-during-job-execution">5.16.2. Message output during job execution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/CheckingAbnormalEndOfJob.html#pjm-0079-error-reason-list">5.16.3. PJM 0079 ERROR REASON list</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/CheckingAbnormalEndOfJob.html#cpu-clock-change-power-capping">5.16.4. CPU clock change (Power capping)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/SampleScripts.html">5.17. Sample Scripts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/SampleScripts.html#normal-job-sequential-program">5.17.1. Normal job (sequential program)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/SampleScripts.html#normal-job-mpi-1d-shape">5.17.2. Normal job (MPI / 1D shape)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/SampleScripts.html#normal-job-mpi-2d-shape">5.17.3. Normal job (MPI / 2D shape)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/SampleScripts.html#normal-job-mpi-3d-shape">5.17.4. Normal job (MPI / 3D shape)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/SampleScripts.html#normal-job-thread-parallel-automatic-parallel">5.17.5. Normal job (thread parallel (automatic parallel))</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/SampleScripts.html#normal-job-thread-parallel-openmp">5.17.6. Normal job (thread parallel (OpenMP))</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/SampleScripts.html#normal-job-flat-mpi-1d-shape">5.17.7. Normal job (Flat MPI / 1D shape)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/SampleScripts.html#normal-job-hybrid-parallel">5.17.8. Normal job (hybrid parallel)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/TofuStatistics.html">5.18. Obtaining TofuD TNR statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/ShowAffectedJobs.html">5.19. Job list display command affected by the failure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/ShowAffectedJobs.html#job-events">5.19.1. job_events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/ShowAffectedJobs.html#show-evict-node">5.19.2. show_evict_node</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="JobExecution/JobExecConsiderpoints.html">5.20. Note</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/JobExecConsiderpoints.html#how-to-use-pjrsh-command">5.20.1. How to use pjrsh command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="JobExecution/JobExecConsiderpoints.html#job-execution-in-startup-project-trial">5.20.2. Job Execution in Startup Project (trial)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MPI/index.html">6. MPI job execution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MPI/Overview.html">6.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/FormatOfMpiexecCommand.html">6.2. Execution command format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/HowToExecuteABackgroundJob.html">6.3. How to execute back ground job</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/HowToExecuteABackgroundJob.html#back-ground-execution">6.3.1. Back ground execution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/HowToExecuteABackgroundJob.html#job-creation-example">6.3.2. Job creation example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/HowToExecuteABackgroundJob.html#notes-on-back-ground-execution">6.3.3. Notes on back ground execution</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/InputOutputRedirection.html">6.4. Standard output / Standard error output / Standard input</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/InputOutputRedirection.html#how-to-specify-standard-output-standard-error-output-standard-input">6.4.1. How to specify standard output / standard error output / standard input</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/InputOutputRedirection.html#output-list-by-option-specification">6.4.2. Output list by option specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/InputOutputRedirection.html#about-standard-output-standard-error-output-when-executing-large-scale-jobs">6.4.3. About standard output / standard error output when executing large-scale jobs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/SpecificationsForMPIJob.html">6.5. Specification when submitting an MPI job</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/SpecificationsForMPIJob.html#static-process-shape-specification">6.5.1. Static process shape specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/SpecificationsForMPIJob.html#specify-the-maximum-number-of-static-processes">6.5.2. Specify the maximum number of static processes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/RankAssignment.html">6.6. Rank assignment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-bynode">6.6.1. Rank-map-bynode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-bynode-1-dimention">6.6.2. rank-map-bynode (1 dimention)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-bynode-2-dimentions">6.6.3. rank-map-bynode (2 dimentions)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-bynode-3-dimentions">6.6.4. rank-map-bynode (3 dimentions)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-bynode-the-multiple-process-specification-in-node-1-dimention">6.6.5. rank-map-bynode (the multiple process specification in node (1 dimention))</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-bychip">6.6.6. rank-map-bychip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-hostfile">6.6.7. rank-map-hostfile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-hostfile-1-dimention">6.6.8. rank-map-hostfile (1 dimention)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-hostfile-2-dimentions">6.6.9. rank-map-hostfile (2 dimentions)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-hostfile-3-dimentions">6.6.10. rank-map-hostfile (3 dimentions)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-hostfile-the-multiple-rank-specification-in-node">6.6.11. rank-map-hostfile (the multiple rank specification in node)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#rank-map-hostfile-rank-map-bychip-the-multiple-rank-specification-in-node">6.6.12. rank-map-hostfile/rank-map-bychip (the multiple rank specification in node)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankAssignment.html#notes-on-when-using-host-map-file">6.6.13. Notes on when using host map file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/JobShape%28torus%29.html">6.7. Job shape (Torus)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/pjsubOptions%28MPI-related%29.html">6.8. Job submitting command option (MPI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/DynamicProcessCreation%28MPI_Comm_spawn%29.html">6.9. Dynamic process creation (MPI_COMM_SPAWN)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/DynamicProcessCreation%28MPI_Comm_spawn%29.html#how-to-execute-a-job">6.9.1. How to execute a job</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/DynamicProcessCreation%28MPI_Comm_spawn%29.html#the-execution-from-java-program">6.9.2. The execution from Java program</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/DynamicProcessCreation%28MPI_Comm_spawn%29.html#notes">6.9.3. Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/RankInquiryFunctions.html">6.10. Rank inquiry functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankInquiryFunctions.html#inquiry-function-of-logical-dimention-number-and-logical-form-specified-to-mpi-comm-world">6.10.1. Inquiry function of logical dimention number and logical form specified to MPI_COMM_WORLD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankInquiryFunctions.html#inquiry-function-of-logical-coordinates-of-mpi-program-by-rank-number">6.10.2. Inquiry function of logical coordinates of MPI program by rank number</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankInquiryFunctions.html#inquiry-function-of-rank-number-of-mpi-program-by-logical-coordinates">6.10.3. Inquiry function of rank number of MPI program by logical coordinates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/RankInquiryFunctions.html#function-use-example">6.10.4. Function use example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/MPIStatisticalInformation.html">6.11. MPI statistic information</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/MPIStatisticalInformation.html#whole-mode">6.11.1. Whole mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MPI/MPIStatisticalInformation.html#section-mode">6.11.2. Section mode</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MPI/CollectiveCommunicationAlgorithm.html">6.12. Collective Communication Algorithms(knomial, rabenseifner) in MPI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MPI/CollectiveCommunicationAlgorithm.html#how-to-specify-algorithms">6.12.1. How to Specify Algorithms</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="PowerControlFunction/index.html">7. Power control function</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="PowerControlFunction/index.html#overview">7.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PowerControlFunction/index.html#power-mode-power-knob-operation-at-job-submisson">7.2. Power mode (Power knob operation at job submisson)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#function-overview">7.2.1. Function overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#use-example">7.2.2. Use example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="PowerControlFunction/index.html#power-api">7.3. Power API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#id2">7.3.1. Function overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#how-to-create-power-api-program">7.3.2. How to create Power API program</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#use-direction-power-api-from-within-the-program">7.3.3. Use direction Power API from within the program</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#electric-power-measurement-point">7.3.4. Electric power measurement point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#power-control-point">7.3.5. Power control point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PowerControlFunction/index.html#note">7.3.6. Note</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LayeredStorageAndLLIO/index.html">8. Layered storage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/OverView.html">8.1. Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/OverView.html#io-time-reduction-and-area-selection">8.1.1. IO time reduction and area selection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/OverView.html#simultaneous-access-to-common-files-from-all-processes">8.1.2. Simultaneous access to common files from all processes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/WriteForFilesystem.html">8.2. About File Operations to FEFS/LLIO</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/WriteForFilesystem.html#when-writing-from-one-process-to-one-file">8.2.1. When writing from one process to one file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/WriteForFilesystem.html#when-multiple-processes-write-to-a-file">8.2.2. When multiple processes write to a file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/WriteForFilesystem.html#rename-file">8.2.3. Rename File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/WriteForFilesystem.html#unlink-file">8.2.4. Unlink File</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/TheSecondLayerStrage.html">8.3. Cache Area of Second-Layer Storage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TheSecondLayerStrage.html#the-cache-area-of-second-layer-storage-size">8.3.1. The Cache Area of Second-Layer Storage size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TheSecondLayerStrage.html#writing-timing-to-second-layer-storage">8.3.2. Writing timing to second-layer storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TheSecondLayerStrage.html#stripe">8.3.3. Stripe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TheSecondLayerStrage.html#asynchronous-close-synchronous-close">8.3.4. Asynchronous close / synchronous close</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TheSecondLayerStrage.html#common-file-distribution-function-llio-transfer">8.3.5. Common file distribution function (llio_transfer)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TheSecondLayerStrage.html#option-when-job-submitting-pjsub-llio">8.3.6. Option when Job submitting (pjsub --llio)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/TemporaryAreaInNode.html">8.4. Node Temporary Area</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TemporaryAreaInNode.html#node-temporary-area-size">8.4.1. Node temporary area size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TemporaryAreaInNode.html#how-to-use">8.4.2. How to use</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TemporaryAreaInNode.html#job-submitting-option-pjsub-llio">8.4.3. Job submitting option (pjsub --llio)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TemporaryAreaInNode.html#option-related-to-cashe-in-compute-node">8.4.4. Option related to cashe in compute node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/TemporaryAreaInNode.html#usage-example-of-node-temporary-area">8.4.5. Usage example of node temporary area</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/SharedTemporaryArea.html">8.5. Shared temporary area</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/SharedTemporaryArea.html#stripe-setting-for-shared-temporary-area">8.5.1. Stripe setting for shared temporary area</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/SharedTemporaryArea.html#shared-temporary-area-size">8.5.2. Shared temporary area size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/SharedTemporaryArea.html#how-to-use">8.5.3. How to use</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/SharedTemporaryArea.html#job-submitting-option-pjsub-llio">8.5.4. Job submitting option (pjsub –llio)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/LLIOconsiderpoints.html">8.6. Important Notices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/LLIOconsiderpoints.html#notes-on-high-parallel-jobs-1000-or-more-parallel">8.6.1. Notes on High Parallel Jobs (1000 or more parallel)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/LLIOconsiderpoints.html#mpi-io">8.6.2. MPI-IO</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/IOprofiling.html">8.7. I/O profiling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/IOprofiling.html#llio-performance-information">8.7.1. LLIO performance information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/IOprofiling.html#darshan">8.7.2. Darshan</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/IOoptimization.html">8.8. I/O optimization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/IOoptimization.html#analysis-of-bottlenecks-using-llio-performance-information">8.8.1. Analysis of bottlenecks using LLIO performance information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/IOoptimization.html#analysis-for-darshan">8.8.2. Analysis for Darshan</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="LayeredStorageAndLLIO/SelectAvailableVolumes.html">8.9. Selecting a usage file system (volume)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/SelectAvailableVolumes.html#environment-variables-and-pjsub-options">8.9.1. Environment Variables and pjsub Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LayeredStorageAndLLIO/SelectAvailableVolumes.html#job-submission-method">8.9.2. Job submission method</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MigrationFromOtherSystems/index.html">9. Migration from other systems</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MigrationFromOtherSystems/index.html#overview">9.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MigrationFromOtherSystems/index.html#migration-from-k">9.2. Migration from K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MigrationFromOtherSystems/index.html#migration-from-other-fujitsu-systems">9.3. Migration from other Fujitsu systems</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MigrationFromOtherSystems/index.html#option-difference">9.3.1. Option difference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MigrationFromOtherSystems/index.html#optimization-indicator-ocl-difference">9.3.2. Optimization indicator (OCL) difference</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MigrationFromOtherSystems/index.html#id1">9.4. Migration from other systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MigrationFromOtherSystems/index.html#endian">9.5. Endian</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MigrationFromOtherSystems/index.html#id2">9.5.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MigrationFromOtherSystems/index.html#target-compiler">9.5.2. Target compiler</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Introduction/index.html"
+                          title="next chapter"><span class="section-number">1. </span>Introduction</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Introduction/index.html" title="1. Introduction"
+             >next</a></li>
+        <li class="nav-item nav-item-0"><a href="#">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Supercomputer Fugaku User Guide - Use and job execution - Version 1.52</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+Use of custom resource
+======================
+
+Here describes the use method of custom resource.
+
+
+Function overview
+------------------
+
+Job operation software has custom resources that can define any resources in addition to node resources and CPU resources.
+
+
+How to check
+-------------
+
+The available custom resource can be checked with :program:`pjshowrsc -v2` command.
+
+[Use example]
+
+ .. code-block:: console
+
+   [_LNlogin]$ pjshowrsc -v2
+   [ CLST: ea-compute ]
+   [ RSCUNIT: rscunit_ft01 ]
+   CUSTOM_RESOURCE
+   RSCNAME                              TOTAL      FREE     ALLOC
+   jobenv/linux                     unlimited unlimited         0
+   jobenv/mck                       unlimited unlimited         0 
+   (omitted)
+
+ .. note::
+
+   In this usage example, you can see that the types linux and mck are set for the custom resource name jobenv.
+
+Assign method
+--------------
+
+To assign custom resource, use  \ :program:`pjsub`\  command's  \ ``-L``\  option.
+
+[Option style]
+
+ .. code-block:: none
+
+   {-L | --rsc-list} CustomResourceName[=Value]
+
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 3 7
+
+   * - Option
+     - Description
+   
+   * - CustomResourceName
+     - Custom resource name
+   
+   * - Value
+     - | The number of custom resources to be assigned, or the type of custom resource to be assigned.
+       | "=Value" can be omitted.
+

@@ -1,0 +1,76 @@
+The list of function
+====================
+
+　This indicates the list of the user support tool function.
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 10 20 50
+
+  * - No
+    - Function
+    - Description
+
+  * - 1
+    - User information displaying 
+    - Display the user information
+
+  * - 2
+    - Group information displaying 
+    - Display the group information
+
+  * - 3
+    - Login history search
+    - Display the login history
+
+  * - 4
+    - Assign resource registration
+    - Deliver the computing resource allocation frame (allocated resource)
+
+  * - 5
+    - Assign resource change
+    - Expand / shrink the assign resource for each job or user
+
+  * - 6
+    - Assign resource deleting
+    - Delete the assign resource for each job or user
+
+  * - 7
+    - Resource assign information displaying
+    - Display the assign resource linking information
+
+  * - 8
+    - Job execution history search 
+    - Display the job execution status (waiting execution, executing, end)
+
+  * - 9
+    - Job execution result search 
+    - Display the job execution result
+
+  * - 10
+    - User payment information displaying (job) 
+    - Display the user user payment information for job
+
+  * - 11
+    - User payment information displaying (disk) 
+    - Display the user user payment information for disk
+
+  * - 12
+    - Job status transition history displaying 
+    - Display the job status transition history
+
+  * - 13
+    - Displaying quotas on data area 
+    - Display groups disk usage and limits on data area
+
+  * - 14
+    - Change the disk quota limit on each VOLUME 
+    - Display groups’ disk usage and limits on data area
+
+  * - 15
+    - Displaying Fugaku Points
+    - Display Fugaku Points
+
+..  * - 16
+    - User payment information displaying (Electricity charging)
+    - Display power billing information for job

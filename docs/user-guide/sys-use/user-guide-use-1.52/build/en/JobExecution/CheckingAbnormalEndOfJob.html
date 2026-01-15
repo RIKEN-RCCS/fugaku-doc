@@ -1,0 +1,587 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.16. Checking when a job ends abnormally &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.17. Sample Scripts" href="SampleScripts.html" />
+    <link rel="prev" title="5.15. Use of custom resource" href="HowToUseCustomResource.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="SampleScripts.html" title="5.17. Sample Scripts"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="HowToUseCustomResource.html" title="5.15. Use of custom resource"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.16. </span>Checking when a job ends abnormally</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="checking-when-a-job-ends-abnormally">
+<h1><span class="section-number">5.16. </span>Checking when a job ends abnormally<a class="headerlink" href="#checking-when-a-job-ends-abnormally" title="Link to this heading">¶</a></h1>
+<section id="job-manager-exit-code">
+<h2><span class="section-number">5.16.1. </span>Job manager exit code<a class="headerlink" href="#job-manager-exit-code" title="Link to this heading">¶</a></h2>
+<p>If the submitted job ends abnormally, the cause can be identified by referring to the job manager’s exit code (PJM CODE).</p>
+<p>To output the job manager exit code, specify  <code class="docutils literal notranslate"><span class="pre">-s</span></code> or  <code class="docutils literal notranslate"><span class="pre">-S</span></code> option when executing  <strong class="program">pjsub</strong>.</p>
+<p>Example of job execution is as following.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w">  </span>-s<span class="w">  </span>./sample.sh
+</pre></div>
+</div>
+<p>When the job ends, job statistics are output with the following file name:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 45.5%" />
+<col style="width: 54.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>File name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Job name.Job ID.stats</p></td>
+<td><p>This file contains job statistical information.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The PJM code list is as follows.</p>
+<table class="docutils align-default" id="jobexecutionjobmanagerendcodetable">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>PJM CODE</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Successful job completion</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>CANCEL by  <strong class="program">pjdel</strong> command that the user controled.</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>REJECT based on job acceptance judgment.  <strong class="program">pjsub</strong>command will be error</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>Execution rejected by the job manager exit function. The job is not running</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>HOLD by  <strong class="program">pjhold</strong> command that the user controled.</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>CANCEL by step job dependency expression. The job is not running</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>CANCEL by deadline forced specification</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>CANCEL by job manager exit function. The job is not running</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>EXIT during job reconstruction because re-execution is not allowed</p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p>Job execution timeout due to violation of elapsed time limit</p></td>
+</tr>
+<tr class="row-even"><td><p>12</p></td>
+<td><p>Forced termination due to excessive memory usage</p></td>
+</tr>
+<tr class="row-odd"><td><p>13</p></td>
+<td><p>Forced termination due to excessive disk usage</p></td>
+</tr>
+<tr class="row-even"><td><p>14</p></td>
+<td><p>Waiting for job status transition of bulk job (currently not output)</p></td>
+</tr>
+<tr class="row-odd"><td><p>16</p></td>
+<td><p>Termination due to inaccessibility of current directory or standard input / standard output / standard error output file</p></td>
+</tr>
+<tr class="row-even"><td><p>18</p></td>
+<td><p>A job that has been executed beyond the minimum executable time is terminated by executing a subsequent job or starting a deadline schedule. If the former is the cause the item REASON will be “ANOTHER JOB STARTED” and the latter will be “DEADLINE SCHEDULE STARTED”</p></td>
+</tr>
+<tr class="row-odd"><td><p>20</p></td>
+<td><p>Node down</p></td>
+</tr>
+<tr class="row-even"><td><p>21</p></td>
+<td><p>Shell execution failure</p></td>
+</tr>
+<tr class="row-odd"><td><p>22</p></td>
+<td><p>ICC error</p></td>
+</tr>
+<tr class="row-even"><td><p>23</p></td>
+<td><p>Termination by OOM Killer operation</p></td>
+</tr>
+<tr class="row-odd"><td><p>25</p></td>
+<td><p>HA failure</p></td>
+</tr>
+<tr class="row-even"><td><p>26</p></td>
+<td><p>Error in prologue and epilogue processing</p></td>
+</tr>
+<tr class="row-odd"><td><p>27</p></td>
+<td><p>Job resource management exit processing error</p></td>
+</tr>
+<tr class="row-even"><td><p>28</p></td>
+<td><p>Abnormal job execution environment</p></td>
+</tr>
+<tr class="row-odd"><td><p>29</p></td>
+<td><p>The specified job execution environment is invalid</p></td>
+</tr>
+<tr class="row-even"><td><p>30</p></td>
+<td><p>Suspended due to suspend or resume processing failure</p></td>
+</tr>
+<tr class="row-odd"><td><p>100</p></td>
+<td><p>Job manager internal error</p></td>
+</tr>
+<tr class="row-even"><td><p>120</p></td>
+<td><p>Job scheduler internal error</p></td>
+</tr>
+<tr class="row-odd"><td><p>140</p></td>
+<td><p>Job resource management internal error</p></td>
+</tr>
+<tr class="row-even"><td><p>160</p></td>
+<td><p>Tofu library internal error. The job is not running</p></td>
+</tr>
+<tr class="row-odd"><td><p>180</p></td>
+<td><p>Tiered storage internal error</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="message-output-during-job-execution">
+<h2><span class="section-number">5.16.2. </span>Message output during job execution<a class="headerlink" href="#message-output-during-job-execution" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">An error message may be output during job execution. Output messages are from parallel execution environment (PLE), job management (PJM), MPI, language processing system (Fortran / C / C ++), etc. A manual with explanations is provided for each message.</div>
+<div class="line">The table below shows the relationship between the messages and the reference manual that describes the message.</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 23.1%" />
+<col style="width: 23.1%" />
+<col style="width: 23.1%" />
+<col style="width: 30.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Error message <sup>*</sup>1</p></th>
+<th class="head"><p>Job output file <sup>*</sup>2</p></th>
+<th class="head"><p>Change of mpiexec output target <sup>*</sup>3</p></th>
+<th class="head"><p>Reference manual</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PLE nnnn plexec</p></td>
+<td><p>Job name.Job ID.err</p></td>
+<td><p>No</p></td>
+<td><p>Job Operation Software</p>
+<p>- Command Reference</p>
+<p>- End-user’s Guide</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>PJM nnnn xxxxxx</p></td>
+<td><p>Job name.Job ID.err</p></td>
+<td><p>No</p></td>
+<td><p>Job Operation Software</p>
+<p>- Command Reference</p>
+<p>- End-user’s Guide</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>mpi::</p></td>
+<td><p>Job name.Job ID.err</p></td>
+<td><p>Yes</p></td>
+<td><p>MPI User’s Guide</p></td>
+</tr>
+<tr class="row-odd"><td><p>jwennnn</p></td>
+<td><p>Job name.Job ID.err</p></td>
+<td><p>Yes</p></td>
+<td><p>Development Studio Fortran/C/C++ Runtime Messages</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line"><sup>*</sup>1: Indicates the character string included in the message. Classify messages by this string.</div>
+<div class="line"><sup>*</sup>2: Indicates the message output target when there is no specifying of  <strong class="program">mpiexec</strong> output target change option.</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+<section id="pjm-0079-error-reason-list">
+<h2><span class="section-number">5.16.3. </span>PJM 0079 ERROR REASON list<a class="headerlink" href="#pjm-0079-error-reason-list" title="Link to this heading">¶</a></h2>
+<p>About the error message by operation resource check (GATE CHECK), display the PJM 0079 ERROR REASON list.</p>
+<p>When “[ERR.] PJM 0079 pjsub <em>Arbitrary character string</em>.” is displayed, refer to REASON below.</p>
+<div class="line-block">
+<div class="line">Error codes Q03 to Q08 and S09 to S14 are displayed when restrictions are applied during system operation.</div>
+<div class="line">If restrictions are applied, we will notify you separately on the Fugaku website etc.</div>
+</div>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#when-job-acceptance" id="id1">When job acceptance</a></p></li>
+<li><p><a class="reference internal" href="#when-job-execution" id="id2">When job execution</a></p></li>
+</ul>
+</nav>
+<section id="when-job-acceptance">
+<h3><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">5.16.3.1. </span>When job acceptance</a><a class="headerlink" href="#when-job-acceptance" title="Link to this heading">¶</a></h3>
+<p>At the time of job acceptance (when an error occurs in GATE CHECK), job acceptance may be rejected.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 9.1%" />
+<col style="width: 27.3%" />
+<col style="width: 27.3%" />
+<col style="width: 36.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Error code</p></th>
+<th class="head"><p>REASON</p></th>
+<th class="head"><p>Error type</p></th>
+<th class="head"><p>Overview</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Q01</p></td>
+<td><p>group is not active (ACC-&gt;QUE)</p></td>
+<td><p>Group enable check error</p></td>
+<td><p>Submission group is unabled due to expiration</p></td>
+</tr>
+<tr class="row-odd"><td><p>Q02</p></td>
+<td><p>user is not active (ACC-&gt;QUE)</p></td>
+<td><p>User enable check error</p></td>
+<td><p>Submission user is unabled due to expiration</p></td>
+</tr>
+<tr class="row-even"><td><p>Q03</p></td>
+<td><p>Node is too few (ACC-&gt;QUE)</p></td>
+<td><div class="line-block">
+<div class="line">Lower limit check error</div>
+<div class="line">[Number of node]</div>
+</div>
+</td>
+<td><p>The value specified for the number of nodes (-L node) at the time of job submission is smaller than the permitted value.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Q04</p></td>
+<td><p>Elapse limit is too short (ACC-&gt;QUE)</p></td>
+<td><div class="line-block">
+<div class="line">Lower limit check error</div>
+<div class="line">[elapse]</div>
+</div>
+</td>
+<td><p>Elapsed time limit at job submission (-L elapse) is smaller than the permitted value.</p></td>
+</tr>
+<tr class="row-even"><td><p>Q05</p></td>
+<td><p>Use resource is too few (ACC-&gt;QUE)</p></td>
+<td><div class="line-block">
+<div class="line">Lower limit check error</div>
+<div class="line">[Node time product]</div>
+</div>
+</td>
+<td><p>The value of the node time product (-L node, -L elapse) at job submission is smaller than the permitted value.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Q06</p></td>
+<td><p>Node is too many (ACC-&gt;QUE)</p></td>
+<td><div class="line-block">
+<div class="line">Upper limit check error</div>
+<div class="line">[Number of node]</div>
+</div>
+</td>
+<td><p>The number of nodes at job submission (-L node) has exceeded the permitted value.</p></td>
+</tr>
+<tr class="row-even"><td><p>Q07</p></td>
+<td><p>Elapse limit is too long (ACC-&gt;QUE)</p></td>
+<td><div class="line-block">
+<div class="line">Upper limit check error</div>
+<div class="line">[elapse]</div>
+</div>
+</td>
+<td><p>The elapsed time limit (-L elapse) at the time of job submission exceeds the permitted value.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Q08</p></td>
+<td><p>Use resource is too many (ACC-&gt;QUE)</p></td>
+<td><div class="line-block">
+<div class="line">Upper limit check error</div>
+<div class="line">[Node time product]</div>
+</div>
+</td>
+<td><p>The node time product (-L node, -L elapse) at job introduction exceeds the permitted value.</p></td>
+</tr>
+<tr class="row-even"><td><p>Q09</p></td>
+<td><p>Computing resources shortage occurred.[group] (ACC-&gt;QUE)</p></td>
+<td><div class="line-block">
+<div class="line">Resource left check error</div>
+<div class="line">(Assignment to the group)</div>
+</div>
+</td>
+<td><p>The remaining resources of the group are less than the expected resource consumption of the job.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Q10</p></td>
+<td><p>Computing resources shortage occurred.[rsc-grp] (ACC-&gt;QUE)</p></td>
+<td><div class="line-block">
+<div class="line">Resource left check error</div>
+<div class="line">(Assignment to the group in a group)</div>
+</div>
+</td>
+<td><p>The remaining resources for the resource group in the group are less than the expected resource consumption of the job.</p></td>
+</tr>
+<tr class="row-even"><td><p>Q11</p></td>
+<td><p>Computing resources shortage occurred.[user] (ACC-&gt;QUE)</p></td>
+<td><div class="line-block">
+<div class="line">Resource left check error</div>
+<div class="line">(Assignment to the user in a group and a resource group)</div>
+</div>
+</td>
+<td><p>The remaining resources for the users in the group and resource group are less than the expected resource consumption of the job.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="when-job-execution">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">5.16.3.2. </span>When job execution</a><a class="headerlink" href="#when-job-execution" title="Link to this heading">¶</a></h3>
+<p>Job execution may be rejected during job execution (when an error occurs in GATE CHECK).</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 9.1%" />
+<col style="width: 27.3%" />
+<col style="width: 27.3%" />
+<col style="width: 36.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Error code</p></th>
+<th class="head"><p>REASON</p></th>
+<th class="head"><p>Error type</p></th>
+<th class="head"><p>Overview</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>S01</p></td>
+<td><p>group is not active (QUE-&gt;SIN)</p></td>
+<td><p>Group enable check error</p></td>
+<td><p>Submission group is unabled due to expiration</p></td>
+</tr>
+<tr class="row-odd"><td><p>S02</p></td>
+<td><p>user is not active (QUE-&gt;SIN)</p></td>
+<td><p>User enable check error</p></td>
+<td><p>Submission user is unabled due to expiration</p></td>
+</tr>
+<tr class="row-even"><td><p>S03</p></td>
+<td><p>need more resource [group] (QUE-&gt;SIN)</p></td>
+<td><div class="line-block">
+<div class="line">Resource left check error</div>
+<div class="line">(Assignment to the group)</div>
+</div>
+</td>
+<td><p>The remaining resources of the group are less than the expected resource consumption of the job.</p></td>
+</tr>
+<tr class="row-odd"><td><p>S04</p></td>
+<td><p>need more resource [rsc-grp] (QUE-&gt;SIN)</p></td>
+<td><div class="line-block">
+<div class="line">Resource left check error</div>
+<div class="line">(Assignment to the group in a group)</div>
+</div>
+</td>
+<td><p>The remaining resources for the resource group in the group are less than the expected resource consumption of the job.</p></td>
+</tr>
+<tr class="row-even"><td><p>S05</p></td>
+<td><p>need more resource [user] (QUE-&gt;SIN)</p></td>
+<td><div class="line-block">
+<div class="line">Resource left check error</div>
+<div class="line">(Assignment to the user in a group and a resource group)</div>
+</div>
+</td>
+<td><p>The remaining resources for the users in the group and resource group are less than the expected resource consumption of the job.</p></td>
+</tr>
+<tr class="row-odd"><td><p>S06</p></td>
+<td><p>requeue, remaining resource shortage [group] (QUE-&gt;SIN)</p></td>
+<td><div class="line-block">
+<div class="line">Resource left check error</div>
+<div class="line">(Assignment to the group)</div>
+</div>
+</td>
+<td><p>The remaining resources of the group are less than the expected resource consumption of the job. It may be executable depending on the result of the running (submitted) job.</p></td>
+</tr>
+<tr class="row-even"><td><p>S07</p></td>
+<td><p>requeue, remaining resource shortage [rsc-grp] (QUE-&gt;SIN)</p></td>
+<td><div class="line-block">
+<div class="line">Resource left check error</div>
+<div class="line">(Assignment to the group in a group)</div>
+</div>
+</td>
+<td><p>The remaining resources for the resource group in the group are less than the expected resource consumption of the job. It may be executable depending on the result of the running (submitted) job.</p></td>
+</tr>
+<tr class="row-odd"><td><p>S08</p></td>
+<td><p>requeue, remaining resource shortage [user] (QUE-&gt;SIN)</p></td>
+<td><div class="line-block">
+<div class="line">Resource left check error</div>
+<div class="line">(Assignment to the user in a group and a resource group)</div>
+</div>
+</td>
+<td><p>The remaining resources for the users in the group and resource group are less than the expected resource consumption of the job. It may be executable depending on the result of the running (submitted) job.</p></td>
+</tr>
+<tr class="row-even"><td><p>S09</p></td>
+<td><p>requeue, Node is too few (QUE-&gt;SIN)</p></td>
+<td><div class="line-block">
+<div class="line">Lower limit check error</div>
+<div class="line">[Number of node]</div>
+</div>
+</td>
+<td><p>The number of nodes of the submitted job (-L node) is smaller than the permitted value.</p></td>
+</tr>
+<tr class="row-odd"><td><p>S10</p></td>
+<td><p>requeue, Elapse limit is too short (QUE-&gt;SIN)</p></td>
+<td><div class="line-block">
+<div class="line">Lower limit check error</div>
+<div class="line">[elapse]</div>
+</div>
+</td>
+<td><p>Elapsed time limit (-L elapse) of the submitted job is smaller than the permitted value.</p></td>
+</tr>
+<tr class="row-even"><td><p>S11</p></td>
+<td><p>requeue, Use resource is too few (QUE-&gt;SIN)</p></td>
+<td><div class="line-block">
+<div class="line">Lower limit check error</div>
+<div class="line">[Node time product]</div>
+</div>
+</td>
+<td><p>The node time product (-L node, -L elapse) of the submitted job is smaller than the permitted value.</p></td>
+</tr>
+<tr class="row-odd"><td><p>S12</p></td>
+<td><p>requeue, Node is too many (QUE-&gt;SIN)</p></td>
+<td><div class="line-block">
+<div class="line">Upper limit check error</div>
+<div class="line">[Number of node]</div>
+</div>
+</td>
+<td><p>The number of nodes of the submitted job (-L node) exceeds the permitted value.</p></td>
+</tr>
+<tr class="row-even"><td><p>S13</p></td>
+<td><p>requeue, Elapse limit is too long (QUE-&gt;SIN)</p></td>
+<td><div class="line-block">
+<div class="line">Upper limit check error</div>
+<div class="line">[elapse]</div>
+</div>
+</td>
+<td><p>Elapsed time limit (-L elapse) of the submitted job exceeds the permitted value.</p></td>
+</tr>
+<tr class="row-odd"><td><p>S14</p></td>
+<td><p>requeue, Use resource is too many (QUE-&gt;SIN)</p></td>
+<td><div class="line-block">
+<div class="line">Upper limit check error</div>
+<div class="line">[Node time product]</div>
+</div>
+</td>
+<td><p>The node time product (-L node, -L elapse) of the submitted job exceeds the permitted value.</p></td>
+</tr>
+<tr class="row-even"><td><p>S15</p></td>
+<td><p>Computing resources shortage occurred.(QUE-&gt;RNA)</p></td>
+<td><div class="line-block">
+<div class="line">Resource left check error</div>
+<div class="line">(Assignment to the group)</div>
+</div>
+</td>
+<td><p>The remaining resources of the group are less than the expected resource consumption of the job. It may be executable depending on the result of the running (submitted) job.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="cpu-clock-change-power-capping">
+<h2><span class="section-number">5.16.4. </span>CPU clock change (Power capping)<a class="headerlink" href="#cpu-clock-change-power-capping" title="Link to this heading">¶</a></h2>
+<p>When the power consumption of a job exceeds the threshold set in the system, the CPU clock of the node used by the job is forcibly reduced.</p>
+<p>Please refer to ‘POWER CAPPING DATE’ to check if you have received this function. If affected, the time exceeding the threshold is output in ‘POWER CAPPING DATE’.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.16. Checking when a job ends abnormally</a><ul>
+<li><a class="reference internal" href="#job-manager-exit-code">5.16.1. Job manager exit code</a></li>
+<li><a class="reference internal" href="#message-output-during-job-execution">5.16.2. Message output during job execution</a></li>
+<li><a class="reference internal" href="#pjm-0079-error-reason-list">5.16.3. PJM 0079 ERROR REASON list</a><ul>
+<li><a class="reference internal" href="#when-job-acceptance">5.16.3.1. When job acceptance</a></li>
+<li><a class="reference internal" href="#when-job-execution">5.16.3.2. When job execution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cpu-clock-change-power-capping">5.16.4. CPU clock change (Power capping)</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="HowToUseCustomResource.html"
+                          title="previous chapter"><span class="section-number">5.15. </span>Use of custom resource</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="SampleScripts.html"
+                          title="next chapter"><span class="section-number">5.17. </span>Sample Scripts</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="SampleScripts.html" title="5.17. Sample Scripts"
+             >next</a></li>
+        <li class="right" >
+          <a href="HowToUseCustomResource.html" title="5.15. Use of custom resource"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.16. </span>Checking when a job ends abnormally</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

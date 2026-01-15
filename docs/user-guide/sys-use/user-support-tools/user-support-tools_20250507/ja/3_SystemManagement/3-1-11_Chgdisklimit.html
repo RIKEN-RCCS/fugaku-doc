@@ -1,0 +1,222 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>3.1.11. データ領域割当変更 &#8212; 利用者支援ツール 使用手引書 (利用者編)  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="3.1.12. 富岳ポイント表示" href="3-1-12_AccountJ_pt.html" />
+    <link rel="prev" title="3.1.10. データ領域割当情報表示" href="3-1-10_Chkdiskspace.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-12_AccountJ_pt.html" title="3.1.12. 富岳ポイント表示"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="3-1-10_Chkdiskspace.html" title="3.1.10. データ領域割当情報表示"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>システム管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" accesskey="U"><span class="section-number">3.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.11. </span>データ領域割当変更</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">3.1.11. </span>データ領域割当変更<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[名前]</strong></div>
+<div class="line">　chgdisklimit -  課題のデータ領域の割り当てを変更します</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[書式]</strong></div>
+<div class="line">　chgdisklimit  [オプション]</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[説明]</strong></div>
+<div class="line">　chgdisklimit コマンドは、課題に割り当て可能なディスク容量の上限値を超えない範囲で、各VOLUMEのディスク容量制限を</div>
+<div class="line">　変更できる。課題責任者とシステム管理者がこのコマンドを利用可能できる。それ以外の利用者は利用できない。</div>
+<div class="line">　課題に割り当て可能なディスク容量が少ない場合は、課題のディスク容量の拡張を申請するか、他のVOLUMEの容量制限を</div>
+<div class="line">　下げることで、割り当てが可能になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[オプション]</strong></div>
+<div class="line">　  -g GROUP_NAME</div>
+<div class="line">　        グループ名を指定する。スペースに続けての複数指定、アスタリスクを使用した前方／中間／後方一致指定はできない。</div>
+<div class="line">　        単一、完全一致指定のみ可能である。</div>
+<div class="line"><br /></div>
+<div class="line">　  -m VOLUME_NAME</div>
+<div class="line">　        先頭の２桁はVOLUMEを、後の２桁はMDT番号を表している。</div>
+<div class="line">　        【例】vol0401</div>
+<div class="line"><br /></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>-mオプションで指定するVOLUMEは、chkdiskspaceコマンドを利用して各VOLUMEのFREE（空き容量）を確認し、割り当てる量よりも空きがあるVOLUMEを選んでください。</p>
+</div>
+<div class="line-block">
+<div class="line">　  -B QUOTA_LIMIT_VALUE</div>
+<div class="line">　        クォータ制限値[単位:TiB]（ハードリミット）</div>
+<div class="line"><br /></div>
+<div class="line">　 --help</div>
+<div class="line">　        コマンドのヘルプ内容を表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[復帰値]</strong></div>
+<div class="line">　正常時: 0</div>
+<div class="line">　異常時: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[備考]</strong></div>
+<div class="line">　なし。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[使用例]</strong></div>
+<div class="line">　【例1】vol0401に追加で割り当てを行う場合。</div>
+</div>
+<div class="line-block">
+<div class="line">　以下の例では、課題に割り当て可能なディスク容量が10TiBあり5TiBの割り当て可能な残量がある。</div>
+<div class="line">　chkdiskspaceコマンドを利用することで、課題に割り当て可能なディスク容量の残量が確認できる。</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>chkdiskspace<span class="w"> </span>-g<span class="w"> </span>group001
+<span class="go">COLLECTDATE : 2022/02/20 11:27:36    unit[TiB]</span>
+<span class="go">[group001] LIMIT:10 ALLOC:5</span>
+<span class="go">*----------------[SYSTEM]-----------------|-----------------------------[GROUP]--------------------------------------*</span>
+<span class="go">VOLUME          SIZE            FREE            LIMIT     USAGE  USE_RATE            ILIMIT           FILES IUSE_RATE</span>
+<span class="go">vol0300         7,000           6,990             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0301         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0302         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0303         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0400         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0401         7,000           6,995             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0402         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0403         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0500         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0501         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0502         3,000           2,995               5      0.01      0.0%         1,500,000              64      0.0%</span>
+<span class="go">vol0503         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0600         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0601         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0602         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0603         3,000           2,995             ---      0.01       ---               ---               1       ---</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">　vol0401に5TiBのディスク容量制限を設定する。</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>chgdisklimit<span class="w"> </span>-g<span class="w"> </span>group001<span class="w"> </span>-m<span class="w"> </span>vol0401<span class="w"> </span>-B<span class="w"> </span><span class="m">5</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">　chkdiskspaceコマンド結果よりvol0401に5TiBのディスク容量制限されたことが確認できる。</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>chkdiskspace<span class="w"> </span>-g<span class="w"> </span>group001
+<span class="go">COLLECTDATE : 2022/02/20 11:27:36    unit[TiB]</span>
+<span class="go">[group001] LIMIT:10 ALLOC:10</span>
+<span class="go">*----------------[SYSTEM]-----------------|-----------------------------[GROUP]--------------------------------------*</span>
+<span class="go">VOLUME          SIZE            FREE            LIMIT     USAGE  USE_RATE            ILIMIT           FILES IUSE_RATE</span>
+<span class="go">vol0300         7,000           6,990             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0301         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0302         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0303         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0400         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0401         7,000           6,990               5      0.01      0.0%         1,500,000              64      0.0%</span>
+<span class="go">vol0402         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0403         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0500         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0501         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0502         3,000           2,995               5      0.01      0.0%         1,500,000              64      0.0%</span>
+<span class="go">vol0503         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0600         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0601         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0602         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0603         3,000           2,995             ---      0.01       ---               ---               1       ---</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="3-1-10_Chkdiskspace.html"
+                          title="前の章へ"><span class="section-number">3.1.10. </span>データ領域割当情報表示</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="3-1-12_AccountJ_pt.html"
+                          title="次の章へ"><span class="section-number">3.1.12. </span>富岳ポイント表示</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-12_AccountJ_pt.html" title="3.1.12. 富岳ポイント表示"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="3-1-10_Chkdiskspace.html" title="3.1.10. データ領域割当情報表示"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>システム管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" ><span class="section-number">3.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.11. </span>データ領域割当変更</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

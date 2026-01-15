@@ -1,0 +1,95 @@
+.. _JobExecConsiderpoints:
+
+留意事項
+=========
+
+pjrshコマンドの使用方法
+------------------------
+
+\ :command:`pjrsh`\ コマンドを使用する場合は以下の注意事項があります。
+
+- システム全体のジョブ数および1つのジョブで実行できる\ :command:`pjrsh`\ コマンドの同時実行数制限
+
+  - 1ジョブあたり\ :command:`pjrsh`\ コマンドは1多重（ジョブマスターノードからのみ）実行可能
+    
+    例えば次のように\ :command:`pjrsh`\ コマンドをバックグラウンドで指定すると1個1個シーケンシャルに動く形になります。
+    
+    .. code-block:: bash
+
+      pjrsh "(1)" "command1" &
+      pjrsh "(2)" "command2" &
+      pjrsh "(3)" "command3" &
+      pjrsh "(4)" "command4" &
+    
+  - \ :command:`pjrsh`\ コマンドを使用するジョブはシステム全体で30多重まで実行可能
+  
+    システム全体で\ :command:`pjrsh`\ コマンドを使用するジョブ数(後述のカスタム資源を指定したジョブ数)が30を越えた場合は、pjsubコマンドでジョブは受け付けますがQUE状態で待機します。
+    RUN状態のジョブが30ジョブ未満になった段階でRUNになります。
+
+- \ :command:`pjrsh`\ コマンドを使用するジョブはジョブを投入する時にカスタム資源「\ ``exepjrsh=1``\ 」の指定が必要
+
+  \ :command:`pjrsh`\ コマンドを実行するジョブは次の投入例のように\ ``exepjrsh=1``\ を指定します。
+
+  .. code-block:: console
+  
+     [_LNlogin]$ pjsub -L exepjrsh=1 jobscript.sh
+
+上記注意事項を満たさない場合は、以下の挙動となります。
+
+- カスタム資源「exepjrsh」を指定しなかった場合、または、ジョブマスターノード以外で\ :command:`pjrsh`\ コマンドを実行した場合
+
+  \ :command:`pjrsh`\ コマンドが「Permission denied」となり実行できません。
+
+  .. code-block:: none
+  
+     /bin/bash: /usr/bin/pjrsh: Permission denied
+
+- カスタム資源「\ ``exepjrsh``\ 」に1以外を指定した場合
+
+  pjsubコマンド実行時にエラーとなります。
+
+  .. code-block:: none
+
+     [ERR.] PJM 0057 pjsub exepjrsh=2 is greater than the upper limit (1).
+
+スタートアップ課題 (trial) におけるジョブ実行
+----------------------------------------------
+
+スタートアップ課題とは、FAASを利用するためのアカウントを取得後、オンラインで本人確認を実施するeKYCや誓約書への同意等の手続きを経て、「富岳」アカウントが発行される際に自動的に参加する、アカウント発行のためのデフォルト課題（グループID：trial,課題ID：rs2xzzzz）です。
+
+スタートアップ課題 (trial) におけるジョブ実行について
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+スタートアップ課題 (trial) におけるジョブ実行時には、以下の手順に従ってください。
+
+- ジョブ投入時は\ ``-g trial``\ を指定してください。
+  
+- \ ``--no-check-directory``\ オプションを指定してホームディレクトリから実行してください。
+
+- 投入可能なリソースグループは以下の通りです。
+
+  * spot-small
+
+  * spot-int
+
+  * spot-large
+
+  * spot-middle
+
+会話型ジョブ
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+リアルタイムで計算ノードにログインして直接コマンドを実行したい場合は、以下のコマンドを参考に実行してください。
+
+  .. code-block:: none
+
+     [_LNlogin]$ pjsub --interact -g trial -L rscgrp=spot-int,node=1,elapse=01:00:00 --sparam "wait-time=600" --no-check-directory
+
+バッチジョブ
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+ジョブスクリプトを作成してジョブを投入する場合は、以下のコマンドを参考に実行してください。
+
+  .. code-block:: none
+
+     [_LNlogin]$ pjsub -g trial -L rscgrp=spot-small,node=1,elapse=01:00:00 --no-check-directory jobscript.sh

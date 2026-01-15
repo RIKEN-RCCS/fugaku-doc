@@ -1,0 +1,240 @@
+Job execution history search
+============================
+
+| 　**[Name]**
+| 　pjstatj - Display the job execution status (waiting execution, executing, end)
+
+| 　**[Style]**
+| 　pjstatj  [Option]
+| 　※Conbination specification of -j, -n, -d, -u, -g, -a, -q, -r, -e, -t, -b is AND search.
+
+| 　**[Description]**
+| 　pjstatj command displays the job execution status (execution waiting / execution / termination). If the display result covers multiple lines, the job ID, bulk number, and step number are displayed in ascending order using the composite key.
+
+| 　It is possible to display the execution status from job input to end and the elapsed time from each state transition time to the current time.
+ 　
+| 　Users and project managers can display job information of members belonging to the group. The system administrator can display job information of all members registered in the system. However, the administrator authority described in System administration function needs to be granted. If the job ID, user name or group name is not specified as an option, even the project manager and system administrator can display only their own job information.
+
+| 　If the "-b" option indicating the number of generations is not specified, jobs for the current year are displayed.
+
+| 　**[Option]**
+| 　-j  job ID
+| 　Specify job ID.
+
+| 　-n  line
+| 　Specify number of lines. When the number of rows is specified, the number of rows specified in ascending order using the job ID, bulk number, and step number as composite keys is displayed. If no number of lines is specified, all items are displayed.
+ 　
+| 　-d  job starting date
+| 　Specify job starting date. If it is not specified, displays all.
+| 　If this option is specified without "-b" option indicating the number of generations, jobs for all generations are displayed.
+ 　
+| 　There are following patterns about job starting date specification format.
+| 　　Specified the period　　yyyymmdd:yyyymmdd
+| 　　After-specified date　yyyymmdd:
+| 　　Before-specified date　:yyyymmdd
+| 　　Specified date　　　yyyymmdd
+
+| 　-u  user name
+| 　Specify user name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.
+ 　
+| 　-g  group name
+| 　Specify group name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.
+ 　
+| 　-a
+| 　Display all user job informaion.If specified -a option, -u, -g option will be disabled.
+ 　
+| 　-R
+| 　If sub job information exists, the sub job information is also displayed. 
+ 　
+| 　-q
+| 　Display only information about jobs waiting to be executed.
+ 　
+| 　The following processing states are targeted.
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 20 30
+
+  * - Process status
+    - Description
+
+  * - ACCEPT
+    - Job submittion status
+
+  * - QUEUED
+    - Waiting execution
+
+  * - RUNNING-A
+    - Requesting execution
+
+  * - RUNNING-P
+    - Processing prologue
+
+| 　-r
+| 　Display only executing job information
+
+| 　Following process status are targets.
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 20 30
+
+  * - Process status
+    - Description
+
+  * - RUNNING
+    - Executing job
+
+  * - RUNNING-E
+    - Processing epilogue
+
+  * - RUNOUT
+    - Waiting closing process
+
+| 　-e
+| 　Display only terminated job information.
+ 　 
+| 　Following process status are targets.
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 20 40
+
+  * - Process status
+    - Description
+
+  * - EXIT
+    - Job execution closed
+
+  * - CANCEL
+    - Job execution stopped
+
+  * - REJECT
+    - Job acceptance failed
+
+| 　-s
+| 　Display the search result as detail mode (show all items).
+ 　 
+| 　-c
+| 　Standard output of search results in CSV format. You can also save to a file by using the redirection function.
+ 　
+| 　-f  file name
+| 　The display item defined in the system can be changed by the user.
+| 　There are the following methods for the user to arbitrarily select display items, which are preferentially interpreted from the top. If this is not specified, the system definition is adopted.
+
+- Create a file with any display item selected in any directory and specify it with the -f option (file name is arbitrary)
+- In the home area, create a file .pjstatj with optional display items (file name is fixed)
+
+　【File setting example】
+
+.. code-block:: none 
+
+   JOBID
+   BLKNO
+   SNO
+   JOBNAME
+   JTYPE
+   MD
+   ST
+   ELAPSE_LIM
+   ELAPSE_TIM
+   JOB_START
+   JOB_END
+   NRNUM
+
+| 　-w
+| 　The waiting time from when a job is submitted until it is executed can be displayed. If the job is canceled before it starts, the waiting time is displayed as-(hyphen).
+
+| 　-b  generation number
+| 　Specify the number of past generations that you want to display. If this option is not specified, job information for the current year is displayed.
+| 　Information display authority follows the authority at the time of command execution.
+
+| 　-t job end date
+| 　Specify job end date. If it is not specified, displays all.
+| 　If there is no value in the job end time, displays based on the date of the job submission acceptance.
+| 　If this option is specified without "-b" option indicating the number of generations, jobs for all generations are displayed.
+
+| 　There are following patterns about job end date specification format.
+| 　　Specified the period　　yyyymmdd:yyyymmdd
+| 　　After-specified date　yyyymmdd:
+| 　　Before-specified date　:yyyymmdd
+| 　　Specified date　　　yyyymmdd
+
+| 　&#45;-help
+| 　Display command help contents.
+ 　
+| 　**[Return value]**
+| 　Normal: 0
+| 　Abnormal: 1
+
+| 　**[Note]**
+| 　None.
+
+| 　**[Use example]**
+　【Example 1】	Display jobs submitted and completed by user (user1)
+
+.. code-block:: console
+
+   [login]$ pjstatj -e
+   JOBID   JOBNAME   MD   USER    GROUP    ST    ELAPSE_LIM   ELAPSE_TIM   PC   
+   10006   sample1   NM   user1   group2   EXT   0000:05:00   0000:01:47   0    
+   [login]$ 
+
+.. code-block:: console
+
+   NODE_ALLOC       STATE_DATE       ACCEPT              STATE_ELAPSE_TIME RETRY
+   48x24x32:36864   04/28 07:48:42   04/27 19:37:19      0521:18:54        0
+
+
+| 　【Example 2】	System administrator displays all job information
+
+.. code-block:: console
+
+   [login]$ pjstatj -a
+   JOBID   JOBNAME   MD   USER    GROUP    ST    ELAPSE_LIM   ELAPSE_TIM   PC   
+   10001   sample1   NM   user1   group1   CCL   0000:40:00   0000:00:00   0    
+   10002   sample2   ST   user2   group2   CCL   0000:40:00   0000:00:00   0    
+   10003   sample3   ST   user3   group3   CCL   0000:10:00   0000:00:00   0    
+   10004   sample4   ST   user4   group4   EXT   0000:05:00   0000:01:15   0    
+   10005   sample5   ST   user5   group5   EXT   0000:05:00   0000:01:20   0    
+   10006   sample1   NM   user1   group2   EXT   0000:05:00   0000:01:47   0    
+   10007   sample1   NM   user1   group1   CCL   0001:00:00   0000:00:00   0    
+   [login]$ 
+
+.. code-block:: console
+
+   NODE_ALLOC       STATE_DATE       ACCEPT              STATE_ELAPSE_TIME RETRY
+   32x12x32:12288   04/27 16:42:11   04/27 11:12:06      0520:20:26        0
+   32x12x32:12288   04/27 16:41:36   04/27 11:18:10      0520:21:54        0
+   34x3x4:408       04/27 16:24:07   04/27 16:18:10      0520:22:35        0
+   48x24x32:36864   04/28 07:43:43   04/27 19:37:11      0521:23:21        0
+   48x24x32:36864   04/28 07:45:55   04/27 19:37:16      0521:24:53        0
+   48x24x32:36864   04/28 07:48:42   04/27 19:37:19      0521:24:14        0
+   48x24x32:36864   04/27 20:39:19   04/27 20:36:46      0520:24:11        0
+
+【Example 3】	The system administrator specifies the user user1 and displays only two lines
+
+.. code-block:: console
+
+   [login]$ pjstatj -u user1 -n 2
+   JOBID   JOBNAME   MD   USER    GROUP    ST    ELAPSE_LIM   ELAPSE_TIM   PC   
+   10001   sample1   NM   user1   group1   CCL   0000:40:00   0000:00:00   0    
+   10006   sample1   NM   user1   group2   EXT   0000:05:00   0000:01:47   0    
+   [login]$ 
+
+.. code-block:: console
+
+   NODE_ALLOC       STATE_DATE       ACCEPT              STATE_ELAPSE_TIME RETRY
+   32x12x32:12288   04/27 16:42:11   04/27 11:12:06      0520:20:26        0
+   48x24x32:36864   04/28 07:48:42   04/27 19:37:19      0521:18:54        0
+
+
+　Display the explanation of the display item.
+
+.. figure:: img/3_SystemManagement_06_1.png
+
+.. figure:: img/3_SystemManagement_06_2.png
+
+.. figure:: img/3_SystemManagement_06_3.png
+
+.. figure:: img/3_SystemManagement_06_4.png

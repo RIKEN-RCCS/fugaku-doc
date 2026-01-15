@@ -1,0 +1,120 @@
+How to execute back ground job
+==============================
+
+This indicates how to execute MPI program in back ground.
+
+
+Back ground execution
+---------------------
+
+This indicates the specification example of back ground execution.
+
+ .. code-block:: console
+
+    $ mpiexec -n 5 --vcoordfile vcoord_file ./a.out &
+
+
+ .. list-table::
+  :widths: 1,3
+  :header-rows: 1
+
+
+  * - Option
+    - Contents
+
+  * - \-n
+    - Specify parallel number
+
+  * - \-\-vcoordfile
+    - Specifies that parallel processes be allocated based on the list of coordinates specified in the VCOORD_FILE file.
+
+
+ .. seealso::
+
+  The description format of the coordinates in the VCOORD_FILE file is conformed to the format of  \ ``rank-map-hostfile``\  parameter of  \ :program:`pjsub`\  command's  \ ``--mpi``\  option.
+  For details, refer to the following in the manual "MPI User's Guide".
+ 
+  - \ ``--vcoordfile``\  explanation of "Options that can be specified in global_options"
+  - "VCOORD file format"
+
+
+Job creation example
+--------------------
+
+| This section shows an example of creating a job script that executes five parallel executions in three backgrounds.
+| node specification is as 1 dimention.
+
+
+1. Create VCOORD_FILE file
+   
+   VCOORD_FILE file is created as conforming to  \ ``rank-map-hostfile``\  parameter format. Create so that the coordinates do not overlap between  \ :program:`mpiexec`\  to be executed simultaneously. If there is a duplicate, an error will occur.  Here,  create as the file name of  \ :file:`vcode1`\,  \ :file:`vcode2`\,  \ :file:`vcode3`\. Indicate file contents in below.
+
+  [vcode1]
+
+  .. code-block:: none
+  
+    (0)
+    (1)
+    (2)
+    (3)
+    (4)
+
+  [vcode2]
+
+  .. code-block:: none
+  
+    (5)
+    (6)
+    (7)
+    (8)
+    (9)
+
+  [vcode3]
+
+  .. code-block:: none
+  
+    (10)
+    (11)
+    (12)
+    (13)
+    (14)
+
+2. Create a job script
+   
+   Create a job script as following.
+
+  .. code-block:: bash
+
+    #!/bin/bash -x
+    #
+    #PJM -L "node=15"         # Number of total node required to process of executing at the same time
+    #PJM -L "rscgrp=small"        
+    #PJM -L "elapse=01:00:00"
+    #PJM -g groupname
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -s
+    #
+    
+    mpiexec -n 5 --vcoordfile vcode1 ./sample_mpi &
+    mpiexec -n 5 --vcoordfile vcode2 ./sample_mpi &
+    mpiexec -n 5 --vcoordfile vcode3 ./sample_mpi &
+    
+    wait       # Input the process to wait until finishing back ground job
+
+
+Notes on back ground execution
+------------------------------
+
+- | The maximum number that can be executed simultaneously in background execution is 128.
+  | If the number exceeds 128, the background job will not be accepted with the message "[ERR.] PLE 0050 plexec cannot be executed any further."
+- When executing multiple background jobs, it is necessary to specify the VCOORD_FILE file.
+- The VCOORD_FILE file cannot have overlapping coordinates between background jobs running simultaneously. An error will occur if the coordinates are duplicated.
+- If there is no end-waiting by  \ :command:`wait`\, processing of the job script ends regardless of the presence or absence of the background job, and processing of the job also ends.
+- In principle, it cannot be used at the same time as dynamic process generation, but it can be used only when all of the following conditions are satisfied.
+
+  * Multiple  \ :program:`mpiexec`\  is not executed at the same time.
+  * The number of MPI_COMM_WORLD of the dynamic process that exists simultaneously does not exceed 65535.
+  * On 1 execution of  \ :program:`mpiexec`\  command, the total number of calls to the MPI_COMM_SPAWN or MPI_COMM_SPAWN_MULTIPLE routine does not exceed 4294967295.
+
+
+

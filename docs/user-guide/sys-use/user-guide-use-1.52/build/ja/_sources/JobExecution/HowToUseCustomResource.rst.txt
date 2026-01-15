@@ -1,0 +1,62 @@
+カスタム資源の利用
+==================
+
+カスタム資源の利用方法について説明します。
+
+
+
+機能概要
+---------
+
+ジョブ運用ソフトウェアでは、ノード資源、CPU資源などの他に、任意の資源を定義できるカスタム資源を持っています。
+
+
+確認方法
+---------
+
+利用できるカスタム資源は、\ :program:`pjshowrsc -v2`\ コマンドで確認することができます。
+
+[使用例]
+
+ .. code-block:: console
+
+   [_LNlogin]$ pjshowrsc -v2
+   [ CLST: ea-compute ]
+   [ RSCUNIT: rscunit_ft01 ]
+   CUSTOM_RESOURCE
+   RSCNAME                              TOTAL      FREE     ALLOC
+   jobenv/linux                     unlimited unlimited         0
+   jobenv/mck                       unlimited unlimited         0 
+   (以下略)
+
+ .. note::
+
+   この使用例では、jobenv というカスタム資源名に対し、linux、mckという種別が設定されていることがわかります。
+
+割り当て方法
+-------------
+
+カスタム資源を割り当てる場合は、\ :program:`pjsub`\ コマンドの\ ``-L``\ オプションを使用します。
+
+[オプションの書式]
+
+ .. code-block:: none
+
+   {-L | --rsc-list} CustomResourceName[=Value]
+
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 3 7
+
+   * - オプション
+     - 説明
+   
+   * - CustomResourceName
+     - カスタム資源名
+   
+   * - Value
+     - | 割り当てるカスタム資源の数、または、割り当てるカスタム資源の種別です。
+       | "=Value" は省略できます
+
+

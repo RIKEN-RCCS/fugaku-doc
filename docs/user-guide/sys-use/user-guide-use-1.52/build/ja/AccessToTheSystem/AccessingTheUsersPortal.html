@@ -1,0 +1,188 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4.3. 富岳ウェブサイトへの接続手順 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="4.4. ログイン" href="LoggingInToTheFugakuComputerWithLocalAccount.html" />
+    <link rel="prev" title="4.2. クライアント証明書のインストール" href="InstallingClientCertificate.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="LoggingInToTheFugakuComputerWithLocalAccount.html" title="4.4. ログイン"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="InstallingClientCertificate.html" title="4.2. クライアント証明書のインストール"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">4. </span>システム利用</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.3. </span>富岳ウェブサイトへの接続手順</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">4.3. </span>富岳ウェブサイトへの接続手順<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>ここでは、富岳ウェブサイトへのアクセス方法について説明します。</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">Webブラウザを用いて、次のURLへアクセスします。</div>
+<div class="line"><a class="reference external" href="https://www.fugaku.r-ccs.riken.jp">https://www.fugaku.r-ccs.riken.jp</a></div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">注釈</p>
+<ul>
+<li><p>富岳ウェブサイトは、Mozilla FirefoxとGoogle Chromeで動作確認を実施しています。他のWebブラウザをご利用の場合に動作に不具合が発生した場合は、動作確認済のWebブラウザをご利用ください。なお、Microsoft Internet Explorerを利用した場合は<a class="reference internal" href="LoggingInToTheFugakuComputerWithLocalAccount.html#registeringapublickey"><span class="std std-ref">公開鍵登録</span></a>で異常終了することが確認されています。</p></li>
+<li><p>脆弱性対応のため、富岳ウェブサイトでは古いSSL接続を禁止しており、TLS 1.2またはTLS1.3接続のみ受け付けます。お使いのWebブラウザの設定によっては接続できない場合があるので、以下のとおりTLS 1.2以降を使用するように適宜設定を変更してください。</p>
+<blockquote>
+<div><p>[Firefoxの設定変更方法]</p>
+<ol class="arabic simple">
+<li><p>アドレスバーに<strong class="command">about:config</strong>と入力しEnterキーを押す</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">security.tls.version</span></code>で検索する</p></li>
+<li><p><span class="guilabel">「security.tls.version.max」</span>が4（TLS 1.3まで有効）になっていることを確認する</p></li>
+<li><p>4より小さい値の場合は、4を設定します</p></li>
+</ol>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><p>クライアント証明書の選択ダイアログが表示されたら、利用するローカルアカウントのクライアント証明書を選択します。</p>
+<ul class="simple">
+<li><p>Firefoxのダイアログ例</p></li>
+</ul>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/AccessingTheUserPortal_02.png"><img alt="../_images/AccessingTheUserPortal_02.png" src="../_images/AccessingTheUserPortal_02.png" style="width: 306.40000000000003px; height: 388.0px;" /></a>
+</figure>
+</div></blockquote>
+<ul class="simple">
+<li><p>Chromeのダイアログ例</p></li>
+</ul>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/AccessingTheUserPortal_07.png"><img alt="../_images/AccessingTheUserPortal_07.png" src="../_images/AccessingTheUserPortal_07.png" style="width: 409.6px; height: 233.60000000000002px;" /></a>
+</figure>
+</div></blockquote>
+</li>
+<li><p>パスワードの入力ダイアログに、クライアント証明書のインストール時に登録した秘密鍵のパスワードを入力します。macOSのキーチェーンを利用している場合はキーチェーンのパスワードを入力します。</p>
+<ul class="simple">
+<li><p>Firefoxのダイアログ例</p></li>
+</ul>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/AccessingTheUserPortal_04.png"><img alt="../_images/AccessingTheUserPortal_04.png" src="../_images/AccessingTheUserPortal_04.png" style="width: 349.6px; height: 159.20000000000002px;" /></a>
+</figure>
+</div></blockquote>
+<ul class="simple">
+<li><p>キーチェーン（macOS）のダイアログ例</p></li>
+</ul>
+<blockquote>
+<div><p>キーチェーンのパスワード（通常はパソコンのログインパスワードと同じ）を入力します。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/AccessingTheUserPortal_06.png"><img alt="../_images/AccessingTheUserPortal_06.png" src="../_images/AccessingTheUserPortal_06.png" style="width: 496.99999999999994px; height: 196.7px;" /></a>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>MacでChrome利用時にキーチェーンのパスワード入力を何度も求められる場合は、パスワード入力ダイアログで[常に許可]をクリックしてください。</p>
+</div>
+</div></blockquote>
+</li>
+<li><p>クライアント証明書の認証に成功すると、次のような画面が表示されます。</p>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/AccessingTheUserPortal_05.png"><img alt="../_images/AccessingTheUserPortal_05.png" src="../_images/AccessingTheUserPortal_05.png" style="width: 941.5px; height: 424.5px;" /></a>
+</figure>
+</div></blockquote>
+</li>
+<li><p>ログアウト</p>
+<p>富岳ウェブサイトはログアウトの機能を持っていません。
+富岳ウェブサイトの利用を完全に終了させたい場合は使用中のWebブラウザを終了してください。</p>
+<p>クライアント証明書(アカウント)を復数所持している場合、別のアカウントに切り換えるには以下に記載するどちらかの方法で変更することが可能です。</p>
+<ul class="simple">
+<li><p>Webブラウザを終了して再度富岳ウェブサイトにアクセスし、着目のクライアント証明書を選択する</p></li>
+<li><p>別のWebブラウザ（Firrfox or Google Chrome）で富岳ウェブサイトにアクセスし、着目のクライアント証明書を選択する</p></li>
+</ul>
+</li>
+</ol>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="InstallingClientCertificate.html"
+                          title="前の章へ"><span class="section-number">4.2. </span>クライアント証明書のインストール</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="LoggingInToTheFugakuComputerWithLocalAccount.html"
+                          title="次の章へ"><span class="section-number">4.4. </span>ログイン</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="LoggingInToTheFugakuComputerWithLocalAccount.html" title="4.4. ログイン"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="InstallingClientCertificate.html" title="4.2. クライアント証明書のインストール"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">4. </span>システム利用</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.3. </span>富岳ウェブサイトへの接続手順</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

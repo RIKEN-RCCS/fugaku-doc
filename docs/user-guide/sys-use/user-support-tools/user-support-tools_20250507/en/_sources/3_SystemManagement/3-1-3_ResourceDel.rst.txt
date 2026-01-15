@@ -1,0 +1,150 @@
+Assign resource deleting
+========================
+
+| 　**[Name]**
+| 　resourcedel - Delete the assign resource for each job or user
+
+| 　**[Style]**
+| 　resourcedel  -g  group name  -n  resource type name
+| 　resourcedel  -f  file name
+
+| 　**[Description]**
+| 　resourcedel command is used to delete the limit value set for each resource type. There are two types of deletion formats: single format for specifying one resource type and CSV format for deleting multiple resource type limit values at once.
+
+.. figure:: img/3_SystemManagement_04.png
+
+| 　The theme manager, the sub-theme manager, and the project manager can delete the limit value of the assigned resource of the assignment below the group (resource group and user hierarchy in the above diagram). However, only the system administrator can delete the limit value for a single resource group under the group.
+| 　You cannot delete resource types for which jobs have already been submitted. To change the limit value, proceed with  :doc:`3.1.2. Assign resource change <./3-1-2_ResourceMod>` .
+| 　Also, the general user cannot use this command.
+
+| 　**[Option]**
+| 　-g  group name
+| 　Specify group name.
+
+| 　-n  resource type name
+| 　Specify resource type name that corresponds to the resource type that is setting target.
+
+| 　【Setting example】
+
+   .. list-table:: 
+     :header-rows: 1
+     :widths: 20 60
+   
+     * - Resource type
+       - Setting resource type name
+   
+     * - RSCG
+       - | Specify resource group name
+         | 【Example】small
+   
+     * - USER
+       - | Specify user name
+         | 【Example】user01
+   
+     * - USER_RSCG
+       - | Specify user name + ”_” + resource group name
+         | 【Example】user01_small
+
+| 　-f  file name
+| 　When the assignment resource of the assignment is already distributed to the job type and the user, a file in which information for deleting the budget limit is described is specified.
+| 　
+| 　【File layout】
+| 　Required column　○: Required, △: Required or not is depending on the resource type
+
+   .. list-table:: 
+     :header-rows: 1
+     :widths: 5 20 20 5 30
+   
+     * - No
+       - Item name
+       - Category
+       - Required
+       - Note
+   
+     * - 1
+       - RTYPE
+       - Alphabetic characters
+       - ○
+       - | Resource type
+         | User: USER
+         | Resource group: RSCG
+         | User-resource group: USER_RSCG
+   
+     * - 2
+       - GROUP
+       - Single-byte alphanumeric symbol
+       - ○
+       - Group name
+   
+     * - 3
+       - USER
+       - Single-byte alphanumeric characters
+       - △
+       - | User name
+         | NULL when specifying resource group
+   
+     * - 4
+       - RSCUNT
+       - Single-byte alphanumeric characters
+       - △
+       - | Resource group name
+         | NULL when specifying user
+   
+     * - 5
+       - RSCGRP
+       - Single-byte alphanumeric characters
+       - △
+       - | Resource group name
+         | NULL when specifying user
+   
+     * - 6
+       - LIMIT
+       - Number
+       - －
+       - | Computing resource frame
+         | Set value is ignored.
+
+　【File setting example】
+
+.. code-block:: none 
+
+   RTYPE,GROUP,USER,RSCUNT,RSCGRP,LIMIT　...header
+   USER,group01,user1,,,　...Assign to the user
+   RSCG,group01,,ru1,rg1,　...Assign to the resource group
+   USER_RSCG,group01,user1,ru1,rg1,　...Assign to the conbinaton with user and resource group
+
+| 　&#45;-help
+| 　Display command help contents.
+
+| 　**[Return value]**
+| 　Normal: 0
+| 　Abnormal: 1
+
+| 　**[Note]**
+| 　None.
+
+| 　**[Use example]**
+| 　【Example 1】	Delete the user limit value
+
+.. code-block:: console 
+
+   [login]$ resourcedel -g group01 -n user1
+   Deleted 1 resource information.
+   [login]$
+
+　【Example 2】	Delete the limit value of the user and resource group combination
+
+.. code-block:: console 
+
+   [login]$ resourcedel -g group01 -n user1_rg1
+   Deleted 1 resource information.
+   [login]$
+
+　【Example 3】	Delete the multiple job type and the user budget for bulk
+
+.. code-block:: console 
+
+   [login]$ resourcedel -f resourcedel.csv
+   Deleted 4 resource information.
+   [login]$
+

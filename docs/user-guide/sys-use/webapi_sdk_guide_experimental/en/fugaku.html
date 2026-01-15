@@ -1,0 +1,539 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>6. fugaku package &#8212; fugaku WebAPI SDK  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="5. Examples" href="examples.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="examples.html" title="5. Examples"
+             accesskey="P">previous</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">fugaku WebAPI SDK  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6. </span>fugaku package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-fugaku">
+<span id="fugaku-package"></span><h1><span class="section-number">6. </span>fugaku package<a class="headerlink" href="#module-fugaku" title="Permalink to this heading">¶</a></h1>
+<p>A simple python library to interact with Fugaku WebAPI.</p>
+<section id="submodules">
+<h2><span class="section-number">6.1. </span>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+<section id="module-fugaku.client">
+<span id="fugaku-client-module"></span><h3><span class="section-number">6.1.1. </span>fugaku.client module<a class="headerlink" href="#module-fugaku.client" title="Permalink to this heading">¶</a></h3>
+<p>fugaku.client</p>
+<p>This module provides a client to access Fugaku WebAPI.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="fugaku.client.Client">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fugaku.client.</span></span><span class="sig-name descname"><span class="pre">Client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auth_code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provider_metadata_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">authorization_endpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_endpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fugaku.client.Client.cancel_job">
+<span class="sig-name descname"><span class="pre">cancel_job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client.cancel_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cancel a job.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>str</em>) – the specific machine.</p></li>
+<li><p><strong>jobid</strong> (<em>str</em>) – the jobid to cancel.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#fugaku.error.NoAccessCode" title="fugaku.error.NoAccessCode"><strong>NoAccessCode</strong></a> – when there is no access_token.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>return the request.</dt><dd><p>(see. <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#delete--queue-machine-jobid">https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#delete–queue-machine-jobid</a>)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fugaku.client.Client.download_fileList">
+<span class="sig-name descname"><span class="pre">download_fileList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client.download_fileList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download file list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>str</em>) – the specific machine.</p></li>
+<li><p><strong>file_path</strong> (<em>str</em>) – the file_path to get the file list.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#fugaku.error.NoAccessCode" title="fugaku.error.NoAccessCode"><strong>NoAccessCode</strong></a> – when there is no access_token.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>return the request.</dt><dd><p>(see. <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#get--file-machine-file_path">https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#get–file-machine-file_path</a>)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fugaku.client.Client.download_filedata">
+<span class="sig-name descname"><span class="pre">download_filedata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client.download_filedata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>str</em>) – the specific machine.</p></li>
+<li><p><strong>file_path</strong> (<em>str</em>) – the download file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#fugaku.error.NoAccessCode" title="fugaku.error.NoAccessCode"><strong>NoAccessCode</strong></a> – when there is no access_token.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>return the request.</dt><dd><p>(see. <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#get--file-machine-file_path">https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#get–file-machine-file_path</a>)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fugaku.client.Client.exec_command">
+<span class="sig-name descname"><span class="pre">exec_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client.exec_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>str</em>) – the specific machine.</p></li>
+<li><p><strong>command</strong> (<em>str</em>) – the command to exec.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#fugaku.error.NoAccessCode" title="fugaku.error.NoAccessCode"><strong>NoAccessCode</strong></a> – when there is no access_token.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>return the request.</dt><dd><p>(see. <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#post--command-machine">https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#post–command-machine</a>)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fugaku.client.Client.get_authentication_url">
+<span class="sig-name descname"><span class="pre">get_authentication_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">redirect_url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client.get_authentication_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get URL for user authentication.</p>
+<p>If neither authorization_endpoint nor provider_metadata_url is set, only queries can be fetched.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>redirect_url</strong> (<em>str</em>) – the redirect URL to receive authorization code.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>return the authentication url.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fugaku.client.Client.get_disk_usage">
+<span class="sig-name descname"><span class="pre">get_disk_usage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client.get_disk_usage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get disk usage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>machine</strong> (<em>str</em>) – the specific machine.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#fugaku.error.NoAccessCode" title="fugaku.error.NoAccessCode"><strong>NoAccessCode</strong></a> – when there is no access_token.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>return the request.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fugaku.client.Client.get_job_detail">
+<span class="sig-name descname"><span class="pre">get_job_detail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client.get_job_detail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get detailed job information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>str</em>) – the specific machine.</p></li>
+<li><p><strong>jobid</strong> (<em>str</em>) – the jobid is used to get a list of sub-jobs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#fugaku.error.NoAccessCode" title="fugaku.error.NoAccessCode"><strong>NoAccessCode</strong></a> – when there is no access_token.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>return the request.</dt><dd><p>(see. <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#get--queue-machine-jobid">https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#get–queue-machine-jobid</a>)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fugaku.client.Client.get_job_status">
+<span class="sig-name descname"><span class="pre">get_job_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client.get_job_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of running jobs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>str</em>) – the specific machine.</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – the index for first record.</p></li>
+<li><p><strong>limit</strong> (<em>int</em>) – the limit for number of records.</p></li>
+<li><p><strong>status</strong> (<em>str</em>) – the status is userd filter jobs.</p></li>
+<li><p><strong>jobid</strong> (<em>str</em>) – the jobid is used to get a list of sub-jobs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#fugaku.error.NoAccessCode" title="fugaku.error.NoAccessCode"><strong>NoAccessCode</strong></a> – when there is no access_token.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>return the request.</dt><dd><p>(see. <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#get--queue-machine">https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#get–queue-machine</a>)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fugaku.client.Client.get_job_status_sacct">
+<span class="sig-name descname"><span class="pre">get_job_status_sacct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client.get_job_status_sacct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of completed jobs.</p>
+<p>Obtain a list of jobs completed within 24 hours from the job scheduler on the target machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>str</em>) – the specific machine.</p></li>
+<li><p><strong>index</strong> (<em>int</em>) – the index for first record.</p></li>
+<li><p><strong>limit</strong> (<em>int</em>) – the limit for number of records.</p></li>
+<li><p><strong>status</strong> (<em>str</em>) – the status is userd filter jobs.</p></li>
+<li><p><strong>jobid</strong> (<em>str</em>) – the jobid is used to get a list of sub-jobs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#fugaku.error.NoAccessCode" title="fugaku.error.NoAccessCode"><strong>NoAccessCode</strong></a> – when there is no access_token.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>return the request.</dt><dd><p>(see. <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#get--queue-machine-sacct">https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#get–queue-machine-sacct</a>)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fugaku.client.Client.get_machine_status">
+<span class="sig-name descname"><span class="pre">get_machine_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client.get_machine_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get status of all machines.
+Outputs the status of all machines managed by the server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#fugaku.error.NoAccessCode" title="fugaku.error.NoAccessCode"><strong>NoAccessCode</strong></a> – when there is no access_token.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>return the request.</dt><dd><p>(see. <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#get--status">https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#get–status</a>-)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fugaku.client.Client.get_specific_machine_status">
+<span class="sig-name descname"><span class="pre">get_specific_machine_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client.get_specific_machine_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get specified machine status.
+Output the status of the specified machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>machine</strong> (<em>str</em>) – the specific machine.
+specify the machine name obtained by getting the status of all machines (get_machine_status).
+Normally, specify “computer”.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#fugaku.error.NoAccessCode" title="fugaku.error.NoAccessCode"><strong>NoAccessCode</strong></a> – when there is no access_token.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>return the request.</dt><dd><p>(see. <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#get--status-machine">https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#get–status-machine</a>)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fugaku.client.Client.make_Jobscript">
+<span class="sig-name descname"><span class="pre">make_Jobscript</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">script</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client.make_Jobscript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate job execution script.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>str</em>) – the specific machine.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – the filename is file path of the script file on the target machine.</p></li>
+<li><p><strong>script</strong> (<em>str</em>) – the script is used to create job exection script.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#fugaku.error.NoAccessCode" title="fugaku.error.NoAccessCode"><strong>NoAccessCode</strong></a> – when there is no access_token.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>return the request.</dt><dd><p>(see. <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#put--queue-machine-jobscript">https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#put–queue-machine-jobscript</a>)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fugaku.client.Client.modify_file">
+<span class="sig-name descname"><span class="pre">modify_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client.modify_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>str</em>) – the specific machine.</p></li>
+<li><p><strong>file_path</strong> (<em>str</em>) – the file_path specifies the upload destination.</p></li>
+<li><p><strong>file</strong> (<em>str</em>) – the upload file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#fugaku.error.NoAccessCode" title="fugaku.error.NoAccessCode"><strong>NoAccessCode</strong></a> – when there is no access_token.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>return the request.</dt><dd><p>(see. <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#put--file-machine-file_path">https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#put–file-machine-file_path</a>)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fugaku.client.Client.submit_job">
+<span class="sig-name descname"><span class="pre">submit_job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobscript</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qopt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client.submit_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Submit a job.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>str</em>) – the specific machine.</p></li>
+<li><p><strong>jobfile</strong> (<em>str</em>) – the jobfile to submit.</p></li>
+<li><p><strong>jobscript</strong> (<em>str</em>) – the jobscript to submit.</p></li>
+<li><p><strong>qopt</strong> (<em>str</em>) – the qopt to be passed to the Job Scheduler.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#fugaku.error.NoAccessCode" title="fugaku.error.NoAccessCode"><strong>NoAccessCode</strong></a> – when there is no access_token.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>return the request.</dt><dd><p>(see. <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#post--queue-machine">https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#post–queue-machine</a>)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fugaku.client.Client.upload_file">
+<span class="sig-name descname"><span class="pre">upload_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fugaku.client.Client.upload_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>str</em>) – the specific machine.</p></li>
+<li><p><strong>file_path</strong> (<em>str</em>) – the file_path specifies the upload destination.</p></li>
+<li><p><strong>file</strong> (<em>str</em>) – the upload file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#fugaku.error.NoAccessCode" title="fugaku.error.NoAccessCode"><strong>NoAccessCode</strong></a> – when there is no access_token.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>return the request.</dt><dd><p>(see. <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#post--file-machine-file_path">https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/webapi/api-reference.html#post–file-machine-file_path</a>)</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>requests.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-fugaku.error">
+<span id="fugaku-error-module"></span><h3><span class="section-number">6.1.2. </span>fugaku.error module<a class="headerlink" href="#module-fugaku.error" title="Permalink to this heading">¶</a></h3>
+<p>fugaku.error</p>
+<p>This module contains the set of fugaku’ exceptions.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="fugaku.error.FugakuClientError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fugaku.error.</span></span><span class="sig-name descname"><span class="pre">FugakuClientError</span></span><a class="headerlink" href="#fugaku.error.FugakuClientError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>An ambiguous exception occurred during processing of the fugaku client.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="fugaku.error.NoAccessCode">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fugaku.error.</span></span><span class="sig-name descname"><span class="pre">NoAccessCode</span></span><a class="headerlink" href="#fugaku.error.NoAccessCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fugaku.error.FugakuClientError" title="fugaku.error.FugakuClientError"><code class="xref py py-class docutils literal notranslate"><span class="pre">FugakuClientError</span></code></a></p>
+<p>if access_code is not set</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="fugaku.error.NoTokenEndpoint">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fugaku.error.</span></span><span class="sig-name descname"><span class="pre">NoTokenEndpoint</span></span><a class="headerlink" href="#fugaku.error.NoTokenEndpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fugaku.error.FugakuClientError" title="fugaku.error.FugakuClientError"><code class="xref py py-class docutils literal notranslate"><span class="pre">FugakuClientError</span></code></a></p>
+<p>if token_endpoint is not set</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">6. fugaku package</a><ul>
+<li><a class="reference internal" href="#submodules">6.1. Submodules</a><ul>
+<li><a class="reference internal" href="#module-fugaku.client">6.1.1. fugaku.client module</a></li>
+<li><a class="reference internal" href="#module-fugaku.error">6.1.2. fugaku.error module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="examples.html"
+                          title="previous chapter"><span class="section-number">5. </span>Examples</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="examples.html" title="5. Examples"
+             >previous</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">fugaku WebAPI SDK  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6. </span>fugaku package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN R-CCS.
+    </div>
+  </body>
+</html>

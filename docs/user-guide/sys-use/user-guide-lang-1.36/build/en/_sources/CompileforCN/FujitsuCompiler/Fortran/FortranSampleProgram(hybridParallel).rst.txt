@@ -1,0 +1,129 @@
+Hybrid parallel
+===============
+
+The following is an example of compiling a multi-node job (hybrid parallel) Fortran program.
+
+1. | Prepare source program.
+   | Prepare sample program as  \ :file:`/home/system/sample/Fortran/mpi/sample_hybrid.f`\.
+   | :download:`(Download sample codde) <./src/sample_hybrid.f>`
+
+.. code-block:: fortran
+   :linenos:
+
+         PROGRAM sample_mpi
+         INCLUDE 'mpif.h'
+         INTEGER,parameter :: RANGE=9000
+
+         INTEGER :: rank, size, root, ierror
+         INTEGER :: i, j, data, result
+         REAL(8), DIMENSION(RANGE, RANGE) :: a,b,c
+
+         result = 0
+         c(:,:) = 0.0d0
+
+         CALL MPI_INIT( ierror )
+         CALL MPI_COMM_RANK( MPI_COMM_WORLD, rank, ierror )
+         CALL MPI_COMM_SIZE( MPI_COMM_WORLD, size, ierror )
+
+         IF ( rank .EQ. 0 ) THEN
+            WRITE(*,*) 'MPI communication start. size=',size
+         ENDIF
+
+         DO j=1 ,RANGE
+           DO i=1, RANGE
+             a(i,j) = i+j*0.5
+             b(i,j) = i+j/(rank+1)
+             c(i,j) = a(i,j)+b(i,j)
+           ENDDO
+         ENDDO
+
+         data = c(1,1)/(rank+1)
+         root = 0
+         CALL MPI_REDUCE( data, result, 1, MPI_INTEGER, 
+        &MPI_SUM, root, MPI_COMM_WORLD, ierror )
+
+         IF (rank .EQ. 0) THEN
+            WRITE(*,*) 'MPI communication end'
+            WRITE(*,*) 'result(',result,')'
+         ENDIF
+
+         CALL MPI_FINALIZE( ierror )
+         STOP
+         END PROGRAM sample_mpi
+
+2. Compile sample program.
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -V -Kfast,parallel,optmsg=2 -Nlst=t -o sample_mpi sample_hybrid.f
+  frtpx: Fujitsu Fortran Compiler 4.1.0 tcsds-1.2.24
+  jwd_fortpx: Fujitsu Fortran Compiler 4.1.0 (Feb 26 2020 07:41:18)
+  Fortran diagnostic messages: program name(sample_mpi)
+    jwd5003p-i  "sample_hybrid.f", line 10: Array description is parallelized.
+    jwd6003s-i  "sample_hybrid.f", line 10: SIMD conversion is applied to array description.
+    jwd8663o-i  "sample_hybrid.f", line 10: This loop is not software pipelined because the software pipelining does not improve the performance.
+    jwd8202o-i  "sample_hybrid.f", line 10: Loop unrolled 4 times.
+    jwd5001p-i  "sample_hybrid.f", line 20: DO loop with DO variable 'j' is parallelized.
+    jwd6001s-i  "sample_hybrid.f", line 21: SIMD conversion is applied to DO loop with DO variable 'i'.
+    jwd8204o-i  "sample_hybrid.f", line 21: This loop is software pipelined.
+    jwd8205o-i  "sample_hybrid.f", line 21: The software-pipelined loop is chosen at run time when the iteration count is greater than or equal to 128.
+  GNU assembler version 2.30 (aarch64-linux-gnu) using BFD version version 2.30-49.el7
+  GNU ld version 2.30-49.el7
+    Supported emulations:
+     aarch64linux
+     aarch64elf
+     aarch64elf32
+     aarch64elf32b
+     aarch64elfb
+     armelf
+     armelfb
+     aarch64linuxb
+     aarch64linux32
+     aarch64linux32b
+     armelfb_linux_eabi
+     armelf_linux_eabi
+     i386pep
+     i386pe
+  flistpx: Fujitsu Listing Processor 4.1.0 (Jan  9 2020 14:46:36)
+
+
+3. | Prepare job script.
+   | Job script sample is prepared as  \ :file:`/home/system/sample/Fortran/mpi/job_mpi.sh`\.
+   | :download:`(Download sample code) <./src/job_mpi.sh>`
+
+ .. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L "node=2"
+  #PJM -L "rscgrp=small"
+  #PJM -L "elapse=10:00"
+  #PJM --mpi max-proc-per-node=4
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -g groupname
+  #PJM -s
+
+  # execute job
+  export OMP_NUM_THREADS=12
+  mpiexec -n 8 ./sample_mpi
+
+
+4. Submit a job with  \ :program:`pjsub`\  command.
+
+ .. code-block:: console
+
+  [_LNlogin]$ pjsub job_mpi.sh
+  [INFO] PJM 0000 pjsub Job 122 submitted.
+
+
+5. | Check execution result.
+   | The standard output is output as  \ :file:`Job name.Job ID.out`\
+
+ .. code-block:: console
+
+  [_LNlogin]$ cat job_mpi.sh.122.out
+  MPI communication start. size= 8
+   MPI communication end
+   result( 4 )
+
+
+

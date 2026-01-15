@@ -1,0 +1,228 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>1. Overview &#8212; fugaku WebAPI SDK  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="5. Examples" href="examples.html" />
+    <link rel="prev" title="fugaku WebAPI SDK User Guide" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="examples.html" title="5. Examples"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="index.html" title="fugaku WebAPI SDK User Guide"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fugaku WebAPI SDK  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>Overview</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="overview">
+<h1><span class="section-number">1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h1>
+<p>Fugaku WebAPI SDK is a simple python library to interact with Fugaku WebAPI.</p>
+<p>Currently, all features work with Python 3.7.</p>
+</section>
+<section id="installing">
+<h1><span class="section-number">2. </span>Installing<a class="headerlink" href="#installing" title="Permalink to this heading">¶</a></h1>
+<p>Simply run pip install fugaku WebAPI SDK to install it.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip install fugaku-x.y.z.tar.gz
+</pre></div>
+</div>
+<p><a class="reference download internal" download="" href="_downloads/045a260604f68c4258d4f98574807ed4/fugaku-0.0.1.tar.gz"><code class="xref download docutils literal notranslate"><span class="pre">fugaku</span>&#160; <span class="pre">WebAPI</span> <span class="pre">SDK</span></code></a></p>
+<p>Requirements: &gt;= Python 3.7</p>
+<p>Project dependencies installed by pip:</p>
+<ul class="simple">
+<li><p>requests</p></li>
+<li><p>python-magic</p></li>
+<li><p>six</p></li>
+</ul>
+</section>
+<section id="getting-started">
+<h1><span class="section-number">3. </span>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading">¶</a></h1>
+<p>To execute WebAPI, an OAuth 2.0 access token and the OpenID Connect protocol is required.</p>
+<p>To get started with the SDK, follow the authorization page of <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/">the WebAPI User Guide</a> to get the Authorization code.</p>
+<p>The following is an example of using an authorization code to create a client.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; client_id, client_secret, redirect_url</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">CLIENT_CONFIG</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="s2">&quot;CLINET_ID&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;client_secret&quot;</span><span class="p">:</span> <span class="s2">&quot;CIENT_SECRET&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;redirect_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;REDIRECT_RUI&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">metadata_url</span> <span class="o">=</span> <span class="s2">&quot;https://idp.fugaku.r-ccs.riken.jp/auth/realms/op/.well-known/openid-configuration&quot;</span>
+
+<span class="n">proxies</span> <span class="o">=</span> <span class="p">{</span>
+     <span class="s2">&quot;http&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+     <span class="s2">&quot;https&quot;</span><span class="p">:</span> <span class="kc">None</span>
+<span class="p">}</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">fugaku</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">auth_code</span><span class="o">=</span><span class="n">authorization_code</span><span class="p">,</span> <span class="n">client_config</span><span class="o">=</span><span class="n">CLIENT_CONFIG</span><span class="p">,</span>
+      <span class="n">provider_metadata_url</span><span class="o">=</span><span class="n">metadata_url</span><span class="p">,</span>
+      <span class="n">request_config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;proxies&quot;</span><span class="p">:</span> <span class="n">proxies</span><span class="p">})</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">client</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">client</span><span class="o">.</span><span class="n">_access_token</span><span class="p">:</span>
+   <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No access token.&quot;</span><span class="p">)</span>
+   <span class="n">client</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">else</span><span class="p">:</span>
+   <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Access token. </span><span class="si">{</span><span class="n">client</span><span class="o">.</span><span class="n">_access_token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Parameter</p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>auth_code</p></td>
+<td><p>String</p></td>
+<td><p>(Required) auth_code is often obtained by the user using a browser.</p></td>
+</tr>
+<tr class="row-odd"><td><p>client_config</p></td>
+<td><p>Dictionary</p></td>
+<td><p>(Required) client_config to be used to get access token.</p></td>
+</tr>
+<tr class="row-even"><td><p>provider_metadata_url</p></td>
+<td><p>String</p></td>
+<td><p>provider_metadata_url that provides IdP metadata.</p></td>
+</tr>
+<tr class="row-odd"><td><p>authorization_endpoint</p></td>
+<td><p>String</p></td>
+<td><p>authorization_endpoint that performs user authentication.</p></td>
+</tr>
+<tr class="row-even"><td><p>token_endpoint</p></td>
+<td><p>String</p></td>
+<td><p>token_endpoint that provides access token, id token or refresh token.</p></td>
+</tr>
+<tr class="row-odd"><td><p>request_config</p></td>
+<td><p>Dictionary</p></td>
+<td><p>any extra args to be passed to the HTTP requests.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Here’s a simple example of getting an authorization code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Please access the following URL.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://idp.fugaku.r-ccs.riken.jp/auth/realms/op/protocol/openid-connect/auth?response_type=code&amp;scope=openid&amp;client_id=</span><span class="si">{</span><span class="n">CLIENT_CONFIG</span><span class="p">[</span><span class="s1">&#39;client_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&amp;redirect_uri=</span><span class="si">{</span><span class="n">quote</span><span class="p">(</span><span class="n">CLIENT_CONFIG</span><span class="p">[</span><span class="s1">&#39;redirect_uri&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Paste Browser URL:&quot;</span><span class="p">)</span>
+<span class="n">line</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="n">pos</span>  <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;&amp;code=&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">pos</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">authorization_code</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">pos</span><span class="o">+</span><span class="mi">6</span><span class="p">:]</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">authorization_code</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;&amp;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pos</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">authorization_code</span> <span class="o">=</span> <span class="n">authorization_code</span><span class="p">[:</span><span class="n">pos</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="error-handling">
+<h1><span class="section-number">4. </span>Error handling<a class="headerlink" href="#error-handling" title="Permalink to this heading">¶</a></h1>
+<p>Fugaku WebAPI SDK exceptions are statically defined in the fugaku.error package. Fugaku WebAPI client you create will use these same statically defined exception classes. The most common exception you’ll encounter is FugakuClientError.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">fugaku</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">any_params</span><span class="p">)</span>
+
+<span class="k">except</span> <span class="n">fugaku</span><span class="o">.</span><span class="n">NoTokenEndpoint</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="c1"># Neither provider_metadata_url nor token_endpoint is not set to constructor parameter.</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;exeption:</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">any_api</span><span class="p">(</span><span class="n">any_params</span><span class="p">)</span>
+
+<span class="k">except</span> <span class="n">fugaku</span><span class="o">.</span><span class="n">NoAccessCode</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="c1"># access_code is not set, or expired.</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;exeption:</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1. Overview</a></li>
+<li><a class="reference internal" href="#installing">2. Installing</a></li>
+<li><a class="reference internal" href="#getting-started">3. Getting Started</a></li>
+<li><a class="reference internal" href="#error-handling">4. Error handling</a></li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">fugaku WebAPI SDK User Guide</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="examples.html"
+                          title="next chapter"><span class="section-number">5. </span>Examples</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="examples.html" title="5. Examples"
+             >next</a></li>
+        <li class="right" >
+          <a href="index.html" title="fugaku WebAPI SDK User Guide"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fugaku WebAPI SDK  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>Overview</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN R-CCS.
+    </div>
+  </body>
+</html>

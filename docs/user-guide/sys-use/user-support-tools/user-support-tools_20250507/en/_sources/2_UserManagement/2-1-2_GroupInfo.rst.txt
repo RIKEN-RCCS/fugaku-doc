@@ -1,0 +1,160 @@
+Group information displaying
+============================
+
+| 　**[Name]**
+| 　groupinfo - Display the group information
+
+| 　**[Style]**
+| 　groupinfo  [-g  group name...]  [option other than -g, -l]
+| 　groupinfo  -l
+| 　※Combination specification of -g, -r, -p, -m is AND search, combination specification in the same option is OR search.
+
+| 　**[Description]**
+| 　groupinfo command displays information on issues registered in the directory service (OpenLDAP) on the user management node. If the display result is more than one line, it will be displayed in the order retrieved from the directory service (OpenLDAP).
+
+| 　Project managers and system administrators can display group information, but users cannot.
+ 　
+| 　If no option is specified, only the primary group assignment information is displayed. However, it must be the project manager and system administrator.
+| 　
+| 　Display target is the user information that the status is other than “deleted”.
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 10 10 50
+
+  * - Status
+    - Condition
+    - Meaning
+
+  * - 0
+    - Available
+    - System use is available.
+
+  * - 3
+    - Deleted
+    - This is the status that it is logically deleted by the system administorator’s decision. This means the user cannot use the system.
+
+  * - 5
+    - Out of expiration
+    - This is the status that it is set as expired by the automatic system decision. This means it is impossible to submit and execute a job. However if it's grace period, logging in to system is available.
+
+
+| 　**[Option]**
+| 　-g  group name...
+| 　Specify group name. Multiple designations can be made following a space, and front / middle / backward match designation using asterisks can be performed.
+| 　　Exact match specification	group
+| 　　Head match specification	’group \*’
+| 　　Middle match specification	’\* group \*’
+| 　　Backward match specification	’\* group’
+
+| 　-r  project manager ID...
+| 　Specify project manager ID. Multiple designations can be made following a space, but front / middle / backward match designation using asterisks can not be performed. Only exact match is available.
+ 　
+| 　-p  project name...
+| 　Specify project name. Multiple designations can be made following a space, and front / middle / backward match designation using asterisks can be performed.
+| 　　Exact match specification	project
+| 　　Head match specification	’project \*’
+| 　　Middle match specification	’\* project \*’
+| 　　Backward match specification	’\* project’
+
+| 　-m  group member...
+| 　Specify user name. Multiple designations can be made following a space, and front / middle / backward match designation using asterisks can be performed.
+| 　　Exact match specification	user
+| 　　Head match specification	’user\*’
+| 　　Middle match specification	’\*user\*’
+| 　　Backward match specification	’\*user’
+ 　
+| 　-l
+| 　Display the list of group names. It has an exclusive relationship with other options.
+| 　When the option is specified, all pieces of task information are displayed without depending on the status state (“Available”, “Deleted”, “Out of expiration”).
+ 　
+| 　Output style is
+| 　group name:group ID
+| 　.
+ 　
+| 　-d
+| 　Display the disk size limit information.
+ 　
+| 　-s
+| 　The detailed mode that displays all items. The same result as the same time specifying of -d.
+ 　
+| 　-c
+| 　Display to standard output in CSV format. Use redirect if you want to output to a file.
+ 　
+| 　&#45;-help
+| 　Display command help contents.
+
+| 　**[Return value]**
+| 　Normal: 0
+| 　Abnormal: 1
+
+| 　**[Note]**
+| 　None.
+
+| 　**[Use example]**
+| 　【Example 1】	Display task information of group name fjse without specifying any option
+
+.. figure:: img/2_UserManagement_09.png
+
+| 　The group information is displayed only for the project manager fjse0012 and the system administrator. Users belonging to the task cannot confirm the group information.
+ 　
+| 　【Example 2】	Display the task information of the group name fjse with the disk space limit information added
+
+.. figure:: img/2_UserManagement_10.png
+
+　【Example 3】	Display all group's group name and group ID
+
+.. code-block:: console 
+
+   [login]$ groupinfo -l
+   fjse 1000
+   fjce 2000
+   [login]$
+
+| 　All group's group name and group ID is displayed.
+ 　
+| 　【Example 4】	Display the task information of group name fjse0100 and fjse0101 as CSV format
+
+.. figure:: img/2_UserManagement_11.png
+
+| 　Be aware of when using an asterisk as an argument so that the shell does not interpret it as a special character.
+| 　Use the following to avoid interpretation as special characters.
+
+- One letter escape by a backslash ( \ )
+- Surround with a single quotation ( ‘ )
+- Surround with a double quotation ( “ )
+
+　【Example 5】	Output the task information of group name fjse0100 and fjse0101 as CSV format
+
+.. code-block:: console 
+
+   [login]$ groupinfo -g ‘fjse010*’ -c > fjse010X.csv
+   [login]$
+
+　【Example 6】	Check the ability of system use status of the group name fjse0100
+
+.. figure:: img/2_UserManagement_12.png
+
+| 　The availability status of the system can be confirmed by the ‘status’ information in the execution result of the groupinfo command.
+ 　
+| 　【Example 7】	Create CSV format file that is used for group information change
+
+.. code-block:: console
+
+   [login]$ groupinfo -g fjse0100 -s -c > fjse0100.csv
+   [login]$
+
+| 　Specify the -s option in detailed mode to display all items and the -c option to display in standard output in CSV format, and save to a file by using the redirection function. If the -s option is not specified, the disk space limit information will be output as NULL.
+
+| 　Indicates the explanation of display item.
+
+.. figure:: img/2_UserManagement_13.png
+
+.. figure:: img/2_UserManagement_14.png
+
+| 　[\*1] Display style: Prefered use start date (YYYYMMDD) - Prefered use end date (YYYYMMDD)
+
+| 　Example) 20220101-20220331
+ 　　
+| 　　Belonging preferd use start date is 2022/1/1/ and prefered use end date is 2022/3/31/.
+

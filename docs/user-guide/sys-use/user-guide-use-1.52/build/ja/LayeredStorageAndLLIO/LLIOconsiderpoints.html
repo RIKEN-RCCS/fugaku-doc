@@ -1,0 +1,425 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8.6. 留意事項 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="8.7. I/Oのプロファイリング" href="IOprofiling.html" />
+    <link rel="prev" title="8.5. 共有テンポラリ領域" href="SharedTemporaryArea.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="IOprofiling.html" title="8.7. I/Oのプロファイリング"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="SharedTemporaryArea.html" title="8.5. 共有テンポラリ領域"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">8. </span>階層化ストレージ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.6. </span>留意事項</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="llioconsiderpoints">
+<span id="id1"></span><h1><span class="section-number">8.6. </span>留意事項<a class="headerlink" href="#llioconsiderpoints" title="Link to this heading">¶</a></h1>
+<p>本環境で提供するLLIOは以下に示す点に留意ください。</p>
+<ul class="simple">
+<li><p>以下の制限で利用してください。制限を超えるとENOMEMでエラーになります。（制限事項）</p></li>
+</ul>
+<blockquote>
+<div><ul>
+<li><p>ジョブが同時にopenする最大ファイル数は、LLIOが提供する3つの領域の合計で、<code class="docutils literal notranslate"><span class="pre">1,024</span> <span class="pre">*</span> <span class="pre">(ジョブが使用する計算ノード数)</span></code>以下にする</p>
+<ul>
+<li><p>同一のファイルを複数の計算ノードからopenする場合は、計算ノード数によらず1ファイルとしてカウント</p></li>
+<li><p><strong class="program">llio_transfer</strong>で転送し共有ファイルとして利用する場合は、異なるファイルとしてカウントするため、同時にopenする計算ノード数でカウント</p></li>
+<li><div class="line-block">
+<div class="line">LLIOのストライプカウントが2以上の場合、ストライプ毎に1ファイルとしてカウント</div>
+<div class="line">(1ファイルでもストライプカウントが4ならば、ファイル数は4とカウント)</div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<ul>
+<li><p>1つのファイルを複数のプロセスから利用する場合、以下の2つの条件を両方満たすようにしなければ、I/Oがスローダウン、またはSIOがダウンする</p>
+<ol class="arabic">
+<li><p>同一ファイルを利用するプロセスが存在するノード数が7,000以下</p></li>
+<li><div class="line-block">
+<div class="line">同一ファイルを利用するプロセスの総数が28,000以下</div>
+<div class="line">(計算ノードあたりのプロセス数の上限なし)</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><p><strong class="program">llio_transfer</strong>で転送し共有ファイルとして利用する場合は、異なるファイルとして扱います。<strong class="program">llio_transfer</strong>の利用を検討してください。</p>
+</div></blockquote>
+</li>
+<li><p>ノード内テンポラリ領域に作成可能なファイル数は、計算ノードあたり1000万ファイルまで(制限事項)</p></li>
+<li><p>共有テンポラリ領域のブロック数やinode使用数が取得できません(dfコマンドで出力されません)</p></li>
+<li><p>第2階層ストレージのキャッシュ領域使用時に異なる計算ノードから以下を同時に実施した場合、LLIO経由でファイルサイズを正しく取得できない場合があります</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Node A</p></th>
+<th class="head"><p>Node B</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>truncate</p></td>
+<td><p>read</p></td>
+</tr>
+<tr class="row-odd"><td><p>truncate</p></td>
+<td><p>write</p></td>
+</tr>
+<tr class="row-even"><td><p>truncate</p></td>
+<td><p>truncate</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>第2階層ストレージのキャッシュ領域または共有テンポラリ領域において、以下の動作をする場合があります。</p>
+<ul class="simple">
+<li><p>計算ノードAでファイルAを削除または別名に変更した後に再作成した場合、計算ノードBでは、ファイルAのopen(2)が失敗する</p></li>
+<li><p>計算ノードAで削除または別名に変更したファイルがopen(2)される。</p></li>
+</ul>
+<p>FEFSではこの動作にはなりません。</p>
+<p>この仕様は、以下で対処できます。</p>
+<ul class="simple">
+<li><p>計算ノードBで、ファイルAをopen(2)する前に、ファイルAの親ディレクトリに対してlsコマンドを実行する。</p></li>
+<li><p>計算ノードBで、ファイルAをopen(2)する前に、計算ノードAのファイルAの再作成から60秒間待つ。</p></li>
+</ul>
+</li>
+<li><p>第2階層ストレージのキャッシュ領域または共有テンポラリ領域使用時にwriteと削除を並行して行った場合、第1階層ストレージ上にファイルデータが残存することがあります(ジョブ終了時に削除されます)</p></li>
+<li><p><a class="reference internal" href="TheSecondLayerStrage.html#asynccloseandsyncclose"><span class="std std-ref">非同期クローズ/同期クローズ</span></a>に記載している &quot;非同期クローズ時の留意事項&quot; も確認してください。</p></li>
+<li><p>共有テンポラリ領域に、1ファイルあたり sharedtmp-sizeで指定したサイズ以上のファイルを作成する場合はストライプの設定が必要です。ストライプ設定の詳細については、<a class="reference internal" href="SharedTemporaryArea.html#stripesettingforsharedtemporaryarea"><span class="std std-ref">共有テンポラリ領域に対するストライプ設定</span></a>を確認してください。</p></li>
+<li><p>以下のオプションは、READ性能に影響を与える場合があるためご留意ください。</p>
+<ul class="simple">
+<li><p>cn-cache-sizeオプションは、アプリケーション側のREAD量に対して大きな値を指定していない場合、キャッシュミスやキャッシュの再利用のための処理により性能が悪化してしまうことがあります。</p></li>
+<li><p>auto-readaheadオプションは、cn-cache-size を十分に大きく取れない場合は、指定をOFFとすることで性能劣化を抑えることができます。LLIO クライアントのキャッシュ量に比べて READ するデータ量が大きい場合にauto-readaheadの設定がONとなっていると、先読みによって必要なデータがアプリケーションが読み込む前にキャッシュから追い出され、結果的にキャッシュミスが多発してREAD性能が悪化してしまうことがあります。</p></li>
+</ul>
+</li>
+<li><p>pjsubオプション<code class="docutils literal notranslate"><span class="pre">--all-mount-gfscache</span></code>および<code class="docutils literal notranslate"><span class="pre">--no-check-gfscache</span></code>は、ジョブスクリプトで指定できません。指定した場合はジョブ投入時にエラーとなりますので、コマンドラインで指定してください。</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>（制限事項）は今後の運用状況に応じて変更される場合があります</p>
+</div>
+<section id="id2">
+<h2><span class="section-number">8.6.1. </span>高並列ジョブ(1000並列以上)の注意点<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>高並列ジョブを実行する際にファイルのアクセス方法によって、I/Oに時間を要したり、ファイルシステムに高負荷を与える場合があります。
+高並列ジョブでファイルI/Oを行う際の注意点を記載します。以下の内容を確認し安全なファイルアクセスを行うようにしてください。</p>
+<nav class="contents local" id="id3">
+<ul class="simple">
+<li><p><a class="reference internal" href="#read" id="id6">ファイルの READ について</a></p></li>
+<li><p><a class="reference internal" href="#write" id="id7">ファイルの WRITE について</a></p></li>
+<li><p><a class="reference internal" href="#directaccessto2ndfs" id="id8">第2階層ストレージへの直接アクセス</a></p></li>
+</ul>
+</nav>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<section id="read">
+<span id="filereadnotes"></span><h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">8.6.1.1. </span>ファイルの READ について</a><a class="headerlink" href="#read" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p>共通ファイルの事前転送</p>
+<div class="line-block">
+<div class="line">実行ファイル、入力データ、設定パラメタなどの各ランクから共通して読み込むファイルは、<strong class="program">llio_transfer</strong>を使用して、第1階層ストレージに配置するようにしてください。</div>
+<div class="line">詳細は、<a class="reference internal" href="OverView.html#simultaneousaccesstollio"><span class="std std-ref">全プロセスから共通ファイルへの一斉アクセス</span></a>を参照ください。</div>
+</div>
+<p><strong class="program">llio_transfer</strong>については、<a class="reference internal" href="TheSecondLayerStrage.html#llio-transfer"><span class="std std-ref">共通ファイル配布機能 (llio_transfer)</span></a>を参照ください。
+<strong class="program">llio_transfer</strong>の対象となるファイルは read only のファイルのみです。</p>
+<p><strong class="program">llio_transfer</strong>を使用する場合と使用しない場合の動作は以下のようになります。</p>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><strong class="program">llio_transfer</strong>を使用しない場合</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_01.png" src="../_images/NotesOnHighParallelJobs_01.png" />
+</figure>
+<ul class="simple">
+<li><p>第2階層ストレージから計算ノードまでの間に、SIO,GIOノードを経由します。</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><strong class="program">llio_transfer</strong>を使用する場合</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_02.png" src="../_images/NotesOnHighParallelJobs_02.png" />
+</figure>
+<ul class="simple">
+<li><p>llio_transferで、ジョブに割り当てられた全てのSIOに共通して読み込むファイルのキャッシュを作成します。</p></li>
+</ul>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_03.png" src="../_images/NotesOnHighParallelJobs_03.png" />
+</figure>
+<ul class="simple">
+<li><p>各計算ノード(並列プロセス)は、物理的に一番近いSIOにアクセスすることで高速に読み込むことができます。</p></li>
+</ul>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ol class="arabic" start="2">
+<li><p>Read データのキャッシュ</p>
+<p>第2階層ストレージから計算ノードへ読み込んだファイルを第1階層ストレージにキャッシュにすることができます。</p>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">キャッシュを保存しない場合</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_04.png" src="../_images/NotesOnHighParallelJobs_04.png" />
+</figure>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">キャッシュを保存する場合 (デフォルト)</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_05.png" src="../_images/NotesOnHighParallelJobs_05.png" />
+</figure>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_06.png" src="../_images/NotesOnHighParallelJobs_06.png" />
+</figure>
+<ul class="simple">
+<li><p>デフォルトはキャッシュを保存する動作となります。変更方法は<a class="reference internal" href="TheSecondLayerStrage.html#thesecondlayerstoragecacheareaopt"><span class="std std-ref">ジョブ投入時（pjsub --llio）のオプション</span></a>を参照ください。</p></li>
+<li><p>各計算ノード(並列プロセス)が同じファイルを複数回読み込む場合に性能が向上する可能性があります。</p></li>
+<li><p>最初の読み込みは第2階層ストレージからの読み込みとなるため、キャッシュの効果は得られません。</p></li>
+<li><p>多数のノードから同一ファイルへのアクセスは一つのSIOにアクセスが集中するため、読み込みに時間がかかる場合があります。</p></li>
+<li><p>全ての計算ノードから読み込むファイルの場合は<strong class="program">llio_transfer</strong>を使用してください。</p></li>
+</ul>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+<section id="write">
+<span id="filewritenotes"></span><h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">8.6.1.2. </span>ファイルの WRITE について</a><a class="headerlink" href="#write" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p>標準出力/標準エラー出力ファイルへの出力</p>
+<p>標準出力/標準エラー出力ファイルは、個別のファイルを指定し、出力先ディレクトリもランク番号によって分けるようにしてください。</p>
+<p>例) 1000 ランクごとにディレクトリを変えて出力する指定</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec -stdout-proc ./%/1000R/%j.stdout \
+        -stderr-proc ./%/1000R/%j.stderr ./a.out
+</pre></div>
+</div>
+<p>詳細は<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/docs/manuals_r01#JOS">ジョブ運用ソフトウェア　エンドユーザ向けガイド</a>の以下を参照ください。</p>
+<ul class="simple">
+<li><p>「2.3.6.9 mpiexecコマンドの標準出力/標準エラー出力 [FX]」</p></li>
+</ul>
+<p>2021年9月の保守以降、標準出力/標準エラー出力ファイルの出力が0だった場合に空ファイルを作成しない設定(<code class="docutils literal notranslate"><span class="pre">PLE_MPI_STD_EMPTYFILE=off</span></code>)がデフォルトになりました。
+<a class="reference internal" href="../MPI/InputOutputRedirection.html#stdoutstderroutforlargejobs"><span class="std std-ref">大規模ジョブ実行時の標準出力／標準エラー出力の指定について</span></a>を参照ください。</p>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ol class="arabic" start="2">
+<li><p>ディレクトリ配下に作成するファイル数</p>
+<p>1つのディレクトリ配下に作成するファイル・ディレクトリの数は、10万個までとしてください。</p>
+<p>また同時に作成を行う場合は、次項にあるように、1000個までとしてください。</p>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ol class="arabic" start="3">
+<li><p>ディレクトリ配下で同時に作成するファイル数</p>
+<p>各プロセスの計算結果を同時にファイル出力する場合、1つのディレクトリ配下に作成するファイルやディレクトリ数を1000個までとしてください。</p>
+<p>例えば、4000プロセス並列ジョブの各プロセスから計算結果をファイルに出力する場合は、以下のように出力するディレクトリを分けてください。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>～/output/0/0～999 までの出力ファイル
+          1/1000～1999 までの出力ファイル
+          2/2000～2999 までの出力ファイル
+          3/3000～3999 までの出力ファイル
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ol class="arabic" start="4">
+<li><p>ディレクトリ配下のファイル作成と参照の同時処理</p>
+<p>同一ディレクトリに複数プロセスからの標準出力ファイルを出力し、実行ファイルを複数プロセスから読むようなケースで、ファイルシステム全体に高負荷を与える場合があります。</p>
+<p>例）</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec -stdout-proc ./file_stdout ./a.out
+</pre></div>
+</div>
+<p>実行ファイルは、llio_transferでSIOに分散配置してください。</p>
+<p>標準出力/標準エラー出力は、&quot;1. 標準出力/標準エラー出力ファイルへの出力&quot; に記載した方法で出力するようにしてください。</p>
+<p><a class="reference internal" href="../UsageRules/index.html#diskpoints"><span class="std std-ref">ディスク</span></a>に記載された注意も参照ください。</p>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ol class="arabic" start="5">
+<li><p>ジョブで扱うファイル数</p>
+<p>高並列ジョブ全体で多数のファイルを扱う場合、1ノードあたりに多数のファイルを扱う場合は注意してください。</p>
+<p><a class="reference internal" href="#llioconsiderpoints"><span class="std std-ref">留意事項</span></a>に記載がありますので、内容を十分に確認してください。</p>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ol class="arabic" start="6">
+<li><p>非同期クローズ</p>
+<p>ファイルクローズ時の書出しを非同期に行う非同期クローズ機能を提供しています。
+この機能を使用することで書出し完了を待たされることがなくなりジョブの終了が早くなる効果があります。
+デフォルトは同期クローズとなるため、必要に応じて非同期クローズを有効にしてください。</p>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">同期クローズ（デフォルト）</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_07.png" src="../_images/NotesOnHighParallelJobs_07.png" />
+</figure>
+<ul class="simple">
+<li><p>同期クローズは、クローズ終了の時点で、第1階層および第2階層ストレージへの書出し終了を保証します。</p></li>
+<li><p>プログラムは、ファイルをクローズする際に第2階層ストレージへの書出し完了を待たされます。</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">非同期クローズ</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_08.png" src="../_images/NotesOnHighParallelJobs_08.png" />
+</figure>
+<ul>
+<li><p>非同期クローズは、第2階層ストレージへの書き出しだけでなく、第1階層ストレージ（SIO 上の SSD）への書き出しを待ち合わせません。第1階層ストレージへの書き出しも含めて非同期に行われます。</p></li>
+<li><div class="line-block">
+<div class="line">ジョブの終了は、第2階層ストレージへの書き出しが完了してから行われます。(書き出しがジョブ終了後も継続することはありません。)</div>
+<div class="line">ただし、ジョブの実行時間制限を超過した場合や、ノードダウンなどでジョブが異常となった場合、第2階層ストレージへの書き出しは打ち切られます。</div>
+</div>
+</li>
+<li><p>第2階層ストレージへの書き出しに失敗した場合は、標準エラー出力に未書出しファイルの一覧が出力されます。</p></li>
+<li><p>非同期クローズは、<code class="docutils literal notranslate"><span class="pre">--llio</span> <span class="pre">async-close=on</span></code>で有効にします。非同期クローズの詳細については、<a class="reference internal" href="TheSecondLayerStrage.html#asynccloseandsyncclose"><span class="std std-ref">非同期クローズ/同期クローズ</span></a>を参照ください。</p></li>
+</ul>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+<section id="directaccessto2ndfs">
+<span id="id5"></span><h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">8.6.1.3. </span>第2階層ストレージへの直接アクセス</a><a class="headerlink" href="#directaccessto2ndfs" title="Link to this heading">¶</a></h3>
+<p>第1階層ストレージの利用において制限事項に抵触する場合やキャッシュの活用で効果が得られないなどの場合は、計算ノードから第2階層ストレージに直接アクセスできる/2ndfsを使用してください。
+ただし、容量はデータ領域などのようには拡大できないため注意してください。</p>
+<p>/home,/vol0<em>n</em>0<em>m</em>/data へのアクセス</p>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_09.png" src="../_images/NotesOnHighParallelJobs_09.png" />
+</figure>
+<p>/2ndfs へのアクセス</p>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_10.png" src="../_images/NotesOnHighParallelJobs_10.png" />
+</figure>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+</section>
+<section id="mpi-io">
+<h2><span class="section-number">8.6.2. </span>MPI-IO<a class="headerlink" href="#mpi-io" title="Link to this heading">¶</a></h2>
+<p>1つのファイルを複数のプロセスから利用する場合の<a class="reference internal" href="#llioconsiderpoints"><span class="std std-ref">留意事項</span></a>を確認したうえでご利用ください。</p>
+<blockquote>
+<div><div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>第2階層ストレージのキャッシュ領域でのMPI-IOの利用は、キャッシュを有効に使えず、非同期に書出せない仕様です。
+性能については、性能情報「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/perf/Perf-FS.pdf">Performance of File System</a>」をご参照ください。</p>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">8.6. 留意事項</a><ul>
+<li><a class="reference internal" href="#id2">8.6.1. 高並列ジョブ(1000並列以上)の注意点</a><ul>
+<li><a class="reference internal" href="#read">8.6.1.1. ファイルの READ について</a></li>
+<li><a class="reference internal" href="#write">8.6.1.2. ファイルの WRITE について</a></li>
+<li><a class="reference internal" href="#directaccessto2ndfs">8.6.1.3. 第2階層ストレージへの直接アクセス</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mpi-io">8.6.2. MPI-IO</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="SharedTemporaryArea.html"
+                          title="前の章へ"><span class="section-number">8.5. </span>共有テンポラリ領域</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="IOprofiling.html"
+                          title="次の章へ"><span class="section-number">8.7. </span>I/Oのプロファイリング</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="IOprofiling.html" title="8.7. I/Oのプロファイリング"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="SharedTemporaryArea.html" title="8.5. 共有テンポラリ領域"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">8. </span>階層化ストレージ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.6. </span>留意事項</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

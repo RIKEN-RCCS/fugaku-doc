@@ -1,0 +1,267 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>3.1.1. Assign resource registration &#8212; User support tools User&#39;s Guide (for User)  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.1.2. Assign resource change" href="3-1-2_ResourceMod.html" />
+    <link rel="prev" title="3.1. Command explanation" href="3-1_CommandExpranation.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-2_ResourceMod.html" title="3.1.2. Assign resource change"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="3-1_CommandExpranation.html" title="3.1. Command explanation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" accesskey="U"><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.1. </span>Assign resource registration</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="assign-resource-registration">
+<h1><span class="section-number">3.1.1. </span>Assign resource registration<a class="headerlink" href="#assign-resource-registration" title="Permalink to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[Name]</strong></div>
+<div class="line">　resourceadd - Set the computing resource limit value</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Style]</strong></div>
+<div class="line">　resourceadd  -g  group name [-u  user name] [-rscgrp  resource group name] [-resource  resource value]</div>
+<div class="line">　resourceadd  -f  file name</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Description]</strong></div>
+<div class="line">　resourceadd command further sets a limit value for each resource group or user for the computing resource assigned to the sub-theme. By setting, the budget limit (upper limit) for resource groups and users can be set. There are two types of registration formats: a single format that distributes computing resources to a single issue and a CSV format that is set for multiple issues at once.</div>
+<div class="line">　This command is used for the condition to set the calculation resource frame for the first time, use the resourcemod command when changing the value that has already been set, or when setting the calculation resource frame in a condition that already has a job submission record.</div>
+<div class="line">　To check whether the calculation resource frame has already been set or whether the job has been submitted, use the accountj command and check the status of the target condition.</div>
+<div class="line">　When the target information line exists, it will be the target of this command.</div>
+<div class="line">　　【Example】$ accountj -g group01 -E</div>
+<div class="line">　　Use the above accountj command to check the status after setting the resourcemod command.</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/3_SystemManagement_02.png" src="../_images/3_SystemManagement_02.png" />
+</figure>
+<div class="line-block">
+<div class="line">　The computing resource allocation frame is a computing resource frame allocated by a registration organization in accordance with an application from a user at the time of assignment selection. Users cannot go beyond this limit to submit and execute jobs at  Supercomputer Fugaku .</div>
+</div>
+<div class="line-block">
+<div class="line">　The theme manager, sub-theme manager, and project manager can set assignment assignment resources for a hierarchy below the group (resource group and user hierarchy in the above diagram). However, only the system administrator can set the resource frame for a single resource group.</div>
+<div class="line">　Also, the general user cannot use the command.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Option]</strong></div>
+<div class="line">　-g  group name</div>
+<div class="line">　Specify group name.</div>
+</div>
+<div class="line-block">
+<div class="line">　-resource  Resource value</div>
+<div class="line">　Specify the computing resource limit (number of nodes x elapsed time limit value) that is the upper limit. Specify a positive integer value. The unit of the numerical value is node seconds [node · s]. If 0 (zero) is specified, use is prohibited.</div>
+</div>
+<div class="line-block">
+<div class="line">　-u  user name</div>
+<div class="line">　Specify user name.</div>
+</div>
+<div class="line-block">
+<div class="line">　-rscgrp  resource group name</div>
+<div class="line">　Specify resource group name which wants to limit the use of computing resource.</div>
+</div>
+<div class="line-block">
+<div class="line">　【File layout】</div>
+<div class="line">　Required column　○: Required, △: Required or not is depending on resource type</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 6.2%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 6.2%" />
+<col style="width: 37.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>No</p></th>
+<th class="head"><p>Item name</p></th>
+<th class="head"><p>Category</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Note</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>RTYPE</p></td>
+<td><p>Alphabetic characters</p></td>
+<td><p>○</p></td>
+<td><div class="line-block">
+<div class="line">Resource type</div>
+<div class="line">User: USER</div>
+<div class="line">Resource group: RSCG</div>
+<div class="line">User-resource group: USER_RSCG</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>GROUP</p></td>
+<td><p>Single-byte alphanumeric symbol</p></td>
+<td><p>○</p></td>
+<td><p>Group name</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>USER</p></td>
+<td><p>Single-byte alphanumeric characters</p></td>
+<td><p>△</p></td>
+<td><div class="line-block">
+<div class="line">User name</div>
+<div class="line">NULL when resource group is specified</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>RSCGRP</p></td>
+<td><p>Single-byte alphanumeric characters</p></td>
+<td><p>△</p></td>
+<td><div class="line-block">
+<div class="line">Resource group name</div>
+<div class="line">NULL when user is specified</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>LIMIT</p></td>
+<td><p>Number</p></td>
+<td><p>○</p></td>
+<td><div class="line-block">
+<div class="line">Computing resource frame</div>
+<div class="line">(Node number x run time limit value)</div>
+<div class="line">※Specify a positive integer value. The unit of the numerical value is node seconds [node · s]. If 0 (zero) is specified, use is prohibited.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>　【File setting example】</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RTYPE,GROUP,USER,RSCGRP,LIMIT　...header
+USER,group01,user1,,100　...Assign to the user
+RSCG,group01,,rg1,100　...Assign to the resource group
+USER_RSCG,group01,user1,rg1,100　...Assign to the user and resource group combination
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　--help</div>
+<div class="line">　Display command help contents.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Return value]</strong></div>
+<div class="line">　Normal: 0</div>
+<div class="line">　Abnormal: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Note]</strong></div>
+<div class="line">　None.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Use example]</strong></div>
+<div class="line">　【Example 1】  Set the limit value to the user</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>resourceadd<span class="w"> </span>-g<span class="w"> </span>group01<span class="w"> </span>-u<span class="w"> </span>user1<span class="w"> </span>-resource<span class="w"> </span><span class="m">100</span>
+<span class="go">Registered 1 resource information.</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<p>　【Example 2】    Set the limit value to the user and resource group conbination</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>resourceadd<span class="w"> </span>-g<span class="w"> </span>group01<span class="w"> </span>-u<span class="w"> </span>user1<span class="w"> </span>–rscgrp<span class="w"> </span>rg1<span class="w"> </span>-resource<span class="w"> </span><span class="m">100</span>
+<span class="go">Registered 1 resource information.</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<p>　【Example 3】    Set the limit value to multiple condition for bulk</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>resourceadd<span class="w"> </span>-f<span class="w"> </span>resourceadd.csv
+<span class="go">Registered 4 resource information.</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="3-1_CommandExpranation.html"
+                          title="previous chapter"><span class="section-number">3.1. </span>Command explanation</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="3-1-2_ResourceMod.html"
+                          title="next chapter"><span class="section-number">3.1.2. </span>Assign resource change</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-2_ResourceMod.html" title="3.1.2. Assign resource change"
+             >next</a></li>
+        <li class="right" >
+          <a href="3-1_CommandExpranation.html" title="3.1. Command explanation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" ><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.1. </span>Assign resource registration</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Potal Top</a>
+    </div>
+  </body>
+</html>

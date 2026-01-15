@@ -1,0 +1,262 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>1. 概要 &#8212; Linaro Forge利用ガイド  ドキュメント</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="prev" title="Linaro Forge 利用ガイド" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="Linaro Forge 利用ガイド"
+             accesskey="P">前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">Linaro Forge利用ガイド  ドキュメント</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. 概要</a></li>
+<li><a class="reference internal" href="#id2">2. クライアントのインストール</a></li>
+<li><a class="reference internal" href="#id3">3. クライアント設定</a></li>
+<li><a class="reference internal" href="#id4">4. 実行方法</a></li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="index.html"
+                        title="前の章へ">Linaro Forge 利用ガイド</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>1. 概要<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>Linaro ForgeはC/C++, Fortran, Pythonで書かれた並列プログラムのデバッグおよび性能解析をGUIで行えるツールです。
+ここではスーパーコンピュータ「富岳」で、Linaro Forgeを利用したプログラムの実行方法を示します。</p>
+<p>Linaro Forgeに関する詳細な情報は、<a class="reference external" href="https://www.linaroforge.com/">https://www.linaroforge.com/</a> 等を参考にしてください。</p>
+</div>
+<div class="section" id="id2">
+<h1>2. クライアントのインストール<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>2024年5月現在、スーパーコンピュータ「富岳」にはLinaro Forge バージョン23.1.2がインストールされています。
+インストール先は以下の通りです。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/vol0004/apps/opt/linaro/forge/23.1.2
+</pre></div>
+</div>
+<p>Linaro Forgeを利用するには各ユーザがクライアントアプリケーションをインストールする必要があります。
+Linaro ForgeクライアントのインストールはWindows, Mac, Linuxそれぞれで行うことができます。
+ご利用のOSに合わせてクライアント用ファイルをダウンロードし、インストールしてください。</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">OS</th>
+<th class="head">クライアント用ファイル</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Windows</td>
+<td>linaro-forge-client-23.1.2-windows-x86_64.exe</td>
+</tr>
+<tr class="row-odd"><td>Mac</td>
+<td>linaro-forge-client-23.1.2-macos-x86_64.dmg</td>
+</tr>
+<tr class="row-even"><td>Linux</td>
+<td><p class="first">linaro-forge-23.1.2-linux-x86_64.tar</p>
+<p>linaro-forge-23.1.2-linux-aarch64.tar</p>
+<p class="last">linaro-forge-23.1.2-linux-ppc64le.tar</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="first admonition-title">注意</p>
+<p class="last">Linaro Forgeを利用するには、インストールされているバージョンを揃える必要があります。</p>
+</div>
+</div>
+<div class="section" id="id3">
+<h1>3. クライアント設定<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>以降の設定、実行についてはOSによる差異があまりないため、Linux版を用いてまとめて解説します。</p>
+<p>クライアントの起動に成功すると、下図のような画面が表示されます。
+「Remote Launch」のプルタブから「Configure」を選択し、「Add」で新しい接続設定を追加します。</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro01.png"><img alt="_images/linaro01.png" src="_images/linaro01.png" style="width: 800px;" /></a>
+</div>
+<p>「Remote Launch」の設定項目では、「Host Name」「Remote Installation Directory」「Private Key」の入力が必須です。</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro02.png"><img alt="_images/linaro02.png" src="_images/linaro02.png" style="width: 800px;" /></a>
+</div>
+<p>各入力項目は以下のように設定してください。</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">設定項目</th>
+<th class="head">入力内容</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Host Name</td>
+<td>{ユーザID}&#64;fugaku.r-ccs.riken.jp</td>
+</tr>
+<tr class="row-odd"><td>Remote Installation Directory</td>
+<td><p class="first">/vol0004/apps/opt/linaro/forge/23.1.2/x86_64  (クライアントがx86_64版の場合）</p>
+<p class="last">/vol0004/apps/opt/linaro/forge/23.1.2/aarch64  (クライアントがaarch64版の場合）</p>
+</td>
+</tr>
+<tr class="row-even"><td>Private Key</td>
+<td>スーパーコンピュータ「富岳」 のログインノードに接続する際に使用するSSH暗号鍵ファイルのパス</td>
+</tr>
+</tbody>
+</table>
+<p>設定が完了したら、「Test Remote Launch」ボタンで接続テストを行うことができます。
+正常に接続テストが成功した場合、下図のように表示されます。</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro03.png"><img alt="_images/linaro03.png" src="_images/linaro03.png" style="width: 800px;" /></a>
+</div>
+<p>接続設定を作成し、「Remote Launch」で作成した設定を選択すると、 スーパーコンピュータ「富岳」 へ接続します。
+接続に成功した場合、起動画面の左下にあるライセンス番号が「18054」と表示され、下図のように詳細なライセンス情報を取得できるようになります。</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro04.png"><img alt="_images/linaro04.png" src="_images/linaro04.png" style="width: 600px;" /></a>
+</div>
+<p>一度接続設定を作成すれば、再度起動した時には作成済みの設定を選択するだけで接続できるようになります。</p>
+</div>
+<div class="section" id="id4">
+<h1>4. 実行方法<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>ここではLinaro Forgeを利用したテストプログラムによるスーパーコンピュータ「富岳」での実行方法を示します。</p>
+<p>前項のクライアント設定で スーパーコンピュータ「富岳」 に接続しておき、Linaro ForgeのReverse Connect機能を用いてジョブからクライアントへ接続します。
+ジョブは以下のような形で記述します。例ではLinaro DDTを起動します。</p>
+<p>[Linaro DDT]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#! /bin/bash -x</span>
+<span class="c1">#PJM -g {groupname}</span>
+<span class="c1">#PJM -L node=1</span>
+<span class="c1">#PJM -L elapse=00:15:00</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004</span>
+<span class="c1">#PJM --mpi max-proc-per-node=48</span>
+<span class="c1">#PJM --sparam wait-time=60</span>
+<span class="c1">#PJM -j</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
+
+<span class="c1"># LinaroForge</span>
+. /vol0004/apps/opt/linaro/setup-env.sh
+
+<span class="c1"># run</span>
+ddt --connect --mpi<span class="o">=</span><span class="s2">&quot;Generic&quot;</span> --np <span class="m">48</span> ./test_c.exe
+</pre></div>
+</div>
+<p>ジョブが実行されると、下図のようにクライアント画面に応答を要求するメッセージが表示されます。</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro05.png"><img alt="_images/linaro05.png" src="_images/linaro05.png" style="width: 600px;" /></a>
+</div>
+<p>応答を許可すると、実行アプリケーションの情報を取得でき、Runボタンを押すことで実行を開始します。</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro06.png"><img alt="_images/linaro06.png" src="_images/linaro06.png" style="width: 600px;" /></a>
+</div>
+<p>アプリケーションが実行されると、Linaro Forgeの画面が下図のようになります。
+以降はGUIデバッガとしてアプリケーションのデバッグを行うことができます。</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro07.png"><img alt="_images/linaro07.png" src="_images/linaro07.png" style="width: 800px;" /></a>
+</div>
+<p>[Linaro MAP]</p>
+<p>Linaro DDTと同様に、Linaro MAPを使用することも可能です。
+その場合、ddtではなくmapを指定します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#! /bin/bash -x</span>
+<span class="c1">#PJM -g {groupname}</span>
+<span class="c1">#PJM -L node=1</span>
+<span class="c1">#PJM -L elapse=00:15:00</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004</span>
+<span class="c1">#PJM --mpi max-proc-per-node=48</span>
+<span class="c1">#PJM --sparam wait-time=60</span>
+<span class="c1">#PJM -j</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
+
+<span class="c1"># LinaroForge</span>
+. /vol0004/apps/opt/linaro/setup-env.sh
+
+<span class="c1"># run</span>
+map --connect --mpi<span class="o">=</span><span class="s2">&quot;Generic&quot;</span> --np <span class="m">48</span> ./test_c.exe
+</pre></div>
+</div>
+<p>アプリケーションが実行されると、Linaro Forgeの画面が下図のようになります。
+以降はGUI性能解析ツールとしてアプリケーションの分析を行うことができます。
+一度MAPが正常に実行されるとmapファイルが生成されるので、それを再度読み込むことでジョブを実行せずに分析をし直すこともできます。</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro08.png"><img alt="_images/linaro08.png" src="_images/linaro08.png" style="width: 800px;" /></a>
+</div>
+<div class="admonition attention">
+<p class="first admonition-title">注意</p>
+<p class="last">スーパーコンピュータ「富岳」 で使用可能なLinaro Forgeの最大プロセス数は512となっています。
+これはLinaro Forgeを使用する全ユーザで共有する数値です。
+1人が512プロセスを利用するプログラムを実行した場合、その他のユーザはライセンスが解放されるまで待機することになります。
+現在は1人あたりのプロセス利用数に制限は設けませんが、節度ある利用をお願いいたします。</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="Linaro Forge 利用ガイド"
+             >前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">Linaro Forge利用ガイド  ドキュメント</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Potal Top</a>
+    </div>
+  </body>
+</html>

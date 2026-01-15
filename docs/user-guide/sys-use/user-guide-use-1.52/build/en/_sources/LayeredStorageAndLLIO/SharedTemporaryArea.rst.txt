@@ -1,0 +1,178 @@
+.. _SharedTemporaryArea:
+
+Shared temporary area
+=====================
+
+The first-layer storage can be shared and used within the same job.
+
+The shared temporary area can be shared between multiple compute nodes within the same job. The shared temporary area will be available at the start of the job and will not be available at the end of the job. Therefore, users need to place files that they want to save, such as job execution result files, in the second-layer storage cache area or 2ndfs area.
+
+#. The shared temporary area can be shared by multiple compute nodes in a job.
+#. The shared temporary area becomes available at the start of the job and is erased at the end of the job. Save such as job execution result files must be placed on the second-layer storage cache area or 2ndfs area.
+#. To use the shared temporary area, specify an arbitrary area size with  ``--llio sharedtmp-size`` in the option of the :program:`pjsub` command when submitting a job.
+#. The path name of the shared temporary area can be referenced in the job by the environment variable  ``${PJM_SHAREDTMP}`` .
+
+
+.. figure:: img/SharedTemporaryArea_01.png
+
+   
+5. Here describes shared temporary area style.
+
+   
+   .. list-table:: Shared temporary area style
+     :header-rows: 1         
+     :widths: 10 20   
+   
+     * - Item
+       - Characteristic
+
+     * - Reference area
+       - Able to refer the within compute node that assigne to job. Able to refer from the multiple compute node if in the same job.
+
+     * - Lifetime
+       - Initialized before job starts and deleted after job closing.
+
+.. _StripeSettingForSharedTemporaryArea:
+
+Stripe setting for shared temporary area
+----------------------------------------
+
+File access bandwidth is increased by distributing the shared temporary area across multiple first-layer devices.
+When submitting a job, the user specifies the stripe size and stripe count according to the I / O characteristics of the application.
+This allows efficient access to the shared temporary area.
+
+
+.. figure:: img/StripeSettingForSharedTemporaryArea_01.png
+
+   
+This indicates the example about setting stripe count 3.
+
+.. list-table:: 
+  :header-rows: 1     
+  :widths: 10 10 10      
+
+  * - Area name
+    - Lfs command
+    - pjsub --llio option
+
+  * - Shared temporary area
+    - －
+    - ✓
+
+
+.. code-block:: console
+
+   $ pjsub  --llio  stripe-count=3  jobscript.sh
+
+.. note::
+
+   * There are currently 24 up and down stripe counts that can be set.
+
+   * LLIO stripe count defaults to 24.
+
+Shared temporary area size
+----------------------------
+
+| When using shared temporary area, that size can be specified when job submission.
+| Specify "size of shared temporary area ÷ number of allocated nodes" in the parameter  ``sharedtmp-size``  of the  ``--llio`` option of the :program:`pjsub` command. If you do not specify a size, It will be the default value (0MiB) set in the system.
+
+
+.. list-table:: 
+  :header-rows: 1     
+  :widths: 10 10 10      
+
+  * - Area name
+    - Option
+    - Specification value
+
+  * - Shared temporary area
+    - --llio sharedtmp-size
+    - Shared temporary area size ÷ Number of job assign node
+
+
+.. attention:: 
+   
+   - | The value specified by the parameter sharedtmp-size is not the size of the entire shared temporary area that can be used by the job. The size of the entire shared temporary area is the value obtained by multiplying the value specified by the parameter sharedtmp-size by the number of nodes allocated to the job.
+
+   - | Even though you do not run out of all the available space of the shared temporary area specified when the job was submitted, you may encounter errors due to insufficient free space.
+     | This may be because a job uses more than one storage I/O node and runs out of available space on one storage I/O node. 
+     | If this occurs, increase the amount of shared temporary space and run the job.
+
+
+At least 128MiB must be assigned to :ref:`VolumeOfStrage`. Please specify the size so that it meets the following.::
+
+   128MiB <= 87GiB - (localtmp-size + sharedtmp-size)
+
+
+How to use
+----------
+
+By specifying option when job submission, shared temporary aea can be used.
+
+1. Submit a job.
+
+   .. code-block:: console
+
+      $ pjsub --llio sharedtmp-size=size   jobscript.sh
+
+
+2. Shared temporary area's path name (directory name) is set to an environmental change PJM_SHAREDTMP.
+
+   It is checkable with environment variables PJM_SHAREDTMP which is set in the job. The following is an example of a simple job that uses a shared temporary area as a temporary data storage destination.
+
+   .. code-block:: none
+
+      prog1 -o ${PJM_SHAREDTMP}/out.data
+
+
+3. Program prog2 reads file out.data and output the final computed result result.data to directory${PJM_SHAREDTMP}.
+
+   .. code-block:: none
+     
+      prog2 -i ${PJM_SHAREDTMP}/out.data -o ${PJM_SHAREDTMP}/result.data
+
+
+4. Before ending the job, save the file result.data in the directory $ {PJM_JOBDIR} (on the global file system) at the time of job execution with the job ID $ {PJM_JOBID} appended.
+
+   .. code-block:: console
+
+      $ cp ${PJM_SHAREDTMP}/result.data ${PJM_JOBDIR}/result_${PJM_JOBID}.data
+
+
+Job submitting option (pjsub --llio)
+------------------------------------
+
+Here describes the option related to shared temporary area.
+
+.. list-table:: 
+  :header-rows: 1      
+  :widths: 30 50       
+
+  * - pjsub option
+    - Description
+
+  * - sharedtmp-size=size	
+    - | Specify shared temporary area size.(Default 0Mi)
+      | Shared temporary area path name is set to environment variable${PJM_SHAREDTMP} in a job.
+
+  * - stripe-count=count	
+    - | Specify the number of stripes per file when distributing files in the shared temporary area.(Default 24)
+
+  * - stripe-size=size	
+    - | Specify the stripe size when distributing files in the shared temporary area.(Default 2048Ki)
+
+  * - async-close={on|off}	
+    - | Specifies whether to close the shared temporary area asynchronously or not.
+      | Specifying synchronous / asynchronous close from the cache in the compute node to the first-layer storage
+      | 
+      | on: Asynchronous close
+      | off: Synchronous close (Default value)
+
+  * - perf[,perf-path=path]	
+    - | Output LLIO performance information to the file.
+      | The output destination is under the current directory when the job is submitted, and the file name is the name defined by the job ACL function. Also with the parameter perf-path, target output file can be specified.
+
+.. attention:: 
+   
+   - | The (default value) may be changed for each resource group depending on the operating conditions. The current default value can be checked with the pjacl \-\-rg <resource group name> command.
+

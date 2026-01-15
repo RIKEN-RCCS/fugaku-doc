@@ -1,0 +1,198 @@
+サンプルスクリプト
+==========================
+
+ジョブスクリプトのサンプルを示します。
+
+スクリプトの行頭にある "#PJM" にはジョブのオプションを指定します。
+
+「富岳」は、課題の\ :ref:`グループ <group>`\ とジョブで使用する\ :ref:`データ領域のvolume <SelectAvailableVolumes>`\ の情報も必要です。
+
+通常ジョブ（逐次プログラム）
+----------------------------
+
+逐次プログラムを実行するジョブスクリプトの例を示します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=1"                          # 割り当てノード 1ノード
+  #PJM -L  "rscgrp=small"                    # リソースグループの指定
+  #PJM -L  "elapse=01:00:00"                 # 経過時間制限 1時間
+  #PJM -g groupname                          # 課題のグループ指定
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N         # ジョブで使用するデータ領域のvolume
+  #PJM -s                                    # 統計情報出力
+  #
+
+  ./a.out                                    # a.out を実行
+
+
+1. 逐次プログラム（\ :file:`a.out`\ ）は、割当ノードとして1ノードを指定（\ ``-L "node=1"``\ ）します。
+#. :file:`./a.out`\ を実行します。
+
+
+通常ジョブ（MPI／2次元形状）
+----------------------------
+
+MPIプログラムを2次元形状で投入するジョブスクリプトの例を示します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=2x2"                        # 割当ノード形状 2x2ノード （2次元形状）
+  #PJM -L  "rscgrp=small"                    # リソースグループの指定
+  #PJM -L  "elapse=01:00:00"                 # 経過時間制限 1時間
+  #PJM --mpi "shape=2x2"                     # プロセスの形状2x2
+  #PJM --mpi "max-proc-per-node=4"           # 1ノードあたりに生成するMPIプロセス数の上限値
+  #PJM -g groupname                          # 課題のグループ指定
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N         # ジョブで使用するデータ領域のvolume
+  #PJM -s                                    # 統計情報出力
+  #
+
+  mpiexec ./a.out                            # a.outを実行
+
+
+1. ``-L node``\ で、要求するノード形状を指定します。
+#. ``--mpi shape``\ で、静的に起動するプロセスの形状を指定します。
+#. ``--mpi max-proc-per-node``\ で、1ノードあたりに生成するMPIプロセス数の上限値を指定します。
+#. :program:`mpiexec`\ でMPIプログラムを実行します。
+
+
+通常ジョブ（MPI／3次元形状）
+----------------------------
+
+MPIプログラムを3次元形状で投入するジョブスクリプトの例を示します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=2x2x2"                      # 割当ノード形状 2x2x2ノード （3次元形状）
+  #PJM -L  "rscgrp=small"                    # リソースグループの指定
+  #PJM -L  "elapse=01:00:00"                 # 経過時間制限 1時間
+  #PJM --mpi "shape=2x2x2"                   # プロセスの形状2x2x2
+  #PJM --mpi "max-proc-per-node=4"           # 1ノードあたりに生成するMPIプロセス数の上限値
+  #PJM -g groupname                          # 課題のグループ指定
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N         # ジョブで使用するデータ領域のvolume
+  #PJM -s                                    # 統計情報出力
+  #
+
+  mpiexec ./a.out                            # a.outを実行
+
+
+1. ``-L node``\ で、要求するノード形状を指定します。
+#. ``--mpi shape``\ で、静的に起動するプロセスの形状を指定します。
+#. ``--mpi max-proc-per-node``\ で、1ノードあたりに生成するMPIプロセス数の上限値を指定します。
+#. :program:`mpiexec`\ でMPIプログラムを実行します。
+
+
+通常ジョブ（スレッド並列（自動並列））
+--------------------------------------
+
+スレッド並列（自動並列）プログラムを実行するジョブスクリプトの例を示します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=1"                          # 割り当てノード 1ノード
+  #PJM -L  "rscgrp=small"                    # リソースグループの指定
+  #PJM -L  "elapse=01:00:00"                 # 経過時間制限 1時間
+  #PJM -g groupname                          # 課題のグループ指定
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N         # ジョブで使用するデータ領域のvolume
+  #PJM -s                                    # 統計情報出力
+  #
+
+  export PARALLEL=8                          # スレッド数の指定
+  export OMP_NUM_THREADS=${PARALLEL}         # スレッド数の指定
+
+  ./a.out                                    # プログラム a.out を実行
+
+
+1. ``-L node``\ で、要求するノード数を指定します。
+#. スレッド数を環境変数 PARALLEL と OMP_NUM_THREADS に指定します。省略時は48スレッドで動作します。
+#. :file:`./a.out`\ を実行します。
+
+
+通常ジョブ（スレッド並列（OpenMP））
+------------------------------------------
+
+スレッド並列（OpenMP）プログラムを実行するジョブスクリプトの例を示します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=1"                          # 割り当てノード 1ノード
+  #PJM -L  "rscgrp=small"                    # リソースグループの指定
+  #PJM -L  "elapse=01:00:00"                 # 経過時間制限 1時間
+  #PJM -g groupname                          # 課題のグループ指定
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N         # ジョブで使用するデータ領域のvolume
+  #PJM -s                                    # 統計情報出力
+  #
+
+  export PARALLEL=8                          # スレッド数の指定
+  export OMP_NUM_THREADS=${PARALLEL}         # スレッド数の指定
+
+  ./a.out                                    # プログラム a.out を実行
+
+
+1. ``-L node``\ で、要求するノード数／ノード形状を指定します。
+#. スレッド数を環境変数 PARALLEL と OMP_NUM_THREADS に指定します。省略時は48スレッドで動作します。
+#. \ :file:`./a.out`\ を実行します。
+
+
+通常ジョブ（フラットMPI／1次元形状）
+--------------------------------------
+
+MPIプログラムをフラットMPIで1次元形状で投入するジョブスクリプトの例を示します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=8"                          # 割当ノード数 8 （1次元形状）
+  #PJM -L  "rscgrp=small"                    # リソースグループの指定
+  #PJM -L  "elapse=01:00:00"                 # 経過時間制限 1時間
+  #PJM --mpi "shape=8"                       # プロセスの形状を指定
+  #PJM --mpi "max-proc-per-node=48"          # 1ノードあたりに生成するMPIプロセス数の上限値
+  #PJM -g groupname                          # 課題のグループ指定
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N         # ジョブで使用するデータ領域のvolume
+  #PJM -s                                    # 統計情報出力
+  #
+
+  mpiexec -n 384 ./a.out                     # a.outを実行
+
+
+1. ``-L node``\ で、要求するノード数を指定します。
+#. ``--mpi shape``\ で、静的に起動するプロセスの形状を指定します。
+#. ``max-proc-per-node=48``\ で、1ノードあたりに生成するMPIプロセス数の上限値を指定します。
+#. :program:`mpiexec`\ でMPIプログラムを実行します。
+
+
+通常ジョブ（ハイブリッド並列）
+--------------------------------------
+
+スレッド並列とプロセス並列の両方を使用する方法をハイブリッド並列と呼びます。
+
+ここではMPIによる並列とスレッド並列を併用したジョブスクリプトの例を示します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=2x3x2"                      # 割当ノード数 12 （3次元形状）
+  #PJM -L  "rscgrp=small"                    # リソースグループの指定
+  #PJM -L  "elapse=01:00:00"                 # 経過時間制限 1時間
+  #PJM --mpi "max-proc-per-node=4"           # 1ノードあたりに生成するMPIプロセス数の上限値
+  #PJM -g groupname                          # 課題のグループ指定
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N         # ジョブで使用するデータ領域のvolume
+  #PJM -s                                    # 統計情報出力
+  #
+
+  export PARALLEL=12                         # スレッド数の指定
+  export OMP_NUM_THREADS=${PARALLEL}         # スレッド数の指定
+
+  mpiexec -n 48 ./a.out                      # a.outを実行
+
+
+1. ``-L node``\ で、要求するノード数を指定します。
+#. ``max-proc-per-node=4``\ で、1ノードあたりに生成するMPIプロセス数の上限値を指定します。
+#. 環境変数\ ``OMP_NUM_THREADS``\ で、スレッド数を指定します。
+#. :program:`mpiexec`\ でMPIプログラムを実行します。
+
+

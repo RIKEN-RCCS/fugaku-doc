@@ -1,0 +1,520 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.1. Overview &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.2. Normal job" href="NormalJob.html" />
+    <link rel="prev" title="5. Job execution" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="NormalJob.html" title="5.2. Normal job"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="index.html" title="5. Job execution"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.1. </span>Overview</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="overview">
+<h1><span class="section-number">5.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h1>
+<p>This is to explain job overview.</p>
+<section id="about-the-jobs">
+<h2><span class="section-number">5.1.1. </span>About the jobs<a class="headerlink" href="#about-the-jobs" title="Link to this heading">¶</a></h2>
+<p>In a system with job operation software installed, the user does not directly execute the program, but requests execution to the job operation management function of the job operation software. The job operation management function secures necessary computer resources for the requested program and executes the program.</p>
+<div class="line-block">
+<div class="line">The unit for processing this program is a job.</div>
+<div class="line">A job consists of programs, data, and job scripts.</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Components</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Job script</p></td>
+<td><p>A shell script that describes how to run the program.</p>
+<p>The job operation software executes jobs based on this job script.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Program</p></td>
+<td><p>An executable program prepared by the user.</p></td>
+</tr>
+<tr class="row-even"><td><p>Data</p></td>
+<td><p>Program input and output.</p>
+<p>For example, a data file that stores input parameters to a program, an output file that stores processing results, and a program display result.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<figure class="align-default">
+<img alt="../_images/WhatAreJobs_01.png" src="../_images/WhatAreJobs_01.png" />
+</figure>
+<p>Job execution is a way of following:</p>
+<ol class="arabic simple">
+<li><p>Prepare the files necessary for job execution by the user and place them on the login node.</p></li>
+<li><p>The user requests the job operation management function to execute the job (submit the job). For the job, submit by specifying job script to <strong class="program">pjsub</strong> command.</p></li>
+<li><p>The job operation management function allocates computer resources to jobs and executes job scripts.</p></li>
+<li><p>The program is executed according to the contents of the job script and the execution result is output.</p></li>
+<li><p>The user checks the job execution result on the login node.</p></li>
+</ol>
+<blockquote>
+<div><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>If an email notification is specified when a job is submitted, the user can be notified of the end of the job script by email.</p>
+</div>
+</div></blockquote>
+</section>
+<section id="types-of-job">
+<h2><span class="section-number">5.1.2. </span>Types of job<a class="headerlink" href="#types-of-job" title="Link to this heading">¶</a></h2>
+<p>Jobs are classified into several categories depending on the type of computer resources and programs required.
+Job management software classifies jobs as follows:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Categories</p></th>
+<th class="head"><p>Type of job</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Category based on job construction (job model)</p></td>
+<td><p>Normal job</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Bulk job</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>Step job</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Workflow job</p></td>
+</tr>
+<tr class="row-even"><td><p>Classification by job execution type (job type)</p></td>
+<td><p>Batch job</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Interactive type job</p></td>
+</tr>
+<tr class="row-even"><td><p>Classification by degree of parallelism</p></td>
+<td><p>Sequential job</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Parallel jobs</p></td>
+</tr>
+<tr class="row-even"><td><p>Classification by required computer resources (node resources)</p></td>
+<td><p>Single node job</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Multinode job</p></td>
+</tr>
+<tr class="row-even"><td><p>Classification by node resource allocation method</p></td>
+<td><p>Node allocated job (Node-exclusive job)</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>Virtual node allocated job (Node-exclusive job, Node-Sharing job)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="create-job-script">
+<h2><span class="section-number">5.1.3. </span>Create job script<a class="headerlink" href="#create-job-script" title="Link to this heading">¶</a></h2>
+<p>The actual job script is a shell script.
+Indicates the job script describing example in below.</p>
+<p>For details on creating job scripts, refer to the manual “Job Operation Software End-user’s Guide”-“2.1 How to Create a Job”.</p>
+<p>Specify a project <a class="reference internal" href="../UsageRules/index.html#group"><span class="std std-ref">group ID</span></a>.</p>
+<p>Specify the <a class="reference internal" href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html#selectavailablevolumes"><span class="std std-ref">usage file system</span></a>.</p>
+<p>For the job script file name, the characters available in the job name must be used. Refer to <a class="reference internal" href="#jobscriptattention"><span class="std std-ref">Attention</span></a>.</p>
+<ul class="simple">
+<li><p>Basic job script example</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#PJM -L &quot;node=1&quot;               # Number of node</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;         # Specify resource group</span>
+<span class="c1">#PJM -L &quot;elapse=60:00&quot;         # Job run time limit value</span>
+<span class="c1">#PJM -g groupname              # group name</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N # volume names that job uses</span>
+<span class="c1">#PJM -S                        # Direction of statistic information file output</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">12</span><span class="w">      </span><span class="c1"># Environment variable setting</span>
+
+<span class="c1"># execute job</span>
+./a.out<span class="w">                        </span><span class="c1"># Execute a program</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>The example of executing MPI job</p></li>
+</ul>
+<blockquote>
+<div><p>For MPI jobs, also specify the number of processes. One node consists of four CMGs (Core Memory Groups). For this reason, we recommend running with 4 processes per node. The following specifies 4 for the number of nodes and 4 for the number of processes per node.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#PJM -L &quot;node=4&quot;                  # 4 nodes</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;            # Specify resource group</span>
+<span class="c1">#PJM -L &quot;elapse=00:10:00&quot;         # Job run time limit value</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;  # Upper limit of number of MPI process created at 1 node</span>
+<span class="c1">#PJM -g groupname                 # group name</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N # volume names that job uses</span>
+<span class="c1">#PJM -s</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">PLE_MPI_STD_EMPTYFILE</span><span class="o">=</span>off<span class="w"> </span><span class="c1"># Do not create a file if there is no output to stdout/stderr.</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">12</span>
+
+<span class="c1"># execute job</span>
+mpiexec<span class="w"> </span>./a.out<span class="w">                </span><span class="c1"># Execute with maximum number of available process (16 at this example)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>See also <a class="reference internal" href="../MPI/InputOutputRedirection.html#stdoutstderroutforlargejobs"><span class="std std-ref">About standard output / standard error output when executing large-scale jobs</span></a>.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When executing MPI job and specifying the number of using process, specify <code class="docutils literal notranslate"><span class="pre">-n</span></code> option as following.</p>
+<p>mpiexec -n 16 ./a.out</p>
+</div>
+</div></blockquote>
+<p>Some resources specified in <code class="docutils literal notranslate"><span class="pre">-L</span></code> in <strong class="program">pjsub</strong> command or job script have default values.
+<a class="reference internal" href="#defaultofjobresource"><span class="std std-ref">Main resource default value</span></a> is shown below.</p>
+<blockquote>
+<div><span id="defaultofjobresource"></span><table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Main resource default value</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Resource name</p></th>
+<th class="head"><p>Default value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>rscgrp</p></td>
+<td><div class="line-block">
+<div class="line">small (Batch job)</div>
+<div class="line">int (Interactive Job)</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>node</p></td>
+<td><p>Different for each resource group</p></td>
+</tr>
+<tr class="row-even"><td><p>elapse</p></td>
+<td><div class="line-block">
+<div class="line">1 minute (Batch job)</div>
+<div class="line">10 second (Interactive Job)</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The lower limit of elapse is set to the same as the default value.
+Therefore, do not specify a value smaller than the default value for elapse.</p>
+<p>When specifying a value smaller than the default value for elapse, an error occurs when the <strong class="program">pjsub</strong> command  is executed.</p>
+</div>
+<p>The default value for node is that when executing <strong class="program">pjacl</strong> command in the following format, the information defined for the executed account is displayed.:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Format: pjacl --rg &lt;Resource group name&gt;
+</pre></div>
+</div>
+<p>The examples of using <strong class="program">pjacl</strong> command is shown below. The default value of node can be checked from the default column of <code class="docutils literal notranslate"><span class="pre">(node</span> <span class="pre">=)</span></code>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjacl<span class="w"> </span>--rg<span class="w"> </span>small
+<span class="gp">#</span>
+<span class="gp"># </span>JOBACL<span class="w"> </span>information
+<span class="gp">#</span>
+
+<span class="gp gp-VirtualEnv">(omitted)</span>
+
+<span class="go">pjsub option parameters</span>
+<span class="go">    (-L/--rsc-list)                         lower            upper            default</span>
+<span class="go">        (elapse=)                           00:01:00         72:00:00         00:01:00</span>
+<span class="go">        (adaptive elapsed time min)         00:01:00         72:00:00         00:01:00</span>
+<span class="go">        (adaptive elapsed time max)         00:01:01         144:00:00        144:00:00</span>
+<span class="go">        (node elapse)                       1                unlimited        -</span>
+<span class="go">        (adaptive node elapse min)          1                unlimited        -</span>
+<span class="go">        (adaptive node elapse max)          2                unlimited        -</span>
+<span class="go">        (total cores elapse)                1                unlimited        -</span>
+<span class="go">        (total cores)                       1                unlimited        -</span>
+<span class="hll"><span class="go">        (node=)                             1                384              1</span>
+</span><span class="go">        (node-mem=)                         1                unlimited        unlimited</span>
+<span class="go">        (vnode=)                            1                2147483647       1</span>
+<span class="go">        (vnode-core=)                       1                2147483647       1</span>
+<span class="go">        (vnode-mem=)                        1                unlimited        unlimited</span>
+<span class="go">        (proc-core=)                        -                unlimited        0</span>
+<span class="go">        (proc-cpu=)                         -                unlimited        unlimited</span>
+<span class="go">        (proc-crproc=)                      -                4096             4096</span>
+<span class="go">        (proc-data=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-lockm=)                       -                unlimited        unlimited</span>
+<span class="go">        (proc-msgq=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-openfd=)                      -                unlimited        1024</span>
+<span class="go">        (proc-psig=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-filesz=)                      -                unlimited        unlimited</span>
+<span class="go">        (proc-stack=)                       -                unlimited        unlimited</span>
+<span class="go">        (proc-vmem=)                        -                unlimited        unlimited</span>
+<span class="go">        (estimated-power=)                  0                unlimited        0</span>
+<span class="go">        (exepjrsh=)                         0                1                0</span>
+<span class="go">        (nnum_cret=)                        0                unlimited        0</span>
+<span class="go">        (test_rsc01=)                       0                unlimited        0</span>
+
+<span class="gp gp-VirtualEnv">(omitted)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjacl<span class="w"> </span>--rg<span class="w"> </span>large
+<span class="gp">#</span>
+<span class="gp"># </span>JOBACL<span class="w"> </span>information
+<span class="gp">#</span>
+
+<span class="gp gp-VirtualEnv">(omitted)</span>
+
+<span class="go">pjsub option parameters</span>
+<span class="go">    (-L/--rsc-list)                         lower            upper            default</span>
+<span class="go">        (elapse=)                           00:01:00         24:00:00         00:01:00</span>
+<span class="go">        (adaptive elapsed time min)         00:01:00         24:00:00         00:01:00</span>
+<span class="go">        (adaptive elapsed time max)         00:01:01         96:00:00         96:00:00</span>
+<span class="go">        (node elapse)                       1                unlimited        -</span>
+<span class="go">        (adaptive node elapse min)          1                unlimited        -</span>
+<span class="go">        (adaptive node elapse max)          2                unlimited        -</span>
+<span class="go">        (total cores elapse)                1                unlimited        -</span>
+<span class="go">        (total cores)                       1                unlimited        -</span>
+<span class="hll"><span class="go">        (node=)                             385              12288            385</span>
+</span><span class="go">        (node-mem=)                         1                unlimited        unlimited</span>
+<span class="go">        (vnode=)                            1                2147483647       1</span>
+<span class="go">        (vnode-core=)                       1                2147483647       1</span>
+<span class="go">        (vnode-mem=)                        1                unlimited        unlimited</span>
+<span class="go">        (proc-core=)                        -                unlimited        0</span>
+<span class="go">        (proc-cpu=)                         -                unlimited        unlimited</span>
+<span class="go">        (proc-crproc=)                      -                4096             4096</span>
+<span class="go">        (proc-data=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-lockm=)                       -                unlimited        unlimited</span>
+<span class="go">        (proc-msgq=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-openfd=)                      -                unlimited        1024</span>
+<span class="go">        (proc-psig=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-filesz=)                      -                unlimited        unlimited</span>
+<span class="go">        (proc-stack=)                       -                unlimited        unlimited</span>
+<span class="go">        (proc-vmem=)                        -                unlimited        unlimited</span>
+<span class="go">        (estimated-power=)                  0                unlimited        0</span>
+<span class="go">        (exepjrsh=)                         0                1                0</span>
+<span class="go">        (nnum_cret=)                        0                unlimited        0</span>
+<span class="go">        (test_rsc01=)                       0                unlimited        0</span>
+
+<span class="gp gp-VirtualEnv">(omitted)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjacl<span class="w"> </span>--rg<span class="w"> </span>int
+<span class="gp">#</span>
+<span class="gp"># </span>JOBACL<span class="w"> </span>information
+<span class="gp">#</span>
+
+<span class="gp gp-VirtualEnv">(omitted)</span>
+
+<span class="go">    (--interact -L)                         lower            upper            default</span>
+<span class="go">        (elapse=)                           00:00:10         06:00:00         00:00:10</span>
+<span class="go">        (adaptive elapsed time min)         00:00:10         06:00:00         00:00:10</span>
+<span class="go">        (adaptive elapsed time max)         00:00:11         78:00:00         78:00:00</span>
+<span class="go">        (node elapse)                       1                unlimited        -</span>
+<span class="go">        (adaptive node elapse min)          1                unlimited        -</span>
+<span class="go">        (adaptive node elapse max)          2                unlimited        -</span>
+<span class="go">        (total cores elapse)                1                unlimited        -</span>
+<span class="go">        (total cores)                       1                unlimited        -</span>
+<span class="hll"><span class="go">        (node=)                             1                12               1</span>
+</span><span class="go">        (node-mem=)                         1                unlimited        unlimited</span>
+<span class="go">        (vnode=)                            1                2147483647       1</span>
+<span class="go">        (vnode-core=)                       1                2147483647       1</span>
+<span class="go">        (vnode-mem=)                        1                unlimited        unlimited</span>
+<span class="go">        (proc-core=)                        -                unlimited        0</span>
+<span class="go">        (proc-cpu=)                         -                unlimited        unlimited</span>
+<span class="go">        (proc-crproc=)                      -                4096             4096</span>
+<span class="go">        (proc-data=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-lockm=)                       -                unlimited        unlimited</span>
+<span class="go">        (proc-msgq=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-openfd=)                      -                unlimited        1024</span>
+<span class="go">        (proc-psig=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-filesz=)                      -                unlimited        unlimited</span>
+<span class="go">        (proc-stack=)                       -                unlimited        unlimited</span>
+<span class="go">        (proc-vmem=)                        -                unlimited        unlimited</span>
+<span class="go">        (estimated-power=)                  0                unlimited        0</span>
+<span class="go">        (exepjrsh=)                         0                1                0</span>
+<span class="go">        (nnum_cret=)                        0                unlimited        0</span>
+<span class="go">        (test_rsc01=)                       0                unlimited        0</span>
+
+<span class="gp gp-VirtualEnv">(omitted)</span>
+</pre></div>
+</div>
+<div class="line-block" id="jobscriptattention">
+<div class="line"><br /></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>The job script file name must use characters available in the job name. The following characters are available.</p>
+<ul>
+<li><p>Any single byte alphanumeric characters, single byte hyphen(-), single byte underscore(_) and single byte dot(.) can be used.</p></li>
+<li><p>Other characters are not supported.</p></li>
+</ul>
+</li>
+<li><p>The shell that executes job script is user’s login shell unless a shell is specified with “#!” on the first line of the job script.</p></li>
+<li><p>To start with “#PJM” in the job script, it id possible to describe <strong class="program">pjsub</strong> command argument when submitting a job. According to the specification in a job script, <strong class="program">pjsub</strong> command argument specification is prior.</p></li>
+<li><p>Once the others than comment line appears, later “#PJM “ is simply ignored as a comment line.</p></li>
+<li><p>Job script needs the reading authority to the user who submits a job. Execution authority is not needed.</p></li>
+<li><p>In job script, do not redirect to <code class="file docutils literal notranslate"><span class="pre">/dev/stdout</span></code> or <cite>/dev/stderr</cite>. If redirected, the standard output file or standard error output file is overwritten from the top.</p></li>
+</ul>
+</div>
+</section>
+<section id="the-command-for-creating-template-of-job-script">
+<h2><span class="section-number">5.1.4. </span>The command for creating template of job script<a class="headerlink" href="#the-command-for-creating-template-of-job-script" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">A command (make_jobscript) to create a template for a job script has been released.</div>
+<div class="line">When using the command, use the <code class="docutils literal notranslate"><span class="pre">--gname</span></code> option to specify the name of the group on which to run the job.</div>
+</div>
+<p>Usage:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>make_jobscript<span class="w"> </span><span class="o">[</span>OPTION<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>--gname<span class="w"> </span>groupname
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>--distribute-common-file path_to_file1,path_to_file2,…</p></td>
+<td><p>Specify the common files to be read from all compute nodes.</p></td>
+</tr>
+<tr class="row-odd"><td><p>--use-directory path_to_directory1,path_to_directory2,…</p></td>
+<td><p>Specify the directories used in the job.</p></td>
+</tr>
+<tr class="row-even"><td><p>--use-spack</p></td>
+<td><p>Specify if you want to use spack.</p></td>
+</tr>
+<tr class="row-odd"><td><p>--gname groupname</p></td>
+<td><p>Specify the group name to use in the job.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Descriptions related to options not specified are also output as comments.
+The URL of the reference document is also output, so please refer to it for details.</p>
+</section>
+<section id="job-allocation-operation">
+<span id="joballocationoperation"></span><h2><span class="section-number">5.1.5. </span>Job allocation operation<a class="headerlink" href="#job-allocation-operation" title="Link to this heading">¶</a></h2>
+<p>Fugaku uses job allocation to reduce congestion caused by job submission concentrated in a specific resource group.</p>
+<p>In job allocation operation, the system periodically moves submitted jobs to another resource group.
+The job to be moved has a condition, and the system changes the resource group of the submitted job whose condition matches the target resource group.
+There are no parameter changes other than changes to the execution resource group.</p>
+<p>For details of the resource groups for which job allocation operation is being performed and the conditions to be allocated
+See <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/resource_group_config">Resource Groups</a> remarks and the various parameters in the table.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>The execution resource group changes when job distribution is applied.
+Therefore, if you limit the available computing resources per resource group on a per-user basis, you will not be able to control them correctly.</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.1. Overview</a><ul>
+<li><a class="reference internal" href="#about-the-jobs">5.1.1. About the jobs</a></li>
+<li><a class="reference internal" href="#types-of-job">5.1.2. Types of job</a></li>
+<li><a class="reference internal" href="#create-job-script">5.1.3. Create job script</a></li>
+<li><a class="reference internal" href="#the-command-for-creating-template-of-job-script">5.1.4. The command for creating template of job script</a></li>
+<li><a class="reference internal" href="#job-allocation-operation">5.1.5. Job allocation operation</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter"><span class="section-number">5. </span>Job execution</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="NormalJob.html"
+                          title="next chapter"><span class="section-number">5.2. </span>Normal job</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="NormalJob.html" title="5.2. Normal job"
+             >next</a></li>
+        <li class="right" >
+          <a href="index.html" title="5. Job execution"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.1. </span>Overview</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

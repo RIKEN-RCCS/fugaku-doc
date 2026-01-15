@@ -1,0 +1,172 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.15. Use of custom resource &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.16. Checking when a job ends abnormally" href="CheckingAbnormalEndOfJob.html" />
+    <link rel="prev" title="5.14. Notes on job operations" href="NotesOnJobOperationCommands.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CheckingAbnormalEndOfJob.html" title="5.16. Checking when a job ends abnormally"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="NotesOnJobOperationCommands.html" title="5.14. Notes on job operations"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.15. </span>Use of custom resource</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="use-of-custom-resource">
+<h1><span class="section-number">5.15. </span>Use of custom resource<a class="headerlink" href="#use-of-custom-resource" title="Link to this heading">¶</a></h1>
+<p>Here describes the use method of custom resource.</p>
+<section id="function-overview">
+<h2><span class="section-number">5.15.1. </span>Function overview<a class="headerlink" href="#function-overview" title="Link to this heading">¶</a></h2>
+<p>Job operation software has custom resources that can define any resources in addition to node resources and CPU resources.</p>
+</section>
+<section id="how-to-check">
+<h2><span class="section-number">5.15.2. </span>How to check<a class="headerlink" href="#how-to-check" title="Link to this heading">¶</a></h2>
+<p>The available custom resource can be checked with <strong class="program">pjshowrsc -v2</strong> command.</p>
+<p>[Use example]</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjshowrsc<span class="w"> </span>-v2
+<span class="go">[ CLST: ea-compute ]</span>
+<span class="go">[ RSCUNIT: rscunit_ft01 ]</span>
+<span class="go">CUSTOM_RESOURCE</span>
+<span class="go">RSCNAME                              TOTAL      FREE     ALLOC</span>
+<span class="go">jobenv/linux                     unlimited unlimited         0</span>
+<span class="go">jobenv/mck                       unlimited unlimited         0</span>
+<span class="gp gp-VirtualEnv">(omitted)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In this usage example, you can see that the types linux and mck are set for the custom resource name jobenv.</p>
+</div>
+</div></blockquote>
+</section>
+<section id="assign-method">
+<h2><span class="section-number">5.15.3. </span>Assign method<a class="headerlink" href="#assign-method" title="Link to this heading">¶</a></h2>
+<p>To assign custom resource, use  <strong class="program">pjsub</strong> command’s  <code class="docutils literal notranslate"><span class="pre">-L</span></code> option.</p>
+<p>[Option style]</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{-L | --rsc-list} CustomResourceName[=Value]
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CustomResourceName</p></td>
+<td><p>Custom resource name</p></td>
+</tr>
+<tr class="row-odd"><td><p>Value</p></td>
+<td><div class="line-block">
+<div class="line">The number of custom resources to be assigned, or the type of custom resource to be assigned.</div>
+<div class="line">“=Value” can be omitted.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.15. Use of custom resource</a><ul>
+<li><a class="reference internal" href="#function-overview">5.15.1. Function overview</a></li>
+<li><a class="reference internal" href="#how-to-check">5.15.2. How to check</a></li>
+<li><a class="reference internal" href="#assign-method">5.15.3. Assign method</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="NotesOnJobOperationCommands.html"
+                          title="previous chapter"><span class="section-number">5.14. </span>Notes on job operations</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CheckingAbnormalEndOfJob.html"
+                          title="next chapter"><span class="section-number">5.16. </span>Checking when a job ends abnormally</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CheckingAbnormalEndOfJob.html" title="5.16. Checking when a job ends abnormally"
+             >next</a></li>
+        <li class="right" >
+          <a href="NotesOnJobOperationCommands.html" title="5.14. Notes on job operations"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.15. </span>Use of custom resource</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,240 @@
+.. highlight:: none
+
+.. _StdoutStderroutStdin:
+
+標準出力／標準エラー出力／標準入力
+======================================
+
+MPIプログラムの標準出力／標準エラー出力／標準入力の指定方法を示します。
+
+.. _StdSpecMethod:
+
+標準出力／標準エラー出力／標準入力の指定方法
+----------------------------------------------
+
+:program:`mpiexec`\ では、標準出力／標準エラー出力をファイルに出力するオプション、ファイルから標準入力を読み込むオプションを用意しています。
+
+- | 各並列プロセスと\ :program:`mpiexec`\ コマンドの標準出力／標準エラー出力は、通常はジョブ運用ソフトウェアによって生成される\ :program:`mpiexec`\ コマンド実行結果ファイルに出力されます。
+  | デフォルト（出力オプション指定なし）の場合、カレントディレクトリに以下の命名規則で標準出力／標準エラー出力ファイルが生成されます。
+  | 
+  | [標準出力ファイルの命名規則]
+  |   ./output.\ *jobid*\ /\ *1000_ranks*\ /\ *mpiexec*\ /stdout.\ *mpiexec*\ .\ *rank*
+  | [標準エラー出力ファイルの命名規則]
+  |   ./output.\ *jobid*\ /\ *1000_ranks*\ /\ *mpiexec*\ /stderr.\ *mpiexec*\ .\ *rank*
+  | 
+  | 「./output.\ *jobid*\」配下には1000ランク毎にディレクトリが分割生成されます。1000ランク毎のディレクトリ配下には\ :program:`mpiexec`\ コマンドを実行した回数分のディレクトリが生成されます。
+
+  .. note::
+
+      *jobid* の文字列は、ジョブIDを表したものです。
+
+      *1000_ranks* の文字列は、ランク番号やspawn番号を1000単位で切り捨てた番号を表したものです。
+
+      *mpiexec* の文字列は、ジョブスクリプト内で何回目の :program:`mpiexec`\ コマンドの実行であるかを表したものです。
+
+      *rank* の文字列は、実際の MPI_COMM_WORLD でのランクを表したものです。
+
+  | 例１：ジョブID=9999、mpiexec実行1回目、ランク番号100の場合の標準出力ファイルパス
+  |   ./output.9999/0/1/stdout.1.100
+  | 例２：ジョブID=9999、mpiexec実行2回目、ランク番号1500の場合の標準出力ファイルパス
+  |   ./output.9999/1000/2/stdout.2.1500
+
+  ::
+
+   mpiexec ./a.out
+
+  .. code-block:: console
+
+   [_LNlogin]$ ls -F output.9999/
+   0/  1000/  2000/  3000/  ...
+   [_LNlogin]$ ls -F output.jobid/0/
+   1/  2/
+   [_LNlogin]$ ls -F output.jobid/0/1/
+   stderr.1.0 stderr.1.1 ... stderr.1.999
+   stdout.1.0 stdout.1.1 ... stdout.1.999
+   
+- :program:`mpiexec`\ コマンドのオプション(``-std-proc/-of-proc``\ 、``-stdout-proc/-ofout-proc``\ 、``-stderr-proc/-oferr-proc``\ )を指定して標準出力／標準エラー出力の出力先を変更した場合は、オプションを指定した\ :program:`mpiexec`\ コマンドで実行する実行可能ファイルに対してのみ有効です。
+- :program:`mpiexec`\ コマンドのリダイレクション指定による標準入力は、各並列プロセスの標準入力として使用することはできません。
+
+ .. Attention::
+
+    - | \ :program:`mpiexec`\ コマンドの出力オプション\ ``-of/-std``\ 、\ ``-ofout/-stdout``\ 、\ ``-oferr/-stderr``\は指定できません。
+      | 指定した場合は\ :program:`mpiexec`\ コマンド実行時に以下のエラーが出力され、デフォルト設定が適用されます（ジョブ受付は可能）。
+      | [WARN] PLE 0605 plexec ignore option -ofout/-stdout(stdout outputs to <file_path>).
+    - | \ :program:`mpiexec`\ コマンドの出力オプション\ ``-std-proc/-of-proc``\ 、``-stdout-proc/-ofout-proc``\ 、``-stderr-proc/-oferr-proc``\は指定可能です。指定した場合の動作は後述の1～3を参照ください。
+
+
+1. 各並列プロセスの標準出力を別ファイルに出力します。
+   
+   各並列プロセスからの標準出力は、\ ``-stdout-proc``\ に指定したファイル名に、mpiexec実行回数とランク番号が付加された名前で出力されます。
+
+  .. code-block:: console
+  
+    $ mpiexec -stdout-proc file_stdout -n 8 ./a.out
+
+  .. figure:: ./img/InputOutputRedirection_04.png
+     :align: center
+
+  .. Attention::
+
+     上記例の場合は標準エラー出力オプションが省略されているため、標準エラー出力についてはデフォルトのファイルパスで出力されます。
+
+2. 各並列プロセスの標準エラー出力を別ファイルに出力します。
+   
+   各並列プロセスからの標準エラー出力は、\ ``-stderr-proc``\ に指定したファイル名に、mpiexec実行回数とランク番号が付加された名前で出力されます。
+
+  .. code-block:: console
+  
+    $ mpiexec -stderr-proc file_stderr -n 8 ./a.out
+
+  .. figure:: ./img/InputOutputRedirection_05.png
+     :align: center
+
+  .. Attention::
+
+     上記例の場合は標準出力オプションが省略されているため、標準出力についてはデフォルトのファイルパスで出力されます。
+
+
+3. 各並列プロセスの標準出力および標準エラー出力を別ファイルに出力します。
+   
+   各並列プロセスからの標準出力／標準エラー出力は、\ ``-std-proc``\ に指定したファイル名に、mpiexec実行回数とランク番号が付加された名前で出力されます。
+
+  .. code-block:: console
+  
+    $ mpiexec -std-proc file_outfile -n 8 ./a.out
+
+  .. figure:: ./img/InputOutputRedirection_06.png
+     :align: center
+
+
+4. 並列プロセスの標準入力を指定ファイルから入力します。
+   
+   標準入力を、\ ``file_stdin``\ から入力する例を示します。
+
+  .. code-block:: console
+  
+    $ mpiexec -stdin file_stdin -n 8 ./a.out
+
+  .. figure:: ./img/InputOutputRedirection_07.png
+     :align: center
+
+
+オプション指定による出力表
+-----------------------------
+
+:program:`mpiexec`\ コマンドの出力オプション指定の有無による、並列プロセスの標準出力と標準エラー出力の出力先の一覧を下表に示します。
+
+
+.. list-table::
+   :header-rows: 1
+   :widths: 5 3 5 5
+
+   * - mpiexecオプション指定
+     - 利用可否
+     - 標準出力
+     - 標準エラー出力
+
+   * - オプション指定なし
+     - \-
+     - \ :ref:`StdSpecMethod`\ の"標準出力ファイルの命名規則"を参照(\*1)
+     - \ :ref:`StdSpecMethod`\ の"標準エラー出力ファイルの命名規則"を参照(\*2)
+
+   * - \-of/-std
+     - 不可
+     - \*1と同様の出力(指定は無効)
+     - \*2と同様の出力(指定は無効)
+
+   * - \-ofout/-stdout
+     - 不可
+     - \*1と同様の出力(指定は無効)
+     - \*2と同様の出力(指定は無効)
+
+   * - \-oferr/-stderr
+     - 不可
+     - \*1と同様の出力(指定は無効)
+     - \*2と同様の出力(指定は無効)
+
+   * - \-of-proc/-std-proc
+     - 可能
+     - *指定したファイル名.mpiexec.rank*
+     - *指定したファイル名.mpiexec.rank*
+
+   * - \-ofout-proc/-stdout-proc
+     - 可能
+     - *指定したファイル名.mpiexec.rank*
+     - \*2と同様の出力
+
+   * - \-oferr-proc/-stderr-proc
+     - 可能
+     - \*1と同様の出力
+     - *指定したファイル名.mpiexec.rank*
+
+.. Attention::
+
+    :program:`mpiexec`\ コマンドのオプション設定については :program:`pjacl`\ コマンドで参照可能です。
+
+    ユーザ側で :program:`mpiexec`\ コマンドのオプション設定を変更することはできません。
+
+.. _StdoutStderroutForLargeJobs:
+
+大規模ジョブ実行時の標準出力／標準エラー出力の指定について
+----------------------------------------------------------------
+
+「富岳」で、1万プロセス以上の大規模ジョブを実行する際は、大量のプロセスによる単一ファイルや同一ディレクトリへのアクセスの集中を防ぐための考慮が必要です。
+
+| 出力するランクを利用者プログラムが限定している場合でも、エラーが発生した場合は全ランクからメッセージが出力される場合があります。このためランクごとに標準出力／標準エラー出力のファイルを分けるように設定してください。
+| ※デフォルトは1000ランクごと、mpiexec実行回数ごとにディレクトリが分割されます。
+
+デフォルトでは標準出力/標準エラー出力への出力がない場合はファイルを作成しません。
+空ファイルを作成するか作成しないかは環境変数\ ``PLE_MPI_STD_EMPTYFILE={on|off}``\ により設定することができます(デフォルトはoff)。
+
+また、メタ文字を利用して出力先のディレクトリを分けることができます。ディレクトリを分けて、１ディレクトリ内のファイル数が多くならないように調整してください。
+``PLE_MPI_STD_EMPTYFILE=off``\ (デフォルト)でもディレクトリは作成されます。
+
+
+| ここでは以下の条件に従ってファイル出力する例を示します。
+| - ジョブIDごとのディレクトリを生成
+| - mpiexec実行回数ごとのディレクトリを生成
+| - 500ランク単位ごとのディレクトリを生成
+
+::
+
+   mpiexec -stdout-proc ./output.%j/%m/%/500r/stdout -stderr-proc ./output.%j/%m/%/500r/stderr ./a.out
+
+.. code-block:: console
+
+   [_LNlogin]$ ls -F output.jobid/
+   1/  2/
+   [_LNlogin]$ ls -F output.jobid/1/
+   0/  500/  1000/  1500/  ...
+   [_LNlogin]$ ls -F output.jobid/1/0/
+   stderr.1.0 stderr.1.1 ... stderr.1.499
+   stdout.1.0 stdout.1.1 ... stdout.1.499
+
+
+ここで使用したメタ文字の意味は次の通りです。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 2 8
+
+   * - メタ文字
+     - 意味
+
+   * - %j
+     - ジョブID
+
+   * - %m
+     - mpiexec実行回数
+
+   * - %r
+     - | ランク番号とspawn番号
+       | 静的プロセスの場合:ランク番号
+       | 動的プロセスの場合:ランク番号@spawn番号
+       | 出力先がmpiexecコマンド単位の場合は、空文
+
+   * - %/Nr
+     - | ランク番号やspawn番号を数値N単位で切り捨てます
+       | 上記の例ではN=500として使用しています
+
+mpiexecコマンドの出力先ファイル名で使用できるメタ文字の詳細については、マニュアル「ジョブ運用ソフトウェア エンドユーザ向けガイド」の「2.3.6.9 mpiexecコマンドの標準出力/標準エラー出力 [FX]」を参照ください。

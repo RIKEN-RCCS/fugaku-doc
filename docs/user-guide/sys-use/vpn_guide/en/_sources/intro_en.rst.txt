@@ -1,0 +1,338 @@
+Overview
+================================================================================
+This is a service that allows users to directly access compute nodes through a VPN connection between 
+Supercomputer Fugaku and the user.
+
+Client Certification Installation
+================================================================================
+
+Client certificate is used when accessing via VPN.
+Please install it on the OS you want to access via VPN.
+
+This indicates how to install the required client certificate to access to the Supercomputer Fugaku via VPN.
+Please prepare the followings before installing the client certificate.
+
+* Client certificate :”user account name .p12” file
+* Client certificate pathphrase
+
+**Client certificate**
+Once the account issue is compleded, the client certificate is sent via e-mail to the e-mail
+address you entered when applying. Please save the attached “local account name.p12” file to the device
+(e.g. PC) which installs the client certificate. To “local account name.p12” file, the client private key, the
+client certificate (a public key) and the route certificate of the client certificate issuing authority.
+
+**Client certificate pathphrase**
+The passphrase is sent in written form or PDF file separately from the client certificate. 
+It will be required when installing the client certificate. Please store at the safe place
+
+This section describes the procedure for registering a client certificate on your PC.
+
+
+Installing the certificate (Windows)
+--------------------------------------------------------------------------------
+
+1. Save a client certificate (“.p12” file) to any location on your device, and then double-click on it.
+
+.. figure:: FIGURES/211.png
+   :width: 100px
+
+2. Select “ **Current User** ” on the Certificate Import Wizard screen, and then [ **Next** ].
+
+.. figure:: FIGURES/212.png
+   :width: 400px
+
+3. Click on [ **Next** ] on the File Specification screen.
+
+.. figure:: FIGURES/213.png
+   :width: 400px
+
+4. Enter the **Client certificate pathphrase**  and click on [ **Next** ].
+
+.. figure:: FIGURES/214.png
+   :width: 400px
+
+5. Select “ **Automatically select the certificate store based on the type of certificate** ” and click on [ **Next** ].
+
+.. figure:: FIGURES/215.png
+   :width: 400px
+
+6. Click on [ **Finish** ].
+
+.. figure:: FIGURES/216.png
+   :width: 400px
+
+7. If a security warning dialog is displayed, confirm that the Issuer (the following red-letter) is“ **RIKEN R-CCS** ” and click on [ **Yes** ].
+
+.. figure:: FIGURES/217.png
+   :width: 400px
+
+8. Click on [ **OK** ].
+
+.. figure:: FIGURES/218.png
+   :width: 200px
+
+That's the end of Client certificate installation procedure.
+
+
+Installing the certificate (MacOS)
+--------------------------------------------------------------------------------
+
+1. Save a client certificate (“.p12” file) to any location on your device, and then double-click on it.
+
+.. figure:: FIGURES/221.png
+   :width: 100px
+
+2. If a dialog about certificate addition is displayed, confirm that Keychain is “ **login** ” and click on [ **Add** ].
+
+.. figure:: FIGURES/222.png
+   :width: 400px
+
+3. Enter  **Client certificate pathphrase**  into a password dialog and click on [ **OK** ].
+
+.. figure:: FIGURES/223.png
+   :width: 400px
+
+4. Select “ **login** ” in Keychain and “ **Certificates** ” in Category at the left pane, and then doubleclick on “ **RIKEN R-CCS** ” at the right pane.
+
+.. figure:: FIGURES/224.png
+   :width: 400px
+
+5. Select “ **Always Trust** ” in “ When using this certificate ”, and close this window.
+
+.. figure:: FIGURES/225.png
+   :width: 400px
+
+6. If a password dialog is displayed, enter the password of your device and click on [ **Update Settings** ]. After update, please confirm that the blue plus icon is displayed at the bottom left of“ **RIKEN R-CCS** ”
+
+.. figure:: FIGURES/226.png
+   :width: 1000px
+
+7. Click on disclosure triangle at the left your client certificate and double-click on **private key (key mark)** .
+
+.. figure:: FIGURES/227.png
+   :width: 400px
+
+8. Change “Name” to **the same name of your client certificate** , click on [ **Save Changes** ] and closethis window.
+
+.. figure:: FIGURES/228.png
+   :width: 400px
+
+That's the end of installation procedure.
+
+
+VPN Connection Setting Procedure
+================================================================================
+
+VPN Connection Setting Procedure (WindowsOS)
+--------------------------------------------------------------------------------
+
+Download the installer for the VPN connection tool “FortiClient”.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Access `https://www.fortinet.com/support/product-downloads <https://www.fortinet.com/support/product-downloads>`_ with a web browser.
+
+　　
+2. From 「 **FortiClient VPN** 」select your OS type ( **Windows** ) and click DOWNLOAD.
+
+　　　※ Download **FortiClient VPN**, not 「 FortiClient 」.
+
+.. figure:: FIGURES/3111.png
+   :width: 600px
+   
+　That's the end of download procedure.
+
+VPN Tool (FortiClient) Installation Procedure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Save a VPN Tool“ **FortiClient VPN** ”installer, to any location on your device, and then double-click on it.
+
+.. figure:: FIGURES/3121.png
+   :width: 100px
+   
+2. When the FortiClient Setup Wizard screen opens, check the box for “ **Yes, I have read and accept the License Agreement** ”, and then click on [ **Next** ].
+
+.. figure:: FIGURES/3122.png
+   :width: 400px
+   
+3. Click on [ **Next** ] on the Destination Folder screen.
+
+.. figure:: FIGURES/3123.png
+   :width: 400px
+   
+4. Click on [ **Install** ].
+
+.. figure:: FIGURES/3124.png
+   :width: 400px
+   
+5. Click on [ **Finish** ].
+
+.. figure:: FIGURES/3125.png
+   :width: 400px
+
+That's the end of installation procedure.
+
+VPN New Setting Procedure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Startup ”FortiClient” from “All Programs”
+
+　
+2. Click on [ **Configure VPN** ].
+
+.. figure:: FIGURES/3132.png
+   :width: 400px
+   
+3. Click on [ **SSL-VPN** ] tab in “New VPN Connection”. Then, fill “Connection Name”, ”Description” and Enter [ **vpn.fugaku.r-ccs.riken.jp** ] in the "Remote Gateway" field.
+
+.. figure:: FIGURES/3133.png
+   :width: 600px
+
+4. Next, select the installed client certificate from the pull-down menu in the "Client Certificate" field. After selecting, select [ **Disable** ] in the “Authentication” and click [ **Save** ].
+
+.. figure:: FIGURES/3134.png
+   :width: 600px
+
+That's the end of VPN new setting procedure. 
+
+
+VPN Connection Procedure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Click the "VPN Name" pull-down, select the connection destination.
+
+  ( Make sure that the client certificate of Supercomputer Fugaku is selected.)
+
+.. figure:: FIGURES/3141.png
+   :width: 400px
+   
+2. Click [ **Connect** ].
+   
+3. When the screen below is displayed, the VPN connection is successful.
+
+.. figure:: FIGURES/3143.png
+   :width: 400px
+   
+VPN Connection Setting Procedure (MacOS)
+--------------------------------------------------------------------------------
+
+Download the installer for the VPN connection tool “FortiClient”.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Access `https://www.fortinet.com/support/product-downloads <https://www.fortinet.com/support/product-downloads>`_ with a web browser.
+
+　
+2. From 「 **FortiClient VPN** 」select your OS type ( **MacOS** ) and click DOWNLOAD.
+
+　　　※ Download **FortiClient VPN**, not 「 FortiClient 」.
+
+.. figure:: FIGURES/3211.png
+   :width: 600px
+
+That's the end of download procedure.
+
+VPN Tool (FortiClient) Installation Procedure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1. Save a VPN Tool“ **FortiClient VPN** ”installer, to any location on your device, and then double-click on it.
+
+.. figure:: FIGURES/3221.png
+   :width: 100px
+
+2. If a warning dialog is displayed, click on [ **Open** ].
+
+.. figure:: FIGURES/3222.png
+   :width: 400px
+   
+3. Click on [ **Install** ].
+
+.. figure:: FIGURES/3223.png
+   :width: 400px
+   
+4. Click on [ **Continue** ] on the Introduction screen.
+
+.. figure:: FIGURES/3224.png
+   :width: 400px
+   
+5. Click on [ **Continue** ] on the License screen.
+
+.. figure:: FIGURES/3225.png
+   :width: 400px
+   
+6. Click on [ **Agree** ].
+
+.. figure:: FIGURES/3226.png
+   :width: 400px
+   
+7. Click on [ **Install** ].
+
+.. figure:: FIGURES/3227.png
+   :width: 400px
+   
+8. If a password dialog is displayed, enter the password of your device and click on [ **Install Software** ].
+
+.. figure:: FIGURES/3228.png
+   :width: 400px
+   
+9. Click on [ **Close** ].
+
+.. figure:: FIGURES/3229.png
+   :width: 400px
+   
+That's the end of installation procedure.
+
+
+VPN New Setting Procedure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Startup ” **FortiClient** ” by double click on ”FortiClient” from “Application”.
+
+2. Click on [ **Configure VPN** ].
+
+.. figure:: FIGURES/3232.png
+   :width: 400px
+   
+3. Click on [ **SSL-VPN** ] tab in “New VPN Connection”. Then, fill “Connection Name”, ”Description”and Enter [ **vpn.fugaku.r-ccs.riken.jp** ] in the "Remote Gateway" field.
+
+.. figure:: FIGURES/3233.png
+   :width: 600px
+
+4. Next, select the installed client certificate from the pull-down menu in the "Client Certificate" field. After selecting, select [ **Disable** ] in the “ **Authentication** ” and click [ **Save** ].
+
+.. figure:: FIGURES/3234.png
+   :width: 600px
+
+That's the end of VPN new setting procedure. 
+
+VPN Connection Procedure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1.Startup ”**FortiClient**” by double click on ”FortiClient” from “Application”.
+
+2.Click the "VPN Name" pull-down, select the connection destination.
+
+  ( Make sure that the client certificate of Supercomputer Fugaku is selected.)
+
+.. figure:: FIGURES/3242.png
+   :width: 400px
+   
+3. When the screen below is displayed, the VPN connection is successful.
+
+.. figure:: FIGURES/3243.png
+   :width: 400px
+
+
+
+Hostname for the compute nodes and Pre/Post nodes
+================================================================================
+When the VPN connection is used, users can access compute nodes and prepost nodes via following hostname.
+
+* Compute node
+
+FQDN is the host name followed by **cn.fugaku.r-ccs.riken.jp**
+
+Example) d22-6008c.cn.fugaku.r-ccs.riken.jp
+
+* PrePost node
+
+FQDN is the host name followed by **pp.fugaku.r-ccs.riken.jp**
+
+Example) pps06.pp.fugaku.r-ccs.riken.jp

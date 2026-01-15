@@ -1,0 +1,12 @@
+Overview
+========
+
+To execute MPI program on computing lode, use  \ :program:`mpiexec`\  command.
+
+| \ :program:`mpiexec`\  is required to be described in a job script.
+| Submitting a job that executes MPI program is proceeded as specifying the following parameter to  \ ``--mpi``\  option by  \ :program:`pjsub`\  command.
+
+- Process form
+- The number of process to create
+- Rank assign rule of process to create
+

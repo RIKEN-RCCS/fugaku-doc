@@ -1,0 +1,203 @@
+Normal job
+==========
+
+| It is a general batch job that does not have a special processing form.
+| Since the job is executed when the conditions (computation resources, etc.) necessary for normal job execution are prepared, the execution order is not guaranteed.
+
+.. figure:: ./img/NormalJob_01.png
+
+
+Submitting a job
+-----------------
+
+To submit a job, specify a job script to :program:`pjsub` command and execute.
+
+1. Submit a job with :program:`pjsub` command.
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjsub ./sample.sh                  # Submit a job
+    [INFO] PJM 0000 pjsub Job 9714 submitted.
+
+  .. note::
+
+   Job ID will be shown on the screen once submit a job with :program:`pjsub` command.
+   Job ID is used to identify a job for displaying job status(:program:`pjstat`)  and job deleting (:program:`pjdel`)  and so on.
+
+The following message is displayed when you execute the :program:`pjsub` command:.
+
+Example. If you do not specify an project group ID::
+
+   [_LNlogin]$ pjsub sample.sh
+   [ERR.] PJM 0071 pjsub Group not authorized to submit a job: group(59999)
+
+..
+
+   If ``group(59999)`` appears, specify the group ID for the project.
+   The :ref:`group <group>` must be specified when the job is executed.
+
+Example. If the executable directory is the home directory::
+
+   [_LNlogin]$ pjsub ./sample.sh
+   The current directory is not a data area. (directory: /vol000N/groupname/username)
+   Specify --no-check-directory option if you want to submit jobs outside the data area.
+
+..
+
+   Submit the job in the data area. Use the ``--no-check-directory`` option if you need to use a home directory.
+   See :ref:`SelectAvailableVolumes`.
+
+Example. No Spack volume specification::
+
+   [_LNlogin]$ pjsub PWscf.sh
+   If you use Spack, set PJM_LLIO_GFSCACHE to /vol0004.(ex. pjsub -x PJM_LLIO_GFSCACHE=/vol0004)
+   Specify --no-check-gfscache option if you do not want to use Spack and want to submit jobs.
+
+..
+
+   Add ``-x PJM_LLIO_GFSCACHE=/vol0004`` to use Spack.
+   See :ref:`SelectAvailableVolumes`.
+
+
+Example. If the number of nodes requested by the submitted job exceeds the number of nodes that can be specified for the Retention state transition of the compute core::
+
+   [_LNlogin]$ pjsub sample.sh
+   warn: specification of core retention is invalid because job size is too large.
+
+..
+
+   This message is displayed when the number of nodes requested by the \``-L node`` \option of the submitted job exceeds the number of nodes that can be specified as Retention for the compute core.
+
+   If it is possible to reduce the number of requested nodes in a job by prioritizing the power savings setting from the Retention state transition of the compute core, see :ref:`Powermodeset`.
+   Set the number of nodes requested for the job to be less than or equal to the number of nodes that can be specified as Retention in the calculation core, and then submit the job.
+   
+   If you want to run the job without changing the number of request nodes, you can either ignore this message or change the setting \``-L retention _ state = 0``
+   Submit the specified job.
+
+
+Refer to job execution result
+------------------------------
+
+| When the job is completed, the job execution result is output to a file in the current directory when the job is submitted.
+| When you use :program:`mpiexec` command, a standard output file and a standard error output file are created for each :program:`mpiexec` command.
+
+The output format of the job execution result file name is as follows.
+
+.. list-table:: 
+   :widths: 3 7
+   :header-rows: 1
+
+   * - Style
+     - Description
+
+   * - Job name.Job ID.out
+     - Data written to the standard output by the job.
+
+   * - Job name.Job ID.err
+     - Data written by the job to the standard error output.
+
+   * - Job name.Job ID.stats
+     - This file contains job statistical information.
+       
+       This will be outputted if ``-s``, ``-S`` option is specified when submitting job.
+
+
+.. attention::
+
+  - Job name is job script file name which specified with :program:`pjsub` command.
+  - If the job name starts with a single-byte number, the character "J" is added to the beginning of the output file name.
+  - In the output file name, the job name part (including the letter "J" added at the beginning) is limited to 63 characters.
+  - If a job is submitted from the standard input instead of a job script, the job name will be "STDIN".
+
+
+Example) Job execution result file name
+
+.. code-block:: console
+
+  [_LNlogin]$ pjsub -s ./sample.sh        # Submit a job
+  [INFO] PJM 0000 pjsub Job 9714 submitted.
+
+  [_LNlogin]$ ls -l                       # Confirm Job output result
+  sample.sh.9714.err                      # The result file of the job standard error output
+  sample.sh.9714.out                      # The result file of the job standard output
+  sample.sh.9714.stats                    # The output file of the job analysis information
+
+
+The output format of :program:`mpiexec` command standard output file / standard error output file is as follows.
+
+.. list-table:: 
+   :widths: 35 65
+   :header-rows: 1
+
+   * - Format
+     - Description
+
+   * - Job name.Job ID.out.\ *mpiexec*\ .\ *rank*
+     - The data written to the standard output by the :program:`mpiexec` command. *mpiexec* is a number indicating how many times the :program:`mpiexec` command is executed in the job script.
+       *rank* is the rank number.
+
+   * - Job name.Job ID.err.\ *mpiexec*\ .\ *rank*
+     - The data written to the standard error output by the :program:`mpiexec` command. *mpiexec* is a number indicating how many times the :program:`mpiexec` command is executed in the job script.
+       *rank* is the rank number.
+
+The default is not to create a file if there is no output to standard output/standard error output.
+
+Example）Job execution result file name
+
+.. code-block:: console
+
+  [_LNlogin]$ pjsub -s ./job_mpi.sh       # Job submission
+  [INFO] PJM 0000 pjsub Job 717011 submitted.
+
+  [_LNlogin]$ ls -l                       # Check the output result of the job
+  -rw-r--r-- 1 username group     0 Jul 10 08:45 job_mpi.sh.717011.err
+  -rw-r--r-- 1 username group  2635 Jul 10 08:45 job_mpi.sh.717011.out
+  -rw-r--r-- 1 username group    70 Jul 10 08:45 job_mpi.sh.717011.out.1.0
+  -rw-r--r-- 1 username group 11193 Jul 10 08:45 job_mpi.sh.717011.stats
+
+When using the :program:`mpiexec` command, it is recommended to specify the output file by using the option of :program:`mpiexec` command as shown in :ref:`StdoutStderroutStdin`.
+
+.. note::
+
+   During continuous use, the disk area resources (i-node, etc.) may be exhausted by increasing in the number of files.
+   It is recommended to reduce the number of files as appropriate by collecting output files each time with tar etc. or deleting them if unnecessary.
+
+.. _JobExecutionStatisticalInformation:
+
+Statistical information
+------------------------
+
+| If \ ``-s``\  or \ ``-S``\  option is specified when a job is submitted, job statistical information can be obtained in a file.
+| See below for details on job statistics.
+
+- "Job Operation Software End-user's Guide"
+- "Job Operation Software Command Reference" - "3.3.2 pjstatsinfo"
+- :command:`man`\ manual ``pjstatsinfo(7)``
+
+[Specification example when submitting a job]
+
+.. code-block:: console
+
+  [_LNlogin]$ pjsub -s ./sample.sh    # Specify -s or -S when submitting a job
+
+[Specification example of by a job script]
+
+.. code-block:: bash
+
+   #!/bin/bash
+   #PJM -L "node=1" 
+   #PJM -L "rscgrp=small"
+   #PJM -L "elapse=60:00"
+   #PJM -g groupname 
+   #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+   #PJM -S                # Direction of output statistic information file (-s or -S)
+   
+   ./a.out
+
+[The detail of statistical information]
+
+.. code-block:: console
+
+  [_LNlogin]$ man pjstatsinfo
+
+

@@ -1,0 +1,321 @@
+Checking when a job ends abnormally
+===================================
+
+
+Job manager exit code
+----------------------
+
+If the submitted job ends abnormally, the cause can be identified by referring to the job manager's exit code (PJM CODE).
+
+To output the job manager exit code, specify  \ ``-s``\  or  \ ``-S``\  option when executing  \ :program:`pjsub`\.
+
+Example of job execution is as following.
+
+.. code-block:: console
+
+  [_LNlogin]$ pjsub  -s  ./sample.sh
+
+
+When the job ends, job statistics are output with the following file name:
+
+.. list-table:: 
+   :widths: 5 6
+   :header-rows: 1
+
+   * - File name
+     - Description
+
+   * - Job name.Job ID.stats
+     - This file contains job statistical information.
+
+
+The PJM code list is as follows.
+
+.. _JobExecutionJobManagerEndCodeTable:
+
+.. csv-table:: 
+   :header-rows: 1
+   :widths: 2, 8
+
+   PJM CODE, Meaning
+   0, Successful job completion
+   1, CANCEL by  \ :program:`pjdel`\  command that the user controled.
+   2, REJECT based on job acceptance judgment.  \ :program:`pjsub`\ command will be error
+   3, Execution rejected by the job manager exit function. The job is not running
+   4, HOLD by  \ :program:`pjhold`\  command that the user controled.
+   6, CANCEL by step job dependency expression. The job is not running
+   7, CANCEL by deadline forced specification
+   8, CANCEL by job manager exit function. The job is not running
+   9, EXIT during job reconstruction because re-execution is not allowed
+   11, Job execution timeout due to violation of elapsed time limit
+   12, Forced termination due to excessive memory usage
+   13, Forced termination due to excessive disk usage
+   14, Waiting for job status transition of bulk job (currently not output)
+   16, Termination due to inaccessibility of current directory or standard input / standard output / standard error output file
+   18, A job that has been executed beyond the minimum executable time is terminated by executing a subsequent job or starting a deadline schedule. If the former is the cause the item REASON will be "ANOTHER JOB STARTED" and the latter will be "DEADLINE SCHEDULE STARTED"
+   20, Node down
+   21, Shell execution failure
+   22, ICC error
+   23, Termination by OOM Killer operation
+   25, HA failure
+   26, Error in prologue and epilogue processing
+   27, Job resource management exit processing error
+   28, Abnormal job execution environment
+   29, The specified job execution environment is invalid
+   30, Suspended due to suspend or resume processing failure
+   100, Job manager internal error
+   120, Job scheduler internal error
+   140, Job resource management internal error
+   160, Tofu library internal error. The job is not running
+   180, Tiered storage internal error
+
+Message output during job execution
+------------------------------------
+
+| An error message may be output during job execution. Output messages are from parallel execution environment (PLE), job management (PJM), MPI, language processing system (Fortran / C / C ++), etc. A manual with explanations is provided for each message.
+| The table below shows the relationship between the messages and the reference manual that describes the message.
+
+
+ .. list-table:: 
+   :widths: 3 3 3 4
+   :header-rows: 1
+
+   * - Error message :superscript:`*`\1
+     - Job output file :superscript:`*`\2
+     - Change of mpiexec output target :superscript:`*`\3
+     - Reference manual
+
+   * - PLE nnnn plexec
+     - Job name.Job ID.err
+     - No
+     - Job Operation Software
+       
+       \- Command Reference
+
+       \- End-user's Guide
+
+   * - PJM nnnn xxxxxx
+     - Job name.Job ID.err
+     - No
+     - Job Operation Software
+
+       \- Command Reference
+       
+       \- End-user's Guide
+
+   * - mpi\::
+     - Job name.Job ID.err
+     - Yes
+     - MPI User's Guide
+
+   * - jwennnn
+     - Job name.Job ID.err
+     - Yes
+     - Development Studio Fortran/C/C++ Runtime Messages
+
+ .. note::
+   | :superscript:`*`\1: Indicates the character string included in the message. Classify messages by this string.
+   | :superscript:`*`\2: Indicates the message output target when there is no specifying of  \ :program:`mpiexec`\  output target change option.
+
+PJM 0079 ERROR REASON list
+-----------------------------
+
+About the error message by operation resource check (GATE CHECK), display the PJM 0079 ERROR REASON list.
+
+When "[ERR.] PJM 0079 pjsub *Arbitrary character string*." is displayed, refer to REASON below.
+
+| Error codes Q03 to Q08 and S09 to S14 are displayed when restrictions are applied during system operation.
+| If restrictions are applied, we will notify you separately on the Fugaku website etc.
+
+.. contents::
+   :local:
+
+When job acceptance
+^^^^^^^^^^^^^^^^^^^^
+
+At the time of job acceptance (when an error occurs in GATE CHECK), job acceptance may be rejected.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 1 3 3 4
+   
+   * - Error code
+     - REASON
+     - Error type
+     - Overview
+
+   * - Q01
+     - group is not active (ACC->QUE)
+     - Group enable check error
+     - Submission group is unabled due to expiration
+
+   * - Q02
+     - user is not active (ACC->QUE)
+     - User enable check error
+     - Submission user is unabled due to expiration
+
+   * - Q03
+     - Node is too few (ACC->QUE)
+     - | Lower limit check error
+       | [Number of node]
+     - The value specified for the number of nodes (-L node) at the time of job submission is smaller than the permitted value.
+
+   * - Q04
+     - Elapse limit is too short (ACC->QUE)
+     - | Lower limit check error
+       | [elapse]
+     - Elapsed time limit at job submission (-L elapse) is smaller than the permitted value.
+
+   * - Q05
+     - Use resource is too few (ACC->QUE)
+     - | Lower limit check error
+       | [Node time product]
+     - The value of the node time product (-L node, -L elapse) at job submission is smaller than the permitted value.
+
+   * - Q06
+     - Node is too many (ACC->QUE)
+     - | Upper limit check error
+       | [Number of node]
+     - The number of nodes at job submission (-L node) has exceeded the permitted value.
+
+   * - Q07
+     - Elapse limit is too long (ACC->QUE)
+     - | Upper limit check error
+       | [elapse]
+     - The elapsed time limit (-L elapse) at the time of job submission exceeds the permitted value.
+
+   * - Q08
+     - Use resource is too many (ACC->QUE)
+     - | Upper limit check error
+       | [Node time product]
+     - The node time product (-L node, -L elapse) at job introduction exceeds the permitted value.
+
+   * - Q09
+     - Computing resources shortage occurred.[group] (ACC->QUE)
+     - | Resource left check error
+       | (Assignment to the group)
+     - The remaining resources of the group are less than the expected resource consumption of the job.
+
+   * - Q10
+     - Computing resources shortage occurred.[rsc-grp] (ACC->QUE)
+     - | Resource left check error
+       | (Assignment to the group in a group)
+     - The remaining resources for the resource group in the group are less than the expected resource consumption of the job.
+
+   * - Q11
+     - Computing resources shortage occurred.[user] (ACC->QUE)
+     - | Resource left check error
+       | (Assignment to the user in a group and a resource group)
+     - The remaining resources for the users in the group and resource group are less than the expected resource consumption of the job.
+
+
+When job execution
+^^^^^^^^^^^^^^^^^^^
+
+Job execution may be rejected during job execution (when an error occurs in GATE CHECK).
+
+.. list-table::
+   :header-rows: 1
+   :widths: 1 3 3 4
+   
+   * - Error code
+     - REASON
+     - Error type
+     - Overview
+
+   * - S01
+     - group is not active (QUE->SIN)
+     - Group enable check error
+     - Submission group is unabled due to expiration
+
+   * - S02
+     - user is not active (QUE->SIN)
+     - User enable check error
+     - Submission user is unabled due to expiration
+
+   * - S03
+     - need more resource [group] (QUE->SIN)
+     - | Resource left check error
+       | (Assignment to the group)
+     - The remaining resources of the group are less than the expected resource consumption of the job.
+
+   * - S04
+     - need more resource [rsc-grp] (QUE->SIN)
+     - | Resource left check error
+       | (Assignment to the group in a group)
+     - The remaining resources for the resource group in the group are less than the expected resource consumption of the job.
+
+   * - S05
+     - need more resource [user] (QUE->SIN)
+     - | Resource left check error
+       | (Assignment to the user in a group and a resource group)
+     - The remaining resources for the users in the group and resource group are less than the expected resource consumption of the job.
+
+   * - S06
+     - requeue, remaining resource shortage [group] (QUE->SIN)
+     - | Resource left check error
+       | (Assignment to the group)
+     - The remaining resources of the group are less than the expected resource consumption of the job. It may be executable depending on the result of the running (submitted) job.
+
+   * - S07
+     - requeue, remaining resource shortage [rsc-grp] (QUE->SIN)
+     - | Resource left check error
+       | (Assignment to the group in a group)
+     - The remaining resources for the resource group in the group are less than the expected resource consumption of the job. It may be executable depending on the result of the running (submitted) job.
+
+   * - S08
+     - requeue, remaining resource shortage [user] (QUE->SIN)
+     - | Resource left check error
+       | (Assignment to the user in a group and a resource group)
+     - The remaining resources for the users in the group and resource group are less than the expected resource consumption of the job. It may be executable depending on the result of the running (submitted) job.
+
+   * - S09
+     - requeue, Node is too few (QUE->SIN)
+     - | Lower limit check error
+       | [Number of node]
+     - The number of nodes of the submitted job (-L node) is smaller than the permitted value.
+
+   * - S10
+     - requeue, Elapse limit is too short (QUE->SIN)
+     - | Lower limit check error
+       | [elapse]
+     - Elapsed time limit (-L elapse) of the submitted job is smaller than the permitted value.
+
+   * - S11
+     - requeue, Use resource is too few (QUE->SIN)
+     - | Lower limit check error
+       | [Node time product]
+     - The node time product (-L node, -L elapse) of the submitted job is smaller than the permitted value.
+
+   * - S12
+     - requeue, Node is too many (QUE->SIN)
+     - | Upper limit check error
+       | [Number of node]
+     - The number of nodes of the submitted job (-L node) exceeds the permitted value.
+
+   * - S13
+     - requeue, Elapse limit is too long (QUE->SIN)
+     - | Upper limit check error
+       | [elapse]
+     - Elapsed time limit (-L elapse) of the submitted job exceeds the permitted value.
+
+   * - S14
+     - requeue, Use resource is too many (QUE->SIN)
+     - | Upper limit check error
+       | [Node time product]
+     - The node time product (-L node, -L elapse) of the submitted job exceeds the permitted value.
+
+   * - S15
+     - Computing resources shortage occurred.(QUE->RNA)
+     - | Resource left check error
+       | (Assignment to the group)
+     - The remaining resources of the group are less than the expected resource consumption of the job. It may be executable depending on the result of the running (submitted) job.
+
+
+CPU clock change (Power capping)
+---------------------------------
+
+When the power consumption of a job exceeds the threshold set in the system, the CPU clock of the node used by the job is forcibly reduced.
+
+Please refer to 'POWER CAPPING DATE' to check if you have received this function. If affected, the time exceeding the threshold is output in 'POWER CAPPING DATE'.
+

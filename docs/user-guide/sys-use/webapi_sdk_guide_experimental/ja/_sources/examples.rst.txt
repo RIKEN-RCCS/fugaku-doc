@@ -1,0 +1,179 @@
+Examples
+==========
+
+These examples shows how to use the Fugaku WebAPI with a valid client.
+
+
+Get status of all machines.
+----------------------------
+
+.. code-block:: python
+
+   response = client.get_machine_status()
+   print(f"status_code:{response.status_code}")
+   print(f"json:{json.dumps(response.json())}")
+
+
+Get specified machine status.
+-----------------------------
+
+Parameter's "machine" is specify the machine name obtained by getting the status of all machines.Normally, specify “computer”.
+
+.. code-block:: python
+
+   machine_name = "computer"
+   response = client.get_specific_machine_status(machine_name)
+   print(f"status_code:{response.status_code}")
+   print(f"json:{json.dumps(response.json())}")
+
+
+Download files.
+---------------
+
+If you want to download large files, use streams.
+
+.. code-block:: python
+
+    client._request_config["stream"] = True
+    response = client.download_filedata(machine_name, full_path)
+    print(f"status_code:{response.status_code}")
+    if response.status_code == 200:
+        local_file = "_download_filedata.out"
+        with open(local_file, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+
+
+Download file list.
+-------------------
+
+.. code-block:: python
+
+   response = client.download_fileList(machine_name, home_dir)
+   print(f"status_code:{response.status_code}")
+   file_list = response.json()['output'].strip().replace("\\n", "\n")
+   print(f"file_list:{file_list}")
+
+
+Upload file.
+------------
+
+This method does not support updating existing files.If you update existing file, use modify_file.
+
+.. code-block:: python
+
+   response = client.upload_file(machine_name, f"{home_dir}/{local_file}", local_file)
+   print(f"status_code:{response.status_code}")
+
+
+Modify file.
+------------
+
+.. code-block:: python
+
+   response = client.modify_file(machine_name, f"{home_dir}/{local_file}", local_file)
+   print(f"status_code:{response.status_code}")
+
+
+Get list of running jobs.
+-------------------------
+
+If you want subjobs, specifyed parameter's jobid.
+
+.. code-block:: python
+
+   response = client.get_job_status(machine_name, limit=-1)
+   print(f"status_code:{response.status_code} json:{response.json()}")
+
+   response = client.get_job_status(machine_name, jobid=jobid)
+   print(f"status_code:{response.status_code} json:{response.json()}")
+
+
+Get detailed job information.
+-----------------------------
+
+.. code-block:: python
+
+   response = client.get_job_detail(machine_name, jobid=jobid)
+   print(f"status_code:{response.status_code} json:{response.json()}")
+
+
+Get list of completed jobs.
+---------------------------
+
+If you want subjobs, specifyed parameter's jobid.
+
+.. code-block:: python
+
+   response = client.get_job_status_saact(machine_name)
+   print(f"status_code:{response.status_code} json:{response.json()}")
+
+   response = client.get_job_status_saact(machine_name, jobid=jobid)
+   print(f"status_code:{response.status_code} json:{response.json()}")
+
+
+Generate job execution script.
+------------------------------
+
+.. code-block:: python
+
+   script = {"APP_DATA":
+                {"ProgramGroupList":
+                  {"ProgramGroup": [
+                    {"ProgramList": {
+                       "Program": [
+                           {"Type": "mpi",
+                            "FileName": "job-script/calc.sh",
+                            "ThreadMode": "parallel",
+                            "Threads": "1"
+                            }
+                       ]
+                   },
+                       "GroupType": "serialgroup"
+                   }
+                  ]
+                 }
+               },
+              "COMMON_DATA": {
+                  "NODE": "1",
+                  "QUEUE": "1rack-A01",
+                  "QOPT": " -L \"rscunit=rscunit_ft01\" "
+              }
+             }
+   response = client.make_Jobscript(
+       machine_name, f"{home_dir}/job-script/st-job.sh", script)
+   print(f"status_code:{response.status_code} json:{response.json()}")
+
+
+Submit a job.
+-------------
+
+.. code-block:: python
+
+   response = client.submit_job(
+       machine_name, f"{home_dir}/job-script/st-job.sh")
+   jobid = None
+   if response.status_code == 200:
+       jobid = response.json()["output"]
+       result = re.match("^\\[INFO\\] PJM \\d+ pjsub Job (\\d+) submitted.", jobid.strip())
+       if result :
+           jobid = result.group(1)
+
+
+Cancel a job.
+-------------
+
+.. code-block:: python
+
+   response = client.cancel_job(machine_name, jobid=jobid)
+   print(f"status_code:{response.status_code} json:{response.json()}")
+
+
+Execute a command.
+------------------
+
+.. code-block:: python
+
+    response = client.exec_command(machine_name, "id")
+    output = response.json()['output'].strip().replace("\\n", "\n")
+    print(f"output:{output}")

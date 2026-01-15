@@ -1,0 +1,332 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>4. Settings For Using The Cache &#8212; Programming Guide (IO part)  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5. Exclusion Control" href="../ExlusionControl/index.html" />
+    <link rel="prev" title="3. Capacity Setting" href="../CapacitySetting/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../ExlusionControl/index.html" title="5. Exclusion Control"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../CapacitySetting/index.html" title="3. Capacity Setting"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Programming Guide (IO part)  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4. </span>Settings For Using The Cache</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="settings-for-using-the-cache">
+<h1><span class="section-number">4. </span>Settings For Using The Cache<a class="headerlink" href="#settings-for-using-the-cache" title="Permalink to this heading">¶</a></h1>
+<section id="what-you-can-do-with-cache-settings">
+<h2><span class="section-number">4.1. </span>What you can do with cache settings<a class="headerlink" href="#what-you-can-do-with-cache-settings" title="Permalink to this heading">¶</a></h2>
+<p>With first-layer storage, you can expect fast access to files by configuring the following cache settings to match job characteristics.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#secondlayerstoragecache"><span class="std std-ref">Configuring a Second-layer Storage Cache Region</span></a></p></li>
+<li><p><a class="reference internal" href="#cacheincomputenode"><span class="std std-ref">Cache in Compute Node</span></a></p></li>
+</ul>
+<p>Some features can be expected to speed up file access by effectively using the cache.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#readahead"><span class="std std-ref">Automatic Readahead Function</span></a></p></li>
+<li><p><a class="reference internal" href="#asyncclose"><span class="std std-ref">Asynchronous Close</span></a></p></li>
+</ul>
+</section>
+<section id="configuring-a-second-layer-storage-cache-region">
+<span id="secondlayerstoragecache"></span><h2><span class="section-number">4.2. </span>Configuring a Second-layer Storage Cache Region<a class="headerlink" href="#configuring-a-second-layer-storage-cache-region" title="Permalink to this heading">¶</a></h2>
+<p>Specify whether to cache files read into the cache area of secondlayer storage.</p>
+<p>If there are multiple loads of files on second-layer storage, you can take advantage of the cache.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 31.6%" />
+<col style="width: 15.8%" />
+<col style="width: 52.6%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option of “pjsub –llio”</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>sio-read-cache={on|off}</p></td>
+<td><p>on or off</p></td>
+<td><p>Specifies whether to cache files read into the case area of second-layer storage.</p>
+<p>on: Proceed cache.</p>
+<p>off: Does not proceed cache</p>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="cache-in-compute-node">
+<span id="cacheincomputenode"></span><h2><span class="section-number">4.3. </span>Cache in Compute Node<a class="headerlink" href="#cache-in-compute-node" title="Permalink to this heading">¶</a></h2>
+<p>If your program uses less memory, you can expect faster access to files by setting it as a cache.</p>
+<p>The following parameters set the cache in the Compute node.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 31.6%" />
+<col style="width: 15.8%" />
+<col style="width: 52.6%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option of “pjsub –llio”</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>cn-cache-size=SIZE</p></td>
+<td><p>0MiB-32768MiB</p></td>
+<td><p>Specifies the size of the first-layer storage cache to acquire within the compute nodes.</p></td>
+</tr>
+<tr class="row-odd"><td><p>cn-cached-write-size=SIZE</p></td>
+<td><p>0MiB - setting value “cn-cache-size”</p></td>
+<td><p>Specifies the size of the first-layer storage cache to acquire within the compute nodes.</p></td>
+</tr>
+<tr class="row-even"><td><p>cn-read-cache={on|off}</p></td>
+<td><p>on or off</p></td>
+<td><p>Specifies the behavior of whether files read from first-layer storage are cached in the in-compute node cache.</p>
+<p>on: Cache.</p>
+<p>off: Do not cache.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<section id="cn-cache-size">
+<h3><span class="section-number">4.3.1. </span>cn-cache-size<a class="headerlink" href="#cn-cache-size" title="Permalink to this heading">¶</a></h3>
+<p>“cn-cache-size” specifies the size of the cache area for first-layer storage.
+The cache effect is achieved by using the area that is not used by the application as the cache area for first-layer storage.</p>
+<figure class="align-default">
+<img alt="../_images/CompNodeCache01_01.png" src="../_images/CompNodeCache01_01.png" />
+</figure>
+</section>
+<section id="cn-cached-write-size">
+<h3><span class="section-number">4.3.2. </span>cn-cached-write-size<a class="headerlink" href="#cn-cached-write-size" title="Permalink to this heading">¶</a></h3>
+<p>Data that does not exceed the “cn-cached-write-size” threshold is written to the compute node cache.</p>
+<figure class="align-default">
+<img alt="../_images/CompNodeCache02_01.png" src="../_images/CompNodeCache02_01.png" />
+</figure>
+<p>Data exceeding the threshold is written without using the compute node cache.</p>
+<figure class="align-default">
+<img alt="../_images/CompNodeCache03_01.png" src="../_images/CompNodeCache03_01.png" />
+</figure>
+</section>
+<section id="cn-read-cache">
+<h3><span class="section-number">4.3.3. </span>cn-read-cache<a class="headerlink" href="#cn-read-cache" title="Permalink to this heading">¶</a></h3>
+<p>When “cn-read-cache” is set to on, file information read from firstlayer storage is cached in the node.</p>
+<figure class="align-default">
+<img alt="../_images/CompNodeCache04_01.png" src="../_images/CompNodeCache04_01.png" />
+</figure>
+<p>If there is not enough cache space available for the amount of data read by the application, the read data will be evicted from the cache and cache misses may occur, resulting in a performance failure.</p>
+</section>
+</section>
+<section id="automatic-readahead-function">
+<span id="readahead"></span><h2><span class="section-number">4.4. </span>Automatic Readahead Function<a class="headerlink" href="#automatic-readahead-function" title="Permalink to this heading">¶</a></h2>
+<p>When a job attempts to read a contiguous area of layered storage, the automatic readahead function can be expected to speed up the read process by automatically reading into the in-compute node cache.</p>
+<p>If you enable the automatic readahead function, you must also configure the <a class="reference internal" href="#cacheincomputenode"><span class="std std-ref">Cache in Compute Node</span></a> appropriately.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 31.6%" />
+<col style="width: 15.8%" />
+<col style="width: 52.6%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option of “pjsub –llio”</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>auto-readahead={on|off}</p></td>
+<td><p>on or off</p></td>
+<td><p>Specifies the behavior of the automatic readahead function.</p>
+<p>on : Enable.</p>
+<p>off : Disable.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="asynchronous-close">
+<span id="asyncclose"></span><h2><span class="section-number">4.5. </span>Asynchronous Close<a class="headerlink" href="#asynchronous-close" title="Permalink to this heading">¶</a></h2>
+<p>You can reduce the elapsed time of a job by enabling asynchronous close.
+If you need synchronization, use fsync(2).</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 31.6%" />
+<col style="width: 15.8%" />
+<col style="width: 52.6%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option of “pjsub –llio”</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>async-close={on|off}</p></td>
+<td><p>on or off</p></td>
+<td><p>Specifies whether file closures on first-layer and second-layer storage are closed asynchronously.</p>
+<p>on: Asynchronous close (write completion is not guaranteed when the file is closed)</p>
+<p>off: Synchronous close (write completion is guaranteed when the file is closed)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<figure class="align-default">
+<img alt="../_images/AsynchronousCloseAndSynchronousClose_01.png" src="../_images/AsynchronousCloseAndSynchronousClose_01.png" />
+</figure>
+</section>
+<section id="unwritten-file-list">
+<h2><span class="section-number">4.6. </span>Unwritten File List<a class="headerlink" href="#unwritten-file-list" title="Permalink to this heading">¶</a></h2>
+<p>At the end of the job, you can specify where to output information for files that have not yet been exported to second-layer storage.
+If not specified, it is output to the standard error output.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 47.4%" />
+<col style="width: 52.6%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option of “pjsub –llio”</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>uncompleted-fileinfo-path=path</p></td>
+<td><p>Specify the output destination for file information that has not been written to the second-layer storage.</p></td>
+</tr>
+</tbody>
+</table>
+<p>For more information about the unwritten file list , see:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/manuals/fefs/j2ul-2555-01enz0.pdf">LLIO User’s Guide</a>““2.6 Unwritten File List Acquisition Function”</p></li>
+<li><p><a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/LayeredStorageAndLLIO/TheSecondLayerStrage.html#asynccloseandsyncclose">Users Guide - Use and job execution -</a></p></li>
+</ul>
+</section>
+<section id="llio-performance-information">
+<h2><span class="section-number">4.7. </span>LLIO Performance Information<a class="headerlink" href="#llio-performance-information" title="Permalink to this heading">¶</a></h2>
+<p>The output setting method of LLIO performance information is described below.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 47.4%" />
+<col style="width: 52.6%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option of “pjsub –llio”</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>perf</p></td>
+<td><p>When this option is specified, LLIO performance information is output.</p></td>
+</tr>
+<tr class="row-odd"><td><p>perf-path=PATH</p></td>
+<td><p>You can set the output path of LLIO performance information.</p></td>
+</tr>
+</tbody>
+</table>
+<p>For more information about LLIO performance information, see、<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/manuals/fefs/j2ul-2555-01enz0.pdf">LLIO User’s Guide</a>“2.7.2 LLIO Performance Information”.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">4. Settings For Using The Cache</a><ul>
+<li><a class="reference internal" href="#what-you-can-do-with-cache-settings">4.1. What you can do with cache settings</a></li>
+<li><a class="reference internal" href="#configuring-a-second-layer-storage-cache-region">4.2. Configuring a Second-layer Storage Cache Region</a></li>
+<li><a class="reference internal" href="#cache-in-compute-node">4.3. Cache in Compute Node</a><ul>
+<li><a class="reference internal" href="#cn-cache-size">4.3.1. cn-cache-size</a></li>
+<li><a class="reference internal" href="#cn-cached-write-size">4.3.2. cn-cached-write-size</a></li>
+<li><a class="reference internal" href="#cn-read-cache">4.3.3. cn-read-cache</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#automatic-readahead-function">4.4. Automatic Readahead Function</a></li>
+<li><a class="reference internal" href="#asynchronous-close">4.5. Asynchronous Close</a></li>
+<li><a class="reference internal" href="#unwritten-file-list">4.6. Unwritten File List</a></li>
+<li><a class="reference internal" href="#llio-performance-information">4.7. LLIO Performance Information</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../CapacitySetting/index.html"
+                          title="previous chapter"><span class="section-number">3. </span>Capacity Setting</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../ExlusionControl/index.html"
+                          title="next chapter"><span class="section-number">5. </span>Exclusion Control</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../ExlusionControl/index.html" title="5. Exclusion Control"
+             >next</a></li>
+        <li class="right" >
+          <a href="../CapacitySetting/index.html" title="3. Capacity Setting"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Programming Guide (IO part)  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4. </span>Settings For Using The Cache</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

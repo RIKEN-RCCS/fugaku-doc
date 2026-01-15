@@ -1,0 +1,405 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>3.1.12. Displaying disk information &#8212; User support tools User&#39;s Guide (for User)  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.1.13. User payment information displaying (Electricity charging in the Second Half of Fiscal 2022)" href="3-1-13_AccountJ_wh.html" />
+    <link rel="prev" title="3.1.11. Change the disk quota limit on each VOLUME" href="3-1-11_Chgdisklimit.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-13_AccountJ_wh.html" title="3.1.13. User payment information displaying (Electricity charging in the Second Half of Fiscal 2022)"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="3-1-11_Chgdisklimit.html" title="3.1.11. Change the disk quota limit on each VOLUME"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" accesskey="U"><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.12. </span>Displaying disk information</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="displaying-disk-information">
+<h1><span class="section-number">3.1.12. </span>Displaying disk information<a class="headerlink" href="#displaying-disk-information" title="Permalink to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[Name]</strong></div>
+<div class="line">　accountj_pt - Display Fugaku Points</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Style]</strong></div>
+<div class="line">　accountd_volume  [Option]</div>
+<div class="line">　※The combined specification of -u and -g is an AND search.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Description]</strong></div>
+<div class="line">　Displays the Fugaku Points earned by the user as a result of participating in power-saving operations.</div>
+<div class="line">　Fugaku Points are awarded according to the amount of power saved by power-saving.</div>
+<div class="line">　Real-time application issues are not applicable. The amount of computational resources obtained</div>
+<div class="line">　according to the points can be prioritized for job execution during a specific period at the end of each term.</div>
+<div class="line">　 Node time product will not be added.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Option]</strong></div>
+<div class="line">　-u  user name</div>
+<div class="line">　Specify user name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.</div>
+</div>
+<div class="line-block">
+<div class="line">　-g  group name</div>
+<div class="line">　Specify group name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.</div>
+</div>
+<div class="line-block">
+<div class="line">　-a</div>
+<div class="line">　Display disk information for all groups. The -u and -g options are invalid when the -a option is specified.</div>
+</div>
+<div class="line-block">
+<div class="line">　-s</div>
+<div class="line">　The disk usage display unit is changed from the default Gibibyte [GiB] to Kibibyte [KiB].</div>
+</div>
+<div class="line-block">
+<div class="line">　-c</div>
+<div class="line">　Standard output of search results in CSV format. You can also save to a file by using the redirection function.</div>
+</div>
+<div class="line-block">
+<div class="line">　-f  file system name</div>
+<div class="line">　Specify file system name. Specify the mount point you want to display. You can specify prefix matching using * (asterisk).</div>
+<div class="line">　　Exact match specification   /vol0001</div>
+</div>
+<div class="line-block">
+<div class="line">　-h</div>
+<div class="line">　Displays the file systems assigned to the group when the group was created.</div>
+</div>
+<div class="line-block">
+<div class="line">　-i</div>
+<div class="line">　Display inode usage.</div>
+</div>
+<div class="line-block">
+<div class="line">　--help</div>
+<div class="line">　Display command help contents.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Return value]</strong></div>
+<div class="line">　Noprmal: 0</div>
+<div class="line">　Abnormal: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Note]</strong></div>
+<div class="line">　None.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Use example]</strong></div>
+<div class="line">　【Example 1】  The user displays the disk information for a group.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountd_volume<span class="w"> </span>-g<span class="w"> </span>group1
+<span class="go">COLLECTDATE : 2022/06/10 13:23:27    unit[GiB]</span>
+<span class="go">*--------------------------------------------------[GROUP]-----------------------------------------------------*</span>
+<span class="go">GROUP           FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE</span>
+<span class="go">group1          /vol0001                     5,120                 1             5,119             770      0.0%</span>
+<span class="go">group1          /vol0003                 unlimited                 1         unlimited           5,197       ---</span>
+<span class="go">group1          /vol0004                 unlimited            47,529         unlimited      31,646,353       ---</span>
+<span class="go">group1          /vol0005                 unlimited                 1         unlimited             143       ---</span>
+<span class="go">group1          /vol0006                 unlimited                 1         unlimited              11       ---</span>
+<span class="go">*--------------------------------------------------[USER]------------------------------------------------------*</span>
+<span class="go">USER            FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE</span>
+<span class="go">u10001          /vol0001                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10001          /vol0003                 unlimited                 1         unlimited               1       ---</span>
+<span class="go">u10001          /vol0004                 unlimited                 2         unlimited             146       ---</span>
+<span class="go">u10001          /vol0005                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10001          /vol0006                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10002          /vol0001                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10002          /vol0003                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10002          /vol0004                 unlimited                 1         unlimited               1       ---</span>
+<span class="go">u10002          /vol0005                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10002          /vol0006                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10003          /vol0001                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10003          /vol0003                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10003          /vol0004                 unlimited                 4         unlimited          86,426       ---</span>
+<span class="go">u10003          /vol0005                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10003          /vol0006                 unlimited                 0         unlimited               0       ---</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　You can check the disk usage status of the group specified in the -g option and all users belonging to the group.</div>
+<div class="line">　The display unit of disk usage is Gibibyte [GiB] by default. If you want to change the display unit to Kibibyte [KiB], specify the -s option. The unit switching is calculated as 1 KiB (1,024B). The fraction due to unit switching is displayed with the limit value (LIMIT) rounded down and the usage (USAGE) rounded up. The remaining usable amount (AVAILABLE) is a value obtained by subtracting the usage amount (USAGE) from the limit value (LIMIT).</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Use example]</strong></div>
+<div class="line">　【Example 2】  Display the accounting information that concerns about own disk</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountd_volume<span class="w"> </span>-u<span class="w"> </span>u10001
+<span class="go">COLLECTDATE : 2022/06/08 15:14:21    unit[GiB]</span>
+<span class="go">USER : u10001</span>
+<span class="go">*--------------------------------------------------[GROUP]-----------------------------------------------------*</span>
+<span class="go">GROUP           FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE</span>
+<span class="go">group1          /vol0001                     5,120                 1             5,119             770      0.0%</span>
+<span class="go">group1          /vol0003                 unlimited                 1         unlimited           5,197       ---</span>
+<span class="go">group1          /vol0004                 unlimited            47,529         unlimited      31,649,071       ---</span>
+<span class="go">group1          /vol0005                 unlimited                 1         unlimited             143       ---</span>
+<span class="go">group1          /vol0006                 unlimited                 1         unlimited              11       ---</span>
+<span class="go">*--------------------------------------------------[USER]------------------------------------------------------*</span>
+<span class="go">USER            FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE</span>
+<span class="go">u10001          /vol0001                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10001          /vol0003                 unlimited                 1         unlimited               1       ---</span>
+<span class="go">u10001          /vol0004                 unlimited                 1         unlimited             323       ---</span>
+<span class="go">u10001          /vol0005                 unlimited                 1         unlimited               8       ---</span>
+<span class="go">u10001          /vol0006                 unlimited                 0         unlimited               0       ---</span>
+
+<span class="go">*--------------------------------------------------[GROUP]-----------------------------------------------------*</span>
+<span class="go">GROUP           FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE</span>
+<span class="go">*fugaku         /vol0001                 unlimited                88         unlimited         583,517       ---</span>
+<span class="go">*fugaku         /vol0003                 unlimited             6,495         unlimited       3,916,642       ---</span>
+<span class="go">*fugaku         /vol0004                 unlimited             7,901         unlimited       1,973,899       ---</span>
+<span class="go">*fugaku         /vol0005                 unlimited            79,976         unlimited       5,438,315       ---</span>
+<span class="go">*fugaku         /vol0006                 unlimited            18,223         unlimited       1,229,654       ---</span>
+
+<span class="go">*--------------------------------------------------[USER]------------------------------------------------------*</span>
+<span class="go">USER            FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE</span>
+<span class="go">u10001          /vol0001                 unlimited                 0         unlimited               0       ---</span>
+<span class="go">u10001          /vol0003                 unlimited                 1         unlimited               1       ---</span>
+<span class="go">u10001          /vol0004                 unlimited                 1         unlimited             323       ---</span>
+<span class="go">u10001          /vol0005                 unlimited                 1         unlimited               8       ---</span>
+<span class="go">u10001          /vol0006                 unlimited                 0         unlimited               0       ---</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　 * (Asterisk) at the beginning of the group name indicates the user’s primary group.</div>
+</div>
+<div class="line-block">
+<div class="line">　Disk accounting information for all groups to which the specified user belongs is displayed.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Use example]</strong></div>
+<div class="line">　【Example 3】  The system administrator displays the accounting information that concerns all task disk</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountd_volume<span class="w"> </span>-a
+<span class="go">COLLECTDATE : 2022/06/08 15:01:22    unit[GiB]</span>
+<span class="go">*--------------------------------------------------[GROUP]-----------------------------------------------------*</span>
+<span class="go">GROUP           FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE</span>
+<span class="go">group1          /vol0001                     5,120                 1             5,119          12,889      0.0%</span>
+<span class="go">group1          /vol0003                 unlimited                 1         unlimited               8       ---</span>
+<span class="go">group1          /vol0004                 unlimited            15,845         unlimited      41,742,218       ---</span>
+<span class="go">group1          /vol0005                 unlimited                 1         unlimited               8       ---</span>
+<span class="go">group1          /vol0006                 unlimited                 1         unlimited               8       ---</span>
+<span class="go">group2          /vol0001                     5,120                 1             5,119             770      0.0%</span>
+<span class="go">group2          /vol0003                 unlimited                 1         unlimited           5,197       ---</span>
+<span class="go">group2          /vol0004                 unlimited            47,529         unlimited      31,649,065       ---</span>
+<span class="go">group2          /vol0005                 unlimited                 1         unlimited             143       ---</span>
+<span class="go">group2          /vol0006                 unlimited                 1         unlimited              11       ---</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　You can check the disk usage status assigned to all groups. Displayed in ascending order with group names as keys.</div>
+</div>
+<div class="line-block">
+<div class="line">　【Example 4】  The system administrator displays the accounting information that concerns all task disk as CSV format</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountd_volume<span class="w"> </span>-a<span class="w"> </span>-c
+<span class="go">INFO_H,COLLECT_DATE</span>
+<span class="go">&quot;INFO&quot;,&quot;2022/06/08 15:10:28&quot;</span>
+<span class="go">GROUP_H,GROUP,FILESYSTEM,LIMIT,USAGE,AVAILABLE,FILES,USAGE_RATE</span>
+<span class="go">&quot;GROUP&quot;,&quot;group1&quot;,&quot;/vol0001&quot;,&quot;5120&quot;,&quot;1&quot;,&quot;5119&quot;,&quot;12889&quot;,&quot;0.000&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group1&quot;,&quot;/vol0003&quot;,&quot;unlimited&quot;,&quot;1&quot;,&quot;unlimited&quot;,&quot;8&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group1&quot;,&quot;/vol0004&quot;,&quot;unlimited&quot;,&quot;15845&quot;,&quot;unlimited&quot;,&quot;41742218&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group1&quot;,&quot;/vol0005&quot;,&quot;unlimited&quot;,&quot;1&quot;,&quot;unlimited&quot;,&quot;8&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group1&quot;,&quot;/vol0006&quot;,&quot;unlimited&quot;,&quot;1&quot;,&quot;unlimited&quot;,&quot;8&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group2&quot;,&quot;/vol0001&quot;,&quot;5120&quot;,&quot;1&quot;,&quot;5119&quot;,&quot;770&quot;,&quot;0.000&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group2&quot;,&quot;/vol0003&quot;,&quot;unlimited&quot;,&quot;1&quot;,&quot;unlimited&quot;,&quot;5197&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group2&quot;,&quot;/vol0004&quot;,&quot;unlimited&quot;,&quot;47529&quot;,&quot;unlimited&quot;,&quot;31649067&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group2&quot;,&quot;/vol0005&quot;,&quot;unlimited&quot;,&quot;1&quot;,&quot;unlimited&quot;,&quot;143&quot;,&quot;---&quot;</span>
+<span class="go">&quot;GROUP&quot;,&quot;group2&quot;,&quot;/vol0006&quot;,&quot;unlimited&quot;,&quot;1&quot;,&quot;unlimited&quot;,&quot;11&quot;,&quot;---&quot;</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　USAGE_RATE is displayed as a-(hyphen) if the disk limit is set or not set (LIMIT is unlimited). The same applies to [Example 1] that is not in CSV format.</div>
+</div>
+<div class="line-block">
+<div class="line">　Indicates the explanation of displaying item.</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 20.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>No</p></th>
+<th class="head"><p>Item name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>COLLECT DATE</p></td>
+<td><p>Data gathering date and time</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>USER</p></td>
+<td><p>User name</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>GROUP</p></td>
+<td><p>Group name</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>FILESYSTEM</p></td>
+<td><p>File system name</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>LIMIT</p></td>
+<td><div class="line-block">
+<div class="line">Limit value</div>
+<div class="line">　The unit of information follows the display unit.</div>
+<div class="line">unit[Display unit]</div>
+<div class="line"><br /></div>
+<div class="line">　　＜Display unit＞</div>
+<div class="line">　　　unit[GiB]　Default is gibibyte display</div>
+<div class="line">　　　unit[KiB]　 Millibyte display when -s option is specified</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>USAGE</p></td>
+<td><div class="line-block">
+<div class="line">Disk usage</div>
+<div class="line">　The unit of information follows the display unit.</div>
+<div class="line">unit[Display unit]</div>
+<div class="line"><br /></div>
+<div class="line">　　＜Display unit＞</div>
+<div class="line">　　　unit[GiB]　Default is gibibyte display</div>
+<div class="line">　　　unit[KiB]　 Millibyte display when -s option is specified</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>AVAILABLE</p></td>
+<td><div class="line-block">
+<div class="line">Disk available usage</div>
+<div class="line">　The unit of information follows the display unit.</div>
+<div class="line">unit[Display unit]</div>
+<div class="line"><br /></div>
+<div class="line">　　＜Display unit＞</div>
+<div class="line">　　　unit[GiB]　Default is gibibyte display</div>
+<div class="line">　　　unit[KiB]　 Millibyte display when -s option is specified</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>FILES</p></td>
+<td><div class="line-block">
+<div class="line">The number of files created in file system</div>
+<div class="line">　Count 1 file as 1 item</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>USAGE RATE</p></td>
+<td><div class="line-block">
+<div class="line">Disk use rate to the limit value</div>
+<div class="line">　This item is displayed in CSV format.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>USE RATE</p></td>
+<td><div class="line-block">
+<div class="line">Disk use rate to the limit value</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>[GROUP]</p></td>
+<td><p>Display information about groups</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>[USER]</p></td>
+<td><p>Display information about user</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="3-1-11_Chgdisklimit.html"
+                          title="previous chapter"><span class="section-number">3.1.11. </span>Change the disk quota limit on each VOLUME</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="3-1-13_AccountJ_wh.html"
+                          title="next chapter"><span class="section-number">3.1.13. </span>User payment information displaying (Electricity charging in the Second Half of Fiscal 2022)</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-13_AccountJ_wh.html" title="3.1.13. User payment information displaying (Electricity charging in the Second Half of Fiscal 2022)"
+             >next</a></li>
+        <li class="right" >
+          <a href="3-1-11_Chgdisklimit.html" title="3.1.11. Change the disk quota limit on each VOLUME"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" ><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.12. </span>Displaying disk information</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Potal Top</a>
+    </div>
+  </body>
+</html>

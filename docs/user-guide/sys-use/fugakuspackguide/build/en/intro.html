@@ -1,0 +1,733 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1. Spack &#8212; Fugaku Spack User Guide  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
+    
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Fugaku Spack User Guide" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="Fugaku Spack User Guide"
+             accesskey="P">previous</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">Fugaku Spack User Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>Spack</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="spack">
+<h1><span class="section-number">1. </span>Spack<a class="headerlink" href="#spack" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p>Spack is package management software for supercomputer systems. For the details, see the official web site <a class="reference external" href="https://spack.io/">https://spack.io/</a>.</p></li>
+<li><p>In the supercomputer Fugaku, we manage and provide open source software (OSS) through Spack.</p></li>
+<li><p>For frequently used OSS, we provide pre-built OSS in a Spack instance on the system side.
+We call this the “public instance”.</p></li>
+<li><p>Users can keep their own Spack instance in their home directory and build OSS by themselves.
+We call this a “private instance”.</p></li>
+<li><p>From a private instance, pre-built OSS served in the public instance is available by using a “chaining”
+functionality of Spack. This can save the user the cost of building many prerequisite packages.</p></li>
+<li><p>Single Spack instance can handle multiple environments. Therefore, for example, two builds can coexist for one package:</p>
+<ul>
+<li><p>A build for x86 of the login node by GCC</p></li>
+<li><p>A build for A64FX of the computing node by Fujitsu compiler</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="using-public-instance">
+<h1><span class="section-number">2. </span>Using Public Instance<a class="headerlink" href="#using-public-instance" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#sourcing-environment-script" id="id2">Sourcing environment script</a></p></li>
+<li><p><a class="reference internal" href="#checking-pre-built-packages" id="id3">Checking pre-built packages</a></p></li>
+<li><p><a class="reference internal" href="#loading-oss" id="id4">Loading OSS</a></p></li>
+</ul>
+</nav>
+<p>To use pre-built OSS in the public instance, all that you have to do
+is to source the environment script.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To use the public instance in a job on compute nodes, specify
+<code class="docutils literal notranslate"><span class="pre">/vol0004</span></code> in an environment variable
+<code class="docutils literal notranslate"><span class="pre">PJM_LLIO_GFSCACHE</span></code>. Please refer to <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/LayeredStorageAndLLIO/SelectAvailableVolumes.html">8.8. Selecting a usage file
+system (volume)</a>
+in <em>Supercomputer Fugaku Users Guide - Use and job execution -</em> for
+more details.</p>
+</div>
+<section id="sourcing-environment-script">
+<span id="setup"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">2.1. </span>Sourcing environment script</a><a class="headerlink" href="#sourcing-environment-script" title="Link to this heading">¶</a></h2>
+<p>Type the following in the command line. For <code class="docutils literal notranslate"><span class="pre">bash</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>.<span class="w"> </span>/vol0004/apps/oss/spack/share/spack/setup-env.sh
+</pre></div>
+</div>
+<p>and for <code class="docutils literal notranslate"><span class="pre">csh</span></code>/<code class="docutils literal notranslate"><span class="pre">tcsh</span></code>:</p>
+<div class="highlight-csh notranslate"><div class="highlight"><pre><span></span><span class="nv">$ </span><span class="nb">setenv </span>SPACK_ROOT /vol0004/apps/oss/spack
+<span class="nv">$ </span><span class="nb">source</span> /vol0004/apps/oss/spack/share/spack/setup-env.csh
+</pre></div>
+</div>
+<p>For the batched jobs, insert that line to the job script.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul>
+<li><p>Currently, we do not recommend including this line to your login
+script <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code>, etc. A potential risk for login failure
+exists when the filesystem is not stable.</p></li>
+<li><p>Spack put work files in the directory specified by an environment
+variable <code class="docutils literal notranslate"><span class="pre">TMPDIR</span></code>. Since <code class="docutils literal notranslate"><span class="pre">TMPDIR</span></code> is set to your home
+directory as of October 17, 2025, you might encounter an error
+“Disk quota exceeded.” In such case, please set <code class="docutils literal notranslate"><span class="pre">TMPDIR</span></code> in the
+way described in:</p>
+<p><a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/operation/20220408_01">https://www.fugaku.r-ccs.riken.jp/en/operation/20220408_01</a></p>
+</li>
+</ul>
+</div>
+</section>
+<section id="checking-pre-built-packages">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">2.2. </span>Checking pre-built packages</a><a class="headerlink" href="#checking-pre-built-packages" title="Link to this heading">¶</a></h2>
+<p>Type in the command line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ spack find -x
+</pre></div>
+</div>
+<p>to show the list of available OSS. As for 2025-10-17, it is as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>login4$<span class="w"> </span>spack<span class="w"> </span>find<span class="w"> </span>-x
+
+--<span class="w"> </span>linux-rhel8-a64fx<span class="w"> </span>/<span class="w"> </span>%c,cxx,fortran<span class="o">=</span>fj@4.12.0<span class="w"> </span>-----------------
+adios2@2.9.2
+adios2@2.9.2
+adios2@2.10.2
+adios2@2.10.2
+adios2@2.10.2
+adios2@2.10.2
+blitz@1.0.2
+cosma@2.6.6
+cp2k@2025.2
+cp2k@2025.2
+elpa@2023.05.001
+elpa@2023.05.001
+ffb@9.0
+ffx@03.01
+fugaku-frontistr@master
+hdf5@1.14.6
+kim-api@2.2.1
+lammps@20220623.2
+lammps@20230802.3
+lammps@20230802.4
+lammps@20230802.4
+lammps@20240829.2
+lammps@20250722.1
+lammps@20250722.1
+libint@2.6.0
+lis@2.1.7
+mptensor@0.3.0
+mvmc@1.3.0
+openblas@0.3.30
+parallel-netcdf@1.14.0
+paraview@5.13.3
+petsc@3.23.4
+pfapack@2014-09-17
+plumed@2.9.0
+py-scipy@1.8.1
+spglib@2.5.0
+suite-sparse@7.8.3
+
+--<span class="w"> </span>linux-rhel8-a64fx<span class="w"> </span>/<span class="w"> </span>%c,cxx<span class="o">=</span>fj@4.12.0<span class="w"> </span>-------------------------
+alamode@1.5.0
+bcftools@1.21
+bedtools2@2.31.1
+boost@1.88.0
+cbc@2.10.11
+cmake@3.31.8
+eigen@3.4.0
+ffmpeg@6.1.1
+gmp@6.3.0
+gromacs@2023.5
+gromacs@2024.5
+gromacs@2024.6
+gromacs@2025.3
+htslib@1.21
+improved-rdock@main
+libint@2.6.0
+llvm@16.0.6
+mapsplice2@2.2.1
+mesa@25.0.5
+netcdf-cxx@4.2
+netcdf-cxx4@4.3.1
+onednn@3.0
+openbabel@3.1.1
+openfoam@2412
+openfoam-org@12
+openjdk@17.0.11_9
+parmetis@4.0.3
+povray@3.7.0.10
+py-matplotlib@3.10.3
+py-numpy@1.26.4
+py-numpy@2.2.6
+py-pandas@2.3.1
+py-pyarrow@16.1.0
+py-pymol@2.5.0
+py-scikit-learn@1.7.0
+python@3.13.5
+qt@5.15.16
+raja@2025.03.0
+rust@1.85.0
+samtools@1.19.2
+star@2.7.11b
+
+--<span class="w"> </span>linux-rhel8-a64fx<span class="w"> </span>/<span class="w"> </span>%c,cxx<span class="o">=</span>gcc@15.1.0<span class="w"> </span>------------------------
+llvm@20.1.6
+
+--<span class="w"> </span>linux-rhel8-a64fx<span class="w"> </span>/<span class="w"> </span>%c,cxx<span class="o">=</span>gcc@8.5.0<span class="w"> </span>-------------------------
+ffmpeg@7.1
+gcc@13.4.0
+gcc@14.3.0
+gcc@15.1.0
+llvm@17.0.6
+llvm@18.1.8
+llvm@19.1.7
+llvm@20.1.6
+
+--<span class="w"> </span>linux-rhel8-a64fx<span class="w"> </span>/<span class="w"> </span>%c,fortran<span class="o">=</span>fj@4.12.0<span class="w"> </span>---------------------
+cblas@2015-06-06
+eigenexa@2.6
+ermod@0.3.6
+fujitsu-fftw@1.1.0
+hphi@3.5.1
+libxc@7.0.0
+netcdf-fortran@4.6.1
+netlib-scalapack@2.2.2
+openmx@3.9.9
+phase0@2024.01
+phase0@2024.01
+quantum-espresso@7.3.1
+quantum-espresso@7.4.1
+salmon-tddft@2.2.1
+
+--<span class="w"> </span>linux-rhel8-a64fx<span class="w"> </span>/<span class="w"> </span>%c<span class="o">=</span>fj@4.12.0<span class="w"> </span>-----------------------------
+batchedblas@1.0
+bwa@0.7.17
+darshan-runtime@3.4.0
+grads@2.2.3
+gsl@2.8
+hdf5@1.14.6
+netcdf-c@4.9.2
+py-cftime@1.6.4
+py-h5py@3.13.0
+py-mpi4py@4.0.1
+py-netcdf4@1.7.2
+py-pysam@0.21.0
+py-spglib@2.0.2
+screen@4.9.1
+tmux@3.5a
+
+--<span class="w"> </span>linux-rhel8-a64fx<span class="w"> </span>/<span class="w"> </span>%c<span class="o">=</span>gcc@8.5.0<span class="w"> </span>-----------------------------
+nano@8.0
+
+--<span class="w"> </span>linux-rhel8-a64fx<span class="w"> </span>/<span class="w"> </span>%cxx<span class="o">=</span>fj@4.12.0<span class="w"> </span>---------------------------
+biobambam2@2.0.177
+dssp@3.1.4
+
+--<span class="w"> </span>linux-rhel8-a64fx<span class="w"> </span>/<span class="w"> </span>%fortran<span class="o">=</span>fj@4.12.0<span class="w"> </span>-----------------------
+akaikkr@2021v02
+fds@6.9.1
+ffx@03.01
+modylas-new@1.1.0
+modylas-new@1.1.0
+modylas-new@1.1.0
+smash@3.0.2
+zpares@0.9.6a
+
+--<span class="w"> </span>linux-rhel8-a64fx<span class="w"> </span>/<span class="w"> </span>no<span class="w"> </span>compilers<span class="w"> </span>-----------------------------
+ffvhc-ace@0.1
+fujitsu-mpi@4.12.0
+fujitsu-ssl2@head
+hwloc@2.2.0
+picard@3.3.0
+py-ase@3.23.0
+py-dask@2024.7.1
+py-hypothesis@6.96.2
+py-ipykernel@6.29.5
+py-pip@25.1.1
+py-pydmd@0.3
+py-pygps@1.3.5
+py-pytest@8.2.1
+py-pytoml@0.1.21
+py-seaborn@0.13.2
+py-toml@0.10.2
+py-xarray@2024.7.0
+rist-fftw@3.3.9-272-g63d6bd70
+
+--<span class="w"> </span>linux-rhel8-cascadelake<span class="w"> </span>/<span class="w"> </span>%c,cxx,fortran<span class="o">=</span>gcc@15.1.0<span class="w"> </span>----------
+darshan-util@3.4.0-pre1
+
+--<span class="w"> </span>linux-rhel8-cascadelake<span class="w"> </span>/<span class="w"> </span>%c,cxx<span class="o">=</span>gcc@14.3.0<span class="w"> </span>------------------
+gcc@15.1.0
+openfoam@2412
+
+--<span class="w"> </span>linux-rhel8-cascadelake<span class="w"> </span>/<span class="w"> </span>%c,cxx<span class="o">=</span>gcc@15.1.0<span class="w"> </span>------------------
+boost@1.88.0
+cmake@3.31.8
+gnuplot@6.0.0
+imagemagick@7.1.1-39
+mercurial@6.7.3
+openfoam@2412
+openjdk@17.0.11_9
+python@3.13.5
+
+--<span class="w"> </span>linux-rhel8-cascadelake<span class="w"> </span>/<span class="w"> </span>%c,fortran<span class="o">=</span>gcc@15.1.0<span class="w"> </span>--------------
+netcdf-fortran@4.6.1
+
+--<span class="w"> </span>linux-rhel8-cascadelake<span class="w"> </span>/<span class="w"> </span>%c<span class="o">=</span>gcc@15.1.0<span class="w"> </span>----------------------
+hdf5@1.14.6
+libxml2@2.13.5
+netcdf-c@4.9.2
+tmux@3.5a
+
+--<span class="w"> </span>linux-rhel8-cascadelake<span class="w"> </span>/<span class="w"> </span>no<span class="w"> </span>compilers<span class="w"> </span>-----------------------
+global@6.6.14
+py-pip@25.1.1
+
+--<span class="w"> </span>linux-rhel8-skylake_avx512<span class="w"> </span>/<span class="w"> </span>%c,cxx,fortran<span class="o">=</span>gcc@15.1.0<span class="w"> </span>-------
+adios2@2.9.2
+
+--<span class="w"> </span>linux-rhel8-skylake_avx512<span class="w"> </span>/<span class="w"> </span>%c,cxx,fortran<span class="o">=</span>gcc@8.5.0<span class="w"> </span>--------
+adios2@2.9.2
+py-scipy@1.11.3
+
+--<span class="w"> </span>linux-rhel8-skylake_avx512<span class="w"> </span>/<span class="w"> </span>%c,cxx<span class="o">=</span>gcc@15.1.0<span class="w"> </span>---------------
+openfoam-org@12
+
+--<span class="w"> </span>linux-rhel8-skylake_avx512<span class="w"> </span>/<span class="w"> </span>%c,cxx<span class="o">=</span>gcc@8.5.0<span class="w"> </span>----------------
+gcc@14.3.0
+gcc@15.1.0
+
+--<span class="w"> </span>linux-rhel8-skylake_avx512<span class="w"> </span>/<span class="w"> </span>%c<span class="o">=</span>gcc@8.5.0<span class="w"> </span>--------------------
+hdf5@1.12.2
+nano@8.0
+py-mpi4py@3.1.4
+
+--<span class="w"> </span>linux-rhel8-skylake_avx512<span class="w"> </span>/<span class="w"> </span>no<span class="w"> </span>compilers<span class="w"> </span>--------------------
+py-phonopy@2.27.0
+<span class="o">==</span>&gt;<span class="w"> </span><span class="m">173</span><span class="w"> </span>installed<span class="w"> </span>packages
+</pre></div>
+</div>
+<p>It only shows explicitly installed packages with an option <code class="docutils literal notranslate"><span class="pre">-x</span></code>, tough many other dependent packages are installed.
+<code class="docutils literal notranslate"><span class="pre">linux-rhel8-cascadelake</span></code> or <code class="docutils literal notranslate"><span class="pre">linux-rhel8-skylake_avx512</span></code> shows packages for login nodes,
+and those below <code class="docutils literal notranslate"><span class="pre">linux-rhel8-a64fx</span></code> are for compute nodes.</p>
+</section>
+<section id="loading-oss">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">2.3. </span>Loading OSS</a><a class="headerlink" href="#loading-oss" title="Link to this heading">¶</a></h2>
+<p>As an example case you want <code class="docutils literal notranslate"><span class="pre">tmux</span></code> ready to use, type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ spack load tmux
+</pre></div>
+</div>
+<p>then it becomes available by setting the environment (e.g. <code class="docutils literal notranslate"><span class="pre">PATH</span></code> variable).</p>
+<p>Similarity, to unload the package type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ spack unload tmux
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">module</span></code> command to load and unload packages as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ module load tmux
+$ module unload tmux
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="using-private-instance">
+<h1><span class="section-number">3. </span>Using Private Instance<a class="headerlink" href="#using-private-instance" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="id1">
+<ul class="simple">
+<li><p><a class="reference internal" href="#cloning-the-repository" id="id5">Cloning the repository</a></p></li>
+<li><p><a class="reference internal" href="#using-the-packages-provided-in-the-public-instance" id="id6">Using the packages provided in the public instance</a></p></li>
+<li><p><a class="reference internal" href="#registering-external-packages" id="id7">Registering external packages</a></p></li>
+<li><p><a class="reference internal" href="#sourcing-the-environments" id="id8">Sourcing the environments</a></p></li>
+<li><p><a class="reference internal" href="#installation-and-management-of-packages" id="id9">Installation and management of packages</a></p></li>
+<li><p><a class="reference internal" href="#resolving-multiple-packages-with-the-same-name" id="id10">Resolving multiple packages with the same name</a></p></li>
+</ul>
+</nav>
+<p><strong>The information below is only for the users who build OSS by themselves,
+and not necessary for users who just use the pre-built OSS by the system side.</strong></p>
+<p>Users can create their own Spack instance under their home directory and build OSS by themselves.</p>
+<section id="cloning-the-repository">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">3.1. </span>Cloning the repository</a><a class="headerlink" href="#cloning-the-repository" title="Link to this heading">¶</a></h2>
+<p>Although the installation path is arbitrary, we assume that is <code class="docutils literal notranslate"><span class="pre">$TMPDIR</span></code>
+for simplicity. For the setting of the environment variable
+<code class="docutils literal notranslate"><span class="pre">TMPDIR</span></code>, please refer to the note in the section of <a class="reference internal" href="#setup"><span class="std std-ref">Sourcing environment script</span></a>.</p>
+<p>Clone the GitHub repository with the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$TMPDIR</span>
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/RIKEN-RCCS/spack.git
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>spack
+$<span class="w"> </span>git<span class="w"> </span>checkout<span class="w"> </span>fugaku-v1.0.1
+</pre></div>
+</div>
+<p>Just after cloning, its branch is set to the default <code class="docutils literal notranslate"><span class="pre">develop</span></code>.
+In this sample, we switch to the <code class="docutils literal notranslate"><span class="pre">fugaku-v1.0.1</span></code> branch.</p>
+</section>
+<section id="using-the-packages-provided-in-the-public-instance">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">3.2. </span>Using the packages provided in the public instance</a><a class="headerlink" href="#using-the-packages-provided-in-the-public-instance" title="Link to this heading">¶</a></h2>
+<p>First, source the Spack environment in the login node:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>.<span class="w"> </span><span class="nv">$TMPDIR</span>/spack/share/spack/setup-env.sh
+</pre></div>
+</div>
+<p>Spack has a “chaining” functionality where an instance can refer packages installed in other instances.
+Here, we introduce to set the public instance as an upstream of the private instance of each user
+so that the packages installed in the public instance is available from the private instance.
+For this functionality, create and edit a file <code class="docutils literal notranslate"><span class="pre">~/.spack/upstreams.yaml</span></code> as in the following:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">upstreams</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">spack-public-instance</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">install_tree</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/vol0004/apps/oss/spack/opt/spack</span>
+</pre></div>
+</div>
+<p>After these settings, type:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>compilers
+</pre></div>
+</div>
+<p>If you have an output</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">==</span>&gt;<span class="w"> </span>Available<span class="w"> </span>compilers
+--<span class="w"> </span>fj<span class="w"> </span>rhel8-x86_64<span class="w"> </span>----------------------------------------------
+<span class="o">[</span>e<span class="o">]</span><span class="w">  </span>fj@4.12.1<span class="w">  </span><span class="o">[</span>e<span class="o">]</span><span class="w">  </span>fj@4.12.0<span class="w">  </span><span class="o">[</span>e<span class="o">]</span><span class="w">  </span>fj@4.11.2<span class="w">  </span><span class="o">[</span>e<span class="o">]</span><span class="w">  </span>fj@4.11.1<span class="w">  </span><span class="o">[</span>e<span class="o">]</span><span class="w">  </span>fj@4.10.0
+
+--<span class="w"> </span>gcc<span class="w"> </span>rhel8-aarch64<span class="w"> </span>--------------------------------------------
+<span class="o">[</span>^<span class="o">]</span><span class="w">  </span>gcc@15.1.0<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>gcc@14.3.0<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>gcc@13.4.0
+
+--<span class="w"> </span>gcc<span class="w"> </span>rhel8-x86_64<span class="w"> </span>---------------------------------------------
+<span class="o">[</span>e<span class="o">]</span><span class="w">  </span>gcc@8.5.0<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>gcc@15.1.0<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>gcc@14.3.0
+
+--<span class="w"> </span>llvm<span class="w"> </span>rhel8-aarch64<span class="w"> </span>-------------------------------------------
+<span class="o">[</span>^<span class="o">]</span><span class="w">  </span>llvm@20.1.6<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>llvm@19.1.7<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>llvm@18.1.8<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>llvm@17.0.6<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>llvm@16.0.6<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>llvm@14.0.6
+</pre></div>
+</div>
+<p>the setup of compilers is successful.</p>
+<p>Then, type</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>/vol0004/apps/oss/spack/var/spack/fugaku-packages/repos/spack_repo/fugaku/local
+$<span class="w"> </span>spack<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>/vol0004/apps/oss/spack/var/spack/fugaku-packages/repos/spack_repo/fugaku/update
+$<span class="w"> </span>spack<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>/vol0004/apps/oss/spack/var/spack/fugaku-packages/repos/spack_repo/fugaku/rist
+$<span class="w"> </span>spack<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>/vol0004/apps/oss/spack/var/spack/fugaku-packages/repos/spack_repo/fugaku/rccs
+</pre></div>
+</div>
+<p>to register the local repository.</p>
+<p>After those, type</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>find
+</pre></div>
+</div>
+<p>to ensure that you find the OSS provided by the public instance.</p>
+</section>
+<section id="registering-external-packages">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">3.3. </span>Registering external packages</a><a class="headerlink" href="#registering-external-packages" title="Link to this heading">¶</a></h2>
+<p>Copy <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> from the system to use external packages such
+as Fujitsu MPI.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cp<span class="w"> </span>/vol0004/apps/oss/spack/etc/spack/packages.yaml<span class="w"> </span>~/.spack/
+</pre></div>
+</div>
+</section>
+<section id="sourcing-the-environments">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">3.4. </span>Sourcing the environments</a><a class="headerlink" href="#sourcing-the-environments" title="Link to this heading">¶</a></h2>
+<p>Spack is available or refreshed after sourcing the script by typing as follows.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">bash</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>.<span class="w"> </span><span class="nv">$TMPDIR</span>/spack/share/spack/setup-env.sh
+</pre></div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">csh</span></code>/<code class="docutils literal notranslate"><span class="pre">tcsh</span></code>:</p>
+<div class="highlight-csh notranslate"><div class="highlight"><pre><span></span>% . <span class="nv">$TMPDIR</span>/spack/share/spack/setup-env.csh
+</pre></div>
+</div>
+</section>
+<section id="installation-and-management-of-packages">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">3.5. </span>Installation and management of packages</a><a class="headerlink" href="#installation-and-management-of-packages" title="Link to this heading">¶</a></h2>
+<p>By typing</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>list
+</pre></div>
+</div>
+<p>all the available packages in Spack (more than 7000) are listed.
+You can narrow the list by a case-insensitive string, e.g.:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>list<span class="w"> </span>mpi
+</pre></div>
+</div>
+<p>This results in:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>armcimpi<span class="w">                        </span>mpi-sync-clocks<span class="w">  </span>mpix-launch-swift<span class="w">               </span>py-mpi4py
+compiler-wrapper<span class="w">                </span>mpi-test-suite<span class="w">   </span>msmpi<span class="w">                           </span>py-pytest-mpi
+compiz<span class="w">                          </span>mpibenchmark<span class="w">     </span>openmpi<span class="w">                         </span>py-tempita
+cray-mpich<span class="w">                      </span>mpibind<span class="w">          </span>pbmpi<span class="w">                           </span>r-rmpi
+exempi<span class="w">                          </span>mpich<span class="w">            </span>pdiplugin-mpi<span class="w">                   </span>rempi
+fujitsu-mpi<span class="w">                     </span>mpidiff<span class="w">          </span>perl-apache-logformat-compiler<span class="w">  </span>rkt-compiler-lib
+hpcx-mpi<span class="w">                        </span>mpifileutils<span class="w">     </span>perl-params-validationcompiler<span class="w">  </span>spectrum-mpi
+intel-mpi-benchmarks<span class="w">            </span>mpigraph<span class="w">         </span>perl-posix-strftime-compiler<span class="w">    </span>spiral-package-mpi
+intel-oneapi-compilers<span class="w">          </span>mpilander<span class="w">        </span>phylobayesmpi<span class="w">                   </span>sst-dumpi
+intel-oneapi-compilers-classic<span class="w">  </span>mpileaks<span class="w">         </span>pnmpi<span class="w">                           </span>tiny-tensor-compiler
+intel-oneapi-mpi<span class="w">                </span>mpip<span class="w">             </span>py-dask-mpi<span class="w">                     </span>umpire
+mpi-bash<span class="w">                        </span>mpir<span class="w">             </span>py-fluidfft-fftwmpi<span class="w">             </span>vampirtrace
+mpi-rockstar<span class="w">                    </span>mpitrampoline<span class="w">    </span>py-fluidfft-mpi-with-fftw<span class="w">       </span>wi4mpi
+mpi-serial<span class="w">                      </span>mpiwrapper<span class="w">       </span>py-mpi4jax
+<span class="o">==</span>&gt;<span class="w"> </span><span class="m">55</span><span class="w"> </span>packages
+</pre></div>
+</div>
+<p>To install <code class="docutils literal notranslate"><span class="pre">openmpi</span></code>, for example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>install<span class="w"> </span>openmpi
+</pre></div>
+</div>
+<p>The version can be explicitly indicated like <code class="docutils literal notranslate"><span class="pre">openmpi&#64;4.1.1</span></code>.
+To inquire available versions and variants (we omit the detail about it), type:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>info<span class="w"> </span>openmpi
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In order to build packages for the compute nodes, users need to log in a compute node with an interactive job or to submit a job script.</p>
+</div>
+<p>Similarly, to uninstall it, type:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>uninstall<span class="w"> </span>openmpi
+</pre></div>
+</div>
+<p>When multiple packages in the same name are installed, Spack cannot identify the target package
+and this causes an error.
+To solve this situation, refer to <a class="reference internal" href="#sec-multiple-package"><span class="std std-ref">Resolving multiple packages with the same name</span></a>.</p>
+</section>
+<section id="resolving-multiple-packages-with-the-same-name">
+<span id="sec-multiple-package"></span><h2><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">3.6. </span>Resolving multiple packages with the same name</a><a class="headerlink" href="#resolving-multiple-packages-with-the-same-name" title="Link to this heading">¶</a></h2>
+<p>Sometimes multiple packages with the same name are installed in a Spack instance or among
+chained instances.
+It happens when different versions of a package or multiple builds for different architectures
+(e.g. login nodes and compute nodes) are installed.
+In such a case, just passing the package name to spack commands such as <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">load</span></code> causes an error
+because Spack cannot identify the target package uniquely.</p>
+<p>For example, in the public instance:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>load<span class="w"> </span>screen
+</pre></div>
+</div>
+<p>will result in an error:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">==</span>&gt;<span class="w"> </span>Error:<span class="w"> </span>screen<span class="w"> </span>matches<span class="w"> </span>multiple<span class="w"> </span>packages.
+<span class="w">  </span>Matching<span class="w"> </span>packages:
+<span class="w">    </span>e754igt<span class="w"> </span>screen@4.9.1<span class="w"> </span><span class="nv">arch</span><span class="o">=</span>linux-rhel8-a64fx<span class="w"> </span>%fj@4.12.0
+<span class="w">    </span>rkrpm6l<span class="w"> </span>screen@4.9.1<span class="w"> </span><span class="nv">arch</span><span class="o">=</span>linux-rhel8-cascadelake<span class="w"> </span>%gcc@15.1.0
+<span class="w">  </span>Use<span class="w"> </span>a<span class="w"> </span>more<span class="w"> </span>specific<span class="w"> </span>spec<span class="w"> </span><span class="o">(</span>e.g.,<span class="w"> </span>prepend<span class="w"> </span><span class="s1">&#39;/&#39;</span><span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span><span class="nb">hash</span><span class="o">)</span>.
+</pre></div>
+</div>
+<p>Similar information is also available in a command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>spack<span class="w"> </span>find<span class="w"> </span>-lv<span class="w"> </span>screen
+</pre></div>
+</div>
+<p>In the following, we will introduce several ways to explicitly identify a package.</p>
+<ul>
+<li><p>Specifying the hash: Spack defines a unique hash for a build with its detailed conditions, <code class="docutils literal notranslate"><span class="pre">spec</span></code>.
+You can uniquely specify a package build by its short hash in 7 letters after <code class="docutils literal notranslate"><span class="pre">/</span></code> (slash).
+For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>load<span class="w"> </span>/e754igt
+$<span class="w"> </span>spack<span class="w"> </span>load<span class="w"> </span>/rkrpm6l
+</pre></div>
+</div>
+<p>In case multiple packages in the same name exit in the public instance (ex. <code class="docutils literal notranslate"><span class="pre">fftw</span></code>; sometimes multiple packages with different dependent packages can exist), load the package shown in the following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>find<span class="w"> </span>-lx
+</pre></div>
+</div>
+<p>Option <code class="docutils literal notranslate"><span class="pre">-l</span></code> shows short hash in 7 letters and <code class="docutils literal notranslate"><span class="pre">-x</span></code> only shows explicitly installed packages.</p>
+</li>
+</ul>
+<ul>
+<li><p>Specifying the version: After the package name, put <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> (at) followed by its version, e.g.:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>load<span class="w"> </span>screen@4.9.1
+</pre></div>
+</div>
+<p>(It remains to be an error in our example case.)</p>
+</li>
+<li><p>Specifying the compiler that built the package: You can indicate the compiler name after <code class="docutils literal notranslate"><span class="pre">%</span></code> (percent).
+When <code class="docutils literal notranslate"><span class="pre">screen</span></code> for the login nodes is compiled by <code class="docutils literal notranslate"><span class="pre">gcc</span></code> and that for the login nodes <code class="docutils literal notranslate"><span class="pre">fj</span></code>,
+you can distinguish them by</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>load<span class="w"> </span>screen%gcc
+$<span class="w"> </span>spack<span class="w"> </span>load<span class="w"> </span>screen%fj
+</pre></div>
+</div>
+<p>In more detail, you can specify the version of the compilers as in <code class="docutils literal notranslate"><span class="pre">screen%gcc&#64;15.1.0</span></code> or <code class="docutils literal notranslate"><span class="pre">screen%fj&#64;4.12.0</span></code>.</p>
+</li>
+<li><p>Specifying the target architecture: Following the package name, you can specify the
+architecture name of the package after <code class="docutils literal notranslate"><span class="pre">arch=</span></code>.
+The builds for the login and compute nodes can be distinguished as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>load<span class="w"> </span>screen<span class="w"> </span><span class="nv">arch</span><span class="o">=</span>linux-rhel8-cascadelake
+$<span class="w"> </span>spack<span class="w"> </span>load<span class="w"> </span>screen<span class="w"> </span><span class="nv">arch</span><span class="o">=</span>linux-rhel8-a64fx
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="known-issues-and-remedies">
+<h1><span class="section-number">4. </span>Known issues and remedies<a class="headerlink" href="#known-issues-and-remedies" title="Link to this heading">¶</a></h1>
+<section id="path-of-dynamic-link-libraries-of-the-operating-system">
+<h2><span class="section-number">4.1. </span>Path of dynamic link libraries of the operating system<a class="headerlink" href="#path-of-dynamic-link-libraries-of-the-operating-system" title="Link to this heading">¶</a></h2>
+<p>When executing a program after loading some of spack packages,
+you may have warnings:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[WARN] xos LPG 2002 - Failed to map HugeTLBfs for data/bss: /usr/bin/file
+The e_type of elf header must be ET_EXEC when using libmpg. You can
+check it on your load module by readelf -h command.
+[WARN] xos LPG 2003 - Failed to map HugeTLBfs for data/bss: Layout
+problem with segments 0 and 1:
+</pre></div>
+</div>
+<p>or an error:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>libmpg BUG!! mpiexec: __mpg_resolve_libc_symbol[776]: Assertion
+`__libc_calloc_fp != ((void *)0)&#39; failed.
+</pre></div>
+</div>
+<p>You can just ignore the former warning. Also on the login nodes, some
+applications (i.e. emacs) might cause an error.</p>
+<p>To avoid these messages, set the environment variable <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> again as follows
+after you call <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">load</span></code> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/lib64:<span class="nv">$LD_LIBRARY_PATH</span>
+</pre></div>
+</div>
+</section>
+<section id="performance-degradation-in-multi-node-jobs">
+<h2><span class="section-number">4.2. </span>Performance Degradation in Multi-node Jobs<a class="headerlink" href="#performance-degradation-in-multi-node-jobs" title="Link to this heading">¶</a></h2>
+<p>Packages provided via Spack are stored on the second-layer
+storage. Therefore, if you use the packages in a multi-node job, the
+performance may degrade due to concentrated access on a certain
+storage I/O node.</p>
+<p>In such cases, you can distribute all of the files to be referenced,
+to the cache area of second-layer storage, which is on first-layer
+storage, by running the <code class="docutils literal notranslate"><span class="pre">dir_transfer</span></code> command for the paths
+in <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> and <code class="docutils literal notranslate"><span class="pre">PATH</span></code>. Thus, the performance
+degradation can be avoided.</p>
+<p>An example of the <code class="docutils literal notranslate"><span class="pre">dir_transfer</span></code> command to distribute shared
+libraries and executable files is as follows:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>spack load xxx
+echo $LD_LIBRARY_PATH | sed -e &#39;s/:/\n/g&#39; | grep &#39;^/vol0004/apps/oss/spack&#39; | xargs /home/system/tool/dir_transfer
+echo $PATH | sed -e &#39;s/:/\n/g&#39; | grep &#39;^/vol0004/apps/oss/spack&#39; | xargs /home/system/tool/dir_transfer
+</pre></div>
+</div>
+</section>
+<section id="error-in-using-python">
+<h2><span class="section-number">4.3. </span>Error in using Python<a class="headerlink" href="#error-in-using-python" title="Link to this heading">¶</a></h2>
+<p>When you use some Python modules installed with Spack, you might
+encounter an error as follows.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>load<span class="w"> </span>py-ase<span class="w"> </span>%fj
+$<span class="w"> </span>python3
+Python<span class="w"> </span><span class="m">3</span>.8.12<span class="w"> </span><span class="o">(</span>default,<span class="w"> </span>Nov<span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="m">2021</span>,<span class="w"> </span><span class="m">04</span>:44:05<span class="o">)</span>
+<span class="o">[</span>Clang<span class="w"> </span><span class="m">7</span>.1.0<span class="w"> </span><span class="o">]</span><span class="w"> </span>on<span class="w"> </span>linux
+Type<span class="w"> </span><span class="s2">&quot;help&quot;</span>,<span class="w"> </span><span class="s2">&quot;copyright&quot;</span>,<span class="w"> </span><span class="s2">&quot;credits&quot;</span><span class="w"> </span>or<span class="w"> </span><span class="s2">&quot;license&quot;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>more<span class="w"> </span>information.
+&gt;&gt;&gt;<span class="w"> </span>import<span class="w"> </span>matplotlib
+...
+&gt;&gt;&gt;<span class="w"> </span>plt.savefig<span class="o">(</span><span class="s1">&#39;fig.png&#39;</span>,format<span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="o">)</span>
+jwe0020i-u<span class="w"> </span>An<span class="w"> </span>error<span class="w"> </span>was<span class="w"> </span>detected<span class="w"> </span>during<span class="w"> </span>an<span class="w"> </span>abnormal<span class="w"> </span>termination<span class="w"> </span>process.
+jwe0020i-u<span class="w"> </span>An<span class="w"> </span>error<span class="w"> </span>was<span class="w"> </span>detected<span class="w"> </span>during<span class="w"> </span>an<span class="w"> </span>abnormal<span class="w"> </span>termination<span class="w"> </span>process.
+...
+</pre></div>
+</div>
+<p>In such cases, you could avoid the error by loading the
+explicitly-installed python, which is
+indicated by <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">find</span> <span class="pre">-lx</span> <span class="pre">python</span></code>, after loading all of the
+modules you need. Note that <code class="docutils literal notranslate"><span class="pre">abcdefg</span></code> in the example below is a hash
+for the explicitly-installed python.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>load<span class="w"> </span>py-ase
+...
+$<span class="w"> </span>spack<span class="w"> </span>load<span class="w"> </span>/abcdefg
+</pre></div>
+</div>
+</section>
+<section id="matches-multiple-packages-error">
+<h2><span class="section-number">4.4. </span>matches multiple packages error<a class="headerlink" href="#matches-multiple-packages-error" title="Link to this heading">¶</a></h2>
+<p>If you get the <code class="docutils literal notranslate"><span class="pre">matches</span> <span class="pre">multiple</span> <span class="pre">packages</span></code> error, usually specify the hash displayed by <code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">find</span> <span class="pre">-lx</span></code>.</p>
+</section>
+<section id="if-rust-compilation-takes-a-long-time">
+<h2><span class="section-number">4.5. </span>If Rust compilation takes a long time?<a class="headerlink" href="#if-rust-compilation-takes-a-long-time" title="Link to this heading">¶</a></h2>
+<p>If Rust installed with Spack takes a long time to compile, try setting the <code class="docutils literal notranslate"><span class="pre">cn-read-cache</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">off</span></code> in the <code class="docutils literal notranslate"><span class="pre">--llio</span></code> option of the <code class="docutils literal notranslate"><span class="pre">pjsub</span></code> command.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pjsub<span class="w"> </span>--llio<span class="w"> </span>cn-read-cache<span class="o">=</span>off<span class="w"> </span>job.sh
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1. Spack</a></li>
+<li><a class="reference internal" href="#using-public-instance">2. Using Public Instance</a><ul>
+<li><a class="reference internal" href="#sourcing-environment-script">2.1. Sourcing environment script</a></li>
+<li><a class="reference internal" href="#checking-pre-built-packages">2.2. Checking pre-built packages</a></li>
+<li><a class="reference internal" href="#loading-oss">2.3. Loading OSS</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-private-instance">3. Using Private Instance</a><ul>
+<li><a class="reference internal" href="#cloning-the-repository">3.1. Cloning the repository</a></li>
+<li><a class="reference internal" href="#using-the-packages-provided-in-the-public-instance">3.2. Using the packages provided in the public instance</a></li>
+<li><a class="reference internal" href="#registering-external-packages">3.3. Registering external packages</a></li>
+<li><a class="reference internal" href="#sourcing-the-environments">3.4. Sourcing the environments</a></li>
+<li><a class="reference internal" href="#installation-and-management-of-packages">3.5. Installation and management of packages</a></li>
+<li><a class="reference internal" href="#resolving-multiple-packages-with-the-same-name">3.6. Resolving multiple packages with the same name</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#known-issues-and-remedies">4. Known issues and remedies</a><ul>
+<li><a class="reference internal" href="#path-of-dynamic-link-libraries-of-the-operating-system">4.1. Path of dynamic link libraries of the operating system</a></li>
+<li><a class="reference internal" href="#performance-degradation-in-multi-node-jobs">4.2. Performance Degradation in Multi-node Jobs</a></li>
+<li><a class="reference internal" href="#error-in-using-python">4.3. Error in using Python</a></li>
+<li><a class="reference internal" href="#matches-multiple-packages-error">4.4. matches multiple packages error</a></li>
+<li><a class="reference internal" href="#if-rust-compilation-takes-a-long-time">4.5. If Rust compilation takes a long time?</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">Fugaku Spack User Guide</a></p>
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="Fugaku Spack User Guide"
+             >previous</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">Fugaku Spack User Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>Spack</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN R-CCS.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

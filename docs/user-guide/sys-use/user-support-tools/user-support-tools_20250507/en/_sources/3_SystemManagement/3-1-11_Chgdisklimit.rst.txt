@@ -1,0 +1,110 @@
+Change the disk quota limit on each VOLUME
+========================================
+
+| 　**[Name]**
+| 　chgdisklimit -  Display groups' disk usage and limits on data area
+
+| 　**[Style]**
+| 　chgdisklimit  [Option]
+
+| 　**[Description]**
+| 　The chgdisklimit command can set disk quota limit within the range that does not exceed the disk space assigned to group.
+| 　Group managers and system administrators can set disk quota limit on each VOLUME, but users cannot.
+| 　If VOLUME is low on free space, you can either request to increase the amount of disk space allocated to group or
+| 　lower the quota limit for other VOLUME. The inode is set according to the disk quota limit.
+ 　
+| 　**[Option]**
+| 　  -g GROUP_NAME
+| 　        Specify group name. You can specify only a single name and exact matching.
+| 　
+| 　  -m VOLUME_NAME
+| 　        The first two digits represent the VOLUME number and the last two digits represent the MDT number.
+| 　
+.. attention::
+
+ The VOLUME specified with the -m option should be chosen by using the chkdiskspace command to check the FREE (available space) of each VOLUME, and selecting a VOLUME that has more free space than the amount you wish to allocate.
+
+.. seealso::
+| 　  -B QUOTA_LIMIT_VALUE
+| 　        QUOTA_LIMIT_VALUE is expressed in units of TiB.
+| 　　　　　　　【Example】vol0401
+| 　
+| 　 --help
+| 　        Display this help and exit.
+
+| 　**[Return value]**
+| 　Noprmal: 0
+| 　Abnormal: 1
+
+| 　**[Note]**
+| 　None.
+
+| 　**[Use example]**
+| 　【Example 1】	Group managers and system administrators Change the disk limits.
+
+| 　In the following example, the remaining 5 TiB of capacity can be allocated to any volume.
+| 　You can check the total quota for a specified group by using chkdiskspace command.
+
+.. code-block:: console 
+
+   [login]$ chkdiskspace -g group001
+   COLLECTDATE : 2022/02/20 11:27:36    unit[TiB]
+   [group001] LIMIT:10 ALLOC:5
+   *----------------[SYSTEM]-----------------|-----------------------------[GROUP]--------------------------------------*
+   VOLUME          SIZE            FREE            LIMIT     USAGE  USE_RATE            ILIMIT           FILES IUSE_RATE
+   vol0300         7,000           6,990             ---      0.01       ---               ---               1       ---
+   vol0301         7,000           7,000             ---      0.01       ---               ---               1       ---
+   vol0302         3,000           3,000             ---      0.01       ---               ---               1       ---
+   vol0303         3,000           3,000             ---      0.01       ---               ---               1       ---
+   vol0400         7,000           7,000             ---      0.01       ---               ---               1       ---
+   vol0401         7,000           6,995             ---      0.01       ---               ---               1       ---
+   vol0402         3,000           3,000             ---      0.01       ---               ---               1       ---
+   vol0403         3,000           3,000             ---      0.01       ---               ---               1       ---
+   vol0500         7,000           7,000             ---      0.01       ---               ---               1       ---
+   vol0501         7,000           7,000             ---      0.01       ---               ---               1       ---
+   vol0502         3,000           2,995               5      0.01      0.0%         1,500,000              64      0.0%
+   vol0503         3,000           3,000             ---      0.01       ---               ---               1       ---
+   vol0600         7,000           7,000             ---      0.01       ---               ---               1       ---
+   vol0601         7,000           7,000             ---      0.01       ---               ---               1       ---
+   vol0602         3,000           3,000             ---      0.01       ---               ---               1       ---
+   vol0603         3,000           2,995             ---      0.01       ---               ---               1       ---
+|
+| 　Here, a quota of 5 TiB is set on vol0401.
+
+.. code-block:: console 
+
+   [login]$ chgdisklimit -g group001 -m vol0401 -B 5
+
+| 　
+| 　The output of chkdiskspace indicates that the chgdisklimit command was successful.
+
+.. code-block:: console 
+
+   [login]$ chkdiskspace -g group001
+   COLLECTDATE : 2022/02/20 11:27:36    unit[TiB]
+   [group001] LIMIT:10 ALLOC:10
+   *----------------[SYSTEM]-----------------|-----------------------------[GROUP]--------------------------------------*
+   VOLUME          SIZE            FREE            LIMIT     USAGE  USE_RATE            ILIMIT           FILES IUSE_RATE
+   vol0300         7,000           6,990             ---      0.01       ---               ---               1       ---
+   vol0301         7,000           7,000             ---      0.01       ---               ---               1       ---
+   vol0302         3,000           3,000             ---      0.01       ---               ---               1       ---
+   vol0303         3,000           3,000             ---      0.01       ---               ---               1       ---
+   vol0400         7,000           7,000             ---      0.01       ---               ---               1       ---
+   vol0401         7,000           6,990               5      0.01      0.0%         1,500,000              64      0.0%
+   vol0402         3,000           3,000             ---      0.01       ---               ---               1       ---
+   vol0403         3,000           3,000             ---      0.01       ---               ---               1       ---
+   vol0500         7,000           7,000             ---      0.01       ---               ---               1       ---
+   vol0501         7,000           7,000             ---      0.01       ---               ---               1       ---
+   vol0502         3,000           2,995               5      0.01      0.0%         1,500,000              64      0.0%
+   vol0503         3,000           3,000             ---      0.01       ---               ---               1       ---
+   vol0600         7,000           7,000             ---      0.01       ---               ---               1       ---
+   vol0601         7,000           7,000             ---      0.01       ---               ---               1       ---
+   vol0602         3,000           3,000             ---      0.01       ---               ---               1       ---
+   vol0603         3,000           2,995             ---      0.01       ---               ---               1       ---
+|
+
+
+    
+
+
+

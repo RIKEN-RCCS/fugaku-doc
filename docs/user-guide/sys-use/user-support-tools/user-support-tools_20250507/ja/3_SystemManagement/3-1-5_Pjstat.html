@@ -1,0 +1,389 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>3.1.5. ジョブ実行履歴検索 &#8212; 利用者支援ツール 使用手引書 (利用者編)  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="3.1.6. ジョブ実行実績検索" href="3-1-6_Pjstata.html" />
+    <link rel="prev" title="3.1.4. リソース割当情報表示" href="3-1-4_ResourceInfo.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-6_Pjstata.html" title="3.1.6. ジョブ実行実績検索"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="3-1-4_ResourceInfo.html" title="3.1.4. リソース割当情報表示"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>システム管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" accesskey="U"><span class="section-number">3.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.5. </span>ジョブ実行履歴検索</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">3.1.5. </span>ジョブ実行履歴検索<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[名前]</strong></div>
+<div class="line">　pjstatj - ジョブの実行状況（実行待ち／実行中／終了）を表示する</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[書式]</strong></div>
+<div class="line">　pjstatj  [オプション]</div>
+<div class="line">　※-j, -n, -d, -u, -g, -a, -q, -r, -e, -t, -bの複合指定はAND検索になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[説明]</strong></div>
+<div class="line">　pjstatj コマンドは、ジョブの実行状況（実行待ち／実行中／終了）を表示する。表示結果が複数行に及ぶ場合はジョブID、バルク番号、ステップ番号を複合キーとして昇順に表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　ジョブの投入から終了までの実行状況、各状態遷移時刻から現在時刻までの経過時間を表示することができる。</div>
+</div>
+<div class="line-block">
+<div class="line">　利用者およびプロジェクト責任者はグループに属するメンバのジョブ情報を表示可能である。システム管理者はシステムに登録されている全メンバのジョブ情報を表示可能である。ただし、 システム管理機能 に記載されている管理者権限が付与されている必要がある。なお、オプション指定でジョブID、ユーザ名、グループ名が指定されていない場合はプロジェクト責任者、システム管理者であっても自身のジョブ情報のみ表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　世代数のオプション &quot;-b&quot; がなければ、今年度のジョブが表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[オプション]</strong></div>
+<div class="line">　-j  ジョブID</div>
+<div class="line">　ジョブIDを指定する。</div>
+</div>
+<div class="line-block">
+<div class="line">　-n  行数</div>
+<div class="line">　行数を指定する。行数を指定した場合は、ジョブID、バルク番号、ステップ番号を複合キーとして昇順に指定された行数分が表示される。行数を指定しなければ全件表示になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-d  ジョブ開始時刻の日付</div>
+<div class="line">　ジョブ開始時刻の日付を指定する。ジョブ開始時刻の日付を指定しなければ全件表示になる。</div>
+<div class="line">　世代数のオプション &quot;-b&quot; が指定されずに当該オプションを指定した場合、すべての世代に対してのジョブが表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　ジョブ開始時刻の日付の指定形式には以下のパターンがある。</div>
+<div class="line">　　範囲指定　　yyyymmdd:yyyymmdd</div>
+<div class="line">　　指定日以降　yyyymmdd:</div>
+<div class="line">　　指定日以前　:yyyymmdd</div>
+<div class="line">　　指定日　　　yyyymmdd</div>
+</div>
+<div class="line-block">
+<div class="line">　-u  ユーザ名</div>
+<div class="line">　ユーザ名を指定する。スペースに続けての複数指定、アスタリスクを使用した前方／中間／後方一致指定はできない。単一、完全一致指定のみ可能である。</div>
+</div>
+<div class="line-block">
+<div class="line">　-g  グループ名</div>
+<div class="line">　グループ名を指定する。スペースに続けての複数指定、アスタリスクを使用した前方／中間／後方一致指定はできない。単一、完全一致指定のみ可能である。</div>
+</div>
+<div class="line-block">
+<div class="line">　-a</div>
+<div class="line">　すべてのユーザのジョブ情報を表示する。-aオプション指定時は、-u, -gオプションは無効になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-R</div>
+<div class="line">　サブジョブ情報が存在する場合はサブジョブ情報も表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　-q</div>
+<div class="line">　実行待ちのジョブ情報のみを表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　以下の処理状態が対象になる。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>処理状態</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ACCEPT</p></td>
+<td><p>ジョブ投入受付</p></td>
+</tr>
+<tr class="row-odd"><td><p>QUEUED</p></td>
+<td><p>実行待ち</p></td>
+</tr>
+<tr class="row-even"><td><p>RUNNING-A</p></td>
+<td><p>実行依頼中</p></td>
+</tr>
+<tr class="row-odd"><td><p>RUNNING-P</p></td>
+<td><p>プロローグ処理中</p></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line">　-r</div>
+<div class="line">　実行中のジョブ情報のみを表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　以下の処理状態が対象になる。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>処理状態</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RUNNING</p></td>
+<td><p>ジョブ実行中</p></td>
+</tr>
+<tr class="row-odd"><td><p>RUNNING-E</p></td>
+<td><p>エピローグ処理中</p></td>
+</tr>
+<tr class="row-even"><td><p>RUNOUT</p></td>
+<td><p>終了処理完了待ち</p></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line">　-e</div>
+<div class="line">　終了したジョブ情報のみを表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　以下の処理状態が対象になる。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>処理状態</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>EXIT</p></td>
+<td><p>ジョブ実行終了</p></td>
+</tr>
+<tr class="row-odd"><td><p>CANCEL</p></td>
+<td><p>ジョブ実行中止</p></td>
+</tr>
+<tr class="row-even"><td><p>REJECT</p></td>
+<td><p>ジョブ受付失敗</p></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line">　-s</div>
+<div class="line">　検索結果を詳細モードで表示（全項目を表示）する。</div>
+</div>
+<div class="line-block">
+<div class="line">　-c</div>
+<div class="line">　検索結果をCSV形式で標準出力する。リダイレクション機能を使用することでファイルに保存することもできる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-f  ファイル名</div>
+<div class="line">　システムで定義されている表示項目を利用者が変更することができる。</div>
+<div class="line">　利用者が表示項目を任意選択する方法には下記のものがあり、上位から優先的に解釈される。この指定が無い場合は、システム定義が採用される。</div>
+</div>
+<ul class="simple">
+<li><p>任意のディレクトリで表示項目を任意選択したファイルを作成し、-fオプションで指定する（ファイル名は任意）</p></li>
+<li><p>ホーム領域で、表示項目を任意選択したファイル .pjstatj を作成する（ファイル名は固定）</p></li>
+</ul>
+<p>　【ファイル設定例】</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>JOBID
+BLKNO
+SNO
+JOBNAME
+JTYPE
+MD
+ST
+ELAPSE_LIM
+ELAPSE_TIM
+JOB_START
+JOB_END
+NRNUM
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　-w</div>
+<div class="line">　ジョブが投入されてから実行されるまでの待ち時間を表示することができる。なお、ジョブが開始される前にキャンセルされた場合には、待ち時間を -（ハイフン）で表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　-b  世代数</div>
+<div class="line">　表示対象としたい過去の世代数を指定する。当該オプションを指定しない場合は、今年度のジョブ情報が表示対象になる。</div>
+<div class="line">　情報の表示権限についてはコマンド実行時点の権限に従います。</div>
+</div>
+<div class="line-block">
+<div class="line">　-t ジョブ終了時刻の日付</div>
+<div class="line">　ジョブ終了時刻の日付を指定する。ジョブ終了時刻の日付を指定しなければ全件表示になる。</div>
+<div class="line">　ジョブ終了時刻に値がない場合、ジョブ投入受付の日付を基に表示する。</div>
+<div class="line">　世代数のオプション &quot;-b&quot; が指定されずに当該オプションを指定した場合、すべての世代に対してのジョブが表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　ジョブ終了時刻の日付の指定形式には以下のパターンがある。</div>
+<div class="line">　　範囲指定　　yyyymmdd:yyyymmdd</div>
+<div class="line">　　指定日以降　yyyymmdd:</div>
+<div class="line">　　指定日以前　:yyyymmdd</div>
+<div class="line">　　指定日　　　yyyymmdd</div>
+</div>
+<div class="line-block">
+<div class="line">　--help</div>
+<div class="line">　コマンドのヘルプ内容を表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[復帰値]</strong></div>
+<div class="line">　正常時: 0</div>
+<div class="line">　異常時: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[備考]</strong></div>
+<div class="line">　なし。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[使用例]</strong></div>
+</div>
+<p>　【例1】   自分自身(user1)の投入したジョブかつ終了したジョブを表示する</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>pjstatj<span class="w"> </span>-e
+<span class="go">JOBID   JOBNAME   MD   USER    GROUP    ST    ELAPSE_LIM   ELAPSE_TIM   PC</span>
+<span class="go">10006   sample1   NM   user1   group2   EXT   0000:05:00   0000:01:47   0</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">NODE_ALLOC       STATE_DATE       ACCEPT              STATE_ELAPSE_TIME RETRY</span>
+<span class="go">48x24x32:36864   04/28 07:48:42   04/27 19:37:19      0521:18:54        0</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　【例2】 システム管理者がすべてのジョブ情報を表示する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>pjstatj<span class="w"> </span>-a
+<span class="go">JOBID   JOBNAME   MD   USER    GROUP    ST    ELAPSE_LIM   ELAPSE_TIM   PC</span>
+<span class="go">10001   sample1   NM   user1   group1   CCL   0000:40:00   0000:00:00   0</span>
+<span class="go">10002   sample2   ST   user2   group2   CCL   0000:40:00   0000:00:00   0</span>
+<span class="go">10003   sample3   ST   user3   group3   CCL   0000:10:00   0000:00:00   0</span>
+<span class="go">10004   sample4   ST   user4   group4   EXT   0000:05:00   0000:01:15   0</span>
+<span class="go">10005   sample5   ST   user5   group5   EXT   0000:05:00   0000:01:20   0</span>
+<span class="go">10006   sample1   NM   user1   group2   EXT   0000:05:00   0000:01:47   0</span>
+<span class="go">10007   sample1   NM   user1   group1   CCL   0001:00:00   0000:00:00   0</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">NODE_ALLOC       STATE_DATE       ACCEPT              STATE_ELAPSE_TIME RETRY</span>
+<span class="go">32x12x32:12288   04/27 16:42:11   04/27 11:12:06      0520:20:26        0</span>
+<span class="go">32x12x32:12288   04/27 16:41:36   04/27 11:18:10      0520:21:54        0</span>
+<span class="go">34x3x4:408       04/27 16:24:07   04/27 16:18:10      0520:22:35        0</span>
+<span class="go">48x24x32:36864   04/28 07:43:43   04/27 19:37:11      0521:23:21        0</span>
+<span class="go">48x24x32:36864   04/28 07:45:55   04/27 19:37:16      0521:24:53        0</span>
+<span class="go">48x24x32:36864   04/28 07:48:42   04/27 19:37:19      0521:24:14        0</span>
+<span class="go">48x24x32:36864   04/27 20:39:19   04/27 20:36:46      0520:24:11        0</span>
+</pre></div>
+</div>
+<p>【例3】    システム管理者がユーザuser1を指定し、2行だけを表示する</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>pjstatj<span class="w"> </span>-u<span class="w"> </span>user1<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span>
+<span class="go">JOBID   JOBNAME   MD   USER    GROUP    ST    ELAPSE_LIM   ELAPSE_TIM   PC</span>
+<span class="go">10001   sample1   NM   user1   group1   CCL   0000:40:00   0000:00:00   0</span>
+<span class="go">10006   sample1   NM   user1   group2   EXT   0000:05:00   0000:01:47   0</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">NODE_ALLOC       STATE_DATE       ACCEPT              STATE_ELAPSE_TIME RETRY</span>
+<span class="go">32x12x32:12288   04/27 16:42:11   04/27 11:12:06      0520:20:26        0</span>
+<span class="go">48x24x32:36864   04/28 07:48:42   04/27 19:37:19      0521:18:54        0</span>
+</pre></div>
+</div>
+<p>　表示項目の説明を示す。</p>
+<figure class="align-default">
+<img alt="../_images/3_SystemManagement_06_1.png" src="../_images/3_SystemManagement_06_1.png" />
+</figure>
+<figure class="align-default">
+<img alt="../_images/3_SystemManagement_06_2.png" src="../_images/3_SystemManagement_06_2.png" />
+</figure>
+<figure class="align-default">
+<img alt="../_images/3_SystemManagement_06_3.png" src="../_images/3_SystemManagement_06_3.png" />
+</figure>
+<figure class="align-default">
+<img alt="../_images/3_SystemManagement_06_4.png" src="../_images/3_SystemManagement_06_4.png" />
+</figure>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="3-1-4_ResourceInfo.html"
+                          title="前の章へ"><span class="section-number">3.1.4. </span>リソース割当情報表示</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="3-1-6_Pjstata.html"
+                          title="次の章へ"><span class="section-number">3.1.6. </span>ジョブ実行実績検索</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-6_Pjstata.html" title="3.1.6. ジョブ実行実績検索"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="3-1-4_ResourceInfo.html" title="3.1.4. リソース割当情報表示"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>システム管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" ><span class="section-number">3.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.5. </span>ジョブ実行履歴検索</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

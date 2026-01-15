@@ -1,0 +1,200 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.20. 留意事項 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="6. MPIジョブ実行" href="../MPI/index.html" />
+    <link rel="prev" title="5.19. 障害の影響を受けたジョブ一覧表示コマンド" href="ShowAffectedJobs.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../MPI/index.html" title="6. MPIジョブ実行"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="ShowAffectedJobs.html" title="5.19. 障害の影響を受けたジョブ一覧表示コマンド"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.20. </span>留意事項</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="jobexecconsiderpoints">
+<span id="id1"></span><h1><span class="section-number">5.20. </span>留意事項<a class="headerlink" href="#jobexecconsiderpoints" title="Link to this heading">¶</a></h1>
+<section id="pjrsh">
+<h2><span class="section-number">5.20.1. </span>pjrshコマンドの使用方法<a class="headerlink" href="#pjrsh" title="Link to this heading">¶</a></h2>
+<p><strong class="command">pjrsh</strong>コマンドを使用する場合は以下の注意事項があります。</p>
+<ul>
+<li><p>システム全体のジョブ数および1つのジョブで実行できる<strong class="command">pjrsh</strong>コマンドの同時実行数制限</p>
+<ul>
+<li><p>1ジョブあたり<strong class="command">pjrsh</strong>コマンドは1多重（ジョブマスターノードからのみ）実行可能</p>
+<p>例えば次のように<strong class="command">pjrsh</strong>コマンドをバックグラウンドで指定すると1個1個シーケンシャルに動く形になります。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pjrsh<span class="w"> </span><span class="s2">&quot;(1)&quot;</span><span class="w"> </span><span class="s2">&quot;command1&quot;</span><span class="w"> </span><span class="p">&amp;</span>
+pjrsh<span class="w"> </span><span class="s2">&quot;(2)&quot;</span><span class="w"> </span><span class="s2">&quot;command2&quot;</span><span class="w"> </span><span class="p">&amp;</span>
+pjrsh<span class="w"> </span><span class="s2">&quot;(3)&quot;</span><span class="w"> </span><span class="s2">&quot;command3&quot;</span><span class="w"> </span><span class="p">&amp;</span>
+pjrsh<span class="w"> </span><span class="s2">&quot;(4)&quot;</span><span class="w"> </span><span class="s2">&quot;command4&quot;</span><span class="w"> </span><span class="p">&amp;</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong class="command">pjrsh</strong>コマンドを使用するジョブはシステム全体で30多重まで実行可能</p>
+<p>システム全体で<strong class="command">pjrsh</strong>コマンドを使用するジョブ数(後述のカスタム資源を指定したジョブ数)が30を越えた場合は、pjsubコマンドでジョブは受け付けますがQUE状態で待機します。
+RUN状態のジョブが30ジョブ未満になった段階でRUNになります。</p>
+</li>
+</ul>
+</li>
+<li><p><strong class="command">pjrsh</strong>コマンドを使用するジョブはジョブを投入する時にカスタム資源「<code class="docutils literal notranslate"><span class="pre">exepjrsh=1</span></code>」の指定が必要</p>
+<p><strong class="command">pjrsh</strong>コマンドを実行するジョブは次の投入例のように<code class="docutils literal notranslate"><span class="pre">exepjrsh=1</span></code>を指定します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="nv">exepjrsh</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>jobscript.sh
+</pre></div>
+</div>
+</li>
+</ul>
+<p>上記注意事項を満たさない場合は、以下の挙動となります。</p>
+<ul>
+<li><p>カスタム資源「exepjrsh」を指定しなかった場合、または、ジョブマスターノード以外で<strong class="command">pjrsh</strong>コマンドを実行した場合</p>
+<p><strong class="command">pjrsh</strong>コマンドが「Permission denied」となり実行できません。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/bin/bash: /usr/bin/pjrsh: Permission denied
+</pre></div>
+</div>
+</li>
+<li><p>カスタム資源「<code class="docutils literal notranslate"><span class="pre">exepjrsh</span></code>」に1以外を指定した場合</p>
+<p>pjsubコマンド実行時にエラーとなります。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ERR.] PJM 0057 pjsub exepjrsh=2 is greater than the upper limit (1).
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="trial">
+<h2><span class="section-number">5.20.2. </span>スタートアップ課題 (trial) におけるジョブ実行<a class="headerlink" href="#trial" title="Link to this heading">¶</a></h2>
+<p>スタートアップ課題とは、FAASを利用するためのアカウントを取得後、オンラインで本人確認を実施するeKYCや誓約書への同意等の手続きを経て、「富岳」アカウントが発行される際に自動的に参加する、アカウント発行のためのデフォルト課題（グループID：trial,課題ID：rs2xzzzz）です。</p>
+<section id="id2">
+<h3><span class="section-number">5.20.2.1. </span>スタートアップ課題 (trial) におけるジョブ実行について<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p>スタートアップ課題 (trial) におけるジョブ実行時には、以下の手順に従ってください。</p>
+<ul class="simple">
+<li><p>ジョブ投入時は<code class="docutils literal notranslate"><span class="pre">-g</span> <span class="pre">trial</span></code>を指定してください。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--no-check-directory</span></code>オプションを指定してホームディレクトリから実行してください。</p></li>
+<li><p>投入可能なリソースグループは以下の通りです。</p>
+<ul>
+<li><p>spot-small</p></li>
+<li><p>spot-int</p></li>
+<li><p>spot-large</p></li>
+<li><p>spot-middle</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id3">
+<h3><span class="section-number">5.20.2.2. </span>会話型ジョブ<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>リアルタイムで計算ノードにログインして直接コマンドを実行したい場合は、以下のコマンドを参考に実行してください。</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_LNlogin]$ pjsub --interact -g trial -L rscgrp=spot-int,node=1,elapse=01:00:00 --sparam &quot;wait-time=600&quot; --no-check-directory
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="id4">
+<h3><span class="section-number">5.20.2.3. </span>バッチジョブ<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>ジョブスクリプトを作成してジョブを投入する場合は、以下のコマンドを参考に実行してください。</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_LNlogin]$ pjsub -g trial -L rscgrp=spot-small,node=1,elapse=01:00:00 --no-check-directory jobscript.sh
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.20. 留意事項</a><ul>
+<li><a class="reference internal" href="#pjrsh">5.20.1. pjrshコマンドの使用方法</a></li>
+<li><a class="reference internal" href="#trial">5.20.2. スタートアップ課題 (trial) におけるジョブ実行</a><ul>
+<li><a class="reference internal" href="#id2">5.20.2.1. スタートアップ課題 (trial) におけるジョブ実行について</a></li>
+<li><a class="reference internal" href="#id3">5.20.2.2. 会話型ジョブ</a></li>
+<li><a class="reference internal" href="#id4">5.20.2.3. バッチジョブ</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="ShowAffectedJobs.html"
+                          title="前の章へ"><span class="section-number">5.19. </span>障害の影響を受けたジョブ一覧表示コマンド</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../MPI/index.html"
+                          title="次の章へ"><span class="section-number">6. </span>MPIジョブ実行</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../MPI/index.html" title="6. MPIジョブ実行"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="ShowAffectedJobs.html" title="5.19. 障害の影響を受けたジョブ一覧表示コマンド"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.20. </span>留意事項</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

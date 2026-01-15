@@ -1,0 +1,86 @@
+.. _SpecificationsForMPIJobMPI:
+
+MPIジョブ投入時の指定
+================================
+
+MPIジョブ投入時には、\ :program:`pjsub`\ コマンドの\ ``--mpi``\ オプションを利用して、静的に起動するプロセス形状、起動する静的プロセスの最大値、ランク割付ルールを指定することができます。
+
+1. 静的に起動するプロセス形状
+
+  - ``pjsub --mpi shape``
+
+2. 起動する静的プロセスの最大数
+
+  - ``pjsub --mpi proc``
+
+3. 生成するプロセスのランクの割付けルール
+
+  - ``pjsub --mpi rank-map-bynode``
+  - ``pjsub --mpi rank-map-hostfile``
+  - ``pjsub --mpi rank-map-bychip``
+
+
+静的プロセスの形状指定
+-----------------------
+
+:program:`pjsub`\ コマンド（``--mpi shape``\ ）を使用することで、静的に起動するプロセスの形状を指定できます。
+
+| プロセスの形状は、1次元、2次元、3次元の形状で\ ``-L``\ の\ ``node``\ パラメータで指定するノード形状と同じ次元数を指定する必要があります。\ ``--mpi``\ オプションの\ ``shape``\ パラメタが省略された場合は、\ ``-L``\ オプションの\ ``node``\ パラメタの値が使用されます。
+| 動的プロセスは、\ ``--mpi shape``\ で指定された範囲外で生成されます。
+
+
+ ``shape``\ パラメタ指定例
+
+ .. list-table:: 
+    :widths: 3 4
+
+    * - [1次元形状]
+      - --mpi "shape=X"
+
+    * - [2次元形状]
+      - --mpi "shape=XxY"
+
+    * - [3次元形状]
+      - --mpi "shape=XxYxZ"
+
+ MPIプログラム（\ :file:`a.out`\ ）に対し、3次元のプロセス形状（X軸4、Y軸3、Z軸2）を指定する例を示します。
+
+ .. code-block:: bash
+
+  #!/bin/sh -x
+  #PJM -L "node=4x3x2"               # node数の指定（3次元指定）
+  #PJM -L "rscgrp=small"             # リソースグループの指定
+  #PJM --mpi "shape=4x3x2"           # 静的プロセス形状
+  #PJM -g groupname                  # 課題のグループ指定
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N # ジョブで使用するデータ領域のvolume
+  #
+  mpiexec -n 24 ./a.out              # 並列プロセス数24でa.outを実行
+
+
+静的プロセスの最大数指定
+--------------------------
+
+プログラム起動時に生成する最大のプロセス数は、``pjsub --mpi proc``\ で指定します。
+
+- ``--mpi proc``\ で指定可能なプロセス数は、"``--mpi shape``\ で指定した値×48" 以下となります。
+- ``--mpi proc``\ に、"\ ``--mpi shape``\ で指定した値の積×48"より大きい値を指定した場合、ジョブの受付が拒否されます。
+- ``--mpi proc``\ を省略した場合、\ ``--mpi shape``\ で指定した値の積 (形状から求まるノード数)が使用されます。\ ``--mpi shape``\ も省略した場合は、\ ``-L node``\ で指定したノード数を採用します。
+- ``-L vnode``\ 指定時に、\ ``vnode``\ で指定した core 数以上の値を \ ``--mpi proc``\ に指定した場合、ジョブの受付が拒否されます。
+
+
+ .. code-block:: bash
+
+  #!/bin/sh -x
+  #PJM -L  "node=4"            # 割当ノード 4ノード （1次元形状）
+  #PJM -L  "rscgrp=small"      # リソースグループの指定
+  #PJM -L  "elapse=01:00:00"   # 経過時間制限 1時間
+  #PJM --mpi "shape=4"         # 静的プロセス形状
+  #PJM --mpi "proc=4"          # 静的プロセスの最大数4
+  #PJM -g groupname            # 課題のグループ指定
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N # ジョブで使用するデータ領域のvolume
+  #PJM -s                      # 統計情報出力
+  #
+  mpiexec -n 4 ./a.out         # a.outを実行
+
+
+

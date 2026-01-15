@@ -1,0 +1,203 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6.12. MPIの集団通信アルゴリズム（knomial, rabenseifner） &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="7. 電力制御機能" href="../PowerControlFunction/index.html" />
+    <link rel="prev" title="6.11. MPI統計情報" href="MPIStatisticalInformation.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../PowerControlFunction/index.html" title="7. 電力制御機能"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="MPIStatisticalInformation.html" title="6.11. MPI統計情報"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">6. </span>MPIジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.12. </span>MPIの集団通信アルゴリズム（knomial, rabenseifner）</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="mpi-knomial-rabenseifner">
+<h1><span class="section-number">6.12. </span>MPIの集団通信アルゴリズム（knomial, rabenseifner）<a class="headerlink" href="#mpi-knomial-rabenseifner" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">言語環境tcsds-1.2.42から、BcastにKnomialアルゴリズム、ReduceとAllreduceにRabenseifnerアルゴリズムを追加しました。これらのアルゴリズムは既存のアルゴリズムより高速な領域があります。</div>
+<div class="line">使用しているアプリケーションプログラムの通信がこの高速な領域を使用している場合は、追加されたアルゴリズムを使用することで性能が改善する可能性があります。</div>
+</div>
+<div class="line-block">
+<div class="line">Knomialアルゴリズムは従来のBinomialアルゴリズムを発展させたもので、より効率的なブロードキャスト通信が期待できます。</div>
+<div class="line">またbychipにおいては小メッセージサイズの領域で既存のアルゴリズムよりも高速であることが確認されています。</div>
+<div class="line">Rabenseifnerアルゴリズムは再帰的ベクトル分割（recursive vector halving）と再帰的距離倍増（recursive distance doubling）の組み合わせによるReduce-scatterと、それに続くBinomial GatherまたはRecursive Doubling Allgatherによって実装されたアルゴリズムです。</div>
+</div>
+<div class="line-block">
+<div class="line">KnomialおよびRabenseifnerアルゴリズムは、ジョブ形状が指定されず、かつ、3次元形状が割り当てられなかった場合に特に有効です。</div>
+<div class="line">一方で、3次元ジョブの場合は既存のアルゴリズムより性能が低下する可能性もあるため、ご使用の際はご注意ください。</div>
+</div>
+<div class="line-block">
+<div class="line">Knomialアルゴリズム、Rabenseifnerアルゴリズムを使用する場合はアルゴリズムの指定が必要です。</div>
+<div class="line">アルゴリズムを指定しない場合は、ブロッキング集団通信ルーチンが呼び出された際に、集団通信ルーチンの引数やコミュニケータの形状の情報をもとに、tcsds-1.2.41以前からある既存のアルゴリズムの中から高速なアルゴリズムを選択します。</div>
+</div>
+<p>Knomialアルゴリズム、Rabenseifnerアルゴリズムの選択の参考情報として、Intel(R) MPI Benchmarks 2021.3を使用した測定結果を<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/faq/20251104_01">FAQ:MPIの集団通信アルゴリズム(knomial, rabenseifner)の使用方法</a>に掲載しています。</p>
+<section id="id1">
+<h2><span class="section-number">6.12.1. </span>アルゴリズムの指定方法<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<p>アルゴリズムの指定方法には、次のの3つの方法があります。</p>
+<ol class="arabic simple">
+<li><p>MCAパラメーターを指定</p></li>
+<li><p>Infoオブジェクトによる指定</p></li>
+<li><p>外部入力ファイルによるアルゴリズム選択</p></li>
+</ol>
+<p>指定方法の詳細は<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/docs/manuals_r01#LANGMAN">マニュアル</a>「MPI使用手引書」の「第8章ブロッキング集団通信の高速化」を参照ください。</p>
+<section id="mca">
+<h3><span class="section-number">6.12.1.1. </span>MCAパラメーター<a class="headerlink" href="#mca" title="Link to this heading">¶</a></h3>
+<p>実行時にMCAパラメーターに使用するアルゴリズムを指定します。この選択方法では、アプリケーションプログラムの再翻訳は不要です。</p>
+<p>BcastのアルゴリズムとしてKnomialを用いる際の指定例:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec --mca coll_select_bcast_algorithm knomial ./a.out
+</pre></div>
+</div>
+<p>ReduceのアルゴリズムとしてRabenseifnerを用いる際の指定例:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec --mca coll_select_reduce_algorithm rabenseifner ./a.out
+</pre></div>
+</div>
+<p>AllreduceのアルゴリズムとしてRabenseifnerを用いる際の指定例:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec --mca coll_select_allreduce_algorithm rabenseifner ./a.out
+</pre></div>
+</div>
+</section>
+<section id="info">
+<h3><span class="section-number">6.12.1.2. </span>Infoオブジェクトによる指定<a class="headerlink" href="#info" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">アプリケーションプログラムの中でInfoオブジェクトに、使用するアルゴリズムを指定します。この選択方法では、アプリケーションプログラムの修正と再翻訳が必要となります。</div>
+<div class="line">詳細は<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/docs/manuals_r01#LANGMAN">マニュアル</a>「MPI使用手引書」の「8.3.1.4 Infoオブジェクトによるアルゴリズム選択」を参照ください。</div>
+</div>
+<p>以下の例は、コミュニケータMPI_COMM_WORLDに対し、Reduce時にRabenseifnerアルゴリズムを実行するよう指定するプログラムの一部です。</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">MPI_Info</span><span class="w"> </span><span class="n">info</span><span class="p">;</span>
+<span class="n">MPI_Info_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">info</span><span class="p">);</span>
+<span class="n">MPI_Info_set</span><span class="p">(</span><span class="n">info</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;reduce_rules&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;rabenseifner&quot;</span><span class="p">);</span>
+<span class="n">MPI_Comm_set_info</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">info</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3><span class="section-number">6.12.1.3. </span>外部入力ファイルによるアルゴリズム選択<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">外部入力ファイルにアルゴリズムの選択を記述し、実行時にMCAパラメーターで外部入力ファイルを指定します。</div>
+<div class="line">詳細は<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/docs/manuals_r01#LANGMAN">マニュアル</a>「MPI使用手引書」の「8.3.1.5 外部入力ファイルによるアルゴリズム選択」を参照ください。</div>
+</div>
+<p>以下の例は、BcastのアルゴリズムとしてKnomialを用い、セグメントサイズも指定する際の選択ルールファイルです。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>header:
+  version: 1.0
+  require: mtofu,base
+
+bcast:
+  knomial(segsize=65536)
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">外部入力ファイルは実行時にMCAパラメーターでファイル名を指定して使用します。</div>
+<div class="line">以下は、/path/to/my_rules.confファイルを外部入力ファイルとして使用する場合の指定例です。</div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec --mca coll_select_dectree_file /path/to/my_rules.conf ./a.out
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3><span class="section-number">6.12.1.4. </span>注意事項<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>実行時に使用する言語環境がtcsds-1.2.42より前の版の場合、Knomialアルゴリズム、Rabenseifnerアルゴリズムは使用できません。使用できない場合は、標準エラー出力にメッセージを出力し、アルゴリズムの指定は無視されます。</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">6.12. MPIの集団通信アルゴリズム（knomial, rabenseifner）</a><ul>
+<li><a class="reference internal" href="#id1">6.12.1. アルゴリズムの指定方法</a><ul>
+<li><a class="reference internal" href="#mca">6.12.1.1. MCAパラメーター</a></li>
+<li><a class="reference internal" href="#info">6.12.1.2. Infoオブジェクトによる指定</a></li>
+<li><a class="reference internal" href="#id4">6.12.1.3. 外部入力ファイルによるアルゴリズム選択</a></li>
+<li><a class="reference internal" href="#id6">6.12.1.4. 注意事項</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="MPIStatisticalInformation.html"
+                          title="前の章へ"><span class="section-number">6.11. </span>MPI統計情報</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../PowerControlFunction/index.html"
+                          title="次の章へ"><span class="section-number">7. </span>電力制御機能</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../PowerControlFunction/index.html" title="7. 電力制御機能"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="MPIStatisticalInformation.html" title="6.11. MPI統計情報"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">6. </span>MPIジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.12. </span>MPIの集団通信アルゴリズム（knomial, rabenseifner）</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

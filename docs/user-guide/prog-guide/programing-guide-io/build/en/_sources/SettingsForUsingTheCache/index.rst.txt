@@ -1,0 +1,203 @@
+Settings For Using The Cache
+============================
+
+What you can do with cache settings
+-------------------------------------
+
+With first-layer storage, you can expect fast access to files by configuring the following cache settings to match job characteristics.
+
+- :ref:`SecondLayerStorageCache` 
+
+- :ref:`CacheInComputeNode` 
+
+Some features can be expected to speed up file access by effectively using the cache.
+
+- :ref:`ReadAhead` 
+
+- :ref:`AsyncClose` 
+
+
+.. _SecondLayerStorageCache:
+
+Configuring a Second-layer Storage Cache Region
+-------------------------------------------------
+
+Specify whether to cache files read into the cache area of secondlayer storage.
+
+If there are multiple loads of files on second-layer storage, you can take advantage of the cache.
+
+.. list-table:: 
+  :header-rows: 1         
+  :widths: 30 15 50 
+
+  * - Option of "pjsub --llio"
+    - Range
+    - Description
+
+  * - sio-read-cache={on|off}
+    - on or off
+    - Specifies whether to cache files read into the case area of second-layer storage.
+
+      on: Proceed cache.
+
+      off: Does not proceed cache
+
+
+.. _CacheInComputeNode:
+
+Cache in Compute Node
+----------------------
+
+If your program uses less memory, you can expect faster access to files by setting it as a cache.
+
+The following parameters set the cache in the Compute node.
+
+.. list-table:: 
+  :header-rows: 1         
+  :widths: 30 15 50 
+
+  * - Option of "pjsub --llio"
+    - Range
+    - Description
+
+  * - cn-cache-size=SIZE
+    - 0MiB-32768MiB
+    - Specifies the size of the first-layer storage cache to acquire within the compute nodes.
+
+  * - cn-cached-write-size=SIZE
+    - 0MiB - setting value "cn-cache-size"
+    - Specifies the size of the first-layer storage cache to acquire within the compute nodes.
+
+  * - cn-read-cache={on|off}
+    - on or off
+    - Specifies the behavior of whether files read from first-layer storage are cached in the in-compute node cache.
+
+      on: Cache.
+
+      off: Do not cache.
+
+cn-cache-size
+^^^^^^^^^^^^^^
+
+"cn-cache-size" specifies the size of the cache area for first-layer storage.
+The cache effect is achieved by using the area that is not used by the application as the cache area for first-layer storage.
+
+.. figure:: img/CompNodeCache01_01.png
+
+
+cn-cached-write-size
+^^^^^^^^^^^^^^^^^^^^^
+
+Data that does not exceed the "cn-cached-write-size" threshold is written to the compute node cache.
+
+.. figure:: img/CompNodeCache02_01.png
+
+
+Data exceeding the threshold is written without using the compute node cache.
+
+.. figure:: img/CompNodeCache03_01.png
+
+cn-read-cache
+^^^^^^^^^^^^^
+
+When "cn-read-cache" is set to on, file information read from firstlayer storage is cached in the node.
+
+.. figure:: img/CompNodeCache04_01.png
+
+If there is not enough cache space available for the amount of data read by the application, the read data will be evicted from the cache and cache misses may occur, resulting in a performance failure.
+
+.. _ReadAhead:
+
+Automatic Readahead Function
+-----------------------------
+
+When a job attempts to read a contiguous area of layered storage, the automatic readahead function can be expected to speed up the read process by automatically reading into the in-compute node cache.
+
+If you enable the automatic readahead function, you must also configure the :ref:`CacheInComputeNode` appropriately.
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 30 15 50
+
+  * - Option of "pjsub --llio"
+    - Range
+    - Description
+
+  * - auto-readahead={on|off} 
+    - on or off
+    - Specifies the behavior of the automatic readahead function.
+
+      on : Enable.
+
+      off : Disable.
+
+.. _AsyncClose:
+
+Asynchronous Close
+------------------
+
+You can reduce the elapsed time of a job by enabling asynchronous close.
+If you need synchronization, use fsync(2).
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 30 15 50 
+
+  * - Option of "pjsub --llio"
+    - Range
+    - Description
+
+  * - async-close={on|off}
+    - on or off
+    - Specifies whether file closures on first-layer and second-layer storage are closed asynchronously.
+
+      on: Asynchronous close (write completion is not guaranteed when the file is closed)
+
+      off: Synchronous close (write completion is guaranteed when the file is closed)
+
+.. figure:: img/AsynchronousCloseAndSynchronousClose_01.png
+
+
+Unwritten File List
+-------------------
+
+At the end of the job, you can specify where to output information for files that have not yet been exported to second-layer storage.
+If not specified, it is output to the standard error output.
+
+.. list-table:: 
+  :header-rows: 1         
+  :widths: 45 50 
+
+  * - Option of "pjsub --llio"
+    - Description
+
+  * - uncompleted-fileinfo-path=path
+    - Specify the output destination for file information that has not been written to the second-layer storage.
+
+For more information about the unwritten file list , see:
+
+-  \ `LLIO User's Guide <https://www.fugaku.r-ccs.riken.jp/doc_root/en/manuals/fefs/j2ul-2555-01enz0.pdf>`_\ "“2.6 Unwritten File List Acquisition Function"
+
+-  \ `Users Guide - Use and job execution - <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/LayeredStorageAndLLIO/TheSecondLayerStrage.html#asynccloseandsyncclose>`_\ 
+
+LLIO Performance Information
+----------------------------
+
+The output setting method of LLIO performance information is described below.
+
+.. list-table:: 
+  :header-rows: 1         
+  :widths: 45 50 
+
+  * - Option of "pjsub --llio"
+    - Description
+
+  * - perf
+    - When this option is specified, LLIO performance information is output.
+
+  * - perf-path=PATH
+    - You can set the output path of LLIO performance information.
+
+
+For more information about LLIO performance information, see、\ `LLIO User's Guide <https://www.fugaku.r-ccs.riken.jp/doc_root/en/manuals/fefs/j2ul-2555-01enz0.pdf>`_\ "2.7.2 LLIO Performance Information".
+

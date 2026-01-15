@@ -1,0 +1,10 @@
+共通
+=====
+
+.. toctree::
+   :maxdepth: 2
+
+   1-1_FunctionList
+   1-2_AdminRoleResource
+
+

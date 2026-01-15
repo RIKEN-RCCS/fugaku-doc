@@ -1,0 +1,100 @@
+環境設定
+==========================
+
+ジョブ実行時はデフォルトの言語環境が自動で設定されます。
+デフォルト以外の言語環境を利用する場合は、moduleコマンドを利用して他の言語環境を設定してください。
+
+言語環境については「\ `利用手引書 －言語開発環境編－ <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/lang_latest/>`_\ 」を参照ください。
+
+
+環境変数(LD_LIBRARY_PATH, PATH)の設定については以下を留意ください。
+
+* LD_LIBRARY_PATHやPATHの検索が、10,000 プロセス以上の大規模並列ジョブの実行時間に影響を与える場合があります。効率よくパスを検索するために、必要なパスだけを重複せずに登録することや、検索頻度の多いパスを先頭に設定するようにしてください。
+
+* spack などで複数のライブラリをLD_LIBRARY_PATHに検索対象として含める場合は、ライブラリファイルを共通ファイルとしてllio_transferで転送すると検索コストが改善します。llio_transferについては\ :ref:`llio_transfer`\ を参照してください。
+
+* LD_LIBRARY_PATHの先頭に/lib64を設定するようにしてください。
+
+  例)
+
+  .. code-block:: console
+
+     export LD_LIBRARY_PATH=/lib64:$LD_LIBRARY_PATH
+
+.. _sort_libp:
+
+動的ライブラリの検索負荷を削減するツール（sort_libp）
+-----------------------------------------------------
+
+動的ライブラリの検索パス(LD_LIBRARY_PATH)を変更することによりシステム負荷の軽減と検索時間の短縮が期待できます。「富岳」ではアクセス時間の短いローカルパスを先頭に、アクセス時間の遅い第2階層ストレージのキャッシュ領域を後に指定することで、検索時間の短縮が図れます。ここでは、検索時間の短縮を図るために/lib64の追加やパスの重複排除、2ndfsや第2階層ストレージのキャッシュ領域のパスを後ろへ並び変えたパスを出力するスクリプト(/home/system/tool/sort_libp)を提供します。なお、検索順が変更されることでアプリケーションに必要なライブラリが検索できない場合は、スクリプトの出力を参考にしてパスの並び順を調整してご利用ください。
+
+例)
+
+.. code-block:: console
+
+   export LD_LIBRARY_PATH=`/home/system/tool/sort_libp`
+
+
+| 以下の通り、オプションを指定することで LD_LIBRARY_PATH に指定した各ディレクトリ配下の全ファイルを共通ファイルとしてLLIOに転送できます。
+| ご利用の際は :ref:`llio_transfer`、:ref:`dir_transfer` の注意事項を合わせてご確認ください。
+
+使用方法
+
+.. code-block:: console
+
+   spackのライブラリを転送：
+    /home/system/tool/sort_libp -s [-l dirname]
+   
+   spack以外のライブラリを転送：
+    /home/system/tool/sort_libp -a [-l dirname]
+   
+   全てのライブラリを転送：
+    /home/system/tool/sort_libp -s -a [-l dirname]
+   
+
+オプション
+
+.. list-table::
+   :header-rows: 1
+   :widths: 4 8
+
+   * - オプション
+     - 説明
+
+   * - \-s
+     - | 環境変数LD_LIBRARY_PATH内のspackのライブラリ（/vol0004/apps/oss/配下にあるライブラリ）を転送します。
+
+   * - \-a
+     - | 環境変数LD_LIBRARY_PATH内のspack以外のライブラリ（/vol000[2-6]/, /home/配下にあるライブラリ）を転送します。
+
+   * - \-l dirname
+     - | 引数dirnameでllio_transferのログの格納先ディレクトリを指定できます。
+       | デフォルトは ./sort_libp.${PJM_SUBJOBID} です。
+
+   * - \-h
+     - | コマンドの使用方法を表示します。
+
+
+| ジョブスクリプトにおける記載例を以下に示します。
+| オプションを指定した場合もLD_LIBRARY_PATHの並び替え結果は出力されますが、例に倣って転送のエラー処理を行ってから再度パスを並び替えることを推奨します。
+| 共通ファイルとして正しく配布が行われず、多くのプロセスからファイルアクセスが発生した場合、I/Oがスローダウンする可能性があります。
+
+
+ジョブスクリプト記載例
+
+.. code-block:: console
+
+   # LD_LIBRARY_PATH の重複排除、並び替え、先頭に /lib64 の追加
+   export LD_LIBRARY_PATH=`/home/system/tool/sort_libp`
+   # ライブラリを転送し、転送ログを LOG_DIR/ に格納
+   /home/system/tool/sort_libp -s -a -l LOG_DIR/
+
+   # 転送のエラー処理
+   if [ $? -eq 0 ]; then
+   :
+   else
+       echo "[ERROR] Error in sort_libp."
+       exit 1
+   fi
+
+

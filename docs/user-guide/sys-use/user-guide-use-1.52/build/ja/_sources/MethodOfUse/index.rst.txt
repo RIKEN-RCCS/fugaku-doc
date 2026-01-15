@@ -1,0 +1,153 @@
+=========
+利用方法
+=========
+
+「富岳」の利用方法を示します。
+
+概要
+==========================
+
+
+「富岳」の利用を開始するためには「スタートアップガイド」に記載した以下の手続きが必要です。
+
+- :ref:`クライアント証明書のインストール <InstallingClientCertificate>`
+- :ref:`SSH公開鍵の登録 <AccessToTheSystemLogin>`
+
+
+プログラムの作成、コンパイルからジョブの実行までの一連の流れを以下に示します。
+
+..
+  .. figure:: ./img/OverviewOfUsage_01.png
+     :scale: 80
+     :align: center
+..
+
+1. ログインノードへのログイン
+
+  .. code-block:: console
+  
+   [terminal] $ ssh username@login.fugaku.r-ccs.riken.jp
+
+2. プログラム作成
+ 
+  .. code-block:: console
+  
+   [_LNlogin] $ emacs sample.f08
+
+
+3. コンパイル
+ 
+  .. code-block:: console
+  
+   [_LNlogin] $ frtpx -Kfast,parallel -o sample sample.f08
+
+4. ジョブスクリプト作成
+ 
+  .. code-block:: console
+  
+   [_LNlogin] $ emacs sample.sh
+
+5. ジョブ実行
+ 
+  .. code-block:: console
+  
+   [_LNlogin] $ pjsub sample.sh
+
+6. ジョブ状態表示
+ 
+  .. code-block:: console
+  
+   [_LNlogin] $ pjstat
+
+7. 結果確認
+
+  .. code-block:: console
+  
+   [_LNlogin] $ less ./sample.sh.jobid.out
+   [_LNlogin] $ less ./sample.sh.jobid.err
+   [_LNlogin] $ less ./sample.sh.jobid.stats
+
+マニュアル
+==================
+
+| 以下のマニュアルを富岳ウェブサイトで提供しています。
+| 富岳ウェブサイトのメニューから「ドキュメント」->「\ `利用手引書 <https://www.fugaku.r-ccs.riken.jp/docs/guides_r01>`_\ 」あるいは「\ `マニュアル <https://www.fugaku.r-ccs.riken.jp/docs/manuals_r01>`_\ 」を参照ください。
+| より詳細な機能を利用したい場合には関連するマニュアルを参照してください。
+
+運用ソフト関連マニュアルおよびファイルシステム関連マニュアルは、機種ごとの固有の仕様を記載した箇所があります。
+「富岳」は「FXサーバ」または［FX］と書かれた箇所を参照ください。
+
+言語関連マニュアルには「/製品インストールパス/」と書かれた箇所があります。
+「/製品インストールパス/」は版数により異なります。
+言語環境を設定するmodulefileで環境変数FJSVXTCLANGAに「/製品インストールパス/」を設定しています。
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 4,9
+
+   * - 種別
+     - マニュアル名
+
+   * - 運用ソフト関連マニュアル
+     - | ジョブ運用ソフトウェア エンドユーザ向けガイド
+       | ジョブ運用ソフトウェア エンドユーザ向けガイド HPC拡張機能編
+       | ジョブ運用ソフトウェア エンドユーザ向けガイド マスタ・ワーカ型ジョブ編
+       | ジョブ運用ソフトウェア ユーザーズガイド コマンドAPI編
+       | ジョブ運用ソフトウェア ユーザーズガイド PowerAPI編
+       | ジョブ運用ソフトウェア コマンドリファレンス
+
+   * - ファイルシステム関連マニュアル
+     - | LLIOユーザーズガイド
+       | FEFSユーザーズガイド
+
+   * - 言語関連マニュアル
+     - | Fortran文法書
+       | Fortran使用手引書
+       | Fortran使用手引書 別冊 COARRAY
+       | Fortran翻訳時メッセージ
+       | C言語使用手引書
+       | C++言語使用手引書
+       | C/C++最適化メッセージ説明書
+       | Fortran/C/C++実行時メッセージ
+       | MPI使用手引書
+       | MPI User’s Guide Additional Volume Java Interface
+       | uTofu使用手引書
+       | 統合開発環境使用手引書
+       | プロファイラ使用手引書
+       | 並列実行デバッガ使用手引書
+       | 数学ライブラリの利用手引
+       | 富士通 SSL II 使用手引書
+       | FUJITSU SSL II 拡張機能使用手引書
+       | FUJITSU SSL II 拡張機能使用手引書 II
+       | FUJITSU SSL II スレッド並列機能使用手引書
+       | FUJITSU C-SSL II 使用手引書
+       | FUJITSU C-SSL II スレッド並列機能使用手引書
+       | FUJITSU SSL II/MPI使用手引書
+       | BLAS LAPACK ScaLAPACK使用手引書
+       | 高速４倍精度基本演算ライブラリ使用手引書
+
+   * - プログラミングガイド
+     - | プログラミングガイド (プログラミング共通編)
+       | プログラミングガイド (Fortran編)
+       | プログラミングガイド (チューニング編)
+       | プログラミングガイド (プロセッサ編)
+       | プログラミングガイド (IO編)
+       | アプリケーションのタイプ別CPU性能チューニング
+
+   * - その他
+     - | 富岳 Spack利用ガイド
+       | 富岳 可視化ガイド
+       | 富岳 高速転送ガイド
+       | 富岳VPN接続設定手順
+       | 富岳 AIフレームワーク 利用ガイド
+       | 富岳における Singularity 利用法
+       | 富岳Open OnDemandガイド
+       | 富岳S3ファイルサービス利用ガイド
+       | VeloC利用ガイド
+       | 利用者支援ツール 使用手引書
+       | プリポスト環境 利用手引書
+       | WebAPI利用手引書 experimental版
+       | WebAPI SDK利用手引書 experimental版
+       | 量子計算ソフトウェア 利用ガイド
+       | チューニング・解析ソフト「Tuning and Analysis Utilities（TAU）」利用ガイド 
+       | HPC向けGUIデバッガー・分析スイート「Linaro Forge」利用ガイド

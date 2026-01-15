@@ -1,0 +1,555 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4.2. Client Certification Installation &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4.3. Accessing steps to the Fugaku website" href="AccessingTheUsersPortal.html" />
+    <link rel="prev" title="4.1. Overview" href="Overview.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="AccessingTheUsersPortal.html" title="4.3. Accessing steps to the Fugaku website"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="4.1. Overview"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">4. </span>System Use</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.2. </span>Client Certification Installation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="client-certification-installation">
+<span id="installingclientcertificate"></span><h1><span class="section-number">4.2. </span>Client Certification Installation<a class="headerlink" href="#client-certification-installation" title="Link to this heading">¶</a></h1>
+<p>Client certificate is used when accesing to the Fugaku website. Please install to the Web browser which accesses to the Fugaku website.</p>
+<p>This indicates how to install the required client certificate to access to the Fugaku website of the Fugaku.
+This work is not required if installed the client certificate by refering to the Startup Guide.</p>
+<p>Please prepare the followings before installing the client certificate.</p>
+<ul class="simple">
+<li><p>Client certificate :”user account name .p12” file</p></li>
+<li><p>Client certificate pathphrase</p></li>
+</ul>
+<dl class="simple">
+<dt>Client certificate</dt><dd><p>Once the account issue is compleded, the client certificate is sent via e-mail to the e-mail address you entered when applying. Please save the attached “local account name.p12” file to the device (e.g. PC) which installs the client certificate.
+To “local account name.p12” file, the client private key, the client certificate (a public key) and the route certificate of the client certificate issuing authority.</p>
+</dd>
+<dt>Client certificate pathphrase</dt><dd><p>The passphrase is sent in written form or PDF file separately from the client certificate. It will be required when installing the client certificate. Please store at the safe place.</p>
+</dd>
+</dl>
+<p>This section describes the procedure for registering a client certificate on your PC.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you use a different Web browser than the specified Web browser, confirm the certificate management method of the Web browser yourself, and install the client certificate in the Web browser to be used.</p>
+</div>
+<section id="installing-the-certificate-to-firefox-windows">
+<h2><span class="section-number">4.2.1. </span>Installing the certificate to Firefox (Windows)<a class="headerlink" href="#installing-the-certificate-to-firefox-windows" title="Link to this heading">¶</a></h2>
+<p>This indicates how to install Firefox on Microsoft Windws.
+The difference may be seen depending on the version of Firefox.
+If the screen is different, please try with confirming the Firefox information.</p>
+<ol class="arabic simple">
+<li><p>Start Firefox and open  <span class="guilabel">[Option]</span>.
+Click on  <span class="guilabel">[Privacy and Security]</span>‘s  <span class="guilabel">[Display certificate]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_01.png"><img alt="../_images/InstallingIntoFirefox_windows_01.png" src="../_images/InstallingIntoFirefox_windows_01.png" style="width: 865.1999999999999px; height: 581.4px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Once the certificate manager is started, select  <span class="guilabel">[Your certificate]</span> and click on  <span class="guilabel">[import…]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_02.png"><img alt="../_images/InstallingIntoFirefox_windows_02.png" src="../_images/InstallingIntoFirefox_windows_02.png" style="width: 560.0px; height: 488.59999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Client certificate: Select “local account name.p12” file and click on  <span class="guilabel">[Open]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_03.png"><img alt="../_images/InstallingIntoFirefox_windows_03.png" src="../_images/InstallingIntoFirefox_windows_03.png" style="width: 660.8px; height: 414.4px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Input the client passphrase to  <span class="guilabel">Password</span>and  click on <span class="guilabel">[OK]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_04.png"><img alt="../_images/InstallingIntoFirefox_windows_04.png" src="../_images/InstallingIntoFirefox_windows_04.png" style="width: 408.09999999999997px; height: 129.5px;" /></a>
+</figure>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If the client certificate pass phrase is wrong it shows an error and cannot go forward.</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>Confirm if the client certificate is registered.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_05.png"><img alt="../_images/InstallingIntoFirefox_windows_05.png" src="../_images/InstallingIntoFirefox_windows_05.png" style="width: 560.0px; height: 486.49999999999994px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>Select  <span class="guilabel">[Certificate authority certificate]</span> and from the list, select “RIKEN R-CCS” and click on  <span class="guilabel">Display</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_06.png"><img alt="../_images/InstallingIntoFirefox_windows_06.png" src="../_images/InstallingIntoFirefox_windows_06.png" style="width: 562.0999999999999px; height: 489.99999999999994px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="7">
+<li><p>Please confirm if the certificate’s  Fingerprints is (SHA-1): <code class="docutils literal notranslate"><span class="pre">EEED846F</span> <span class="pre">FC733A73</span> <span class="pre">328F4561</span> <span class="pre">39BDB995</span> <span class="pre">D5174BBC</span></code>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_08.png"><img alt="../_images/InstallingIntoFirefox_windows_08.png" src="../_images/InstallingIntoFirefox_windows_08.png" style="width: 1009.4px; height: 677.5999999999999px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>Next, set the password to be entered when using the client certificate. Click on  <span class="guilabel">Security device…</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_09.png"><img alt="../_images/InstallingIntoFirefox_windows_09.png" src="../_images/InstallingIntoFirefox_windows_09.png" style="width: 887.5999999999999px; height: 650.3px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="9">
+<li><p>Once device manager is started, select  <span class="guilabel">Software Security Device</span> and  click on  <span class="guilabel">Change password…</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_10.png"><img alt="../_images/InstallingIntoFirefox_windows_10.png" src="../_images/InstallingIntoFirefox_windows_10.png" style="width: 890.4px; height: 485.09999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="10">
+<li><p>Set any password required when using the client certificate, click on  <span class="guilabel">OK</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_11.png"><img alt="../_images/InstallingIntoFirefox_windows_11.png" src="../_images/InstallingIntoFirefox_windows_11.png" style="width: 265.3px; height: 206.5px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="11">
+<li><p>After registering the password, close Device Manager. This is the end of setting the password when using the client certificate. The password set here is used when using the client certificate.</p></li>
+</ol>
+</section>
+<section id="installing-the-certificate-on-firefox-mac">
+<h2><span class="section-number">4.2.2. </span>Installing the certificate on Firefox (Mac)<a class="headerlink" href="#installing-the-certificate-on-firefox-mac" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Start Firefox, click <span class="guilabel">[Preferences…]</span>from menu.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_01.png"><img alt="../_images/InstallingIntoFirefox_01.png" src="../_images/InstallingIntoFirefox_01.png" style="width: 952.6999999999999px; height: 489.99999999999994px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Click <span class="guilabel">[View certificates…]</span>in <span class="guilabel">Privacy and security</span> tab.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_02.png"><img alt="../_images/InstallingIntoFirefox_02.png" src="../_images/InstallingIntoFirefox_02.png" style="width: 953.4px; height: 488.59999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Once certificate manager started, select <span class="guilabel">[Your certificate]</span> then click <span class="guilabel">[Import…]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_03.png"><img alt="../_images/InstallingIntoFirefox_03.png" src="../_images/InstallingIntoFirefox_03.png" style="width: 448.7px; height: 389.2px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Select the “local account name.p12” file saved on your computer, click <span class="guilabel">[Open]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_04.png"><img alt="../_images/InstallingIntoFirefox_04.png" src="../_images/InstallingIntoFirefox_04.png" style="width: 613.9px; height: 314.29999999999995px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>Input the passphrase of the obtained client certificate to <span class="guilabel">Password area</span>, click <span class="guilabel">[OK]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_05.png"><img alt="../_images/InstallingIntoFirefox_05.png" src="../_images/InstallingIntoFirefox_05.png" style="width: 311.5px; height: 110.6px;" /></a>
+</figure>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If the client certificate passphrase is incorrect, an error is displayed and you cannot proceed to the next screen.</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>Confirm that the client certificate has been registered, click <span class="guilabel">[OK]</span>and close the certificate manager. This completes the client certificate installation process.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_06.png"><img alt="../_images/InstallingIntoFirefox_06.png" src="../_images/InstallingIntoFirefox_06.png" style="width: 331.79999999999995px; height: 90.3px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="7">
+<li><p>Next, set the password to be entered when using the client certificate. Click <span class="guilabel">Security device…</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_07.png"><img alt="../_images/InstallingIntoFirefox_07.png" src="../_images/InstallingIntoFirefox_07.png" style="width: 951.3px; height: 487.9px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>Once device manager starts, select <span class="guilabel">Software Security Device</span>then click <span class="guilabel">Change password…</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_08.png"><img alt="../_images/InstallingIntoFirefox_08.png" src="../_images/InstallingIntoFirefox_08.png" style="width: 730.0999999999999px; height: 387.79999999999995px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="9">
+<li><p>Set an arbitrary password required when using a client certificate, click <span class="guilabel">OK</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_09.png"><img alt="../_images/InstallingIntoFirefox_09.png" src="../_images/InstallingIntoFirefox_09.png" style="width: 228.2px; height: 154.7px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="10">
+<li><p>Click <span class="guilabel">OK</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_10.png"><img alt="../_images/InstallingIntoFirefox_10.png" src="../_images/InstallingIntoFirefox_10.png" style="width: 230.99999999999997px; height: 153.29999999999998px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="11">
+<li><p>Click <span class="guilabel">OK</span> and close devicce manager This completes the password setting procedure when using a client certificate.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_11.png"><img alt="../_images/InstallingIntoFirefox_11.png" src="../_images/InstallingIntoFirefox_11.png" style="width: 251.29999999999998px; height: 90.3px;" /></a>
+</figure>
+</div></blockquote>
+</section>
+<section id="installing-the-certificate-to-chrome-windows">
+<h2><span class="section-number">4.2.3. </span>Installing the certificate to Chrome (Windows)<a class="headerlink" href="#installing-the-certificate-to-chrome-windows" title="Link to this heading">¶</a></h2>
+<p>This indicates how to install Chrome on Microsoft Windws.
+The difference may be seen depending on the version of Chrome.
+If the screen is different, please try with confirming the Chrome information.</p>
+<ol class="arabic simple">
+<li><p>Start Chrome and open  <span class="guilabel">[Setting]</span>.
+Click on  <span class="guilabel">[Privacy and Security]</span>‘s  <span class="guilabel">[Security]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_01.png"><img alt="../_images/InstallingIntoChrome_windows_01.png" src="../_images/InstallingIntoChrome_windows_01.png" style="width: 667.1999999999999px; height: 404.4px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Click on  <span class="guilabel">[Manage certificates]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_02.png"><img alt="../_images/InstallingIntoChrome_windows_02.png" src="../_images/InstallingIntoChrome_windows_02.png" style="width: 667.8px; height: 403.2px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Click on  <span class="guilabel">[Manage imported certificates from Windows]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_19.png"><img alt="../_images/InstallingIntoChrome_windows_19.png" src="../_images/InstallingIntoChrome_windows_19.png" style="width: 909.9999999999999px; height: 291.2px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Once certification manager is started, select  <span class="guilabel">[Personal]</span> and click on  <span class="guilabel">[Import…]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_03.png"><img alt="../_images/InstallingIntoChrome_windows_03.png" src="../_images/InstallingIntoChrome_windows_03.png" style="width: 411.59999999999997px; height: 401.09999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>Once certificate import wizard is opened, click on  <span class="guilabel">[Next]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_04.png"><img alt="../_images/InstallingIntoChrome_windows_04.png" src="../_images/InstallingIntoChrome_windows_04.png" style="width: 443.09999999999997px; height: 451.49999999999994px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>Click on  <span class="guilabel">[Browse…]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_05.png"><img alt="../_images/InstallingIntoChrome_windows_05.png" src="../_images/InstallingIntoChrome_windows_05.png" style="width: 443.09999999999997px; height: 451.49999999999994px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="7">
+<li><p>Change the file type to  <span class="guilabel">[Personal Information Exchange(*.pfx,*.p12)]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_06.png"><img alt="../_images/InstallingIntoChrome_windows_06.png" src="../_images/InstallingIntoChrome_windows_06.png" style="width: 663.5999999999999px; height: 417.2px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>Select “user account name.p12” file and click on  <span class="guilabel">[Open]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_07.png"><img alt="../_images/InstallingIntoChrome_windows_07.png" src="../_images/InstallingIntoChrome_windows_07.png" style="width: 663.5999999999999px; height: 417.2px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="9">
+<li><p>After setting a file name, click on  <span class="guilabel">[Next]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_08.png"><img alt="../_images/InstallingIntoChrome_windows_08.png" src="../_images/InstallingIntoChrome_windows_08.png" style="width: 443.09999999999997px; height: 451.49999999999994px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="10">
+<li><p>Input the client certificate passphrase to  <span class="guilabel">Password</span> and check the import option <span class="guilabel">[Strong the security of private key</span> then click on  <span class="guilabel">[Next]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_09.png"><img alt="../_images/InstallingIntoChrome_windows_09.png" src="../_images/InstallingIntoChrome_windows_09.png" style="width: 443.09999999999997px; height: 451.49999999999994px;" /></a>
+</figure>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If the client certificate pass phrase is wrong it shows an error and cannot go forward.</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="11">
+<li><p>Check  <span class="guilabel">Automatically select certificate store based on certificate type</span> and click on  <span class="guilabel">[Next]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_10.png"><img alt="../_images/InstallingIntoChrome_windows_10.png" src="../_images/InstallingIntoChrome_windows_10.png" style="width: 443.09999999999997px; height: 451.49999999999994px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="12">
+<li><p>Click on  <span class="guilabel">[Finish]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_11.png"><img alt="../_images/InstallingIntoChrome_windows_11.png" src="../_images/InstallingIntoChrome_windows_11.png" style="width: 443.09999999999997px; height: 451.49999999999994px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="13">
+<li><p>The “Import new secret exchange key” screen will be displayed continuously, click on  <span class="guilabel">[Set security level]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_12.png"><img alt="../_images/InstallingIntoChrome_windows_12.png" src="../_images/InstallingIntoChrome_windows_12.png" style="width: 447.0px; height: 282.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="14">
+<li><p>Check  <span class="guilabel">[High]</span> and click on  <span class="guilabel">[Next]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_13.png"><img alt="../_images/InstallingIntoChrome_windows_13.png" src="../_images/InstallingIntoChrome_windows_13.png" style="width: 517.0px; height: 335.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="15">
+<li><p>Set the password and click on  <span class="guilabel">[Finish]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_14.png"><img alt="../_images/InstallingIntoChrome_windows_14.png" src="../_images/InstallingIntoChrome_windows_14.png" style="width: 517.0px; height: 335.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="16">
+<li><p>Click on  <span class="guilabel">[OK]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_15.png"><img alt="../_images/InstallingIntoChrome_windows_15.png" src="../_images/InstallingIntoChrome_windows_15.png" style="width: 447.0px; height: 282.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="17">
+<li><p>Click on  <span class="guilabel">[OK]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_16.png"><img alt="../_images/InstallingIntoChrome_windows_16.png" src="../_images/InstallingIntoChrome_windows_16.png" style="width: 284.0px; height: 202.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="18">
+<li><p>If a security warning is issued, confirm that the thumbprint is (SHA-1):  <code class="docutils literal notranslate"><span class="pre">EEED846F</span> <span class="pre">FC733A73</span> <span class="pre">328F4561</span> <span class="pre">39BDB995</span> <span class="pre">D5174BBC</span></code> and click on  <span class="guilabel">[Yes]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_17.png"><img alt="../_images/InstallingIntoChrome_windows_17.png" src="../_images/InstallingIntoChrome_windows_17.png" style="width: 550.0px; height: 522.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="19">
+<li><p>Installation of client certificate is all done.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_18.png"><img alt="../_images/InstallingIntoChrome_windows_18.png" src="../_images/InstallingIntoChrome_windows_18.png" style="width: 411.59999999999997px; height: 401.09999999999997px;" /></a>
+</figure>
+</div></blockquote>
+</section>
+<section id="installing-the-certificate-to-chrome-mac">
+<h2><span class="section-number">4.2.4. </span>Installing the certificate to Chrome (Mac)<a class="headerlink" href="#installing-the-certificate-to-chrome-mac" title="Link to this heading">¶</a></h2>
+<p>This indicates how to install Chrome on Mac.
+At macOS, the client certificate is managed at “Key chain access”.</p>
+<ol class="arabic simple">
+<li><p>Client certificate: Double click “user account name.p12” file. The password input screen is show first.
+Enter the client certificate pass phrase and click on <span class="guilabel">[OK]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_01.png"><img alt="../_images/InstallingIntoChrome_01.png" src="../_images/InstallingIntoChrome_01.png" style="width: 444.0px; height: 196.0px;" /></a>
+</figure>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If the client certificate pass phrase is wrong it shows an error and cannot go forward.</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Open “Key chain access” screen and double click on the server certificate (RIKEN R-CCS) that issused the client certificate.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_02.png"><img alt="../_images/InstallingIntoChrome_02.png" src="../_images/InstallingIntoChrome_02.png" style="width: 526.1999999999999px; height: 359.4px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Click on “Route certificate authority” - “Trust” and from the list of “When using this certificatie”, select “Always trust” and close the screen.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_03.png"><img alt="../_images/InstallingIntoChrome_03.png" src="../_images/InstallingIntoChrome_03.png" style="width: 462.6px; height: 390.6px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>You will be prompted for your Mac administrator username and password to reflect the change in trust settings. Input these and click on <span class="guilabel">[Update setting]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_04.png"><img alt="../_images/InstallingIntoChrome_04.png" src="../_images/InstallingIntoChrome_04.png" style="width: 441.0px; height: 236.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>On the “Keychain Access” screen, hold down the Control key and click the client certificate (the local account name is shown in the name field), select <span class="guilabel">[New identify preference]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_05.png"><img alt="../_images/InstallingIntoChrome_05.png" src="../_images/InstallingIntoChrome_05.png" style="width: 613.9px; height: 417.2px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>To “Location or Email Address:”, input “<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/">https://www.fugaku.r-ccs.riken.jp/</a>” and click on <span class="guilabel">[Add]</span>.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_06.png"><img alt="../_images/InstallingIntoChrome_06.png" src="../_images/InstallingIntoChrome_06.png" style="width: 299.59999999999997px; height: 148.39999999999998px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="7">
+<li><p>With the same steps, register “<a class="reference external" href="https://api.fugaku.r-ccs.riken.jp/">https://api.fugaku.r-ccs.riken.jp/</a>”.</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_07.png"><img alt="../_images/InstallingIntoChrome_07.png" src="../_images/InstallingIntoChrome_07.png" style="width: 299.59999999999997px; height: 151.89999999999998px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>Confirm if “<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/">https://www.fugaku.r-ccs.riken.jp/</a>” and “<a class="reference external" href="https://api.fugaku.r-ccs.riken.jp/">https://api.fugaku.r-ccs.riken.jp/</a>” ‘s “Identify preference” is registered to “Key chain access” and close the screen. Installation is all done.</p></li>
+</ol>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">4.2. Client Certification Installation</a><ul>
+<li><a class="reference internal" href="#installing-the-certificate-to-firefox-windows">4.2.1. Installing the certificate to Firefox (Windows)</a></li>
+<li><a class="reference internal" href="#installing-the-certificate-on-firefox-mac">4.2.2. Installing the certificate on Firefox (Mac)</a></li>
+<li><a class="reference internal" href="#installing-the-certificate-to-chrome-windows">4.2.3. Installing the certificate to Chrome (Windows)</a></li>
+<li><a class="reference internal" href="#installing-the-certificate-to-chrome-mac">4.2.4. Installing the certificate to Chrome (Mac)</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Overview.html"
+                          title="previous chapter"><span class="section-number">4.1. </span>Overview</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="AccessingTheUsersPortal.html"
+                          title="next chapter"><span class="section-number">4.3. </span>Accessing steps to the Fugaku website</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="AccessingTheUsersPortal.html" title="4.3. Accessing steps to the Fugaku website"
+             >next</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="4.1. Overview"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">4. </span>System Use</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.2. </span>Client Certification Installation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

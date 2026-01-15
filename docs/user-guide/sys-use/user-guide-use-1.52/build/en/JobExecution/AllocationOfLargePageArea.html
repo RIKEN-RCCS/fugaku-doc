@@ -1,0 +1,458 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.10. Large page space allocation &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.11. CPU core and memory binding" href="CPUcoreMemoryBinding.html" />
+    <link rel="prev" title="5.9. Job execution command options" href="pjsubCommandOptions.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CPUcoreMemoryBinding.html" title="5.11. CPU core and memory binding"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="pjsubCommandOptions.html" title="5.9. Job execution command options"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.10. </span>Large page space allocation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="large-page-space-allocation">
+<h1><span class="section-number">5.10. </span>Large page space allocation<a class="headerlink" href="#large-page-space-allocation" title="Link to this heading">¶</a></h1>
+<p>Here explains about large page library that  the Fugaku HPC extention function offers.</p>
+<div class="line-block">
+<div class="line">About the detail, please see the <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/docs/manuals_r01#JOS">manual</a> “Job Operation Software End-user’s Guide for HPC Extensions”.</div>
+<div class="line">Also see the chapter “Large Page” in the “<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/docs/guides_r01#programing-guide">Programming Guide</a> (Programming common part)”.</div>
+</div>
+<section id="overview">
+<h2><span class="section-number">5.10.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The large page function extends HugeTLBfs, a standard function of Linux, and allocates memory (large pages) with a page size larger than that of normal pages (normal pages) to application programs that handle large data. This is a function that reduces the cost of OS address translation processing and improves memory access performance.</p>
+<p>At Fugaku computing node,64KiB is available for normal pages and 2MiB for large pages. Large page is enabled by default, and you can select enable / disable of large page by environment variable (XOS_MMM_L_HPAGE_TYPE).</p>
+<p>Merit and demerit about the defferenceare of page size are as following.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Evaluation item</p></th>
+<th class="head"><p>64KiB</p></th>
+<th class="head"><p>2MiB</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>TLB miss rate</p></td>
+<td><p>High</p></td>
+<td><p>Low</p></td>
+</tr>
+<tr class="row-odd"><td><p>Memory initialize cost</p></td>
+<td><p>Small</p></td>
+<td><p>Large</p></td>
+</tr>
+<tr class="row-even"><td><p>Memory use rate</p></td>
+<td><p>High</p></td>
+<td><p>Low</p></td>
+</tr>
+</tbody>
+</table>
+<p>For paging method, there are 2 types : demand charging method and pre paging method.</p>
+<ul class="simple">
+<li><p>The demand paging method is a method that allocates pages to main memory as needed when the required pages do not exist in main memory during application program execution.
+A physical page is allocated when the memory area is first accessed.</p></li>
+<li><p>The pre paging method is a method in which pages are allocated in main memory in advance.
+Physical pages are allocated at the timing when the memory area is allocated.</p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Paging method</p></th>
+<th class="head"><p>In NUMA/Access to the outside memory</p></th>
+<th class="head"><p>Initial memory access</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Demand paging method</p></td>
+<td><div class="line-block">
+<div class="line">Use memory in NUMA as much as possible</div>
+<div class="line">(Cost : low)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Load pages into physical memory when accessing memory</div>
+<div class="line">(Cost : High)</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Pre paging method</p></td>
+<td><div class="line-block">
+<div class="line">Use regardless of memory inside and outside NUMA</div>
+<div class="line">(Cost : High)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Load page to phsical memory ih hand</div>
+<div class="line">(Cost : low)</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When spanning multiple CMGs in thread parallelization, the demand paging method is recommended.
+Please refer to the “Paging Policy of Large Page” section in the “<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/docs/guides_r01#programing-guide">Programming Guide</a> (Programming common part)”.</p>
+</div>
+<p>The memory area and the target of large page conversion are shown below.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Area</p></th>
+<th class="head"><p>Target of large paging</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Text (.text) area</p></td>
+<td><p>No (64KiB page)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Static data (.data) area</p></td>
+<td><p>Yes (2Mi page)</p></td>
+</tr>
+<tr class="row-even"><td><p>Static data(.bss) area</p></td>
+<td><p>Yes (2Mi page)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dynamic memory hold area (Heap area)</p></td>
+<td><p>No (64KiB page)</p></td>
+</tr>
+<tr class="row-even"><td><p>Thread heap area</p></td>
+<td><p>Yes (2MiB page)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Stuck area</p></td>
+<td><p>Yes (2MiB page)</p></td>
+</tr>
+<tr class="row-even"><td><p>Thread stuck</p></td>
+<td><p>Yes (2MiB page)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dynamic memory saving area (Mmap area)</p></td>
+<td><p>Yes (2MiB page)</p></td>
+</tr>
+<tr class="row-even"><td><p>Shared memory</p></td>
+<td><p>No (64KiB page)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="environment-variable-for-large-page-library-setting">
+<span id="largepageenvironmentvariable"></span><h2><span class="section-number">5.10.2. </span>Environment variable for large page library setting<a class="headerlink" href="#environment-variable-for-large-page-library-setting" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">The following environment variables can be used to adjust the behavior of the large page library.</div>
+<div class="line">The environment variables for setting the basic settings of the large page are shown below.</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable name</p></th>
+<th class="head"><p>Specify value</p></th>
+<th class="head"><p>Default value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>XOS_MMM_L_HPAGE_TYPE</p></td>
+<td><p>hugetlbfs|none</p></td>
+<td><p>hugetlbfs</p></td>
+</tr>
+<tr class="row-odd"><td><p>XOS_MMM_L_LPG_MODE</p></td>
+<td><p>base+stack|base</p></td>
+<td><p>base+stack</p></td>
+</tr>
+<tr class="row-even"><td><p>XOS_MMM_L_PRINT_ENV</p></td>
+<td><p>on|off|1|0</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+<p>The environment variable (XOS_MMM_L_PAGING_POLICY) allows you to set the paging method in each memory area of static data (.bss area), stack / thread stack area, and dynamic memory allocation area.
+The environment variables for setting the paging formula are shown below.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable name</p></th>
+<th class="head"><p>Specify value</p></th>
+<th class="head"><p>Default value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>XOS_MMM_L_PAGING_POLICY</p></td>
+<td><p>[demand|prepage]:[demand|prepage]:[demand|prepage]</p></td>
+<td><p>demand:demand:prepage</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We customize the default value of XOS_MMM_L_PAGING_POLICY. This is different from the default value shown in “Job Operation Software End-user’s Guide for HPC Extensions” “prepage:demand:prepage”.</p>
+</div>
+<p>The environment variables for tuning large page allocation are shown below.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable name</p></th>
+<th class="head"><p>Specify value</p></th>
+<th class="head"><p>Default value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>XOS_MMM_L_ARENA_FREE</p></td>
+<td><p>1|2</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>XOS_MMM_L_ARENA_LOCK_TYPE</p></td>
+<td><p>0|1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>XOS_MMM_L_MAX_ARENA_NUM</p></td>
+<td><p>Integer value that is over 1 and under INT_MAX [Decimal number]</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>XOS_MMM_L_HEAP_SIZE_MB</p></td>
+<td><p>Integer value that is over MALLOC_MMAP_THRESHOLD_x2 and under ULONG_MAX &lt;MiB unit&gt;[Decimal number]</p></td>
+<td><p>MALLOC_MMAP_THRESHOLD_x2</p></td>
+</tr>
+<tr class="row-even"><td><p>XOS_MMM_L_COLORING</p></td>
+<td><p>0|1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>XOS_MMM_L_FORCE_MMAP_THRESHOLD</p></td>
+<td><p>0|1</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>MALLOC_CHECK_</p></td>
+<td><p>0|1|2|3|5|7 [Decimal number]</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p>MALLOC_TOP_PAD_</p></td>
+<td><p>Integer value that is over 0 and under ULONG_MAX &lt;byte unit&gt; [Decimal number]</p></td>
+<td><p>131072(=128KiB)</p></td>
+</tr>
+<tr class="row-even"><td><p>MALLOC_PERTURB_</p></td>
+<td><p>Integer value that is over INT_MIN and under INT_MAX [Decimal number]</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>MALLOC_MMAP_MAX_</p></td>
+<td><p>Integer value that is over INT_MIN and under INT_MAX [Decimal number]</p></td>
+<td><p>2097152(=2*1024*1024)</p></td>
+</tr>
+<tr class="row-even"><td><p>MALLOC_MMAP_THRESHOLD_</p></td>
+<td><p>Integer value that is over 0 and under ULONG_MAX &lt;byte unit&gt; [Decimal number or Hexadecimal]</p></td>
+<td><p>134217728(=128MiB)</p></td>
+</tr>
+<tr class="row-odd"><td><p>MALLOC_TRIM_THRESHOLD_</p></td>
+<td><p>Integer value that is over 0 and under ULONG_MAX &lt;byte unit&gt; [Decimal number or Hexadecimal]</p></td>
+<td><p>134217728(=128MiB)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="large-page-library-linking">
+<span id="linklargepagelibrary"></span><h2><span class="section-number">5.10.3. </span>Large page library linking<a class="headerlink" href="#large-page-library-linking" title="Link to this heading">¶</a></h2>
+<p>To use large page from user program, it is required to link large page library to the executable file.</p>
+<p>To use Fujitsu compiler, link the large page as a default (-Klargepage option is enabled as a default).</p>
+<p>To use the compiler othar than Fujitsu’s, by linking large page library  <strong class="program">libmpg.so</strong> , it is possible to create executable file which is large paged.</p>
+<p>Large page library path is as following.</p>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Large page library path</span><a class="headerlink" href="#id2" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Node type</p></th>
+<th class="head"><p>Path name</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Login node</p></td>
+<td><p>/opt/FJSVxos/devkit/aarch64/rfs/opt/FJSVxos/mmm/lib64</p></td>
+</tr>
+<tr class="row-odd"><td><p>Compute node</p></td>
+<td><p>/opt/FJSVxos/mmm/lib64</p></td>
+</tr>
+</tbody>
+</table>
+<p>For large pages, this large page library also provides a linker script for large pages at the following path. This is for large pages of static data (.data) and static data (.bss).
+Specify this linker script to the compiler appropriately.</p>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Linker script</span><a class="headerlink" href="#id3" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Node type</p></th>
+<th class="head"><p>Path name</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Login node</p></td>
+<td><p>/opt/FJSVxos/devkit/aarch64/rfs/opt/FJSVxos/mmm/util/bss-2mb.lds</p></td>
+</tr>
+<tr class="row-odd"><td><p>Compute node</p></td>
+<td><p>/opt/FJSVxos/mmm/util/bss-2mb.lds</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following is an example of the case to compile compute node gcc.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcc<span class="w"> </span>-Wl,-T/opt/FJSVxos/mmm/util/bss-2mb.lds<span class="w"> </span>-L/opt/FJSVxos/mmm/lib64<span class="w"> </span>-lmpg<span class="w"> </span>sample.c
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>If the application program is compiled with PIE (Position Independent Executable), the .data / .bss area will not be converted to large pages. In this case, the large page library only outputs a warning log, normal pages are used in the .data / .bss area, and the application program continues to execute.
+For example, use the -no-pie option to compile gcc so that it does not explicitly use the PIE format.</p>
+</div>
+</section>
+<section id="mitigating-memory-fragmentation">
+<h2><span class="section-number">5.10.4. </span>Mitigating Memory Fragmentation<a class="headerlink" href="#mitigating-memory-fragmentation" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">In Linux OS running on compute nodes, as memory fragmentation progresses, the amount of memory available for jobs decreases (this is a specification of the Linux OS).</div>
+<div class="line">As a way to mitigate the impact of this memory fragmentation, there is a method to configure environment variables related to large pages.</div>
+<div class="line">However, both methods can lead to performance degradation and potentially increase job execution time.</div>
+</div>
+<ul>
+<li><div class="line-block">
+<div class="line">XOS_MMM_L_HPAGE_TYPE=none</div>
+<div class="line">Uses normal pages instead of large pages.</div>
+<div class="line">Memory fragmentation occurs when “contiguous free memory space” is fragmented, resulting in small free spaces scattered around. Because of this, large pages, which require large contiguous space (page size of 2MiB or more), are more susceptible to its effects.</div>
+<div class="line">By using normal pages, smaller contiguous areas (page size of 64KiB) can also be used, mitigating the impact of memory fragmentation.</div>
+<div class="line">The disadvantage is that the TLB miss rate may increase, potentially degrading memory access performance.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">XOS_MMM_L_HUGETLB_FALLBACK=1</div>
+<div class="line">If large pages are insufficient, it attempts to allocate the insufficient memory using normal pages.</div>
+<div class="line">If the necessary memory cannot be secured even with normal pages, the process will terminate due to memory exhaustion.</div>
+<div class="line">This serves as a remedy for memory shortage when using large pages.</div>
+<div class="line">This environment variable is only effective when all of the following conditions are met. If the conditions are not met, it will operate as if the default value of 0 (disabled) is specified.</div>
+</div>
+<ul class="simple">
+<li><p>XOS_MMM_L_HPAGE_TYPE=hugetlbfs</p></li>
+<li><p>XOS_MMM_L_PAGING_POLICY=*:*:prepage</p></li>
+<li><p>XOS_MMM_L_ARENA_LOCK_TYPE=1</p></li>
+<li><p>XOS_MMM_L_MAX_ARENA_NUM=1</p></li>
+</ul>
+<p>The disadvantage is that the overhead of determining whether or not normal page allocation is necessary occurs, which degrades memory acquisition performance.</p>
+</li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.10. Large page space allocation</a><ul>
+<li><a class="reference internal" href="#overview">5.10.1. Overview</a></li>
+<li><a class="reference internal" href="#environment-variable-for-large-page-library-setting">5.10.2. Environment variable for large page library setting</a></li>
+<li><a class="reference internal" href="#large-page-library-linking">5.10.3. Large page library linking</a></li>
+<li><a class="reference internal" href="#mitigating-memory-fragmentation">5.10.4. Mitigating Memory Fragmentation</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="pjsubCommandOptions.html"
+                          title="previous chapter"><span class="section-number">5.9. </span>Job execution command options</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CPUcoreMemoryBinding.html"
+                          title="next chapter"><span class="section-number">5.11. </span>CPU core and memory binding</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CPUcoreMemoryBinding.html" title="5.11. CPU core and memory binding"
+             >next</a></li>
+        <li class="right" >
+          <a href="pjsubCommandOptions.html" title="5.9. Job execution command options"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.10. </span>Large page space allocation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

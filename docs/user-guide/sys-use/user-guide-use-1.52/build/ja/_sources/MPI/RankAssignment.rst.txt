@@ -1,0 +1,399 @@
+ランク割り当て
+================
+
+| MPIでは、プロセス識別のために、プロセス番号に相当する「ランク」と呼ぶ番号を割り当てます。
+| ランクの割り当てルールは、\ :program:`pjsub`\ コマンドの\ ``--mpi``\ オプションにより指定することができます。
+
+rank-map-bynode
+--------------------
+
+``rank-map-bynode``\は、計算ノードに1プロセスを生成すると、次の計算ノードに移動し、ラウンドロビンで自動的に割り付けます。座標の原点をランク0とし、\ ``rank-map-bynode``\の先頭文字の軸方向にランクを並べ、上限まで達した時点で、次の文字に移動します。
+
+.. list-table::
+ :widths: 4,8
+ :header-rows: 1
+
+
+ * - オプション
+   - 内容
+
+ * - rank-map-bynode[=rankmap]
+   - | ``rankmap``\ には、``XY|YX|XYZ|XZY|YXZ|YZX|ZXY|ZYX``\ を指定してください。
+     | ``rankmap``\ は ``shape``\ で指定した次元数と同じものを指定してください。
+     | 1次元の場合、``rankmap``\ の指定はできません。
+     | 2次元の場合は文字 ``XY``\ 、3次元の場合は文字 ``XYZ``\ の組み合わせで指定してください。
+     | ``rankmap``\ のデフォルトは、以下のとおりです。
+
+     - 1次元ジョブの場合は、1次元座標がランク番号になります。
+     - 2次元ジョブの場合は、[\ ``XY``\ ]と同じです。
+     - 3次元ジョブの場合は、[\ ``XYZ``\ ]と同じです。
+
+
+rank-map-bynode（1次元）
+-------------------------------
+
+1次元の指定例を示します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=8"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "rank-map-bynode"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+.. figure:: ./img/RankAssignment_01.png
+   :align: center
+   :scale: 80
+
+
+rank-map-bynode（2次元）
+-------------------------
+
+2次元の指定例を示します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=3x3"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "rank-map-bynode=XY"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+.. figure:: ./img/RankAssignment_02.png
+   :align: center
+   :scale: 80
+
+
+rank-map-bynode（3次元）
+-------------------------
+
+3次元の指定例を示します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=3x3x2"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "rank-map-bynode=XYZ"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+.. figure:: ./img/RankAssignment_03.png
+   :align: center
+   :scale: 80
+
+
+rank-map-bynode（ノード内複数プロセス指定（1次元））
+--------------------------------------------------------
+
+ノード内に複数のプロセスを指定する場合の例を示します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=8"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "proc=16"
+  #PJM --mpi  "rank-map-bynode"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+.. figure:: ./img/RankAssignment_04.png
+   :align: center
+   :scale: 80
+
+
+rank-map-bychip
+-------------------------
+
+``rank-map-bychip``\ は、計算ノードにnプロセスを生成すると、次の計算ノードに移動し、ラウンドロビンで自動的に割り付けます。座標の原点をランク0とし、\ ``rank-map-bychip``\ の先頭文字の軸方向にランクを並べ、上限まで達した時点で、次の文字に移動します。
+
+.. list-table::
+ :widths: 4,8
+ :header-rows: 1
+
+
+ * - オプション
+   - 内容
+
+ * - rank-map-bychip[:rankmap]
+   - | ``rankmap``\ には、``XY|YX|XYZ|XZY|YXZ|YZX|ZXY|ZYX``\ を指定してください。
+     | ``rankmap``\ は ``shape``\ で指定した次元数と同じものを指定してください。
+     | 1次元の場合、``rankmap``\ の指定はできません。
+     | 2次元の場合は文字 ``XY``\ 、3次元の場合は文字 ``XYZ``\ の組み合わせで指定してください。
+     | ``rankmap``\ のデフォルトは、以下のとおりです。
+
+     - 1次元ジョブの場合は、1次元座標がランク番号になります。
+     - 2次元ジョブの場合は、[\ ``XY``\ ]と同じです。
+     - 3次元ジョブの場合は、[\ ``XYZ``\ ]と同じです。
+
+
+``rank-map-bychip``\ の指定例を示します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=3x3"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "proc=18"
+  #PJM --mpi  "rank-map-bychip:XY"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+
+.. figure:: ./img/RankAssignment_05.png
+   :align: center
+   :scale: 80
+
+
+rank-map-hostfile
+-------------------------
+
+ランクマップファイルに指定された座標を基に、ランクを割り当てます。
+
+``rank-map-hostfile``\ の指定例を示します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=2x2x2"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "rank-map-hostfile=filename"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+
+1. ``filename``\ は、\ :program:`pjsub`\ コマンドを実行するカレントディレクトリに配置します。
+2. ``filename``\ 内のランク指定は、ノード形状に合わせて、1次元、2次元または3次元座標で指定します。
+3. ``filename``\ には、1行に1座標を記述し、括弧で囲んで指定します。
+
+
+rank-map-hostfile（1次元）
+------------------------------
+
+1次元座標を指定する場合、(X)と指定します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=8"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "rank-map-hostfile=filename"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+
+ホストマップファイル（1次元指定例）
+
+.. code-block:: none
+
+  (0)      <-- ランク0
+  (1)      <-- ランク1
+  (2)      <-- ランク2
+  (3)      <-- ランク3
+  (7)      <-- ランク4
+  (6)      <-- ランク5
+  (5)      <-- ランク6
+  (4)      <-- ランク7
+
+.. figure:: ./img/RankAssignment_06.png
+   :align: center
+   :scale: 80
+
+
+rank-map-hostfile（2次元）
+------------------------------
+
+2次元座標を指定する場合、(X,Y)と指定します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=4x2"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "rank-map-hostfile=filename"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+ホストマップファイル（2次元指定例）
+
+.. code-block:: none
+
+  (0,0)      <-- ランク0
+  (1,0)      <-- ランク1
+  (2,0)      <-- ランク2
+  (3,0)      <-- ランク3
+  (3,1)      <-- ランク4
+  (2,1)      <-- ランク5
+  (1,1)      <-- ランク6
+  (0,1)      <-- ランク7
+
+.. figure:: ./img/RankAssignment_07.png
+   :align: center
+   :scale: 80
+
+
+rank-map-hostfile（3次元）
+------------------------------
+
+3次元座標を指定する場合、(X,Y,Z)と指定します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=2x2x2"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "rank-map-hostfile=filename"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+ホストマップファイル（3次元指定例）
+
+.. code-block:: none
+
+  (0,0,0)      <-- ランク0
+  (1,0,0)      <-- ランク1
+  (0,1,0)      <-- ランク2
+  (1,1,0)      <-- ランク3
+  (0,0,1)      <-- ランク4
+  (0,1,1)      <-- ランク5
+  (1,0,1)      <-- ランク6
+  (1,1,1)      <-- ランク7
+
+.. figure:: ./img/RankAssignment_08.png
+   :align: center
+   :scale: 80
+
+
+rank-map-hostfile（ノード内複数ランク指定）
+----------------------------------------------
+
+ホストマップファイル（\ ``rank-map-hostfile``\ ）にて、ノード内に複数プロセスを割り当てる例を示します。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=2x2"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "proc=8"
+  #PJM --mpi  "rank-map-hostfile=filename"
+  #PJM --mpi  "rank-map-bynode"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+ホストマップファイル（2次元指定例）
+
+.. code-block:: none
+
+  (0,0)      <-- ランク0
+  (0,0)      <-- ランク1
+  (1,0)      <-- ランク2
+  (1,0)      <-- ランク3
+  (0,1)      <-- ランク4
+  (0,1)      <-- ランク5
+  (1,1)      <-- ランク6
+  (1,1)      <-- ランク7
+
+.. figure:: ./img/RankAssignment_09.png
+   :align: center
+   :scale: 80
+
+
+rank-map-hostfile／rank-map-bychip（ノード内複数ランク指定）
+-------------------------------------------------------------------
+
+| ``rank-map-hostfile``\ と\ ``rank-map-bychip``\ を同時に指定することができます。
+| ホストマップファイルで指定される座標（1行）に、ジョブスクリプトで指定した\ ``proc=``\ と\ ``shape=``\ の数を元に、\ ``proc/shape``\ のプロセス数(小数点以下切り上げ)を割り当てます。\ ``shape``\ が指定されない場合、代わりに\ ``node=``\ で指定した数を使用します。
+| 次の例では、\ ``proc/node=8/4=2``\ となります。
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=2x2"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "proc=8"
+  #PJM --mpi  "rank-map-hostfile=filename"
+  #PJM --mpi  "rank-map-bychip"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+ホストマップファイル（2次元指定例）
+
+.. code-block:: none
+
+  (0,0)      <-- ランク0,1
+  (0,1)      <-- ランク2,3
+  (1,1)      <-- ランク4,5
+  (1,0)      <-- ランク6,7
+
+.. figure:: ./img/RankAssignment_10.png
+   :align: center
+   :scale: 80
+
+
+ホストマップファイル利用時の注意事項
+--------------------------------------
+
+ホストマップファイルについて注意事項を示します。
+
+- ファイル内の空行は、無視します。
+- ファイル内に記述する座標は、ノードの形状を表す\ ``shape``\ パラメーターで指定した範囲内の値である必要があります。
+
+  - 例）\ ``shape=2x3``\ が指定された場合、記述できる座標は (0,0)、(0,1)、(0,2)、(1,0)、(1,1)、(1,2) です。
+
+- ``rank-map-hostfile``\ と\ ``rank-map-bychip``\ パラメーターを共に指定する場合、ファイル内の記述は以下にしたがう必要があります。
+
+  - ファイル内に記述する座標の個数は、\ ``shape``\ パラメーターで指定された形状が示すノード数と同じにします。
+
+   - 例）\ ``shape=3x2``\ の場合、ノード数は6つのため、ファイル内には6つの座標を記述します。
+   - 記述した座標の数が\ ``shape``\ パラメーターで指定した形状が示すノード数よりも少ない場合、\ :program:`pjsub`\ コマンドはジョブの受付けを拒否します。
+   - 記述した座標の数が\ ``shape``\ パラメーターで指定した形状が示すノード数よりも多い場合、残りの座標は無視されます。
+
+  - ファイル内に複数の同じ座標は記述できません。同じ座標を記述した場合、\ :program:`pjsub`\ コマンドがエラーになります。
+
+- ``rank-map-hostfile``\ と\ ``rank-map-bynode``\ パラメーターを共に指定する場合、ファイル内の記述は以下にしたがう必要があります。
+
+  - ファイル内に記述した座標の個数が\ ``shape``\ パラメーターで指定したプロセス数よりも少ない場合、最後の座標のノードまで割り当てたら最初の座標のノードに戻って割り当てます。
+    座標の数が\ ``shape``\ パラメーターで指定したプロセス数よりも多い場合、残りの座標は無視されます。
+
+  - ファイル内には、同じ座標は計算ノードあたりのCPUコア数以下であれば記述できます。
+
+
+
+

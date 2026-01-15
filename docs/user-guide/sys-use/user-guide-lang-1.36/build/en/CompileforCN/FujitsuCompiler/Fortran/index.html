@@ -1,0 +1,1120 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.7. Fortran &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f85107c5" />
+    
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="3.1.7.11.1. Sequential execution" href="FortranSampleProgram%28sequential%29.html" />
+    <link rel="prev" title="3.1.6. How to check the version" href="../HowToCheckTheVersion.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="FortranSampleProgram%28sequential%29.html" title="3.1.7.11.1. Sequential execution"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../HowToCheckTheVersion.html" title="3.1.6. How to check the version"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.7. </span>Fortran</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="fortran">
+<h1><span class="section-number">3.1.7. </span>Fortran<a class="headerlink" href="#fortran" title="Link to this heading">¶</a></h1>
+<p>This section indicates how to use Fortran compiler.</p>
+<section id="environment-variables">
+<h2><span class="section-number">3.1.7.1. </span>Environment variables<a class="headerlink" href="#environment-variables" title="Link to this heading">¶</a></h2>
+<p>The environment variable which is required when executing compiler is set when logging in.</p>
+</section>
+<section id="how-to-compile">
+<h2><span class="section-number">3.1.7.2. </span>How to compile<a class="headerlink" href="#how-to-compile" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">This indicates how to compile Fortran program. Use  <strong class="program">frtpx</strong> for Fortran compiling.</div>
+<div class="line">As used <strong class="program">mpifrtpx</strong>, there is no need to be aware of MPI header files and libraries when using MPI library.</div>
+</div>
+<p>If use MPI library</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifrtpx<span class="w"> </span><span class="o">[</span>compile<span class="w"> </span>option<span class="o">]</span><span class="w"> </span><span class="nb">source</span><span class="w"> </span>file<span class="w"> </span>name
+</pre></div>
+</div>
+<p>If don’t use MPI library</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span><span class="o">[</span>compile<span class="w"> </span>option<span class="o">]</span><span class="w"> </span><span class="nb">source</span><span class="w"> </span>file<span class="w"> </span>name
+</pre></div>
+</div>
+</section>
+<section id="compilation-option">
+<h2><span class="section-number">3.1.7.3. </span>Compilation option<a class="headerlink" href="#compilation-option" title="Link to this heading">¶</a></h2>
+<p>This indicates the main compile option of Fortran compiler.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Compile option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-c</p></td>
+<td><p>Proceed up to object file creation.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o exe_file</p></td>
+<td><div class="line-block">
+<div class="line">Change the executable file name / object file name to  <code class="docutils literal notranslate"><span class="pre">exe_file</span></code>.</div>
+<div class="line">If executable file name is omitted, it will be  <code class="file docutils literal notranslate"><span class="pre">a.out</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-O [0|1|2|3]</p></td>
+<td><div class="line-block">
+<div class="line">Specify optimisation level.</div>
+<div class="line">If the number after  <code class="docutils literal notranslate"><span class="pre">-O</span></code>is omitted, it will be  <code class="docutils literal notranslate"><span class="pre">-O3</span></code>.</div>
+<div class="line">The default is  <code class="docutils literal notranslate"><span class="pre">-O2</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Kfast</p></td>
+<td><p>Guide optimization options for speedup.</p></td>
+</tr>
+<tr class="row-even"><td><p>-Ksimd[=1|2|auto]</p></td>
+<td><div class="line-block">
+<div class="line">Generate objects using SIMD extension instructions.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Ksimd=1</span></code></div>
+<div class="line">Generate objects using SIMD extension instructions.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Ksimd=2</span></code></div>
+<div class="line-block">
+<div class="line">Generate objects using SIMD extension instructions to the loop including if-statement, in addition to  <code class="docutils literal notranslate"><span class="pre">-Ksimd=1</span></code> option.</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Ksimd=auto</span></code></div>
+<div class="line-block">
+<div class="line">Instructs the compiler to automatically determine whether to loop the loop. The SIMD of the loop including IF syntax is promoted.</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Ksimd</span></code></div>
+<div class="line-block">
+<div class="line">If  the number after  <code class="docutils literal notranslate"><span class="pre">-Ksimd</span></code>is omitted, it will be  <code class="docutils literal notranslate"><span class="pre">-Ksimd=auto</span></code>.</div>
+</div>
+<div class="line">If over  <code class="docutils literal notranslate"><span class="pre">-O2</span></code>option is available,  <code class="docutils literal notranslate"><span class="pre">-Ksimd</span></code>option is applied when omitted.</div>
+<div class="line">If  <code class="docutils literal notranslate"><span class="pre">-Ksimd</span></code>option is available,  <code class="docutils literal notranslate"><span class="pre">-Kloop_part_simd</span></code>option is also available.</div>
+<div class="line">This option is meaningful when the -O2 option or higher is enabled.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Kparallel</p></td>
+<td><div class="line-block">
+<div class="line">Proceed auto parallelization. The default is <code class="docutils literal notranslate"><span class="pre">-Knoparallel</span></code>.</div>
+<div class="line">When only linking is to be performed, <code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code> option must be specified if an object program that was compiled with the <code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code> option specified is included.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-Kopenmp</p></td>
+<td><div class="line-block">
+<div class="line">Enable directive of OpenMP Fortran specification.</div>
+<div class="line">The default is <code class="docutils literal notranslate"><span class="pre">-Knoopenmp</span></code>.</div>
+<div class="line">When only linking is to be performed, <code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code> option must be specified if an object program that was compiled with the <code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code> option specified is included.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Kocl</p></td>
+<td><div class="line-block">
+<div class="line">Enable the optimization control line.</div>
+<div class="line">The default is  <code class="docutils literal notranslate"><span class="pre">-Knoocl</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-Klargepage</p></td>
+<td><p>Indicates whether to create an executable program that uses the large page feature. This option must be specified when linking a program. Default is  <code class="docutils literal notranslate"><span class="pre">-Klargepage</span></code> .If not using large page function, use  <code class="docutils literal notranslate"><span class="pre">-Knolargepage</span></code> option.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Koptmsg[=1|2|guide]</p></td>
+<td><div class="line-block">
+<div class="line">A message of optimization status is output.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Koptmsg=1</span></code></div>
+<div class="line-block">
+<div class="line">A message is output indicating that the execution result has been optimized that may cause side effects.</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Koptmsg=2</span></code></div>
+<div class="line-block">
+<div class="line">In addition to optmsg = 1, a message is output indicating that optimization functions such as automatic parallelization, SIMD conversion, and loop unrolling have been activated.</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Koptmsg=guide</span></code></div>
+<div class="line-block">
+<div class="line">In addition to optmsg=2 message, the obstruction factor and the corrective action are output as a guidance message when the following optimization cannot be applied.</div>
+<div class="line-block">
+<div class="line">- SIMD conversion</div>
+<div class="line">- Auto parallelization</div>
+<div class="line">- Software pipelining</div>
+<div class="line">- Inline expansion</div>
+</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Koptmsg</span></code></div>
+<div class="line-block">
+<div class="line">If the number after  <code class="docutils literal notranslate"><span class="pre">-Koptmsg</span></code>is omitted, it will be  <code class="docutils literal notranslate"><span class="pre">-Koptmsg=1</span></code>.</div>
+</div>
+<div class="line">The default is  <code class="docutils literal notranslate"><span class="pre">-Koptmsg=1</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-I directory</p></td>
+<td><p>Specify the directory to search for INCLUDE files or module information files.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Fixed</p></td>
+<td><div class="line-block">
+<div class="line">Indicates that the source program is written in a fixed format.</div>
+<div class="line">The default is determined by referring to the extension.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-Free</p></td>
+<td><div class="line-block">
+<div class="line">Indicates that the source program is written in free form.</div>
+<div class="line">The default is determined by referring to the extension.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-X6</p></td>
+<td><p>The part of the language specification that is interpreted differently is interpreted as the FORTRAN66 specification.</p></td>
+</tr>
+<tr class="row-even"><td><p>-X7</p></td>
+<td><p>The part of the language specification that is interpreted differently is interpreted as the FORTRAN77 specification.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-X9</p></td>
+<td><p>The part of the language specification that is interpreted differently is interpreted as the Fortran95 specification.</p></td>
+</tr>
+<tr class="row-even"><td><p>-X03</p></td>
+<td><p>The part of the language specification that is interpreted differently is interpreted as the Fortran2003 specification. Interpretation is the same as  <code class="docutils literal notranslate"><span class="pre">-X08</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-X08</p></td>
+<td><p>The part of the language specification that is interpreted differently is interpreted as the Fortran2008 specification.</p></td>
+</tr>
+<tr class="row-even"><td><p>-fw</p></td>
+<td><p>Outputs only w level (low error) and s level (severe error) diagnostic messages.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-fs</p></td>
+<td><p>Output only s level (severe error) diagnostic messages.</p></td>
+</tr>
+<tr class="row-even"><td><p>-f msg_num</p></td>
+<td><p>By specifying the message number to  <code class="docutils literal notranslate"><span class="pre">msg_num</span></code>, suppresses the output of specific diagnostic messages.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-N maxserious=maxnum</p></td>
+<td><p>If the number of severe error messages detected during compilation is reached to  <code class="docutils literal notranslate"><span class="pre">maxnum</span></code>, stop compiling.</p></td>
+</tr>
+<tr class="row-even"><td><p>-H[a|e|f|o|s|u|x]</p></td>
+<td><p>Check argument integrity, subscript expression values, substring expression values, undefined variable references, or array expression shape conformance at compile and run time.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Nlibomp</p></td>
+<td><p>Uses the LLVM OpenMP library for parallel processing. This option must be specified when linking. Default is  <code class="docutils literal notranslate"><span class="pre">-Nlibomp</span></code>.  When using the Fujitsu OpenMP library for parallel processing, specify  <code class="docutils literal notranslate"><span class="pre">-Nfjomplib</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>-NRtrap</p></td>
+<td><div class="line-block">
+<div class="line">Instructs the execution of diagnostic messages for built-in operations during execution and the detection of floating-point operation interrupt events.</div>
+<div class="line">The default is <code class="docutils literal notranslate"><span class="pre">-NRnotrap</span></code>.</div>
+<div class="line">To enable the <code class="docutils literal notranslate"><span class="pre">-NRtrap</span></code> option, it must be set at both compilation and linking.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Nlst=t</p></td>
+<td><p>Output the detailed optimisation information and statictics information.</p></td>
+</tr>
+<tr class="row-even"><td><p>-V</p></td>
+<td><p>Output the compiler version information.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>About Fortran compiler compile option, see Fortran User’s Guide “2.2 Translation Option”.</p>
+</div>
+</section>
+<section id="recommended-compiling-option">
+<h2><span class="section-number">3.1.7.4. </span>Recommended compiling option<a class="headerlink" href="#recommended-compiling-option" title="Link to this heading">¶</a></h2>
+<p>Performance Focused:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-Kfast,openmp[,parallel]
+
+Specify this option to draw out the full performance of the A64FX. For example,
+with the option, you can make full use of cores through thread parallelization or
+SVE through SIMDization, improve instruction level parallelism by software pipelining,
+change the operation order by optimization, and use the reciprocal approximation operation.
+</pre></div>
+</div>
+<p>Precision Focused:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-Kfast,openmp[,parallel],fp_precision
+
+Use this option when you want to obtain the same precision as -O0 while optimizing
+performance as much as possible. Specify the new option Kfp_precision, which
+suppresses all optimizations that affect precision, as an option appended to the
+recommended option focused on performance.
+
+This suppresses multiple optimizations that significantly affect performance.
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-Kfast</span></code> option is the same value with <code class="docutils literal notranslate"><span class="pre">-O3,-Keval,fp_contract,fp_relaxed,fz,ilfunc,mfunc,omitfp,simd_packed_promotion</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code> option enables the OpenMP specification directives.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code> option  induces <code class="docutils literal notranslate"><span class="pre">-O2</span></code>, <code class="docutils literal notranslate"><span class="pre">-Kregion_extension</span></code>, and <code class="docutils literal notranslate"><span class="pre">-Kloop_part_parallel</span></code> option. However if the <code class="docutils literal notranslate"><span class="pre">-O3</span></code> option is enable (<code class="docutils literal notranslate"><span class="pre">-Kfast</span></code> is specified first, etc) , the optimization level is 3.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Kfp_precision</span></code> option is the same value with <code class="docutils literal notranslate"><span class="pre">-Knoeval,nofp_contract,nofp_relaxed,nofz,noilfunc,nomfunc,parallel_fp_precision</span></code>.</p></li>
+</ul>
+<blockquote>
+<div><div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Optimization functions other than the recommended options may or may not be effective depending on the characteristics of the program data and must be tried.</p>
+</div>
+</div></blockquote>
+<p>The option detail is as below:</p>
+<ul class="simple">
+<li><p>The list of option which is the same value with <code class="docutils literal notranslate"><span class="pre">-Kfast</span></code>.</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td colspan="2"><p>-O3</p></td>
+<td><div class="line-block">
+<div class="line">Create optimized object.</div>
+<div class="line">Performs optimization such as SIMD and unrolling.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><p>-Keval <sup>*</sup></p></td>
+<td></td>
+<td><div class="line-block">
+<div class="line">Applies optimizations that change how the operations are evaluated.</div>
+<div class="line">If  <code class="docutils literal notranslate"><span class="pre">-Keval</span></code> is enabled,  <code class="docutils literal notranslate"><span class="pre">-Ksimd_reduction_product</span></code>is also enabled.</div>
+<div class="line">If  <code class="docutils literal notranslate"><span class="pre">-Keval</span></code> and  <code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code> is enable,  <code class="docutils literal notranslate"><span class="pre">-Kfsimple</span></code>, <code class="docutils literal notranslate"><span class="pre">-Kreduction</span></code> is also enabled.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-Kfsimple <sup>*</sup></p></td>
+<td><p>Simplify floating-point arithmetic for object programs.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kreduction <sup>*</sup></p></td>
+<td><p>Optimizes reduction.</p></td>
+</tr>
+<tr class="row-even"><td><p>-Ksimd_reduction_product <sup>*</sup></p></td>
+<td><p>SIMD conversion is performed for the reduction operation of multiplication.</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>-Kfp_contract <sup>*</sup></p></td>
+<td><p>Performs optimization using Floating-Point Multiply-Add / Subtract instructions.</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>-Kfp_relaxed <sup>*</sup></p></td>
+<td><p>For single-precision or double-precision floating-point division or SQRT functions,
+use reciprocal approximation arithmetic instructions and Floating-Point Multiply-Add / Subtract arithmetic instructions.</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>-Kfz <sup>*</sup></p></td>
+<td><div class="line-block">
+<div class="line">Use flush-to-zero mode.</div>
+<div class="line">In flush-to-zero mode, if the result or source operand is a denormalized number, it is replaced with 0 of the same sign.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>-Kilfunc=procedure <sup>*</sup></p></td>
+<td><p>Inline expansion of single-precision and double-precision real type built-in functions.</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>-Kmfunc <sup>*</sup></p></td>
+<td><p>Performs optimization using multiple arithmetic functions.</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>-Komitfp</p></td>
+<td><div class="line-block">
+<div class="line">Indicates that optimization is performed without guaranteeing the frame pointer register in the procedure call.</div>
+<div class="line">If this option is enabled, the traceback information is not guaranteed.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>-Ksimd_packed_promotion</p></td>
+<td><p>Promotes packed-SIMD.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><sup>*</sup>:Optimization may affect the calculation result. For details, refer to the “Optimization Functions” chapter in the “Fortran User’s Guide”.</p>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>The list of option which is induced from  <code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code>.</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Induced option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-O2</p></td>
+<td><p>Direct optimisation level.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kregion_extension</p></td>
+<td><p>Enlarge the parallel region.</p></td>
+</tr>
+<tr class="row-even"><td><p>-Kloop_part_parallel</p></td>
+<td><p>Divide loops and partially parallelize automatically.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kloop_perfect_nest</p></td>
+<td><p>Indicates whether to split an incomplete multiplex loop into a complete multiplex loop.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">By adding the compile option, you can control the optimization function of the recommended option.</div>
+<div class="line">As the compile option is given priority, the one written later is used, so use the characteristics to specify it as in the following example.</div>
+</div>
+<ol class="arabic">
+<li><p>If the result accuracy is different.</p>
+<blockquote>
+<div><p>On <strong class="program">frtpx</strong>, optimization (<code class="docutils literal notranslate"><span class="pre">-Keval</span></code>) to change the calculation evaluation method from  <code class="docutils literal notranslate"><span class="pre">-Kfast</span></code> is specified  and this may affect precision sensitive calculations.
+If so, specifying  <code class="docutils literal notranslate"><span class="pre">-Knoeval</span></code> can limit the change.</p>
+</div></blockquote>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w">  </span>-Kfast,parallel,noeval<span class="w"> </span>sample.f
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><p>If compiling takes long period of time</p>
+<p>Pull down the optimization option level. In this example,  using <code class="docutils literal notranslate"><span class="pre">-kfast</span></code> and pulling down the optimization option  <code class="docutils literal notranslate"><span class="pre">-O3</span></code>  to  <code class="docutils literal notranslate"><span class="pre">-O2</span></code>.</p>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w">  </span>-Kfast,parallel<span class="w"> </span>-O2<span class="w">  </span>sample.f
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="environment-variable-option-specification">
+<h2><span class="section-number">3.1.7.5. </span>Environment variable (option specification)<a class="headerlink" href="#environment-variable-option-specification" title="Link to this heading">¶</a></h2>
+<p>This indicates the environment variable which Fortran compiler ( <strong class="program">frtpx</strong>) uses.</p>
+<ol class="arabic">
+<li><p>FORT90CPX</p>
+<p>You can set compile options in the environment variable FORT90CPX.
+Compile options defined in FORT90CPX are automatically passed to the compiler.
+Compiler variables defined in environment variables and systems have the following precedence:</p>
+<p>[Priority]</p>
+<ol class="arabic simple">
+<li><p>Translation direction line (Only when specifying  <code class="docutils literal notranslate"><span class="pre">-Koptions</span></code>)</p></li>
+<li><p>Compile command operands</p></li>
+<li><p>Environment variable FORT90CPX or FORT90C</p></li>
+<li><p>Translation profile file</p></li>
+<li><p>Default</p></li>
+</ol>
+<p>The following example sets the recommended option to the environment variable FORT90CPX.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">FORT90CPX</span><span class="o">=</span>-Kfast,parallel
+</pre></div>
+</div>
+<p>The enabled compilation options are confirmable with  <code class="docutils literal notranslate"><span class="pre">-Nlst</span></code> option.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Nlst<span class="o">=</span>t<span class="w"> </span>-o<span class="w"> </span>sample<span class="w"> </span>sample.f
+</pre></div>
+</div>
+<p>An extract of translation information output by  <code class="docutils literal notranslate"><span class="pre">-Nlst</span></code>option is as following:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Option information</span>
+<span class="go">  Environment variable : (omitted)</span>
+<span class="go">  Command line options : -Nlst=t -o sample</span>
+<span class="go">  Effective options    : -fi -g0 -AE -Fixed -O2 -X08</span>
+<span class="go">                         -x0 -xaccept=nomodule_allocatable</span>
+<span class="go">                         -KA64FX -KARMV8_3_A -KSVE -Kalign_commons</span>
+<span class="go">                         -Kalign_loops -Kassume=noshortloop</span>
+<span class="go">                         -Kassume=nomemory_bandwidth</span>
+<span class="go">                         -Kassume=notime_saving_compilation -Kauto</span>
+<span class="go">                         -Kautoobjstack -Knocalleralloc -Kcmodel=small</span>
+<span class="go">                         -Knoeval -Keval_noconcurrent -Knofenv_access</span>
+<span class="go">                         -Knofp_contract -Knofp_relaxed -Knofsimple -Knofz</span>
+<span class="go">                         -Khpctag -Knoilfunc -Kintentopt -Klargepage</span>
+<span class="go">                         -Kloop_blocking -Kloop_fission</span>
+<span class="go">                         -Kloop_nofission_stripmining</span>
+<span class="go">                         -Kloop_fission_threshold=50 -Kloop_fusion</span>
+<span class="go">                         -Kloop_interchange -Kloop_nopart_parallel</span>
+<span class="go">                         -Kloop_part_simd -Kloop_noversioning -Knolto</span>
+<span class="go">                         -Knomfunc -Knoocl -Knoomitfp -Knooptlib_string</span>
+<span class="go">                         -Koptmsg=1 -Knopc_relative_literal_loads -Kplt</span>
+<span class="go">                         -Knopreex -Kprefetch_noconditional</span>
+<span class="go">                         -Kprefetch_noindirect -Kprefetch_sequential=auto</span>
+<span class="go">                         -Kprefetch_nostride -Kprefetch_cache_level=all</span>
+<span class="go">                         -Kprefetch_noinfer -Kprefetch_strong</span>
+<span class="go">                         -Kprefetch_strong_L2 -Knosch_post_ra -Knosch_pre_ra</span>
+<span class="go">                         -Knosibling_calls -Ksimd=auto</span>
+<span class="go">                         -Ksimd_nopacked_promotion</span>
+<span class="go">                         -Ksimd_noreduction_product -Ksimd_reg_size=512</span>
+<span class="go">                         -Knostriping -Kswp -Kswp_freg_rate=100</span>
+<span class="go">                         -Kswp_ireg_rate=100 -Kswp_preg_rate=100</span>
+<span class="go">                         -Ktemparraystack -Kunroll -Knounroll_and_jam</span>
+<span class="go">                         -Knozfill</span>
+<span class="go">                         -Knoopenmp -Kopenmp_noassume_norecurrence</span>
+<span class="go">                         -Kopenmp_nocollapse_except_innermost</span>
+<span class="go">                         -Kopenmp_noordered_reduction -Knoopenmp_simd</span>
+<span class="go">                         -Knothreadsafe -Knoparallel</span>
+<span class="go">                         -Kparallel_nofp_precision -Knoarray_private</span>
+<span class="go">                         -Knodynamic_iteration -Knoreduction</span>
+<span class="go">                         -Knoregion_extension</span>
+<span class="go">                         -Nallextput -Nnoalloc_assign</span>
+<span class="go">                         -Ncancel_overtime_compilation -Nnocheck_global</span>
+<span class="go">                         -Nnocoarray -Nnocompdisp -Nnocopyarg -Nnocoverage</span>
+<span class="go">                         -Nfreealloc -Nf90move -Nnohook_func -Nnohook_time</span>
+<span class="go">                         -Nline -Nnolinkprof -Nlst -Nlst=p -Nlst=t</span>
+<span class="go">                         -Nnomallocfree -Nnoobsfun -Nquickdbg=noargchk</span>
+<span class="go">                         -Nquickdbg=nosubchk -Nquickdbg=noundef -NRnotrap</span>
+<span class="go">                         -Nnorecursive -Nnoreordered_variable_stack</span>
+<span class="go">                         -Nrt_notune -Nnosave -Nsetvalue=noheap</span>
+<span class="go">                         -Nsetvalue=nostack -Nsetvalue=noscalar</span>
+<span class="go">                         -Nsetvalue=noarray -Nsetvalue=nostruct -Nuse_rodata</span>
+
+<span class="go">Main program &quot;main&quot;</span>
+<span class="go"> (line-no.)(nest)(optimize)</span>
+<span class="go">   (omitted)</span>
+</pre></div>
+</div>
+</li>
+<li><p>TMPDIR</p>
+<p>The temporary directory used by the compiler can be changed by using the environment variable <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>.
+<code class="docutils literal notranslate"><span class="pre">/etc/profile</span></code> to set the home directory in <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>.</p>
+<p>When changing the temporary directory, please avoid using <code class="file docutils literal notranslate"><span class="pre">/tmp</span></code>.
+For <span class="target" id="index-2"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>, specify a writable directory of  <code class="file docutils literal notranslate"><span class="pre">/home/</span></code> or  <code class="file docutils literal notranslate"><span class="pre">/vol0n0m/data/</span></code>.</p>
+</li>
+</ol>
+</section>
+<section id="fortran-library-for-parallel-processing">
+<h2><span class="section-number">3.1.7.6. </span>Fortran library for parallel processing<a class="headerlink" href="#fortran-library-for-parallel-processing" title="Link to this heading">¶</a></h2>
+<p>The Fortran library is called from the Fortran object program to execute the Fortran program.</p>
+<p>Library types include startup routines, Fortran input / output statements, built-in procedures, service routines, and parallel processing.
+In Supercomputer Fugaku, the following two libraries are provided for “parallel processing”.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Library name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LLVM OpenMP library</p></td>
+<td><div class="line-block">
+<div class="line">A library for parallel functions based on LLVM OpenMP Runtime Library, which is open source software.</div>
+<div class="line">The supported specifications are OpenMP 4.5 and OpenMP5.0 (partial).</div>
+<div class="line">For the specifications of the LLVM OpenMP library, please read “Chapter 12 Multiprocessing” in the Fortran User’s Guide.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Fujitsu OpenMP library</p></td>
+<td><div class="line-block">
+<div class="line">This is a library for parallel functions based on the Fujitsu OpenMP library for K computer systems prior to PRIMEHPC FX100. It is suitable for cases where importance is attached to compatibility with the conventional Fujitsu OpenMP library.</div>
+<div class="line">The supported specifications are OpenMP 3.1, OpenMP4.0 (part), and OpenMP4.5 (part).</div>
+<div class="line">For the specifications of the Fujitsu OpenMP library, refer to the Fortran User’s Guide “Appendix J Fujitsu OpenMP Library”.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>To specify a parallel processing library, the following options must be specified at link time.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 18.2%" />
+<col style="width: 81.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-Nlibomp</p></td>
+<td><p>Indicates that the LLVM OpenMP library is to be used as the OpenMP library.</p>
+<p>When omitted, this  <code class="docutils literal notranslate"><span class="pre">-Nlibomp</span></code> is applied.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Nfjomplib</p></td>
+<td><p>Indicates that the Fujitsu OpenMP library is to be used as the OpenMP library.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following environment variables added in OpenMP 4.0 and later are available in the LLVM OpenMP library.
+On the other hand, the Fujitsu OpenMP library does not support these environment variables. These environment variables are ignored when using the Fujitsu OpenMP library.</p>
+<ul class="simple">
+<li><p>OMP_CANCELLATION</p></li>
+<li><p>OMP_DISPLAY_ENV</p></li>
+<li><p>OMP_DEFAULT_DEVICE</p></li>
+<li><p>OMP_MAX_TASK_PRIORITY</p></li>
+</ul>
+</div>
+</section>
+<section id="compilation-example">
+<h2><span class="section-number">3.1.7.7. </span>Compilation example<a class="headerlink" href="#compilation-example" title="Link to this heading">¶</a></h2>
+<p>This shows how to compile Fortran programs.</p>
+<p>Multi-node job (hybrid parallel)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifrtpx<span class="w"> </span>-Kfast,parallel<span class="w">  </span>sample.f08
+</pre></div>
+</div>
+<p>Single node job (sequential)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast<span class="w">  </span>sample.f08
+</pre></div>
+</div>
+<p>Single node job (automatic parallel)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,paralle<span class="w"> </span>sample.f08
+</pre></div>
+</div>
+<p>Single node job (OpenMP)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,openmp<span class="w">  </span>sample.f08
+</pre></div>
+</div>
+</section>
+<section id="endian-conversion">
+<h2><span class="section-number">3.1.7.8. </span>Endian conversion<a class="headerlink" href="#endian-conversion" title="Link to this heading">¶</a></h2>
+<p>Supercomputer Fugaku works with the little Endian.</p>
+<p>Fortran programs can input and output big-endian files by specifying run-time options.</p>
+<p>Runtime options can be specified as environment variables or as arguments to executable modules.</p>
+<ul class="simple">
+<li><p>Runtime options</p></li>
+</ul>
+<blockquote>
+<div><p>There are the following two specification methods. When this option is specified, endian conversion is performed for logical type data, integer type data, and IEEE floating point format data in unformatted I / O statements.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-Wl,-T</p></td>
+<td><p>This applies to all device numbers connected to unformatted files.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wl,-T<em>u_no</em></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">u_no</span></code>is an integer value from 0 to 2147483647 that represents the device number and is the device number connected to the specified number is the target. Only one device number can be specified.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The effect is the same whether specified with an environment variable or specified with an argument. When specified by an argument, it is possible to obtain the runtime options with a built-in subroutine that handles command arguments such as GET_COMMAND and GET_COMMAND_ARGUMENT.</p>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>How to specify runtime options</p></li>
+</ul>
+<blockquote>
+<div><p>The following is an example of specifying endian conversion.</p>
+<p>In the following example, unformatted input and output is big endian data for device number “10”.</p>
+<ul class="simple">
+<li><p>The specification example by environment variable (FORT90L)</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash -x</span>
+<span class="c1">#</span>
+<span class="c1">#PJM -L &quot;node=1&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">FORT90L</span><span class="o">=</span>-Wl,-T10
+
+./a.out
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The specification example by argument</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash -x</span>
+<span class="c1">#</span>
+<span class="c1">#PJM -L &quot;node=1&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+./a.out<span class="w"> </span>-Wl,-T10
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="error-monitor">
+<span id="errormonitorfortran"></span><h2><span class="section-number">3.1.7.9. </span>Error monitor<a class="headerlink" href="#error-monitor" title="Link to this heading">¶</a></h2>
+<p>The error monitor is called if the error occured during Fortran program is processing.</p>
+<p>Here indicates about the error monitor.</p>
+<section id="what-is-error-monitor">
+<h3><span class="section-number">3.1.7.9.1. </span>What is error monitor<a class="headerlink" href="#what-is-error-monitor" title="Link to this heading">¶</a></h3>
+<p>This part controls actions when an error occurs during Fortran program execution. The error monitor executes actions when an error occurs based on the error control table.</p>
+<p>Users can use the error monitor function at runtime to control actions for individual errors themselves. The control of that action is shown below.</p>
+<ul class="simple">
+<li><p>Control the number of times execution of an executable program is aborted</p></li>
+<li><p>Control the maximum number of messages output for an error</p></li>
+<li><p>Control whether output the traceback map</p></li>
+<li><p>Control whether user-supplied (or defined) error handling routines are called</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<div class="line-block">
+<div class="line">Error monitor will be disable to LLVM OpenMP library error.</div>
+<div class="line">About LLVM OpenMP library error, see Fortran User’s Guide “12.4 Runtime Message”.</div>
+</div>
+</div>
+</section>
+<section id="error-control-table">
+<h3><span class="section-number">3.1.7.9.2. </span>Error control table<a class="headerlink" href="#error-control-table" title="Link to this heading">¶</a></h3>
+<p>The error control table summarizes the error items corresponding to the error identification numbers, and is described in “Table 8.1 Error control table standard values” in the “Fortran User’s Guide”.</p>
+<p>The error monitor takes action based on the contents of this error control table.</p>
+<div class="line-block">
+<div class="line">For example, we explain with jwe0320i-w.</div>
+<div class="line">The error ID of jwe0320i-w is 320 so see where there discribes error 320 from the table.</div>
+<div class="line">The following table is an excerpt of a standard value from the error control table with error identification number “320”.</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 6.7%" />
+<col style="width: 13.3%" />
+<col style="width: 13.3%" />
+<col style="width: 13.3%" />
+<col style="width: 13.3%" />
+<col style="width: 13.3%" />
+<col style="width: 13.3%" />
+<col style="width: 13.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>No.</p></th>
+<th class="head"><p>Error abort count</p></th>
+<th class="head"><p>Maximum message output count</p></th>
+<th class="head"><p>Correction of error items</p></th>
+<th class="head"><p>Buffer contents output</p></th>
+<th class="head"><p>Traceback map output</p></th>
+<th class="head"><p>Standard revision</p></th>
+<th class="head"><p>Error level</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>320</p></td>
+<td><p>10</p></td>
+<td><p>5</p></td>
+<td><p>Able</p></td>
+<td><p>Does not output</p></td>
+<td><p>Does output</p></td>
+<td><p>Yes</p></td>
+<td><p>w</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>The meaning of each item is as follows.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item name</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>No.</p></td>
+<td><div class="line-block">
+<div class="line">Error ID</div>
+<div class="line">In this example, jwe0320i-w’s 320.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Error abort count</p></td>
+<td><div class="line-block">
+<div class="line">When an error is detected, the upper limit of the number of detections is shown.</div>
+<div class="line">When the upper limit is reached, program execution is aborted.</div>
+<div class="line">In this example, the program execution is aborted at the 10th detection.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>Maximum message output count</p></td>
+<td><div class="line-block">
+<div class="line">When checked error, indicates Maximum message output count.</div>
+<div class="line">In this example, no message is output at the sixth or later detection.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Correction of error items</p></td>
+<td><div class="line-block">
+<div class="line">When the user can change the action when an error occurs, it is described as “possible”, and when the user cannot change it, it is described as “impossible”.</div>
+<div class="line">jwe0320i-w is “able” , the error control table can be changed by the user program.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>Buffer contents output</p></td>
+<td><p>Indicates whether the contents of the input / output buffer are output or not output.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Traceback map output</p></td>
+<td><p>Indicates whether output traceback map or not.</p></td>
+</tr>
+<tr class="row-even"><td><p>Standard revision</p></td>
+<td><p>Indicates whether the standard revision is prepared or not on Fortran system.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Error level</p></td>
+<td><div class="line-block">
+<div class="line">Shows error level.</div>
+<div class="line">From the lower level, one of these is mentioned :  i, w, e, s, u .</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="how-to-control-error">
+<h3><span class="section-number">3.1.7.9.3. </span>How to control error<a class="headerlink" href="#how-to-control-error" title="Link to this heading">¶</a></h3>
+<p>Error control table is error handling service subroutine: ERRSET service subroutine can be used to change individual control information of error items.</p>
+<p>Format to call ERRSET service sub routine</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CALL ERRSET(errno , estop , mprint , trace , uexit , r)
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 90.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>errno</p></td>
+<td><p>Basic integer type scalar. Error identification number corresponding to the error item to be changed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>estop</p></td>
+<td><div class="line-block">
+<div class="line">Basic integer type scalar. Error abort count.</div>
+<div class="line">If the specified value is under 0, nothing is changed.</div>
+<div class="line">If it is greater than 255, error abort count will be infinity.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>mprint</p></td>
+<td><div class="line-block">
+<div class="line">Basic integer type scalar. The maximum number of message outputs.</div>
+<div class="line">If the specified value is 0, nothing is changed.</div>
+<div class="line">If it is negative, the maximum output count is 0.</div>
+<div class="line">If it is greater than 255, maximum output count will be infinity.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>trace</p></td>
+<td><div class="line-block">
+<div class="line">Basic integer type scalar. The relationship between the values and the control information of the traceback map output is shown below.</div>
+<div class="line">=0:Traceback map output control informatuion is not changed.</div>
+<div class="line">=1:Change to not output traceback map.</div>
+<div class="line">=2:Change to output traceback map.</div>
+<div class="line">If other than 1 or 2, it will be treated as 0.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>uexit</p></td>
+<td><div class="line-block">
+<div class="line">Specify 0, 1 or the name of a user-defined correction subroutine as the error correction action.</div>
+<div class="line">If 0, it is not changed. In case of 1, it means to perform standard correction of this processing system.</div>
+<div class="line">If you specify the name of a user-defined correction subroutine, this name must be declared as an external procedure name.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>r</p></td>
+<td><div class="line-block">
+<div class="line">Basic integer type scalar. If errno is other than 132, specify the error identification number</div>
+<div class="line">Here, if r&gt; errno, it means that the error items corresponding to error identification numbers in the range from errno to r are changed according to estop, mprint, trace, and uexit.</div>
+<div class="line">If r less than errno, r is ignored. If it is not necessary, specify the value r less than errno.</div>
+<div class="line">If errno is 132 and r = 1, when data is output, if the Fortran record specified in the format specification is larger than the record length of the file, one blank is added to the beginning of the next Fortran record. Will be output as a new record.</div>
+<div class="line">If r not equal 1, the space is not added to the head of next Fortran record.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Here, jwe0320i-w will rewrite the control table with “error abort count” set to 20, “message maximum output count set to 10”, and other items unchanged.</div>
+<div class="line">Set the argument of the ERRSET service subroutine, and insert the control table at the location you want to change (in this case, the top of the program).</div>
+</div>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w">      </span><span class="k">program </span><span class="n">main</span>
+<span class="linenos"> 2</span><span class="w">      </span><span class="kt">integer</span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">j</span>
+<span class="linenos"> 3</span><span class="w">      </span><span class="kt">real</span><span class="p">,</span><span class="k">dimension</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span>
+<span class="linenos"> 4</span><span class="w">      </span><span class="k">CALL </span><span class="n">ERRSET</span><span class="p">(</span><span class="mi">320</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">320</span><span class="p">)</span>
+<span class="linenos"> 5</span><span class="w">      </span><span class="c">!</span>
+<span class="linenos"> 6</span><span class="w">      </span><span class="n">j</span><span class="o">=</span><span class="mi">10</span>
+<span class="linenos"> 7</span><span class="w">      </span><span class="k">call </span><span class="n">sub1</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+<span class="linenos"> 8</span><span class="w">      </span><span class="k">stop</span>
+<span class="linenos"> 9</span><span class="k">      end program </span><span class="n">main</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="w">      </span><span class="k">subroutine </span><span class="n">sub1</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+<span class="linenos">12</span><span class="w">      </span><span class="kt">integer</span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">j</span>
+<span class="linenos">13</span><span class="w">      </span><span class="kt">integer</span><span class="kd">::</span><span class="w"> </span><span class="n">k</span>
+<span class="linenos">14</span><span class="w">      </span><span class="kt">real</span><span class="p">,</span><span class="k">dimension</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span>
+<span class="linenos">15</span><span class="w">      </span><span class="k">do </span><span class="n">k</span><span class="o">=</span><span class="n">i</span><span class="p">,</span><span class="n">j</span>
+<span class="linenos">16</span><span class="w">         </span><span class="n">a</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">+</span><span class="n">c</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<span class="linenos">17</span><span class="w">      </span><span class="k">enddo</span>
+<span class="linenos">18</span><span class="k">      return</span>
+<span class="linenos">19</span><span class="k">      end subroutine </span><span class="n">sub1</span>
+</pre></div>
+</div>
+<p>Until after ERRSET service routine is called and program execution ends, or resetting by other ERRSET service routine, it is proceeded as the status of error control table is rewritten.</p>
+<p>For more detail about error monitor, see “8.1 Error Processing” of the manual “Fortran User’s Guide”.</p>
+</section>
+</section>
+<section id="built-in-debug-function">
+<h2><span class="section-number">3.1.7.10. </span>Built-in debug function<a class="headerlink" href="#built-in-debug-function" title="Link to this heading">¶</a></h2>
+<p>The built-in debugging function performs various inspections by compiling a program with debugging options at compile time and executing an execution module.
+When using the built-in debugging function, the optimization level may be down to  <code class="docutils literal notranslate"><span class="pre">-O0</span></code> so that you may feel the running time is taking long.</p>
+<ul class="simple">
+<li><p>About built-in debugging function</p></li>
+</ul>
+<blockquote>
+<div><p>If change execution environment, it may terminate abnormally. In this situation, these points are considered as the reason.</p>
+<ol class="arabic simple">
+<li><p>The variable is quoted without setting an initial value.</p></li>
+<li><p>Array subscript exceeds array size</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>[Change the execution environment] is because…</p>
+<ul class="simple">
+<li><p>Used tools like profiler, etc.</p></li>
+<li><p>Changed the size of large page.</p></li>
+</ul>
+<p>In this case, the execution status of the execution module in the memory changes and may end abnormally.</p>
+</div>
+</div></blockquote>
+<p>We introduce the built-in debugging function to check these.</p>
+<ul class="simple">
+<li><p>In the case of using Fortran, the following check is performed with the built-in debugging function.</p></li>
+</ul>
+<blockquote>
+<div><ol class="arabic">
+<li><div class="line-block">
+<div class="line">Citation checking of undefined data (<code class="docutils literal notranslate"><span class="pre">-Hu</span></code> option)</div>
+<div class="line">If you quote a variable (undefined data) for which an initial value is not set, the jwe0323i-w message is output.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Check array range (<code class="docutils literal notranslate"><span class="pre">-Hs</span></code> option)</div>
+<div class="line">If the array index is not within the range of the array, the jwe0320i-w or jwe0322i-w message is output.</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><p>See “Chapter 8 Debugging” of the manual “Fortran User’s Guide” for more detail.</p>
+</div></blockquote>
+<p>Next, the following is an example of the message displayed by the created sample program which applicable to  <code class="docutils literal notranslate"><span class="pre">-Hsu</span></code> option.  (Sample program is easy-fixed to output the message.)</p>
+<ol class="arabic simple">
+<li><p>Sample program</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w">      </span><span class="k">program </span><span class="n">main</span>
+<span class="linenos"> 2</span><span class="w">        </span><span class="kt">integer</span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">j</span>
+<span class="linenos"> 3</span><span class="w">        </span><span class="kt">real</span><span class="p">,</span><span class="k">dimension</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span>
+<span class="linenos"> 4</span><span class="w">        </span><span class="n">j</span><span class="o">=</span><span class="mi">10</span>
+<span class="linenos"> 5</span><span class="w">        </span><span class="k">call </span><span class="n">sub1</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+<span class="linenos"> 6</span><span class="w">        </span><span class="k">stop</span>
+<span class="linenos"> 7</span><span class="k">      end program </span><span class="n">main</span>
+<span class="linenos"> 8</span><span class="w">      </span><span class="k">subroutine </span><span class="n">sub1</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+<span class="linenos"> 9</span><span class="w">        </span><span class="kt">integer</span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">j</span>
+<span class="linenos">10</span><span class="w">        </span><span class="kt">integer</span><span class="kd">::</span><span class="w"> </span><span class="n">k</span>
+<span class="linenos">11</span><span class="w">        </span><span class="kt">real</span><span class="p">,</span><span class="k">dimension</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span>
+<span class="linenos">12</span><span class="w">        </span><span class="k">do </span><span class="n">k</span><span class="o">=</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="w">              </span><span class="c">! jwe0323i-w</span>
+<span class="linenos">13</span><span class="w">          </span><span class="n">a</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">+</span><span class="n">c</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w">    </span><span class="c">! jwe0320i-w</span>
+<span class="linenos">14</span><span class="w">        </span><span class="k">enddo</span>
+<span class="linenos">15</span><span class="k">        return</span>
+<span class="linenos">16</span><span class="k">      end subroutine </span><span class="n">sub1</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Compile / Job execution</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast<span class="w"> </span>-Hsu<span class="w"> </span>-Nlst<span class="o">=</span>t<span class="w"> </span>-o<span class="w"> </span>sample<span class="w"> </span>sample.f
+<span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>sample.sh
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Execution result example (contents of standard error output)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">jwe0323i-w line 13 The variable (i) has an undefined value.</span>
+<span class="go"> error occurs at sub1_    line 13 loc 0000000000400d50 offset 0000000000000184</span>
+<span class="go"> sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6</span>
+<span class="go"> MAIN__       at loc 0000000000400b24 called from o.s.</span>
+<span class="go">taken to (standard) corrective action, execution continuing.</span>
+<span class="go">jwe0320i-w line 14 The subscript or substring b is out of the specified range (reference value: -1953789045, specification value: 1:10).</span>
+<span class="go"> error occurs at sub1_    line 14 loc 0000000000400e18 offset 000000000000024c</span>
+<span class="go"> sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6</span>
+<span class="go"> MAIN__       at loc 0000000000400b24 called from o.s.</span>
+<span class="go">taken to (standard) corrective action, execution continuing.</span>
+<span class="go">jwe0320i-w line 14 The subscript or substring c is out of the specified range (reference value: -1953789045, specification value: 1:10).</span>
+<span class="go"> error occurs at sub1_    line 14 loc 0000000000400e60 offset 0000000000000294</span>
+<span class="go"> sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6</span>
+<span class="go"> MAIN__       at loc 0000000000400b24 called from o.s.</span>
+<span class="go">taken to (standard) corrective action, execution continuing.</span>
+<span class="go">jwe0320i-w line 14 The subscript or substring a is out of the specified range (reference value: -1953789045, specification value: 1:10).</span>
+<span class="go"> error occurs at sub1_    line 14 loc 0000000000400eac offset 00000000000002e0</span>
+<span class="go"> sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6</span>
+<span class="go"> MAIN__       at loc 0000000000400b24 called from o.s.</span>
+<span class="go">taken to (standard) corrective action, execution continuing.</span>
+<span class="go">jwe0320i-w line 14 The subscript or substring b is out of the specified range (reference value: -1953789044, specification value: 1:10).</span>
+<span class="go"> error occurs at sub1_    line 14 loc 0000000000400e18 offset 000000000000024c</span>
+<span class="go"> sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6</span>
+<span class="go"> MAIN__       at loc 0000000000400b24 called from o.s.</span>
+<span class="go">taken to (standard) corrective action, execution continuing.</span>
+<span class="go">jwe0320i-w line 14 The subscript or substring c is out of the specified range (reference value: -1953789044, specification value: 1:10).</span>
+<span class="go"> error occurs at sub1_    line 14 loc 0000000000400e60 offset 0000000000000294</span>
+<span class="go"> sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6</span>
+<span class="go"> MAIN__       at loc 0000000000400b24 called from o.s.</span>
+<span class="go">taken to (standard) corrective action, execution continuing.</span>
+<span class="go">jwe0903i-u Error number 0320 was detected. Maximum error count exceeded.</span>
+<span class="go">error summary (Fortran)</span>
+<span class="go">error number  error level  error count</span>
+<span class="go">  jwe0320i         w          10</span>
+<span class="go">  jwe0323i         w           1</span>
+<span class="go">total error count = 11</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If jwe0320i-w and jwe0323i-w are discovered 10 times, program execution is ended. TO change the this number, see “ <a class="reference internal" href="#errormonitorfortran"><span class="std std-ref">Error monitor</span></a> “.</p>
+</div>
+</div></blockquote>
+</div></blockquote>
+</section>
+<section id="fortran-sample-program">
+<h2><span class="section-number">3.1.7.11. </span>Fortran sample program<a class="headerlink" href="#fortran-sample-program" title="Link to this heading">¶</a></h2>
+<p>Here is an example from compilation to job execution using a sample program.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="FortranSampleProgram%28sequential%29.html">3.1.7.11.1. Sequential execution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FortranSampleProgram%28automaticParallel%29.html">3.1.7.11.2. Automatic parallel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FortranSampleProgram%28OpenMP%29.html">3.1.7.11.3. OpenMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FortranSampleProgram%28hybridParallel%29.html">3.1.7.11.4. Hybrid parallel</a></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3.1.7. Fortran</a><ul>
+<li><a class="reference internal" href="#environment-variables">3.1.7.1. Environment variables</a></li>
+<li><a class="reference internal" href="#how-to-compile">3.1.7.2. How to compile</a></li>
+<li><a class="reference internal" href="#compilation-option">3.1.7.3. Compilation option</a></li>
+<li><a class="reference internal" href="#recommended-compiling-option">3.1.7.4. Recommended compiling option</a></li>
+<li><a class="reference internal" href="#environment-variable-option-specification">3.1.7.5. Environment variable (option specification)</a></li>
+<li><a class="reference internal" href="#fortran-library-for-parallel-processing">3.1.7.6. Fortran library for parallel processing</a></li>
+<li><a class="reference internal" href="#compilation-example">3.1.7.7. Compilation example</a></li>
+<li><a class="reference internal" href="#endian-conversion">3.1.7.8. Endian conversion</a></li>
+<li><a class="reference internal" href="#error-monitor">3.1.7.9. Error monitor</a><ul>
+<li><a class="reference internal" href="#what-is-error-monitor">3.1.7.9.1. What is error monitor</a></li>
+<li><a class="reference internal" href="#error-control-table">3.1.7.9.2. Error control table</a></li>
+<li><a class="reference internal" href="#how-to-control-error">3.1.7.9.3. How to control error</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#built-in-debug-function">3.1.7.10. Built-in debug function</a></li>
+<li><a class="reference internal" href="#fortran-sample-program">3.1.7.11. Fortran sample program</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../HowToCheckTheVersion.html"
+                          title="previous chapter"><span class="section-number">3.1.6. </span>How to check the version</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="FortranSampleProgram%28sequential%29.html"
+                          title="next chapter"><span class="section-number">3.1.7.11.1. </span>Sequential execution</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="FortranSampleProgram%28sequential%29.html" title="3.1.7.11.1. Sequential execution"
+             >next</a></li>
+        <li class="right" >
+          <a href="../HowToCheckTheVersion.html" title="3.1.6. How to check the version"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.7. </span>Fortran</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

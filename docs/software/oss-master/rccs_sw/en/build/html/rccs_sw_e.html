@@ -1,0 +1,468 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>R-CCS Software &#8212; R-CCS Software  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=89e52957" />
+    
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="#">R-CCS Software  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">R-CCS Software</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="r-ccs-software">
+<h1>R-CCS Software<a class="headerlink" href="#r-ccs-software" title="Link to this heading">¶</a></h1>
+<p>The “R-CCS Software” packages developed by RIKEN Center for
+Computational Science are available on Fugaku.</p>
+<p>If you have any questions or requests about the packages, please
+contact to <a class="reference external" href="https://fugaku.zendesk.com/hc/en-us/">Fugaku Support Site</a> or the dedicated one of each
+of the packages.</p>
+<section id="mpich-on-tofu">
+<h2>MPICH on Tofu<a class="headerlink" href="#mpich-on-tofu" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Description</p></td>
+<td><p>MPICH for Tofu</p></td>
+</tr>
+<tr class="row-even"><td><p>Version</p></td>
+<td><p>master</p></td>
+</tr>
+<tr class="row-odd"><td><p>Developed by</p></td>
+<td><p>Fragship 2020 Project</p></td>
+</tr>
+<tr class="row-even"><td><p>License</p></td>
+<td><p>MPICH License</p></td>
+</tr>
+<tr class="row-odd"><td><p>Provided support includes</p></td>
+<td><p>answering questions, bug fixing, feature enhancement, etc.</p></td>
+</tr>
+<tr class="row-even"><td><p>Webpage</p></td>
+<td><p><a class="reference external" href="https://github.com/yutaka-ishikawa/mpich-tofu/wiki">https://github.com/yutaka-ishikawa/mpich-tofu/wiki</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>How to use</p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">load</span> <span class="pre">mpich-tofu%gcc</span> <span class="pre">~mt</span></code> for MPI with single thread  (available in Spack-v0.21/0.19)</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">load</span> <span class="pre">mpich-tofu%gcc</span> <span class="pre">+mt</span></code> for MPI with multiple thread (available in Spack-v0.21/0.19)</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="ihk-mckernel">
+<h2>IHK/McKernel<a class="headerlink" href="#ihk-mckernel" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Description</p></td>
+<td><p>light-weight multi-kernel operating system designed for high-end supercomputing</p></td>
+</tr>
+<tr class="row-even"><td><p>Version</p></td>
+<td><p>1.7.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>Developed by</p></td>
+<td><p>Fragship 2020 Project</p></td>
+</tr>
+<tr class="row-even"><td><p>License</p></td>
+<td><p>GPL</p></td>
+</tr>
+<tr class="row-odd"><td><p>Provided support includes</p></td>
+<td><p>support suspended</p></td>
+</tr>
+<tr class="row-even"><td><p>Webpage</p></td>
+<td><p><a class="reference external" href="https://ihkmckernel.readthedocs.io/en/latest/">https://ihkmckernel.readthedocs.io/en/latest/</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Contact Information</p></td>
+<td><p><a class="reference external" href="mailto:ihkmckernel&#37;&#52;&#48;googlegroups&#46;com">ihkmckernel<span>&#64;</span>googlegroups<span>&#46;</span>com</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="omni-xcalablemp">
+<h2>Omni XcalableMP<a class="headerlink" href="#omni-xcalablemp" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Description</p></td>
+<td><p>compiler for the XcalableMP PGAS language for distributed-memory computers</p></td>
+</tr>
+<tr class="row-even"><td><p>Version</p></td>
+<td><p>1.3.3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Developed by</p></td>
+<td><p>Programming Environment Research Team</p></td>
+</tr>
+<tr class="row-even"><td><p>License</p></td>
+<td><p>LGPL-3.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>Provided support includes</p></td>
+<td><p>answering questions, bug fixing, feature enhancement, etc.</p></td>
+</tr>
+<tr class="row-even"><td><p>Webpage</p></td>
+<td><p><a class="reference external" href="https://omni-compiler.org/">https://omni-compiler.org/</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>How to use</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">load</span> <span class="pre">omni-compiler</span></code> (available in Spack-v0.21/0.19)</p></td>
+</tr>
+<tr class="row-even"><td><p>Contact Information</p></td>
+<td><p><a class="reference external" href="mailto:support&#37;&#52;&#48;xcalablemp&#46;org">support<span>&#64;</span>xcalablemp<span>&#46;</span>org</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="eigenexa">
+<h2>EigenExa<a class="headerlink" href="#eigenexa" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Description</p></td>
+<td><p>a high-performance eigenvalue solver</p></td>
+</tr>
+<tr class="row-even"><td><p>Version</p></td>
+<td><p>2.6</p></td>
+</tr>
+<tr class="row-odd"><td><p>Developed by</p></td>
+<td><p>Large-scale Parallel Numerical Computing Technology Research
+Team</p></td>
+</tr>
+<tr class="row-even"><td><p>License</p></td>
+<td><p>BSD 2-clause license</p></td>
+</tr>
+<tr class="row-odd"><td><p>Provided support includes</p></td>
+<td><p>answering questions, bug fixing, feature enhancement, etc.</p></td>
+</tr>
+<tr class="row-even"><td><p>Webpage</p></td>
+<td><p><a class="reference external" href="https://www.r-ccs.riken.jp/labs/lpnctrt/projects/eigenexa/index.html">https://www.r-ccs.riken.jp/labs/lpnctrt/projects/eigenexa/index.html</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>How to use</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">load</span> <span class="pre">eigenexa</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Contact Information</p></td>
+<td><p><a class="reference external" href="mailto:EigenExa&#37;&#52;&#48;ml&#46;riken&#46;jp">EigenExa<span>&#64;</span>ml<span>&#46;</span>riken<span>&#46;</span>jp</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sc-summa-25d-semi-scalapack-compatible-2-5d-pxgemm-based-on-summa">
+<h2>SC-SUMMA-25D (Semi-ScaLAPACK-Compatible 2.5D-PxGEMM based on SUMMA)<a class="headerlink" href="#sc-summa-25d-semi-scalapack-compatible-2-5d-pxgemm-based-on-summa" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Description</p></td>
+<td><p>XXXXXXX</p></td>
+</tr>
+<tr class="row-even"><td><p>Version</p></td>
+<td><p>1.0 alpha</p></td>
+</tr>
+<tr class="row-odd"><td><p>Developed by</p></td>
+<td><p>Large-scale Parallel Numerical Computing Technology Research
+Team</p></td>
+</tr>
+<tr class="row-even"><td><p>License</p></td>
+<td><p>MIT License</p></td>
+</tr>
+<tr class="row-odd"><td><p>Provided support includes</p></td>
+<td><p>answering questions, bug fixing, feature enhancement, etc.</p></td>
+</tr>
+<tr class="row-even"><td><p>Webpage</p></td>
+<td><p><a class="reference external" href="https://www.r-ccs.riken.jp/labs/lpnctrt/projects/25dpdgemm/">https://www.r-ccs.riken.jp/labs/lpnctrt/projects/25dpdgemm/</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>How to use</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">load</span> <span class="pre">scsumma25d</span></code> (available in Spack-v0.21/0.19)</p></td>
+</tr>
+<tr class="row-even"><td><p>Contact Information</p></td>
+<td><p><a class="reference external" href="mailto:daichi&#46;mukunoki&#37;&#52;&#48;riken&#46;jp">daichi<span>&#46;</span>mukunoki<span>&#64;</span>riken<span>&#46;</span>jp</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="batched-blas-generator">
+<h2>Batched Blas Generator<a class="headerlink" href="#batched-blas-generator" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Description</p></td>
+<td><p>XXXXXXXXXX</p></td>
+</tr>
+<tr class="row-even"><td><p>Version</p></td>
+<td><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>Developed by</p></td>
+<td><p>Large-scale Parallel Numerical Computing Technology Research
+Team</p></td>
+</tr>
+<tr class="row-even"><td><p>License</p></td>
+<td><p>BSD 2-clause license</p></td>
+</tr>
+<tr class="row-odd"><td><p>Provided support includes</p></td>
+<td><p>answering questions, bug fixing, feature enhancement, etc.</p></td>
+</tr>
+<tr class="row-even"><td><p>Webpage</p></td>
+<td><p><a class="reference external" href="https://www.r-ccs.riken.jp/labs/lpnctrt/projects/batchedblas/">https://www.r-ccs.riken.jp/labs/lpnctrt/projects/batchedblas/</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>How to use</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">load</span> <span class="pre">batchedblas</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Contact Information</p></td>
+<td><p><a class="reference external" href="mailto:daichi&#46;mukunoki&#37;&#52;&#48;ml&#46;riken&#46;jp">daichi<span>&#46;</span>mukunoki<span>&#64;</span>ml<span>&#46;</span>riken<span>&#46;</span>jp</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="genesis-generalized-ensemble-simulation-system">
+<h2>GENESIS (GENeralized-Ensemble SImulation System)<a class="headerlink" href="#genesis-generalized-ensemble-simulation-system" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Description</p></td>
+<td><p>molecular dynamics and modeling software for bimolecular
+systems such as proteins, lipids, nucleic acids, glycans, and
+their complexes</p></td>
+</tr>
+<tr class="row-even"><td><p>Version</p></td>
+<td><p>2.1.4</p></td>
+</tr>
+<tr class="row-odd"><td><p>Developed by</p></td>
+<td><p>Computational Biophysics Research Team</p></td>
+</tr>
+<tr class="row-even"><td><p>License</p></td>
+<td><p>LGPL-3.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>Provided support includes</p></td>
+<td><p>answering questions, bug fixing</p></td>
+</tr>
+<tr class="row-even"><td><p>Webpage</p></td>
+<td><p><a class="reference external" href="https://www.r-ccs.riken.jp/labs/cbrt/">https://www.r-ccs.riken.jp/labs/cbrt/</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>How to use</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">load</span> <span class="pre">genesis</span></code> (available in Spack-v0.21/0.19)</p></td>
+</tr>
+<tr class="row-even"><td><p>Contact Information</p></td>
+<td><p>The contact information is currently closed. We will contact you again when it reopens.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="ntchem">
+<h2>NTChem<a class="headerlink" href="#ntchem" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Description</p></td>
+<td><p>a high-Performance software package for the molecular electronic structure
+calculation</p></td>
+</tr>
+<tr class="row-even"><td><p>Version</p></td>
+<td><p>24.04</p></td>
+</tr>
+<tr class="row-odd"><td><p>Developed by</p></td>
+<td><p>Computational Molecular Science Research Team</p></td>
+</tr>
+<tr class="row-even"><td><p>License</p></td>
+<td><p>The executable file is available for free; the source code is unpublished.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Provided support includes</p></td>
+<td><p>answering questions, bug fixing, feature enhancement, etc.</p></td>
+</tr>
+<tr class="row-even"><td><p>Webpage</p></td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://molsc.riken.jp/ntchem_e.html">https://molsc.riken.jp/ntchem_e.html</a></div>
+<div class="line"><a class="reference external" href="https://www.r-ccs.riken.jp/software_center/software/ntchem/overview/">https://www.r-ccs.riken.jp/software_center/software/ntchem/overview/</a></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>How to use</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">load</span> <span class="pre">ntchem</span></code> (available in Spack-v0.21/0.19)</p></td>
+</tr>
+<tr class="row-even"><td><p>Contact Information</p></td>
+<td><p><a class="reference external" href="mailto:nakajima&#37;&#52;&#48;riken&#46;jp">nakajima<span>&#64;</span>riken<span>&#46;</span>jp</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="scale">
+<h2>SCALE<a class="headerlink" href="#scale" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Description</p></td>
+<td><p>a basic library for weather and climate model of the earth and
+planets aimed to be widely used in various models</p></td>
+</tr>
+<tr class="row-even"><td><p>Version</p></td>
+<td><p>5.5.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>Developed by</p></td>
+<td><p>Computational Climate Science Research Team</p></td>
+</tr>
+<tr class="row-even"><td><p>License</p></td>
+<td><div class="line-block">
+<div class="line">SCALE license</div>
+<div class="line"><a class="reference external" href="https://scale.riken.jp/license/">https://scale.riken.jp/license/</a></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Provided support includes</p></td>
+<td><p>answering questions, bug fixing, feature enhancement, etc.</p></td>
+</tr>
+<tr class="row-even"><td><p>Webpage</p></td>
+<td><p><a class="reference external" href="https://scale.riken.jp/">https://scale.riken.jp/</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>How to use</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spack</span> <span class="pre">load</span> <span class="pre">scale</span></code> (available in Spack-v0.21/0.19)</p></td>
+</tr>
+<tr class="row-even"><td><p>Contact Information</p></td>
+<td><p><a class="reference external" href="mailto:scale&#37;&#52;&#48;ml&#46;riken&#46;jp">scale<span>&#64;</span>ml<span>&#46;</span>riken<span>&#46;</span>jp</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="frontflow-red-hpc">
+<h2>FrontFlow/red-HPC<a class="headerlink" href="#frontflow-red-hpc" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Description</p></td>
+<td><p>General-purpose thermal fluid modeling software for analyzing
+large flow fields with complicated geometries, like those
+arising in studies of gas turbines or automobile aerodynamics</p></td>
+</tr>
+<tr class="row-even"><td><p>Version</p></td>
+<td><p>3.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Developed by</p></td>
+<td><p>Complex Phenomena Unified Simulation Research Team</p></td>
+</tr>
+<tr class="row-even"><td><p>License</p></td>
+<td><p>Only executable file is available for free; source code is not open.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Provided support includes</p></td>
+<td><p>answering questions, bug fixing</p></td>
+</tr>
+<tr class="row-even"><td><p>Webpage</p></td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://cfml.eng.hokudai.ac.jp/frontflow-red-ver-3-1.html">https://cfml.eng.hokudai.ac.jp/frontflow-red-ver-3-1.html</a></div>
+<div class="line"><a class="reference external" href="http://www.ciss.iis.u-tokyo.ac.jp/dl/">http://www.ciss.iis.u-tokyo.ac.jp/dl/</a></div>
+<div class="line"><a class="reference external" href="http://www.nufd.jp/product/nufd_frontflowred_2.html">http://www.nufd.jp/product/nufd_frontflowred_2.html</a></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>How to use</p></td>
+<td><p>Please contact by email to get the access to FrontFlow/red-HPC.</p></td>
+</tr>
+<tr class="row-even"><td><p>Contact Information</p></td>
+<td><p><a class="reference external" href="mailto:mtsubo&#37;&#52;&#48;riken&#46;jp">mtsubo<span>&#64;</span>riken<span>&#46;</span>jp</a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="#">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">R-CCS Software</a><ul>
+<li><a class="reference internal" href="#mpich-on-tofu">MPICH on Tofu</a></li>
+<li><a class="reference internal" href="#ihk-mckernel">IHK/McKernel</a></li>
+<li><a class="reference internal" href="#omni-xcalablemp">Omni XcalableMP</a></li>
+<li><a class="reference internal" href="#eigenexa">EigenExa</a></li>
+<li><a class="reference internal" href="#sc-summa-25d-semi-scalapack-compatible-2-5d-pxgemm-based-on-summa">SC-SUMMA-25D (Semi-ScaLAPACK-Compatible 2.5D-PxGEMM based on SUMMA)</a></li>
+<li><a class="reference internal" href="#batched-blas-generator">Batched Blas Generator</a></li>
+<li><a class="reference internal" href="#genesis-generalized-ensemble-simulation-system">GENESIS (GENeralized-Ensemble SImulation System)</a></li>
+<li><a class="reference internal" href="#ntchem">NTChem</a></li>
+<li><a class="reference internal" href="#scale">SCALE</a></li>
+<li><a class="reference internal" href="#frontflow-red-hpc">FrontFlow/red-HPC</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="#">R-CCS Software  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">R-CCS Software</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

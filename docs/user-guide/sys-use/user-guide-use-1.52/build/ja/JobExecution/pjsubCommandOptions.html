@@ -1,0 +1,754 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.9. ジョブ実行コマンドのオプション &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.10. ラージページ領域割当て" href="AllocationOfLargePageArea.html" />
+    <link rel="prev" title="5.8. 環境設定" href="EnvironmentSettings.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="AllocationOfLargePageArea.html" title="5.10. ラージページ領域割当て"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="EnvironmentSettings.html" title="5.8. 環境設定"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.9. </span>ジョブ実行コマンドのオプション</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">5.9. </span>ジョブ実行コマンドのオプション<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p><strong class="program">pjsub</strong>のオプション一覧を示します。</p>
+<section id="id2">
+<h2><span class="section-number">5.9.1. </span>基本オプション<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>ジョブを実行するグループや環境変数の引渡しなど、<strong class="program">pjsub</strong>コマンドの基本的なオプションを示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>オプション名</p></th>
+<th class="head"><p>機能</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-L &quot;<cite>resource=value[,...]</cite>&quot;</p></td>
+<td><div class="line-block">
+<div class="line">ジョブの資源に関するオプションを指定します。</div>
+<div class="line">詳細は「<a class="reference internal" href="#jobexecutionresourcespecifications"><span class="std std-ref">リソース指定</span></a>」に示します。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>--mpi &quot;<cite>parameter[,...]</cite>&quot;</p></td>
+<td><div class="line-block">
+<div class="line">MPI ジョブの各種パラメーターを指定します。</div>
+<div class="line">詳細は「<a class="reference internal" href="#jobexecutionmpioptions"><span class="std std-ref">MPIオプション</span></a>」に示します。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>--gname &quot;<cite>gname</cite>&quot;</p></td>
+<td><div class="line-block">
+<div class="line">ジョブ実行時に、ジョブのプロセスが所属するグループ名を指定します。</div>
+<div class="line">グループ名（<code class="docutils literal notranslate"><span class="pre">gname</span></code>）、グループID（<code class="docutils literal notranslate"><span class="pre">gid</span></code>）のどちらでも指定可能です。</div>
+<div class="line">ジョブ管理ノードに指定されたグループが存在しない場合、ジョブ投入はエラーとなります。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>--help</p></td>
+<td><p>ヘルプを表示します。</p></td>
+</tr>
+<tr class="row-even"><td><p>-j</p></td>
+<td><p>標準エラー出力を標準出力へ出力します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>-m &quot;<cite>mailoption[,...]</cite>&quot;</p></td>
+<td><div class="line-block">
+<div class="line">ジョブのステータスなどの情報について、メール通知を行うかを指定します。</div>
+<div class="line"><cite>mailoption</cite>は<code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">pjsub</span></code>を参照ください。</div>
+<div class="line">本オプション使用時は、<code class="docutils literal notranslate"><span class="pre">--mail-list</span></code>も使用してメールアドレスを必ず指定してください。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>--mail-list &quot;<cite>mailaddress[,...]</cite>&quot;</p></td>
+<td><div class="line-block">
+<div class="line">メールの送信先を指定します。複数指定時はコンマ (&quot;,&quot;) で区切って指定します。指定する文字列のサイズは 255文字までです。</div>
+<div class="line">メールアドレスを間違えて入力した場合は宛先に届きません、また、エラー通知等もないため注意してください。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>--name &quot;<cite>name</cite>&quot;</p></td>
+<td><div class="line-block">
+<div class="line">ジョブの名前を指定します。ジョブ名には63バイトまで指定できます。</div>
+<div class="line">本オプションを指定しない場合、コマンド行で指定されたスクリプトファイル名がジョブ名として設定されます。</div>
+<div class="line">スクリプトファイル名が指定されていない場合は、&quot;STDIN&quot; がジョブ名として設定されます。</div>
+<div class="line">ジョブ名の先頭文字は、半角アルファベットのみです。<code class="docutils literal notranslate"><span class="pre">name</span></code>には、&quot;/&quot; を含んだ文字列は指定できません。</div>
+<div class="line"><br /></div>
+<div class="line">ジョブ名およびスクリプトファイル名に使用できる文字は次の通りです。</div>
+</div>
+<ul class="simple">
+<li><p>半角英数字、半角ハイフン(-)、半角アンダースコア(_)、半角ドット(.)が使用可能です</p></li>
+<li><p>上記以外の文字の使用は未サポートです</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>--restart</p></td>
+<td><div class="line-block">
+<div class="line">このオプションが指定されたとき、ジョブ実行環境停止または異常発生によりジョブ実行が中断された場合に、再実行を試みます。</div>
+<div class="line">このオプションを指定しない場合（デフォルト値）は、再実行しません。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-X</p></td>
+<td><p>全ての環境変数を計算ノードに転送します。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition hint">
+<p class="admonition-title">ヒント</p>
+<p>「富岳」では運用を補助するために「富岳」固有の<a class="reference internal" href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html#environmentvariablesandpjsuboptions"><span class="std std-ref">環境変数およびpjsubオプション</span></a>を用意しています。必要に応じてこれらのオプションも利用してください。</p>
+</div>
+</section>
+<section id="jobexecutionresourcespecifications">
+<span id="id3"></span><h2><span class="section-number">5.9.2. </span>リソース指定<a class="headerlink" href="#jobexecutionresourcespecifications" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">ジョブが使用するリソースを指定するオプションを示します。</div>
+<div class="line">ジョブが要求する資源の上限値を<code class="docutils literal notranslate"><span class="pre">-L</span></code>に続いて<code class="docutils literal notranslate"><span class="pre">resource=value</span></code>の形式で指定します。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">resource</span></code>を複数指定する場合は、カンマで区切って指定します。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.8%" />
+<col style="width: 69.2%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目名</p></th>
+<th class="head"><p>内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-L &quot;node=nodeshape&quot;</p></td>
+<td><p>ジョブに割り当てるノード数および形状を指定します。</p>
+<ul class="simple">
+<li><p>1次元の場合：node=N1</p></li>
+<li><p>2次元の場合：node=N1xN2</p></li>
+<li><p>3次元の場合：node=N1xN2xN3</p></li>
+</ul>
+<p>ノードの形状指定に続けて、ノードの割り当て方法を指定できます。</p>
+<ul>
+<li><p>1次元の場合：node=N1[:torus|:mesh|:noncont]</p></li>
+<li><p>2次元の場合：node=N1xN2[:torus|:mesh|:noncont]</p></li>
+<li><p>3次元の場合：node=N1xN2xN3[:torus|:mesh|:noncont]</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>:torus</dt><dd><p>Tofu単位(12ノード)で計算機資源をジョブに割り当てるトーラスモード</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>:mesh</dt><dd><p>ノード単位で計算機資源をジョブに割り当てるメッシュモード</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>:noncont</dt><dd><p>ノード単位で計算機資源をジョブに割り当てる離散割り当て</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>利用できるノード数、形状、割り当て方法はリソースグループごとに設定されています。
+<a class="reference internal" href="../UsageRules/index.html#resource"><span class="std std-ref">リソース</span></a>を参照ください。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-L &quot;elapse=elapsetimelimit&quot;</p></td>
+<td><div class="line-block">
+<div class="line">ジョブ単位の経過時間制限値を設定します。<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/resource_group_config">リソースグループ</a>ごとに最大値を設定しています。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">elapsetimelimit</span></code>は、 &quot;[[時間:]分:]秒&quot; の形式で指定します。</div>
+</div>
+<ul class="simple">
+<li><p>-L &quot;elapse=30&quot; (30秒の場合)</p></li>
+<li><p>-L &quot;elapse=2:30&quot; (2分30秒の場合)</p></li>
+<li><p>-L &quot;elapse=1:00:00&quot; (1時間の場合)</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-L &quot;elapse=min_limit-max_limit&quot;</div>
+<div class="line">-L &quot;elapse=min_limit-&quot;</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">経過時間制限値を範囲で指定します。</div>
+<div class="line">min_limit,max_limitに指定できる値は<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/resource_group_config">リソースグループ</a>ごとに異なります</div>
+<div class="line">（min_limit,max_limitの確認方法は後述。）</div>
+<div class="line">経過時間がmin_limit に達しても、経過時間が最長で max_limit に達するまで実行を継続できます。</div>
+<div class="line">ただし、経過時間がmin_limit を超えて実行しているとき、次の場合は、経過時間がmax_limit未満でもジョブは強制終了させられます。</div>
+</div>
+<ul class="simple">
+<li><p>後続のジョブのためにノードが必要になった場合</p></li>
+<li><p>デッドラインスケジューリングによってノードが予約されている期間になった場合</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ul class="simple">
+<li><p>-L &quot;elapse=2:30-5:00&quot; (2分30秒-5分の場合)</p></li>
+<li><p>-L &quot;elapse=1:00:00-1:30:00&quot; (1時間-1時間30分の場合)</p></li>
+<li><p>-L &quot;elapse=2:00:00-24:00:00&quot; (2時間-24時間の場合)</p></li>
+<li><p>-L &quot;elapse=2:00:00-&quot; (max_limit省略時は使用しているリソースグループの最大値)</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-L &quot;rscgrp=rscgname&quot;</p></td>
+<td><p>ジョブを投入するリソースグループ名 <code class="docutils literal notranslate"><span class="pre">rscgname</span></code>を指定します。</p></td>
+</tr>
+</tbody>
+</table>
+<section id="jobexecutionwithminimumexecutiontimespecified">
+<span id="id6"></span><h3><span class="section-number">5.9.2.1. </span>最低実行時間を指定したジョブ実行<a class="headerlink" href="#jobexecutionwithminimumexecutiontimespecified" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">「富岳」では、一部リソースグループを除き、経過時間指定を範囲で指定することができます。</div>
+<div class="line">通常の実行では、指定経過時間になるとジョブが終了しますが、この機能を使うと指定経過時間後もノードが空いていれば</div>
+<div class="line">引き続きジョブを実行することができます。</div>
+<div class="line">ジョブ投入時に指定した最低実行時間（min_limit）以降に使用された計算資源は課金対象外となります。</div>
+<div class="line"><br /></div>
+<div class="line">スケジューリングは最低実行時間で行われるため、短く指定することでスケジューリングされやすくなるというメリットもあります。</div>
+</div>
+<div class="line-block">
+<div class="line">経過時間がmin_limitに達しても、経過時間が最長でmax_limitに達するまで実行を継続し、min_limit以降は課金対象外となります。</div>
+<div class="line-block">
+<div class="line">- max_limitは経過時間上限＋72Hまで指定可能。</div>
+<div class="line">- max_limitを省略した場合(例: elapse=30:00-)は，max_limitは経過時間上限＋72Hになります。</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line">ただし、経過時間がmin_limitを超えた場合に、後続のジョブが割り当てられた場合、経過時間がmax_limit未満でもジョブは強制終了されます。そのため、ジョブ側でチェックポイントリスタートなどを利用してジョブの打ち切りに対応する必要があります。</div>
+</div>
+<div class="line-block">
+<div class="line">- チェックポイントリスタートには、VeloCなどの利用を推奨します。</div>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/VeloC_Guide/">VeloC 利用ガイド</a></div>
+<div class="line"><a class="reference external" href="https://veloc.readthedocs.io/en/latest/toc.html">VeloC Webpage</a></div>
+</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/min_limit_ja.png" src="../_images/min_limit_ja.png" />
+</figure>
+<div class="line-block">
+<div class="line">参考）：ジョブ運用ソフトウェア　エンドユーザ向けガイド - 2.3.2.3 ジョブの経過時間制限値の指定</div>
+</div>
+<div class="line-block">
+<div class="line">以下は、リソースグループごとに設定された min_limit,max_limit の確認方法の例です。</div>
+</div>
+<div class="line-block">
+<div class="line">バッチジョブの例</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjacl<span class="w"> </span>-u<span class="w"> </span><span class="nv">$USER</span><span class="w"> </span>-g<span class="w"> </span><span class="nv">$GROUP</span><span class="w"> </span>--rg<span class="w"> </span>small
+<span class="gp gp-VirtualEnv">(中略)</span>
+<span class="go">pjsub option parameters</span>
+<span class="go">    (-L/--rsc-list)                         lower            upper            default</span>
+<span class="go">        (elapse=)                           00:01:00         72:00:00         00:01:00</span>
+<span class="go">        (adaptive elapsed time min)         00:01:00         72:00:00         00:01:00  # バッチジョブのminLimit</span>
+<span class="go">        (adaptive elapsed time max)         00:01:01         144:00:00        144:00:00 # バッチジョブのmaxLimit</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">会話型ジョブの例</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjacl<span class="w"> </span>-u<span class="w"> </span><span class="nv">$USER</span><span class="w"> </span>-g<span class="w"> </span><span class="nv">$GROUP</span><span class="w"> </span>--rg<span class="w"> </span>int
+<span class="gp gp-VirtualEnv">(中略)</span>
+<span class="go">pjsub option parameters</span>
+<span class="gp gp-VirtualEnv">(中略)</span>
+<span class="go">    (--interact -L)                         lower            upper            default</span>
+<span class="go">        (elapse=)                           00:00:10         06:00:00         00:00:10</span>
+<span class="go">        (adaptive elapsed time min)         00:00:10         06:00:00         00:00:10 # 会話型ジョブのminLimit</span>
+<span class="go">        (adaptive elapsed time max)         2                48:00:00         02:00:00 # 会話型ジョブのmaxLimit</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>経過時間指定を範囲で指定したジョブは、<strong class="program">pjalter</strong>コマンドによるパラメータ変更の対象外となります。
+投入後にパラメータ（経過時間制限値、リソースグループ、リソースユニット、ユーザ内優先度）を変更することはできません。</p></li>
+<li><p>経過時間指定を範囲で指定したジョブは、<a class="reference internal" href="Overview.html#joballocationoperation"><span class="std std-ref">ジョブ振り分け運用</span></a>の対象外となります。
+振り分け先のリソースグループに対する直接投入においては、範囲の指定が可能です。</p></li>
+</ul>
+</div>
+</section>
+<section id="id7">
+<h3><span class="section-number">5.9.2.2. </span>低優先度ジョブ実行<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>「富岳」では、割り当て資源量を消費せずに低優先度でジョブを実行することができます。</p>
+<div class="line-block">
+<div class="line">対象課題：有償課題を除く課題</div>
+<div class="line">対象課題に該当する場合のみジョブの投入が可能です。投入対象外の場合はエラーとなります。</div>
+</div>
+<p>以下のリソースグループで低優先度ジョブを実行できます。</p>
+<ul class="simple">
+<li><p>spot-large</p></li>
+<li><p>spot-small</p></li>
+<li><p>spot-int</p></li>
+<li><p>spot-middle</p></li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>有償課題は低優先度利用の対象外です。</p></li>
+<li><p>低優先度ジョブはノードが空いている場合に実行されます。</p></li>
+<li><p>通常ジョブが投入されている場合は、投入時期に関係なくノードが空くまで低優先度ジョブの開始が待たされます。</p></li>
+<li><p>低優先度ジョブのリソースグループの設定は、優先度以外は通常リソースグループ(spot-XXXのXXX部分)と同じです。</p></li>
+</ul>
+</div>
+<div class="line-block">
+<div class="line">低優先度ジョブでは、ジョブの実行時間上限を4時間に制限しています。</div>
+<div class="line">ただし、ジョブが実行中のノードに後続ジョブがスケジューリングされていない場合は、最大で12時間（spot-intは6時間）まで継続して実行できます。</div>
+<div class="line">実行時間上限を超えてジョブを実行するには、「<a class="reference internal" href="#jobexecutionresourcespecifications"><span class="std std-ref">5.9.2 リソース指定</span></a>」および 「<a class="reference internal" href="#jobexecutionwithminimumexecutiontimespecified"><span class="std std-ref">5.9.2.1 最低実行時間を指定したジョブ実行</span></a>」を参考に経過時間を範囲で指定してください。</div>
+<div class="line">尚、指定時間の下限は4時間以下、上限は12時間以下にする必要があります。</div>
+</div>
+<p>例：ジョブの経過時間を4時間に指定し、後続のジョブが割り当てられない場合に最大で12時間まで実行を継続する場合</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;elapse=4:00:00-12:00:00&quot;</span><span class="w"> </span>job.sh
+</pre></div>
+</div>
+<p>ジョブの経過時間を4時間以内に指定する場合は、経過時間の範囲指定は不要です。この場合、ジョブは指定時間が経過すると終了します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;elapse=4:00:00&quot;</span><span class="w"> </span>job.sh
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul>
+<li><p>指定時間の下限に4時間を超える値を指定するとエラーになります。また、指定時間の上限に12時間より大きい値を指定するとエラーになります。</p>
+<blockquote>
+<div><p>以下はエラーとなる例です。</p>
+<div class="line-block">
+<div class="line">-L &quot;elapse=6:00:00-12:00:00&quot; (指定時間の下限が4時間を超えている)</div>
+<div class="line">-L &quot;elapse=4:00:00-24:00:00&quot; (指定時間の上限が12時間を超えている)</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>誤った実行時間指定でジョブを投入した場合は以下のエラーメッセージが出力されます。ジョブの実行時間指定を修正して再度ジョブを投入してください。</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">[ERR.] PJM 0057 pjsub elapse=18000 is greater than the upper limit (14400).</div>
+</div>
+</div></blockquote>
+</li>
+<li><div class="line-block">
+<div class="line">実行時間上限を超えて実行しているジョブは、後続のジョブがスケジューリングされると強制終了されます。</div>
+<div class="line">後続のジョブがスケジューリングされジョブが途中終了した場合は、ジョブはCCL状態に遷移し、ジョブ統計情報の「REASON」欄に「ANOTHER JOB STARTED」と表示されます。pjstatコマンド等で確認してください。</div>
+</div>
+</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="mpi">
+<span id="jobexecutionmpioptions"></span><h2><span class="section-number">5.9.3. </span>MPIオプション<a class="headerlink" href="#mpi" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">MPIの動作に関わるパラメータを設定します。</div>
+<div class="line">ジョブで使用するMPIに関する設定を、<code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">&quot;parameter[,parameter…]&quot;</span></code>オプションで設定します。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">parameter</span></code>を複数指定する場合は、カンマで区切って指定します。</div>
+</div>
+<p>MPIに関するオプションの詳細については、「<a class="reference internal" href="../MPI/SpecificationsForMPIJob.html#specificationsformpijobmpi"><span class="std std-ref">MPIジョブ投入時の指定</span></a>」を参照してください。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目名</p></th>
+<th class="head"><p>内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>--mpi &quot;shape= <cite>shape</cite> &quot;</p></td>
+<td><div class="line-block">
+<div class="line">静的に起動するプロセスの形状を指定します。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">shape</span></code>には、<code class="docutils literal notranslate"><span class="pre">shape=N1</span></code>、<code class="docutils literal notranslate"><span class="pre">shape=N1xN2</span></code>、または、<code class="docutils literal notranslate"><span class="pre">shape=N1xN2xN3</span></code>を指定できます。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-L（--rsc-list）</span></code>オプションの<code class="docutils literal notranslate"><span class="pre">node</span></code>で指定した値と同じ次元数を指定する必要があります。</div>
+<div class="line">省略した場合、<code class="docutils literal notranslate"><span class="pre">node</span></code>で指定した値と同じ値が使用されます。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vnode</span></code>オプションを指定した場合には、1 のみ指定できます。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>--mpi &quot;proc= <cite>num</cite> &quot;</p></td>
+<td><div class="line-block">
+<div class="line">静的に起動する最大のプロセス数を、<code class="docutils literal notranslate"><span class="pre">num</span></code>に指定します。</div>
+<div class="line">省略した場合、<code class="docutils literal notranslate"><span class="pre">shape</span></code>で指定した値の積となります。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">shape</span></code>で指定した値の積×ノード内のCPU コア数より大きい値を指定した場合、ジョブの受付が拒否されます。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vnode</span></code>オプションを指定した場合には、<code class="docutils literal notranslate"><span class="pre">vnode</span></code>オプションで指定した core 数以上の値を指定した場合もジョブの受付が拒否されます。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>--mpi &quot;max-proc-per-node= <cite>mppnnum</cite> &quot;</p></td>
+<td><div class="line-block">
+<div class="line">プログラムが 1ノードに生成する最大のプロセス数を指定します。</div>
+<div class="line">省略した場合、1ノードに生成する最大プロセス数は、<code class="docutils literal notranslate"><span class="pre">proc</span></code> で指定した値を 1ノード内に生成するプロセス数に変換した値となります。</div>
+<div class="line">1ノード内の CPUコア数よりも大きい値が指定された場合、または、<code class="docutils literal notranslate"><span class="pre">proc</span></code> で指定した値を 1ノード内に生成するプロセス数に変換した値が <code class="docutils literal notranslate"><span class="pre">mppnnum</span></code> を超えていた場合、ジョブの受付が拒否されます。<code class="docutils literal notranslate"><span class="pre">vnode</span></code>オプションを指定した場合には、ジョブの受付が拒否されます。</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id8">
+<h2><span class="section-number">5.9.4. </span>ジョブ統計情報<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">ジョブの実行終了時に、ジョブの統計情報を出力することができます。</div>
+<div class="line">ジョブ統計情報を出力するには、<strong class="program">pjsub</strong>コマンドにオプション<code class="docutils literal notranslate"><span class="pre">-s</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-S</span></code>を指定し、ジョブを投入します。</div>
+<div class="line">ジョブの統計情報はジョブの異常終了時などの調査に役に立ちます。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>オプション名</p></th>
+<th class="head"><p>機能</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-s</div>
+<div class="line">(小文字)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">投入したジョブの統計情報をファイルに出力します。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-S</span></code>オプションとの併用はできません。</div>
+<div class="line">指定したファイルに出力したい場合は、<code class="docutils literal notranslate"><span class="pre">--spath</span></code>オプションを指定します。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-S</div>
+<div class="line">(大文字)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-s</span></code>オプションで出力される情報に加えて、投入したジョブのノード単位の情報を出力します。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-s</span></code>オプションとの併用はできません。</div>
+<div class="line">指定したファイルに出力したい場合は、<code class="docutils literal notranslate"><span class="pre">--spath</span></code>オプションを指定します。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>--spath pathname</p></td>
+<td><div class="line-block">
+<div class="line">ジョブの統計情報を、<code class="docutils literal notranslate"><span class="pre">pathname</span></code>で指定されたファイルに出力します。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-s</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-S</span></code>オプションを同時に指定する必要があります。</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id9">
+<h2><span class="section-number">5.9.5. </span>ジョブスクリプト内環境変数<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">ジョブスクリプト内で使用できる代表的な環境変数を示します。</div>
+<div class="line">詳細は「ジョブ運用ソフトウェア エンドユーザ向けガイド」の「2.1.2 ジョブ内での環境変数」を参照してください。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>環境変数名</p></th>
+<th class="head"><p>内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PJM_BULKNUM</p></td>
+<td><p>バルク番号（バルクジョブだけ設定）</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_COMMENT</p></td>
+<td><p><strong class="program">pjsub</strong>オプションの<code class="docutils literal notranslate"><span class="pre">--comment</span></code>で指定したコメントが入ります。</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_ENVIRONMENT</p></td>
+<td><p>ジョブ種別が入ります。BATCH、または、INTERACTとなります。</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_JOBDIR</p></td>
+<td><p>ジョブスクリプト実行開始時のカレントディレクトリのパス</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_JOBID</p></td>
+<td><p>ジョブIDが入ります。</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_JOBNAME</p></td>
+<td><p>ジョブ名が入ります。</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_LOCALTMP</p></td>
+<td><p>第1階層ストレージ上のノード内テンポラリ領域のパスが入ります。</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_SUBJOBID</p></td>
+<td><p>サブジョブIDが入ります。</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_STEPNUM</p></td>
+<td><p>ステップジョブのステップ番号が入ります。</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_LLIO_SHAREDTMP_SIZE</p></td>
+<td><p>第1階層ストレージ上の共有テンポラリ領域のサイズ（バイト）が入ります。</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_LLIO_LOCALTMP_SIZE</p></td>
+<td><p>第1階層ストレージ上のノード内テンポラリ領域のサイズ（バイト）が入ります。</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_LLIO_AUTO_READAHEAD</p></td>
+<td><p>ジョブが複数回続けて第1階層ストレージまたは第2階層ストレージ上の連続した領域を読み込もうとした場合、自動的に先読みをするか否かの動作です</p>
+<ul class="simple">
+<li><p>on：先読みをします</p></li>
+<li><p>off：先読みをしません</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>PJM_LLIO_ASYNC_CLOSE</p></td>
+<td><p>第1階層ストレージおよび第2階層ストレージ上のファイルのクローズを非同期クローズにするか否かの動作です</p>
+<ul class="simple">
+<li><p>on：非同期クローズ</p></li>
+<li><p>off：同期クローズ</p></li>
+</ul>
+<p>on（非同期クローズ）が設定されている場合、ファイルのクローズ時に書出し完了は保証されません。off（同期クローズ）が設定されている場合、ファイルのクローズ時に書出し完了は保証されます。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>PJM_LLIO_CN_CACHE_SIZE</p></td>
+<td><p>第1階層ストレージ上の計算ノード内キャッシュのサイズ（バイト）が入ります。</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_LLIO_CN_CACHED_WRITE_SIZE</p></td>
+<td><p>第1階層ストレージへの書込み時にキャッシュするか否かのしきい値（バイト）が入ります。</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_LLIO_CN_READ_CACHE</p></td>
+<td><p>第1階層ストレージまたは第2階層ストレージから読み込んだファイルを計算ノード内キャッシュにキャッシュするか否かの動作です。</p>
+<ul class="simple">
+<li><p>on: キャッシュします。</p></li>
+<li><p>off: キャッシュしません。</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>PJM_LLIO_SIO_READ_CACHE</p></td>
+<td><p>第2階層ストレージから計算ノードへ読み込んだファイルを第1階層ストレージにキャッシュするか否かの動作です。</p>
+<ul class="simple">
+<li><p>on: キャッシュします。</p></li>
+<li><p>off: キャッシュしません。</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>PJM_LLIO_STRIPE_COUNT</p></td>
+<td><p>第1階層ストレージにファイルを分散配置する際のファイルあたりのストライプ数が入ります。</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_LLIO_STRIPE_SIZE</p></td>
+<td><p>第1階層ストレージにファイルを分散配置する際のストライプサイズ（バイト）が入ります。</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_LLIO_UNCOMPLETED_FILEINFO_PATH</p></td>
+<td><p>未書出しファイル情報の出力先パスが入ります。</p>
+<p>ジョブ終了時に、第2階層ストレージへの書出しが完了していないファイルがキャッシュに残っていた場合に、ファイル名の一覧を出力するファイルのパスです。</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>PJM_O_HOME</p></td>
+<td><p><strong class="program">pjsub</strong>コマンドを発行したユーザの環境変数 <code class="docutils literal notranslate"><span class="pre">HOME</span></code> が入ります。</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_O_LANG</p></td>
+<td><p><strong class="program">pjsub</strong>コマンドを発行したユーザの環境変数 <code class="docutils literal notranslate"><span class="pre">LANG</span></code> が入ります。</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_O_LOGNAME</p></td>
+<td><p><strong class="program">pjsub</strong>コマンドを発行したユーザの環境変数 <code class="docutils literal notranslate"><span class="pre">LOGNAME</span></code> が入ります。</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_O_PATH</p></td>
+<td><p><strong class="program">pjsub</strong>コマンドを発行したユーザの環境変数 <code class="docutils literal notranslate"><span class="pre">PATH</span></code> が入ります。</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_O_SHELL</p></td>
+<td><p><strong class="program">pjsub</strong>コマンドを発行したユーザの環境変数 <code class="docutils literal notranslate"><span class="pre">SHELL</span></code> が入ります。</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_O_HOST</p></td>
+<td><p><strong class="program">pjsub</strong>コマンドを発行したユーザの環境変数 <code class="docutils literal notranslate"><span class="pre">HOST</span></code> が入ります。</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_O_WORKDIR</p></td>
+<td><p><strong class="program">pjsub</strong>コマンドを発行したユーザのカレントディレクトリが入ります。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>上記表で示した環境変数と同名の環境変数を、<strong class="program">pjsub</strong>コマンドの<code class="docutils literal notranslate"><span class="pre">-x</span></code>オプションに指定しても、その値は無視され、上記表で示した値になります。</p></li>
+<li><p><strong class="program">pjsub</strong>コマンドを実行するシェル上で設定されている環境変数は、指示がない限り、ジョブ内には引き継がれません。ジョブ内に環境変数を引き継ぐためには、<strong class="program">pjsub</strong> コマンドの<code class="docutils literal notranslate"><span class="pre">-X</span></code>オプションを指定してください。ただし、上記表で示した環境変数と同名の環境変数は、<strong class="program">pjsub</strong>コマンドの<code class="docutils literal notranslate"><span class="pre">-X</span></code>オプションを指定しても、その値は無視され、上記表で示した値になります。</p></li>
+</ul>
+</div>
+</section>
+<section id="id10">
+<h2><span class="section-number">5.9.6. </span>MPIプロセスに設定される環境変数<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">MPIプロセス内では、ジョブ運用ソフトウェアによって、次の環境変数が設定されています</div>
+<div class="line">詳細は「ジョブ運用ソフトウェア エンドユーザ向けガイド」の「2.3.6.10 MPIプロセスに設定される環境変数」を参照してください。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>環境変数名</p></th>
+<th class="head"><p>内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PMIX_RANK</p></td>
+<td><p>MPIプロセスのランク番号が10進数で指定されます。</p></td>
+</tr>
+<tr class="row-odd"><td><p>PLE_RANK_ON_NODE</p></td>
+<td><div class="line-block">
+<div class="line">計算ノード内でのMPIプロセスの識別番号が10進数で設定されます。</div>
+<div class="line">識別番号とは、同じ計算ノード上の同じMPI_COMM_WORLDに属するMPIプロセスの中で一意に割り当てられる番号で、0から始まります。</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id11">
+<h2><span class="section-number">5.9.7. </span>実行開始時刻の指定<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">通常、ユーザーが投入したジョブは、空き資源の状況や優先度に従って最も早く実行できるように順番が決定されますが、ユーザーによる実行開始時刻の指定もできます。</div>
+<div class="line">実行開始時刻は<strong class="program">pjsub</strong>コマンドの<code class="docutils literal notranslate"><span class="pre">--at</span></code>オプションを使い、以下の書式で指定します。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>書式</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>--at YYYYMMDD[hhmm]</p></td>
+<td><div class="line-block">
+<div class="line">YYYY は年、MM は月、DD は日を表します。</div>
+<div class="line">hh は時、mm は分を表します。hhmm を省略した場合は 0時0分が指定されたものとみなします。</div>
+<div class="line">また、秒単位では指定できません。</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line">以下は、実行開始時刻を指定してジョブを投入する例です。</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--at<span class="w"> </span><span class="m">202208011511</span><span class="w"> </span>job.sh<span class="w"> </span><span class="c1"># 2022年8月1日15:11 に job.sh の実行を開始する</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>実行開始時刻の指定（<code class="docutils literal notranslate"><span class="pre">--at</span></code> オプション）は、有償利用の方のみ利用可能です。</p></li>
+<li><p>実行開始時刻を指定したジョブは、資源に空きがあっても、指定時刻より前に実行されることはありません。また、資源の空き状況によっては、指定時刻より後に実行される場合があります。</p></li>
+<li><p>会話型ジョブに対しては、実行開始時刻は指定できません。指定した場合は無視されます。</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.9. ジョブ実行コマンドのオプション</a><ul>
+<li><a class="reference internal" href="#id2">5.9.1. 基本オプション</a></li>
+<li><a class="reference internal" href="#jobexecutionresourcespecifications">5.9.2. リソース指定</a><ul>
+<li><a class="reference internal" href="#jobexecutionwithminimumexecutiontimespecified">5.9.2.1. 最低実行時間を指定したジョブ実行</a></li>
+<li><a class="reference internal" href="#id7">5.9.2.2. 低優先度ジョブ実行</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mpi">5.9.3. MPIオプション</a></li>
+<li><a class="reference internal" href="#id8">5.9.4. ジョブ統計情報</a></li>
+<li><a class="reference internal" href="#id9">5.9.5. ジョブスクリプト内環境変数</a></li>
+<li><a class="reference internal" href="#id10">5.9.6. MPIプロセスに設定される環境変数</a></li>
+<li><a class="reference internal" href="#id11">5.9.7. 実行開始時刻の指定</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="EnvironmentSettings.html"
+                          title="前の章へ"><span class="section-number">5.8. </span>環境設定</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="AllocationOfLargePageArea.html"
+                          title="次の章へ"><span class="section-number">5.10. </span>ラージページ領域割当て</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="AllocationOfLargePageArea.html" title="5.10. ラージページ領域割当て"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="EnvironmentSettings.html" title="5.8. 環境設定"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.9. </span>ジョブ実行コマンドのオプション</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

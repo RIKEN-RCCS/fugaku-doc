@@ -1,0 +1,510 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>9. Migration from other systems &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="8.9. Selecting a usage file system (volume)" href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html" title="8.9. Selecting a usage file system (volume)"
+             accesskey="P">previous</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">9. </span>Migration from other systems</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="migration-from-other-systems">
+<h1><span class="section-number">9. </span>Migration from other systems<a class="headerlink" href="#migration-from-other-systems" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2><span class="section-number">9.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>Here indicates about main compile option which is incompatible when migrating the program from other Fujitsu system (PC cluster and Supercomputer K) to the Fugaku and other company’s compiler (Intel compiler and gcc).</p>
+</section>
+<section id="migration-from-k">
+<h2><span class="section-number">9.2. </span>Migration from K<a class="headerlink" href="#migration-from-k" title="Link to this heading">¶</a></h2>
+<p>Here indicates main difference between the Fugaku and Supercomputer K.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>K</p></th>
+<th class="head"><p>Fugaku</p></th>
+<th class="head"><p>Note</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Executable file</p></td>
+<td><p>SPARC VIIIfx format</p></td>
+<td><p>Armv8.2-A format</p></td>
+<td><p>Incompatible. Re-compile is required.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Staging</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Recommended number of process in node</p></td>
+<td><p>1</p></td>
+<td><p>4</p></td>
+<td><p>Due to having 4 CMG (Core Memory Group, NUMA node) in 1 node</p></td>
+</tr>
+<tr class="row-odd"><td><p>Maximum number of thread in node</p></td>
+<td><p>8</p></td>
+<td><p>48</p></td>
+<td><p>12 thread/process when 4 process/node</p></td>
+</tr>
+<tr class="row-even"><td><p>Large page</p></td>
+<td><p>4MiB/32MiB/256MiB</p></td>
+<td><p>4MiB</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Endian</p></td>
+<td><p>Big endian</p></td>
+<td><p>Little Endian</p></td>
+<td><p>Incompatible on binary data</p></td>
+</tr>
+<tr class="row-even"><td><p>Language environment setting direction</p></td>
+<td><p>Uses Env_base file</p></td>
+<td><p>Uses Environment Modules</p></td>
+<td><p>Default environment is loaded when logging in and job execution</p></td>
+</tr>
+</tbody>
+</table>
+<p>Please refer to “14. Migration from K” of “Supercomputer Fugaku Users Guide -Language and development environment- “ about main incompatible of language environment.</p>
+<p>Based on the difference in above, we indicate the change example of job script in below.</p>
+<p>[Supercomputer K job script example]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM --rsc-list  &quot;node=8&quot;                   # Number of assign node 8  (1 dementional format)</span>
+<span class="c1">#PJM --rsc-list  &quot;elapse=01:00:00&quot;          # Running time limit 1 hour</span>
+<span class="c1">#PJM --stg-transfiles all</span>
+<span class="c1">#PJM --mpi &quot;use-rankdir&quot;                    # Rank number directory use declaration</span>
+<span class="c1">#PJM --stgin &quot;rank=* ./a.out %r:./&quot;         # Stage in ./a.out to each rank</span>
+<span class="c1">#PJM -s                                     # Output statistic information</span>
+<span class="c1">#</span>
+.<span class="w"> </span>/work/system/Env_base<span class="w">                     </span><span class="c1"># Set environment variables</span>
+<span class="c1">#</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">8</span>
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>./a.out<span class="w">    </span><span class="c1"># Execute a.out</span>
+</pre></div>
+</div>
+<p>Change job script as following.</p>
+<ul class="simple">
+<li><p>Delete the definition about staging (–stg-transfiles, use-rankdir, –stgin, –stgout etc). If definition is still existing, nothing works.</p></li>
+<li><p>Since 1node 4 process, it is using max-proc-per-node=4 here.</p></li>
+<li><p>To make number of process to 8, change number of node to 2. If number of node is 8, it executes with 32 process.</p></li>
+<li><p>Since default language environment is set when job execution, delete environment variables setting.</p></li>
+</ul>
+<p>[Fugaku job script example]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM --rsc-list  &quot;node=2&quot;                   # Number of assign node 2 (1 dementional format)</span>
+<span class="c1">#PJM --rsc-list  &quot;elapse=01:00:00&quot;          # Running time limit 1 hour</span>
+<span class="c1">#PJM --mpi max-proc-per-node=4              # Upper limit of number of MPI process that created at 1 node</span>
+<span class="c1">#PJM -g groupname                         # group name</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N          # volume names that job uses</span>
+<span class="c1">#PJM -s                                     # Output statistic information</span>
+<span class="c1">#</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">12</span>
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>./a.out<span class="w">    </span><span class="c1"># Execute a.out</span>
+</pre></div>
+</div>
+<p>When executing a job, the directory where pjsub is executed operates as the current directory of the job.
+When executing multiple jobs at the same time, make sure that input / output data does not conflict between jobs.</p>
+</section>
+<section id="migration-from-other-fujitsu-systems">
+<h2><span class="section-number">9.3. </span>Migration from other Fujitsu systems<a class="headerlink" href="#migration-from-other-fujitsu-systems" title="Link to this heading">¶</a></h2>
+<p>This indicates about the migration from other Fujitsu systems, compile option and the difference of optimization directive.</p>
+<section id="option-difference">
+<h3><span class="section-number">9.3.1. </span>Option difference<a class="headerlink" href="#option-difference" title="Link to this heading">¶</a></h3>
+<p>Here indicates representative option because of migration from other systems.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>PC cluster</p></th>
+<th class="head"><p>“K”</p></th>
+<th class="head"><p>FX100</p></th>
+<th class="head"><p>Fugaku</p></th>
+<th class="head"><p>Changed point</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-Kfast</p></td>
+<td><p>-Kfast</p></td>
+<td><p>-Kfast</p></td>
+<td><p>-Kfast</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-Kparallel</p></td>
+<td><p>-Kparallel</p></td>
+<td><p>-Kparallel</p></td>
+<td><p>-Kparallel</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-Kopenmp</p></td>
+<td><p>-Kopenmp</p></td>
+<td><p>-Kopenmp</p></td>
+<td><p>-Kopenmp</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>None</p></td>
+<td><p>-KXFILL</p></td>
+<td><p>-KXFILL</p></td>
+<td><p>-Kzfill</p></td>
+<td><p>Changed option name at “Fugaku”</p></td>
+</tr>
+<tr class="row-even"><td><p>None</p></td>
+<td><p>-Kuxsimd</p></td>
+<td><p>-Kuxsimd</p></td>
+<td><p>None</p></td>
+<td><p>Abolished option at “Fugaku”</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kopenmp_tls</p></td>
+<td><p>-Kopenmp_tls</p></td>
+<td><p>-Kopenmp_tls</p></td>
+<td><p>None</p></td>
+<td><p>Abolished option at “Fugaku”</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="optimization-indicator-ocl-difference">
+<h3><span class="section-number">9.3.2. </span>Optimization indicator (OCL) difference<a class="headerlink" href="#optimization-indicator-ocl-difference" title="Link to this heading">¶</a></h3>
+<p>Here indicates added to changed representative OCL.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>PC cluster</p></th>
+<th class="head"><p>“K”</p></th>
+<th class="head"><p>FX100</p></th>
+<th class="head"><p>Fugaku</p></th>
+<th class="head"><p>Changed point</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>None</p></td>
+<td><p>XFILL</p></td>
+<td><p>XFILL</p></td>
+<td><p>ZFILL</p></td>
+<td><p>Name changed at “Fugaku”</p></td>
+</tr>
+<tr class="row-odd"><td><p>None</p></td>
+<td><p>UXSIMD</p></td>
+<td><p>UXSIMD</p></td>
+<td><p>None</p></td>
+<td><p>Abolished at “Fugaku”</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="id1">
+<h2><span class="section-number">9.4. </span>Migration from other systems<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<p>Here indicates main option difference about Intel compiler and GNU.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>Induces optimisation option for speeding up</p></th>
+<th class="head"><p>Automatic parallel</p></th>
+<th class="head"><p>OpenMP</p></th>
+<th class="head"><p>Change local variables to automatic variables</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Fugaku</p></td>
+<td><p>-Kfast</p></td>
+<td><p>-Kparallel</p></td>
+<td><p>-Kopenmp</p></td>
+<td><p>-Kauto</p></td>
+</tr>
+<tr class="row-odd"><td><p>Intel compiler</p></td>
+<td><p>-O3 -xHost</p></td>
+<td><p>-parallel</p></td>
+<td><p>-openmp</p></td>
+<td><p>-auto</p></td>
+</tr>
+<tr class="row-even"><td><p>GNU</p></td>
+<td><p>-O3</p></td>
+<td><p>-</p></td>
+<td><p>-fopenmp</p></td>
+<td><p>-</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">If change to  <strong class="program">fccpx</strong> from  GCC  (<strong class="program">gcc</strong>)</div>
+<div class="line">In addition to fccpx, C11 specification understand based on GNU C extentional specification.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">If change to  <strong class="program">fccpx</strong> from Intel compiler  (<strong class="program">ifort</strong>)</div>
+</div>
+<div class="line-block">
+<div class="line">Display option to extend Fortran fixed specification.</div>
+<div class="line">Fugaku: <code class="docutils literal notranslate"><span class="pre">-Fwide</span></code>(Up to 255 letters)</div>
+<div class="line">Intel compiler :<code class="docutils literal notranslate"><span class="pre">-132</span></code></div>
+</div>
+</li>
+</ol>
+</div>
+</section>
+<section id="endian">
+<h2><span class="section-number">9.5. </span>Endian<a class="headerlink" href="#endian" title="Link to this heading">¶</a></h2>
+<p>Here explains about Endian and about comparing with Supercomputer K and target compilers.</p>
+<section id="id2">
+<h3><span class="section-number">9.5.1. </span>Overview<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p>At Supercomputer K, Big Endian is used.
+On the other hands, the Fugaku  and around devices uses Little Endian.</p>
+<p>Indicates Endian used on each node.</p>
+<span id="endian-on-each-node"></span><table class="docutils align-default" id="id6">
+<caption><span class="caption-text">Endian on each node</span><a class="headerlink" href="#id6" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Node type</p></th>
+<th class="head"><p>K</p></th>
+<th class="head"><p>Fugaku</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Computing node</p></td>
+<td><p>Big Endian</p></td>
+<td><p>Little Endian</p></td>
+</tr>
+<tr class="row-odd"><td><p>Login node</p></td>
+<td><p>Little Endian</p></td>
+<td><p>Little Endian</p></td>
+</tr>
+</tbody>
+</table>
+<p>It is required to change Endian to use the binary data that is created with Supercomputer K.
+Indicates the policy of change at <a class="reference internal" href="#data-migration-change-policy"><span class="std std-ref">Data migration (change) policy</span></a> .</p>
+<span id="data-migration-change-policy"></span><table class="docutils align-default" id="id7">
+<caption><span class="caption-text">Data migration (change) policy</span><a class="headerlink" href="#id7" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Language</p></th>
+<th class="head"><p>Change direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Fortran (Input and output without style)</p></td>
+<td><p>Uses language software change function</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fortran(Other)</p></td>
+<td><p>Change by the user</p></td>
+</tr>
+<tr class="row-even"><td><p>C</p></td>
+<td><p>Change by the user</p></td>
+</tr>
+<tr class="row-odd"><td><p>C++</p></td>
+<td><p>Change by the user</p></td>
+</tr>
+<tr class="row-even"><td><p>MPI-IO</p></td>
+<td><p>Change by the user</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="target-compiler">
+<h3><span class="section-number">9.5.2. </span>Target compiler<a class="headerlink" href="#target-compiler" title="Link to this heading">¶</a></h3>
+<p>The target compiler in this section is as following.
+On these compilers, Some Endian conversion functions are provided for Fortran binary data.</p>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#fujitsu-compiler" id="id8">Fujitsu compiler</a></p></li>
+<li><p><a class="reference internal" href="#intel-compiler" id="id9">Intel compiler</a></p></li>
+<li><p><a class="reference internal" href="#gnu-compiler-gcc" id="id10">GNU compiler(GCC)</a></p></li>
+</ul>
+</nav>
+<section id="fujitsu-compiler">
+<span id="id3"></span><h4><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">9.5.2.1. </span>Fujitsu compiler</a><a class="headerlink" href="#fujitsu-compiler" title="Link to this heading">¶</a></h4>
+<p>At Fujitsu compiler, execution option and change command are offered.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Execution option</p></td>
+<td><p>By putting <code class="docutils literal notranslate"><span class="pre">-Wl,-T</span></code> to the execution option of Fortran program, Endian change is exeuted when Fortran input/output.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Change command</p></td>
+<td><p>Offeres  <code class="docutils literal notranslate"><span class="pre">fcvendianpx</span></code> command.
+Use as  <code class="docutils literal notranslate"><span class="pre">fcvendianpx</span> <span class="pre">inputfilename</span> <span class="pre">outputfilename</span> <span class="pre">type</span></code><code class="docutils literal notranslate"><span class="pre">type</span></code>  specifies data type to change (one of these values: 2, 4, 8, 16).</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="intel-compiler">
+<span id="id4"></span><h4><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">9.5.2.2. </span>Intel compiler</a><a class="headerlink" href="#intel-compiler" title="Link to this heading">¶</a></h4>
+<p>At Intel compiler, compile option and environment variables when execution are offered.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Compile option</p></td>
+<td><p>By compiling with putting  <code class="docutils literal notranslate"><span class="pre">-convert</span> <span class="pre">big_endian</span></code> , <code class="docutils literal notranslate"><span class="pre">-convert</span> <span class="pre">little_endian</span></code>, it is possible to make numeric data format without style to Big Endian or Little Endian.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Environment variables when execution</p></td>
+<td><p>Specify environment variables  <code class="docutils literal notranslate"><span class="pre">F_UFMTENDIAN</span> <span class="pre">=</span> <span class="pre">MODE</span> <span class="pre">(MODE</span> <span class="pre">=</span> <span class="pre">big</span> <span class="pre">|</span> <span class="pre">little)</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="gnu-compiler-gcc">
+<span id="id5"></span><h4><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">9.5.2.3. </span>GNU compiler(GCC)</a><a class="headerlink" href="#gnu-compiler-gcc" title="Link to this heading">¶</a></h4>
+<p>At gfortran, convert specifier by extending the OPEN statement and execution option are offered.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>OPEN statement’s extention</p></td>
+<td><p>Specify  <code class="docutils literal notranslate"><span class="pre">CONVERT='BIG_ENDIAN'</span></code> and  <code class="docutils literal notranslate"><span class="pre">CONVERT='LITTLE_ENDIAN'</span></code> to OPEN statement. Specify such as  <code class="docutils literal notranslate"><span class="pre">open(file='big.dat',form='unformatted',</span> <span class="pre">convert='big_endian')</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Execution option</p></td>
+<td><p>Specify  <code class="docutils literal notranslate"><span class="pre">-fconvert=big-endian</span></code> and  <code class="docutils literal notranslate"><span class="pre">-fconvert=little-endian</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">9. Migration from other systems</a><ul>
+<li><a class="reference internal" href="#overview">9.1. Overview</a></li>
+<li><a class="reference internal" href="#migration-from-k">9.2. Migration from K</a></li>
+<li><a class="reference internal" href="#migration-from-other-fujitsu-systems">9.3. Migration from other Fujitsu systems</a><ul>
+<li><a class="reference internal" href="#option-difference">9.3.1. Option difference</a></li>
+<li><a class="reference internal" href="#optimization-indicator-ocl-difference">9.3.2. Optimization indicator (OCL) difference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id1">9.4. Migration from other systems</a></li>
+<li><a class="reference internal" href="#endian">9.5. Endian</a><ul>
+<li><a class="reference internal" href="#id2">9.5.1. Overview</a></li>
+<li><a class="reference internal" href="#target-compiler">9.5.2. Target compiler</a><ul>
+<li><a class="reference internal" href="#fujitsu-compiler">9.5.2.1. Fujitsu compiler</a></li>
+<li><a class="reference internal" href="#intel-compiler">9.5.2.2. Intel compiler</a></li>
+<li><a class="reference internal" href="#gnu-compiler-gcc">9.5.2.3. GNU compiler(GCC)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html"
+                          title="previous chapter"><span class="section-number">8.9. </span>Selecting a usage file system (volume)</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html" title="8.9. Selecting a usage file system (volume)"
+             >previous</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">9. </span>Migration from other systems</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

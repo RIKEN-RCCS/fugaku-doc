@@ -1,0 +1,13 @@
+Job shape (Torus)
+=================
+
+The resource is assigned to job depending on the specified shape in  \ ``pjsub -L node``\  (1 dimention/ 2 dimentions / 3 dimentions) and computing node.
+
+The assigned resources make up a torus in the job for each axis.
+
+.. figure:: ./img/JobShape(torus)_01.png
+   :scale: 80
+
+
+
+

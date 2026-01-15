@@ -1,0 +1,497 @@
+Job execution command options
+=============================
+
+This is a list of :program:`pjsub` options.
+
+
+Basic option
+-------------
+
+This is to indicate :program:`pjsub` command's basic option, such as job execution group, environment variable passing, etc.
+
+.. list-table:: 
+   :widths: 4 8
+   :header-rows: 1
+
+   * - Option name
+     - Function
+
+   * - \-L "`resource=value[,...]`"
+     - | Specifies options related to job resources.
+       | Indicates on ":ref:`JobExecutionResourceSpecifications`"  for details.
+
+   * - \--mpi "`parameter[,...]`"
+     - | Specify various parameters for the MPI job.
+       | Indicates on ":ref:`JobExecutionMPIOptions`"  for details.
+
+   * - \--gname "`gname`"
+     - | Specify the name of the group to which the job process belongs when executing the job.
+       | You can specify either a group name (``gname``) or a group ID (``gid``).
+       | If the specified group does not exist in the job management node, job submission will result in an error.
+
+   * - \--help
+     - Display help.
+
+   * - \-j
+     - Standard error output is output to standard output.
+
+   * - \-m  "`mailoption[,...]`"
+     - | Specify whether to send email notifications for job status and other information.
+       | See ``man pjsub`` for `mailoption`.
+       | When using this option, be sure to specify an email address using ``--mail-list``.
+
+   * - \--mail-list  "`mailaddress[,...]`"
+     - | Specify the mail destination. When specifying multiple items, separate them with commas (","). The string size you specify is limited to 255 characters.
+       | Please note that if you enter the wrong e-mail address, it will not reach the recipient and there will be no error notification.
+
+   * - \--name  "`name`"
+     - | Specifies the name of the job. You can specify up to 63 bytes for the job name.
+       | If this option is not specified, the script file name specified on the command line is set as the job name.
+       | If the script file name is not specified, "STDIN" is set as the job name.
+       | The first character of the job name is only one-byte alphabet. ``name`` cannot be a string containing "/".
+       | The job and script file names can contain the following characters.
+       
+       - Any single byte alphanumeric characters, single byte hyphen(-), single byte underscore(_) and single byte dot(.) can be used.
+       - Other characters are not supported.
+
+   * - \--restart
+     - | When this option is specified, attempts to run the job again if the job execution is interrupted due to a job execution environment shutdown or an error.
+       | If this option is not specified (Default Value), the job does not rerun.
+
+   * - \-X
+     - Transfer all environment variables to the compute node.
+
+.. hint::
+
+   To assist the operation of the Fugaku, Fugaku specific :ref:`EnvironmentVariablesandpjsubOptions` are provided.
+   You may also want to use these options.
+
+.. _JobExecutionResourceSpecifications:
+
+Resource specification
+-----------------------
+
+| Indicates an option that specifies the resources used by the job.
+| Specify the upper limit value of the resource requested by the job in the format of  ``resource = value`` after ``-L``.
+| When specifying multiple ``resource``, separate them with commas.
+
+.. list-table:: 
+   :widths: 4 9
+   :header-rows: 1
+
+   * - Item name
+     - Contents
+
+   * - \-L "node=nodeshape"
+     - Specify the number of nodes and the shape to be assigned to the job.
+       
+       - If 1 dimention: ``node=N1``
+       - If 2 dimentions: ``node=N1xN2``
+       - If 3 dimentions: ``node=N1xN2xN3``
+
+       Following the node shape specification, the node allocation method can be specified.
+
+       - If 1 dimention ：node=N1[:torus|:mesh|:noncont]
+       - If 2 dimentions：node=N1xN2[:torus|:mesh|:noncont]
+       - If 3 dimentions：node=N1xN2xN3[:torus|:mesh|:noncont]
+
+          - :torus
+             Torus mode that allocates computer resources to jobs in units of Tofu (12 nodes)
+          - :mesh
+             Mesh mode that allocates computer resources to jobs in units of node
+          - :noncont
+             Non-contiguous mode that allocates computer resources to jobs in units of node
+
+       The available number of nodes, shape and allocation method are set for each resource group.
+       Refer to :ref:`Resource <Resource>`.
+
+   * - \-L "elapse=elapsetimelimit"
+     - | Set the elapsed time limit for each job. The maximum value is set for each `Resource group <https://www.fugaku.r-ccs.riken.jp/en/resource_group_config>`_\ .
+       | ``elapsetimelimit`` is specified in the format "[[time:] minute:] second".
+
+       - ``-L "elapse=30"`` (If 30 seconds)
+       - ``-L "elapse=2:30"`` (If 2 minutes 30 seconds)
+       - ``-L "elapse=1:00:00"`` (If 1 hour)
+
+   * - | -L "elapse=min_limit-max_limit"
+       | -L "elapse=min_limit-"
+     - | Specifying an elapsed time limit value as a range.
+       | The values that can be specified for min_limit and max_limit differ for each `Resource group <https://www.fugaku.r-ccs.riken.jp/en/resource_group_config>`_.
+       | (How to check min_limit, max_limit is described later.)
+       | After the elapsed time reaches min_limit, job execution can continue only until the elapsed time reaches max_limit.
+       | However, even when the elapsed time is less than max_limit, the job is forcibly terminated in the following situation.
+
+       - When the node is needed for a subsequent job.
+       - When the node enters a period reserved by deadline scheduling.
+
+       |
+
+       - \-L "elapse=2:30-5:00" (2 mins 30 sec-5 mins)
+       - \-L "elapse=1:00:00-1:30:00" (1hour - 1hour and 30mins)
+       - \-L "elapse=2:00:00-24:00:00" (2hours - 24 hours)
+       - \-L "elapse=2:00:00-" (Maximum value of the resource group used when max_limit is omitted)
+
+   * - \-L "rscgrp=rscgname"
+     - Specify the resource group name ``rscgname`` to submit the job.
+
+
+.. _JobExecutionWithminimumExecutiontimeSpecified:
+
+Jobs specifying the minimum elapsed time limit value
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+| You can use the following formats to specify the elapsed time limit value for the job on Fugaku except some resource groups.
+| On normal job execution, jobs will terminate to reach the elapsed time limit.
+| But by specifying the minimum elapsed time limit value (min_limit), your job can run after the minimum elapsed time limit unless other jobs will not be scheduled on nodes used by your job. the compute resource used by your job after the minimum elapsed time limit will no longer be charged
+| 
+| The job scheduling time is decided based on the minimum elapsed time limit, so short specified elapsed time will make short waiting time to be executed.
+
+
+| After the elapsed time reaches min_limit, job execution can continue to run until the elapsed time reaches max_limit, and used compute resource over min_limit will be no charge.
+|   - max_limit can be specified for up to "the max. amount of elapse time limit + 72H"
+|   - If max_limit is not specified (e.g., elapse=30:00-), "the max. amount of elapse time limit + 72H" is applied to max_limit.
+
+| However, even when the elapsed time is less than max_limit, the job is forcibly terminated when other job is allocated on nodes used by your job. So you need to be prepared for the job termination using check-point restart or something like.
+
+|   - We recommend using VeloC as a check-point restart.
+|     \ `VeloC User Guide <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/VeloC_Guide/>`_\ 
+|     \ `VeloC Webpage <https://veloc.readthedocs.io/en/latest/toc.html>`_\ 
+
+
+.. figure:: ./img/min_limit_en.png
+
+| ref: Job Operation Software End-user's Guide - 2.3.2.3 Specifying the elapsed time limit value for a job
+
+
+
+|  The following example shows how to determine the min _ limit, max _ limit configured for each resource group.
+
+| Batch Job Example
+
+.. code-block:: console
+
+   $ pjacl -u $USER -g $GROUP --rg small
+   (Omitted)
+   pjsub option parameters
+       (-L/--rsc-list)                         lower            upper            default
+           (elapse=)                           00:01:00         72:00:00         00:01:00
+           (adaptive elapsed time min)         00:01:00         72:00:00         00:01:00  # minLimit for batch jobs
+           (adaptive elapsed time max)         00:01:01         144:00:00        144:00:00 # maxLimit for batch jobs
+
+| Conversational Job Example
+
+.. code-block:: console
+
+   $ pjacl -u $USER -g $GROUP --rg int
+   (Omitted)
+   pjsub option parameters
+   (Omitted)
+       (--interact -L)                         lower            upper            default
+           (elapse=)                           00:00:10         06:00:00         00:00:10
+           (adaptive elapsed time min)         00:00:10         06:00:00         00:00:10 # minLimit for conversational jobs
+           (adaptive elapsed time max)         2                48:00:00         02:00:00 # maxLimit for conversational jobs
+
+
+.. attention::
+
+   - Jobs with a range of elapsed times are excluded from parameter changes by the :program:`pjalter` command.
+     You cannot change the parameters (Elapsed time limit, resource group, resource unit, and in-user priority) after you have submitted them.
+   - Jobs with an age specification in the range are not covered by :ref:`JobAllocationOperation`.
+     A range can be specified for direct input to the destination resource group.
+
+
+Low priority jobs
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+You can run a job at a low priority without consuming resources allocated in Fugaku.
+
+| Target Project: Projects other than paid projects
+| You can submit a job only if the project used for job submission is the target project. If the input condition is not satisfied, an error occurs.
+
+Following resource groups are for low priority jobs.
+
+- spot-large
+- spot-small
+- spot-int
+- spot-middle
+
+.. attention::
+
+   - Fee-based Access Projects are not eligible for low priority jobs.
+   - Low priority jobs are executed when compute nodes are free.
+   - If there are some normal priority jobs, the low-priority job will wait until the node becomes available, regardless of the submission time.
+   - The configuration of low priority job's resource groups the same as the normal resource group (the XXX part of spot-XXX), except for the priority.
+
+| For low-priority jobs, the job execution time limit is limited to 4 hours.
+| However, if no successor jobs are scheduled on the node where the low-priority job is running, the job can continue to run for up to 12 hours (spot-int is 6 hours).
+| If you want to execute a job that exceeds the maximum execution time, specify the elapsed time as a range, referring to "\ :ref:`5.9.2 Resource specification<JobExecutionResourceSpecifications>`\ " and "\ :ref:`5.9.2.1 Jobs specifying the minimum elapsed time limit value<JobExecutionWithminimumExecutiontimeSpecified>`\ ".
+| However, the specified time range must have a lower limit of 4 hours or less and an upper limit of 12 hours or less.
+
+Example: How to submit a job that has an age of 4 hours and continues to run for up to 12 hours if no subsequent jobs are assigned
+
+.. code-block:: console
+
+   [_LNlogin]$ pjsub -L "elapse=4:00:00-12:00:00" job.sh
+
+If you specify a job elapse of 4 hours or less, you do not need to specify an elapse range. In this case, the job ends after the specified time has elapsed.
+
+.. code-block:: console
+
+   [_LNlogin]$ pjsub -L "elapse=4:00:00" job.sh
+
+.. attention::
+
+   - An error occurs if you specify a value greater than 4 hours for the lower limit. And an error occurs if you specify a value greater than 12 hours for the upper limit.
+      
+      The following example generates an error:
+
+      | -L "elapse=6:00:00-12:00:00" (The lower limit of the specified time exceeds 4 hours.)
+      | -L "elapse=4:00:00-24:00:00" (The upper limit of the specified time exceeds 12 hours.)
+
+   - If you submit a job with an incorrect execution time, the following error message is output. Correct the job execution time specification, and then re-submit the job.
+      
+      | [ERR.] PJM 0057 pjsub elapse=18000 is greater than the upper limit (14400).
+
+   - | Jobs that run longer than the running time limit are killed when subsequent jobs are scheduled.
+     | If a low-priority job ends prematurely because a subsequent job is scheduled, the job transitions to the CCL state, and ANOTHER JOB STARTED appears in the REASON column of the job statistics. You can use the pjstat command to check.
+
+.. _JobExecutionMPIOptions:
+
+MPI option
+-----------
+
+| Set parameters related to MPI operation.
+| Set as settings related to MPI used in jobs \ ``--mpi "parameter[,parameter...]"``\  option.
+| When specifying multiple  \ ``parameter``\, separate them with commas.
+| Please refer to " :ref:`SpecificationsForMPIJobMPI` " for the detail about option concerning to MPI.
+
+.. list-table:: 
+  :widths: 3 6
+  :header-rows: 1
+
+  * - Item name
+    - Contents
+
+  * - &#45;-mpi "shape= `shape` "
+    - | Specifies the shape of the process to be started statically.
+      | To  \ ``shape``\ ,  \ ``shape=N1``\,\ ``shape=N1xN2``\  or  \ ``shape=N1xN2xN3``\  can be specified.
+      | You must specify the same number of dimensions which is specified in  \ ``node``\  of  \ ``-L(--rsc-list)``\  option.
+      | If omitted, the same value as specified in \ ``node``\  is used.
+      | If the \ ``vnode``\  option is specified, only 1 can be specified.
+
+  * - &#45;-mpi "proc= `num` "
+    - | Specify the maximum number of processes to start statically in \ ``num``\.
+      | If omitted, it is the product of the values specified by \ ``shape``\.
+      | If the product of the value specified by \ ``shape``\  x a value greater than the number of CPU cores in the node is specified, job acceptance is rejected.
+      | IF specified \ ``vnode``\  option, Job reception is also rejected if a value greater than the number of cores specified in the \ ``vnode``\  option is specified.
+
+  * - \--mpi "max-proc-per-node= `mppnnum` "
+    - | Specify the maximum number of process that the program creates at the 1 node.
+      | If omitted, the maximum number of process at the 1 node will be the value obtained by converting the value specified in  \ ``proc``   to the number of processes created in one node.
+      | If a value larger than the number of CPU cores in one node is specified or If the value converted from the value specified in  \ ``proc``  to the number of processes created in one node exceeds ``mppnnum`` , the job acceptance is rejected. If specified  \ ``vnode``\  option, the job acceptance is rejected.
+
+Job statistical information
+----------------------------
+
+| When ending job execution, it can output the job statistical information.
+| To output the job statistical information, specify \ ``-s``\, or \ ``-S``\  to  \ :program:`pjsub`\  command, and submit a job.
+| Job statistics are useful for investigating when a job ends abnormally.
+
+
+.. list-table:: 
+   :widths: 2 8
+   :header-rows: 1
+
+   * - Option name
+     - Function
+
+   * - | -s
+       | (Small letter)
+     - | Outputs the statistical information of the submitted job to a file.
+       | Cannot use with \ ``-S``\  option.
+       | If you want to output to the specified file, specify \ ``--spath``\  option.
+
+   * - | -S
+       | (Large letter)
+     - | In addition to the information output by the \ ``-s``\  option, the information for each submitted job node is output.
+       | Cannot use with \ ``-s``\  ption.
+       | If you want to output to the specified file, specify \ ``--spath``\  option.
+
+   * - &#45;-spath pathname
+     - | Outputs job statistics to the file specified by \ ``pathname``\.
+       | Need to specify \ ``-s``\ or \ ``-S``\ option at the same time.
+
+Environment variables in job scripts
+-------------------------------------
+
+| The following are typical environment variables that can be used in job scripts.
+| For details, please refer to "2.1.2 Environment variables in jobs" of "Job Operation Software End-user's Guide".
+
+
+.. list-table:: 
+   :widths: 3 7
+   :header-rows: 1
+
+   * - Environment variables name
+     - contents
+
+   * - PJM_BULKNUM
+     - Buld number (set only bulk job)
+
+   * - PJM_COMMENT
+     - Specified comment in \ ``--comment``\  of \ :program:`pjsub`\  option is entered.
+
+   * - PJM_ENVIRONMENT
+     - Contains the job type. BATCH or INTERACT.
+
+   * - PJM_JOBDIR
+     - Current directory path when job script execution starts
+
+   * - PJM_JOBID
+     - Job ID is entered.
+
+   * - PJM_JOBNAME
+     - Job name is entered.
+
+   * - PJM_LOCALTMP
+     - The path of the temporary area in the node on the first-layer storage is entered.
+
+   * - PJM_SUBJOBID
+     - Sub job ID is entered.
+
+   * - PJM_STEPNUM
+     - Step job step number is entered.
+
+   * - PJM_LLIO_SHAREDTMP_SIZE
+     - Contains the size (bytes) of the shared temporary area on the first-layer storage.
+
+   * - PJM_LLIO_LOCALTMP_SIZE
+     - Contains the size (bytes) of the temporary area in the node on the first-layer storage.
+
+   * - PJM_LLIO_AUTO_READAHEAD
+     - Whether to automatically pre-read when a job tries to read a continuous area on the first-layer storage or second-layer storage multiple times in succession
+
+       - on: read in ahead
+       - off: doesnt read in ahead
+
+   * - PJM_LLIO_ASYNC_CLOSE
+     - Whether to close files on the first-layer storage and second-layer storage asynchronously
+       
+       - on: Asynchronous close
+       - off: Synchronous close
+       
+       If on (asynchronous close) is set, writing completion is not guaranteed when the file is closed. When off (synchronous close) is set, writing is guaranteed when the file is closed.
+
+   * - PJM_LLIO_CN_CACHE_SIZE
+     - Contains the size (bytes) of the cache in the compute node on the first-layer storage.
+
+   * - PJM_LLIO_CN_CACHED_WRITE_SIZE
+     - Contains the threshold (bytes) for whether to cache when writing to the first-layer storage.
+
+   * - PJM_LLIO_CN_READ_CACHE
+     - Whether to cache the file read from the first-layer storage or the second-layer storage in the cache in the compute node.
+
+       - on: Proceed cash.
+       - off: Dont proceed cash.
+
+   * - PJM_LLIO_SIO_READ_CACHE
+     - Whether to cache the file read from the second-layer storage to the compute node in the first-layer storage.
+
+       - on: Proceed cash.
+       - off: Dont proceed cash.
+
+   * - PJM_LLIO_STRIPE_COUNT
+     - Contains the number of stripes per file when files are distributed to the first-layer storage.
+
+   * - PJM_LLIO_STRIPE_SIZE
+     - Contains the stripe size (bytes) for distributing files in the first-layer storage.
+
+   * - PJM_LLIO_UNCOMPLETED_FILEINFO_PATH
+     - Contains the output path of unwritten file information.
+       
+       This is the path of the file that outputs a list of file names when a file that has not been written to the second-layer storage remains in the cache when the job ends.
+
+   * - PJM_O_HOME
+     - Contains the user environment variable ``HOME``, issued \ :program:`pjsub`\  command.
+
+   * - PJM_O_LANG
+     - Contains the user environment variable ``LANG``, issued \ :program:`pjsub`\  command.
+
+   * - PJM_O_LOGNAME
+     - Contains the user environment variable ``LOGNAME``, issued \ :program:`pjsub`\  command.
+
+   * - PJM_O_PATH
+     - Contains the user environment variable ``PATH``, issued \ :program:`pjsub`\  command.
+
+   * - PJM_O_SHELL
+     - Contains the user environment variable ``SHELL``, issued \ :program:`pjsub`\  command.
+
+   * - PJM_O_HOST
+     - Contains the user environment variable ``HOST``, issued \ :program:`pjsub`\  command.
+
+   * - PJM_O_WORKDIR
+     - Contains the user current directory, issued \ :program:`pjsub`\  command.
+
+
+.. attention::
+
+   - Even if an environment variable with the same name as that shown in the table above is specified in the \ ``-x``\  option of the  \ :program:`pjsub`\  command, the value is ignored and becomes the value shown in the table above. 
+   - Environment variables set on the shell that executes the  \ :program:`pjsub`\  command are not inherited in the job unless otherwise specified. To take over the environment variables in job, specify \ ``-X``\  option of  \ :program:`pjsub`\  command. However, the environment variable with the same name as the environment variable shown in the above table is ignored even if the \ ``-X``\  option of the  \ :program:`pjsub`\  command is specified, and becomes the value shown in the table above.
+
+
+
+Environment variables in MPI processes
+-----------------------------------------
+
+| The Job Operation Software sets the following environment variable in MPI processes.
+| For details, please refer to "2.3.6.10 Environment variable in MPI processes" of "Job Operation Software End-user's Guide".
+
+
+.. list-table:: 
+   :widths: 3 7
+   :header-rows: 1
+
+   * - Environment variables name
+     - contents
+
+   * - PMIX_RANK
+     - The rank number of the MPI process is set in decimal.
+
+   * - PLE_RANK_ON_NODE
+     - | The identification number of the MPI process in the compute node is set in decimal.
+       | An identification number is a unique number assigned within an MPI process belonging to the same MPI_COMM_WORLD on the same compute node, starting with 0.
+
+
+Specifying an execution start time
+--------------------------------------------
+
+| Normally, the jobs submitted by users are executed as soon as possible, with the execution order determined according to resource availability and priority. However, users can specify execution start times.
+| To specify an execution start time, use the ``--at`` option of the :program:`pjsub` command in the following format.
+
+
+.. list-table:: 
+   :widths: 3 7
+   :header-rows: 1
+
+   * - Format
+     - Description
+
+   * - \-\-at YYYYMMDD[hhmm]
+     - | YYYY is the year, MM is the month, and DD is the day.
+       | hh is the hour, and mm is the minute. If hhmm is omitted, 00:00 is assumed specified.
+       | The specification in seconds is not available.                                       
+
+
+| The following example shows the submission of a job with the execution start time specified.
+
+
+.. code-block:: console
+
+   [_LNlogin]$ pjsub --at 202208011511 job.sh # Execution of job.sh starts at 15:11 on August 1, 2022. 
+
+
+.. attention::
+
+   - Specifying the execution start time (``--at`` option) is available only for paid users.
+   - A job with the execution start time specified is never executed before the specified time even when there are free resources. Furthermore, it may be executed later than the specified time, depending on the availability of resources.
+   - An interactive job cannot have a specified execution start time. If one is specified, it is ignored.
+

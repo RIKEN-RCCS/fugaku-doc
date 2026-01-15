@@ -1,0 +1,100 @@
+CPU core and memory binding
+===========================
+
+When a job is executed by default, memory near the CPU core (with the same CMG) is preferentially secured, but if it cannot be acquired, memory is acquired from a CMG different from the CPU core.
+If you want to limit the CMG that gets the memory, use the numctl command to bind the memory.
+
+| IF you want to limit CMG to get memory, use  \ :program:`numctl`\  command and binde a memory.
+| For MPI job, binde with a memory with using MCA parameter  \ ``plm_ple_memory_allocation_policy``\.
+
+
+1. numactl use
+
+ - The CPU core, CPU node and memory node numbers used in the numactl command are as follows:
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 2 2 2 2
+
+    * - CMG
+      - CPU core number
+      - CPU node number
+      - memory node
+
+    * - CMG0
+      - 12 \- 13
+      - 4
+      - 4
+
+    * - CMG1
+      - 24 \- 35
+      - 5
+      - 5
+
+    * - CMG2
+      - 36 \- 47
+      - 6
+      - 6
+
+    * - CMG3
+      - 48 \- 59
+      - 7
+      - 7
+
+
+
+ - IF using CPU and memory of CMG0
+   
+ .. code-block:: console
+   
+   $ numactl --cpunodebind 4 --membind 4 ./a.out
+
+2. MCA parameter use (MPI job)
+
+ - If using MCA parameter on MPI job.
+ 
+ .. code-block:: console
+
+   $ mpiexec -mca plm_ple_memory_allocation_policy bind_local ./a.out
+
+ - If using MCA parameter as environment variable on MPI job.
+ 
+ .. code-block:: console
+
+   $ export OMPI_MCA_plm_ple_memory_allocation_policy=bind_local
+   $ mpiexec ./a.out
+
+
+ [Set value of MCA parameter (plm_ple_memory_allocation_policy)]
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 2 8
+
+    * - Setting value
+      - Description
+
+    * - bind_local
+      - | Allocate memory in ascending order of node ID on each NUMA node belonging to the local node set of the process. If there is no free memory in the NUMA node belonging to the local node set, allocation will fail. The default value is localalloc.
+        | The "local node set" is the union of NUMA nodes to which each CPU (core) to which a process has been assigned belongs.
+
+    * - localalloc
+      - Allocate memory from the NUMA node to which the CPU (core) on which the process is running belongs. If there is no free memory in the NUMA node to which the CPU (core) belongs, memory is allocated in ascending order of the access cost from the CPU (core).
+
+.. attention::
+
+   When memory is bound, the program terminates abnormally if the required amount of memory cannot be obtained in the bound memory node.
+
+.. seealso::
+
+   [An error when cannot obtain a memory]
+   
+   When you bind memory and make a request that exceeds the amount of available memory, the OOM killer will process pruning. This causes the program to end abnormally. When the process ends abnormally, PJM CODE = 23 is recorded.
+   
+   PJM CODE can be check on thejob script or job statistic information that is output when specify \ ``-s``\  or  \ ``-S``\  to  \ :program:`pjsub`  command option .
+
+
+   
+   
+   
+

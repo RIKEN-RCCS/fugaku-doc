@@ -1,0 +1,981 @@
+.. highlight:: none
+
+利用規則
+============
+
+
+概要
+--------------------
+
+「富岳」の利用に係る基本事項を示します。
+
+
+利用規模／利用環境
+--------------------
+
+| 利用可能な機能、利用規模（利用可能な計算ノード数）、ファイルシステムの種類／容量を以下の表に示します。
+| コンパイラ、MPIライブラリ、数学ライブラリ、プログラム開発支援ツール（プロファイラ／デバッガ）、運用ソフトウェア（ジョブ投入／ジョブ状態表示／ジョブ削除）については、システム保守等により本書に記載された版数と異なる場合があります。これらの版数を更新する場合は、別途広報いたします。
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 5, 5
+
+
+   * - 項目
+     - 内容
+
+   * - 計算ノード数
+     - 158,976
+
+   * - 言語ソフトウェア
+     - Technical Computing Suite V4.0L20A Development Studio
+
+   * - プログラム開発
+     - ログインノード
+
+   * - ジョブ投入
+     - ログインノード
+
+   * - ホーム領域
+     - 第2階層ストレージ(FEFS)
+
+   * - データ領域
+     - 第2階層ストレージ(FEFS)
+
+
+利用可能なジョブ規模
+^^^^^^^^^^^^^^^^^^^^^^^
+
+1～82,944 ノード
+
+利用可能なジョブ規模はリソースグループにより異なります。
+
+リソースグループは富岳ウェブサイトの「\ `Resource group configuration <https://www.fugaku.r-ccs.riken.jp/resource_group_config>`_\」を参照してください。
+
+
+ローカルアカウント管理
+-----------------------
+
+| ローカルアカウント管理について示します。
+| 「富岳」を利用するにあたり、\ |post-k-only|\ にログインするための\ |post-k-only|\ 固有のローカルアカウントについて説明します。
+
+
+ログイン
+^^^^^^^^^^
+
+ローカルアカウントを利用したシステムへのログインはSSH公開鍵認証となります。
+
+クライアント証明書による認証
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+| マニュアル参照など富岳ウェブサイトへのアクセスは、クライアント証明書による認証となります。
+| クライアント証明書は、利用者登録が完了すると利用者宛に送付されます。
+
+プロジェクト責任者の責任範囲
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+| 各種申請を行う際の責任者となります。
+| ディスク領域拡大等の申請を行う際には、プロジェクト責任者の確認が必要です。
+
+
+更新処理
+^^^^^^^^^
+
+| 年度を跨り課題を継続する際は、新年度利用の申請を行います。 
+| 新年度利用が承認された場合は現在利用の課題、アカウントを継続して利用可能です。
+| シングルアカウントを利用し、新たに所属する課題がある場合、シングルアカウントのセカンダリグループに追加します。
+
+| 課題が終了する場合は、課題期間終了後、1カ月がログイン猶予期間となります。 
+| この猶予期間内にデータの取得を完了させてください。
+| シングルアカウントを利用している場合、課題期間終了後1カ月でシングルアカウントのセカンダリグループから該当の課題を削除します。その結果、シングルアカウントの所属する課題がなくなった場合、シングルアカウント自体も利用停止となり、ログインできなくなります。
+
+.. _Resource:
+
+リソース
+-----------------
+
+利用可能な計算ノード数、および、ディスクについて示します。
+
+
+計算ノード
+^^^^^^^^^^^
+
+指定できる計算ノード数は、リソースグループごとに下限値、最大値が異なります。
+
+指定できるジョブ形状（1次元、2次元、3次元）は、リソースグループごとに最大値が異なります。
+2次元、3次元については、各軸の入れ替えが可能です。
+例えば各軸の最大値が\ ``4x6x16``\ であった場合、軸を入れ換えた\ ``16x4x6``\ の形状も利用できます。
+
+指定できるノード割り当て方法（noncont、mesh、torus）は、リソースグループごとに異なります。
+
+   - 385ノード以上が利用できるリソースグループはtorusのみ利用可能です。デフォルトはtorusです。
+   - 384ノード以下が利用できるリソースグループはnoncont（デフォルト)、mesh、torusが指定可能なリソースグループと、torusのみ利用可能なリソースグループを用意しています。meshまたはtorusを指定した場合、noncont（デフォルト)と比べてジョブ実行までの待ち時間が長くなります。
+   - 離散割り当て（noncont）を含むリソースグループは、meshまたはtorusを指定した場合でも離散割り当てジョブの影響を受ける場合があります。ベンチマーク測定等厳密な性能測定を行いたい場合はtorusのみが利用できるリソースグループを利用してください。
+
+リソースグループは富岳ウェブサイトの「\ `Resource group configuration <https://www.fugaku.r-ccs.riken.jp/resource_group_config>`_\」を参照してください。
+
+
+
+.. attention::
+
+  ジョブ形状は、軸ごとに最大値を持っています。ジョブ投入時には、この軸の最大値を超えないように指定する必要があります。
+
+ジョブ投入数の確認
+^^^^^^^^^^^^^^^^^^^
+
+:program:`pjstat`\ コマンドの\ ``--limit``\ オプションでは、:program:`pjacl`\ コマンドで表示される内容のうち、ユーザのジョブ投入における資源の制限値と現在の割り当て量を確認できます。
+
+[リソースユニット内での資源の制限値と割り当て量]
+
+ .. code-block:: console
+
+  [_LNlogin]$ pjstat --limit
+  System Resource Information:
+  RSCUNIT: rscunit_ft01
+  USER: user1
+   LIMIT-NAME                    LIMIT  ALLOC
+   ru-accept                       100      0   # 1
+   ru-accept-allsubjob       unlimited      0   # 2
+   ru-accept-bulksubjob      unlimited      0   # 3
+   ru-accept-stepsubjob      unlimited      0   # 4
+   ru-run-job                unlimited      0   # 5
+   ru-run-bulksubjob         unlimited      0   # 6
+   ru-use-node               unlimited      0   # 7
+   ru-interact-accept        unlimited      0   # 8
+   ru-interact-run-job       unlimited      0   # 9
+   ru-interact-use-node      unlimited      0   # 10
+   ru-use-core               unlimited      0   # 11
+   ru-interact-use-core      unlimited      0   # 12
+  GROUP: group1
+   LIMIT-NAME                    LIMIT  ALLOC
+   ru-accept                 unlimited      0
+   ru-accept-allsubjob       unlimited      0
+   ru-accept-bulksubjob      unlimited      0
+   ru-accept-stepsubjob      unlimited      0
+   ru-run-job                unlimited      0
+   ru-run-bulksubjob         unlimited      0
+   ru-use-node               unlimited      0
+   ru-interact-accept        unlimited      0
+   ru-interact-run-job       unlimited      0
+   ru-interact-use-node      unlimited      0
+   ru-use-core               unlimited      0
+   ru-interact-use-core      unlimited      0
+  ALL:
+   LIMIT-NAME                    LIMIT  ALLOC
+   ru-accept                 unlimited      0
+   ru-accept-allsubjob       unlimited      0
+   ru-accept-bulksubjob      unlimited      0
+   ru-accept-stepsubjob      unlimited      0
+   ru-run-job                unlimited      0
+   ru-run-bulksubjob         unlimited      0
+   ru-use-node               unlimited      0
+   ru-interact-accept        unlimited      1
+   ru-interact-run-job       unlimited      0
+   ru-interact-use-node      unlimited      0
+   ru-use-core               unlimited      0
+   ru-interact-use-core      unlimited      0
+
+
+ .. note::
+
+    1. バッチジョブの同時受付け数
+    2. バルクジョブおよびステップジョブのサブジョブの同時受付制限数
+    3. バルクジョブのサブジョブの同時受付制限数
+    4. ステップジョブのサブジョブの同時受付制限数
+    5. バッチジョブの同時実行数
+    6. バルクジョブのサブジョブの同時実行制限数
+    7. バッチジョブのノードの同時使用数
+    8. 会話型ジョブの同時受付け数
+    9. 会話型ジョブの同時実行数
+    10. 会話型ジョブのノードの同時使用数
+    11. バッチジョブのCPUコアの同時使用数
+    12. 会話型ジョブのCPUコアの同時使用数
+
+:program:`pjstat`\ コマンドの\ ``--limit``\ オプションで表示される項目と内容は以下のとおりです。
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 5 5
+
+   * - 項目
+     - 説明
+
+   * - LIMIT-NAME
+     - 制限値の名称
+
+   * - RSCUNIT
+     - リソースユニット名
+
+   * - GROUP
+     - OSにおけるグループ名
+
+   * - LIMIT
+     - 制限値
+
+   * - ALLOC
+     - 現在の割り当て値
+
+
+[リソースグループの下限設定について]
+
+ リソースグループには、指定できるノード数に下限を設定しています。下限値より少ないノード数を指定していた場合、:program:`pjsub`\実行時に次のようなエラーメッセージが表示され、ジョブが受け付けられません。
+
+ ノード数の指定が下限値より小さかった場合のエラー表示は以下のとおりです。
+
+ .. code-block:: console
+
+   [_LNlogin]$ pjsub -L "rscgrp=large" sample.sh
+   [ERR.] PJM 0054 pjsub node=1 is less than the lower limit (385).
+
+.. _HowToSpecifyResourceGroups:
+
+リソースグループの使用方法
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+リソースグループを使用する場合は、リソース名を指定する必要があります。
+
+- リソースグループ small による実行コマンド例
+
+ .. code-block:: console
+
+   [_LNlogin]$ pjsub -L "rscgrp=small" sample.sh
+
+リソースグループの利用状況
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+システムにおける資源の利用状況は、\ :program:`pjshowrsc`\ コマンドで確認します。
+
+.. attention:: 
+
+   シングルアカウントを利用している場合は、newgrpコマンドで個別の課題グループ（例：hpxxxxxx）に変更したうえでpjshowrscコマンドを実行してください。
+
+- リソースグループのごとのサマリ表示
+
+ ``--rscgrp``\ オプションを引数なしで指定すると、すべてのリソースグループについて表示します。
+
+ .. code-block:: console
+
+   [_LNlogin]$ pjshowrsc --rscgrp
+   [ CLST: clst ]
+   [ RSCUNIT: rscunit_ft01 ]
+   RSCGRP  NODE
+          TOTAL FREE ALLOC
+   group1     36    24   12
+   group2     36    24   12
+   group3     36    24   12
+
+
+- 特定のリソースグループについてのサマリ表示
+
+ ``--rscgrp``\ オプションの引数にリソースグループ名を指定すると、指定したリソースグループ情報を表示します。
+
+ .. code-block:: console
+
+   [_LNlogin]$ pjshowrsc --rscgrp group2
+   [ CLST: clst ]
+   [ RSCUNIT: rscunit_ft01 ]
+   RSCGRP  NODE
+           TOTAL FREE ALLOC
+   group2     36    24   12
+
+.. _diskpoints:
+
+ディスク
+^^^^^^^^^
+
+ファイルシステムの種類について示します。
+
+- ディスク領域として、ホーム領域、データ領域、シェア領域、tmpfs領域および2ndfs領域の5種類を用意します。
+
+ .. list-table:: 
+  :header-rows: 1
+  :widths: 1,2,2
+
+  * - 領域
+    - ファイルシステム
+    - 割り当てvolume
+
+  * - ホーム領域
+    - グローバル・ファイルシステム（FEFS,LLIO）
+    - /vol0002,/vol0003,/vol0004,/vol0005,/vol0006
+
+  * - データ領域
+    - グローバル・ファイルシステム（FEFS,LLIO）
+    - 〃
+
+  * - シェア領域
+    - グローバル・ファイルシステム（FEFS,LLIO）
+    - 〃
+
+  * - tmpfs領域
+    - tmpfs
+    - \-
+
+  * - 2ndfs領域
+    - グローバル・ファイルシステム（FEFS）
+    - /vol0001
+
+ .. attention:: 
+
+  「富岳」ではシステムで利用者データのバックアップを採取しません。データの管理（バックアップ等）は利用者の自己管理となります。
+
+  ファイルシステムに対して短時間に連続して数十万ファイル以上をopen,closeする操作を行った場合、実行ノードでメモリ枯渇を引き起こす場合があります。
+
+  以下、1から3に示す操作は、ファイルシステム全体に高負荷を与える場合があるため、お控えください。
+
+  1. 同一ディレクトリに対する1000プロセス以上からの一斉ファイル作成
+  #. ホーム領域、および、データ領域にある同一ディレクトリに、十万以上のファイル作成
+  #. 複数の計算ノードから以下を同時に行う処理
+    
+    a. ファイルやディレクトリの作成や削除
+    b. ファイルやディレクトリの参照
+
+  特に 3. の操作は、ファイルシステムのスローダウンや計算ノードのダウンにつながる可能性があるため、お控えください。
+
+  （例）1000 本（プロセス）以上の小規模ジョブを同一ディレクトリ上で実行し、ジョブ内で同ディレクトリに対する操作、ジョブの結果や統計情報を出力する。
+
+  複数の計算ノードが同時に同じディレクトリにアクセスしないよう、以下の対応をしていただくことでジョブが実行しやすくなります。
+  
+  * ジョブ毎に出力ディレクトリを分ける
+  * ディレクトリを階層化し、参照のみを行うディレクトリと出力を行うディレクトリを分ける
+
+- ディレクトリ名について
+  
+  ホームディレクトリ、データディレクトリ、シェアディレクトリ、tmpfsディレクトリ、2ndfsディレクトリは、次に示すシンボリックリンク名で作成しています。ジョブのログ、富岳ウェブサイト等では、実体のパス（割り当てvolumeに記載したパス）で表示するものがあります。
+ 
+  - ホームディレクトリ：:file:`/home/username/`
+  - データディレクトリ：:file:`/vol0n0m/data/groupname/`
+  - シェアディレクトリ：:file:`/vol0n0m/share/groupname/`
+  - tmpfs ディレクトリ：:file:`/worktmp/`
+  - 2ndfs ディレクトリ：:file:`/2ndfs/groupname/`
+ 
+   | \ *n*\ :volume番号(2～6)
+   | \ *m*\ :MDT番号(0～7)
+ 
+ | データディレクトリ、シェアディレクトリ、2ndfsディレクトリは、グループに対して割り当てます。グループのメンバーでご利用ください。シェアディレクトリは、ログインノードからのみ上記パスで参照できます。
+ | 2ndfsについては\ :ref:`filesystempoints`\ を参照ください。
+
+- シェア領域(/vol0n0m/share/groupname/)の利用
+  
+  特定のグループやメンバー間でデータを共有できる領域です。ホーム領域やデータ領域と異なり、全ての利用者が\ :file:`/vol0n0m/share/groupname/`\ 配下にアクセスできます。共有したいグループやメンバー毎にディレクトリを自由に作成することができます。
+
+- tmpfs領域(/worktmp/)の利用
+
+  | ジョブ実行中に計算ノードのみから利用できる一時ファイル用領域です。
+  | tmpfs領域は計算ノードのメモリ（ジョブメモリ）を消費し、提供される容量は最大20GiBです。
+
+  .. attention:: 
+
+    20GiB以上のファイルを一時ファイルとして使用する場合には、:ref:`TemporaryAreaInNode` のご活用等の検討をお願いします。
+
+.. contents::
+   :local:
+
+シェア領域(/vol0n0m/share/groupname/)の利用方法
+++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ACL機能
+~~~~~~~~~
+
+FEFSでは、ext4などのファイルシステムと同様に、以下のACL機能が利用できます。
+
+  * setfacl コマンドによるACLの設定
+
+  * getfacl コマンドによるACL情報の表示
+
+ACL機能を用いて柔軟なファイルアクセス制御の設定が可能です。
+
+
+ACLを利用したファイルの共有例
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+異なるグループとのファイル共有の例を示します。その他の設定例などは、\ :command:`man { setfacl | getfacl }`\ コマンドで詳細な情報を参照してください。
+
+  異なるグループ\ ``GroupA``\ と自グループからのみ参照できるディレクトリ\ ``toGroupA``\ を作成します。
+
+  .. code-block:: console
+
+    [_LNlogin]$ cd /vol0n0m/share/<yourgroup>
+    [_LNlogin]$ mkdir   toGroupA
+    [_LNlogin]$ getfacl toGroupA
+    # file: toGroupA
+    # owner: you
+    # group: yourgroup
+    # flags: -s-
+    user::rwx
+    group::rwx
+    other::---
+    default:user::rwx
+    default:group::rwx
+    default:other::---
+
+
+  :command:`mkdir`\ 直後は、グループのメンバーしか参照することはできません。
+  共有したい他のグループ\ ``GroupA``\ に\ ``rx``\ 権を付与します。
+
+  .. code-block:: console
+
+    [_LNlogin]$ setfacl -m g:GroupA:rx   toGroupA
+
+  作成したディレクトリ配下でファイルやディレクトリを作成した際にアクセス権限が継承されるように、default ACLを設定します。
+
+  .. code-block:: console
+
+    [_LNlogin]$ setfacl -m d:g:GroupA:rx toGroupA
+
+  ``GroupA``\ と共有するディレクトリ\ ``foo``\ とファイル\ ``bar``\ を先ほど作成・設定したディレクトリ\ ``toGroupA``\ 配下に作成し、アクセス権限を確認すると、アクセス権限が継承されていることが確認できます。
+
+  .. code-block:: console
+
+    [_LNlogin]$ cd toGroupA
+    [_LNlogin]$ mkdir   foo
+    [_LNlogin]$ touch   bar
+    [_LNlogin]$ getfacl foo
+    # file: foo
+    # owner: you
+    # group: yourgroup
+    # flags: -s-
+    user::rwx
+    group::rwx
+    group:GroupA:r-x
+    mask::rwx
+    other::---
+    default:user::rwx
+    default:group::rwx
+    default:group:GroupA:r-x
+    default:mask::rwx
+    default:other::---
+
+    [_LNlogin]$ getfacl bar
+    # file: bar
+    # owner: you
+    # group: yourgroup
+    user::rw-
+    group::rwx                      #effective:rw-
+    group:GroupA:r-x                #effective:r--
+    mask::rw-
+    other::---
+
+.. attention:: 
+
+   * ファイルの共有は慎重に行ってください。不要なグループや\ ``other``\ にアクセス権限を付与しないでください。
+
+   * システム側の問題やメンテナンス等によりFEFSがACL機能を無効化した状態でマウントした場合は、ACL設定は無効となり、通常のファイルパーミッションだけでの管理となります。この場合、グループ間の共有は利用できません。
+
+tmpfs領域(/worktmp/)の利用方法
+++++++++++++++++++++++++++++++++
+
+通常のファイルシステムと同様にファイルの作成、読み書き、実行可能ファイルの起動が可能です。
+
+利用時は以下の点に留意してください。
+
+- | ジョブごとに領域が割り当てられます。ジョブ実行開始～ジョブ実行終了の間だけ利用可能です。
+  | 同一ユーザの別ジョブや別ユーザのジョブからは参照できません。
+
+- | ノード単位で割り当てられます。同一ノード内でのみ利用可能です。他ノードからは参照できません。
+  | 例えば1ノード4プロセスで実行した場合、同一ノード内の4プロセスは同じ領域を参照します。
+
+- | 提供する容量は20GiBです。
+  | ただし、利用できるtmpfs領域の容量は、以下の条件によって異なります。
+  
+     ::
+
+          利用容量上限（目安）= ジョブメモリ量の上限 - ジョブによるメモリ使用量   (1)
+
+
+     - 式(1)の結果が20GiB以上の場合 : 20GiB
+     - 式(1)の結果が20GiB未満の場合 : 式(1)の結果
+
+  | ジョブメモリ量の上限やジョブによるメモリ使用量(ユーザプログラムが使用するメモリ量)については\ :ref:`EstimatingTheAmountOfMemory`\ を参照ください。
+
+.. attention:: 
+  
+    tmpfs領域にファイルを利用容量上限以上配置しようとした場合、書き込みエラーが発生します。
+    
+    また、「ジョブによるメモリ使用量」と「tmpfs領域の使用量」の合計が「ジョブメモリ量の上限」に迫る場合、OOM(Out Of Memory)が発生する可能性があります。
+    
+    一度ジョブを実行し、ノード単位の最大メモリ使用量を把握した上での利用を推奨します。
+
+
+ファイル作成とストライプ設定
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ホーム領域、データ領域に作成するファイルに、ストライプを設定することができます。ストライプ設定を行うことにより、グローバル・ファイルシステムを構成するOST（Object Storage Target）に対するアクセスを分散し、効率の良い利用が可能となります。
+
+.. attention::
+
+   計算ノードから１ファイルのサイズが1GBを超える書き込みをする場合、特定のOSTへの負荷をかけないようにするため、ストライプ設定を行ってください。
+
+.. contents::
+   :local:
+
+ストライプの設定
+++++++++++++++++++
+
+ストライプの設定は、:program:`lfs setstripe`\ コマンドを使用します。:program:`lfs setstripe`\ コマンドの書式を示します。詳細はマニュアル「FEFSユーザーズガイド」を参照してください。
+
+ 書式
+
+ .. code-block:: none
+
+   lfs setstripe [options] <dirname|filename>
+
+ オプション
+
+ .. code-block:: none
+
+    [--stripe-count | -c stripe_count]
+
+ ストライプ数を設定します。1～48を指定します。
+
+
+
+ <dirname>
+  既存のディレクトリ名を指定します。ディレクトリにストライプが設定されます。設定後に、このディレクトリ配下に作成されるファイルやディレクトリにストライプの設定が継承されます。
+
+ <filename>
+  新規のファイル名を指定します。ストライプを設定した空ファイルを作成します。既存のファイルは指定できません。既存のファイルのストライプ設定は変更できません。
+
+ ストライプの設定方法
+  ここでは、ディレクトリを作成し、作成したディレクトリにストライプ設定する手順を示します。ファイル単位ではなく、ディレクトリにストライプ設定する利用方法を推奨します。
+
+  .. code-block:: console
+
+    [_LNlogin]$ mkdir <dirname>
+    [_LNlogin]$ lfs setstripe -c 4 <dirname>
+
+  .. attention::
+
+     | 計算ノードから、2ndfsに対して :program:`lfs`\ コマンドを使用する場合は、コマンドをフルパス(:program:`/usr/bin/lfs`\ )で指定してください。
+     | 計算ノードから、第2階層ストレージのキャッシュに対して :program:`lfs`\ コマンドを使用する場合は、そのまま :program:`lfs`\ (defaut PATH)で指定してください。
+
+
+
+ストライプの確認
++++++++++++++++++
+
+ストライプの確認は、:program:`lfs getstripe`\ コマンドを使用します。詳細はマニュアル「FEFSユーザーズガイド」を参照してください。
+
+ ストライプの確認方法
+  ここでは、ディレクトリとファイルのストライプ設定を確認する手順を示します。次のようにして表示されるstripe_count、または、lmm_stripe_countを確認します。
+
+  .. code-block:: console
+
+    [_LNlogin]$ lfs getstripe -d <dirname>
+    <dirname>
+    stripe_count:   4 stripe_size:    0 stripe_offset:  -1
+    [_LNlogin]$ lfs getstripe <dirname>/<filename>
+    <dirname>/<filename>
+    lmm_stripe_count:   4
+    lmm_stripe_size:    1048576
+    lmm_stripe_offset:  ...
+            obdidx           objid          objid            group
+    ....
+
+
+  .. attention::
+
+     | 計算ノードから、2ndfsに対して :program:`lfs`\ コマンドを使用する場合は、コマンドをフルパス(:program:`/usr/bin/lfs`\ )で指定してください。
+     | 計算ノードから、第2階層ストレージのキャッシュに対して :program:`lfs`\ コマンドを使用する場合は、そのまま :program:`lfs`\ (defaut PATH)で指定してください。
+
+.. _filesystempoints:
+
+ファイルシステム
+^^^^^^^^^^^^^^^^^
+
+
+ジョブ運用ソフトウェアは、「階層化ストレージ」でのジョブ実行をサポートしています。階層化ストレージとは、以下に示す第１階層ストレージと第２階層ストレージによる階層構造を持つファイルシステムです。
+
+.. figure:: ./img/HierarchyFilesystem_01.png
+
+- 第１階層ストレージ
+
+  第1階層ストレージは、Lightweight Layered IO-Accelerator(LLIO) 技術を利用した高速ファイルシステムです。第１階層ストレージは、LLIOと呼ぶ場合もあります。階層化ストレージでは、計算ノードから直接アクセスできるのはこの第1階層ストレージになります。
+  
+  第1階層ストレージには以下の3種類の領域があります。
+
+  - ノード内テンポラリ領域
+     ジョブに割り当てられたそれぞれの計算ノードで利用できるローカルな領域です。
+  - 共有テンポラリ領域
+     ジョブに割り当てられたノード間で共有できる領域です。同じジョブのプロセスであれば、どの計算ノードからでもアクセスできます。
+  - 第2階層ストレージのキャッシュ
+     ジョブからは第2階層ストレージとして見えますが、内部的には、第2階層ストレージを直接アクセスするのではなく、第1階層ストレージ上にある第2階層ストレージのキャッシュをアクセスします。ノード内テンポラリ領域と共有テンポラリ領域はジョブごとに確保され、そのジョブだけが使用できる高速な作業用ファイルシステムです。これらの領域はジョブの開始時に確保され、ジョブが終了すると領域は削除されます。
+
+  .. seealso::
+
+    第１階層ストレージについての詳細は、マニュアル「LLIOユーザーズガイド」を参照してください。
+
+- 第２階層ストレージ
+
+  第２階層ストレージは、分散ファイルシステムの FEFS を利用し、ログインノードおよび各計算ノードで共有されます。ユーザはジョブを投入する前に、ジョブの実行に必要なジョブスクリプトなどのファイルをこのファイルシステムに配置します。計算ノード上のジョブから第２階層ストレージへのアクセスは、内部的には第１階層ストレージ上のキャッシュに対するアクセスになります。
+
+  ホーム領域（/home）、データ領域（/vol0\ *n*\0\ *m*\ /data）、シェア領域（/vol0\ *n*\0\ *m*\ /share）、2ndfs領域（/2ndfs）は第2階層ストレージに作成されています。
+  2ndfsは第1階層ストレージを経由せず直接第2階層ストレージにアクセスするための領域です。
+  
+  | \ *n*\ :volume番号(2～6)
+  | \ *m*\ :MDT番号(0～7)
+  
+  - ディスク容量／ファイル数制限
+  
+    .. list-table::
+       :header-rows: 1
+
+       * - 項目
+         - ホーム領域
+         - データ領域＋シェア領域
+         - 2ndfs領域
+
+       * - 容量制限
+         - 20GiB/ユーザ
+         - 5TiB/グループ
+         - 5TiB/グループ
+
+       * - ファイル数制限
+         - 200K/ユーザ
+         - 1.5M/グループ
+         - 1.5M/グループ
+
+       * - ブロックサイズ
+         - 4KiB
+         - 4KiB
+         - 4KiB
+
+       * - ストライプカウント
+         - 1
+         - 1
+         - 1
+
+       * - ストライプサイズ
+         - 1MiB
+         - 1MiB
+         - 1MiB
+
+
+  /vol0002領域は i-node を特に多く利用したい課題に優先的に利用いただくことを目的とした領域です。
+  領域に適した課題に利用していただくため、利用を許可制とします。
+  利用申請時に、i-node 数を特に多く利用する理由について記載をお願いいたします。
+  この領域の運用方針に沿わない利用をされている課題は利用を中止し、通常の領域へ引越しの依頼をさせていただく場合があります。
+
+  - ディスク容量／ファイル数制限
+  
+    .. list-table::
+       :header-rows: 1
+
+       * - 項目
+         - データ領域＋シェア領域(/vol0002)
+
+       * - 容量制限
+         - 5TiB/グループ
+
+       * - ファイル数制限
+         - 9.0M/グループ
+
+       * - ブロックサイズ
+         - 4KiB
+
+       * - ストライプカウント
+         - 1
+
+       * - ストライプサイズ
+         - 1MiB
+
+  申請については\ `こちら <https://www.fugaku.r-ccs.riken.jp/application>`_\ をご確認ください
+
+  .. seealso::
+
+     FEFSについての詳細は、マニュアル「FEFSユーザーズガイド」を参照してください。
+
+
+計算ノードのクライアントキャッシュとIO性能
++++++++++++++++++++++++++++++++++++++++++++++++++
+
+計算ノードは、入出力で使用するクライアントキャッシュを128MiBに制限しています。このため、１レコードの長さが128MiBより大きい場合に第2階層ストレージ上のファイルに対するRead性能が劣化する場合があります。I/Oの設計を行う場合、および、他システムから移行を行う場合は、１レコードの長さを128MiB以下にすることを推奨します。
+
+- C/C++利用の場合
+
+  利用者プログラム内で読み込む大きさを調整します。freadを例に取ると、size*num <= 128MiB になるようにします。
+
+    .. code-block:: c
+
+      fread(buf, size, num, fp);
+
+
+- Fortran利用の場合
+
+  Fortranが持つ入出力バッファの大きさが影響します。この入出力バッファのデフォルト値は8MiBのため、クライアントキャッシュのサイズの影響を受けません。アプリケーション実行時に入出力バッファの大きさを指定する場合(-Wl,-gオプションなどの指定)は、128MiB以下になるようにします。
+
+また、gzip/gunzipなどを用いて128MiBを越えるファイルを展開した場合、キャッシュの吐き出し待ちに時間を要することがあります。第2階層ストレージ上に大量のファイルを展開する場合、大きなクライアントキャッシュを持つログインノードを利用して展開することを検討してください。
+
+
+.. _group:
+
+グループ
+^^^^^^^^
+
+ジョブを実行する時にはグループIDを指定する必要があります．
+
+| 各課題には課題IDが付与されていますが、グループIDは各課題の初年度採択時の課題IDです（課題IDは毎年度変わりますが、グループIDは変わりません）。
+| :command:`userinfo`\ コマンドでアカウントが属しているグループIDを確認することができます。:command:`userinfo`\ コマンドを利用して課題のグループIDを確認してください。
+
+userinfoコマンド使用例
+
+.. code-block:: console
+
+   [_LNlogin]$ userinfo | grep groupList
+   groupList=hp210xxx,hp220xxx,fugaku
+
+複数のグループIDが表示され、目的の課題IDに対応するグループIDがわからない場合は、各課題の代表者に確認してください。
+
+グループリストに\ ``'fugaku'``\ が含まれている場合がありますが、\ ``'fugaku'``\ は全てのシングルアカウントが属するグループIDです。
+``'fugaku'``\ は、ジョブ実行時に指定することはできません。
+
+
+ジョブスクリプト例
+
+.. code-block:: console
+
+   [_LNlogin]$ cd /vol0n0m/data/groupname/username
+
+   [_LNlogin]$ vi jobscript
+   #!/bin/bash
+   #PJM -L "node=4"
+   #PJM -L "rscgrp=small"
+   #PJM -L "elapse=1:00:00"
+   #PJM --mpi "max-proc-per-node=4"
+   #PJM -x PJM_LLIO_GFSCACHE=/vol0005
+   #PJM -g groupname
+
+
+| また、ジョブで利用するファイルシステム(volume)も指定する必要があります。
+| \ :ref:`SelectAvailableVolumes`\ を参照ください。
+
+
+並列ジョブの種類
+^^^^^^^^^^^^^^^^^
+
+「富岳」では、計算するプログラムをジョブ単位で実行します。ジョブは、必要とするノード数によって、シングルノードジョブとマルチノードジョブに分類されます。
+
+1. | マルチノードジョブ
+   | 複数の計算ノードを利用して実行するジョブです。ノードをまたぐプロセス並列プログラムが該当します。
+
+#. | シングルノードジョブ
+   | １台の計算ノードで実行するジョブです。逐次ジョブはシングルノードジョブになります。並列ジョブは、ノード内で複数のプロセスまたはスレッドを使うものが該当します。
+
+ログインノード
+^^^^^^^^^^^^^^^
+
+| ログインノードでは、Linux標準の機能を利用してリソースの制限を設けています。
+| :command:`ulimit`\ コマンドを利用して使用可能なリソースを確認できます。
+
+
+:command:`ulimit`\ コマンドの実行例
+
+.. code-block:: console
+
+  [_LNlogin]$ ulimit -a
+  core file size          (blocks, -c) unlimited
+  data seg size           (kbytes, -d) unlimited
+  scheduling priority             (-e) 0
+  file size               (blocks, -f) unlimited
+  pending signals                 (-i) 377308
+  max locked memory       (kbytes, -l) unlimited
+  max memory size         (kbytes, -m) unlimited
+  open files                      (-n) 1024
+  pipe size            (512 bytes, -p) 8
+  POSIX message queues     (bytes, -q) 819200
+  real-time priority              (-r) 0
+  stack size              (kbytes, -s) 8192
+  cpu time               (seconds, -t) 604800
+  max user processes              (-u) 4096
+  virtual memory          (kbytes, -v) 41943040
+  file locks                      (-x) unlimited
+
+1台のログインノードあたり、次を超える資源利用を行う場合は、複数のログインノードでの分散実行や\ `プリポストノード <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/pps-slurm/>`_\ 、「富岳」本体の利用をご検討ください。
+
+.. list-table:: 
+   :header-rows: 1
+
+   * - 資源
+     - 目安
+
+   * - スレッド数
+     - 8スレッド
+
+   * - メモリ容量
+     - 12GiB
+
+富岳ウェブサイトの「\ `富岳ログインノードの利用時の注意点について <https://www.fugaku.r-ccs.riken.jp/operation/20211028_01>`_\ 」も参照ください。
+
+.. _UsageRulesIOnode:
+
+I/Oノード
+^^^^^^^^^^
+
+「富岳」は、一部の計算ノードがI/Oノードを兼ねています。
+
+I/Oノードは次の三種類があります。
+
+BIO(Boot I/O node)
+   ノードのブートサーバになるI/Oノードです。
+   16ノード（1BoB）に1ノード存在します。
+
+SIO(Storage I/O node)
+   第1階層ストレージに対する入出力を担う I/Oノードです。
+   SIOノードには、第1階層ストレージを構成するディスク装置(SSD)が接続されています。
+   16ノード（1BoB）に1ノード存在します。
+
+GIO(Global I/O node)
+   第2階層ストレージ(FEFS)に対する入出力を中継するノードです。
+   192ノードに1ノード存在します。
+
+
+.. figure:: img/IOnode_01.png
+   :scale: 100
+   :align: center
+   :alt: I/Oノードの配置概要
+
+   I/Oノードの配置概要
+
+I/OノードのCPU周波数は2.2GHzに固定されています。
+
+ジョブ統計情報に出力されるNODE IDからI/Oノードを識別することができます。
+
+I/Oノードの識別方法
+
+  | BIO: NODE IDの末尾01
+  | SIO: NODE IDの末尾02
+  | GIO: `GIO_list.txt <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/contents/0603-2020/GIO_LIST.txt>`_ のNODE ID一覧を参照
+
+BIO、SIO、GIO、BoBの機能についてはマニュアル「ジョブ運用ソフトウェア　概説書」を参照ください。
+
+ログインノードにNODE IDからI/Oノードを表示する\ :program:`idcheck`\ コマンドを用意しています。
+
+1. ``-h``\ オプションでヘルプ内容が表示されます。
+
+   .. code-block:: console
+
+      [_LNlogin]$ idcheck -h
+      Usage: idcheck [OPTION]...
+       -h Display help
+       -n nodeid[,...] Search node type from node ID
+       -f <FILE> This option executes the process for node IDs written in the file that is specified by filename.
+       [Example]
+       0x01010001
+       0x01010002
+       0x01010003
+       0x01010004
+
+2. ``-n``\ オプションで複数のNODEID（カンマで区切ります）を指定して確認できます。
+
+   .. code-block:: console
+
+      [_LNlogin]$ idcheck -n 0x01010001,0x01010002,0x01010003,0x01010004
+      0x01010001 BIO
+      0x01010002 SIO
+      0x01010003 GIO
+      0x01010004 CN
+
+3. ``-f``\ オプションでファイルに記載されたNODEID群を確認できます。
+
+   .. code-block:: console
+
+      [_LNlogin]$ cat aaa
+      0x01010001
+      0x01010002
+      0x01010003
+      0x01010004
+      [_LNlogin]$ idcheck -f aaa
+      0x01010001 BIO
+      0x01010002 SIO
+      0x01010003 GIO
+      0x01010004 CN
+
+.. _EstimatingTheAmountOfMemory:
+
+ユーザープログラムが利用可能なメモリ量の見積り
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+「富岳」では、ジョブが1ノードで使用できるメモリ量(ジョブメモリ量)の上限がシステムによって設定されています。
+
+.. list-table:: 
+   :header-rows: 1
+
+   * - ノード種別
+     - ジョブメモリ量の上限(byte)
+
+   * - BIO/SIO/GIO
+     - 30,739,267,584
+
+   * - CN
+     - 30,739,333,120
+
+| このジョブメモリ量の上限を超過してジョブを実行することはできません。
+| また、計算ノードで動作しているLinux OSのメモリ断片化が進行すると、ジョブで使用するメモリ量が上限に達しない場合でもジョブが終了する場合があります。
+| 安定して使用できるジョブメモリ量の上限の目安は約25GB(23.2GiB)です(メモリの断片化状況によっては、このメモリ量でも使用できない可能性があります)。
+
+ユーザープログラムが利用可能なメモリ量は以下となります。
+
+見積式::
+
+   AM = MJM - MPI
+   
+    AM  : ユーザプログラムが利用できる1ノードあたりのメモリ量 (byte)
+    MJM : ジョブメモリ量の上限 (byte)
+    MPI : MPIライブラリのメモリ使用量 (byte)
+  
+MPIライブラリのメモリ使用量の見積りについては、マニュアル「Development Studio MPI使用手引書」-「6.11 メモリ使用量の見積り式とチューニング」を参照ください。
+
+
+計算資源の利用の定義
+^^^^^^^^^^^^^^^^^^^^^
+
+.. この項は https://www.fugaku.r-ccs.riken.jp/faq/20210514_01 と関連あり
+
+.. figure:: ./img/DefinitionOfUsedComputationalResource_01.png
+
+**n番目のジョブに割り当てられたノード数**
+
+| ＝ スケジューラがジョブに割り当てたノード数
+| ≠ ジョブスクリプトまたはpjsub実行時に指定したノード数
+| ≠ 実際にジョブの実行中に使用したノード数
+
+- 384ノード以下のジョブは、指定したノード割り当て方式で、割り当てられるノード数が変わります。
+
+  + torus : 12ノード単位(2*3*2)(Tofu単位)でノードが割り当てられます。
+    そのため、ジョブ投入時に指定したノード数よりも多いノードがジョブに割り当てられる場合があります。
+  + mesh : 指定されたmeshを形成するのに必要なノード数が割り当てられます。
+    そのため、ジョブ投入時に指定したノード数よりも多いノードがジョブに割り当てられる場合があります。
+  + noncont(デフォルト指定) : 指定されたノード数が割り当てられます。
+    この場合、隣接したノードが割り当てられない場合があるので、ノード間通信が他のジョブの影響を受ける場合があります。
+
+- 385ノード以上のジョブは48ノード単位(2*3*8)(Shelf単位)でノードが割り当てられます。
+  そのため、ジョブ投入時に指定したノード数よりも多いノードがジョブに割り当てられる場合があります。
+  48ノード単位(2*3*8)で構成される直方体でノードを指定すると、この無駄を少なくすることができます。
+  Shelf単位でノードが割り当てられるため、ジョブは第1階層を占有することができます。
+
+- ノードの空き状況によっては、指定した形状を回転させて割り当てることがあるため、ジョブを投入するごとに割り当てられるノード数が変わることがあります。
+  ``:strict``\ オプションを指定すると回転を抑止できますが、ジョブの実行開始時刻が遅くなる場合があります。
+  noncontが指定されたジョブ以外は回転の影響を受けます。
+
+スケジューラがジョブに割り当てたノード数は、ジョブ統計情報の\ ``NODE NUM (ALLOC)``\ や\ ``pjstat -v --choose jid,nnuma``\ コマンドで参照することができます。
+
+[pjstatコマンド表示例]
+
+.. code-block:: console
+
+   [_LNlogin]$ pjstat -v --choose jid,nnuma
+   JOB_ID     NODE_ALLOC
+   13132535   432:6x9x8
+   14049234   216
+
+
+**n番目のジョブの経過時間**
+
+| ＝ 実際にジョブの実行にかかった時間
+| ＝ ステータスが「RUN」になっている時間 （再実行された場合は全ての実行時間の和）
+| ≠ ジョブスクリプトまたはpjsub実行時に指定した経過時間
+
+.. attention:: 
+
+   - 原則資源返却は行いません
+

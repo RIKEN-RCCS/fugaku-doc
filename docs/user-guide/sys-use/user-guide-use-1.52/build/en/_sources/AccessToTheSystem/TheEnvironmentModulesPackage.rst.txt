@@ -1,0 +1,211 @@
+Module package
+==============
+
+| On the Fugaku, a module package (Environment Modules package) can be used.
+| For :file:`modulefile`\  is offered, for instance PATH, LD_LIBRARY_PATH's environment variable can be set by using \ :program:`module`\  command.
+
+
+Module command
+--------------
+
+This indicates the basic :program:`module`\  command operation. To see more detail, please refer to the online manual (:command:`man module`).
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 5,5
+
+   * - command
+     - discription
+
+   * - module avail
+     - View the list of availabe modulefile
+
+   * - module list
+     - View the list of loaded modulefile
+
+   * - module load modulefile.
+     - Load modulefile
+
+   * - module unload modulefile...
+     - Unload modulefile
+  
+   * - module purge
+     - Unload all modulefile
+
+   * - module switch [modulefile1] modulefile2
+     - Change modulefile 
+
+   * - module whatis [modulefile...]
+     - View information of modulefile' whatis
+     
+   * - module show modulefile
+     - Display modulefile setting contents
+
+   * - module help [modulefile...]
+     - View modulefile help information
+
+Example of command use
+-----------------------
+
+.. contents::
+   :local:
+
+The modulefile provided may vary depending on the time period. Therefore, the display content of the usage examples and the specified modulefile name may differ from the actual ones.
+
+module avail (View the list of availabe module)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Displays a list of provided modulefiles.
+If executed :program:`module avail` on login node, display as the following style.
+
+.. code-block:: console
+     
+   [_LNlogin]$ module avail
+     
+   ------------------------------- /work/Fugaku-environment/modulefiles -------------------------------
+   lang/tcsds-1.2.36  lang/tcsds-1.2.37  lang/tcsds-1.2.38(default)
+
+
+module list (View the list of loaded modulefile)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Displays the loaded modulefile. This example shows that the language default environment is loaded.
+
+.. code-block:: console
+  
+   [_LNlogin]$ module list
+   Currently Loaded Modulefiles:
+    1) lang/tcsds-1.2.38(default)
+
+module load/unload (Execution example of modulefile load and unload)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following shows an example of loading / unloading the default language environment.
+
+.. code-block:: console
+
+   [_LNlogin]$ module list
+   Currently Loaded Modulefiles:
+    1) lang/tcsds-1.2.38(default)
+   [_LNlogin]$ module unload lang
+   [_LNlogin]$ module list
+   No Modulefiles Currently Loaded.
+   [_LNlogin]$ module load lang
+   [_LNlogin]$ module list
+   Currently Loaded Modulefiles:
+   1) lang/tcsds-1.2.38(default)
+
+module purge (Unload all modulefile)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Delete the contents set in all loaded modulefiles. This is useful when you want to return the modulefile to its initial state where nothing has been loaded.
+   
+.. code-block:: console
+   
+   [_LNlogin]$ module list
+   Currently Loaded Modulefiles:
+    1) lang/tcsds-1.2.38(default)
+   [_LNlogin]$ module purge
+   [_LNlogin]$ module list
+   No Modulefiles Currently Loaded.
+
+module switch (Change modulefile)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+switch changes the module file having the same route name (the head of slash is the same).
+The same name module file is only able to load one of them so if try to load continuously, shows conflict error message and cannot load.
+switch can change the loaded modulefile1 to other modulefile2 in this situation.
+   
+.. code-block:: console
+   
+   [_LNlogin]$ module list
+   Currently Loaded Modulefiles:
+    1) lang/tcsds-1.2.38(default)
+   [_LNlogin]$ module switch lang/tcsds-1.2.37
+   [_LNlogin]$ module list
+   Currently Loaded Modulefiles:
+     1) lang/tcsds-1.2.37
+
+module whatis (Display module-whatis information)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Display the contents of modulefile module-whatis. If module-whatis is not defined, this doesn't show.
+
+.. code-block:: console
+
+   [_LNlogin]$ module whatis
+   ------------------------------- /work/Fugaku-environment/modulefiles ------------------------------
+      lang/tcsds-1.2.36: Fujitsu Compiler 4.8.1 (Fortran/C/C++/Tool)
+      lang/tcsds-1.2.37: Fujitsu Compiler 4.9.0 (Fortran/C/C++/Tool)
+      lang/tcsds-1.2.38: Fujitsu Compiler 4.10.0 (Fortran/C/C++/Tool)
+
+
+module show (Display modulefile setting contents)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+show displays modulefile setting contents.
+
+.. code-block:: console
+
+   [_LNlogin]$ module show lang
+   -------------------------------------------------------------------
+   /work/Fugaku-environment/modulefiles/lang/tcsds-1.2.38:
+
+   module-whatis   {Fujitsu Compiler 4.10.0 (Fortran/C/C++/Tool)}
+   conflict        lang
+   setenv          FJSVXTCLANGA /opt/FJSVxtclanga/tcsds-1.2.38
+   prepend-path    PATH /opt/FJSVxtclanga/tcsds-1.2.38/bin
+   prepend-path    LD_LIBRARY_PATH /opt/FJSVxtclanga/tcsds-1.2.38/lib64
+   -------------------------------------------------------------------
+
+View modulefile help information
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Displays the contents of modulefile help. This is not displayed if help is not defined.
+
+.. code-block:: console
+
+   [_LNlogin]$ module help lang
+   -------------------------------------------------------------------
+   Module Specific Help for /work/Fugaku-environment/modulefiles/lang/tcsds-1.2.38:
+
+   ** Changelog **
+    Oct. 6, 2023
+    - New Compiler available
+   -------------------------------------------------------------------
+
+How to change language environment
+----------------------------------
+
+To change language environment, use \ :program:`module`\  file.
+
+The language environment configuration file contains the settings necessary to use \ |post-k-only|\. Please set the required language environment when using |post-k-only|. 
+For language environment setting and switching operations, please use  \ :program:`module load`\  command or  \ :program:`module switch`\  command.
+
+[\ :program:`module switch`\  command use example]
+
+1. Use ``module`` command
+
+   .. code-block:: console
+
+    [_LNlogin]$ module list
+    Currently Loaded Modulefiles:
+      1) lang/tcsds-1.2.38(default)
+    [_LNlogin]$ module switch lang/tcsds-1.2.NN
+    [_LNlogin]$ module list
+    Currently Loaded Modulefiles:
+      1) lang/tcsds-1.2.NN
+
+.. seealso::
+  
+     If you try to load another language environment while the language environment is loaded, the following error message is displayed. If this shown, change environment by using :program:`module switch`\  as above or after executed  :program:`module unload`\  , execute   :program:`module load`\  again and change the environment.
+
+   .. code-block:: console
+
+     [_LNlogin]$ module load lang
+     [_LNlogin]$ module load lang/tcsds-1.2.NN
+     Loading lang/tcsds-1.2.NN
+       ERROR: lang/tcsds-1.2.NN cannot be loaded due to a conflict.
+         HINT: Might try "module unload lang" first.
+
+

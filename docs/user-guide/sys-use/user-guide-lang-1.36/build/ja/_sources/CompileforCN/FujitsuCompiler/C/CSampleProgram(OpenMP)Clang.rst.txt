@@ -1,0 +1,130 @@
+OpenMP
+=========================
+
+シングルノードジョブ（OpenMP）のCプログラムをコンパイルする例を示します。
+
+1. | ソースプログラムを用意します。
+   | サンプルプログラムを\ :file:`/home/system/sample/C/openmp/clang_sample_omp.c`\として用意しています。
+   | :download:`（サンプルコードのダウンロード） <./src/clang_sample_omp.c>`
+
+.. code-block:: c
+   :linenos:
+
+   #include <stdio.h>
+   #include <math.h>
+   #include <sys/time.h>
+   
+   #define N 5888
+   
+   double gettimeofday_sec(){
+       struct timeval tv;
+       gettimeofday(&tv, NULL);
+       return tv.tv_sec + (double)tv.tv_usec*1e-6;
+   }
+   
+   int main(){
+       double a[N][N+1];
+       double b[N][N+1];
+       double c[N][N+1];
+       int i, j, k;
+       double t1,t2;
+   
+   //
+   //  print message
+   //
+       printf ("\n");
+       printf ("%d, %d\n", N, N);
+   
+   //
+   //  initialize matrix
+   //
+   #pragma omp parallel for shared(a,b,c)
+       for (j = 0; j < N; j++) {
+          for (i = 0; i < N; i++) {
+             a[j][i] = 0.1;
+             b[j][i] = 0.3;
+             c[j][i] = 0.0;
+          }
+       }
+   
+   //
+   //  do matrix multiply
+   //
+       t1 = gettimeofday_sec();
+   #pragma omp parallel for shared(a,b,c)
+       for (j = 0; j < N; j++) {
+          for (i = 0; i < N; i++) {
+             for (k = 0; k < N; k++) {
+                c[i][j] = c[i][j] + a[i][k] * b[k][j];
+             }
+          }
+       }
+       t2 = gettimeofday_sec();
+   
+   //
+   //  print result
+   //
+       printf("c[1][1] = %f\n", c[1][1]);
+       printf("time : %f sec.\n", t2 - t1);
+       return 0;
+   }
+
+2. サンプルプログラムをコンパイルします。
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Nclang -Ofast -fopenmp -Rpass=.* -ffj-lst=t -o sample_omp clang_sample_omp.c
+  clang_sample_omp.c:41:10: remark: gettimeofday_sec inlined into main with cost=45 (threshold=375)
+        [-Rpass=inline]
+      t1 = gettimeofday_sec();
+           ^
+  clang_sample_omp.c:50:10: remark: gettimeofday_sec inlined into main with cost=45 (threshold=375)
+        [-Rpass=inline]
+      t2 = gettimeofday_sec();
+           ^
+  clang_sample_omp.c:32:11: remark: sinking zext [-Rpass=licm]
+            a[j][i] = 0.1;
+            ^
+  
+  (省略)
+
+
+3. | ジョブスクリプトを用意します。
+   | ジョブスクリプトのサンプルは\ :file:`/home/system/sample/C/openmp/clang_job_openmp.sh`\ として用意しています。
+   | :download:`（サンプルコードのダウンロード） <./src/clang_job_openmp.sh>`
+
+ .. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L "node=1"
+  #PJM -L "rscgrp=small"
+  #PJM -L "elapse=10:00"
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -g groupname
+  #PJM -s
+
+  # execute job
+  export OMP_NUM_THREADS=12
+  ./sample_omp
+
+
+4. :program:`pjsub`\コマンドでジョブを投入します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ pjsub clang_job_openmp.sh
+   [INFO] PJM 0000 pjsub Job 117 submitted.
+
+
+5. | 実行結果を確認します。
+   | 標準出力は\ :file:`ジョブ名.ジョブID.out`\として出力されます。
+
+ .. code-block:: console
+
+  [_LNlogin]$ cat clang_job_openmp.sh.117.out
+  
+  5888, 5888
+  c[1][1] = 176.640000
+  time : 10.873365 sec.
+
+

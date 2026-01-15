@@ -1,0 +1,702 @@
+BLAS／LAPACK／ScaLAPACKライブラリ
+===================================
+
+Fortran／C言語／C++からBLAS/LAPACK/ScaLAPACKを利用することができます。
+
+- BLAS（Basic Linear Algebra Subprograms）は、ベクトル演算や行列演算を行なうライブラリです。
+- LAPACK（Linear Algebra PACKage）は、線形代数の問題を解くライブラリです。
+- ScaLAPACK（Scalable LAPACK）は、線形代数分野の計算をメッセージパッシングで並列化したライブラリです。
+
+.. _HowToCompileInFortranBLASLAPACKScaLAPACKLibrary:
+
+Fortranコンパイル方法
+------------------------
+
+FortranにおけるBLAS／LAPACK／ScaLAPACKのコンパイル方法を示します。
+
+コンパイル例は以下のとおりです。
+
+
+1. MPI／ScaLAPACK／BLAS,LAPACK（逐次版）
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -Kfast,SVE sample.f90 -SCALAPACK -SSL2
+
+2. MPI／OpenMP／ScaLAPACK／BLAS,LAPACK（スレッド並列版）
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -Kfast,parallel,openmp,SVE sample.f90 -SCALAPACK -SSL2BLAMP
+
+3. 逐次／BLAS,LAPACK（逐次版）
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,SVE sample.f90 -SSL2
+
+4. OpenMP／BLAS,LAPACK（スレッド並列版）
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,openmp,SVE sample.f90 -SSL2BLAMP
+
+.. seealso::
+
+ - BLAS、LAPACK逐次版を使用するには、:program:`frtpx`\ コマンドに\ ``-SSL2``\ を指定します。
+ - BLAS、LAPACKスレッド並列版を使用するには、\ ``-Kopenmp``\ 、および、\ ``-SSL2BLAMP``\ を指定します。
+ - ScaLAPACKを使用するには、:program:`mpifrtpx`\ コマンドに \ ``-SCALAPACK``\ をオプションとして指定します。また、BLAS、LAPACKの逐次版、スレッド並列版の種類に応じて、\ ``-SSL2``\ 、または、\ ``-SSL2BLAMP``\ オプションも指定します。
+ - ログインノードで結合する場合、\ ``-KSVE``\ が有効であれば、\ ``SVE``\ を使用したライブラリを結合します。
+ - ログインノードで結合する場合、\ ``-KNOSVE``\ が有効であれば、汎用のライブラリを結合します。
+ - 計算ノードで結合する場合、\ ``-KSVE``\ と\ ``-KNOSVE``\ のどちらを指定しても\ ``SVE``\ を使用したライブラリを結合します。
+ - ``-KSVE``\ オプションのデフォルト（省略時）は、\ ``-KSVE``\ になります。
+ - ネイティブコンパイラでユーザプログラムを翻訳し、BLAS、LAPACKを結合する場合、\ :program:`frt`\ コマンドを使用します。
+ - ネイティブコンパイラでMPIプログラムを翻訳し、BLAS、LAPACKを結合する場合、\ :program:`mpifrt`\ コマンドを使用します。
+
+.. _HowToCompileInCBLASLAPACKScaLAPACKLibrary:
+
+C言語コンパイル方法
+-----------------------
+
+C言語におけるBLAS／LAPACK／ScaLAPACKのコンパイル方法を示します。
+
+コンパイル例は以下のとおりです。
+
+
+1. MPI／ScaLAPACK／BLAS,LAPACK（逐次版）
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Kfast,SVE sample.c -SCALAPACK -SSL2
+
+2. MPI／OpenMP／ScaLAPACK／BLAS,LAPACK（スレッド並列版）
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Kfast,parallel,openmp,SVE sample.c -SCALAPACK -SSL2BLAMP
+
+3. 逐次／BLAS,LAPACK（逐次版）
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,SVE sample.c -SSL2
+
+4. OpenMP／BLAS,LAPACK（スレッド並列版）
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,openmp,SVE sample.c -SSL2BLAMP
+
+
+.. seealso::
+
+ - BLAS、LAPACK逐次版を使用するには、:program:`fccpx`\ コマンドに\ ``-SSL2``\ を指定します。
+ - BLAS、LAPACKスレッド並列版を使用するには、\ ``-Kopenmp``\ 、および、\ ``-SSL2BLAMP``\ を指定します。
+ - ScaLAPACKを使用するには、:program:`mpifccpx`\ コマンドに \ ``-SCALAPACK``\ をオプションとして指定します。また、BLAS、LAPACKの逐次版、スレッド並列版の種類に応じて、\ ``-SSL2``\、または、\ ``-SSL2BLAMP``\オプションも指定します。
+ - ログインノードで結合する場合、\ ``-KSVE``\ が有効であれば、\ ``SVE``\ を使用したライブラリを結合します。
+ - ログインノードで結合する場合、\ ``-KNOSVE``\ が有効であれば、汎用のライブラリを結合します。
+ - 計算ノードで結合する場合、\ ``-KSVE``\ と\ ``-KNOSVE``\ のどちらを指定しても\ ``SVE``\ を使用したライブラリを結合します。
+ - ``-KSVE``\ オプションのデフォルト（省略時）は、\ ``-KSVE``\ になります。
+ - ネイティブコンパイラでユーザプログラムを翻訳し、BLAS、LAPACK アーカイブを結合する場合、\ :program:`fcc`\ コマンドを使用します。
+ - ネイティブコンパイラでMPIプログラムを翻訳し、BLAS、LAPACKを結合する場合、\ :program:`mpifcc`\ コマンドを使用します。
+
+.. _HowToCompileInC++BLASLAPACKScaLAPACKLibrary:
+
+C++コンパイル方法
+-------------------
+
+C++におけるBLAS／LAPACK／ScaLAPACKのコンパイル方法を示します。
+
+コンパイル例は以下のとおりです。
+
+
+1. MPI／ScaLAPACK／BLAS,LAPACK（逐次版）
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpiFCCpx -Kfast,SVE sample.cc -SCALAPACK -SSL2
+
+2. MPI／OpenMP／ScaLAPACK／BLAS,LAPACK（スレッド並列版）
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpiFCCpx -Kfast,parallel,openmp,SVE sample.cc -SCALAPACK -SSL2BLAMP
+
+3. 逐次／BLAS,LAPACK（逐次版）
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,SVE sample.cc -SSL2
+
+4. OpenMP／BLAS,LAPACK（スレッド並列版）
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,openmp,SVE sample.cc -SSL2BLAMP
+
+.. seealso::
+
+ - BLAS、LAPACK逐次版を使用するには、\ :program:`FCCpx`\ コマンドに\ ``-SSL2``\ を指定します。
+ - BLAS、LAPACKスレッド並列版を使用するには、\ ``-Kopenmp``\ 、および、\ ``-SSL2BLAMP``\ を指定します。
+ - ScaLAPACKを使用するには、:program:`mpiFCCpx`\ コマンドに \ ``-SCALAPACK``\ をオプションとして指定します。また、BLAS、LAPACKの逐次版、スレッド並列版の種類に応じて、\ ``-SSL2``\、または、\ ``-SSL2BLAMP``\ オプションも指定します。
+ - ログインノードで結合する場合、\ ``-KSVE``\ が有効であれば、\ ``SVE``\ を使用したライブラリを結合します。
+ - ログインノードで結合する場合、\ ``-KNOSVE``\ が有効であれば、汎用のライブラリを結合します。
+ - 計算ノードで結合する場合、\ ``-KSVE``\ と\ ``-KNOSVE``\ のどちらを指定しても\ ``SVE``\ を使用したライブラリを結合します。
+ - ``-KSVE``\ オプションのデフォルト（省略時）は、\ ``-KSVE``\ になります。
+ - ネイティブコンパイラでユーザプログラムを翻訳し、BLAS、LAPACK アーカイブを結合する場合、\ :program:`FCC`\ コマンドを使用します。
+ - ネイティブコンパイラでMPIプログラムを翻訳し、BLAS、LAPACKを結合する結合する場合、\ :program:`mpiFCC`\ コマンドを使用します。
+
+
+サンプルプログラム（ScaLAPACK／FORTRAN）
+----------------------------------------
+
+サンプルプログラムを使用して、コンパイルからジョブ実行までの例を示します。
+
+1. | ソースプログラムを用意します。
+   | サンプルプログラムを\ :file:`/home/system/sample/SCALAPACK/sample_ScaLAPACK.f`\ として用意しています。
+   | :download:`（サンプルコードのダウンロード） <./src/sample_ScaLAPACK.f>`
+
+2. サンプルプログラムをコンパイルします。
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -V -Kfast,optmsg=2 -Nlst=t -o sample_ScaLAPACK  sample_ScaLAPACK.f -SCALAPACK -SSL2
+
+3. | ジョブスクリプトを用意します。
+   | ジョブスクリプトのサンプルは\ :file:`/home/system/sample/SCALAPACK/sample_ScaLAPACK.sh`\ として用意しています。
+   | :download:`（サンプルコードのダウンロード） <./src/sample_ScaLAPACK.sh>`
+
+4. :program:`pjsub`\ コマンドでジョブを投入します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ pjsub sample_ScaLAPACK.sh
+  [INFO] PJM 0000 pjsub Job 150 submitted.
+
+
+共有ライブラリの利用方法
+--------------------------
+
+BLAS、LAPACK、ScaLAPACK は「:ref:`HowToCompileInFortranBLASLAPACKScaLAPACKLibrary`」「:ref:`HowToCompileInCBLASLAPACKScaLAPACKLibrary`」「:ref:`HowToCompileInC++BLASLAPACKScaLAPACKLibrary`」で示した方法で結合すると、スタティックリンクになります。これとは別に、共有ライブラリも提供しています。共有ライブラリ版は動的ロードして使う場合を考慮し、アーカイブの構成および結合方法がスタティックリンク版と異なっています。
+
+また共有ライブラリのBLAS、LAPACKでは整数型および論理型の引数が4バイト整数であるLP64インターフェースのライブラリに加えて、整数型および論理型の引数を8バイト整数とするILP64インターフェースのライブラリを使うことができます。ILP64インターフェースを使用する場合は、ILP64の共有ライブラリを指定してください。
+
+.. contents::
+   :local:
+
+
+BLAS、LAPACK 逐次版の Fortran からの利用方法
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fortranで書かれたユーザプログラムを翻訳し、BLAS 及び LAPACKの逐次版の共有ライブラリを結合するためには、:program:`frtpx` \ 、または、:program:`frt`\ コマンド行に、以下の表に示すオプションを指定します。
+
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 5,5
+
+    * - 種類
+      - 結合オプション
+
+    * - LP64、汎用版
+      - \-lfjlapack
+
+    * - LP64、SVE版
+      - \-lfjlapacksve
+
+    * - ILP64、汎用版
+      - \-lfjlapack_ilp64
+
+    * - ILP64、SVE版
+      - \-lfjlapacksve_ilp64
+
+
+このオプションはユーザプログラムよりも後ろに指定します。
+
+利用方法の例は以下のとおりです。
+
+
+1. Fortranで書かれたユーザプログラム\ :file:`a.f`\ を翻訳し、SVE版 BLAS、LAPACKライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,optmsg=2 a.f -lfjlapacksve
+
+
+2. Fortranで書かれたユーザプログラム\ :file:`a.f`\ を翻訳し、汎用版 BLAS、LAPACKライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,optmsg=2 a.f -lfjlapack
+
+
+3. Fortran で書かれたユーザプログラム\ :file:`a.f`\ を翻訳し、ILP64 インターフェースのSVE版BLAS、LAPACKライブラリを結合します。ソースプログラムの基本整数型 および 基本論理型は、``-CcdII8、-CcdLL8`` オプションで、8バイトに拡張します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,optmsg=2 -CcdII8 -CcdLL8 a.f -lfjlapacksve_ilp64
+
+
+4. OpenMP Fortran で書かれたユーザプログラム\ :file:`a.f`\ を翻訳し、SVE版BLAS、LAPACK ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,openmp,optmsg=2 a.f -lfjlapacksve
+
+
+5. Fortran で書かれたユーザプログラム\ :file:`a.f`\ をネイティブコンパイラで翻訳し、SVE版BLAS、LAPACK ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ frt -Kfast,optmsg=2 a.f -lfjlapacksve
+
+
+BLAS、LAPACK スレッド並列版の Fotran からの利用方法
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Fortranで書かれたユーザプログラムを翻訳し、BLAS及びLAPACKのスレッド並列版の共有ライブラリを結合するためには、\ ``frtpx``\ 、または、\ ``frt``\ コマンド行にオプション\ ``-Kopenmp``\ に加えて、以下の表に示すオプションを指定します。
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 5,5
+
+    * - 種類
+      - 結合オプション
+
+    * - LP64、汎用版
+      - \-lfjlapackex
+
+    * - LP64、SVE版
+      - \-lfjlapackexsve
+
+    * - ILP64、汎用版
+      - \-lfjlapackex_ilp64
+
+    * - ILP64、SVE版
+      - \-lfjlapackexsve_ilp64
+
+
+| このオプションはユーザプログラムよりも後ろに指定します。
+| ``-Kopenmp``\ オプションのかわりに\ ``-Kparallel``\ オプションを指定することもできます。
+
+利用方法の例は以下のとおりです。
+
+1. Fortran で書かれたユーザプログラム\ :file:`a.f`\ を翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,openmp,optmsg=2 a.f -lfjlapackexsve
+
+2. Fortran で書かれたユーザプログラム\ :file:`a.f`\ を翻訳し、汎用版BLAS、LAPACK スレッド並列版ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,openmp,optmsg=2 a.f -lfjlapackex
+
+3. Fortran で書かれたユーザプログラム\ :file:`a.f`\ を翻訳し、ILP64 インターフェースのSVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。ソースプログラムの基本整数型 および 基本論理型は、``-CcdII8、-CcdLL8`` オプションで8バイトに拡張します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,openmp,optmsg=2 -CcdII8 -CcdLL8 a.f -lfjlapackexsve_ilp64
+
+4. Fortran で書かれたユーザプログラム\ :file:`a.f`\ をネイティブコンパイラで翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_CNlogin]$ frt -Kfast,openmp,optmsg=2 a.f -lfjlapackexsve
+
+5. Fortran で書かれたユーザプログラム\ :file:`a.f`\ を逐次実行プログラムとして翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,optmsg=2 -c a.f
+  [_LNlogin]$ frtpx -Kfast,openmp a.o -lfjlapackexsve
+  
+
+6. Fortran で書かれたユーザプログラム\ :file:`a.f`\ を自動並列化して翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,parallel,optmsg=2 -c a.f
+  [_LNlogin]$ frtpx -Kfast,parallel a.o -lfjlapackexsve
+
+
+ScaLAPACKのFortranからの利用方法
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ScaLAPACKを使用するユーザプログラムを翻訳しScaLAPACKの共有ライブラリを結合するためには、:program:`mpifrtpx`\ 、または、:program:`mpifrt`\ コマンドを使用し、以下の表に示すオプションを指定します。
+
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 5,5
+
+    * - 種類
+      - 結合オプション
+
+    * - LP64、汎用版
+      - \-lfjscalapack
+
+    * - LP64、SVE版
+      - \-lfjscalapacksve
+
+    * - ILP64、汎用版
+      - \-
+
+    * - ILP64、SVE版
+      - \-
+
+| ScaLAPACK を結合するオプションはユーザプログラムよりも後ろに指定し、BLAS、LAPACK を結合するためのオプションよりも前に指定します。
+| スレッド並列版BLAS、LAPACK を使用する場合、``-Kopenmp``\ オプションも一緒に指定します。
+
+利用方法の例は以下のとおりです。
+
+1. Fortran で書かれたユーザプログラム\ :file:`a.f`\ を翻訳し、SVE版ScaLAPACK ライブラリを結合します。BLAS、LAPACK は逐次版を結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -Kfast,optmsg=2 a.f -lfjscalapacksve -lfjlapacksve
+
+
+2. Fortran で書かれたユーザプログラム\ :file:`a.f`\ を翻訳し、汎用版ScaLAPACK ライブラリを結合します。BLAS、LAPACK は逐次版を結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -Kfast,optmsg=2 a.f -lfjscalapack -lfjlapack
+
+
+3. Fortran で書かれたユーザプログラム\ :file:`a.f`\ を翻訳し、SVE版ScaLAPACK ライブラリを結合します。BLAS、LAPACK はスレッド並列版を結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -Kfast,openmp,optmsg=2 a.f -lfjscalapacksve -lfjlapackexsve
+
+
+4. Fortran で書かれたユーザプログラム\ :file:`a.f`\ をネイティブコンパイラで翻訳し、SVE版ScaLAPACK ライブラリを結合します。BLAS、LAPACK はスレッド並列版を結合します。
+
+ .. code-block:: console
+
+  [_CNlogin]$ mpifrt -Kfast,openmp,optmsg=2 a.f -lfjscalapacksve -lfjlapackexsve
+
+
+.. _UsingBLASandLAPACKSequentialVersionFromCCPPProgramsUsingSharedLibrariesBLASLAPACKScaLAPACKLibrary:
+
+BLAS、LAPACK逐次版のC、C++からの利用方法
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+| C、C++で書かれたユーザプログラムを翻訳し、BLAS 及びLAPACKの逐次版の共有ライブラリを結合するためには、:program:`fccpx`\ 、:program:`FCCpx`\ 、:program:`fcc`\ 、または、:program:`FCC`\ コマンド行に、以下の表に示すオプションに加えて、 \ ``-SSL2``\ 、または、\ ``-SSL2BLAMP``\ を指定します。
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 5,5
+
+    * - 種類
+      - 結合オプション
+
+    * - LP64、汎用版
+      - \-lfjlapack
+
+    * - LP64、SVE版
+      - \-lfjlapacksve
+
+    * - ILP64、汎用版
+      - \-lfjlapack_ilp64
+
+    * - ILP64、SVE版
+      - \-lfjlapacksve_ilp64
+
+| 結合オプションはユーザプログラムよりも後ろに指定します。\ ``-SSL2``\ 、または、\ ``-SSL2BLAMP``\ オプションはどちらを指定してもかまいません。
+| ILP64 インターフェースのライブラリを使用する場合は、ILP64 に対応したヘッダファイルを使用するために\ :file:`-I${FJSVXTCLANGA}/include/lapack_ilp64`\ を翻訳時のオプションに指定します。
+
+利用方法の例は以下のとおりです。
+
+
+1. C で書かれたユーザプログラム\ :file:`a.c`\ を翻訳し、SVE版BLAS、LAPACK ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,optmsg=2 a.c -lfjlapacksve -SSL2
+
+
+2. C で書かれたユーザプログラム\ :file:`a.c`\ を翻訳し、汎用版BLAS、LAPACK ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,optmsg=2 a.c -lfjlapack -SSL2
+
+
+3. C で書かれたユーザプログラム\ :file:`a.c`\ を翻訳し、ILP64 インターフェースのSVE版BLAS、LAPACK ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,optmsg=2 -I${FJSVXTCLANGA}/include/lapack_ilp64 a.c -lfjlapacksve_ilp64 -SSL2
+
+
+4. C++で書かれたユーザプログラム\ :file:`a.cpp`\ を翻訳し、SVE版BLAS、LAPACK ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,optmsg=2 a.cpp -lfjlapacksve -SSL2
+
+
+5. OpenMP C で書かれたユーザプログラム\ :file:`a.c`\ を翻訳し、SVE版BLAS、LAPACKライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,openmp,optmsg=2 a.c -lfjlapacksve -SSL2
+
+
+6. OpenMP C で書かれたユーザプログラム\ :file:`a.c`\ をネイティブコンパイラで翻訳し、SVE版BLAS、LAPACK ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_CNlogin]$ fcc -Kfast,openmp,optmsg=2 a.c -lfjlapacksve -SSL2
+
+
+.. _UsingBLASandLAPACKThreadParallelVersionFromCCPPProgramsUsingSharedLibrariesBLASLAPACKScaLAPACKLibrary:
+
+BLAS、LAPACKスレッド並列版のC、C++からの利用方法
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ユーザプログラムを翻訳し、BLAS 及びLAPACKのスレッド並列版の共有ライブラリを結合するためには、:program:`fccpx`\ 、:program:`FCCpx`\ 、:program:`fcc`\ 、または、:program:`FCC`\ コマンド行にオプション ``-Kopenmp``\ と、以下の表に示すオプションに加えて、``-SSL2``\ 、または、``-SSL2BLAMP``\ を指定します。
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 5,5
+
+    * - 種類
+      - 結合オプション
+
+    * - LP64、汎用版
+      - \-lfjlapackex
+
+    * - LP64、SVE版
+      - \-lfjlapackexsve
+
+    * - ILP64、汎用版
+      - \-lfjlapackex_ilp64
+
+    * - ILP64、SVE版
+      - \-lfjlapackexsve_ilp64
+
+| 結合オプションはユーザプログラムよりも後ろに指定します。``-SSL2``\ 、または、``-SSL2BLAMP``\ オプションはどちらを指定してもかまいません。
+| ``-Kopenmp``\ オプションのかわりに ``-Kparallel``\ オプションを指定することもできます。
+| ILP64 インターフェースのライブラリを使用する場合は、ILP64 に対応したヘッダファイルを使用するために\ ``-I${FJSVXTCLANGA}/include/lapack_ilp64``\ を翻訳時のオプションに指定します。
+
+利用方法の例は以下のとおりです。
+
+1. C で書かれたユーザプログラム\ :file:`a.c`\ を翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,openmp,optmsg=2 a.c -lfjlapackexsve -SSL2
+
+
+2. CC で書かれたユーザプログラム\ :file:`a.c`\ を翻訳し、汎用版BLAS、LAPACK スレッド並列版ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,openmp,optmsg=2 a.c -lfjlapackex -SSL2
+
+
+3. C で書かれたユーザプログラム\ :file:`a.c`\ を翻訳し、ILP64 インターフェースのSVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,openmp,optmsg=2 -I${FJSVXTCLANGA}/include/lapack_ilp64 a.c -lfjlapackexsve_ilp64 -SSL2
+
+
+4. C++で書かれたユーザプログラム\ :file:`a.cpp`\ を翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,openmp,optmsg=2 a.cpp -lfjlapackexsve -SSL2
+
+
+5. C で書かれたユーザプログラム\ :file:`a.c`\ を逐次実行プログラムとして翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -c -Kfast,optmsg=2 a.c
+  [_LNlogin]$ fccpx -Kopenmp a.o -lfjlapackexsve -SSL2
+
+
+6. C で書かれたユーザプログラム\ :file:`a.c`\ を自動並列化して翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -c -Kfast,parallel,optmsg=2 a.c
+  [_LNlogin]$ fccpx -Kfast,parallel,openmp a.o -lfjlapackexsve -SSL2
+
+
+7. Cで書かれたユーザプログラム\ :file:`a.c`\ をネイティブコンパイラで翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。
+
+ .. code-block:: console
+
+  [_CNlogin]$ fcc -Kfast,openmp,optmsg=2 a.c -lfjlapackexsve -SSL2
+
+
+ScaLAPACK の C、C++からの利用方法
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+C、C++で書かれたユーザプログラムを翻訳し、ScaLAPACKの共有ライブラリを結合するためには、:program:`mpifccpx`\ 、:program:`mpiFCCpx`\ 、:program:`mpifcc`\ 、または、:program:`mpiFCC`\ コマンドを使用します。
+
+また、以下の表に示すオプション、および、使用するBLAS、LAPACKの種類に応じて、 :ref:`UsingBLASandLAPACKSequentialVersionFromCCPPProgramsUsingSharedLibrariesBLASLAPACKScaLAPACKLibrary` 、または、\ :ref:`UsingBLASandLAPACKThreadParallelVersionFromCCPPProgramsUsingSharedLibrariesBLASLAPACKScaLAPACKLibrary` の表に示すオプションを指定します。さらに、\ ``-SCALAPACK``\ に加えて ``-SSL2``\ 、または、``-SSL2BLAMP``\ を指定します。
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 5,5
+
+    * - 種類
+      - 結合オプション
+
+    * - LP64、汎用版
+      - \-lfjscalapack
+
+    * - LP64、SVE版
+      - \-lfjscalapacksve
+
+    * - ILP64、汎用版
+      - \-
+
+    * - ILP64、SVE版
+      - \-
+
+| ScaLAPACKの結合オプションはユーザプログラムよりも後ろに指定し、BLAS、LAPACK を結合するためのオプションよりも前に指定します。\ ``-SSL2``\ または、``-SSL2BLAMP``\ オプションはどちらを指定してもかまいません。
+| スレッド並列版BLAS、LAPACK を使用する場合、``-Kopenmp``\ オプションも一緒に指定します。
+
+
+利用方法の例は以下のとおりです。
+
+1. C で書かれたユーザプログラム\ :file:`a.c`\ を翻訳し、SVE版ScaLAPACK ライブラリを結合します。BLAS、LAPACK は逐次版を結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Kfast,optmsg=2 a.c -lfjscalapacksve -lfjlapacksve -SSL2 -SCALAPACK
+
+
+2. C で書かれたユーザプログラム\ :file:`a.c`\ を翻訳し、汎用版ScaLAPACK ライブラリを結合します。BLAS、LAPACK は逐次版を結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Kfast,optmsg=2 a.c -lfjscalapack -lfjlapack -SSL2 -SCALAPACK
+
+
+3. C で書かれたユーザプログラム\ :file:`a.c`\ を翻訳し、SVE版ScaLAPACK ライブラリを結合します。BLAS、LAPACK は逐次版を結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Kfast,optmsg=2 a.c -lfjscalapacksve -lfjlapacksve -SSL2 -SCALAPACK
+
+
+4. C++で書かれたユーザプログラム\ :file:`a.cpp`\ を翻訳し、SVE版ScaLAPACK ライブラリを結合します。BLAS、LAPACK はスレッド並列版を結合します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpiFCCpx -Kfast,openmp,optmsg=2 a.cpp -lfjscalapacksve -lfjlapackexsve -SSL2 -SCALAPACK
+
+
+5. C で書かれたユーザプログラム\ :file:`a.c`\ をネイティブコンパイラで翻訳し、SVE版ScaLAPACK ライブラリを結合します。BLAS、LAPACK はスレッド並列版を結合します。
+
+ .. code-block:: console
+
+  [_CNlogin]$ mpifcc -Kfast,openmp,optmsg=2 a.c -lfjscalapacksve -lfjlapackexsve -SSL2 -SCALAPACK
+
+
+BLAS、LAPACK、ScaLAPACK を動的ロードして利用する方法
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+dlopen、dlsym 関数で動的ロードしてBLAS、LAPACK、ScaLAPACK ライブラリを利用する場合、dlopen 関数でにファイル名を指定してライブラリをロードします。
+
+共有ライブラリのファイル名を以下の表に示します。
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 2 3 3 3
+
+    * - 種類
+      - BLAS、LAPACK逐次版
+      - BLAS、LAPACKスレッド並列版
+      - ScaLAPACK
+
+    * - LP64、汎用版
+      - libfjlapack.so
+      - libfjlapackex.so
+      - libfjscalapack.so
+
+    * - LP64、SVE 版
+      - libfjlapacksve.so
+      - libfjlapackexsve.so
+      - libfjscalapacksve.so
+
+    * - ILP64、汎用版
+      - libfjlapack_ilp64.so
+      - libfjlapackex_ilp64.so
+      - \-
+
+    * - ILP64、SVE 版
+      - libfjlapacksve_ilp64.so
+      - libfjlapackexsve_ilp64.so
+      - \-
+
+- dlopen、dlsym 関数を使ってBLAS、LAPACK、および、ScaLAPACKを使用する場合、結合時にライブラリを指定するオプションは必要ありません。
+- BLAS、LAPACK スレッド並列版を使用するユーザプログラムを結合する場合、結合時のオプションに\ ``-Kopenmp``\ を指定します。
+- :program:`fccpx、FCCpx、mpifccpx`\ または :program:`mpiFCCpx`\ コマンドを使ってユーザプログラムを結合する場合、``-SSL2``\ または\ ``-SSL2BLAMP``\ オプションも一緒に指定します。
+- :program:`mpifccpx`\ または、:program:`mpiFCCpx`\ コマンドを使ってユーザプログラムと、ScaLAPACKライブラリを結合する場合、\ ``-SCALAPACK``\ オプションも一緒に指定します。
+
+
+
+利用方法の例は以下のとおりです。
+
+1. BLAS、LAPACK 逐次版を動的ロードする Cプログラム\ :file:`a.c`\ を翻訳、結合する。
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,optmsg=2 a.c -SSL2
+
+2. BLAS、LAPACK スレッド並列版を動的ロードする Cプログラム\ :file:`a.c`\ を翻訳、結合する。
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,openmp,optmsg=2 a.c -SSL2
+
+3. ScaLAPACK および BLAS、LAPACK 逐次版を動的ロードする Cプログラム\ :file:`a.c`\ を翻訳、結合する。
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Kfast,optmsg=2 a.c -SSL2 -SCALAPACK
+
+4. ScaLAPACK および BLAS、LAPACK スレッド並列版を動的ロードする Cプログラム\ :file:`a.c`\ を翻訳、結合する。
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Kfast,openmp,optmsg=2 a.c -SSL2 -SCALAPACK
+
+5. BLAS、LAPACK 逐次版を動的ロードする Cプログラム\ :file:`a.c`\ と、それを呼び出す Fortranプログラム\ :file:`b.f`\ を翻訳、結合する。
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -c -Kfast,optmsg=2 a.c
+  [_LNlogin]$ frtpx -Kfast,optmsg=2 b.f a.o
+
+6. BLAS, LAPACK スレッド並列版を動的ロードする Cプログラム\ :file:`a.c`\ と、それを呼び出す Fortranプログラム\ :file:`b.f`\ を翻訳、結合する。
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -c -Kfast,optmsg=2 a.c
+  [_LNlogin]$ frtpx -Kfast,openmp,optmsg=2 b.f a.o
+
+7. ScaLAPACK および BLAS、LAPACK 逐次版を動的ロードする Cプログラム\ :file:`a.c`\ と、それを呼び出す Fortran プログラム\ :file:`b.f`\ を翻訳、結合する
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -c -Kfast,optmsg=2 a.c
+  [_LNlogin]$ mpifrtpx -Kfast,optmsg=2 b.f a.o
+
+8. ScaLAPACK および BLAS、LAPACK スレッド並列版を動的ロードする Cプログラム\ :file:`a.c`\ と、それを呼び出す Fortran プログラム\ :file:`b.f`\ を翻訳、結合する
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -c -Kfast,optmsg=2 a.c
+  [_LNlogin]$ mpifrtpx -Kfast,openmp,optmsg=2 b.f a.o
+

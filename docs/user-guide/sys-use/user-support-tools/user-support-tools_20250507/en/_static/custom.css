@@ -1,0 +1,53 @@
+// div.related {
+//     background-color: #a32223;
+//     color: #000;
+// }
+// 
+// div.body h1,
+// div.body h2,
+// div.body h3,
+// div.body h4,
+// div.body h5,
+// div.body h6 {
+//     font-family: Arial, sans-serif;
+//     background-color: #a32223;
+//     font-weight: normal;
+//     color: #ffffff;
+//     margin: 30px 0px 10px 0px;
+//     padding: 5px 0 5px 10px;
+//     text-shadow: 0px 1px 0 white
+// }
+
+//div.attention {
+//    background-color: #ffe4e4;
+//    border: 1px solid #f66;
+//}
+
+//div.important {
+//    background-color: #eee;
+//    border: 1px solid #ccc;
+//}
+
+
+//pre {
+//    white-space:pre-wrap;
+//    overflow: auto;
+//    overflow-y: hidden;  /* fixes display issues on Chrome browsers */
+//}
+
+
+
+table.docutils th {
+    color: white;
+    text-align: center;
+    padding-right: 5px;
+#    background-color: #37ac71 ;
+    border: solid #666666;
+    border-width: thin;
+
+}
+
+
+table.docutils td {
+    border: solid #666666;
+    border-width: thin;

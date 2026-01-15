@@ -1,0 +1,285 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.18. TofuD TNR 統計情報の取得 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.19. 障害の影響を受けたジョブ一覧表示コマンド" href="ShowAffectedJobs.html" />
+    <link rel="prev" title="5.17. サンプルスクリプト" href="SampleScripts.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="ShowAffectedJobs.html" title="5.19. 障害の影響を受けたジョブ一覧表示コマンド"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="SampleScripts.html" title="5.17. サンプルスクリプト"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.18. </span>TofuD TNR 統計情報の取得</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="tofud-tnr">
+<h1><span class="section-number">5.18. </span>TofuD TNR 統計情報の取得<a class="headerlink" href="#tofud-tnr" title="Link to this heading">¶</a></h1>
+<p><strong>概要</strong></p>
+<blockquote>
+<div><p>TofuD TNR (Tofuネットワークルータ) の統計情報を取得することができます。
+TNR の各ポート (A,C,B-,B+,X-,X+,Y-,Y+,Z-,Z+) ごとに、次の統計情報を取得できます。</p>
+<ul class="simple">
+<li><p>ゼロクレジット状態サイクル数</p></li>
+<li><p>送受信パケット総数</p></li>
+<li><p>送受信パケット総バイト数(1/16の値)</p></li>
+</ul>
+<p>ゼロクレジット状態サイクル数は、送信先バッファ残量がゼロ状態の合計のサイクル数を表します。動作周波数は425MHzであるため、1サイクルは約2.35ナノ秒に相当します。輻輳によって通信が停止していたサイクル数(時間)を知ることができます。</p>
+<p>時間間隔を開けて統計情報を取得し、読み出した値の差分を取ることで通信量などを知ることができます。</p>
+<p>送受信パケット総バイト数は、送受信した総バイト数の1/16の値を表します。</p>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>富岳ウェブサイトの「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/fugaku_information#tofud-interconnect">Fugaku System Configuration</a>」にTofuDの構成情報があり、参考として参照ください。</p>
+</div>
+</div></blockquote>
+<p><strong>統計情報を取得するインターフェース(ioctl)について</strong></p>
+<blockquote>
+<div><p>TNRの統計情報は、TofuDドライバが提供する<strong class="command">ioctl(2)</strong>のインターフェースにより取得します。
+<strong class="command">ioctl</strong>呼び出し時の引数として次を指定します。</p>
+<blockquote>
+<div><ul>
+<li><p>ioctl の第1引数: /proc/tofu/dev/info を open した fd番号</p></li>
+<li><p>ioctl の第2引数: _IOWR('d', 9, long)</p></li>
+<li><p>ioctl の第3引数: 次の構造体(tof_get_port_stat)のアドレス</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">tof_get_port_stat</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="n">port_no</span><span class="p">;</span>
+<span class="w">      </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">mask</span><span class="p">;</span>
+<span class="w">      </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">pa</span><span class="p">[</span><span class="mi">31</span><span class="p">];</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+<p>tof_get_port_stat 構造体のport_no 変数と mask 変数は ioctl の入力となるパラメータです。pa 変数には port_no で指定したポートの統計情報の取得結果が格納されます。
+pa 変数(配列)のインデックスと、取得可能な統計情報の対応関係は以下の通りです。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>pa変数のインデックス</p></th>
+<th class="head"><p>取得結果の説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>仮想チャネル0(VC0)におけるゼロクレジット状態サイクル数</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>仮想チャネル1(VC1)におけるゼロクレジット状態サイクル数</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>仮想チャネル2(VC2)におけるゼロクレジット状態サイクル数</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>仮想チャネル3(VC3)におけるゼロクレジット状態サイクル数</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>送信したパケットの総数</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>送信したパケットの総バイト数(1/16の値)</p></td>
+</tr>
+<tr class="row-even"><td><p>16</p></td>
+<td><p>受信したパケットの総数</p></td>
+</tr>
+<tr class="row-odd"><td><p>17</p></td>
+<td><p>受信したパケットの総バイト数(1/16の値)</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>port_no 変数には下記対応表に基づくポートIDを指定してください。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>論理ポート</p></th>
+<th class="head"><p>ポートID</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>C</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>B-</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p>B+</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>X-</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p>X+</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-even"><td><p>Y-</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-odd"><td><p>Y+</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td><p>Z-</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-odd"><td><p>Z+</p></td>
+<td><p>10</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>mask 変数にはビットマスクを設定してください。</p>
+<ul class="simple">
+<li><p>0のとき pa[n] を取得する</p></li>
+<li><p>1のとき pa[n] を取得しない</p></li>
+</ul>
+<p>例えば、pa[0],pa[1],pa[2],pa[3] を取得する場合は、mask に 0xFFFFFFF0 を指定します。
+上記の表のすべての統計情報を取得する場合は、mask に 0xFFFCFF30 を指定します。</p>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>統計情報の取得時にはハードウェアのレジスタアクセスが発生します。レイテンシが無視できない場合は、mask により取得が必要な情報を明示してください。mask により取得されなかった統計情報としては不定値が返ります。</p></li>
+<li><p>送受信パケット総バイト数は1/16の値が格納されます。実際の値に変換する場合は16倍してください。</p></li>
+</ul>
+</div>
+<p>ioctl 呼び出し失敗時には errno に次のエラーが設定されます。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>名称</p></th>
+<th class="head"><p>操作</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>EINVAL</p></td>
+<td><p>port_no に 1～10以外の値を指定</p></td>
+</tr>
+<tr class="row-odd"><td><p>EFAULT</p></td>
+<td><p>ユーザ空間とカーネル空間のデータコピーが失敗</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div></blockquote>
+<p><strong>サンプルプログラム</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>ioctl により TofuD の TNR 統計情報を取得するサンプルプログラムを用意しています。</dt><dd><p><a class="reference download internal" download="" href="../_downloads/1e3ad0a12fed9345ec2d05ff06f4e871/get_port_stat.c"><code class="xref download docutils literal notranslate"><span class="pre">get_port_stat.c</span> <span class="pre">のダウンロード</span></code></a></p>
+</dd>
+</dl>
+<p>計算ノード上でのコンパイル・実行手順の例を示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>fcc<span class="w"> </span>get_port_stat.c<span class="w"> </span>-o<span class="w"> </span>get_port_stat
+<span class="gp">[_CNlogin]$ </span>./get_port_stat
+<span class="go">port_name,pa[0],pa[1],pa[2],pa[3],pa[6],pa[7],pa[16],pa[17]</span>
+<span class="go">A,0,27910272727454,420730647535,0,2464338799405,153641653215667,2934762493226,214395948656466</span>
+<span class="go">C,0,18924412834175,489428671284,0,2073545237108,156157972293252,2329968905612,188700401742674</span>
+<span class="go">B-,0,3762767544996,390704871815,250024,2243406296215,163990760948475,1978652407038,126890968786478</span>
+<span class="go">B+,397823126596,4891130840161,478845006012,44572,2102091704677,162165504844619,1572638411965,101847294931163</span>
+<span class="go">X-,131270521308116,18178231547705,1130725761941,24741113620,6310974937394,446507465546870,6129539107432,430123327647998</span>
+<span class="go">X+,210371927252085,25664573932559,2226337318599,11202950790,6079358975087,425306776312583,6331250757071,446564108159829</span>
+<span class="go">Y-,1239911977558,3394055414680,80637718934,164614927485,366061771695,26837543897751,513661116740,43540705115890</span>
+<span class="go">Y+,2619521829150,10313768124615,104613494016,78053815908,738388103253,65146082508265,566950117829,45821629417759</span>
+<span class="go">Z-,1989340756317,307229854310,208198959208,198717930578,181498497720,13130612346246,238798680681,19827909732205</span>
+<span class="go">Z+,1256929737324,1423913574375,131643193373,170725424408,242929503717,18650318528973,205296746334,14306341870088</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="SampleScripts.html"
+                          title="前の章へ"><span class="section-number">5.17. </span>サンプルスクリプト</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="ShowAffectedJobs.html"
+                          title="次の章へ"><span class="section-number">5.19. </span>障害の影響を受けたジョブ一覧表示コマンド</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="ShowAffectedJobs.html" title="5.19. 障害の影響を受けたジョブ一覧表示コマンド"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="SampleScripts.html" title="5.17. サンプルスクリプト"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.18. </span>TofuD TNR 統計情報の取得</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

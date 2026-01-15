@@ -1,0 +1,52 @@
+Runtime environment variables
+=============================
+
+We describe the main environment variables which is specifiable when execution on Fortran/C/C++ program.
+The environment variables described here differ when using the LLVM OpenMP library (-Nlibomp option) and when using the Fujitsu OpenMP library (-Nfjomplib option).
+
+Please refer to the manual "Fortran User's Guide", "C User's Guide", and "C ++ User's Guide" for details.
+
+
+.. list-table:: When using the LLVM OpenMP library (-Nlibomp option)
+   :header-rows: 1
+   :widths: 3,9
+
+   * - Environment variables
+     - Description
+
+   * - OMP_NUM_THREADS
+     - | The number of threads to operate in parallel can be specified.
+       | If omitted, the number of cores available for the job (48 for 1 node and 1 process) is used.
+
+   * - OMP_STACKSIZE
+     - The size of the stack area for each thread can be specified in bytes, K bytes, M bytes, G bytes, and T bytes.
+       The default value is 8 Mbytes.
+
+.. list-table:: When using the Fujitsu OpenMP library (-Nfjomplib option)
+   :header-rows: 1
+   :widths: 3,9
+
+   * - Environment variables
+     - Description
+
+   * - PARALLEL
+     - | The number of threads to operate in parallel can be specified.
+       | If omitted, the number of cores available for the job (48 for 1 process per node) is used.
+       | 
+       | When the environment variable FLIB_FASTOMP is set to TRUE (default), if the environment variable OMP_NUM_THREADS has a specified value, that value and the specified value of the environment variable PARALLEL must match.
+       | If not matched, the smaller number of threads is used. In this case, the jwe1042i-w message is output.
+  
+   * - OMP_NUM_THREADS
+     - | The number of threads to operate in parallel can be specified.
+       | If omitted, the number of cores available for the job (48 for 1 process per node) is used.
+
+   * - THREAD_STACK_SIZE
+     - | The size of the stack area for each thread can be specified in Kbytes.
+       | If the environment variable OMP_STACKSIZE is specified, the larger specified value will be the size of the stack area for each thread.
+
+   * - OMP_STACKSIZE
+     - | The size of the stack area for each thread can be specified in bytes, K bytes, M bytes, or G bytes.
+       | If the environment variable THREAD_STACK_SIZE is specified, the larger specified value will be the size of the stack area for each thread.
+
+
+

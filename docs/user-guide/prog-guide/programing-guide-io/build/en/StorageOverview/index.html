@@ -1,0 +1,573 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>2. Storage Overview &#8212; Programming Guide (IO part)  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3. Capacity Setting" href="../CapacitySetting/index.html" />
+    <link rel="prev" title="1. Introduction" href="../Introduction/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../CapacitySetting/index.html" title="3. Capacity Setting"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../Introduction/index.html" title="1. Introduction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Programming Guide (IO part)  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>Storage Overview</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="storage-overview">
+<h1><span class="section-number">2. </span>Storage Overview<a class="headerlink" href="#storage-overview" title="Permalink to this heading">¶</a></h1>
+<section id="job-submission-flow">
+<h2><span class="section-number">2.1. </span>Job submission flow<a class="headerlink" href="#job-submission-flow" title="Permalink to this heading">¶</a></h2>
+<p>A user can execute a job on the compute node side by logging in to the login node and requesting to place a file in FEFS and execute a job.</p>
+<ul class="simple">
+<li><p>While the job is running, the FEFS reads and writes files as needed.</p></li>
+<li><p>After the job ends, the user can view the files output during job execution from the login node.</p></li>
+</ul>
+<figure class="align-default">
+<img alt="../_images/JobSubmission_01.png" src="../_images/JobSubmission_01.png" />
+</figure>
+</section>
+<section id="overview-of-fugaku-storage-configuration">
+<h2><span class="section-number">2.2. </span>Overview of Fugaku Storage Configuration<a class="headerlink" href="#overview-of-fugaku-storage-configuration" title="Permalink to this heading">¶</a></h2>
+<p>Storage of the supercomputer Fugaku.</p>
+<figure class="align-default">
+<img alt="../_images/OverView_01.png" src="../_images/OverView_01.png" />
+</figure>
+<section id="file-system-available-in-fugaku">
+<h3><span class="section-number">2.2.1. </span>File system available in Fugaku<a class="headerlink" href="#file-system-available-in-fugaku" title="Permalink to this heading">¶</a></h3>
+<p>Fugaku supports two file systems:</p>
+<ul>
+<li><p>FEFS (Fujitsu Exabyte Filesystem) : Second-layer storage</p>
+<p>It is a file system developed by “K” and consists of disk drives. Suitable for large volumes of data or data to be stored for a long time.</p>
+</li>
+<li><p>LLIO (Lightweight Layered IO-Accelerator) : First-layer storage</p>
+<p>It is a dedicated file system for job execution, aiming for ease of use of hierarchical storage and faster I/O of application files. It is composed of SSDs and offers three types of areas for different purposes.</p>
+</li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default" id="id1">
+<caption><span class="caption-text">LLIO Area</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 18.2%" />
+<col style="width: 18.2%" />
+<col style="width: 63.6%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Area</p></th>
+<th class="head"><p>Namespace</p></th>
+<th class="head"><p>Use</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Cache Area of Second-Layer Storage</p></td>
+<td><p>Second-Layer Storage</p></td>
+<td><p>[Save file]</p>
+<p>There are two types of storage: First-layer storage (LLIO) and Second-layer storage (FEFS). Cache function for FEFS that can be used during job execution.</p>
+<ul class="simple">
+<li><p>When an application issues a READ request for a file, LLIO automatically reads the file data from the second-layer storage (FEFS) to the first-layer storage (LLIO) for caching.</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p>When an application issues a WRITE request, it buffers the first-layer storage and LLIO writes to the second-layer storage (FEFS) asynchronously with application execution.</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Directories and files created during job execution are not deleted after the job ends.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Shared temporary area</p></td>
+<td><p>Intra-job share</p></td>
+<td><p>[Temporary file]</p>
+<p>A temporary area that can be used to share files within a job while the job is running. It is independent of second-layer storage (FEFS).</p>
+<ul class="simple">
+<li><p>It is suitable for storing temporary files that share read and write data among multiple compute nodes on which an application is running. A temporary file system is created when the application is started using first-layer storage (LLIO).</p></li>
+<li><p>After the job ends, the file system is automatically released and any directories and files created during the job are deleted.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>Node temporary area</p></td>
+<td><p>Intra-job share</p></td>
+<td><p>[Temporary file]</p>
+<p>A temporary area closed within one node that can be used during job execution. It is independent of Second-layer Storage (FEFS).</p>
+<ul class="simple">
+<li><p>Creates a temporary file system when the application starts using first-layer storage (LLIO).</p></li>
+<li><p>After the job ends, the file system is automatically released and any directories and files created during the job are deleted.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="about-layered-storage">
+<h3><span class="section-number">2.2.2. </span>About Layered Storage<a class="headerlink" href="#about-layered-storage" title="Permalink to this heading">¶</a></h3>
+<p>Layered storage is a file system that combines first-layer storage (LLIO) for high-speed access and second-layer storage (FEFS) for long-term storage of large amounts of data.
+By processing IO from multiple compute nodes, you can expect fast access to files.</p>
+<p>Reference : <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/perf/Perf-FS.pdf">Performance of File System</a></p>
+<ul class="simple">
+<li><p>Access method</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p>Access from jobs (compute nodes)</p>
+<ul>
+<li><p>Access the second-layer storage through the first-layer storage</p></li>
+<li><p>Access the second-layer storage directly.</p></li>
+</ul>
+</li>
+<li><p>Access from the login node.</p>
+<ul>
+<li><p>Access the second-layer storage directly.</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Notes</p>
+<ul>
+<li><p>Please refer to <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/LayeredStorageAndLLIO/LLIOconsiderpoints.html">Users Guide - Use and job execution</a>.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="layered-storage-decision-flow">
+<h3><span class="section-number">2.2.3. </span>Layered Storage Decision Flow<a class="headerlink" href="#layered-storage-decision-flow" title="Permalink to this heading">¶</a></h3>
+<p>The availability of FEFS/LLIO can be checked using the following flow.</p>
+<figure class="align-default">
+<img alt="../_images/LayerdStorageDecisionFlow_01.png" src="../_images/LayerdStorageDecisionFlow_01.png" />
+</figure>
+<p>The LLIO area might not be available depending on the capacity. Use the FEFS area (/2ndfs).
+For details, refer to <a class="reference internal" href="../CapacitySetting/index.html#firstlayercapacitysetting"><span class="std std-ref">First-Layer Storage Capacity Settings</span></a> .</p>
+</section>
+</section>
+<section id="first-layer-storage">
+<h2><span class="section-number">2.3. </span>First-layer Storage<a class="headerlink" href="#first-layer-storage" title="Permalink to this heading">¶</a></h2>
+<p>First-layer storage provides three types of space as shown.</p>
+<figure class="align-default">
+<img alt="../_images/AboutLLIO_01.png" src="../_images/AboutLLIO_01.png" />
+</figure>
+<div class="line-block">
+<div class="line">First-layer storage includes <a class="reference internal" href="#nodetemporaryarea"><span class="std std-ref">Node temporary area</span></a>, <a class="reference internal" href="#sharedtemporaryarea"><span class="std std-ref">Shared temporary area</span></a>, and <a class="reference internal" href="#cacheofsecondlayerstoragearea"><span class="std std-ref">Cache Area of Second-Layer Storage</span></a>.</div>
+<div class="line">To switch between the three types of areas, the path name used when the file was opened is used.</div>
+</div>
+<section id="about-node-temporary-area">
+<span id="nodetemporaryarea"></span><h3><span class="section-number">2.3.1. </span>About Node Temporary Area<a class="headerlink" href="#about-node-temporary-area" title="Permalink to this heading">¶</a></h3>
+<p>A temporary area enclosed within a compute node that provides fast access to temporary files.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Advantages</p></th>
+<th class="head"><p>Points to consider</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><ul class="simple">
+<li><p>Because meta-processing is distributed across compute nodes, you can expect faster meta-access.</p></li>
+<li><p>Expect faster file access by eliminating the need to export to second-layer storage.</p></li>
+<li><p>Temporary files are automatically deleted without your knowledge.</p></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li><p>The scope of sharing files is limited within the node.</p></li>
+<li><p>File system capacity is limited.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>How to use</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Specify the job parameter “localtmp-size” in the job script.</p></li>
+<li><p>The access path is set to the environment variable “PJM_LOCALTMP”.</p></li>
+</ul>
+</div></blockquote>
+<ul>
+<li><p>Usage examples(1) : Improving Performance of File Access Closed in Nodes.</p>
+<p>After specifying a temporary area in the node in the TMPDIR environment variable, you can expect fast file access for files read or written to this DIR.
+The following is an example script for prog1 that creates an intermediate file in the TMPDIR environment variable.</p>
+<ul class="simple">
+<li><p>Job scripts that do not use node temporary Area.</p></li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#!/bin/bash -x
+#PJM -L &quot;rscunit=rscunit_ft01&quot;
+#PJM -L &quot;node=48&quot;
+#PJM -L &quot;rscgrp=small&quot;
+#PJM -L &quot;elapse=1:00:00&quot;
+#PJM -g groupname
+#PJM --mpi &quot;max-proc-per-node=4&quot;
+#PJM -s
+
+export TMPDIR=${TMPDIR}/temp
+mkdir -p ${TMPDIR}
+mpiexec ./prog1
+rm –rf ${TMPDIR}/* #Delete intermediate files
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Job scripts using node temporary area.</p></li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#!/bin/bash -x
+#PJM -L &quot;rscunit=rscunit_ft01&quot;
+#PJM -L &quot;node=48&quot;
+#PJM -L &quot;rscgrp=small&quot;
+#PJM -L &quot;elapse=1:00:00&quot;
+#PJM -g groupname
+#PJM --mpi &quot;max-proc-per-node=4&quot;
+#PJM --llio localtmp-size=30Gi #  Specifies the amount of Node temporary area
+#PJM --llio perf #  Output of LLIO performance information
+#PJM -s
+
+export TMPDIR=${PJM_LOCALTMP}
+mpiexec ./prog1
+
+#File system disappears after job completion, so no need to delete
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="../_images/NodeTemporary1_01.png" src="../_images/NodeTemporary1_01.png" />
+</figure>
+</li>
+<li><p>Usage examples(2) : Pre-deploy files for faster file access.</p></li>
+</ul>
+<blockquote>
+<div><p>If there are executables or multiple input files, archive them. Transfer the archive file to a node temporary area and extract it before running the job.
+This allows you to expect fast access to these files during job execution.</p>
+<p>The following example expands an archive file into a node temporary area.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#!/bin/bash -x
+#PJM -L &quot;rscunit=rscunit_ft01&quot;
+#PJM -L &quot;node=48&quot;
+#PJM -L &quot;rscgrp=small&quot;
+#PJM -L &quot;elapse=1:00:00&quot;
+#PJM -g groupname
+#PJM --mpi &quot;max-proc-per-node=4&quot;
+#PJM --llio localtmp-size=30Gi # Specifies the amount of Node temporary area
+#PJM --llio perf #  Output of LLIO performance information
+#PJM -s
+
+# Copy archive.tar to second-layer storage cache
+llio_transfer ./archive.tar
+
+#  Extract archive.tar from one process in the node
+mpiexec sh -c &#39;if [ ${PLE_RANK_ON_NODE} -eq 0 ]; then ¥
+                  tar xf ./archive.tar -C $PJM_LOCALTMP; ¥
+               fi
+
+# Delete archive.tar from second-layer storage cache
+llio_transfer --purge ./archive.tar
+
+# Run bin/prog1 in the archive.tar
+mpiexec $PJM_LOCALTMP/bin/prog1
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="about-shared-temporary-area">
+<span id="sharedtemporaryarea"></span><h3><span class="section-number">2.3.2. </span>About Shared Temporary Area<a class="headerlink" href="#about-shared-temporary-area" title="Permalink to this heading">¶</a></h3>
+<p>A closed temporary area within a job that provides fast access to temporary files.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Advantages</p></th>
+<th class="head"><p>Points to consider</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><ul class="simple">
+<li><p>Expect faster file access by eliminating the need to export to second-layer storage.</p></li>
+<li><p>Temporary files are automatically deleted without your knowledge.</p></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li><p>The scope of sharing files is limited within the node.</p></li>
+<li><p>File system capacity is limited.</p></li>
+<li><p>When multiple processes write to the same file, locking is necessary. To perform locking programmatically, refer to Users Guide - Use and job execution <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/LayeredStorageAndLLIO/WriteForFilesystem.html">Users Guide - Use and job execution</a>. The lock processing can be substituted by using MPI-IO.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>How to use</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Specify the job parameter “sharedtmp-size” in the job script.</p></li>
+<li><p>The access path is set to the environment variable “PJM_SHAREDTMP”.</p></li>
+</ul>
+</div></blockquote>
+<ul>
+<li><p>Usage examples: Speed up access to files bound in a job, such as the progress of the job</p>
+<p>By outputting the progress of the calculation to a shared temporary area, you can expect fast access to the file from the program.
+The following example script reads the results of job prog1 and outputs the final calculation results to job prog2.</p>
+<ul class="simple">
+<li><p>Job scripts that do not use shared temporary Area.</p></li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+#PJM -L &quot;rscunit=rscunit_ft01&quot;
+#PJM -L &quot;node=48&quot;
+#PJM -L &quot;rscgrp=small&quot;
+#PJM -L &quot;elapse=1:00:00&quot;
+#PJM -g groupname
+#PJM --mpi &quot;max-proc-per-node=4&quot;
+#PJM -s
+
+### 1. Program prog1 prints out.data in the FEFS area.
+mpiexec ./prog1 -o ./out.data
+
+### 2. Program prog2 reads out.data and
+###    outputs the final result.data.
+mpiexec ./prog2 –i ./out.data -o ./result.data
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Job scripts using shared temporary area.</p></li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+#PJM -L &quot;rscunit=rscunit_ft01&quot;
+#PJM -L &quot;node=48&quot;
+#PJM -L &quot;rscgrp=small&quot;
+#PJM -L &quot;elapse=1:00:00&quot;
+#PJM -g groupname
+#PJM --mpi &quot;max-proc-per-node=4&quot;
+#PJM --llio sharedtmp-size=10Gi # Specifies the amount of Node temporary area
+#PJM -s
+
+### 1.  Program prog1 outputs out.data to shared temporary area.
+mpiexec ./prog1 -o ${PJM_SHAREDTMP}/out.data
+
+### 2. Program prog2 reads out.data and
+###    outputs the final result.data.
+mpiexec ./prog2 –i ${PJM_SHAREDTMP}/out.data -o ${PJM_SHAREDTMP}/result.data
+
+#### 3. Save result.data to the job execution directory before job termination.
+cp –p ${PJM_SHAREDTMP}/result.data ${PJM_JOBDIR}/result.data
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="../_images/SharedTemporary_01.png" src="../_images/SharedTemporary_01.png" />
+</figure>
+</li>
+</ul>
+</section>
+<section id="about-cache-area-of-second-layer-storage">
+<span id="cacheofsecondlayerstoragearea"></span><h3><span class="section-number">2.3.3. </span>About Cache Area of Second-Layer Storage<a class="headerlink" href="#about-cache-area-of-second-layer-storage" title="Permalink to this heading">¶</a></h3>
+<p>You can expect fast access to files by caching data accessed in second-layer storage.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Advantages</p></th>
+<th class="head"><p>Points to consider</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><ul class="simple">
+<li><p>If you access the same file multiple times, you can expect faster access to the file because cached data is used.</p></li>
+<li><p>No script changes are required because it is accessible at the same path as secondlayer storage.</p></li>
+<li><p>Write data is written to second-layer storage asynchronously with job execution.</p></li>
+</ul>
+</td>
+<td><ul class="simple">
+<li><p>When multiple processes write to each file at the same time, cache synchronization takes time.</p></li>
+<li><p>When multiple processes write to the same file, locking is necessary. To perform locking programmatically, refer to Users Guide - Use and job execution <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/LayeredStorageAndLLIO/WriteForFilesystem.html">Users Guide - Use and job execution</a>. The lock processing can be substituted by using MPI-IO.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>How to use</p>
+<ul class="simple">
+<li><p>The access path is the same path as the second-layer storage.</p></li>
+</ul>
+</li>
+<li><p>Usage examples: Faster file access during job execution.</p>
+<p>If you read from the same file multiple times, the cached data is used and you can expect fast access to the file.
+The following is an example script for prog1.</p>
+<ul class="simple">
+<li><p>Job scripts without cache area of second-layer storage.</p></li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+#PJM -L &quot;rscunit=rscunit_ft01&quot;
+#PJM -L &quot;node=48&quot;
+#PJM -L &quot;rscgrp=small&quot;
+#PJM -L &quot;elapse=1:00:00&quot;
+#PJM -g groupname
+#PJM --mpi &quot;max-proc-per-node=4“
+#PJM --llio sio-read-cache=off # Do not use cashe area of second-layer storage
+#PJM -s
+
+### 1. Program prog1 prints out.data in the FEFS area
+mpiexec ./prog1 ./in.data -o ./out.data
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Job scripts that leverage cache area of second-layer storage.</p></li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+#PJM -L &quot;rscunit=rscunit_ft01&quot;
+#PJM -L &quot;node=48&quot;
+#PJM -L &quot;rscgrp=small&quot;
+#PJM -L &quot;elapse=1:00:00&quot;
+#PJM -g groupname
+#PJM --mpi &quot;max-proc-per-node=4“
+#PJM --llio localtmp-size=0Gi # Specifies the amount of node temporary area.
+#PJM --llio sharedtmp-size=0Gi # Specifies the amount of share temporary area.
+### Capacity of cache area of second-layer storage is:
+### 87GiB - (node temporary area + shared temporary area)
+#PJM --llio sio-read-cache=on # Specify use of cache area of second-layer storage
+#PJM -s
+
+### 1.  Program prog1 outputs out.data to cache area of second-layer storage.
+mpiexec ./prog1 ./in.data -o ./out.data
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="about-second-layer-storage">
+<h2><span class="section-number">2.4. </span>About Second-Layer Storage<a class="headerlink" href="#about-second-layer-storage" title="Permalink to this heading">¶</a></h2>
+<p>Second-layer storage is a parallel distributed file system that can store large files.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Advantages</p></th>
+<th class="head"><p>Points to consider</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>You can use FEFS for application work areas and areas under /home.</p></td>
+<td><p>Each user has a limited capacity. If you need more capacity, you need to apply.</p></td>
+</tr>
+</tbody>
+</table>
+<p>How to use</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Second-layer storage is the area that you can log into a login node and access as home and data areas.</div>
+<div class="line-block">
+<div class="line">From the compute node, you can access the file using the same file path as above, but through first-tier storage.</div>
+</div>
+<div class="line">To access second-layer storage from a direct compute node, use the dedicated space/2ndfs. Please check <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/UsageRules/index.html#diskpoints">Users Guide - Use and job execution</a>for details on how to use /2ndfs.</div>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">2. Storage Overview</a><ul>
+<li><a class="reference internal" href="#job-submission-flow">2.1. Job submission flow</a></li>
+<li><a class="reference internal" href="#overview-of-fugaku-storage-configuration">2.2. Overview of Fugaku Storage Configuration</a><ul>
+<li><a class="reference internal" href="#file-system-available-in-fugaku">2.2.1. File system available in Fugaku</a></li>
+<li><a class="reference internal" href="#about-layered-storage">2.2.2. About Layered Storage</a></li>
+<li><a class="reference internal" href="#layered-storage-decision-flow">2.2.3. Layered Storage Decision Flow</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#first-layer-storage">2.3. First-layer Storage</a><ul>
+<li><a class="reference internal" href="#about-node-temporary-area">2.3.1. About Node Temporary Area</a></li>
+<li><a class="reference internal" href="#about-shared-temporary-area">2.3.2. About Shared Temporary Area</a></li>
+<li><a class="reference internal" href="#about-cache-area-of-second-layer-storage">2.3.3. About Cache Area of Second-Layer Storage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#about-second-layer-storage">2.4. About Second-Layer Storage</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../Introduction/index.html"
+                          title="previous chapter"><span class="section-number">1. </span>Introduction</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../CapacitySetting/index.html"
+                          title="next chapter"><span class="section-number">3. </span>Capacity Setting</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../CapacitySetting/index.html" title="3. Capacity Setting"
+             >next</a></li>
+        <li class="right" >
+          <a href="../Introduction/index.html" title="1. Introduction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Programming Guide (IO part)  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>Storage Overview</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,117 @@
+.. This document is created by Akiyoshi KURODA, RIKEN R-CCS on 2021/10/15 as Ver. 0.1.0.
+
+.. _labelname: chainer
+
+Chainer for K on the Fugaku
+==============================================================================
+
+License
+------------------------------------------------------------------------------
+
+The patches and procedures are scheduled to be provided (Upstream) to the OSS, PyTorch will comply with the MIT license. 
+
+
+Installed version (Cf. checkout.sh, site-packages and so on.)
+------------------------------------------------------------------------------
+
+- Chainer ver.4.5.0
+
+  - ChainerMN ver.1.3.1
+
+  - ChainerK ver.1.1.0
+
+- Python ver.3.8.2
+
+  - mpi4py ver.3.0.3
+
+
+Files
+------------------------------------------------------------------------------
+
+.. code-block:: none
+
+  /vol0001/apps/oss/ChainerK-4.5.0/
+    bin: binaries
+    lib: libraries
+      lib/python3.8/site-packages: Chainer and Python modules
+    include: include files
+    build: scripts, patches and so on.
+    example: examples of MNIST and ResNet-50
+
+
+Build
+------------------------------------------------------------------------------
+
+You can refer the directory :file:`build`. Please use it after adjusting the paths :file:`$PATH` and so on, require a timely correction. It takes about one hour to build. 
+
+.. code-block:: none
+
+  ./checkout.sh
+  pjsub go.sh
+
+
+We have adjusted compilation options to build. In order to avoid timeout of Python construction, fwe built with ``-O3`` first. Next, we commented out the place to timeout and overwrote with ``-Kfast``.
+
+
+Execution
+------------------------------------------------------------------------------
+
+This environment can be performed anywhere by setting :file:`$PATH`. Because Python module has a large number of files, MDS access high loads will take the :program:`importlib` time due to MDS access high load. You can use staging by coping common binaries by using :command:`llio_transfer` refering `8.2.4.2. Tips for common file distribution <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/LyeredStorageAndLLIO/TheSecondLayerStrage.html#tips-for-common-file-distribution>`_ of the `Users Guide <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/>`_ .
+You can also uce staging by deploying all files with :command:`tar` and expanding using :command:`llio_transfer`.
+
+You can see some examples of MINT and ResNet-50 under the :file:`example` directory.
+
+The procedure is described in the above reference. Please use it after adjusting the paths. 
+
+.. code-block:: none
+
+  pjsub go.sh
+
+
+Environment variables needed to run when :file:`$PREFIX` is specified as follows.
+
+.. code-block:: none
+
+  TCSDS=1.2.27b                         : set the Fujitsu language environment version
+  export PREFIX=${PWD}/../..            : installed path
+  
+  # System Enironment
+  module switch lang/tcsds-${TCSDS}     : to read latest Fujitsu language environment
+  export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH}
+  export PATH=${PREFIX}/bin:${PATH}     : path of python3
+
+
+Execution results are included in :file:`log`. It is a result of running in 2.2 GHz interactive mode. Example of multi-node are the result of the previous version. 
+
+
+Notes
+------------------------------------------------------------------------------
+
+In order to speed up, tuned libraries developed by R-CCS is incorporated into the framework.
+These components only support the basic calculation of image recognition etc now. Then depending on the network which you want to use, it may not work at high performance. 
+
+Please contact your support desk (R-CCS support desk or HPCI support desk) for questions for performances and requirements of the versions and python modules, and so on, providing your network scripts. Please note that there are several months to support. 
+
+
+History
+------------------------------------------------------------------------------
+
+- September 12, 2020 (Sat) build under the tcsds-1.2.26b and release
+
+- September 20, 2020 (Sun) build under the tcsds-1.2.26b and modify
+
+  - modify the problem maxpooing3d under the -Infinity
+
+  - img2col disable OpenMP on the ChainerK library
+
+- October 27, 2020 (Mon) build under the tcsds-1.2.27b
+
+  - add the examples of largepage
+
+  - add the examples of fapp, fapp, PA
+
+  - modify of the scripts
+
+- October 15, 2021 (Fri) release these documents (Ver.1.0)
+
+- December 07, 2021 (Tue) update these documents (Ver.1.1) addition the usage of llio

@@ -1,0 +1,211 @@
+モジュールパッケージ
+=====================
+
+「富岳」では、モジュールパッケージ（Environment Modules package）を利用することができます。
+
+:file:`modulefile`\ を使用することで、PATH、LD_LIBRARY_PATH などの環境変数を\ :program:`module`\ コマンドを利用して簡単に設定することができます。
+
+
+moduleコマンド
+----------------
+
+主な \ :program:`module`\ コマンドは以下のとおりです。
+
+その他、詳細はオンラインマニュアル（\ :command:`man module`\ ）を参照してください。
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 5 5
+
+   * - コマンド
+     - 説明
+
+   * - module avail
+     - 利用可能な modulefile の一覧表示
+
+   * - module list
+     - ロード済みの modulefile の一覧表示
+
+   * - module load modulefile.
+     - modulefile をロードする
+
+   * - module unload modulefile...
+     - modulefile をアンロードする
+
+   * - module purge
+     - 全ての modulefile をアンロードする
+
+   * - module switch [modulefile1] modulefile2
+     - modulefile を切り換える
+
+
+   * - module whatis [modulefile...]
+     - modulefile の whatis情報を表示する
+
+   * - module show modulefile
+     - modulefile の 設定内容を表示する
+
+   * - module help [modulefile...]
+     - modulefile の help情報を表示する
+
+コマンドの使用例
+-----------------
+
+.. contents::
+   :local:
+
+提供しているmodulefileは時期により異なります。このため使用例の表示内容や指定するmodulefile名は実際と異なる場合があります。
+
+module avail（利用可能な module 一覧表示）
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+提供されている modulefile の一覧を表示します。
+ログインノードで\ :program:`module avail`\ を実行した場合は、次のような形式で表示します。
+
+.. code-block:: console
+  
+   [_LNlogin]$ module avail
+   
+   ------------------------------- /work/Fugaku-environment/modulefiles -------------------------------
+   lang/tcsds-1.2.36  lang/tcsds-1.2.37  lang/tcsds-1.2.38(default)
+
+module list（ロード済みのmodulefile一覧表示）
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ロード済みの modulefile を表示します。この例では、言語のデフォルト環境がロードされていることを示しています。
+
+.. code-block:: console
+
+   [_LNlogin]$ module list
+   Currently Loaded Modulefiles:
+    1) lang/tcsds-1.2.38(default)
+
+module load／unload（modulefileのロードとアンロード実行例）
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+デフォルトの言語環境をロード／アンロードする例を示します。
+
+.. code-block:: console
+   
+   [_LNlogin]$ module list
+   Currently Loaded Modulefiles:
+    1) lang/tcsds-1.2.38(default)
+   [_LNlogin]$ module unload lang
+   [_LNlogin]$ module list
+   No Modulefiles Currently Loaded.
+   [_LNlogin]$ module load lang
+   [_LNlogin]$ module list
+   Currently Loaded Modulefiles:
+   1) lang/tcsds-1.2.38(default)
+
+module purge（全てのmodulefileのアンロード）
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ロードしている全ての modulefile で設定した内容を削除します。modulefile を何もロードしていない初期状態に戻したい場合などに利用すると便利です。
+   
+.. code-block:: console
+   
+   [_LNlogin]$ module list
+   Currently Loaded Modulefiles:
+    1) lang/tcsds-1.2.38(default)
+   [_LNlogin]$ module purge
+   [_LNlogin]$ module list
+   No Modulefiles Currently Loaded.
+
+module switch (modulefile の切替)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+switch は、同じルート名(スラッシュより前が同じ)を持つ modulefile を切り換えます。
+同じルート名を持つ modulefile は、同時に一つしかロードできないため、続けてロードしようとすると conflict のエラーメッセージが表示されロードされません。
+switch は、このような場合に、ロードされている modulefile1 を別の modulefile2 に切り換えることができます。
+
+.. code-block:: console
+   
+   [_LNlogin]$ module list
+   Currently Loaded Modulefiles:
+    1) lang/tcsds-1.2.38(default)
+   [_LNlogin]$ module switch lang/tcsds-1.2.37
+   [_LNlogin]$ module list
+   Currently Loaded Modulefiles:
+     1) lang/tcsds-1.2.37
+
+module whatis（module-whatis情報表示）
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+modulefile の module-whatis の内容を表示します。module-whatis が定義されていない場合は表示されません。
+  
+.. code-block:: console
+
+   [_LNlogin]$ module whatis
+   ------------------------------- /work/Fugaku-environment/modulefiles ------------------------------
+      lang/tcsds-1.2.36: Fujitsu Compiler 4.8.1 (Fortran/C/C++/Tool)
+      lang/tcsds-1.2.37: Fujitsu Compiler 4.9.0 (Fortran/C/C++/Tool)
+      lang/tcsds-1.2.38: Fujitsu Compiler 4.10.0 (Fortran/C/C++/Tool)
+
+
+module show（modulefileの設定内容表示）
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+show は modulefile の設定内容を表示します。
+
+.. code-block:: console
+
+   [_LNlogin]$ module show lang
+   -------------------------------------------------------------------
+   /work/Fugaku-environment/modulefiles/lang/tcsds-1.2.38:
+
+   module-whatis   {Fujitsu Compiler 4.10.0 (Fortran/C/C++/Tool)}
+   conflict        lang
+   setenv          FJSVXTCLANGA /opt/FJSVxtclanga/tcsds-1.2.38
+   prepend-path    PATH /opt/FJSVxtclanga/tcsds-1.2.38/bin
+   prepend-path    LD_LIBRARY_PATH /opt/FJSVxtclanga/tcsds-1.2.38/lib64
+   -------------------------------------------------------------------
+
+
+module help（modulefileのhelp情報表示）
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+modulefile の help の内容を表示します。help が定義されていない場合は表示されません。
+
+.. code-block:: console
+
+   [_LNlogin]$ module help lang
+   -------------------------------------------------------------------
+   Module Specific Help for /work/Fugaku-environment/modulefiles/lang/tcsds-1.2.38:
+
+   ** Changelog **
+    Oct. 6, 2023
+    - New Compiler available
+   -------------------------------------------------------------------
+
+言語環境の切換方法
+-------------------
+
+言語環境を切り換えるには、\ :program:`module`\ コマンドを利用します。
+
+言語環境の設定ファイルは\ |post-k-only|\ を利用するために必要な設定を含んでいます。 |post-k-only|\ を利用する際は、必要な言語環境を設定してください。言語環境の設定、および、切り替えの操作は、\ :program:`module load`\ コマンド、\ :program:`module switch`\ コマンドを利用してください。
+
+[\ :program:`module switch`\ コマンドの使用例]
+
+ .. code-block:: console
+
+    [_LNlogin]$ module list
+    Currently Loaded Modulefiles:
+      1) lang/tcsds-1.2.38(default)
+    [_LNlogin]$ module switch lang/tcsds-1.2.NN
+    [_LNlogin]$ module list
+    Currently Loaded Modulefiles:
+      1) lang/tcsds-1.2.NN
+
+ .. seealso::
+
+    言語環境をloadした状態で、別の言語環境をloadしようとした場合は、次のようなエラーメッセージが表示されます。この場合は、上記のように :program:`module switch`\ を利用する、または、 :program:`module unload`\ を実行後に再度、 :program:`module load`\ を実行して環境を切り換えてください。
+
+    .. code-block:: console
+    
+       [_LNlogin]$ module load lang
+       [_LNlogin]$ module load lang/tcsds-1.2.NN
+       Loading lang/tcsds-1.2.NN
+         ERROR: lang/tcsds-1.2.NN cannot be loaded due to a conflict.
+           HINT: Might try "module unload lang" first.
+

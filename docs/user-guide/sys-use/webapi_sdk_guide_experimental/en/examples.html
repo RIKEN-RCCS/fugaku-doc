@@ -1,0 +1,267 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>5. Examples &#8212; fugaku WebAPI SDK  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="6. fugaku package" href="fugaku.html" />
+    <link rel="prev" title="1. Overview" href="top.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="fugaku.html" title="6. fugaku package"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="top.html" title="1. Overview"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fugaku WebAPI SDK  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5. </span>Examples</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="examples">
+<h1><span class="section-number">5. </span>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h1>
+<p>These examples shows how to use the Fugaku WebAPI with a valid client.</p>
+<section id="get-status-of-all-machines">
+<h2><span class="section-number">5.1. </span>Get status of all machines.<a class="headerlink" href="#get-status-of-all-machines" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_machine_status</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;status_code:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;json:</span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="get-specified-machine-status">
+<h2><span class="section-number">5.2. </span>Get specified machine status.<a class="headerlink" href="#get-specified-machine-status" title="Permalink to this heading">¶</a></h2>
+<p>Parameter’s “machine” is specify the machine name obtained by getting the status of all machines.Normally, specify “computer”.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">machine_name</span> <span class="o">=</span> <span class="s2">&quot;computer&quot;</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_specific_machine_status</span><span class="p">(</span><span class="n">machine_name</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;status_code:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;json:</span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="download-files">
+<h2><span class="section-number">5.3. </span>Download files.<a class="headerlink" href="#download-files" title="Permalink to this heading">¶</a></h2>
+<p>If you want to download large files, use streams.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">_request_config</span><span class="p">[</span><span class="s2">&quot;stream&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">download_filedata</span><span class="p">(</span><span class="n">machine_name</span><span class="p">,</span> <span class="n">full_path</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;status_code:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+    <span class="n">local_file</span> <span class="o">=</span> <span class="s2">&quot;_download_filedata.out&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">local_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">8192</span><span class="p">):</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="download-file-list">
+<h2><span class="section-number">5.4. </span>Download file list.<a class="headerlink" href="#download-file-list" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">download_fileList</span><span class="p">(</span><span class="n">machine_name</span><span class="p">,</span> <span class="n">home_dir</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;status_code:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">file_list</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;file_list:</span><span class="si">{</span><span class="n">file_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="upload-file">
+<h2><span class="section-number">5.5. </span>Upload file.<a class="headerlink" href="#upload-file" title="Permalink to this heading">¶</a></h2>
+<p>This method does not support updating existing files.If you update existing file, use modify_file.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">machine_name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">home_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">local_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">local_file</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;status_code:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="modify-file">
+<h2><span class="section-number">5.6. </span>Modify file.<a class="headerlink" href="#modify-file" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modify_file</span><span class="p">(</span><span class="n">machine_name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">home_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">local_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">local_file</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;status_code:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="get-list-of-running-jobs">
+<h2><span class="section-number">5.7. </span>Get list of running jobs.<a class="headerlink" href="#get-list-of-running-jobs" title="Permalink to this heading">¶</a></h2>
+<p>If you want subjobs, specifyed parameter’s jobid.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_job_status</span><span class="p">(</span><span class="n">machine_name</span><span class="p">,</span> <span class="n">limit</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;status_code:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> json:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_job_status</span><span class="p">(</span><span class="n">machine_name</span><span class="p">,</span> <span class="n">jobid</span><span class="o">=</span><span class="n">jobid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;status_code:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> json:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="get-detailed-job-information">
+<h2><span class="section-number">5.8. </span>Get detailed job information.<a class="headerlink" href="#get-detailed-job-information" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_job_detail</span><span class="p">(</span><span class="n">machine_name</span><span class="p">,</span> <span class="n">jobid</span><span class="o">=</span><span class="n">jobid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;status_code:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> json:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="get-list-of-completed-jobs">
+<h2><span class="section-number">5.9. </span>Get list of completed jobs.<a class="headerlink" href="#get-list-of-completed-jobs" title="Permalink to this heading">¶</a></h2>
+<p>If you want subjobs, specifyed parameter’s jobid.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_job_status_saact</span><span class="p">(</span><span class="n">machine_name</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;status_code:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> json:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_job_status_saact</span><span class="p">(</span><span class="n">machine_name</span><span class="p">,</span> <span class="n">jobid</span><span class="o">=</span><span class="n">jobid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;status_code:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> json:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-job-execution-script">
+<h2><span class="section-number">5.10. </span>Generate job execution script.<a class="headerlink" href="#generate-job-execution-script" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">script</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;APP_DATA&quot;</span><span class="p">:</span>
+             <span class="p">{</span><span class="s2">&quot;ProgramGroupList&quot;</span><span class="p">:</span>
+               <span class="p">{</span><span class="s2">&quot;ProgramGroup&quot;</span><span class="p">:</span> <span class="p">[</span>
+                 <span class="p">{</span><span class="s2">&quot;ProgramList&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;Program&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span><span class="s2">&quot;Type&quot;</span><span class="p">:</span> <span class="s2">&quot;mpi&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;FileName&quot;</span><span class="p">:</span> <span class="s2">&quot;job-script/calc.sh&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;ThreadMode&quot;</span><span class="p">:</span> <span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;Threads&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span>
+                         <span class="p">}</span>
+                    <span class="p">]</span>
+                <span class="p">},</span>
+                    <span class="s2">&quot;GroupType&quot;</span><span class="p">:</span> <span class="s2">&quot;serialgroup&quot;</span>
+                <span class="p">}</span>
+               <span class="p">]</span>
+              <span class="p">}</span>
+            <span class="p">},</span>
+           <span class="s2">&quot;COMMON_DATA&quot;</span><span class="p">:</span> <span class="p">{</span>
+               <span class="s2">&quot;NODE&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;QUEUE&quot;</span><span class="p">:</span> <span class="s2">&quot;1rack-A01&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;QOPT&quot;</span><span class="p">:</span> <span class="s2">&quot; -L </span><span class="se">\&quot;</span><span class="s2">rscunit=rscunit_ft01</span><span class="se">\&quot;</span><span class="s2"> &quot;</span>
+           <span class="p">}</span>
+          <span class="p">}</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">make_Jobscript</span><span class="p">(</span>
+    <span class="n">machine_name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">home_dir</span><span class="si">}</span><span class="s2">/job-script/st-job.sh&quot;</span><span class="p">,</span> <span class="n">script</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;status_code:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> json:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="submit-a-job">
+<h2><span class="section-number">5.11. </span>Submit a job.<a class="headerlink" href="#submit-a-job" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">submit_job</span><span class="p">(</span>
+    <span class="n">machine_name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">home_dir</span><span class="si">}</span><span class="s2">/job-script/st-job.sh&quot;</span><span class="p">)</span>
+<span class="n">jobid</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+    <span class="n">jobid</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;^</span><span class="se">\\</span><span class="s2">[INFO</span><span class="se">\\</span><span class="s2">] PJM </span><span class="se">\\</span><span class="s2">d+ pjsub Job (</span><span class="se">\\</span><span class="s2">d+) submitted.&quot;</span><span class="p">,</span> <span class="n">jobid</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="p">:</span>
+        <span class="n">jobid</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="cancel-a-job">
+<h2><span class="section-number">5.12. </span>Cancel a job.<a class="headerlink" href="#cancel-a-job" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">cancel_job</span><span class="p">(</span><span class="n">machine_name</span><span class="p">,</span> <span class="n">jobid</span><span class="o">=</span><span class="n">jobid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;status_code:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2"> json:</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="execute-a-command">
+<h2><span class="section-number">5.13. </span>Execute a command.<a class="headerlink" href="#execute-a-command" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">exec_command</span><span class="p">(</span><span class="n">machine_name</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;output:</span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5. Examples</a><ul>
+<li><a class="reference internal" href="#get-status-of-all-machines">5.1. Get status of all machines.</a></li>
+<li><a class="reference internal" href="#get-specified-machine-status">5.2. Get specified machine status.</a></li>
+<li><a class="reference internal" href="#download-files">5.3. Download files.</a></li>
+<li><a class="reference internal" href="#download-file-list">5.4. Download file list.</a></li>
+<li><a class="reference internal" href="#upload-file">5.5. Upload file.</a></li>
+<li><a class="reference internal" href="#modify-file">5.6. Modify file.</a></li>
+<li><a class="reference internal" href="#get-list-of-running-jobs">5.7. Get list of running jobs.</a></li>
+<li><a class="reference internal" href="#get-detailed-job-information">5.8. Get detailed job information.</a></li>
+<li><a class="reference internal" href="#get-list-of-completed-jobs">5.9. Get list of completed jobs.</a></li>
+<li><a class="reference internal" href="#generate-job-execution-script">5.10. Generate job execution script.</a></li>
+<li><a class="reference internal" href="#submit-a-job">5.11. Submit a job.</a></li>
+<li><a class="reference internal" href="#cancel-a-job">5.12. Cancel a job.</a></li>
+<li><a class="reference internal" href="#execute-a-command">5.13. Execute a command.</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="top.html"
+                          title="previous chapter"><span class="section-number">1. </span>Overview</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="fugaku.html"
+                          title="next chapter"><span class="section-number">6. </span>fugaku package</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="fugaku.html" title="6. fugaku package"
+             >next</a></li>
+        <li class="right" >
+          <a href="top.html" title="1. Overview"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">fugaku WebAPI SDK  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5. </span>Examples</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN R-CCS.
+    </div>
+  </body>
+</html>

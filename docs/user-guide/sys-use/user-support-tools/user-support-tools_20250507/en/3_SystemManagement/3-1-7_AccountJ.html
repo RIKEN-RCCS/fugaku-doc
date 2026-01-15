@@ -1,0 +1,685 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>3.1.7. User payment information displaying (job) &#8212; User support tools User&#39;s Guide (for User)  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.1.8. User payment information displaying (disk)" href="3-1-8_AccountD.html" />
+    <link rel="prev" title="3.1.6. Job execution result search" href="3-1-6_Pjstata.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-8_AccountD.html" title="3.1.8. User payment information displaying (disk)"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="3-1-6_Pjstata.html" title="3.1.6. Job execution result search"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" accesskey="U"><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.7. </span>User payment information displaying (job)</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="user-payment-information-displaying-job">
+<h1><span class="section-number">3.1.7. </span>User payment information displaying (job)<a class="headerlink" href="#user-payment-information-displaying-job" title="Permalink to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[Name]</strong></div>
+<div class="line">　accountj - Display the user user payment information for job</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Style]</strong></div>
+<div class="line">　accountj  -t theme name  [-r the type of information display]  [-s]  [-h]  [-b generation number]  [-c]</div>
+<div class="line">　accountj  [-r the type of information display]  [-s]  [-h]  [-g group name]  [-E[-u user name]] [-c]</div>
+<div class="line">　accountj  -g group name  [-r the type of information display]  [-s]  [-h]  [-E[-u user name]]  [-b generation number]  [-c]</div>
+<div class="line">　※Combination specification of -g and -u is AND search.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Description]</strong></div>
+<div class="line">　accountj command displays charging information related to the used job. Charging information is displayed for each group to which it belongs.</div>
+<div class="line">　The node time product (number of nodes × execution elapsed time × charging unit price coefficient) and power consumption are managed in the charging information about the job.</div>
+<div class="line">　Power consumption is based on the ACCT_ECON value of the pjstata command.</div>
+<div class="line">　Since the usage rate of the resource allocated to the assignment can be confirmed, it can be used to determine whether or not a job can be submitted.</div>
+<div class="line">　To display charging information in detail for each resource by designating the type of the resource to be displayed.</div>
+</div>
+<div class="line-block">
+<div class="line">　For the theme / sub-theme / group unit, in addition to the usage rate from the allocated resource amount for each fiscal year, if resources are allocated every six months, the usage status for each half year can also be confirmed.</div>
+</div>
+<div class="line-block">
+<div class="line">　Users and project managers can display job accounting information of members belonging to the group.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Option]</strong></div>
+<div class="line">　-t  theme name</div>
+<div class="line">　Specify theme name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.</div>
+</div>
+<div class="line-block">
+<div class="line">　-g  group name</div>
+<div class="line">　Specify group name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.</div>
+<div class="line">　When not specified, job accounting information for all groups to which the user belongs is displayed.</div>
+</div>
+<div class="line-block">
+<div class="line">　-E</div>
+<div class="line">　Change the information display range to all layers (only the group route).</div>
+<div class="line">　　　-u  user name</div>
+<div class="line">　　　Specify user name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.</div>
+<div class="line">　　　This option is enabled when the -E option is specified.</div>
+</div>
+<div class="line-block">
+<div class="line">　-r the type of information display</div>
+<div class="line">　Select the type of information display from the following. If the -r option is omitted, all resources are displayed.</div>
+<div class="line">　1|n|N:Display node time product</div>
+<div class="line">　2|e|E:Display power</div>
+</div>
+<div class="line-block">
+<div class="line">　-s</div>
+<div class="line">　The display unit of the node time product is changed from the default megasecond [Ms] to second [s].</div>
+<div class="line">　The power consumption display unit changes from the default megawatt hour [MWh] to the watt hour [Wh].</div>
+</div>
+<div class="line-block">
+<div class="line">　-h</div>
+<div class="line">　The display unit of the node time product is changed from the default megasecond [Ms] to time [h].</div>
+<div class="line">　Valid only when node time product is specified for the resource type.</div>
+</div>
+<div class="line-block">
+<div class="line">　-c</div>
+<div class="line">　Standard output the search result as CSV format.</div>
+<div class="line">　If this option is specified, the display unit for the node time product is seconds [s] and the display unit for the power is watt hour [Wh].</div>
+</div>
+<div class="line-block">
+<div class="line">　-b  generation number</div>
+<div class="line">　Can be specified only when the -g option is specified. Specifies the number of past generations to be displayed. If this option is not specified, the latest information is displayed.</div>
+<div class="line">　Permission to display information is subject to the permission at the time of command execution.</div>
+</div>
+<div class="line-block">
+<div class="line">　--help</div>
+<div class="line">　Display command help contents.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Return value]</strong></div>
+<div class="line">　Normal: 0</div>
+<div class="line">　Abnormal: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Note]</strong></div>
+<div class="line">　None.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Display contents]</strong></div>
+<div class="line">　Charging information is displayed for each management unit such as theme, subtheme, group, etc.</div>
+<div class="line">　A separator line indicates what administrative unit is displayed below it.</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/3_SystemManagement_18.png" src="../_images/3_SystemManagement_18.png" />
+</figure>
+<div class="line-block">
+<div class="line">　Items for each management unit are as follows.</div>
+<div class="line">　THEME：View the assigned resources and resource consumption for a theme</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 28.6%" />
+<col style="width: 71.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>THEME</p></td>
+<td><p>Theme Name</p></td>
+</tr>
+<tr class="row-odd"><td><p>LIMIT</p></td>
+<td><p>Amount of allocated resources</p></td>
+</tr>
+<tr class="row-even"><td><p>USAGE</p></td>
+<td><p>Amount of used resources</p></td>
+</tr>
+<tr class="row-odd"><td><p>RUNNING</p></td>
+<td><p>Amount of resources submited and execution</p></td>
+</tr>
+<tr class="row-even"><td><p>AVAILABLE</p></td>
+<td><p>Amount of available resources</p></td>
+</tr>
+<tr class="row-odd"><td><p>USAGE_RATE</p></td>
+<td><p>Percentage of used resources(USAGE / LIMIT)</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">　THEME_PERIOD：Displays the amount of resources allocated and consumption of each theme period</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 28.6%" />
+<col style="width: 71.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PERIOD</p></td>
+<td><p>Indicates the period in which resources are managed for each period</p></td>
+</tr>
+<tr class="row-odd"><td><p>LIMIT</p></td>
+<td><p>Amount of resources allocated per period</p></td>
+</tr>
+<tr class="row-even"><td><p>USAGE</p></td>
+<td><p>Value used within the amount of resources allocated per period out of the amount of resources used per period</p></td>
+</tr>
+<tr class="row-odd"><td><p>ADVANCE</p></td>
+<td><p>The amount of used resources used in excess of the allocated resources for each period</p></td>
+</tr>
+<tr class="row-even"><td><p>AVAILABLE</p></td>
+<td><div class="line-block">
+<div class="line">Past period: The amount of resources that became unconsumable out of the allocated resources for each period</div>
+<div class="line">Current and future periods: The amount of available resources within the assigned resources per period</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>USAGE_TOTAL</p></td>
+<td><p>Amount of used resources by period</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">　SUBTHEME：View the assigned resources and resource consumption for a subtheme</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 28.6%" />
+<col style="width: 71.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SUBTHEME</p></td>
+<td><p>Subtheme Name</p></td>
+</tr>
+<tr class="row-odd"><td><p>PARENT</p></td>
+<td><p>Upper layer name</p></td>
+</tr>
+<tr class="row-even"><td><p>LIMIT</p></td>
+<td><p>Amount of allocated resources</p></td>
+</tr>
+<tr class="row-odd"><td><p>USAGE</p></td>
+<td><p>Amount of used resources</p></td>
+</tr>
+<tr class="row-even"><td><p>RUNNING</p></td>
+<td><p>Amount of resources submited and execution</p></td>
+</tr>
+<tr class="row-odd"><td><p>AVAILABLE</p></td>
+<td><p>Amount of available resources</p></td>
+</tr>
+<tr class="row-even"><td><p>USAGE_RATE</p></td>
+<td><p>Percentage of used resources(USAGE / LIMIT)</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">　SUBTHEME_PERIOD：Displays the amount of resources allocated and consumption of each subtheme period</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 28.6%" />
+<col style="width: 71.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PERIOD</p></td>
+<td><p>Indicates the period in which resources are managed for each period</p></td>
+</tr>
+<tr class="row-odd"><td><p>LIMIT</p></td>
+<td><p>Amount of resources allocated per period</p></td>
+</tr>
+<tr class="row-even"><td><p>USAGE</p></td>
+<td><p>Value used within the amount of resources allocated per period out of the amount of resources used per period</p></td>
+</tr>
+<tr class="row-odd"><td><p>ADVANCE</p></td>
+<td><p>The amount of used resources used in excess of the allocated resources for each period</p></td>
+</tr>
+<tr class="row-even"><td><p>AVAILABLE</p></td>
+<td><div class="line-block">
+<div class="line">Past period: The amount of resources that became unconsumable out of the allocated resources for each period</div>
+<div class="line">Current and future periods: The amount of available resources within the assigned resources per period</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>USAGE_TOTAL</p></td>
+<td><p>Amount of used resources by period</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">　GROUP：View the assigned resources and resource consumption for a group</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 28.6%" />
+<col style="width: 71.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GROUP</p></td>
+<td><p>Group Name</p></td>
+</tr>
+<tr class="row-odd"><td><p>PARENT</p></td>
+<td><p>Upper layer name</p></td>
+</tr>
+<tr class="row-even"><td><p>LIMIT</p></td>
+<td><p>Amount of allocated resources</p></td>
+</tr>
+<tr class="row-odd"><td><p>USAGE</p></td>
+<td><p>Amount of used resources</p></td>
+</tr>
+<tr class="row-even"><td><p>RUNNING</p></td>
+<td><p>Amount of resources submited and execution</p></td>
+</tr>
+<tr class="row-odd"><td><p>AVAILABLE</p></td>
+<td><p>Amount of available resources</p></td>
+</tr>
+<tr class="row-even"><td><p>USAGE_RATE</p></td>
+<td><p>Percentage of used resources(USAGE / LIMIT)</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">　RESOURCE_GROUP：View resource consumption by resource group</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 28.6%" />
+<col style="width: 71.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RESOURCE_GROUP</p></td>
+<td><p>Resource group name</p></td>
+</tr>
+<tr class="row-odd"><td><p>LIMIT</p></td>
+<td><p>Amount of allocated resources</p></td>
+</tr>
+<tr class="row-even"><td><p>USAGE</p></td>
+<td><p>Amount of used resources</p></td>
+</tr>
+<tr class="row-odd"><td><p>RUNNING</p></td>
+<td><p>Amount of resources submited and execution</p></td>
+</tr>
+<tr class="row-even"><td><p>AVAILABLE</p></td>
+<td><p>Amount of available resources</p></td>
+</tr>
+<tr class="row-odd"><td><p>USAGE_RATE</p></td>
+<td><p>Percentage of used resources(USAGE / LIMIT)</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">　USER：View resource consumption by user</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 28.6%" />
+<col style="width: 71.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>USER</p></td>
+<td><p>User Name</p></td>
+</tr>
+<tr class="row-odd"><td><p>LIMIT</p></td>
+<td><p>Amount of allocated resources</p></td>
+</tr>
+<tr class="row-even"><td><p>USAGE</p></td>
+<td><p>Amount of used resources</p></td>
+</tr>
+<tr class="row-odd"><td><p>RUNNING</p></td>
+<td><p>Amount of resources submited and execution</p></td>
+</tr>
+<tr class="row-even"><td><p>AVAILABLE</p></td>
+<td><p>Amount of available resources</p></td>
+</tr>
+<tr class="row-odd"><td><p>USAGE_RATE</p></td>
+<td><p>Percentage of used resources(USAGE / LIMIT)</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">　USER_RESOURCEGROUP：View resource consumption by user and resource group</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 28.6%" />
+<col style="width: 71.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>USER_RESOURCEGROUP</p></td>
+<td><p>User Name + Resource Group Name</p></td>
+</tr>
+<tr class="row-odd"><td><p>LIMIT</p></td>
+<td><p>Amount of allocated resources</p></td>
+</tr>
+<tr class="row-even"><td><p>USAGE</p></td>
+<td><p>Amount of used resources</p></td>
+</tr>
+<tr class="row-odd"><td><p>RUNNING</p></td>
+<td><p>Amount of resources submited and execution</p></td>
+</tr>
+<tr class="row-even"><td><p>AVAILABLE</p></td>
+<td><p>Amount of available resources</p></td>
+</tr>
+<tr class="row-odd"><td><p>USAGE_RATE</p></td>
+<td><p>Percentage of used resources(USAGE / LIMIT)</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">　<strong>[Use example]</strong></div>
+<div class="line">　【Example 1】  Display the accounting information that the group they are belonging to</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountj
+<span class="go">COLLECTDATE : 2021-03-09 10:30:00   unit[Ms,MWh]</span>
+<span class="go">*-----[ SUBTHEME ]---------------------------------------------------------------------*</span>
+<span class="go">SUBTHEME                 PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">group001                Y20HP00          2,000             0         2,000             0</span>
+<span class="go">*-----[ SUBTHEME_PERIOD ]--------------------------------------------------------------*</span>
+<span class="go">                         PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">group001                      1          1,000             0         1,000             0</span>
+<span class="go">group001                      2          1,000             0         1,000             0</span>
+<span class="go">*-----[ GROUP ]------------------------------------------------------------------------*</span>
+<span class="go">GROUP                    PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">group001               group001      unlimited             0     unlimited             0</span>
+
+<span class="go">*-----[ SUBTHEME ]---------------------------------------------------------------------*</span>
+<span class="go">SUBTHEME                 PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">group002                Y20HP01          1,000             0         1,000             0</span>
+<span class="go">*-----[ SUBTHEME_PERIOD ]--------------------------------------------------------------*</span>
+<span class="go">                         PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">group002                      1            500             0           500             0</span>
+<span class="go">group002                      2            500             0           500             0</span>
+<span class="go">*-----[ GROUP ]------------------------------------------------------------------------*</span>
+<span class="go">GROUP                    PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">group002               group002      unlimited             0     unlimited             0</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　The resource allocation information of all groups to which the executing user belongs and the upper sub-theme layer is displayed. An upper limit value and a consumption state are displayed for each resource of the node time product (N) and the power (E).</div>
+<div class="line">　The resource limits available for the assignment are set in the subtheme layer, so 【SUBTHEME】 displays the resource limits and consumption status.</div>
+<div class="line">　If resources are allocated for each period, the upper limit value and consumption status for each period are displayed in 【SUBTHEME _ PERIOD】.</div>
+</div>
+<div class="line-block">
+<div class="line">　【Example 2】  Display the power accounting information for the group to which you belong</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountj<span class="w"> </span>-g<span class="w"> </span>group001<span class="w"> </span>-r<span class="w"> </span><span class="m">2</span>
+<span class="go">COLLECTDATE : 2021-03-09 10:30:00   unit[MWh]</span>
+<span class="go">*-----[ SUBTHEME ]--------------------------------------------------------------------------------------------------*</span>
+<span class="go">SUBTHEME              PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE</span>
+<span class="go">group001             Y20HP00            1,000                 0                 0             1,000            0.000%</span>
+<span class="go">*-----[ SUBTHEME_PERIOD ]-------------------------------------------------------------------------------------------*</span>
+<span class="go">                        PERIOD          LIMIT             USAGE           ADVANCE         AVAILABLE       USAGE_TOTAL</span>
+<span class="go">group001                     1            500                 0                 0               500                 0</span>
+<span class="go">group001                     2            500                 0               ---               500                 0</span>
+<span class="go">*-----[ GROUP ]-----------------------------------------------------------------------------------------------------*</span>
+<span class="go">GROUP                 PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE</span>
+<span class="go">group001            group001        unlimited                 0                 0               ---               ---</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　Displays power billing information for the specified group.</div>
+</div>
+<div class="line-block">
+<div class="line">　【Example 3】  Display the job accounting information of pre-generation</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountj<span class="w"> </span>-g<span class="w"> </span>group001<span class="w"> </span>-b<span class="w"> </span><span class="m">1</span>
+</pre></div>
+</div>
+<p>　As using -b option, the past generation job accounting information can be displayed. If this option is not specified, accounting for the latest billing information is displayed.</p>
+<div class="line-block">
+<div class="line">　【Example 4】  Display units in default mega seconds [Ms] and megawatt hours [MWh]</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/3_SystemManagement_11.png" src="../_images/3_SystemManagement_11.png" />
+</figure>
+<div class="line-block">
+<div class="line">　If the limit value (LIMIT), usage amount (USAGE), submitting job usage planned amount (RUNNING), and usable amount (AVAILABLE) values are all displayed as “0 (zero)”, try changing the display unit. This case may be caused by the fact that it is less than megasecond [Ms] or megawatt hours [MWh].</div>
+</div>
+<div class="line-block">
+<div class="line">　【Example 5】  Change the display units from Mega seconds [Ms] to Node seconds [MWh] to Watt hours [Wh]</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/3_SystemManagement_12.png" src="../_images/3_SystemManagement_12.png" />
+</figure>
+<div class="line-block">
+<div class="line">　You can use the -s option to change the display units to Node Second or Watt Hour Wh. Unit switching is calculated as 1K (1,000). The fraction due to unit switching is displayed with the limit value (LIMIT) rounded down and the usage (USAGE) rounded up. The remaining usable amount (AVAILABLE) is a value obtained by subtracting the usage amount (USAGE) and the submitting job usage planned amount (RUNNING) from the limit value (LIMIT).</div>
+<div class="line">　The submitting job usage planned amount (RUNNING) includes executing job and resource amount of waiting to execute job.</div>
+<div class="line">　The usage rate (USAGE_RATE) is rounded off to the second decimal place.</div>
+</div>
+<div class="line-block">
+<div class="line">　【Example 6】  Change the display unit from the default megasecond [Ms] to hour [h] and display</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/3_SystemManagement_13.png" src="../_images/3_SystemManagement_13.png" />
+</figure>
+<div class="line-block">
+<div class="line">　By using the -h option, the display unit of the node time product can be changed from the default megasecond [Ms] to time [h]. The fraction due to unit switching is displayed with the limit value (LIMIT) rounded down and the usage (USAGE) rounded up. The remaining usable amount (AVAILABLE) is a value obtained by subtracting the usage amount (USAGE) and the submitting job usage planned amount (RUNNING) from the limit value (LIMIT).</div>
+<div class="line">　The submitting job usage planned amount (RUNNING) includes executing job and resource amount of waiting to execute job.</div>
+<div class="line">　The usage rate (USAGE_RATE) is rounded off to the second decimal place.</div>
+</div>
+<div class="line-block">
+<div class="line">　【Example 7】  Display the information display range to all layers  (only the group route).</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountj<span class="w"> </span>-E
+<span class="go">COLLECTDATE : 2023-08-25 16:35:44   unit[Ms,MWh]</span>
+<span class="go">*-----[ THEME ]--------------------------------------------------------------------------*</span>
+<span class="go">THEME                                   LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">Y23FM00                           10,000,000,000            40     1,000,000             1</span>
+<span class="go">[20230401-20240331]</span>
+<span class="go">*-----[ THEME_PERIOD ]-------------------------------------------------------------------*</span>
+<span class="go">                          PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">20230401-20230930               1  5,000,000,000            40       500,000             1</span>
+<span class="go">20231001-20240331               2  5,000,000,000             0       500,000             0</span>
+<span class="go">*-----[ SUBTHEME ]-----------------------------------------------------------------------*</span>
+<span class="go">SUBTHEME                   PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">group001                  Y23FM00          2,231            40        10,000             1</span>
+<span class="go">*-----[ SUBTHEME_PERIOD ]----------------------------------------------------------------*</span>
+<span class="go">                          PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">group001                       1          1,115            40         5,000             1</span>
+<span class="go">group001                       2          1,115             0         5,000             0</span>
+<span class="go">*-----[ GROUP ]--------------------------------------------------------------------------*</span>
+<span class="go">GROUP                      PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">group001                 group001      unlimited            40     unlimited             1</span>
+<span class="go">*-----[ RESOURCE_GROUP ]-----------------------------------------------------------------*</span>
+<span class="go">RESOURCE_GROUP                          LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">small                                  unlimited             0     unlimited             0</span>
+<span class="go">int                                    unlimited             0     unlimited             0</span>
+<span class="go">large                                  unlimited            10     unlimited             0</span>
+<span class="go">pt-Aug                                         0             0     unlimited             0</span>
+<span class="go">pt-Feb                                         0             0     unlimited             0</span>
+<span class="go">*-----[ USER ]---------------------------------------------------------------------------*</span>
+<span class="go">USER                                    LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">user1                                  unlimited             0     unlimited             0</span>
+<span class="go">user2                                  unlimited             0     unlimited             0</span>
+<span class="go">user3                                  unlimited             0     unlimited             0</span>
+<span class="go">*-----[ USER_RESOURCEGROUP ]-------------------------------------------------------------*</span>
+<span class="go">USER                                    LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">user1_int                              unlimited             0     unlimited             0</span>
+<span class="go">user1_large                            unlimited             0     unlimited             0</span>
+<span class="go">user1_small                            unlimited             0     unlimited             0</span>
+<span class="go">user2_int                              unlimited             0     unlimited             0</span>
+<span class="go">user2_large                            unlimited             0     unlimited             0</span>
+<span class="go">user2_small                            unlimited             0     unlimited             0</span>
+<span class="go">user3_int                              unlimited             0     unlimited             0</span>
+<span class="go">user3_large                            unlimited             0     unlimited             0</span>
+<span class="go">user3_small                            unlimited             0     unlimited             0</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　You can use the -E option to display the information display range to all layers. You can also check the usage status of each resource group.</div>
+</div>
+<div class="line-block">
+<div class="line">　【Example 8】  Display job billing information for a specified user</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountj<span class="w"> </span>-E<span class="w"> </span>-u<span class="w"> </span>user1
+<span class="go">COLLECTDATE : 2023-08-25 16:35:44   unit[Ms,MWh]</span>
+<span class="go">*-----[ THEME ]--------------------------------------------------------------------------*</span>
+<span class="go">THEME                                   LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">Y23FM00                           10,000,000,000            40     1,000,000             1</span>
+<span class="go">[20230401-20240331]</span>
+<span class="go">*-----[ THEME_PERIOD ]-------------------------------------------------------------------*</span>
+<span class="go">                          PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">20230401-20230930               1  5,000,000,000            40       500,000             1</span>
+<span class="go">20231001-20240331               2  5,000,000,000             0       500,000             0</span>
+<span class="go">*-----[ SUBTHEME ]-----------------------------------------------------------------------*</span>
+<span class="go">SUBTHEME                   PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">group001                  Y23FM00          2,231            40        10,000             1</span>
+<span class="go">*-----[ SUBTHEME_PERIOD ]----------------------------------------------------------------*</span>
+<span class="go">                          PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">group001                       1          1,115            40         5,000             1</span>
+<span class="go">group001                       2          1,115             0         5,000             0</span>
+<span class="go">*-----[ GROUP ]--------------------------------------------------------------------------*</span>
+<span class="go">GROUP                      PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">group001                 group001      unlimited            40     unlimited             1</span>
+<span class="go">*-----[ RESOURCE_GROUP ]-----------------------------------------------------------------*</span>
+<span class="go">RESOURCE_GROUP                          LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">small                                  unlimited             0     unlimited             0</span>
+<span class="go">int                                    unlimited             0     unlimited             0</span>
+<span class="go">large                                  unlimited            10     unlimited             0</span>
+<span class="go">pt-Aug                                         0             0     unlimited             0</span>
+<span class="go">pt-Feb                                         0             0     unlimited             0</span>
+<span class="go">*-----[ USER ]---------------------------------------------------------------------------*</span>
+<span class="go">USER                                    LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">user1                                  unlimited             0     unlimited             0</span>
+<span class="go">*-----[ USER_RESOURCEGROUP ]-------------------------------------------------------------*</span>
+<span class="go">USER                                    LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)</span>
+<span class="go">user1_int                              unlimited             0     unlimited             0</span>
+<span class="go">user1_large                            unlimited             0     unlimited             0</span>
+<span class="go">user1_small                            unlimited             0     unlimited             0</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　Job accounting information of a designated user is displayed for every group to which the user belongs.</div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="3-1-6_Pjstata.html"
+                          title="previous chapter"><span class="section-number">3.1.6. </span>Job execution result search</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="3-1-8_AccountD.html"
+                          title="next chapter"><span class="section-number">3.1.8. </span>User payment information displaying (disk)</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-8_AccountD.html" title="3.1.8. User payment information displaying (disk)"
+             >next</a></li>
+        <li class="right" >
+          <a href="3-1-6_Pjstata.html" title="3.1.6. Job execution result search"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" ><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.7. </span>User payment information displaying (job)</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Potal Top</a>
+    </div>
+  </body>
+</html>

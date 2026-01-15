@@ -1,0 +1,171 @@
+Dynamic process creation (MPI_COMM_SPAWN)
+=========================================
+
+Dynamic process creation on the Fugaku, MPI_COMM_SPAWN routine or MPI_COMM_SPAWN_MULTIPLE routine is available.
+
+
+How to execute a job
+--------------------
+
+To execute a program that generates a dynamic process, it is necessary to specify the number of static processes (processes started when a job is submitted) and the number of dynamic processes (processes started by spawn) in the job script.
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 2 5
+   
+   * - Option
+     - Overview
+
+   * - #PJM -L "node=N"
+     - Specify the number of nodes. Specify the total number of nodes of "static processes + dynamic processes" required for execution.
+
+   * - #PJM --mpi "shape=N"
+     - Specify the shape of a static process. The shape (1 dimention, 2 dimentions, 3 dimentions) matches the shape specified by node.
+
+   * - #PJM --mpi "proc=N"
+     - Specify the number of static process.
+
+Indicates the specification example of job script as below. Please also refer to " :ref:`pjsubOptions(MPI-related)MPI`\ ".
+
+-  The case of 1 dimentional shape, number of static process 1, number of dynamic process 7
+
+ .. code-block:: bash
+
+  #!/bin/bash -x
+  #
+  #PJM -L "elapse=01:00:00"
+  #PJM -L "rscgrp=small"
+  #PJM -L "node=8"
+  #PJM --mpi "shape=1"
+  #PJM --mpi "proc=1"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -s
+  #
+  
+  export PARALLEL=8
+  export OMP_NUM_THREADS=$PARALLEL
+  
+  mpiexec -n 1 ./parent.exe
+
+
+-  The case of 2 dimentional shape, number of static process 4, number of dynamic process 8
+
+ .. code-block:: bash
+
+  #!/bin/bash -x
+  #
+  #PJM -L "elapse=01:00:00"
+  #PJM -L "rscgrp=small"
+  #PJM -L "node=4x3"
+  #PJM --mpi "shape=2x2"
+  #PJM --mpi "proc=4"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -s
+  #
+  
+  export PARALLEL=8
+  export OMP_NUM_THREADS=$PARALLEL
+  
+  mpiexec -n 4 ./parent.exe
+
+
+-  The case of 1 dimentional shape, number of static process 8, number of dynamic process 8, flat MPI (1 node 8 process)
+
+ .. code-block:: bash
+
+  #!/bin/bash -x
+  #
+  #PJM -L "elapse=01:00:00"
+  #PJM -L "rscgrp=small"
+  #PJM -L "node=2"
+  #PJM --mpi "shape=1"
+  #PJM --mpi "proc=8"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -s
+  #
+  
+  mpiexec -n 8 ./parent.exe
+
+
+The execution from Java program
+-------------------------------
+
+When calling MPI_COMM_SPAWN routine and MPI_COMM_SPAWN_MULTIPLE routine in Java program, the class path where the Java class file to be started exists is required to set with environment variable  \ ``CLASSPATH``\, rather than  \ ``-classpath``\  option.
+The following shows a specification example and a program example when executing from a Java program.
+
+-  Specification example of execution
+
+ .. code-block:: bash
+
+  CLASSPATH=/home/user1/bin:$CLASSPATH
+  export CLASSPATH
+  PATH=/Product intalling path/bin:$PATH
+  export PATH
+  LD_LIBRARY_PATH=/Product intalling path/lib64:$LD_LIBRARY_PATH
+  export LD_LIBRARY_PATH
+  
+  mpiexec -n 2 java Spawn
+
+
+
+- Example of Java program
+
+ .. code-block:: java
+
+  import mpi.*;
+
+  public class Spawn {
+    private final static String CMD_ARGV1 = "THIS IS ARGV 1"; /* Arguments to pass to child process 1 */
+    private final static String CMD_ARGV2 = "THIS IS ARGV 2"; /* Arguments to pass to child process 2 */
+    private final static String CMD = "Spawn"; /* Class file name of the target of Spawn */
+
+    public static void main(String args[]) throws MPIException {
+      MPI.Init(args);
+      System.out.println("Start");
+      
+      String spawn_argv[] = {
+        CMD,
+        CMD_ARGV1,
+        CMD_ARGV2
+      };
+      
+      int count = 1;
+      int errcode[] = new int[1];
+      
+      Intercomm parent;
+      parent = Intercomm.getParent();
+      
+      if (!parent.isNull()) {
+        /* Child process processing */
+        System.out.println("I am a child");
+      }else{
+        /* Parent process processing : Spawn itself */
+        MPI.COMM_WORLD.spawn("java", spawn_argv, count, MPI.INFO_NULL, 0, errcode);
+        System.out.println("I am a parent");
+      }
+      
+      System.out.println("End");
+      MPI.Finalize();
+    }
+  }
+
+
+Notes
+-----
+
+To use dynamic process creation function, please aware of these points.
+
+-  The target of dynamic process creation is MPI program only. If execute other than MPI program, it will be terminated abnormally.
+-  Cannot use " \ :ref:`RankInquiryFunctionsMPI`\ " for dynamic process creation.
+-  The total number of calls to the MPI_COMM_SPAWN routine or MPI_COMM_SPAWN_MULTIPLE routine is up to 4294967295. If it exceeds 4294967295 times, an error message is output and the job ends.
+-  If a static process is set to flat MPI, the dynamic process part is also assigned a process as flat MPI. Static processes cannot be flat MPI and dynamic processes cannot be hybrid parallel.
+-  The process created when the MPI program starts and the process created dynamically do not share a node with each other.
+-  In flat MPI, dynamically created processes inherit the process shape of static processes. For details, refer to "Specifying the number of processes to create "Job Operation Software End-user's Guide".
+-  If the same process repeatedly executes dynamic process generation, the generated process generation information and communicator information are accumulated in the memory, which may cause memory shortage.
+
+
+
+

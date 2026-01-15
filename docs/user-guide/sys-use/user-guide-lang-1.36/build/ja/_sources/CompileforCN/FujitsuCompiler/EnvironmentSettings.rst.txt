@@ -1,0 +1,61 @@
+.. _EnvironmentSettings:
+
+コンパイル環境設定
+======================
+
+Fortran／C／C++コンパイラを利用するには、環境変数 PATH、LD_LIBRARY_PATH に、利用するバージョンに対応したパスの設定が必要になります。
+
+\ |post-k|\ では、ログイン時にデフォルトの言語環境（標準環境）が設定されるため、ログイン後の環境変数の設定は不要です。
+
+ただし、各バージョンに対応した環境を設定することも可能です。以下の表に、各バージョンに対応したモジュールファイル名を示します。
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 3,9
+
+
+  * - バージョンレベル
+    - モジュールファイル名
+
+  * - 4.12.1 tcsds-1.2.42
+    - lang/tcsds-1.2.42 (default)
+
+  * - 4.12.0 tcsds-1.2.41
+    - lang/tcsds-1.2.41
+
+  * - 4.11.2 tcsds-1.2.40
+    - lang/tcsds-1.2.40
+
+デフォルトのモジュールファイルは、\ :command:`module avail`\ コマンドを実行して表示される一覧の\ ``(default)``\ の表記で確認することができます。
+
+.. code-block:: console
+
+  $ module avail
+  
+  ------------------------------- /work/Fugaku-environment/modulefiles -------------------------------
+  lang/tcsds-1.2.40   lang/tcsds-1.2.41   lang/tcsds-1.2.42(default)
+
+
+- 環境設定ファイル使用例
+
+ 以下は、バージョンレベル 4.12.0 tcsds-1.2.41 の環境を使用する場合の例です。
+
+ .. code-block:: console
+
+   [_LNlogin]$ module switch lang/tcsds-1.2.41
+   [_LNlogin]$ module list
+   Currently Loaded Modulefiles:
+     1) lang/tcsds-1.2.41
+
+ :command:`module load`\ コマンドで環境設定ファイルを読み込むことにより環境が定義されます。
+
+ .. Attention::
+
+    バージョンレベルの異なるモジュールファイルを既にロードしている場合は、ロード実行時にエラーとなります。
+    
+    上記の例のように\ :command:`module switch`\ コマンドを利用するか、
+    次のように\ :command:`module unload`\ コマンドを使用して設定を解除してから実施してください。
+
+     | [_LNlogin]$ module unload lang/tcsds-1.2.42
+     | [_LNlogin]$ module load lang/tcsds-1.2.41
+

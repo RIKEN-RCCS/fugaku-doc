@@ -1,0 +1,166 @@
+Interactive job
+===============
+
+An interactive job is a job type that executes jobs interactively within the allocated resources, and has the following characteristics.
+
+- Run interactively from a terminal 
+- Cannot be re-executed 
+
+
+Job submission
+---------------
+
+| To submit a job, use ``--interact`` option of :program:`pjsub` command.
+| There are two methods for submitting jobs: standard input and job scripts created in advance.
+| Also, when submitting, it is necessary to specify the resource group assigned to the interactive job.
+
+- Submit a job with :program:`pjsub` command.
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjsub --interact -g groupname -L "node=1" -L "rscgrp=int" -L "elapse=1:00:00" --sparam "wait-time=600"
+    [INFO] PJM 0000 pjsub Job 405918 submitted.
+    [INFO] PJM 0081 .connected.
+    [INFO] PJM 0082 pjsub Interactive job 405918 started.
+    [_CNlogin] module list
+    Currently Loaded Modulefiles:
+      1) lang/tcsds-1.2.31
+    [_CNlogin]$ ./a.out
+    (Omitted)
+    [_CNlogin]$ exit
+    [_LNlogin]$
+
+
+- Submit a job with specifying a job script with :program:`pjsub` command.
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjsub --interact  ./sample.sh  # Specify the job script created beforehand
+    [INFO] PJM 0000 pjsub Job 405918 submitted.
+    [INFO] PJM 0081 .connected.
+    [INFO] PJM 0082 pjsub Interactive job 405918 started.
+    (Omitted)... # <- Job script output contents
+    [INFO] PJM 0083 pjsub Interactive job 405918 completed.
+
+Command format
+---------------
+
+Interactive job executes by specifying ``--interact`` to :program:`pjsub` command.
+
+[Style]
+
+.. code-block:: none
+
+  pjsub --interact -g groupname -L "elapse=1:00:0" [--sparam wait-time=waittime] [options] [script-file] 
+
+
+| In interactive jobs, computing resources are immediately allocated and attempted to execute.
+| If immediate execution is not possible due to resource shortage, wait for resource allocation for the time specified by ``--sparam wait-time``.
+
+
+.. list-table::
+   :header-rows: 1
+   :widths: 2,6
+
+   * - Option
+     - Description
+
+   * - elapse=elapsedtime
+     - | Specify the maximum job execution time.
+       | The default is 10 seconds.
+
+   * - wait-time=waittime
+     - | Specify the cumputer resource allocation wait time in seconds.
+       | The range that can be specified for ``waittime`` is 0 to 36000 and unlimited. The default value is 0.
+       | If ``unlimited`` is specified, it continues to wait until a computing resource is allocated.
+       | A minimum of 60 seconds is recommended to avoid the cumputer resource allocation timeout.
+
+
+[Option specification example]
+
+If a interactive job is canceled due to a computer resource allocation wait time limit, display the message as following and end up :program:`pjsub` command.
+
+.. code-block:: console
+
+   [_LNlogin]$ pjsub --interact -g groupname --sparam "wait-time=600" # Wait up to 600 seconds (10 minutes) for resource allocation
+   [INFO] PJM 0000 pjsub Job 291 submitted.
+   [INFO] PJM 0081 .
+   [INFO] PJM 0080 pjsub Interactive job 291 is canceled due to the resource allocation timeout.
+          The timeout period "t" can be specified by "--sparam wait-time=t".
+
+Command option block
+---------------------
+
+For option block, other options of :program:`pjsub` option can be specified.
+However, some options are disabled when running interactive jobs. If an invalid option is specified, it is ignored instead of an error.
+
+The following options are disabled for interactive jobs:
+
+
+.. csv-table:: 
+   :header-rows: 1
+   :widths: 5 5 
+
+   option,specify contents
+   &#45;-at,job execution time
+   -e &#45;-err,standard error output file
+   -j,output standard error output to standard output file
+   &#45;-bulk &#45;-step,set per job model
+   -m e,finish execution email notification
+   -m r,restart execution email notification
+   &#45;-restart,enabling automatic job re-execution
+   -o &#45;-out,standard output file
+   -p,job prior level
+   -w,:program:`pjsub` command return wait timing
+
+Script file block
+------------------
+
+| Interavtive job is able to specify ``script-file`` when executing :program:`pjsub` command as the same as normal job.
+| If ``script-file`` is specified, the specified script file will be executed. When the specified script file finishes executing, the interactive job ends.
+
+
+- The example of when specifying script file  (:file:`./sample.sh`)
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjsub --interact --sparam "wait-time=3600" ./sample.sh 
+    [INFO] PJM 0000 pjsub Job 488 submitted.
+    .connected.
+    [INFO] PJM 0082 pjsub Interactive job 488 started.
+    Env_base: Ver. 1.2.0
+     MPI communication start. size= 8
+     MPI communication end
+     result is 0+1+...size-1.check result( 28 )
+    [INFO] PJM 0083 pjsub Interactive job 488 completed.
+
+  .. note::
+
+    If ``script-file`` is not specified, the job displays a prompt and waits for input. After that, the job will be in the execution state until execution is canceled by :program:`pjdel` command or closing the standard input. 
+
+
+- Execution example when no script file is specified
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjsub --interact -g groupname -L "node=8" -L "rscgrp=int" -L "elapse=00:10:0" --sparam "wait-time=3600"
+    [INFO] PJM 0000 pjsub Job 490 submitted.
+    .connected.
+    [INFO] PJM 0082 pjsub Interactive job 490 started.
+    [_CNlogin]$ export PARALLEL=8
+    [_CNlogin]$ export OMP_NUM_THREADS=$PARALLEL
+    [_CNlogin]$ mpiexec ./sample_mpi
+     MPI communication start. size= 8
+     MPI communication end
+     result is 0+1+...size-1.check result( 28 )
+    [_CNlogin]$ exit
+    exit
+    [INFO] PJM 0083 pjsub Interactive job 490 completed.
+    [_LNlogin]$
+
+
+  .. seealso::
+
+    In interactive job execution, a pseudo terminal is used to perform a series of job operations interactively. However, if ``script-file`` is specified, the pseudo terminal is not used.
+
+

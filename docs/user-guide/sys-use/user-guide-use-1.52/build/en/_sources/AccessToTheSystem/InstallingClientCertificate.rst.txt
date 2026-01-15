@@ -1,0 +1,370 @@
+.. _InstallingClientCertificate:
+
+Client Certification Installation
+=================================
+
+Client certificate is used when accesing to the Fugaku website. Please install to the Web browser which accesses to the Fugaku website.
+
+This indicates how to install the required client certificate to access to the Fugaku website of the Fugaku.
+This work is not required if installed the client certificate by refering to the Startup Guide.
+
+Please prepare the followings before installing the client certificate.
+
+- Client certificate :"user account name .p12" file
+- Client certificate pathphrase
+
+Client certificate
+   Once the account issue is compleded, the client certificate is sent via e-mail to the e-mail address you entered when applying. Please save the attached "local account name.p12" file to the device (e.g. PC) which installs the client certificate.
+   To "local account name.p12" file, the client private key, the client certificate (a public key) and the route certificate of the client certificate issuing authority.
+   
+   
+Client certificate pathphrase
+   The passphrase is sent in written form or PDF file separately from the client certificate. It will be required when installing the client certificate. Please store at the safe place.
+
+This section describes the procedure for registering a client certificate on your PC. 
+
+
+.. note::
+
+  If you use a different Web browser than the specified Web browser, confirm the certificate management method of the Web browser yourself, and install the client certificate in the Web browser to be used.
+
+
+Installing the certificate to Firefox (Windows)
+------------------------------------------------
+
+This indicates how to install Firefox on Microsoft Windws.
+The difference may be seen depending on the version of Firefox.
+If the screen is different, please try with confirming the Firefox information.
+
+
+1. Start Firefox and open  \ :guilabel:`[Option]`\ .
+   Click on  :guilabel:`[Privacy and Security]`\ 's  \ :guilabel:`[Display certificate]`\ .
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_01.png
+     :scale: 60
+     :align: center
+
+
+2. Once the certificate manager is started, select  \ :guilabel:`[Your certificate]`\  and click on  :guilabel:`[import...]`\.
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_02.png
+     :scale: 70
+     :align: center
+
+3. Client certificate: Select "local account name.p12" file and click on  \ :guilabel:`[Open]`\ .
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_03.png
+     :scale: 70
+     :align: center
+
+4. Input the client passphrase to  :guilabel:`Password`\ and  click on :guilabel:`[OK]`\.
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_04.png
+     :scale: 70
+     :align: center
+
+  .. Attention::
+    
+    If the client certificate pass phrase is wrong it shows an error and cannot go forward.
+
+5. Confirm if the client certificate is registered.
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_05.png
+     :scale: 70
+     :align: center
+
+6. Select  :guilabel:`[Certificate authority certificate]`\  and from the list, select "RIKEN R-CCS" and click on  \ :guilabel:`Display`\ .
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_06.png
+     :scale: 70
+     :align: center
+
+7. Please confirm if the certificate's  Fingerprints is (SHA-1): ``EEED846F FC733A73 328F4561 39BDB995 D5174BBC``\.
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_08.png
+     :scale: 70
+     :align: center
+
+
+
+8. Next, set the password to be entered when using the client certificate. Click on  :guilabel:`Security device...`\.
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_09.png
+     :scale: 70
+     :align: center
+
+9. Once device manager is started, select  :guilabel:`Software Security Device`\  and  click on  :guilabel:`Change password...`\.
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_10.png
+     :scale: 70
+     :align: center
+
+10. Set any password required when using the client certificate, click on  :guilabel:`OK`\.
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_11.png
+     :scale: 70
+     :align: center
+
+11. After registering the password, close Device Manager. This is the end of setting the password when using the client certificate. The password set here is used when using the client certificate.
+
+
+Installing the certificate on Firefox (Mac)
+--------------------------------------------
+
+1. Start Firefox, click :guilabel:`[Preferences...]`\ from menu.
+
+  .. figure:: ./img/InstallingIntoFirefox_01.png
+     :scale: 70
+     :align: center
+
+2. Click :guilabel:`[View certificates...]`\ in :guilabel:`Privacy and security`\  tab.
+
+  .. figure:: ./img/InstallingIntoFirefox_02.png
+     :scale: 70
+     :align: center
+
+3. Once certificate manager started, select :guilabel:`[Your certificate]`\  then click :guilabel:`[Import...]`\.
+
+  .. figure:: ./img/InstallingIntoFirefox_03.png
+     :scale: 70
+     :align: center
+
+4. Select the "local account name.p12" file saved on your computer, click :guilabel:`[Open]`\.
+
+  .. figure:: ./img/InstallingIntoFirefox_04.png
+     :scale: 70
+     :align: center
+
+5. Input the passphrase of the obtained client certificate to :guilabel:`Password area`\, click :guilabel:`[OK]`\.
+
+  .. figure:: ./img/InstallingIntoFirefox_05.png
+     :scale: 70
+     :align: center
+
+  .. Attention::
+    
+    If the client certificate passphrase is incorrect, an error is displayed and you cannot proceed to the next screen.
+
+6. Confirm that the client certificate has been registered, click :guilabel:`[OK]`\ and close the certificate manager. This completes the client certificate installation process.
+
+  .. figure:: ./img/InstallingIntoFirefox_06.png
+     :scale: 70
+     :align: center
+
+7. Next, set the password to be entered when using the client certificate. Click :guilabel:`Security device...`\.
+
+  .. figure:: ./img/InstallingIntoFirefox_07.png
+     :scale: 70
+     :align: center
+
+8. Once device manager starts, select :guilabel:`Software Security Device`\ then click :guilabel:`Change password...`\.
+
+  .. figure:: ./img/InstallingIntoFirefox_08.png
+     :scale: 70
+     :align: center
+
+9. Set an arbitrary password required when using a client certificate, click :guilabel:`OK`\.
+
+  .. figure:: ./img/InstallingIntoFirefox_09.png
+     :scale: 70
+     :align: center
+
+10. Click :guilabel:`OK`\.
+
+  .. figure:: ./img/InstallingIntoFirefox_10.png
+     :scale: 70
+     :align: center
+
+11. Click :guilabel:`OK`\  and close devicce manager This completes the password setting procedure when using a client certificate.
+
+  .. figure:: ./img/InstallingIntoFirefox_11.png
+     :scale: 70
+     :align: center
+
+Installing the certificate to Chrome (Windows)
+-----------------------------------------------
+
+This indicates how to install Chrome on Microsoft Windws.
+The difference may be seen depending on the version of Chrome.
+If the screen is different, please try with confirming the Chrome information.
+
+
+1. Start Chrome and open  \ :guilabel:`[Setting]`\ .
+   Click on  :guilabel:`[Privacy and Security]`\ 's  \ :guilabel:`[Security]`\ .
+
+  .. figure:: ./img/InstallingIntoChrome_windows_01.png
+     :scale: 60
+     :align: center
+
+2. Click on  :guilabel:`[Manage certificates]`\ .
+
+  .. figure:: ./img/InstallingIntoChrome_windows_02.png
+     :scale: 60
+     :align: center
+
+3. Click on  :guilabel:`[Manage imported certificates from Windows]`.
+
+  .. figure:: ./img/InstallingIntoChrome_windows_19.png
+     :scale: 70
+     :align: center
+
+4. Once certification manager is started, select  \ :guilabel:`[Personal]`\  and click on  :guilabel:`[Import...]`\.
+
+  .. figure:: ./img/InstallingIntoChrome_windows_03.png
+     :scale: 70
+     :align: center
+
+5. Once certificate import wizard is opened, click on  \ :guilabel:`[Next]`\ .
+
+  .. figure:: ./img/InstallingIntoChrome_windows_04.png
+     :scale: 70
+     :align: center
+
+6. Click on  :guilabel:`[Browse...]`\ .
+
+  .. figure:: ./img/InstallingIntoChrome_windows_05.png
+     :scale: 70
+     :align: center
+
+7. Change the file type to  \ :guilabel:`[Personal Information Exchange(*.pfx,*.p12)]`\ .
+
+  .. figure:: ./img/InstallingIntoChrome_windows_06.png
+     :scale: 70
+     :align: center
+
+8. Select "user account name.p12" file and click on  \ :guilabel:`[Open]`\ .
+
+  .. figure:: ./img/InstallingIntoChrome_windows_07.png
+     :scale: 70
+     :align: center
+
+9. After setting a file name, click on  \ :guilabel:`[Next]`\ .
+
+  .. figure:: ./img/InstallingIntoChrome_windows_08.png
+     :scale: 70
+     :align: center
+
+
+10. Input the client certificate passphrase to  \ :guilabel:`Password` and check the import option \ :guilabel:`[Strong the security of private key`\  then click on  \ :guilabel:`[Next]`\ .
+
+  .. figure:: ./img/InstallingIntoChrome_windows_09.png
+     :scale: 70
+     :align: center
+
+  .. Attention::
+    
+    If the client certificate pass phrase is wrong it shows an error and cannot go forward.
+
+
+11. Check  :guilabel:`Automatically select certificate store based on certificate type`\  and click on  \ :guilabel:`[Next]`\ .
+
+  .. figure:: ./img/InstallingIntoChrome_windows_10.png
+     :scale: 70
+     :align: center
+
+12. Click on  :guilabel:`[Finish]`\ .
+
+  .. figure:: ./img/InstallingIntoChrome_windows_11.png
+     :scale: 70
+     :align: center
+
+13. The "Import new secret exchange key" screen will be displayed continuously, click on  \ :guilabel:`[Set security level]`\ .
+
+  .. figure:: ./img/InstallingIntoChrome_windows_12.png
+     :scale: 100
+     :align: center
+
+14. Check  :guilabel:`[High]`\  and click on  \ :guilabel:`[Next]`\ .
+
+  .. figure:: ./img/InstallingIntoChrome_windows_13.png
+     :scale: 100
+     :align: center
+
+15. Set the password and click on  \ :guilabel:`[Finish]`\ .
+
+  .. figure:: ./img/InstallingIntoChrome_windows_14.png
+     :scale: 100
+     :align: center
+
+16. Click on  :guilabel:`[OK]`\ .
+
+  .. figure:: ./img/InstallingIntoChrome_windows_15.png
+     :scale: 100
+     :align: center
+
+17. Click on  :guilabel:`[OK]`\ .
+
+  .. figure:: ./img/InstallingIntoChrome_windows_16.png
+     :scale: 100
+     :align: center
+
+18. If a security warning is issued, confirm that the thumbprint is (SHA-1):  ``EEED846F FC733A73 328F4561 39BDB995 D5174BBC`` and click on  :guilabel:`[Yes]`.
+
+  .. figure:: ./img/InstallingIntoChrome_windows_17.png
+     :scale: 100
+     :align: center
+
+19. Installation of client certificate is all done.
+
+  .. figure:: ./img/InstallingIntoChrome_windows_18.png
+     :scale: 70
+     :align: center
+
+Installing the certificate to Chrome (Mac)
+-------------------------------------------
+
+This indicates how to install Chrome on Mac.
+At macOS, the client certificate is managed at "Key chain access".
+
+
+1. Client certificate: Double click "user account name.p12" file. The password input screen is show first.
+   Enter the client certificate pass phrase and click on :guilabel:`[OK]`.
+
+  .. figure:: ./img/InstallingIntoChrome_01.png
+     :scale: 100
+     :align: center
+
+  .. Attention::
+    
+    If the client certificate pass phrase is wrong it shows an error and cannot go forward.
+
+2. Open "Key chain access" screen and double click on the server certificate (RIKEN R-CCS) that issused the client certificate.
+
+  .. figure:: ./img/InstallingIntoChrome_02.png
+     :scale: 60
+     :align: center
+
+3. Click on "Route certificate authority" - "Trust" and from the list of "When using this certificatie", select "Always trust" and close the screen.
+
+  .. figure:: ./img/InstallingIntoChrome_03.png
+     :scale: 90
+     :align: center
+
+4. You will be prompted for your Mac administrator username and password to reflect the change in trust settings. Input these and click on :guilabel:`[Update setting]`.
+
+  .. figure:: ./img/InstallingIntoChrome_04.png
+     :scale: 100
+     :align: center
+
+5. On the "Keychain Access" screen, hold down the Control key and click the client certificate (the local account name is shown in the name field), select :guilabel:`[New identify preference]`.
+
+  .. figure:: ./img/InstallingIntoChrome_05.png
+     :scale: 70
+     :align: center
+
+6. To "Location or Email Address:", input "https://www.fugaku.r-ccs.riken.jp/" and click on :guilabel:`[Add]`.
+
+  .. figure:: ./img/InstallingIntoChrome_06.png
+     :scale: 70
+     :align: center
+
+7. With the same steps, register "https://api.fugaku.r-ccs.riken.jp/".
+
+  .. figure:: ./img/InstallingIntoChrome_07.png
+     :scale: 70
+     :align: center
+
+8. Confirm if "https://www.fugaku.r-ccs.riken.jp/" and "https://api.fugaku.r-ccs.riken.jp/" 's "Identify preference" is registered to "Key chain access" and close the screen. Installation is all done.
+
+
+

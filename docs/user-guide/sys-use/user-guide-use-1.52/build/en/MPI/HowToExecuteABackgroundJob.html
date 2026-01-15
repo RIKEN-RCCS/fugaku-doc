@@ -1,0 +1,233 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6.3. How to execute back ground job &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6.4. Standard output / Standard error output / Standard input" href="InputOutputRedirection.html" />
+    <link rel="prev" title="6.2. Execution command format" href="FormatOfMpiexecCommand.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="InputOutputRedirection.html" title="6.4. Standard output / Standard error output / Standard input"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="FormatOfMpiexecCommand.html" title="6.2. Execution command format"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.3. </span>How to execute back ground job</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="how-to-execute-back-ground-job">
+<h1><span class="section-number">6.3. </span>How to execute back ground job<a class="headerlink" href="#how-to-execute-back-ground-job" title="Link to this heading">¶</a></h1>
+<p>This indicates how to execute MPI program in back ground.</p>
+<section id="back-ground-execution">
+<h2><span class="section-number">6.3.1. </span>Back ground execution<a class="headerlink" href="#back-ground-execution" title="Link to this heading">¶</a></h2>
+<p>This indicates the specification example of back ground execution.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">5</span><span class="w"> </span>--vcoordfile<span class="w"> </span>vcoord_file<span class="w"> </span>./a.out<span class="w"> </span><span class="p">&amp;</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Contents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-n</p></td>
+<td><p>Specify parallel number</p></td>
+</tr>
+<tr class="row-odd"><td><p>--vcoordfile</p></td>
+<td><p>Specifies that parallel processes be allocated based on the list of coordinates specified in the VCOORD_FILE file.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The description format of the coordinates in the VCOORD_FILE file is conformed to the format of  <code class="docutils literal notranslate"><span class="pre">rank-map-hostfile</span></code> parameter of  <strong class="program">pjsub</strong> command’s  <code class="docutils literal notranslate"><span class="pre">--mpi</span></code> option.
+For details, refer to the following in the manual “MPI User’s Guide”.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--vcoordfile</span></code> explanation of “Options that can be specified in global_options”</p></li>
+<li><p>“VCOORD file format”</p></li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+<section id="job-creation-example">
+<h2><span class="section-number">6.3.2. </span>Job creation example<a class="headerlink" href="#job-creation-example" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">This section shows an example of creating a job script that executes five parallel executions in three backgrounds.</div>
+<div class="line">node specification is as 1 dimention.</div>
+</div>
+<ol class="arabic">
+<li><p>Create VCOORD_FILE file</p>
+<p>VCOORD_FILE file is created as conforming to  <code class="docutils literal notranslate"><span class="pre">rank-map-hostfile</span></code> parameter format. Create so that the coordinates do not overlap between  <strong class="program">mpiexec</strong> to be executed simultaneously. If there is a duplicate, an error will occur.  Here,  create as the file name of  <code class="file docutils literal notranslate"><span class="pre">vcode1</span></code>,  <code class="file docutils literal notranslate"><span class="pre">vcode2</span></code>,  <code class="file docutils literal notranslate"><span class="pre">vcode3</span></code>. Indicate file contents in below.</p>
+</li>
+</ol>
+<blockquote>
+<div><p>[vcode1]</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(0)
+(1)
+(2)
+(3)
+(4)
+</pre></div>
+</div>
+<p>[vcode2]</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(5)
+(6)
+(7)
+(8)
+(9)
+</pre></div>
+</div>
+<p>[vcode3]</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(10)
+(11)
+(12)
+(13)
+(14)
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><p>Create a job script</p>
+<p>Create a job script as following.</p>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash -x</span>
+<span class="c1">#</span>
+<span class="c1">#PJM -L &quot;node=15&quot;         # Number of total node required to process of executing at the same time</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">5</span><span class="w"> </span>--vcoordfile<span class="w"> </span>vcode1<span class="w"> </span>./sample_mpi<span class="w"> </span><span class="p">&amp;</span>
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">5</span><span class="w"> </span>--vcoordfile<span class="w"> </span>vcode2<span class="w"> </span>./sample_mpi<span class="w"> </span><span class="p">&amp;</span>
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">5</span><span class="w"> </span>--vcoordfile<span class="w"> </span>vcode3<span class="w"> </span>./sample_mpi<span class="w"> </span><span class="p">&amp;</span>
+
+<span class="nb">wait</span><span class="w">       </span><span class="c1"># Input the process to wait until finishing back ground job</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="notes-on-back-ground-execution">
+<h2><span class="section-number">6.3.3. </span>Notes on back ground execution<a class="headerlink" href="#notes-on-back-ground-execution" title="Link to this heading">¶</a></h2>
+<ul>
+<li><div class="line-block">
+<div class="line">The maximum number that can be executed simultaneously in background execution is 128.</div>
+<div class="line">If the number exceeds 128, the background job will not be accepted with the message “[ERR.] PLE 0050 plexec cannot be executed any further.”</div>
+</div>
+</li>
+<li><p>When executing multiple background jobs, it is necessary to specify the VCOORD_FILE file.</p></li>
+<li><p>The VCOORD_FILE file cannot have overlapping coordinates between background jobs running simultaneously. An error will occur if the coordinates are duplicated.</p></li>
+<li><p>If there is no end-waiting by  <strong class="command">wait</strong>, processing of the job script ends regardless of the presence or absence of the background job, and processing of the job also ends.</p></li>
+<li><p>In principle, it cannot be used at the same time as dynamic process generation, but it can be used only when all of the following conditions are satisfied.</p>
+<ul class="simple">
+<li><p>Multiple  <strong class="program">mpiexec</strong> is not executed at the same time.</p></li>
+<li><p>The number of MPI_COMM_WORLD of the dynamic process that exists simultaneously does not exceed 65535.</p></li>
+<li><p>On 1 execution of  <strong class="program">mpiexec</strong> command, the total number of calls to the MPI_COMM_SPAWN or MPI_COMM_SPAWN_MULTIPLE routine does not exceed 4294967295.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">6.3. How to execute back ground job</a><ul>
+<li><a class="reference internal" href="#back-ground-execution">6.3.1. Back ground execution</a></li>
+<li><a class="reference internal" href="#job-creation-example">6.3.2. Job creation example</a></li>
+<li><a class="reference internal" href="#notes-on-back-ground-execution">6.3.3. Notes on back ground execution</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FormatOfMpiexecCommand.html"
+                          title="previous chapter"><span class="section-number">6.2. </span>Execution command format</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="InputOutputRedirection.html"
+                          title="next chapter"><span class="section-number">6.4. </span>Standard output / Standard error output / Standard input</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="InputOutputRedirection.html" title="6.4. Standard output / Standard error output / Standard input"
+             >next</a></li>
+        <li class="right" >
+          <a href="FormatOfMpiexecCommand.html" title="6.2. Execution command format"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.3. </span>How to execute back ground job</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

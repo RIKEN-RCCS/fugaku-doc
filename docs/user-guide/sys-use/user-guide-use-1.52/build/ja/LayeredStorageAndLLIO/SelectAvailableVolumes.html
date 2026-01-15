@@ -1,0 +1,424 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8.9. 利用ファイルシステム(volume)の選択 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="9. 他システムからの移行" href="../MigrationFromOtherSystems/index.html" />
+    <link rel="prev" title="8.8. I/Oの最適化" href="IOoptimization.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../MigrationFromOtherSystems/index.html" title="9. 他システムからの移行"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="IOoptimization.html" title="8.8. I/Oの最適化"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">8. </span>階層化ストレージ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.9. </span>利用ファイルシステム(volume)の選択</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="volume">
+<span id="selectavailablevolumes"></span><h1><span class="section-number">8.9. </span>利用ファイルシステム(volume)の選択<a class="headerlink" href="#volume" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">ジョブ投入時、ユーザはジョブで利用するファイルシステム(以下volumeと表記)を追加で指定する必要があります。</div>
+<div class="line">ジョブは実行開始前に、ユーザが指定したファイルシステムを計算ノードでマウントし、第2階層ストレージのキャッシュ領域へのアクセスを確立します。</div>
+</div>
+<blockquote>
+<div><dl class="simple">
+<dt>ジョブ投入時に指定するvolume</dt><dd><ul class="simple">
+<li><p>ジョブ実行に必要なデータ領域(/vol0002-6)</p></li>
+<li><p>システムが提供しているSpack（パブリック・インスタンス）を利用する場合はSpackの領域(/vol0004)</p></li>
+</ul>
+</dd>
+<dt>ジョブ投入時に指定不要なvolume</dt><dd><ul class="simple">
+<li><p>2ndfs(/vol0001)</p></li>
+<li><p>ホーム領域のvolume</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>ホーム領域は利用可能な容量が20GiB程度と少ないため、ジョブの実行環境として利用しないでください。</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<ul>
+<li><div class="line-block">
+<div class="line">ユーザのデータ領域(/vol0<em>n</em>0<em>m</em>/data/&lt;<em>groupname</em>&gt;)のパスは、シンボリックリンクとなっています。</div>
+<div class="line">パス名の意味は以下となります。</div>
+<div class="line-block">
+<div class="line"><em>n</em>:volume番号(2～6)</div>
+<div class="line"><em>m</em>:MDT番号(0～7)</div>
+</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">データ領域のvolume番号は後述する<a class="reference internal" href="#volumespecificationjobs"><span class="std std-ref">ジョブ投入方法</span></a>で、PJM_LLIO_GFSCACHE環境変数に指定する必要があります。</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><a class="reference internal" href="../UsageRules/index.html#diskpoints"><span class="std std-ref">ディスク</span></a>の記載事項も参照ください。</div>
+</div>
+</li>
+</ul>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<section id="pjsub">
+<span id="environmentvariablesandpjsuboptions"></span><h2><span class="section-number">8.9.1. </span>環境変数およびpjsubオプション<a class="headerlink" href="#pjsub" title="Link to this heading">¶</a></h2>
+<p>ジョブで利用するvolumeを指定するには、以下の環境変数およびpjsubオプションを使用します。</p>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">ジョブ投入時に指定できる環境変数</span><a class="headerlink" href="#id2" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 37.5%" />
+<col style="width: 62.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>環境変数名</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PJM_LLIO_GFSCACHE</p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">-x</span></code>オプション、ジョブスクリプトで第2階層ストレージのキャッシュ領域として利用するvolumeを指定します。</div>
+<div class="line">PJM_LLIO_GFSCACHE=パス名&quot; で指定します。</div>
+<div class="line">指定可能なパス名は/vol0002,/vol0003,/vol0004,/vol0005,/vol0006です。</div>
+<div class="line">複数指定する場合は、&quot;:&quot; 区切りで指定します。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>PJM_LLIO_SHAREDTMP</p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">-x</span></code>オプション、ジョブスクリプトで共有テンポラリ領域のMDTとして利用するvolumeを指定します。</div>
+<div class="line">PJM_LLIO_SHAREDTMP=パス名&quot; で指定します。</div>
+<div class="line">指定可能なパス名は/vol0002,/vol0003,/vol0004,/vol0005,/vol0006です。</div>
+<div class="line">複数指定する場合は、&quot;:&quot; 区切りで指定します。</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">ジョブ投入時に指定できるpjsubオプション</span><a class="headerlink" href="#id3" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 37.5%" />
+<col style="width: 62.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>pjsubオプション</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>--all-mount-gfscache</p></td>
+<td><div class="line-block">
+<div class="line">全てのvolumeが環境変数(PJM_LLIO_GFSCACHE)に指定されたものみなします。以下の設定と同義です。</div>
+<div class="line">PJM_LLIO_GFSCACHE=/vol0002:/vol0003:/vol0004:/vol0005:/vol0006</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>--no-check-gfscache</p></td>
+<td><div class="line-block">
+<div class="line">ジョブ投入時に環境変数(PJM_LLIO_GFSCACHE)の設定状況を検査しません。</div>
+<div class="line">環境変数(PJM_LLIO_GFSCACHE)の指定有無にかかわらず、ジョブを投入します。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>--no-check-directory</p></td>
+<td><div class="line-block">
+<div class="line">ジョブ投入時のカレントディレクトリにグループデータ領域パスが含まれているか検査しません。</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>pjsubオプション<code class="docutils literal notranslate"><span class="pre">--all-mount-gfscache</span></code>,<code class="docutils literal notranslate"><span class="pre">--no-check-gfscache</span></code>および<code class="docutils literal notranslate"><span class="pre">--no-check-directory</span></code>は、ジョブスクリプトで指定できません。指定した場合はジョブ投入時にエラーとなりますので、コマンドラインで指定してください。</p></li>
+</ul>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<ul class="simple">
+<li><p>環境変数(PJM_LLIO_GFSCACHE、およびPJM_LLIO_SHAREDTMP)でvolumeを複数指定することが可能ですが、障害の影響を受けにくくするためには、指定するvolumeを必要最小限にしてください。</p></li>
+</ul>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+<section id="volumespecificationjobs">
+<span id="id1"></span><h2><span class="section-number">8.9.2. </span>ジョブ投入方法<a class="headerlink" href="#volumespecificationjobs" title="Link to this heading">¶</a></h2>
+<p>ジョブで利用するvolumeを指定してジョブ投入するには、以下のようにします。</p>
+<p>[pjsubのオプションで指定する場合]</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>pjsub<span class="w"> </span>-x<span class="w"> </span><span class="nv">PJM_LLIO_GFSCACHE</span><span class="o">=</span>/vol0004:/vol0005
+</pre></div>
+</div>
+</div></blockquote>
+<p>[ジョブスクリプト内で指定する場合]</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004:/vol0005</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>[ジョブスクリプト内で指定する場合：シングルアカウント利用時]</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004:/vol0005</span>
+<span class="c1">#PJM -g groupname     # シングルアカウント利用時はグループ指定</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>利用例1）データ領域のvolumeからジョブを投入する</p>
+<ol class="arabic simple">
+<li><p>ジョブが存在するデータ領域のvolumeのパス名を確認します。</p></li>
+</ol>
+<blockquote>
+<div><div class="line-block">
+<div class="line">データ領域(/vol0<em>n</em>0<em>m</em>/data/&lt;<em>groupname</em>&gt;)のパスからvolume番号を取得してください。</div>
+<div class="line">データ領域のパスが/vol0501/data/&lt;<em>groupname</em>&gt;の場合、/vol05の5の部分がvolume番号となり、PJM_LLIO_GFSCACHEに設定するパス名は「/vol0005」となります。</div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>ジョブスクリプトに利用するvolumeのパス名を指定します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/vol0n0m/data/groupname/username
+
+login$<span class="w"> </span>vi<span class="w"> </span>jobscript
+<span class="c1">#!/bin/bash</span>
+<span class="c1">#PJM -L &quot;node=4&quot;</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0005     # /vol0005を設定</span>
+<span class="c1">#PJM -g groupname</span>
+
+llio_transfer<span class="w"> </span>./a.out
+mpiexec<span class="w"> </span>./a.out
+llio_transfer<span class="w"> </span>--purge<span class="w"> </span>./a.out
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>ジョブを投入します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>pjsub<span class="w"> </span>jobscript
+</pre></div>
+</div>
+</div></blockquote>
+<p></p>
+<blockquote>
+<div><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<ul class="simple">
+<li><p>利用するデータ領域がホーム領域と同じvolumeの場合はパス名は指定する必要はありません。</p></li>
+</ul>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>利用例2）システムが提供しているSpack（パブリック・インスタンス）を利用するジョブを投入する</p>
+<ol class="arabic simple">
+<li><p>ジョブスクリプトに利用するvolumeのパス名を指定します。(Spack利用時は/vol0004を指定します。)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/vol0n0m/data/groupname/username
+
+login$<span class="w"> </span>vi<span class="w"> </span>jobscript
+<span class="c1">#!/bin/bash</span>
+<span class="c1">#PJM -L &quot;node=4&quot;</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004     # /vol0004を設定</span>
+<span class="c1">#PJM -g groupname</span>
+
+.<span class="w"> </span>/vol0004/apps/oss/spack/share/spack/setup-env.sh
+<span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/lib64:<span class="nv">$LD_LIBRARY_PATH</span>
+spack<span class="w"> </span>load<span class="w"> </span>gromacs@2021.3
+
+...
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>ジョブを投入します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>pjsub<span class="w"> </span>jobscript
+</pre></div>
+</div>
+</div></blockquote>
+<p></p>
+<blockquote>
+<div><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<ul class="simple">
+<li><p>ホームディレクトリが存在するvolumeのパス名が/vol0004の場合は指定する必要はありません。指定がない場合でも利用することが可能です。</p></li>
+</ul>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>利用例3）pjsubオプション<code class="docutils literal notranslate"><span class="pre">--all-mount-gfscache</span></code>または<code class="docutils literal notranslate"><span class="pre">--no-check-gfscache</span></code>を指定する</p>
+<ol class="arabic simple">
+<li><p>ジョブスクリプトの作成 (環境変数PJM_LLIO_GFSCACHEは指定しません。)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>vi<span class="w"> </span>jobscript
+<span class="c1">#!/bin/bash</span>
+<span class="c1">#PJM -L &quot;node=4&quot;</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+
+llio_transfer<span class="w"> </span>./a.out
+mpiexec<span class="w"> </span>./a.out
+llio_transfer<span class="w"> </span>--purge<span class="w"> </span>./a.out
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>ジョブ投入</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>pjsub<span class="w"> </span>--all-mount-gfscache<span class="w"> </span>jobscript
+</pre></div>
+</div>
+<p>もしくは</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>pjsub<span class="w"> </span>--no-check-gfscache<span class="w"> </span>jobscript
+</pre></div>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>ジョブ実行に必要なvolumeが環境変数に設定されていない場合、以下のエラーとなります。</p>
+<ul>
+<li><div class="line-block">
+<div class="line">ホームディレクトリのあるvolumeとは異なるvolumeにあるディレクトリにジョブを配置して投入した場合、ジョブ投入時にエラーとなります。</div>
+<div class="line">The current directory is contained in vol000X, so set PJM_LLIO_GFSCACHE to vol000X.(ex. -x PJM_LLIO_GFSCACHE=/vol000X)</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Spackを利用するジョブで環境変数に/vol0004が指定されていない場合、ジョブ投入時にエラーとなります。</div>
+<div class="line">If you use Spack, set PJM_LLIO_GFSCACHE to vol0004.(ex. pjsub -x PJM_LLIO_GFSCACHE=/vol0004)</div>
+<div class="line">Specify --no-check-gfscache option if you do not want to use Spack and want to submit jobs.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">環境変数に指定可能なvolumeを正しく指定していない場合(存在しないvolumeを指定した場合など)、ジョブ投入時にエラーとなります。</div>
+<div class="line">[ERR.] PJM 0045 pjsub path isn't on the global file system.</div>
+</div>
+</li>
+<li><p>障害の発生により、運用から切り離されたvolumeを環境変数に指定した場合、ジョブ実行時にPJM CODE=180でエラーとなります。</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">8.9. 利用ファイルシステム(volume)の選択</a><ul>
+<li><a class="reference internal" href="#pjsub">8.9.1. 環境変数およびpjsubオプション</a></li>
+<li><a class="reference internal" href="#volumespecificationjobs">8.9.2. ジョブ投入方法</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="IOoptimization.html"
+                          title="前の章へ"><span class="section-number">8.8. </span>I/Oの最適化</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../MigrationFromOtherSystems/index.html"
+                          title="次の章へ"><span class="section-number">9. </span>他システムからの移行</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../MigrationFromOtherSystems/index.html" title="9. 他システムからの移行"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="IOoptimization.html" title="8.8. I/Oの最適化"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">8. </span>階層化ストレージ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.9. </span>利用ファイルシステム(volume)の選択</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

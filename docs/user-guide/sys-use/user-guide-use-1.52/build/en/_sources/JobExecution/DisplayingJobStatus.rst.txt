@@ -1,0 +1,657 @@
+Displaying a job status
+=======================
+
+This is to explain how to confirm the job execution status that the user submitted.
+
+To check the job status, use  \ :program:`pjstat`\  command.
+
+
+Normal job
+-----------
+
+This is to explain how to check after job submission or job execution status, etc.
+
+.. contents::
+   :local:
+
+Display a job list
+^^^^^^^^^^^^^^^^^^^
+
+To display a job status list, use  \ :program:`pjstat`\  command.
+
+.. code-block:: console
+
+  [_LNlogin]$ pjstat
+
+  JOB_ID  JOB_NAME  MD  ST   USER   START_DATE      ELAPSE_LIM  NODE_REQUIRE  VNODE  CORE  V_MEM
+  238     job.sh    NM  RUN  user1  11/17 09:01:41  0001:00:00  12:2x3x2      -      -     -
+  239     bulk.sh   BU  RUN  user1  11/17 09:01:42  0001:00:00  12:2x3x2      -      -     -
+  240     step.sh   ST  RUN  user1  11/17 09:01:42  -           -             -      -     -
+  241     job2.sh   NM  RUN  user1  11/17 09:01:42  0001:00:00  2             -      -     -
+
+.. seealso::
+
+   As default, only jobs that can be referenced by the user who executed the  \ :program:`pjstat`\  command are displayed.
+
+Display specific jobs
+^^^^^^^^^^^^^^^^^^^^^^
+
+Job ID and sub job ID can be specified when executing  \ :program:`pjstat`\.
+
+.. code-block:: console
+
+  [_LNlogin]$ pjstat 238
+
+  JOB_ID  JOB_NAME  MD  ST   USER   START_DATE      ELAPSE_LIM  NODE_REQUIRE  VNODE  CORE  V_MEM
+  238     job.sh    NM  RUN  user1  11/17 09:01:41  0001:00:00  12:2x3x2      -      -     -
+
+  [_LNlogin]$ pjstat '239[1]'
+  JOB_ID  JOB_NAME  MD  ST   USER   START_DATE      ELAPSE_LIM  NODE_REQUIRE  -      -     -
+  239[1]  bulk.sh   BU  RUN  user1  11/17 09:01:42  0001:00:00  12:2x3x2      -      -     -
+
+Multiple job IDs and sub job IDs can be specified when executing  \ :program:`pjstat`\.
+
+.. code-block:: console
+
+  [_LNlogin]$ pjstat 238 239
+
+  JOB_ID  JOB_NAME  MD  ST   USER   START_DATE      ELAPSE_LIM  NODE_REQUIRE  VNODE  CORE  V_MEM
+  238     job.sh    NM  RUN  user1  11/17 09:01:41  0001:00:00  12:2x3x2      -      -     -
+  239     bulk.sh   BU  RUN  user1  11/17 09:01:42  0001:00:00  12:2x3x2      -      -     -
+
+
+Multiple job IDs and sub job IDs can be specified, and there are a method to enumerate and a method to specify a range.
+
+- Enumeration
+
+  .. code-block:: console
+
+     [_LNlogin]$ pjstat 238 239                              # Job ID
+     [_LNlogin]$ pjstat '239[1]' '239[2]' '239[3]' '239[4]'  # Bulk job's sub job ID
+     [_LNlogin]$ pjstat 240_0 240_1 240_2 240_3              # Step job's sub job ID
+
+- Specify the area
+
+  A range can be specified by connecting the job ID, bulk number, or step number with a hyphen.
+  
+  .. code-block:: console
+
+     [_LNlogin]$ pjstat 238-240    # Job ID 238, 239, 240
+     [_LNlogin]$ pjstat '239[1-5]' # Sub job ID 239[1], 239[2], 239[3], 239[4], 239[5]
+     [_LNlogin]$ pjstat 240_0-4    # Sub job ID 240_0, 240_1, 240_2, 240_3, 240_4
+
+.. attention::
+
+   When specifying a sub job ID of a bulk job as an argument to the pjstat command, escape the parentheses '[]' with single quotes so that they are not processed by the shell.
+
+
+pjstat output item
+^^^^^^^^^^^^^^^^^^^
+
+:program:`pjstat`\  output result item and contents are as below.
+
+The item of job information list
+
+.. list-table:: 
+   :widths: 2 8
+   :header-rows: 1
+
+   * - Item name
+     - contents
+
+   * - JOB_ID
+     - Job ID
+
+   * - JOB_NAME
+     - Job name
+
+   * - MD
+     - Job model
+
+       - NM is normal job or interactive job
+       - ST is step job
+       - BU is bulk job
+       - MW is master worker type job
+
+   * - ST
+     - | The current processing status of the job.
+       | For details, refer to Job Status below.
+
+   * - USER
+     - Executing user name
+
+   * - START_DATE
+     - If the job is not executed, the scheduled execution start time is displayed. If it is during or after execution, the actual start time is displayed.
+       
+       - For the scheduled execution start time of a job, the scheduled execution start time is enclosed in parentheses "()".
+       - The scheduled start time may change during rescheduling.
+
+   * - ELAPSE_LIM
+     - Displays the elapsed time limit.
+
+   * - NODE_REQUIRE
+     - - For node assignment jobs
+
+         Number of nodes and node shape specified at job submission "     n:XXxYYxZZ"
+
+         If it does not fit in the above format, only the node shape is output.
+
+       - For a virtual node assignment job
+
+         The number of virtual nodes specified when the job was submitted. Currently, "1" is output.
+
+       - For step job summary information
+
+         Outputs \"-\".
+
+   * - VNODE
+     - Displays the number of virtual nodes.
+
+   * - CORE
+     - Displays the number of CPU cores per virtual node.
+
+   * - V_MEM
+     - Displays the amount of memory per virtual node.
+
+
+Job status items
+^^^^^^^^^^^^^^^^^
+
+The job status (ST) item status list is shown below.
+
+.. list-table:: 
+   :widths: 2 2 10
+   :header-rows: 1
+   
+
+   * - Display content
+     - Status
+     - Description
+
+   * - ACC
+     - ACCEPT
+     - Job submission is accepted.
+
+   * - CCL
+     - CANCEL
+     - The job has been canceled by an instruction from the job submitter or administrator.
+
+   * - ERR
+     - ERROR
+     - The job has been canceled due to an error detected by the job management function while maintaining the submitted status.
+
+       - Error jobs need to delete by the users.
+       - Error jobs that have passed a certain period of time may delete by the system.
+
+   * - EXT
+     - EXIT
+     - The job has finished.
+
+   * - HLD
+     - HOLD
+     - The job execution is stopped and fixed in the submitted state.
+
+       - Hold jobs need to delete by the users when it is no longer needed.
+
+   * - QUE
+     - QUEUED
+     - The job is accepted and waiting for the execution order.
+
+   * - RJT
+     - REJECT
+     - Job acceptance is rejected.
+
+   * - RNA
+     - RUNNING-A
+     - The resources necessary for job execution have been acquired.
+
+   * - RNE
+     - RUNNING-E
+     - Epilogue processing is being executed.
+
+   * - RNO
+     - RUNOUT
+     - The job is being terminated.
+
+   * - RNP
+     - RUNNING-P
+     - Prologue processing is being executed.
+
+   * - RSM
+     - RESUME
+     - Resume processing is in progress.
+
+   * - RUN
+     - RUNNING
+     - The job is being executed.
+
+   * - SPD
+     - SUSPENDED
+     - Suspended state.
+
+   * - SPP
+     - SUSPEND
+     - Suspend processing is in progress.
+
+
+List of output messages
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+| REASON will be output if specifying \ ``-v``\ option to  \ :program:`pjstat`\  command.
+| Reason displays a message corresponding to the result code for some processing of the job, whether or not the job is executed.
+| The meaning of the output message is as follows.
+
+.. list-table:: 
+   :widths: 3 7
+   :header-rows: 1
+
+   * - Message
+     - Description
+
+   * - (none)
+     - No error
+
+   * - ANOTHER JOB STARTED
+     - A job that was running beyond the minimum runnable time for the job has been terminated to run a subsequent job.
+
+   * - DEADLINE SCHEDULE STARTED
+     - A job that was running beyond the minimum job execution time was terminated due to the start of the deadline schedule.
+
+   * - ELAPSE LIMIT EXCEEDED
+     - The elapsed time limit has been exceeded.
+
+   * - FILE IO ERROR
+     - The current directory when the user's job is submitted cannot be accessed.
+
+   * - GATE CHECK
+     - Canceled by the job manager exit function.
+
+   * - IMPOSSIBLE SCHED
+     - Scheduling failed.
+
+   * - INSUFF CPU
+     - There is a physical shortage of CPUs.
+
+   * - INSUFF MEMORY
+     - There is a physical memory shortage.
+
+   * - INSUFF NODE
+     - The number of nodes is physically insufficient.
+
+   * - INSUFF CustomResourceName
+     - The custom resource defined by the resource name CustomResourceName is insufficient.
+
+   * - INTERNAL ERROR
+     - Internal error.
+
+   * - INVALID HOSTFILE
+     - The host file is unmatched which specified with \ ``rank-map-hostfile``\  parameter of  \ :program:`pjsub`\  command.
+
+   * - LIMIT OVER MEMORY
+     - The memory limit was exceeded during job execution.
+
+   * - LOST COMM
+     - All-to-all communication of parallel processes is not guaranteed.
+
+   * - NO CURRENT DIR
+     - The current directory or standard input / standard output / standard error output file when the user job was submitted could not be accessed.
+
+   * - NOT EXIST CustomResourceName
+     - A custom resource with the resource name CustomResourceName is not defined.
+
+   * - RESUME FAIL
+     - Resume failed.
+
+   * - RSCGRP NOT EXIST
+     - Resource group does not exist.
+
+   * - RSCGRP STOP
+     - The resource group has stopped.
+
+   * - RSCUNIT NOT EXIST
+     - Resource unit does not exist.
+
+   * - RSCUNIT STOP
+     - The resource unit has stopped.
+
+   * - RUNLIMIT EXCEED
+     - The maximum number of concurrent job executions has been exceeded.
+
+   * - SUSPEND FAIL
+     - Suspend failed.
+
+   * - USELIMIT EXCEED
+     - Waiting for execution due to simultaneous node limit or concurrent CPU core limit.
+
+   * - USER NOT EXIST
+     - The job execution user does not exist in the system.
+
+   * - WAIT SCHED
+     - The number of jobs subject to scheduling has been reached, so it has been excluded from scheduling.
+
+   * - Other character strings
+     - - The specified message with \ ``--reason``\ option of  \ :program:`pjdel`\ ,\ :program:`pjhold`\   or  \ :program:`pmsuspend`\  command.
+
+       - Messages set by the administrator using the job manager exit function, job scheduler exit function, or job resource management exit function
+       
+       If the message by \ ``--reason``\  option of  \ :program:`pjhold`\  and  \ :program:`pmsuspend`\  command, viwed as the format of  "\ `command executed user name :message`\ ". If not specified with ``--reason``\  option,  "\ `command executed user name:`\ "  is displayed.
+
+Job count display by status
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The number of jobs and job details by status are displayed if specifying \ ``--with-summary``\  to  \ :program:`pjstat`\  command.
+
+The information displayed and its meaning are shown below.
+
+.. code-block:: console
+
+  [_LNlogin]$ pjstat --with-summary
+
+     ACCEPT QUEUED RUNING RUNOUT  HOLD  ERROR REJECT  EXIT CANCEL  TOTAL
+          n      n      n      n     n      n      n     n      n      n
+   s      n      n      n      n     n      n      n     n      n      n
+
+   JOB_ID JOB_NAME MD ST USER START_DATE     ELAPSE_LIM            NODE_REQUIRE VNODE CORE V_MEM
+   XXXXXX XXXXXXXX XX XX XXXX MM/DD hh:mm:ss hhhh:mm:ss-hhhh:mm:ss nnn:XXxYYxZZ nnnnn nnnn nnnMiB
+
+.. seealso::
+  In the number of jobs displayed by status, the line with s at the beginning displays the number of jobs including sub jobs.
+  
+  If \ ``pjstat --summary``\  is specified, only the number of jobs by status is displayed.
+
+
+:program:`pjstat`\  command output item (Number of jobs depending on the status)
+
+.. list-table:: 
+    :widths: 2 8
+    :header-rows: 1
+
+    * - Item
+      - Description
+
+    * - ACCEPT
+      - Displays the number of jobs waiting to be accepted.
+
+    * - QUEUED
+      - Displays the number of jobs waiting to be executed.
+
+    * - RUNING
+      - Displays the number of running jobs.
+
+    * - RUNOUT
+      - Displays the number of jobs waiting to be completed.
+
+    * - HOLD
+      - Displays the number of jobs fixed by the user.
+
+    * - ERROR
+      - Displays the number of jobs that are fixed due to errors.
+
+    * - REJECT
+      - Displays the number of jobs that have been rejected.
+
+    * - EXIT
+      - Displays the number of finished jobs.
+
+    * - CANCEL
+      - Displays the number of canceled jobs.
+
+    * - TOTAL
+      - The total number of displayed jobs by status is displayed.
+
+
+Step job
+---------
+
+| The step job status can be displayed with  \ :program:`pjstat`\  command.
+| The \ ``-E``\  option is required when referring to sub job information. In addition, since the sub job is executed sequentially in the order of submission, the next sub job is not scheduled until the execution of the first sub job is completed.
+| Therefore, when the status is displayed, "\-" is displayed in the "START_DATE" column for the second and subsequent sub jobs.
+
+
+- Normal display
+
+ .. code-block:: console
+
+   [_LNlogin]$ pjstat
+   JOB_ID JOB_NAME MD ST  USER  START_DATE     ELAPSE_LIM NODE_REQUIRE VNODE CORE V_MEM
+   240    step.sh  ST RUN user1 11/17 09:01:42 -          -            -     -    -
+
+- Display including sub job (\ ``-E``\  option added)
+
+ .. code-block:: console
+
+   [_LNlogin]$ pjstat -E
+   JOB_ID JOB_NAME MD ST  USER  START_DATE     ELAPSE_LIM ...(omitted)...
+   240    step.sh  ST RUN user1 11/17 09:01:42 -          ...(omitted)...
+   240_0  step.sh  ST RUN user1 11/17 09:01:42 0001:00:00 ...(omitted)...
+   240_1  step.sh  ST QUE user1 -              0001:00:00 ...(omitted)...
+   240_2  step.sh  ST QUE user1 -              0001:00:00 ...(omitted)...
+   240_3  step.sh  ST QUE user1 -              0001:00:00 ...(omitted)...
+   240_4  step.sh  ST QUE user1 -              0001:00:00 ...(omitted)...
+
+
+Bulk job
+---------
+
+| Bulk job status can be displayed with  \ :program:`pjstat`\  command.
+| The \ ``-E``\  option is required when referring to sub job information.
+
+1. Display example of parent job only
+
+  .. code-block:: console
+
+   [_LNlogin]$ pjstat
+   JOB_ID JOB_NAME MD ST  USER  START_DATE     ELAPSE_LIM NODE_REQUIRE VNODE CORE V_MEM
+   239    bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 12:2x3x2     -     -    -
+
+2. Display example including sub job (add \ ``-E``\  option)
+
+  .. code-block:: console
+
+   [_LNlogin]$ pjstat -E
+   JOB_ID JOB_NAME MD ST  USER  START_DATE     ELAPSE_LIM ...(omitted)...
+   239    bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(omitted)...
+   239[1] bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(omitted)...
+   239[2] bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(omitted)...
+   239[3] bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(omitted)...
+   239[4] bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(omitted)...
+   239[5] bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(omitted)...
+
+Computer resources
+-------------------
+
+The display of computer resources for each assignment can be checked using the accountj command.
+
+The display of computing resources and coefficients for each job can be confirmed using the pjstata command.
+
+About the usage of each command, please refer to "3.1. Command explanation" of "\ `User Support Tool User's Guide <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/support_tool/>`_\ ".
+
+The job statistic information
+------------------------------
+
+The job statistic information is output to stats file if put  ``-s``  or   ``-S``  to pjsub option and execute. 
+
+The job statistic information can be checked by using   :command:`pjstat`  command. If use   :command:`pjstat`  command, the following options are used.
+
+.. code-block:: none
+
+   pjstat {-s|-S} --history [day=N] [jobid]
+   
+Use example
+
+.. code-block:: console
+
+   [_LNlogin]$ pjstat -S --history day=7 22269
+   
+Please refer to the manual for pjstatsinfo (7) for the job statistics information items.
+
+.. code-block:: console
+
+   [_LNlogin]$ man pjstatsinfo
+
+Electric power information
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The job statistics include the following power information:
+
+- Calculation cores in CMG units Average Power consumption (Recommended)
+- L2 cache per CMG Average power consumption (Estimation)
+- Memory per CMG Average Power (Estimation)
+- Tofu Average power consumption (Estimation)
+- In CPU around Average power consumption (Recommended)
+- Light module Average power consumption (Estimation)
+- PCI-E Average power consumption (Recommended)
+- Node Average power consumption (Estimation)
+- Node Average power consumption  (Actual measurement)
+
+
+.. attention::
+
+   Understanding the interval for obtaining power-related information
+
+   - | The power measurements from which the power information in the job statistics is derived run every 1 minute.
+     | It may not be able to measure power at the right time in the jobs that run for less than 1 minute. In that case, the discrepancy between the output value and the actual power used will be large. 
+    
+   - The power information AVG output in the job statistics is the processed value of the information measured in 1 minute increments.     
+
+
+
+On  the Fugaku  , if the power consumption exceeds the value set on the operation side during job execution, the CPU clock of the node used by the job may be forcibly reduced.
+The output of statistical information is a measure of the power consumption of the job.
+
+If you need more detailed power consumption research, use PowerAPI or Profiler.
+
+Output example for the job statistic information (Abstract)
+
+.. code-block:: none
+
+   AVG POWER CONSUMPTION OF CORES/CMG(0) (IDEAL) : 21.394424
+   AVG POWER CONSUMPTION OF CORES/CMG(1) (IDEAL) : 21.355174
+   AVG POWER CONSUMPTION OF CORES/CMG(2) (IDEAL) : 21.362863
+   AVG POWER CONSUMPTION OF CORES/CMG(3) (IDEAL) : 21.363552
+   ENERGY CONSUMPTION OF CORES/CMG(0) (IDEAL) : 0.012945
+   ENERGY CONSUMPTION OF CORES/CMG(1) (IDEAL) : 0.012922
+   ENERGY CONSUMPTION OF CORES/CMG(2) (IDEAL) : 0.012926
+   ENERGY CONSUMPTION OF CORES/CMG(3) (IDEAL) : 0.012927
+   AVG POWER CONSUMPTION OF L2CACHE/CMG(0) (IDEAL) : 1.349224
+   AVG POWER CONSUMPTION OF L2CACHE/CMG(1) (IDEAL) : 1.337747
+   AVG POWER CONSUMPTION OF L2CACHE/CMG(2) (IDEAL) : 1.323286
+   AVG POWER CONSUMPTION OF L2CACHE/CMG(3) (IDEAL) : 1.323401
+
+
+Electric power limitation function (Power capping)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When the power limit function is activated when the power consumption of the job exceeds the threshold, the time when the threshold is exceeded is output to 'POWER CAPPING DATE' of the job statistical information.
+
+Please refer to 'POWER CAPPING DATE' to confirm whether the power limit has been applied.
+
+
+Performance information output
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Job statistical information includes information (PERF COUNT) for calculating performance information.
+Thus this information is output per node,  output if put   ``-S``  option.
+
+Output example (Abstract)
+
+.. code-block:: none
+
+ PERF COUNT 1                : 4385694044
+ PERF COUNT 2                : 3968
+ PERF COUNT 3                : 0
+ PERF COUNT 4                : 267598
+ PERF COUNT 5                : 328895
+ PERF COUNT 6                : 0
+ PERF COUNT 7                : 2398547
+ PERF COUNT 8                : 98275
+ PERF COUNT 9                : 237498
+
+Performance information output is calculated as following.
+
+.. list-table::
+  :header-rows: 1
+
+  * - Performance information
+    - Output direction
+
+  * - Number of execution cycle
+    - SUM(PERF COUNT 1)
+
+  * - Number of floating-point instruction operations
+    - SUM(PERF COUNT 2)+SUM(PERF COUNT 3)x4
+
+  * - Number of memory read request
+    - SUM(PERF COUNT 4) / 12
+
+  * - Number of memory write request
+    - SUM(PERF COUNT 5) / 12
+
+  * - Number of sleep cycle
+    - SUM(PERF COUNT 6)
+
+  * - EFFECTIVE_INST_SPEC*
+    - SUM(PERF COUNT 7)
+
+  * - SIMD_INST_RETIRED*
+    - SUM(PERF COUNT 8)
+
+  * - SVE_INST_RETIRED*
+    - SUM(PERF COUNT 9)
+
+\*reference: `https://github.com/fujitsu/A64FX/blob/master/doc/A64FX_PMU_Events_v1.3.pdf <https://github.com/fujitsu/A64FX/blob/master/doc/A64FX_PMU_Events_v1.3.pdf>`_
+
+.. attention::
+
+  Note that the performance information calculated from the job statistics is per job, not per executed application.
+  
+  In the job script, if executed :command:`xospastop` command or executed a profiler, calculation of PERF COUNT will not be proceeded.
+  
+  If you need detailed performance information of the application, please use a profiler.
+
+
+Job status display command options
+-----------------------------------
+
+Typical options of job status display command(  \ :program:`pjstat`\  ) are shown.
+
+For details, refer to "Job Operation Software End-user's Guide".
+
+.. list-table:: 
+    :widths: 3 9
+    :header-rows: 1
+
+    * - Option name
+      - Function
+
+    * - \-H, &#45;-history [day=value]
+      - | This  option  displays  only the information on jobs that finished processing (in the REJECT, EXIT, or CANCEL state).
+        | If neither the ``-H`` nor ``--history`` argument is specified, information on jobs that  finished in the past three days is output.
+        | day=value outputs information about jobs that finished within the past number of days represented by value. 
+        | The value can be an integer [1-90].
+        | The Fugaku holds up to 90 days of information.
+        | Example: ``pjstat -H day=90``
+
+    * - \-v
+      - The job information which is not output with standard format is desplayed additionally.
+
+    * - \-s
+      - | Outputs detailed information such as resource usage and resource limit values.
+        | Please refer to  \ :ref:`JobExecutionStatisticalInformation`\  for output information.
+        | If used  \ ``-v``\  or  \ ``-S``\  option, output error message and terminate.
+
+    * - \-S
+      - | In addition to the information output by the  \ ``-s`` \  option, the node unit information set for the job is also output.
+        | Please refer to  \ :ref:`JobExecutionStatisticalInformation`\  for output information.
+        | If used  \ ``-v``\  or  \ ``-s``\  option, output error message and terminate.
+
+    * - \-E, &#45;-expand
+      - When sub jobs exist, the list of sub jobs is also output.
+
+    * - &#45;-limit
+      - Displays the limit value and current usage for user job submission.
+
+    * - &#45;-help
+      - Shows help.
+
+

@@ -1,0 +1,326 @@
+:tocdepth: 3
+
+.. _CompilerforCNLLVM:
+
+LLVM
+================
+
+This section describes how to use the C/C++/Fortran compilers based on LLVM.
+LLVM, which generates binaries for compute nodes, is available on both the login nodes (Intel) and the compute nodes.
+
+Usage of LLVM compilers
+-----------------------
+
+
+Environment setting
+^^^^^^^^^^^^^^^^^^^
+
+
+These compiler is located at:
+
+On login node (cross environment) /vol0004/apps/r/OSS_CN/llvm-21.1.0/cross_clangfx
+On compute node (native environment) /vol0004/apps/r/OSS_CN/llvm-21.1.0/own_clangfx
+
+(If you prefer to use the previous version, ':ref:`lvm-v19.1.4 <CompilerforLLVM19>`' remains available.)
+
+Execute the following command to setup the environment before running compilers.
+
+login node
+
+.. code-block:: console
+
+   [_LNIlogin]$ module load LLVM/llvmorg-21.1.0
+
+compute node
+
+.. code-block:: console
+
+   [_CNlogin]$ module load LLVM/llvmorg-21.1.0
+
+Available languages are following
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3 2 2 8
+
+   * - Software
+     - Language
+     - Version
+     - Command
+
+   * - Clang
+     - C
+     - 21.1.0
+     - clang
+
+   * - Clang++
+     - C++
+     - 21.1.0
+     - clang++
+
+   * - Flang
+     - Fortran
+     - 21.1.0
+     - flang
+
+
+How to Use
+^^^^^^^^^^
+
+Here is an example of how to compile C. The commands are common for both nodes.
+For compilation options, please refer to those provided by LLVM’s Clang/Flang.
+
+In particular, with flang, the compile process may sometimes take longer. 
+In such cases, please allocate a larger cache size on the compute node, as described below.
+
+
+[Sequential execution]
+
+login node
+ .. code-block:: console
+
+    [_LNIlogin]$ clang -O3 source_file
+
+compute node
+ .. code-block:: console
+
+    [_CNlogin]$ clang -O3 source_file
+
+
+[OpenMP]
+
+Please add "-fopenmp" option for OpenMP library.
+
+login node
+ .. code-block:: console
+
+    [_LNIlogin]$ clang -O3 -fopenmp source_file
+
+compute node
+ .. code-block:: console
+
+    [_CNlogin]$ clang -O3 -fopenmp source_file
+
+
+[MPI]
+
+You can use MPI library via mpiclang/mpiclang++/mpiflang commands.
+
+
+login node
+ .. code-block:: console
+
+    [_LNIlogin]$ mpiclang -O3 -fopenmp source_file
+
+compute node
+ .. code-block:: console
+
+    [_CNlogin]$ mpiclang -O3 -fopenmp source_file
+
+.. seealso::
+    
+    The same procedure applies when using C++ (mpiclang++) and Fortran (mpiflang).
+
+
+Example: Compilation in a job script
+
+| When assigning a job to a compute node, specify the pjsub option --llio cn-cache-size=1Gi.
+| If omitted, the translation time may increase.
+
+
+ .. code-block:: bash
+
+    #!/bin/sh -x
+    #PJM -L  "node=1"
+    #PJM -L  "rscgrp=small"
+    #PJM -L  "elapse=01:00:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+    #PJM -g groupname
+    #PJM --llio cn-cache-size=1Gi
+    #PJM -s
+    #
+
+    module purge
+    module load LLVM/llvmorg-21.1.0
+
+    mpiclang -o sample1.out sample1.c
+
+How to execute
+^^^^^^^^^^^^^^
+
+The compiled binary can be executed either from an interactive job or from a script. Here is an example of script.
+To improve performance, transfer the executable and LLVM libraries using llio_transfer.
+
+ .. code-block:: bash
+
+    #!/bin/sh -x
+    #PJM -L  "node=128"
+    #PJM --mpi "max-proc-per-node=4"
+    #PJM -L  "rscgrp=small"
+    #PJM -L  "elapse=01:00:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+    #PJM -g groupname
+    #PJM -s
+    #
+
+    module purge
+    module load LLVM/llvmorg-21.1.0
+    llio_transfer `find ${LLVM_BASEDIR}/lib64 -type f -name \*.so\*`
+    llio_transfer `find ${MPI_HOME}/lib64 -type f -name \*.so\*`
+    llio_transfer sample1.out
+
+    mpiexec ./sample1.out
+
+.. seealso::
+
+    For C++ and Fortran programs, the same execution procedure should be followed.
+
+
+Using Libraries
+^^^^^^^^^^^^^^^
+
+With this LLVM, the OpenBLAS and FFTW libraries are available for use.
+
+Please note that this library cannot be used with other compilers.
+
+Usage of OpenBLAS
+"""""""""""""""""
+
+
+The libraries are located at the following path:
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3 8
+
+   * - Library
+     - Path of Library
+   
+   *  - LP64, sequential
+      - /vol0004/apps/r/OSS_CN/llvm/openblas-seq
+
+   *  - LP64, thread-parallel
+      - /vol0004/apps/r/OSS_CN/llvm/openblas-omp
+  
+   *  - ILP64, sequential
+      - /vol0004/apps/r/OSS_CN/llvm/openblas-seq-ilp64
+  
+   *  - ILP64, thread-parallel
+      - /vol0004/apps/r/OSS_CN/llvm/openblas-omp-ilp64
+
+
+How to compile
+++++++++++++++
+
+When compiling a program that uses OpenBLAS, please first configure the environment for LLVM.
+Then, add the option -lopenblas at the linking stage.
+
+For multi-threaded execution, please also add the option -fopenmp.
+
+In addition, please add the following options depending on the programming language.
+
+For C/C++:
+
+- Please specify the library and header files of the OpenBLAS installation directory (${OPENBLAS_DIR}) using the -L and -I options.
+- Please add -lflang_rt.runtime.
+
+For Fortran:
+
+- Please specify the library files of the OpenBLAS installation directory (${OPENBLAS_DIR}) using the -L option.
+
+How to execute
+++++++++++++++
+
+When running a program that uses OpenBLAS, please add ${OPENBLAS_DIR}/lib to the LD_LIBRARY_PATH.
+
+Modifications from the original OpenBLAS
+
+Compared with the original OpenBLAS 0.3.26, the following routines have been tuned for A64FX.
+
+- DGEMM
+- SGEMM
+
+Usage of FFTW
+"""""""""""""
+
+FFTW libraries are located at /vol0004/apps/r/OSS_CN/llvm/fftw3. (FFTW_DIR)
+
+When compiling a program that uses FFTW, please first configure the environment for LLVM.
+Then, add the following options at the linking stage:
+
+- Single-precision sequential library		: -lfftw3f -lm
+- Single-precision multi-threaded library	: -lfftw3f_omp -lfftw3f -lm
+- Double-precision sequential library		: -lfftw3 -lm
+- Double-precision multi-threaded library	: -lfftw3_omp -lfftw3 -lm
+
+When using the multi-threaded library, please add the option -fopenmp.
+
+In addition, please add the following options depending on the programming language:
+
+For C/C++:
+
+- Please specify the library and header files of the FFTW installation directory (${FFTW_DIR}) using the -L and -I options.
+- Please add -lflang_rt.runtime.
+
+For Fortran:
+
+- Please specify the library files of the FFTW installation directory (${FFTW_DIR}) using the -L option.
+
+How to execute
+++++++++++++++
+
+When running a program that uses FFTW, please add ${FFTW_DIR}/lib to the LD_LIBRARY_PATH.
+
+Modifications from the original FFTW
+
+- Header files supporting various SIMD instructions have been adapted for SVE instructions.
+- In the automatic tuning mechanism called plan generation, efficiency is achieved by removing processing routes that are not selected.
+
+Cautions
+^^^^^^^^
+
+Caution for REAL(KIND=16) and COMPLEX(KIND=16) types
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+On the cross-compilation environment flang available on the login nodes, the following error 
+occurs when compiling Fortran programs that use REAL(KIND=16) or COMPLEX(KIND=16) types.
+
+Example for the failure 
+
+ .. code-block:: bash
+
+   flang complex16.f90
+   error: Semantic errors in complex16.f90
+    ./complex16.f90:3:3: error: COMPLEX(KIND=16) is not an enabled type for this target
+    complex(kind=16) :: x
+    ^^^^^^^^^^^^^^^^^^^^^
+
+ .. code-block:: bash
+
+   flang real16.f90
+   error: Semantic errors in real16.f90
+    ./real16.f90:3:3: error: REAL(KIND=16) is not an enabled type for this target
+    real(kind=16) :: x, y, z
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+Workaround
+
+When using these types, please compile in the native environment (i.e., on the compute nodes).
+
+Notes for Interlanguage Linkage
+"""""""""""""""""""""""""""""""
+
+Compilation Command and Required Options during Linking
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+When linking combined Fortran, C, and C++ object programs created with the LLVM compiler, please note the following points.
+
+When linking C++ objects (Using libstdc++)
+   When linking using the command :command:`clang` or :command:`flang`, please specify the option ``-lstdc++``.
+
+When linking Fortran objects
+   When linking using the command :command:`clang` or :command:`clang++`, please specify the following options.
+
+   ``L${LLVM_BASEDIR}/lib64 -lflang_rt.runtime``
+
+.. include:: userguid-section3-01_en.rst.inc
+

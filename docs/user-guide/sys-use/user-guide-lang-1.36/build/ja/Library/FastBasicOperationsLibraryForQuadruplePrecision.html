@@ -1,0 +1,210 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.5. 高速4倍精度基本演算ライブラリ &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="6. PAPIの利用" href="../PAPI/index.html" />
+    <link rel="prev" title="5.4. BLAS／LAPACK／ScaLAPACKライブラリ" href="BLASLAPACKScaLAPACKLibrary.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../PAPI/index.html" title="6. PAPIの利用"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="BLASLAPACKScaLAPACKLibrary.html" title="5.4. BLAS／LAPACK／ScaLAPACKライブラリ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>数学ライブラリ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.5. </span>高速4倍精度基本演算ライブラリ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">5.5. </span>高速4倍精度基本演算ライブラリ<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">高速4倍精度基本演算ライブラリ（fast_dd）は、4倍精度の値を double-double 形式で表現し演算を行うライブラリです。</div>
+<div class="line">double-double 形式は倍精度実数型の変数2つで、4倍精度変数を表現する形式です。</div>
+<div class="line">演算はプロセッサの持つ倍精度演算命令を使って行うため、言語処理系が持つ4倍精度実数型に比べて高速に演算できます。</div>
+</div>
+<p>高速4倍精度基本演算ライブラリは、Fortran、または、C++プログラムから利用できます。</p>
+<section id="fortran">
+<h2><span class="section-number">5.5.1. </span>Fortran 版の結合方法<a class="headerlink" href="#fortran" title="Link to this heading">¶</a></h2>
+<p>fast_dd は、Fortran または C++で記述された利用者プログラムに結合して使用することができます。翻訳、結合には富士通製 Fortran/C++コンパイラを使用します。</p>
+<p>利用方法の例は以下のとおりです。</p>
+<ol class="arabic simple">
+<li><p>SVE版 fast_dd のアーカイブを結合する</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span>,SVE<span class="w"> </span>a.f90<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>汎用版 fast_dd のアーカイブを結合する</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span>,NOSVE<span class="w"> </span>a.f90<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>スレッド並列ルーチンを使用するユーザプログラムを翻訳し、fast_dd のアーカイブを結合する</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span>,SVE<span class="w"> </span>b.f90<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>ネイティブコンパイラにより、ユーザプログラムを翻訳し、SVE版 fast_dd のアーカイブを結合する</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>frt<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span>,SVE<span class="w"> </span>a.f90<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<ul class="simple">
+<li><p>ユーザプログラムをクロスコンパイラにより翻訳し、fast_dd を結合する場合、<strong class="program">frtpx</strong>コマンド行に<code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>を指定します。</p></li>
+<li><p>ユーザプログラムでBLAS/LAPACK のスレッド並列版を使用する場合は、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>オプションを指定します。</p></li>
+<li><p>fast_dd のスレッド並列化されたルーチンを使用する場合は、<code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code>または <code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code>オプションを追加します。</p></li>
+<li><p>ログインノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>が有効であれば、<code class="docutils literal notranslate"><span class="pre">SVE</span></code>を使用したライブラリを結合します。</p></li>
+<li><p>ログインノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code>が有効であれば、汎用のライブラリを結合します。</p></li>
+<li><p>計算ノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>と<code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code>のどちらを指定しても<code class="docutils literal notranslate"><span class="pre">SVE</span></code>を使用したライブラリを結合します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>オプションのデフォルト（省略時）は、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>になります。</p></li>
+<li><p>MPIプログラムを翻訳し、fast_dd を結合するためには <strong class="program">mpifrtpx、mpifrt</strong>コマンドを使用します。</p></li>
+</ul>
+</div>
+</section>
+<section id="c">
+<h2><span class="section-number">5.5.2. </span>C++版の結合方法<a class="headerlink" href="#c" title="Link to this heading">¶</a></h2>
+<p>利用方法の例は以下のとおりです。</p>
+<ol class="arabic simple">
+<li><p>ユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.cpp</span></code>を翻訳し, SVE版 fast_dd のアーカイブを結合する</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span>,SVE<span class="w"> </span>a.cpp<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>ユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.cpp</span></code>を翻訳し, 汎用版 fast_dd のアーカイブを結合する</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span>,NOSVE<span class="w"> </span>a.cpp<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>ネイティブコンパイラでユーザプログラムを翻訳し、SVE 版 fast_dd のアーカイブを結合する</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>FCC<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span>,SVE<span class="w"> </span>a.cpp<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<ul class="simple">
+<li><p>ユーザプログラムをクロスコンパイラにより翻訳し、fast_dd を結合するためには、<strong class="program">FCCpx</strong>コマンド行に<code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>を指定します。</p></li>
+<li><p>ユーザプログラムでBLAS/LAPACK のスレッド並列版を使用する場合は、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>オプションを指定します。</p></li>
+<li><p>fast_dd はスレッドセーフなオブジェクトであるため、<code class="docutils literal notranslate"><span class="pre">-Kopenmp、-Kparallel</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-mt</span></code>のいずれかを指定します。</p></li>
+<li><p>ログインノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>が有効であれば、<code class="docutils literal notranslate"><span class="pre">SVE</span></code>を使用したライブラリを結合します。</p></li>
+<li><p>ログインノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code>が有効であれば、汎用のライブラリを結合します。</p></li>
+<li><p>計算ノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>と<code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code>のどちらを指定しても<code class="docutils literal notranslate"><span class="pre">SVE</span></code>を使用したライブラリを結合します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>オプションのデフォルト（省略時）は、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>になります。</p></li>
+<li><p>MPIプログラムを翻訳し、fast_dd を結合するためには、<strong class="program">mpiFCCpx、mpiFCC</strong>コマンドを使用します。</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.5. 高速4倍精度基本演算ライブラリ</a><ul>
+<li><a class="reference internal" href="#fortran">5.5.1. Fortran 版の結合方法</a></li>
+<li><a class="reference internal" href="#c">5.5.2. C++版の結合方法</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="BLASLAPACKScaLAPACKLibrary.html"
+                          title="前の章へ"><span class="section-number">5.4. </span>BLAS／LAPACK／ScaLAPACKライブラリ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../PAPI/index.html"
+                          title="次の章へ"><span class="section-number">6. </span>PAPIの利用</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../PAPI/index.html" title="6. PAPIの利用"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="BLASLAPACKScaLAPACKLibrary.html" title="5.4. BLAS／LAPACK／ScaLAPACKライブラリ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>数学ライブラリ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.5. </span>高速4倍精度基本演算ライブラリ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

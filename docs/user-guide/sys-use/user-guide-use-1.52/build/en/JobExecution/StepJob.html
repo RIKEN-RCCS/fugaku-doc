@@ -1,0 +1,428 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.3. Step job &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.4. Bulk Job" href="BulkJob.html" />
+    <link rel="prev" title="5.2. Normal job" href="NormalJob.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="BulkJob.html" title="5.4. Bulk Job"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="NormalJob.html" title="5.2. Normal job"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.3. </span>Step job</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="step-job">
+<h1><span class="section-number">5.3. </span>Step job<a class="headerlink" href="#step-job" title="Link to this heading">¶</a></h1>
+<p>A step job is a batch job that gives the job an execution order or dependency.</p>
+<ul class="simple">
+<li><p>The multiple job is called as sub job which consists of step job.</p></li>
+<li><p>Execute each sub job when subumitting sub job.</p></li>
+<li><p>You can control whether to execute the next sub job based on the return code of the first executed sub job.</p></li>
+<li><p>Cannot conbine with interactive job.</p></li>
+<li><p>Resource allocation for sub jobs is performed for each sub job in the same way as for normal jobs. You can specify different resources (number of compute nodes, amount of memory, etc.) for each sub job.</p></li>
+</ul>
+<p>This indicates the workflow image of step job.</p>
+<blockquote>
+<div><figure class="align-default">
+<a class="reference internal image-reference" href="../_images/07020000_1.png"><img alt="../_images/07020000_1.png" src="../_images/07020000_1.png" style="width: 559.3px; height: 298.9px;" /></a>
+</figure>
+</div></blockquote>
+<section id="job-submitting">
+<h2><span class="section-number">5.3.1. </span>Job submitting<a class="headerlink" href="#job-submitting" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">Step job specifies and submits <code class="docutils literal notranslate"><span class="pre">--step</span></code> to  <strong class="program">pjsub</strong>.</div>
+<div class="line">After that, specifies and submits sub job one by one.</div>
+</div>
+<p>[Method of specifying the job ID]</p>
+<p>Submit a sub job with the job ID of the step job.
+In this case, the options of the first sub job differ from the options of the second and subsequent sub jobs.</p>
+<ol class="arabic simple">
+<li><p>Start step job (Specify <code class="docutils literal notranslate"><span class="pre">--step</span></code>)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span><span class="o">[</span>--sparam<span class="w"> </span><span class="s2">&quot;sn=stepno&quot;</span><span class="o">]</span><span class="w"> </span>Script<span class="w"> </span>file
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Execute sujob after the second (Specify <code class="docutils literal notranslate"><span class="pre">--step</span></code>, <code class="docutils literal notranslate"><span class="pre">--sparam</span>&#160; <span class="pre">&quot;jid=jobid&quot;</span></code>)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w">  </span><span class="s2">&quot;jid=jobid [,sn=stepno]&quot;</span><span class="w"> </span>Script<span class="w"> </span>file
+</pre></div>
+</div>
+</div></blockquote>
+<p>Example) When submitting two sub jobs in a step job</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>sub_job0.sh
+<span class="go"> [INFO.] PJM 0000 pjsub Job 64856_0 submitted.</span>
+<span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jid=64856&quot;</span><span class="w"> </span>sub_job1.sh
+<span class="go"> [INFO.] PJM 0000 pjsub Job 64856_1 submitted.</span>
+<span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jid=64856&quot;</span><span class="w"> </span>sub_job2.sh
+<span class="go"> [INFO.] PJM 0000 pjsub Job 64856_2 submitted.</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>Processes with <code class="docutils literal notranslate"><span class="pre">jid</span></code> specified as the second and subsequent sub jobs. Note that if <code class="docutils literal notranslate"><span class="pre">jid</span></code> is not specified, it will be processed as the start of a new step job.</p></li>
+<li><p>The second and subsequent sub jobs can be submitted if any of the previously submitted sub jobs remain. If the step job specified by <code class="docutils literal notranslate"><span class="pre">jid</span></code>  has already ended, the following message is displayed and the job cannot be submitted.</p></li>
+</ul>
+<blockquote>
+<div><div class="line-block">
+<div class="line">$ pjsub –step –sparam “jid=64856” sub_job3.sh</div>
+<div class="line">[ERR.] PJM 0012 pjsub Job 64856 does not exist.</div>
+</div>
+</div></blockquote>
+</div>
+</div></blockquote>
+<p>[Method of specifying the job name]</p>
+<p>Make the sub job name same and submit sub job with the job name specified.
+In this method, the first job and the jobs after that can be submitted by same way basically.</p>
+<ol class="arabic simple">
+<li><p>Start step job (Specify <code class="docutils literal notranslate"><span class="pre">--step</span></code>, <code class="docutils literal notranslate"><span class="pre">--sparam</span> <span class="pre">&quot;jnam=&quot;</span></code>)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jnam=jobname[,sn=stepno]&quot;</span><span class="w"> </span>Script<span class="w"> </span>file
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Execute sujob after the second (Specify <code class="docutils literal notranslate"><span class="pre">--step</span></code>, <code class="docutils literal notranslate"><span class="pre">--sparam</span> <span class="pre">&quot;jnam=&quot;</span></code>）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w">  </span><span class="s2">&quot;jnam=jobname[,sn=stepno]&quot;</span><span class="w"> </span>Script<span class="w"> </span>file
+</pre></div>
+</div>
+</div></blockquote>
+<p>Example) When submitting two sub jobs in a step job</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jnam=mystepjob&quot;</span><span class="w"> </span>sub_job0.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 11716781_0 submitted.</span>
+<span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jnam=mystepjob&quot;</span><span class="w"> </span>sub_job1.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 11716781_1 submitted.</span>
+<span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jnam=mystepjob&quot;</span><span class="w"> </span>sub_job2.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 11716781_2 submitted.</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>If the step job which has the corresponding job name does not exist, new step job will be created.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">--sparam</span> <span class="pre">&quot;jnam=&quot;</span></code> option is specified, the job name specified with the option is set to the sub job regardless of the``-N`` or <code class="docutils literal notranslate"><span class="pre">--name</span></code> option.</p></li>
+<li><p>Two or more step jobs of the same job name might exist. If you submit a sub job specified job name with <code class="docutils literal notranslate"><span class="pre">--sparam</span> <span class="pre">&quot;jnam=&quot;</span></code> option, the sub job is assumed to be associate with the latest step job.</p></li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+<section id="step-job-option">
+<h2><span class="section-number">5.3.2. </span>Step job option<a class="headerlink" href="#step-job-option" title="Link to this heading">¶</a></h2>
+<p>Step job options are as followings:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>--step</p></td>
+<td><div class="line-block">
+<div class="line">Required option</div>
+<div class="line">Indicates it’s a step job</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>--sparam “jid=jobid”</p></td>
+<td><div class="line-block">
+<div class="line">Specify when submitting the second and subsequent sub jobs.</div>
+<div class="line">Specify the job ID of the existing step job in the  <code class="docutils literal notranslate"><span class="pre">jobid</span></code> part.</div>
+<div class="line">If jid is omitted, it is submitted as a new step job.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>--sparam “jnam=jobname”</p></td>
+<td><div class="line-block">
+<div class="line">If you want to submit a step job that each sub jobs of the job name are the same name, you can use this option.</div>
+<div class="line">When the argument <code class="docutils literal notranslate"><span class="pre">jid</span></code> and arguments <code class="docutils literal notranslate"><span class="pre">jnam</span></code> has been specified at the same time, the error occurs (incorrect  specified  option combination).</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>--sparam “sn=stepno”</p></td>
+<td><div class="line-block">
+<div class="line">Specify the step number of the sub job.</div>
+<div class="line">The specified step number becomes the step number of the submitted sub job.</div>
+<div class="line">For the step number, specify a value greater than the maximum step number that has been submitted.</div>
+<div class="line">Step number can be specified as 0~65535.</div>
+<div class="line">If this specification is omitted, 0 is set for the first sub job, and the maximum step number of the submitted sub job is set to +1 for the second and subsequent sub jobs.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sub-job-id">
+<h2><span class="section-number">5.3.3. </span>Sub job ID<a class="headerlink" href="#sub-job-id" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">A sub job of a step job is given a “sub job ID” that combines the job ID and step number.</div>
+<div class="line">As the step number, a serial number (0 to 65535) within one job (one step job including sub jobs) is set.</div>
+</div>
+<p>[The example of step job’s sub job ID]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Job ID</p></th>
+<th class="head"><p>Step job number</p></th>
+<th class="head"><p>Sub job ID</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>12345</p></td>
+<td><p>1</p></td>
+<td><p>12345_1</p></td>
+</tr>
+<tr class="row-odd"><td><p>12345</p></td>
+<td><p>2</p></td>
+<td><p>12345_2</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the job ID is “12345” and the step number is “1”, the sub job ID is “12345_1”.</p>
+</div>
+</section>
+<section id="referencing-job-execution-results">
+<h2><span class="section-number">5.3.4. </span>Referencing job execution results<a class="headerlink" href="#referencing-job-execution-results" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">When the job ends, the job execution result is output to a file in the current directory when the sub job is submitted.</div>
+<div class="line">If the directory at the time of submission is changed for each sub job, it is output to each directory.</div>
+<div class="line">The file name of job execution result is as followings:</div>
+</div>
+<p>[Output file for each sub job]</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 44.4%" />
+<col style="width: 55.6%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Style</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Job name.Sub job ID.out</p></td>
+<td><p>Data written to the standard output by the sub job.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Job name.Sub job ID.err</p></td>
+<td><p>Data written to the standard error output by the sub job.</p></td>
+</tr>
+<tr class="row-even"><td><p>Job name.Sub job ID.stats</p></td>
+<td><p>This is the file to which the sub job statistical information is output.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>[Output file for each step job]</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 44.4%" />
+<col style="width: 55.6%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Style</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>The first jobe name.Job ID.stats</p></td>
+<td><p>This file contains step job statistical information.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>Job name is the file name of the specified job script specifiled with <strong class="program">pjsub</strong> command.</p></li>
+<li><p>If the job name starts with a single-byte number, the character “J” is added to the beginning of the output file name.</p></li>
+<li><p>In the output file name, the job name part (including the letter “J” added at the beginning) is limited to 63 characters.</p></li>
+<li><p>If a job is submitted from the standard input instead of a job script, the job name will be “STDIN”.</p></li>
+<li><p>If standard output and standard error output are specified for the same file name for a step job, the output of each sub job is mixed.</p></li>
+</ul>
+</div>
+<p>Example) Step job execution result file name</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sub_job1.sh.70990.stats      # Step job statistical information file
+sub_job1.sh.70990_0.err      # Standard job output result file for sub job 0
+sub_job1.sh.70990_0.stats    # Sub job 0 statistical information output file
+sub_job1.sh.70990_0.out      # Sub job 0 standard output result file
+sub_job2.sh.70990_1.err      # Sub job 1 standard error output result file
+sub_job2.sh.70990_1.stats    # Sub job 1 statistical information output file
+sub_job2.sh.70990_1.out      # Sub job 1 standard output result file
+sub_job3.sh.70990_2.err      # Standard job output result file for sub job 2
+sub_job3.sh.70990_2.stats    # Sub job 2 statistical information output file
+sub_job3.sh.70990_2.out      # Sub job 2 standard output result file
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>These files as output to current directoy when executed <strong class="program">pjsub</strong> if the place to output is not specified. Please be aware that it’s output to different directories if the current directory is different to <strong class="program">pjsub</strong> for each sub job.</p>
+</div>
+</section>
+<section id="job-submission-example-with-dependency">
+<h2><span class="section-number">5.3.5. </span>Job submission example with dependency<a class="headerlink" href="#job-submission-example-with-dependency" title="Link to this heading">¶</a></h2>
+<p>Using step jobs, it is possible to control whether subsequent jobs are executed by referring to the return value of the job executed first.</p>
+<p>When submitting the second and subsequent sub-jobs, use the <code class="docutils literal notranslate"><span class="pre">--sparam</span> <span class="pre">sd=</span></code> option to specify what action to take depending on the result of the preceding sub-job.
+This is called the “dependency expression” of the step job. For details on dependency expressions, see “How to submit a step job” in the manual “Job Operation Software End-user’s Guide”.</p>
+<p>[Dependency expression format]</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>--sparam &quot;sd=form[:[deletetype][:stepno[:stepno[...]]]]&quot;
+</pre></div>
+</div>
+<p>Here is an example:</p>
+<ol class="arabic simple">
+<li><p>Setting the return value</p></li>
+</ol>
+<blockquote>
+<div><p>The return value referenced by the step job is the return value of the job script. Write a job script to specify the return value of the script.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mpiexec<span class="w"> </span>./sample_mpi
+<span class="nb">exit</span><span class="w"> </span><span class="nv">$?</span><span class="w">   </span><span class="c1">#Return value</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Set script return value to <code class="file docutils literal notranslate"><span class="pre">./sample_mpi</span></code> return value using <strong class="command">exit</strong>.</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Job submission example</p></li>
+</ol>
+<blockquote>
+<div><p>This example to not execute <code class="file docutils literal notranslate"><span class="pre">sub_job3.sh</span></code> if <code class="file docutils literal notranslate"><span class="pre">sub_job2.sh</span></code> return value is not 0.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>sub_job1.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 71080_0 submitted.</span>
+<span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jid=71080&quot;</span><span class="w"> </span>sub_job2.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 71080_1 submitted.</span>
+<span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jid=71080,sd=ec!=0:one:1&quot;</span><span class="w"> </span>sub_job3.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 71080_2 submitted.</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The option specification values in the above example are as follows.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">ec</span></code> :Job script end status of the dependent sub job</p>
+<p><code class="docutils literal notranslate"><span class="pre">one</span></code> :Only this sub job is deleted, and subsequent sub jobs that depend on the results of this sub job are not deleted.</p>
+<p><code class="docutils literal notranslate"><span class="pre">1</span></code> :Refer to the end status of sub job No.1.</p>
+</div></blockquote>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.3. Step job</a><ul>
+<li><a class="reference internal" href="#job-submitting">5.3.1. Job submitting</a></li>
+<li><a class="reference internal" href="#step-job-option">5.3.2. Step job option</a></li>
+<li><a class="reference internal" href="#sub-job-id">5.3.3. Sub job ID</a></li>
+<li><a class="reference internal" href="#referencing-job-execution-results">5.3.4. Referencing job execution results</a></li>
+<li><a class="reference internal" href="#job-submission-example-with-dependency">5.3.5. Job submission example with dependency</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="NormalJob.html"
+                          title="previous chapter"><span class="section-number">5.2. </span>Normal job</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="BulkJob.html"
+                          title="next chapter"><span class="section-number">5.4. </span>Bulk Job</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="BulkJob.html" title="5.4. Bulk Job"
+             >next</a></li>
+        <li class="right" >
+          <a href="NormalJob.html" title="5.2. Normal job"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.3. </span>Step job</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

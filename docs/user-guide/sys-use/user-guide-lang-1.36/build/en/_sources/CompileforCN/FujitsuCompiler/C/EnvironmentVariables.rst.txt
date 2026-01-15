@@ -1,0 +1,5 @@
+Environment variables
+=====================
+
+The environment variable which is required when executing compiler is set when logging in.
+

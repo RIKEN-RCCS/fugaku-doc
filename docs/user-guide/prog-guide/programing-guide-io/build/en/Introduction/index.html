@@ -1,0 +1,227 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>1. Introduction &#8212; Programming Guide (IO part)  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Storage Overview" href="../StorageOverview/index.html" />
+    <link rel="prev" title="Programming Guide (IO part) version 1.02" href="../index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../StorageOverview/index.html" title="2. Storage Overview"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../index.html" title="Programming Guide (IO part) version 1.02"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Programming Guide (IO part)  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>Introduction</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="introduction">
+<h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h1>
+<section id="the-purpose-of-this-document">
+<h2><span class="section-number">1.1. </span>The purpose of this document.<a class="headerlink" href="#the-purpose-of-this-document" title="Permalink to this heading">¶</a></h2>
+<p>This document describes about the basic use direction of Supercomputer Fugaku.</p>
+</section>
+<section id="notation-used-in-this-document">
+<h2><span class="section-number">1.2. </span>Notation used in this document<a class="headerlink" href="#notation-used-in-this-document" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>In command execution, the user terminal and login node to be operated are represented by a prompt.</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Prompt</p></th>
+<th class="head"><p>Control target</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[terminal]</p></td>
+<td><p>Means to execute the command at the user device</p></td>
+</tr>
+<tr class="row-odd"><td><p>[_LNlogin]</p></td>
+<td><p>Means to execute the command at the login node (Common)</p></td>
+</tr>
+<tr class="row-even"><td><p>[_LNIlogin]</p></td>
+<td><p>Means to execute the command at the login node (Intel)</p></td>
+</tr>
+<tr class="row-odd"><td><p>[_LNAlogin]</p></td>
+<td><p>Means to execute the command at the login node (Arm)</p></td>
+</tr>
+<tr class="row-even"><td><p>[_CNlogin]</p></td>
+<td><p>Means to execute the command at the computing node</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li><p>Home directory indicates with ~ (tilde).</p></li>
+<li><p>The language environment is described based on the latest version of functions unless otherwise specified.</p></li>
+</ul>
+</section>
+<section id="abbreviations-and-aliases">
+<h2><span class="section-number">1.3. </span>Abbreviations and aliases<a class="headerlink" href="#abbreviations-and-aliases" title="Permalink to this heading">¶</a></h2>
+<p>The used abbreviations in this document is as following.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Abbreviations and aliases</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Next-generation ultra-high-speed computer system</p></td>
+<td><p>Supercomputer Fugaku</p></td>
+</tr>
+<tr class="row-odd"><td><p>Computing node</p></td>
+<td><p>CN</p></td>
+</tr>
+<tr class="row-even"><td><p>BIO and computing node</p></td>
+<td><p>CN/BIO</p></td>
+</tr>
+<tr class="row-odd"><td><p>SIO and computing node</p></td>
+<td><p>CN/SIO</p></td>
+</tr>
+<tr class="row-even"><td><p>GIO and computing node</p></td>
+<td><p>CN/GIO</p></td>
+</tr>
+<tr class="row-odd"><td><p>Login node and file transfer node</p></td>
+<td><p>Login node or LN</p></td>
+</tr>
+<tr class="row-even"><td><p>Storage connected to BIO and computing node</p></td>
+<td><p>System disk</p></td>
+</tr>
+<tr class="row-odd"><td><p>Storage connected to SIO and computing node</p></td>
+<td><p>First-layer storage</p>
+<p>First tier SSD or SSD</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="about-trademarks">
+<h2><span class="section-number">1.4. </span>About trademarks<a class="headerlink" href="#about-trademarks" title="Permalink to this heading">¶</a></h2>
+<p>Company names and product names in the text may be trademarks or registered trademarks of the respective companies. Other trademarks and registered trademarks are generally trademarks or registered trademarks of their respective companies. Please note that trademark names (TM, (R)) are not always added to system names, product names, etc., described in this document.</p>
+</section>
+<section id="change-log">
+<h2><span class="section-number">1.5. </span>Change log<a class="headerlink" href="#change-log" title="Permalink to this heading">¶</a></h2>
+<p>This indicates the update history of this document.</p>
+<p><strong>Version 1.02 Decenbar 26, 2024</strong></p>
+<ul class="simple">
+<li><p>Modify the sample code in “2.3.1. About Node Temporary Area”.</p></li>
+<li><p>Modify the sample code in “2.3.2. About Shared Temporary Area”.</p></li>
+<li><p>Modify the sample code in “2.3.3. About Cache Area of Second-Layer Storage”.</p></li>
+</ul>
+<p><strong>Version 1.01 November 29, 2024</strong></p>
+<ul class="simple">
+<li><p>The description format has been changed.</p></li>
+</ul>
+<p><strong>Version 1.00 July 12, 2024</strong></p>
+<ul class="simple">
+<li><p>Create New</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1. Introduction</a><ul>
+<li><a class="reference internal" href="#the-purpose-of-this-document">1.1. The purpose of this document.</a></li>
+<li><a class="reference internal" href="#notation-used-in-this-document">1.2. Notation used in this document</a></li>
+<li><a class="reference internal" href="#abbreviations-and-aliases">1.3. Abbreviations and aliases</a></li>
+<li><a class="reference internal" href="#about-trademarks">1.4. About trademarks</a></li>
+<li><a class="reference internal" href="#change-log">1.5. Change log</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../index.html"
+                          title="previous chapter">Programming Guide (IO part) version 1.02</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../StorageOverview/index.html"
+                          title="next chapter"><span class="section-number">2. </span>Storage Overview</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../StorageOverview/index.html" title="2. Storage Overview"
+             >next</a></li>
+        <li class="right" >
+          <a href="../index.html" title="Programming Guide (IO part) version 1.02"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Programming Guide (IO part)  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>Introduction</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

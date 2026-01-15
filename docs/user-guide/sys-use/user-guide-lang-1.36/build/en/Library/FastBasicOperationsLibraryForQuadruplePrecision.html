@@ -1,0 +1,210 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.5. High-speed quadruple precision basic arithmetic library &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6. Use of PAPI" href="../PAPI/index.html" />
+    <link rel="prev" title="5.4. BLAS/LAPACK/ScaLAPACK library" href="BLASLAPACKScaLAPACKLibrary.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../PAPI/index.html" title="6. Use of PAPI"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="BLASLAPACKScaLAPACKLibrary.html" title="5.4. BLAS/LAPACK/ScaLAPACK library"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Math library</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.5. </span>High-speed quadruple precision basic arithmetic library</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="high-speed-quadruple-precision-basic-arithmetic-library">
+<h1><span class="section-number">5.5. </span>High-speed quadruple precision basic arithmetic library<a class="headerlink" href="#high-speed-quadruple-precision-basic-arithmetic-library" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">The high-speed quad-precision basic arithmetic library (fast_dd) is a library that performs arithmetic operations by expressing quad-precision values in double-double format.</div>
+<div class="line">The double-double format is a format that represents a quadruple precision variable with two double precision real variables.</div>
+<div class="line">Since the calculation is performed using the double precision arithmetic instructions of the processor, it can be performed faster than the quadruple precision real type of the language processor.</div>
+<div class="line"><br /></div>
+<div class="line">The high-speed quad-precision basic operation library can be used from Fortran or C ++ programs.</div>
+</div>
+<section id="how-to-combine-fortran-versions">
+<h2><span class="section-number">5.5.1. </span>How to combine Fortran versions<a class="headerlink" href="#how-to-combine-fortran-versions" title="Link to this heading">¶</a></h2>
+<p>fast_dd can be used in conjunction with user programs written in Fortran or C ++. Use the Fortran / C ++ compiler made by Fujitsu for translation and combination.</p>
+<p>Compile example is as following:</p>
+<ol class="arabic simple">
+<li><p>Conbine SVE fast_dd archives.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span>,SVE<span class="w"> </span>a.f90<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Combine generic fast_dd archives.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span>,NOSVE<span class="w"> </span>a.f90<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Translate user program using thread parallel routine, conbine fast_dd archive.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span>,SVE<span class="w"> </span>b.f90<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Translate user program by native compiler, conbine SVE version fast_dd archives.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>frt<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span>,SVE<span class="w"> </span>a.f90<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p>To translate a user program with a cross compiler and combine fast_dd, specify  <code class="docutils literal notranslate"><span class="pre">-SSL2</span></code> to  <strong class="program">frtpx</strong> command line.</p></li>
+<li><p>If you are using the BLAS / LAPACK thread parallel version in your user program, specify  <code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code> .</p></li>
+<li><p>To use fast_dd thread parallelized routines, add the -Kopenmp or -Kparallel option.</p></li>
+<li><p>When joining with a login node, if  <code class="docutils literal notranslate"><span class="pre">-KSVE</span></code> is enabled, combine libraries that are using  <code class="docutils literal notranslate"><span class="pre">SVE</span></code>.</p></li>
+<li><p>When joining with a login node, if  <code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code> is enabled, combine general purpose libraries.</p></li>
+<li><p>If combine with computing node, specifying  <code class="docutils literal notranslate"><span class="pre">-KSVE</span></code> or  <code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code> combine library using  <code class="docutils literal notranslate"><span class="pre">SVE</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-KSVE</span></code> option’s default (when omitted) will be  <code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>.</p></li>
+<li><p>To translate a user program written in MPI using a native compiler and combine fast_dd, use  <strong class="program">mpifrtpx, mpifrt</strong> command.</p></li>
+</ul>
+</div>
+</section>
+<section id="how-to-conbine-c-version">
+<h2><span class="section-number">5.5.2. </span>How to conbine C ++ version<a class="headerlink" href="#how-to-conbine-c-version" title="Link to this heading">¶</a></h2>
+<p>Compile example is as following:</p>
+<ol class="arabic simple">
+<li><p>Translate user program <code class="file docutils literal notranslate"><span class="pre">a.cpp</span></code>,conbine SVE fast_dd archives.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span>,SVE<span class="w"> </span>a.cpp<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Translate user program  <code class="file docutils literal notranslate"><span class="pre">a.cpp</span></code>, combine generic fast_dd archives.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span>,NOSVE<span class="w"> </span>a.cpp<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Translate user program by native compiler , conbine SVE fast_dd archives.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>FCC<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span>,SVE<span class="w"> </span>a.cpp<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p>To translate a user program with a cross compiler and combine fast_dd, specify  <code class="docutils literal notranslate"><span class="pre">-SSL2</span></code> to  <strong class="program">FCCpx</strong> command line.</p></li>
+<li><p>If you are using the BLAS / LAPACK thread parallel version in your user program, specify  <code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>.</p></li>
+<li><p>fast_dd is a thread-safe object, specify  <code class="docutils literal notranslate"><span class="pre">-Kopenmp,</span> <span class="pre">-Kparallel</span></code> or  <code class="docutils literal notranslate"><span class="pre">-mt</span></code>.</p></li>
+<li><p>When joining with a login node, if  <code class="docutils literal notranslate"><span class="pre">-KSVE</span></code> is enabled, combine libraries that are using  <code class="docutils literal notranslate"><span class="pre">SVE</span></code>.</p></li>
+<li><p>When joining with a login node, if  <code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code> is enabled, combine general purpose libraries.</p></li>
+<li><p>If combine with computing node, specifying  <code class="docutils literal notranslate"><span class="pre">-KSVE</span></code> or  <code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code> combine library using  <code class="docutils literal notranslate"><span class="pre">SVE</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-KSVE</span></code> option’s default (when omitted) will be  <code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>.</p></li>
+<li><p>To translate a user program written in MPI using a native compiler and combine fast_dd, use  <strong class="program">mpiFCCpx, mpiFCC</strong> command.</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.5. High-speed quadruple precision basic arithmetic library</a><ul>
+<li><a class="reference internal" href="#how-to-combine-fortran-versions">5.5.1. How to combine Fortran versions</a></li>
+<li><a class="reference internal" href="#how-to-conbine-c-version">5.5.2. How to conbine C ++ version</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="BLASLAPACKScaLAPACKLibrary.html"
+                          title="previous chapter"><span class="section-number">5.4. </span>BLAS/LAPACK/ScaLAPACK library</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../PAPI/index.html"
+                          title="next chapter"><span class="section-number">6. </span>Use of PAPI</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../PAPI/index.html" title="6. Use of PAPI"
+             >next</a></li>
+        <li class="right" >
+          <a href="BLASLAPACKScaLAPACKLibrary.html" title="5.4. BLAS/LAPACK/ScaLAPACK library"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Math library</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.5. </span>High-speed quadruple precision basic arithmetic library</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

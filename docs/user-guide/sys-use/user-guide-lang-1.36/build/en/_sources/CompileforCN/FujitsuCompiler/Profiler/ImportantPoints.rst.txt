@@ -1,0 +1,100 @@
+.. highlight:: none
+
+Notes
+=====
+
+The following notes apply to all profilers. For notes on each profiler (Instant Performance, Advanced Performance, CPU Performance Analysis Report), refer to the manual "Profiler User's Guide"-"5 Notes".
+
+Compile option
+--------------------
+
+The following options may cause the profiler to behave unintentionally when compiling a program.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 2 7
+
+   * - Compile options
+     - Description
+
+   * - \-O0
+     - In case of C language or C ++ program, to measure the loop information of the program with Instant Performance Profiler, specify an optimisation option ( more than ``-O1``) when translation.
+
+   * - \-Nnoline, -ffj-no-line
+     - If translation option ``-Nnoline``  or ``-ffj-no-line`` is enabled, cannot calculate cost by ``-Puserfunc`` option of ``fipp`` command.
+       
+       If it is something like this program, enable with ``-Pnouserfunc`` option then cost will be calculated right.
+       
+       Also traslation option ``-Nnoline`` or ``-ffj-no-line`` is enabled, cannot measure the MPI library cost.
+
+   * - \-Ncoarray
+     - If translation option ``-Ncoarray`` is enabled, be aware of the followings.
+      
+       - The value obtained by adding +1 to the rank number or process number corresponds to the image number.
+       - The cost of the MPI library used by the COARRAY function may be recorded.
+
+   * - \-Klto , -flto
+     - If translation option ``-Klto`` or ``-flto`` is enabled, the following information output by the Instant Performance Profiler is not guaranteed.
+      
+       - Call graph information
+      
+        The procedure name that is generated internally by link time optimization may be displayed in the displayed procedure name.
+      
+       - Source code information
+      
+        The cost of each row may not be displayed correctly.
+
+Avoiding long time or large memory use in large parallel programs
+--------------------------------------------------------------------
+
+When analyzing large parallel programs (``fipppx -A``, ``fapppx -A``, ``fipp -A`` and ``fapp -A``), the profiler may take a long time to be analyzed or run out of memory.
+
+In the analysis process, the following options of :program:`fapppx` command can be used to avoid the above long run and low memory.
+
+-p option
+   By reducing the number of processes to be analyzed, the memory area required for the analysis can be reduced.
+
+-I option
+   By reducing the number of output items, the amount of memory use can be reduced.
+
+CPU frequency of compute nodes that also serve as IO
+-------------------------------------------------------------
+
+The CPU frequency of compute nodes that also serve as IO (CN/BIO, CN/SIO and CN/GIO) is set to 2.2GHz.
+Users cannot change the CPU frequency of compute nodes that also serve as IO.
+
+The CPU frequency of compute nodes (CN) is 2.0GHz. Be careful when evaluating the performance.
+
+Refer to "`7. Power control function <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/PowerControlFunction/index.html>`_" of "Users Guide - Use and job execution -" for details of the CPU frequency.
+
+
+CPU Binding
+------------
+
+| When measuring profile data, you must control the bindings so that threads and CPU have a one-to-one relationship.
+| If the CPU is not binding, the Profiler measurements may be incorrect.
+
+The CPU Performance Analysis Report prints the following message and does not generate a report.::
+
+   paXX.csv : The environment seems to not bind process to core.
+
+
+For more information on CPU binding, see.
+
+See the "Fortran User's Guide", "C User's Guide", or "C++ User's Guide" when using threadparallel program.
+
+Use the VCOORD file for CPU binding when using non-thread-parallel and MPI program (using :program:`mpiexec` command). 
+See ``{ -vcoordfile | --vcoordfile }`` option in "MPI User's Guide" to specify the VCOORD file. 
+Set the number of CPUs (cores) to "1" (core=1) for all processes in the VCOORD file.
+
+Use :program:`taskset` or :program:`numactl` command for CPU binding when using neither thread-parallel nor MPI program. 
+For more information, see the man page.
+
+CPU Performance Analysis Report Cache Miss Ratio
+-------------------------------------------------
+
+The ratio of cache misses may be out of range due to exceed the effect of measurement errors or measurement variation. 
+The ratio of cache misses greater than 100% is considered 100%, and the ratio of cache misses less than 0% is considered 0%.
+
+Refer to "4.2.2.5.2 Cache (Standard and Detail Reports)" in "Profiler User's Guide".
+

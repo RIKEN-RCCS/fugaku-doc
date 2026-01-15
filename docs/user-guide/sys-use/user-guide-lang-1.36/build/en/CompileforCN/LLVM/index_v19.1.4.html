@@ -1,0 +1,240 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>LLVM v19.1.4 &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=f85107c5" />
+    
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">LLVM v19.1.4</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="llvm-v19-1-4">
+<span id="compilerforllvm19"></span><h1>LLVM v19.1.4<a class="headerlink" href="#llvm-v19-1-4" title="Link to this heading">¶</a></h1>
+<p>It shows how to use C and C++ compilers based on LLVM.
+The compiler is available on the login node (Intel) and compute node.</p>
+<section id="environment-setting">
+<h2>Environment setting<a class="headerlink" href="#environment-setting" title="Link to this heading">¶</a></h2>
+<p>These compilers are in /vol0004/apps/oss/llvm-v19.1.4</p>
+<p>(v19.1.0 has been deprecated due to a minor bug. Please use v19.1.4.)</p>
+<p>Execute the followin gcommand to setup the environment before runnig compliers.</p>
+<p>login node</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>.<span class="w"> </span>/vol0004/apps/oss/llvm-v19.1.4/init.sh
+</pre></div>
+</div>
+<p>compute node</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>.<span class="w"> </span>/vol0004/apps/oss/llvm-v19.1.4/init.sh
+</pre></div>
+</div>
+<p>Available compilers are following</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 13.3%" />
+<col style="width: 13.3%" />
+<col style="width: 53.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Software</p></th>
+<th class="head"><p>Language</p></th>
+<th class="head"><p>Version</p></th>
+<th class="head"><p>Command</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Clang</p></td>
+<td><p>C</p></td>
+<td><p>19.1.4</p></td>
+<td><p>clang</p></td>
+</tr>
+<tr class="row-odd"><td><p>Clang++</p></td>
+<td><p>C++</p></td>
+<td><p>19.1.4</p></td>
+<td><p>clang++</p></td>
+</tr>
+<tr class="row-even"><td><p>Flang</p></td>
+<td><p>Fortran</p></td>
+<td><p>19.1.4</p></td>
+<td><p>flang</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="how-to-use">
+<h2>How to Use<a class="headerlink" href="#how-to-use" title="Link to this heading">¶</a></h2>
+<p>Here is an example of how to compile C.
+The commands are common for both nodes.</p>
+<blockquote>
+<div><p>[Sequential execution]</p>
+<p>Login node</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>clang<span class="w"> </span>-O3<span class="w"> </span>source_file
+</pre></div>
+</div>
+<p>Compute node</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>clang<span class="w"> </span>-O3<span class="w"> </span>source_file
+</pre></div>
+</div>
+<p>[OpenMP]</p>
+<p>You can use Fujitsu OpenMP libarary.</p>
+<p>Please add ‘-Kopenmp’ option for Futjistu OpenMP library.</p>
+<p>However, it has been reported that specifying schedule(dynamic) in a #pragma directive may cause linking errors.</p>
+<p>In such cases, please use “-fopenmp” instead.</p>
+<p>Login node</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>clang<span class="w"> </span>-O3<span class="w"> </span>-Kopenmp<span class="w"> </span>source_file
+</pre></div>
+</div>
+<p>Compute node</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>clang<span class="w"> </span>-O3<span class="w"> </span>-Kopenmp<span class="w"> </span>source_file
+</pre></div>
+</div>
+<p>[Fujistu MPI]</p>
+<p>You can use Fujitsu MPI libraries by mpiclang/mpiclang++ commands on login node.</p>
+<p>Please add ‘-Kopenmp’ option for Futjistu OpenMP library.</p>
+<p>However, it has been reported that specifying schedule(dynamic) in a #pragma directive may cause linking errors.</p>
+<p>In such cases, please use “-fopenmp” instead.</p>
+<p>Login node</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>mpiclang<span class="w"> </span>-O3<span class="w"> </span>-Kopenmp<span class="w"> </span>source_file
+</pre></div>
+</div>
+<p>Compute node</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>mpiclang<span class="w"> </span>-O3<span class="w"> </span>-Kopenmp<span class="w"> </span>source_file
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>In the case of C++, please just command to clang++/mpiclang++.</p>
+</div>
+</section>
+<section id="how-to-execute">
+<h2>How to execute<a class="headerlink" href="#how-to-execute" title="Link to this heading">¶</a></h2>
+<p>The compiled binary can be executed either from an interactive job or from a script.
+Here is an example of script.</p>
+<blockquote>
+<div><p>[Sequential execution]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=1&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+.<span class="w"> </span>/vol0004/apps/oss/llvm-v19.1.4/init.sh
+./a.out
+</pre></div>
+</div>
+<p>[OpenMP]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=1&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">12</span>
+.<span class="w"> </span>/vol0004/apps/oss/llvm-v19.1.4/init.sh
+./a.out
+</pre></div>
+</div>
+<p>[Fujistu MPI]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=1&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;proc=4&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">12</span>
+.<span class="w"> </span>/vol0004/apps/oss/llvm-v19.1.4/init.sh
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Binaries compiled clang++ can be executed in the same way.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">LLVM v19.1.4</a><ul>
+<li><a class="reference internal" href="#environment-setting">Environment setting</a></li>
+<li><a class="reference internal" href="#how-to-use">How to Use</a></li>
+<li><a class="reference internal" href="#how-to-execute">How to execute</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">LLVM v19.1.4</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

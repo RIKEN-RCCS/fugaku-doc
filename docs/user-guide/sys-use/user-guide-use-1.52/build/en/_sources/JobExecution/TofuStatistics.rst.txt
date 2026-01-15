@@ -1,0 +1,164 @@
+Obtaining TofuD TNR statistics
+=================================
+
+**Overview**
+
+  Users can obtain TofuD TNR (Tofu network router) statistics.
+  For each TNR port (A,C,B-,B+,X-,X+,Y-,Y+,Z-,Z+), the following statistics can be obtained.
+  
+  - zero credit state cyscles
+  - total packets sent and received
+  - total bytes of packets sent and received(1/16 value)
+  
+  Zero credit state cycles represent the total number of cycles when the remaining amount of destination buffer was zero. Since the operating frequency is 425MHz, one cycle corresponds to approximately 2.35 nanoseconds. Users can see the number of cycles (time) that communication was stopped due to congestion.
+  
+  By obtaining statistics with a time interval and taking the difference between the read values, it is possible to know the communication amount.
+  
+  The total bytes of packets sent and received represent 1/16 of the total bytes sent and received.
+
+  .. seealso::
+  
+    Please refer to " `Fugaku System Configuration <https://www.fugaku.r-ccs.riken.jp/fugaku_information#tofud-interconnect>`_ " on the Fugaku website for the configuration information of TofuD.
+
+
+**Understanding the interface for obtaining statistics (ioctl)**
+
+  TNR statistics can be obtained with the :command:`ioctl(2)` interface provided by the TofuD driver.
+  Specify the followings as arguments to call :command:`ioctl`.
+  
+    - the first argument of ioctl : fd number when opening /proc/tofu/dev/info
+    - the second argument of ioctl: _IOWR('d', 9, long) 
+    - the third argument of ioctl : Address of the following structure (tof_get_port_stat)
+
+      .. code-block:: c
+
+        struct tof_get_port_stat {
+              int port_no;
+              uint64_t mask;
+              uint64_t pa[31];
+        };
+
+  The port_no variable and mask variable in the tof_get_port_stat structure are input parameters of ioctl. For the pa variable, the statistics of the port specified by port_no is stored.
+  The correspondence between the index of the pa variable (array) and the available statistics is as follows.
+
+   .. list-table:: 
+    :header-rows: 1
+    :widths: 1,3
+  
+    * - Index of the pa variable
+      - Description of obtained results
+  
+    * - 0
+      - number of zero credit state cyscles in virtual channel 0 (VC0)
+  
+    * - 1
+      - number of zero credit state cyscles in virtual channel 1 (VC1)
+  
+    * - 2
+      - number of zero credit state cyscles in virtual channel 2 (VC2)
+
+    * - 3
+      - number of zero credit state cyscles in virtual channel 3 (VC3)
+
+    * - 6
+      - total sent packets
+
+    * - 7
+      - total sent bytes(1/16 value)
+
+    * - 16
+      - total received packets
+
+    * - 17
+      - total received bytes(1/16 value)
+
+  Specify the port ID based on the table below for the port_no variable.
+
+   .. list-table:: 
+    :header-rows: 1
+    :widths: 1,1
+
+    * - Logical port
+      - Port ID
+
+    * - A
+      - 1
+
+    * - C
+      - 2
+
+    * - B-
+      - 3
+
+    * - B+
+      - 4
+
+    * - X-
+      - 5
+
+    * - X+
+      - 6
+
+    * - Y-
+      - 7
+
+    * - Y+
+      - 8
+
+    * - Z-
+      - 9
+
+    * - Z+
+      - 10
+
+  Set a bitmask to the mask variable.
+
+  - Obtain pa[n] when 0
+  - Do not obtain pa[n] when 1
+
+  For example, in order to obtain pa[0],pa[1],pa[2],pa[3], specify 0xFFFFFFF0 for mask.
+  If you want to obtain all the statistics in the table above, specify 0xFFFFFF30 for mask.
+
+  .. attention::
+
+    - Hardware register access occurs when obtaining statistics. If you cannot ignore the latency, please specify the information that needs to be obtained by using mask. An indeterminate number is returned for the statistics not obtained by mask.
+    - A value of 1/16 is stored for the total bytes of packets sent and received. To convert to an actual value, multiply by 16.
+
+  The following error is set in errno when ioctl call fails.
+
+   .. list-table:: 
+    :header-rows: 1
+    :widths: 1,1
+
+    * - Name
+      - Operation
+
+    * - EINVAL
+      - Specify a value other than 1-10 for port_no
+
+    * - EFAULT
+      - User space and kernel space data copy failed
+
+**Sample program**
+
+  A sample program is provided to obtain TofuD TNR statistics by ioctl.
+   :download:`Download get_port_stat.c <./src/get_port_stat.c>`
+
+  Here is an example of how to compile and run the program on a compute node.
+
+  .. code-block:: console
+
+    [_CNlogin]$ fcc get_port_stat.c -o get_port_stat
+    [_CNlogin]$ ./get_port_stat
+    port_name,pa[0],pa[1],pa[2],pa[3],pa[6],pa[7],pa[16],pa[17]
+    A,0,27910272727454,420730647535,0,2464338799405,153641653215667,2934762493226,214395948656466
+    C,0,18924412834175,489428671284,0,2073545237108,156157972293252,2329968905612,188700401742674
+    B-,0,3762767544996,390704871815,250024,2243406296215,163990760948475,1978652407038,126890968786478
+    B+,397823126596,4891130840161,478845006012,44572,2102091704677,162165504844619,1572638411965,101847294931163
+    X-,131270521308116,18178231547705,1130725761941,24741113620,6310974937394,446507465546870,6129539107432,430123327647998
+    X+,210371927252085,25664573932559,2226337318599,11202950790,6079358975087,425306776312583,6331250757071,446564108159829
+    Y-,1239911977558,3394055414680,80637718934,164614927485,366061771695,26837543897751,513661116740,43540705115890
+    Y+,2619521829150,10313768124615,104613494016,78053815908,738388103253,65146082508265,566950117829,45821629417759
+    Z-,1989340756317,307229854310,208198959208,198717930578,181498497720,13130612346246,238798680681,19827909732205
+    Z+,1256929737324,1423913574375,131643193373,170725424408,242929503717,18650318528973,205296746334,14306341870088
+ 

@@ -1,0 +1,144 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.8. C language &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f85107c5" />
+    
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="3.1.8.1. Environment variables" href="EnvironmentVariables.html" />
+    <link rel="prev" title="3.1.7.11.4. Hybrid parallel" href="../Fortran/FortranSampleProgram%28hybridParallel%29.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="EnvironmentVariables.html" title="3.1.8.1. Environment variables"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../Fortran/FortranSampleProgram%28hybridParallel%29.html" title="3.1.7.11.4. Hybrid parallel"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.8. </span>C language</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="c-language">
+<h1><span class="section-number">3.1.8. </span>C language<a class="headerlink" href="#c-language" title="Link to this heading">¶</a></h1>
+<p>This indicates how to use C language compiler.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="EnvironmentVariables.html">3.1.8.1. Environment variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modeTradAndClangC.html">3.1.8.2. Compiler mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tradmode.html">3.1.8.3. trad mode</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tradmode.html#how-to-compile">3.1.8.3.1. How to compile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tradmode.html#compilation-option">3.1.8.3.2. Compilation option</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tradmode.html#recommended-compiling-option">3.1.8.3.3. Recommended compiling option</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tradmode.html#environment-variable-option-specification">3.1.8.3.4. Environment variable (option specification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tradmode.html#c-library-for-parallel-processing">3.1.8.3.5. C library for parallel processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tradmode.html#compilation-example">3.1.8.3.6. Compilation example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tradmode.html#c-sample-program">3.1.8.3.7. C sample program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tradmode.html#built-in-debug-function">3.1.8.3.8. Built-in debug function</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="clangmode.html">3.1.8.4. clang mode</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="clangmode.html#how-to-compile">3.1.8.4.1. How to compile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clangmode.html#compilation-option">3.1.8.4.2. Compilation option</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clangmode.html#recommended-compiling-options">3.1.8.4.3. Recommended compiling options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clangmode.html#environment-variable-option-specification">3.1.8.4.4. Environment variable (option specification)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clangmode.html#c-library-for-parallel-processing">3.1.8.4.5. C library for parallel processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clangmode.html#compilation-example">3.1.8.4.6. Compilation example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clangmode.html#c-sample-program">3.1.8.4.7. C sample program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clangmode.html#built-in-debug-function">3.1.8.4.8. Built-in debug function</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="InlineAssemblerC.html">3.1.8.5. Inline Assembler</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="InlineAssemblerC.html#notes">3.1.8.5.1. Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InlineAssemblerC.html#compile">3.1.8.5.2. Compile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InlineAssemblerC.html#asm-statement-general-format">3.1.8.5.3. asm statement (General format)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InlineAssemblerC.html#asm-statement-gnu-expanded-format">3.1.8.5.4. asm statement (GNU expanded format)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InlineAssemblerC.html#i-o-operand">3.1.8.5.5. I/O operand</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InlineAssemblerC.html#constraint-character">3.1.8.5.6. Constraint character</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InlineAssemblerC.html#how-to-specify-names-in-assembler-code">3.1.8.5.7. How to specify names in assembler code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InlineAssemblerC.html#how-to-specify-the-specific-register">3.1.8.5.8. How to specify the specific register</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InlineAssemblerC.html#specification-example-gnu-expanded-format">3.1.8.5.9. Specification example (GNU expanded format)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../Fortran/FortranSampleProgram%28hybridParallel%29.html"
+                          title="previous chapter"><span class="section-number">3.1.7.11.4. </span>Hybrid parallel</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="EnvironmentVariables.html"
+                          title="next chapter"><span class="section-number">3.1.8.1. </span>Environment variables</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="EnvironmentVariables.html" title="3.1.8.1. Environment variables"
+             >next</a></li>
+        <li class="right" >
+          <a href="../Fortran/FortranSampleProgram%28hybridParallel%29.html" title="3.1.7.11.4. Hybrid parallel"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.8. </span>C language</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,478 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6.11. MPI statistic information &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6.12. Collective Communication Algorithms(knomial, rabenseifner) in MPI" href="CollectiveCommunicationAlgorithm.html" />
+    <link rel="prev" title="6.10. Rank inquiry functions" href="RankInquiryFunctions.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CollectiveCommunicationAlgorithm.html" title="6.12. Collective Communication Algorithms(knomial, rabenseifner) in MPI"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="RankInquiryFunctions.html" title="6.10. Rank inquiry functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.11. </span>MPI statistic information</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="mpi-statistic-information">
+<h1><span class="section-number">6.11. </span>MPI statistic information<a class="headerlink" href="#mpi-statistic-information" title="Link to this heading">¶</a></h1>
+<p>In job script, by specifying the following table MCA parameter, it can display the statistic information concerning to MPI communication.
+About MPI statistic information detail, please see “MPI User’s Guide”-“6.15 MPI Statistical Information”.</p>
+<ul class="simple">
+<li><p>-mca mpi_print_stats</p></li>
+<li><p>-mca mpi_print_stats_ranks</p></li>
+</ul>
+<p>[mpi_print_stats]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 8.3%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Area</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Specification contents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>None</p></td>
+<td><p>0</p></td>
+<td><p>Specifies not to output MPI statistics. If a value other than an integer from 0 to 4 is specified for this parameter, the value 0 is assumed to be specified. The default value of this parameter is 0.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Whole mode</p></td>
+<td><p>1</p></td>
+<td><p>Specifies that MPI statistics are to be output to the standard error output. However, in this case, the MPI statistics of all the parallel processes are summarized, and the parallel processes with rank number 0 belonging to MPI_COMM_WORLD are output.</p></td>
+</tr>
+<tr class="row-even"><td><p>Whole mode</p></td>
+<td><p>2</p></td>
+<td><p>Specifies that MPI statistics are to be output to the standard error output. However, in this case, MPI statistics for each parallel process are output by each parallel process itself. Which parallel process to output is determined by specifying MCA parameter  <code class="docutils literal notranslate"><span class="pre">mpi_print_stats_ranks</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Section mode</p></td>
+<td><p>3</p></td>
+<td><p>Same as parameter value 1. However, it is necessary to specify the FJMPI_COLLECTION_PRINT routine to output to the standard error output. Furthermore, the output contents are divided into a header part, a body part including section lines, and a footer part and output.</p></td>
+</tr>
+<tr class="row-even"><td><p>Section mode</p></td>
+<td><p>4</p></td>
+<td><p>Same as parameter value 2. However, it is necessary to specify the FJMPI_COLLECTION_PRINT routine to output to the standard error output. Furthermore, the output contents are divided into a header part, a body part including section lines, and a footer part and output.</p></td>
+</tr>
+</tbody>
+</table>
+<p>[mpi_print_stats_ranks]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Specification contents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Integer value than 0</p></td>
+<td><p>Identify parallel process rank number to output MPI statistic information. This parameter is only available when specify 2 or 4 to MCA parameter  <code class="docutils literal notranslate"><span class="pre">mpi_print_stats</span></code>. Specify the rank number belonging to MPI_COMM_WORLD. Multiple rank numbers can be specified by separating the rank numbers with commas “,”. If you specify a rank number that does not exist in this parameter, the specification of that rank number will be ignored.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-1</p></td>
+<td><p>Specify to output all parallel process MPI statistic information. This parameter is only available when specify 2 or 4 to MCA parameter  <code class="docutils literal notranslate"><span class="pre">mpi_print_stats</span></code>. If specify the lower number than -1 to this parameter, it will be considered as -1 is specified. This parameter’s omitting value is -1.</p></td>
+</tr>
+</tbody>
+</table>
+<section id="whole-mode">
+<h2><span class="section-number">6.11.1. </span>Whole mode<a class="headerlink" href="#whole-mode" title="Link to this heading">¶</a></h2>
+<p>Gather statistic information of whole of MPI application and output.</p>
+<p>It is available by specifying <code class="docutils literal notranslate"><span class="pre">1</span></code> or  <code class="docutils literal notranslate"><span class="pre">2</span></code>to MCA option   <code class="docutils literal notranslate"><span class="pre">mpi_print_stats</span></code>.</p>
+<p>[Option specification example]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">16</span><span class="w"> </span>-mca<span class="w"> </span>mpi_print_stats<span class="w"> </span><span class="m">1</span><span class="w"> </span>./a.out
+</pre></div>
+</div>
+</section>
+<section id="section-mode">
+<h2><span class="section-number">6.11.2. </span>Section mode<a class="headerlink" href="#section-mode" title="Link to this heading">¶</a></h2>
+<p>It can be used by specifying  <code class="docutils literal notranslate"><span class="pre">3</span></code> or  <code class="docutils literal notranslate"><span class="pre">4</span></code> to MCA option  <code class="docutils literal notranslate"><span class="pre">mpi_print_stats</span></code> and using the section specification routine described later.</p>
+<p>In MPI application, gather the statistic information that the user specified the section area and output.</p>
+<p>[Option specification example]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">16</span><span class="w"> </span>-mca<span class="w"> </span>mpi_print_stats<span class="w"> </span><span class="m">3</span><span class="w"> </span>./a.out
+</pre></div>
+</div>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#setion-specification-routine" id="id1">Setion specification routine</a></p></li>
+<li><p><a class="reference internal" href="#section-mode-application-examples" id="id2">Section mode application examples</a></p></li>
+<li><p><a class="reference internal" href="#output-contents-of-section-mode" id="id3">Output contents of section mode</a></p></li>
+<li><p><a class="reference internal" href="#notes-on-using-section-mode" id="id4">Notes on using section mode</a></p></li>
+</ul>
+</nav>
+<section id="setion-specification-routine">
+<h3><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">6.11.2.1. </span>Setion specification routine</a><a class="headerlink" href="#setion-specification-routine" title="Link to this heading">¶</a></h3>
+<p>The following table shows a list of specific routines for the section-specific MPI statistical information interface. When using the section mode, it is necessary to specify the measurement section (FJMPI_COLLECTION_START / FJMPI_COLLECTION_STOP) and output (FJMPI_COLLECTION_PRINT) in the source code.</p>
+<p>To use this interface, it is required to specify 3 or 4 to MCA option  <code class="docutils literal notranslate"><span class="pre">mpi_print_stats</span></code>.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 10.0%" />
+<col style="width: 50.0%" />
+<col style="width: 10.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Routine name</p></th>
+<th class="head"><p>Argument</p></th>
+<th class="head"><p>Function overview</p></th>
+<th class="head"><p>Sync process</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>FJMPI_COLLECTION_START</p></td>
+<td><p>None</p></td>
+<td><p>Start gathering of section specification MPI statistic information</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>FJMPI_COLLECTION_STOP</p></td>
+<td><p>None</p></td>
+<td><p>Stop gathering of section specification MPI statistic information</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-even"><td><p>FJMPI_COLLECTION_PRINT</p></td>
+<td><p>String type</p></td>
+<td><p>Output gathering data of section specification MPI statistic information</p></td>
+<td><p><sup>*</sup>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>FJMPI_COLLECTION_CLEAR</p></td>
+<td><p>None</p></td>
+<td><p>Initialize gathering data of section specification MPI statistic information</p></td>
+<td><p>-</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><sup>*</sup>1 : Only when mpi_print_stats is 3, sync process is included in FJMPI_COLLECTION_PRINT.</p>
+</div>
+</div></blockquote>
+<p>For details of the section specification routine, refer to “The MPI Statistical Information Section Specifying Routine” in the manual “MPI User’s Guide”.</p>
+<div class="line-block">
+<div class="line">The use image of the section specification MPI routine is shown below.</div>
+<div class="line">If the specified section (FJMPI_Collection_start / FJMPI_Collection_stop) is repeatedly executed, the measured values will be accumulated. FJMPI_Collection_clear needs to be executed to clear the measurement value and perform measurement.</div>
+</div>
+<div class="line-block">
+<div class="line">If the FJMPI_Collection_clear on the 9th line is absent in the image below using the section specification MPI routine, the accumulated value of processing 1 and processing 2 is output in FJMPI_Collection_print on the 15th line.</div>
+<div class="line"><br /></div>
+</div>
+<blockquote>
+<div><p>[Section specification MPI routine use image]</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="n">MPI_Init</span><span class="p">();</span>
+<span class="linenos"> 2</span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<span class="linenos"> 3</span><span class="w">   </span><span class="n">FJMPI_Collection_start</span><span class="p">();</span>
+<span class="linenos"> 4</span><span class="w">   </span><span class="c1">//(Process 1)</span>
+<span class="linenos"> 5</span><span class="w">   </span><span class="n">FJMPI_Collection_stop</span><span class="p">();</span>
+<span class="linenos"> 6</span><span class="p">}</span>
+<span class="linenos"> 7</span><span class="n">FJMPI_Collection_print</span><span class="p">(</span><span class="s">&quot;main1&quot;</span><span class="p">);</span><span class="w">  </span><span class="c1">// Tirak value of process 1 in for-sentence is output</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="n">FJMPI_Collection_clear</span><span class="p">();</span><span class="w">         </span><span class="c1">// Initialixe statistic information</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="n">FJMPI_Collection_start</span><span class="p">();</span>
+<span class="linenos">12</span><span class="c1">//(Process 2)</span>
+<span class="linenos">13</span><span class="n">FJMPI_Collection_stop</span><span class="p">();</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="n">FJMPI_Collection_print</span><span class="p">(</span><span class="s">&quot;main2&quot;</span><span class="p">);</span><span class="w">  </span><span class="c1">// Statistic information in line 12 process 2</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="n">MPI_Finalize</span><span class="p">();</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">The specification of section mode (FJMPI_COLLECTION_START / FJMPI_COLLECTION_STOP) cannot be a nest.</div>
+<div class="line">If it is specified as a nest, cannot guaranteed the output result. Be careful when specifying.</div>
+</div>
+<div class="line-block">
+<div class="line">The operation example when nesting is specified is shown below.</div>
+<div class="line">If FJMPI_Collection_start is continued, only statrting time is reset after the 2nd time.</div>
+<div class="line">If FJMPI_Collection_stop is continued, stop data gathering at the 1st time and nothing happens after the 2nd time.</div>
+<div class="line">As a result, in the FJMPI_Collection_print on the 8th line, Time is displayed from the 3rd to 5th lines, and other (other than Time) statistical information is displayed from the 1st to 5th lines.</div>
+</div>
+<blockquote>
+<div><p>[If setting specification of section mode to the nest]</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w"> </span><span class="n">FJMPI_Collection_start</span><span class="p">();</span>
+<span class="linenos">2</span><span class="w"> </span><span class="c1">//(Process 1)</span>
+<span class="linenos">3</span><span class="w"> </span><span class="n">FJMPI_Collection_start</span><span class="p">();</span><span class="w">   </span><span class="c1">// Note *1</span>
+<span class="linenos">4</span><span class="w"> </span><span class="c1">//(Process 2)</span>
+<span class="linenos">5</span><span class="w"> </span><span class="n">FJMPI_Collection_stop</span><span class="p">();</span><span class="w">    </span><span class="c1">// Note *2</span>
+<span class="linenos">6</span><span class="w"> </span><span class="c1">//(Process 3)</span>
+<span class="linenos">7</span><span class="w"> </span><span class="n">FJMPI_Collection_stop</span><span class="p">();</span><span class="w">    </span><span class="c1">// Note *3</span>
+<span class="linenos">8</span><span class="w"> </span><span class="n">FJMPI_Collection_print</span><span class="p">(</span><span class="s">&quot;s1&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line"><sup>*</sup>1: Only start time is reset that is used for calculation of time displayed in the output function. Counter value is continued.</div>
+<div class="line"><sup>*</sup>2: Stop data gathering.</div>
+<div class="line"><sup>*</sup>3: Nothing proceeded.</div>
+</div>
+</div>
+</div></blockquote>
+</section>
+<section id="section-mode-application-examples">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">6.11.2.2. </span>Section mode application examples</a><a class="headerlink" href="#section-mode-application-examples" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">This section shows how to measure from MPI_Init to MPI_Finalize without changing the source using the section mode. Use this function when the section specification routine cannot be inserted into the source code.</div>
+<div class="line">The global mode collects execution information for the entire MPI application. For this reason, the totals include communication that occurs in the internal processing of MPI_Init. Since the MPI_Init internal processing is included, the number of non-target communication times appears in the statistical information as the parallelism increases. In the application example shown here, MPI_Init and MPI_Finalize are excluded from measurement using the section mode.</div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>When executing a program using the procedure using PMPI shown here, the profiler and runtime information output function cannot be used. When using the profiler and runtime information output function, do not use the init_finalize_hook program shown here.</p>
+</div>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">Prepara source program for section specification</div>
+<div class="line">Prepare  “ <code class="file docutils literal notranslate"><span class="pre">init_finalize_hookf.f</span></code>“  if executing MPI_Init/MPI_Finalize from Fortran or “<code class="file docutils literal notranslate"><span class="pre">init_finalize_hookc.c</span></code> “ if executing from C/C++.</div>
+<div class="line">Compile depending on using language</div>
+</div>
+<p>[init_finalize_hookf.f]</p>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-Fortran notranslate"><div class="highlight"><pre><span></span><span class="k">SUBROUTINE </span><span class="n">MPI_INIT</span><span class="p">(</span><span class="w"> </span><span class="n">ierr</span><span class="w"> </span><span class="p">)</span>
+<span class="k">INCLUDE</span><span class="w"> </span><span class="s2">&quot;mpif.h&quot;</span>
+<span class="kt">INTEGER </span><span class="n">ierr</span>
+
+<span class="k">CALL </span><span class="n">PMPI_INIT</span><span class="p">(</span><span class="w"> </span><span class="n">ierr</span><span class="w"> </span><span class="p">)</span>
+
+<span class="k">CALL </span><span class="n">FJMPI_Collection_start</span><span class="p">()</span>
+
+<span class="k">RETURN</span>
+<span class="k">END</span>
+<span class="k">SUBROUTINE </span><span class="n">MPI_FINALIZE</span><span class="p">(</span><span class="w"> </span><span class="n">ierr</span><span class="w"> </span><span class="p">)</span>
+<span class="k">INCLUDE</span><span class="w"> </span><span class="s2">&quot;mpif.h&quot;</span>
+<span class="kt">INTEGER </span><span class="n">ierr</span>
+<span class="kt">CHARACTER</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="n">STR</span>
+
+<span class="n">STR</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+
+<span class="k">CALL </span><span class="n">FJMPI_Collection_stop</span><span class="p">()</span>
+<span class="k">CALL </span><span class="n">FJMPI_Collection_print</span><span class="p">(</span><span class="n">STR</span><span class="p">)</span>
+
+<span class="k">CALL </span><span class="n">PMPI_FINALIZE</span><span class="p">(</span><span class="w"> </span><span class="n">ierr</span><span class="w"> </span><span class="p">)</span>
+
+<span class="k">RETURN</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+<p>[init_finalize_hookc.c]</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi-ext.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">MPI_Init</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">***</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">rc</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PMPI_Init</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">FJMPI_Collection_start</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">rc</span><span class="p">;</span>
+<span class="w"> </span><span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">MPI_Finalize</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">rc</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">FJMPI_Collection_stop</span><span class="p">();</span>
+<span class="w">    </span><span class="n">FJMPI_Collection_print</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PMPI_Finalize</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">rc</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>[Compile execution]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpifrtpx<span class="w"> </span>-G<span class="w"> </span>-KPIC<span class="w"> </span>init_finalize_hookf.f<span class="w"> </span>-o<span class="w"> </span>libhookf.so
+<span class="gp">$ </span>mpifrtpx<span class="w"> </span>-c<span class="w"> </span>-KPIC<span class="w"> </span>init_finalize_hookf.f
+<span class="gp">$ </span>mpifccpx<span class="w"> </span>-G<span class="w"> </span>-KPIC<span class="w"> </span>init_finalize_hookc.c<span class="w"> </span>-o<span class="w"> </span>libhookc.so
+<span class="gp">$ </span>mpifccpx<span class="w"> </span>-c<span class="w"> </span>-KPIC<span class="w"> </span>init_finalize_hookc.c
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><div class="line-block">
+<div class="line">Execution by dynamic linking</div>
+<div class="line">If it is difficult to re-link the execution module, execute it using dynamic linking. In this method, the MPI latency performance is lower than in the case of the static link described later.</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><p>To execute by dynamic link, when execution, only specify  <code class="file docutils literal notranslate"><span class="pre">libhookf.so</span></code> (<code class="file docutils literal notranslate"><span class="pre">libhookc.so</span></code>)  to  <code class="docutils literal notranslate"><span class="pre">LD_PRELOAD</span></code> by  <code class="docutils literal notranslate"><span class="pre">LD_PRELOAD</span></code>. As shown in the following dynamic link execution example (job script), execute by adding the specification of  <code class="docutils literal notranslate"><span class="pre">LD_PRELOAD</span></code> to  <code class="file docutils literal notranslate"><span class="pre">libhookf.so</span></code> (If C/C++,  <code class="file docutils literal notranslate"><span class="pre">libhookc.so</span></code>) .</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash -x</span>
+<span class="c1">#</span>
+<span class="c1">#PJM -L &quot;node=8&quot;</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+
+
+mpiexec<span class="w"> </span>-x<span class="w"> </span><span class="nv">LD_PRELOAD</span><span class="o">=</span>./libhookf.so<span class="w"> </span>-mca<span class="w"> </span>mpi_print_stats<span class="w"> </span><span class="m">3</span><span class="w"> </span>./a.out
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="3">
+<li><div class="line-block">
+<div class="line">Execution by static link</div>
+<div class="line">This is the way to proceed execution module re-linking.</div>
+<div class="line">Recreate the execution module by linking  <code class="file docutils literal notranslate"><span class="pre">init_finalize_hookf.o</span></code> (or  <code class="file docutils literal notranslate"><span class="pre">init_finalize_hookc.o</span></code>). With created execution module, gather MPI statistic information.</div>
+<div class="line">How to re-link is indicated as below. Link by adding  <code class="file docutils literal notranslate"><span class="pre">init_finalize_hookf.o</span></code> (or  <code class="file docutils literal notranslate"><span class="pre">init_finalize_hookc.o</span></code>) when linking.</div>
+<div class="line">Execute the execution module that is created on re-linking.</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpifrtpx<span class="w"> </span>-o<span class="w"> </span>a.out<span class="w"> </span>init_finalize_hookf.o<span class="w"> </span><span class="c1"># Program object</span>
+<span class="gp">$ </span>mpifccpx<span class="w"> </span>-o<span class="w"> </span>a.out<span class="w"> </span>init_finalize_hookc.o<span class="w"> </span><span class="c1"># Program object</span>
+</pre></div>
+</div>
+<p>[Execution example by static link (job script)]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash -x</span>
+<span class="c1">#</span>
+<span class="c1">#PJM -L &quot;node=8&quot;</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+
+
+mpiexec<span class="w"> </span>-mca<span class="w"> </span>mpi_print_stats<span class="w"> </span><span class="m">3</span><span class="w"> </span>./a.out
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="output-contents-of-section-mode">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">6.11.2.3. </span>Output contents of section mode</a><a class="headerlink" href="#output-contents-of-section-mode" title="Link to this heading">¶</a></h3>
+<p>On section mode, if FJMPI_COLLECTION_PRINT is not specified, the statistic information is not output. As specified FJMPI_COLLECTION_PRINT, the statistic information is output.</p>
+<p>For details on each output item, see “Contents of MPI statistical information output for section specifying output mode” in the “MPI User’s Guide”.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The statictic information of Hasty_Rendezvous is displayed when “Use Hasty Rendezvous communication (<code class="docutils literal notranslate"><span class="pre">--mca</span> <span class="pre">pml_ob1_use_hasty_rendezvous</span> <span class="pre">1</span></code>) “ is specified.</p>
+</div>
+</section>
+<section id="notes-on-using-section-mode">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">6.11.2.4. </span>Notes on using section mode</a><a class="headerlink" href="#notes-on-using-section-mode" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>If FJMPI_COLLECTION_PRINT is not specified, the statistic information is not output.</p></li>
+<li><p>If specified  <code class="docutils literal notranslate"><span class="pre">3</span></code> to  <code class="docutils literal notranslate"><span class="pre">mpi_print_stats</span></code>, sync process is proceeded in FJMPI_COLLECTION_PRINT.</p></li>
+<li><p>Do not specify measurement section specification (FJMPI_COLLECTION_START/ FJMPI_COLLECTION_STOP) to the nest. If so, the result is not guaranteed.</p></li>
+<li><p>Until specifying FJMPI_COLLECTION_CLEAR, the statistical information of the measurement section is accumulated. When setting multiple measurement sections, keep in mind which section is accumulated.</p></li>
+<li><p>The argument (character string) of FJMPI_COLLECTION_PRINT is output to the section heading when output. It has no effect other than being output to the headline. The character string must be a printable character within 30 characters.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">6.11. MPI statistic information</a><ul>
+<li><a class="reference internal" href="#whole-mode">6.11.1. Whole mode</a></li>
+<li><a class="reference internal" href="#section-mode">6.11.2. Section mode</a><ul>
+<li><a class="reference internal" href="#setion-specification-routine">6.11.2.1. Setion specification routine</a></li>
+<li><a class="reference internal" href="#section-mode-application-examples">6.11.2.2. Section mode application examples</a></li>
+<li><a class="reference internal" href="#output-contents-of-section-mode">6.11.2.3. Output contents of section mode</a></li>
+<li><a class="reference internal" href="#notes-on-using-section-mode">6.11.2.4. Notes on using section mode</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="RankInquiryFunctions.html"
+                          title="previous chapter"><span class="section-number">6.10. </span>Rank inquiry functions</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CollectiveCommunicationAlgorithm.html"
+                          title="next chapter"><span class="section-number">6.12. </span>Collective Communication Algorithms(knomial, rabenseifner) in MPI</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CollectiveCommunicationAlgorithm.html" title="6.12. Collective Communication Algorithms(knomial, rabenseifner) in MPI"
+             >next</a></li>
+        <li class="right" >
+          <a href="RankInquiryFunctions.html" title="6.10. Rank inquiry functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.11. </span>MPI statistic information</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

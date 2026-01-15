@@ -1,0 +1,112 @@
+Hybrid parallel
+===============
+
+The following is an example of compiling a C program for a multi-node job (hybrid parallel).
+
+
+1. | Prepare source program.
+   | Sample program is prepared as  \ :file:`/home/system/sample/C/mpi/clang_sample_hybrid.c`\ .
+   | :download:`(Downloard sample code) <./src/clang_sample_hybrid.c>`
+
+.. code-block:: c
+   :linenos:
+
+   #include <stdio.h>
+   #include "mpi.h"
+   #define SIZE 9000
+   
+   int main(int argc, char *argv[])
+   {
+       int     rank, size, root;
+       int     data, result;
+       int     i,j;
+       double  a[SIZE][SIZE],b[SIZE][SIZE],c[SIZE][SIZE];
+   
+       result = 0;
+   
+       MPI_Init(&argc, &argv);
+       MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+       MPI_Comm_size(MPI_COMM_WORLD, &size);
+   
+       for(i=0; i < SIZE; i++){
+               for(j=0; j < SIZE; j++){
+                       a[i][j] = (double)(i+j*0.5);
+                       b[i][j] = (double)(i+j/(rank+1));
+                       c[i][j] = a[i][j] + b[i][j];
+               }
+       }
+   
+       data = c[1][1]/(rank+1);
+   
+       if (rank == 0) {
+               fprintf(stdout, "MPI communication start. size=%d\n", size);
+               fflush(stdout);
+       }
+   
+       root = 0;
+       MPI_Reduce(&data, &result, 1, MPI_INT, MPI_SUM, root, MPI_COMM_WORLD);
+   
+       if (rank == 0) {
+               fprintf(stdout, "MPI communication end\n");
+               fprintf(stdout, "result(%d)\n",result);
+               fflush(stdout);
+       }
+   
+       MPI_Finalize();
+       return 0;
+   }
+
+2. Compile sample program.
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Nclang -Ofast -fopenmp -Rpass=.* -ffj-lst=t -o sample_mpi clang_sample_hybrid.c
+  
+  clang_sample_hybrid.c:21:25: remark: sinking zext [-Rpass=licm]
+                          a[i][j] = (double)(i+j*0.5);
+                          ^
+  clang_sample_hybrid.c:21:25: remark: sinking zext [-Rpass=licm]
+  clang_sample_hybrid.c:21:44: remark: hoisting sitofp [-Rpass=licm]
+                          a[i][j] = (double)(i+j*0.5);
+                                             ^
+  (omitted)
+
+
+3. | Prepare job script.
+   | Job script sample is prepared as  \ :file:`/home/system/sample/C/mpi/clang_job_mpi.sh`\.
+   | :download:`(Download sample code) <./src/clang_job_mpi.sh>`
+
+ .. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L "node=2"
+  #PJM -L "rscgrp=small"
+  #PJM -L "elapse=10:00"
+  #PJM --mpi max-proc-per-node=4
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -g groupname
+  #PJM -s
+
+  # execute job
+  export OMP_NUM_THREADS=12
+  mpiexec -n 8 ./sample_mpi
+
+
+4. Submit a job with  \ :program:`pjsub`\  command.
+
+ .. code-block:: console
+
+  [_LNlogin]$ pjsub clang_job_mpi.sh
+  [INFO] PJM 0000 pjsub Job 26 submitted.
+
+5. | Check execution result.
+   | The standard output is output as  \ :file:`job name.job ID.out`\.
+
+ .. code-block:: console
+
+  [_LNlogin]$ cat clang_job_mpi.sh.26.out
+  MPI communication start. size=8
+  MPI communication end
+  result(4)
+
+

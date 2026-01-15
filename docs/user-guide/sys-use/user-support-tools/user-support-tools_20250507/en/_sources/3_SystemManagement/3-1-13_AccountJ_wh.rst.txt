@@ -1,0 +1,163 @@
+User payment information displaying (Electricity charging)
+============================================================================================
+
+.. attention:: **accountj_wh is deprecated. To check power consumption, use the command: accountj_pt.**
+
+
+.. | 　**[Name]**
+.. | 　accountj_wh - Display power billing information for job
+.. 
+.. | 　**[Style]**
+.. | 　accountj_wh  [-s]  [-g group name]
+.. 
+.. | 　**[Description]**
+.. | 　The accountj_wh command displays power billing information about the job used. The power charging information is displayed for each group to which it belongs.
+.. |   Since the resources allocated to the projects are reference values and are not power consumption limits, they are not intended to determine whether a job can be submitted.
+.. 
+.. 
+.. | 　**[Option]**
+.. | 　-g  group name
+.. | 　Specify group name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.
+.. | 　When not specified, job accounting information for all groups to which the user belongs is displayed.
+..  　
+.. | 　-s
+.. | 　The power consumption display unit changes from the default megawatt hour [MWh] to the watt hour [Wh].
+..  　
+.. | 　&#45;-help
+.. | 　Display command help contents.
+..  　
+.. | 　**[Return value]**
+.. | 　Normal: 0
+.. | 　Abnormal: 1
+.. 
+.. | 　**[Note]**
+.. | 　None.
+.. 
+.. | 　**[Display contents]**
+.. | 　Charging information is displayed for each management unit such as subtheme, group, etc.
+.. | 　A separator line indicates what administrative unit is displayed below it.
+.. | 　Items for each management unit are as follows.
+.. | 　SUBTHEME：View the assigned resources and resource consumption for a subtheme
+.. 
+..   .. list-table::
+..     :header-rows: 1
+..     :widths: 40 100
+..   
+..     * - Item name
+..       - Description
+..   
+..     * - SUBTHEME
+..       - Subtheme Name
+..   
+..     * - PARENT
+..       - Upper layer name
+..   
+..     * - LIMIT
+..       - Amount of allocated resources
+..   
+..     * - USAGE
+..       - Amount of used resources
+..   
+..     * - RUNNING
+..       - Amount of resources submited and execution
+.. 
+..     * - AVAILABLE
+..       - Amount of available resources
+.. 
+..     * - USAGE_RATE
+..       - Percentage of used resources(USAGE / LIMIT)
+.. 
+.. | 　GROUP：View the assigned resources and resource consumption for a group
+.. 
+..   .. list-table::
+..     :header-rows: 1
+..     :widths: 40 100
+..   
+..     * - Item name
+..       - Description
+..   
+..     * - GROUP
+..       - Group Name
+..   
+..     * - PARENT
+..       - Upper layer name
+..   
+..     * - LIMIT
+..       - Amount of allocated resources
+..   
+..     * - USAGE
+..       - Amount of used resources
+..   
+..     * - RUNNING
+..       - Amount of resources submited and execution
+.. 
+..     * - AVAILABLE
+..       - Amount of available resources
+.. 
+..     * - USAGE_RATE
+..       - Percentage of used resources(USAGE / LIMIT)
+.. 
+.. | 　**[Use example]**
+.. | 　【Example 1】Display the accounting information that the group they are belonging to
+.. 
+.. .. code-block:: console 
+.. 
+..    [login]$ accountj_wh
+..    COLLECTDATE : 2021-03-09 10:30:00   unit[MWh]
+..    *-----[ SUBTHEME ]--------------------------------------------------------------------------------------------------*
+..    SUBTHEME              PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE
+..    group001             Y20HP00              100                10                 0                90           10.000%
+..    *-----[ GROUP ]-----------------------------------------------------------------------------------------------------*
+..    GROUP                 PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE
+..    group001            group001        unlimited                10                 0               ---               ---
+.. 
+..    *-----[ SUBTHEME ]--------------------------------------------------------------------------------------------------*
+..    SUBTHEME              PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE
+..    group002             Y20HP01               50                 0                 0                50            0.000%
+..    *-----[ GROUP ]-----------------------------------------------------------------------------------------------------*
+..    GROUP                 PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE
+..    group002            group002        unlimited                 0                 0               ---               ---
+.. 
+.. 
+.. | 　The resource allocation information of all groups to which the executing user belongs and the upper sub-theme layer is displayed.
+.. 
+.. 
+.. | 　【Example 2】Display the power accounting information for the group to which you belong
+.. 
+.. .. code-block:: console 
+.. 
+..    [login]$ accountj_wh -g group001
+..    COLLECTDATE : 2021-03-09 10:30:00   unit[MWh]
+..    *-----[ SUBTHEME ]--------------------------------------------------------------------------------------------------*
+..    SUBTHEME              PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE
+..    group001             Y20HP00              100                10                 0                90           10.000%
+..    *-----[ GROUP ]-----------------------------------------------------------------------------------------------------*
+..    GROUP                 PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE
+..    group001            group001        unlimited                10                 0               ---               ---
+.. 
+.. | 　Displays power billing information for the specified group.
+.. 
+.. 
+.. | 　【Example 3】Change the display units from Mega Watt hours [MWh] to Watt hours [Wh]
+.. 
+.. .. code-block:: console 
+.. 
+..    [login]$ accountj_wh -s
+..    COLLECTDATE : 2021-03-09 10:30:00   unit[Wh]
+..    *-----[ SUBTHEME ]--------------------------------------------------------------------------------------------------*
+..    SUBTHEME              PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE
+..    group001             Y20HP00      100,000,000        10,000,000                 0        90,000,000           10.000%
+..    *-----[ GROUP ]-----------------------------------------------------------------------------------------------------*
+..    GROUP                 PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE
+..    group001            group001        unlimited        10,000,000                 0               ---               ---
+.. 
+..    *-----[ SUBTHEME ]--------------------------------------------------------------------------------------------------*
+..    SUBTHEME              PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE
+..    group002             Y20HP01       50,000,000                 0                 0        50,000,000            0.000%
+..    *-----[ GROUP ]-----------------------------------------------------------------------------------------------------*
+..    GROUP                 PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE
+..    group002            group002        unlimited                 0                 0               ---               ---
+.. 
+.. | 　You can use the -s option to change the display units to Watt Hour[Wh]. Unit switching is calculated as 1K (1,000). The fraction due to unit switching is displayed with the limit value (LIMIT) rounded down and the usage (USAGE) rounded up. The remaining usable amount (AVAILABLE) is a value obtained by subtracting the usage amount (USAGE) and the submitting job usage planned amount (RUNNING) from the limit value (LIMIT).
+.. | 　The submitting job usage planned amount (RUNNING) includes executing job and resource amount of waiting to execute job. 
+.. | 　The usage rate (USAGE_RATE) is rounded off to the second decimal place.

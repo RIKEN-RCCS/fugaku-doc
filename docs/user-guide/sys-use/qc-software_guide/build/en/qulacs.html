@@ -1,0 +1,251 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>2. Qulacs &#8212; Quantum Computing Software User&#39;s Guide  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="1. braket" href="braket.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="braket.html" title="1. braket"
+             accesskey="P">previous</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">Quantum Computing Software User&#39;s Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>Qulacs</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="qulacs">
+<h1><span class="section-number">2. </span>Qulacs<a class="headerlink" href="#qulacs" title="Permalink to this heading">¶</a></h1>
+<section id="overview">
+<h2><span class="section-number">2.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<p>Qulacs is a Python/C++ library for high-speed simulations of quantum circuits.
+This document will explain how to use Qulacs on Fugaku.</p>
+<p>The supported version of Qulacs on Fugaku is v0.5.5.</p>
+<p>For more information about Qulacs, refer to <a class="reference external" href="http://docs.qulacs.org/en/latest/index.html">the official website</a>.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+<section id="how-to-use-qulacs">
+<h2><span class="section-number">2.2. </span>How to use Qulacs<a class="headerlink" href="#how-to-use-qulacs" title="Permalink to this heading">¶</a></h2>
+<p>Qulacs is available through Spack, a software package management system for high performance computing.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<section id="preparation-of-spack-environment">
+<h3><span class="section-number">2.2.1. </span>Preparation of Spack environment<a class="headerlink" href="#preparation-of-spack-environment" title="Permalink to this heading">¶</a></h3>
+<p>The Spack environment on Fugaku can be constructed based on <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/FugakuSpackGuide/">Fugaku Spack User Guide</a>.</p>
+<p>This document explains how to use Qulacs assuming the use of public instances of Spack.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+<section id="loading-qulacs">
+<h3><span class="section-number">2.2.2. </span>Loading Qulacs<a class="headerlink" href="#loading-qulacs" title="Permalink to this heading">¶</a></h3>
+<p>If you use Qulacs, load it with the following command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ spack load qulacs %fj
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+<section id="unloading-qulacs">
+<h3><span class="section-number">2.2.3. </span>Unloading Qulacs<a class="headerlink" href="#unloading-qulacs" title="Permalink to this heading">¶</a></h3>
+<p>If you do not use Qulacs, unload it with the following command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ spack unload qulacs %fj
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+</section>
+<section id="example-of-usage">
+<h2><span class="section-number">2.3. </span>Example of Usage<a class="headerlink" href="#example-of-usage" title="Permalink to this heading">¶</a></h2>
+<p>This section shows an example of running Qulacs in a batch job on Fugaku.</p>
+<p>Here we will use a sample program (main.cpp) that creates a quantum state called the Bell state, which is a typical quantum entangled state.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cat main.cpp
+#include &lt;iostream&gt;
+#include &lt;cppsim/state.hpp&gt;
+#include &lt;cppsim/circuit.hpp&gt;
+#include &lt;cppsim/observable.hpp&gt;
+#include &lt;cppsim/gate_factory.hpp&gt;
+#include &lt;cppsim/gate_merge.hpp&gt;
+
+int main(){
+    QuantumState state(2);
+    state.set_computational_basis(0b00);
+
+    QuantumCircuit circuit(2);
+    circuit.add_H_gate(0);
+    circuit.add_CNOT_gate(0,1);
+    circuit.update_quantum_state(&amp;state);
+
+    std::cout &lt;&lt; state &lt;&lt; std::endl;
+
+    Observable observable(2);
+    observable.add_operator(1.0, &quot;Z 1 X 0&quot;);
+
+    auto value = observable.get_expectation_value(&amp;state);
+    std::cout &lt;&lt; value &lt;&lt; std::endl;
+
+    return 0;
+}
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<section id="creating-batch-job-script">
+<h3><span class="section-number">2.3.1. </span>Creating batch job script<a class="headerlink" href="#creating-batch-job-script" title="Permalink to this heading">¶</a></h3>
+<p>The following batch job script (run.sh) is an example for running Qulacs on Fugaku.</p>
+<p>※ For single account users, the execution group id (check with the id command) must be specified in run.sh.</p>
+<p>（Example: #PJM -g hp*****）</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cat run.sh
+#!/bin/sh
+#PJM -g hp*****
+#PJM -L &quot;node=1&quot;
+#PJM -L &quot;rscgrp=small&quot;
+#PJM -L &quot;elapse=00:20:00&quot;
+#PJM --mpi &quot;max-proc-per-node=12&quot;
+#PJM -x PJM_LLIO_GFSCACHE=/vol0004
+#PJM -S
+
+export PATH=/opt/FJSVxtclanga/tcsds-1.2.36/bin:$PATH
+export LD_LIBRARY_PATH=/opt/FJSVxtclanga/tcsds-1.2.36/lib64:$LD_LIBRARY_PATH
+. /vol0004/apps/oss/spack/share/spack/setup-env.sh
+spack load qulacs %fj
+
+FCC -Nclang -O2 main.cpp -fopenmp -lcppsim_static -lcsim_static
+./a.out
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+<section id="execution-of-batch-job">
+<h3><span class="section-number">2.3.2. </span>Execution of batch job<a class="headerlink" href="#execution-of-batch-job" title="Permalink to this heading">¶</a></h3>
+<p>Please submit the batch job script (run.sh) by the following command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pjsub run.sh
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+<section id="confirmation-of-result">
+<h3><span class="section-number">2.3.3. </span>Confirmation of result<a class="headerlink" href="#confirmation-of-result" title="Permalink to this heading">¶</a></h3>
+<p>If you obtain the following result in run.sh.job-id.out, Qulacs is working without problems.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="o">***</span> <span class="n">Quantum</span> <span class="n">State</span> <span class="o">***</span>
+ <span class="o">*</span> <span class="n">Qubit</span> <span class="n">Count</span> <span class="p">:</span> <span class="mi">2</span>
+ <span class="o">*</span> <span class="n">Dimension</span>   <span class="p">:</span> <span class="mi">4</span>
+ <span class="o">*</span> <span class="n">State</span> <span class="n">vector</span> <span class="p">:</span>
+<span class="p">(</span><span class="mf">0.707107</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+       <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+       <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="p">(</span><span class="mf">0.707107</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">2. Qulacs</a><ul>
+<li><a class="reference internal" href="#overview">2.1. Overview</a></li>
+<li><a class="reference internal" href="#how-to-use-qulacs">2.2. How to use Qulacs</a><ul>
+<li><a class="reference internal" href="#preparation-of-spack-environment">2.2.1. Preparation of Spack environment</a></li>
+<li><a class="reference internal" href="#loading-qulacs">2.2.2. Loading Qulacs</a></li>
+<li><a class="reference internal" href="#unloading-qulacs">2.2.3. Unloading Qulacs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-of-usage">2.3. Example of Usage</a><ul>
+<li><a class="reference internal" href="#creating-batch-job-script">2.3.1. Creating batch job script</a></li>
+<li><a class="reference internal" href="#execution-of-batch-job">2.3.2. Execution of batch job</a></li>
+<li><a class="reference internal" href="#confirmation-of-result">2.3.3. Confirmation of result</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="braket.html"
+                          title="previous chapter"><span class="section-number">1. </span>braket</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="braket.html" title="1. braket"
+             >previous</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">Quantum Computing Software User&#39;s Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>Qulacs</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

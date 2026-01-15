@@ -1,0 +1,192 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>3. Chainer for K on the Fugaku &#8212; AI framework on the FUGAKU Users Guide  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="2. TensorFlow on the Fugaku" href="tensorflow.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="tensorflow.html" title="2. TensorFlow on the Fugaku"
+             accesskey="P">previous</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">AI framework on the FUGAKU Users Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>Chainer for K on the Fugaku</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="chainer-for-k-on-the-fugaku">
+<h1><span class="section-number">3. </span>Chainer for K on the Fugaku<a class="headerlink" href="#chainer-for-k-on-the-fugaku" title="Permalink to this headline">¶</a></h1>
+<section id="license">
+<h2><span class="section-number">3.1. </span>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>The patches and procedures are scheduled to be provided (Upstream) to the OSS, PyTorch will comply with the MIT license.</p>
+</section>
+<section id="installed-version-cf-checkout-sh-site-packages-and-so-on">
+<h2><span class="section-number">3.2. </span>Installed version (Cf. checkout.sh, site-packages and so on.)<a class="headerlink" href="#installed-version-cf-checkout-sh-site-packages-and-so-on" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Chainer ver.4.5.0</p>
+<ul>
+<li><p>ChainerMN ver.1.3.1</p></li>
+<li><p>ChainerK ver.1.1.0</p></li>
+</ul>
+</li>
+<li><p>Python ver.3.8.2</p>
+<ul>
+<li><p>mpi4py ver.3.0.3</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="files">
+<h2><span class="section-number">3.3. </span>Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/vol0001/apps/oss/ChainerK-4.5.0/
+  bin: binaries
+  lib: libraries
+    lib/python3.8/site-packages: Chainer and Python modules
+  include: include files
+  build: scripts, patches and so on.
+  example: examples of MNIST and ResNet-50
+</pre></div>
+</div>
+</section>
+<section id="build">
+<h2><span class="section-number">3.4. </span>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h2>
+<p>You can refer the directory <code class="file docutils literal notranslate"><span class="pre">build</span></code>. Please use it after adjusting the paths <code class="file docutils literal notranslate"><span class="pre">$PATH</span></code> and so on, require a timely correction. It takes about one hour to build.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./checkout.sh
+pjsub go.sh
+</pre></div>
+</div>
+<p>We have adjusted compilation options to build. In order to avoid timeout of Python construction, fwe built with <code class="docutils literal notranslate"><span class="pre">-O3</span></code> first. Next, we commented out the place to timeout and overwrote with <code class="docutils literal notranslate"><span class="pre">-Kfast</span></code>.</p>
+</section>
+<section id="execution">
+<h2><span class="section-number">3.5. </span>Execution<a class="headerlink" href="#execution" title="Permalink to this headline">¶</a></h2>
+<p>This environment can be performed anywhere by setting <code class="file docutils literal notranslate"><span class="pre">$PATH</span></code>. Because Python module has a large number of files, MDS access high loads will take the <strong class="program">importlib</strong> time due to MDS access high load. You can use staging by coping common binaries by using <strong class="command">llio_transfer</strong> refering <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/LyeredStorageAndLLIO/TheSecondLayerStrage.html#tips-for-common-file-distribution">8.2.4.2. Tips for common file distribution</a> of the <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/">Users Guide</a> .
+You can also uce staging by deploying all files with <strong class="command">tar</strong> and expanding using <strong class="command">llio_transfer</strong>.</p>
+<p>You can see some examples of MINT and ResNet-50 under the <code class="file docutils literal notranslate"><span class="pre">example</span></code> directory.</p>
+<p>The procedure is described in the above reference. Please use it after adjusting the paths.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pjsub go.sh
+</pre></div>
+</div>
+<p>Environment variables needed to run when <code class="file docutils literal notranslate"><span class="pre">$PREFIX</span></code> is specified as follows.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>TCSDS=1.2.27b                         : set the Fujitsu language environment version
+export PREFIX=${PWD}/../..            : installed path
+
+# System Enironment
+module switch lang/tcsds-${TCSDS}     : to read latest Fujitsu language environment
+export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH}
+export PATH=${PREFIX}/bin:${PATH}     : path of python3
+</pre></div>
+</div>
+<p>Execution results are included in <code class="file docutils literal notranslate"><span class="pre">log</span></code>. It is a result of running in 2.2 GHz interactive mode. Example of multi-node are the result of the previous version.</p>
+</section>
+<section id="notes">
+<h2><span class="section-number">3.6. </span>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>In order to speed up, tuned libraries developed by R-CCS is incorporated into the framework.
+These components only support the basic calculation of image recognition etc now. Then depending on the network which you want to use, it may not work at high performance.</p>
+<p>Please contact your support desk (R-CCS support desk or HPCI support desk) for questions for performances and requirements of the versions and python modules, and so on, providing your network scripts. Please note that there are several months to support.</p>
+</section>
+<section id="history">
+<h2><span class="section-number">3.7. </span>History<a class="headerlink" href="#history" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>September 12, 2020 (Sat) build under the tcsds-1.2.26b and release</p></li>
+<li><p>September 20, 2020 (Sun) build under the tcsds-1.2.26b and modify</p>
+<ul>
+<li><p>modify the problem maxpooing3d under the -Infinity</p></li>
+<li><p>img2col disable OpenMP on the ChainerK library</p></li>
+</ul>
+</li>
+<li><p>October 27, 2020 (Mon) build under the tcsds-1.2.27b</p>
+<ul>
+<li><p>add the examples of largepage</p></li>
+<li><p>add the examples of fapp, fapp, PA</p></li>
+<li><p>modify of the scripts</p></li>
+</ul>
+</li>
+<li><p>October 15, 2021 (Fri) release these documents (Ver.1.0)</p></li>
+<li><p>December 07, 2021 (Tue) update these documents (Ver.1.1) addition the usage of llio</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3. Chainer for K on the Fugaku</a><ul>
+<li><a class="reference internal" href="#license">3.1. License</a></li>
+<li><a class="reference internal" href="#installed-version-cf-checkout-sh-site-packages-and-so-on">3.2. Installed version (Cf. checkout.sh, site-packages and so on.)</a></li>
+<li><a class="reference internal" href="#files">3.3. Files</a></li>
+<li><a class="reference internal" href="#build">3.4. Build</a></li>
+<li><a class="reference internal" href="#execution">3.5. Execution</a></li>
+<li><a class="reference internal" href="#notes">3.6. Notes</a></li>
+<li><a class="reference internal" href="#history">3.7. History</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="tensorflow.html"
+                          title="previous chapter"><span class="section-number">2. </span>TensorFlow on the Fugaku</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="tensorflow.html" title="2. TensorFlow on the Fugaku"
+             >previous</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">AI framework on the FUGAKU Users Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>Chainer for K on the Fugaku</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, RIKEN R-CCS.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,256 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8.8. I/Oの最適化 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="8.9. 利用ファイルシステム(volume)の選択" href="SelectAvailableVolumes.html" />
+    <link rel="prev" title="8.7. I/Oのプロファイリング" href="IOprofiling.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="SelectAvailableVolumes.html" title="8.9. 利用ファイルシステム(volume)の選択"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="IOprofiling.html" title="8.7. I/Oのプロファイリング"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">8. </span>階層化ストレージ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.8. </span>I/Oの最適化</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="i-o">
+<span id="iooptimization"></span><h1><span class="section-number">8.8. </span>I/Oの最適化<a class="headerlink" href="#i-o" title="Link to this heading">¶</a></h1>
+<p>前項<a class="reference internal" href="IOprofiling.html#ioprofiling"><span class="std std-ref">I/Oのプロファイリング</span></a>で取得したデータの分析例を示します。</p>
+<section id="llio">
+<h2><span class="section-number">8.8.1. </span>LLIO性能情報を用いたボトルネックの分析<a class="headerlink" href="#llio" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>LLIO領域別のI/O状況を確認します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>awk<span class="w"> </span>-f<span class="w"> </span>sample.awk<span class="w"> </span>&lt;jobname&gt;.&lt;jobid&gt;.llio_perf
+<span class="go">      Area                        Time(us)       % of Time</span>
+<span class="go">Meta  2ndLayerCache           670517500351             4.0</span>
+<span class="go">      SharedTmp             15490822246315            92.7</span>
+<span class="go">      LocalTmp                 32396742469             0.2</span>
+<span class="go">I/O   2ndLayerCache           357836957071             2.1</span>
+<span class="go">      SharedTmp               108339293976             0.6</span>
+<span class="go">      LocalTmp                 50591120306             0.3</span>
+</pre></div>
+</div>
+<p>この例では、共有テンポラリ領域へのメタアクセスが全体の90%以上を占めていると判断できます。</p>
+</li>
+<li><p>更にLLIO性能情報を直接確認し、ボトルネックとなっている共有テンポラリ領域のメタアクセス情報を確認します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>less<span class="w"> </span>&lt;jobname&gt;.&lt;jobid&gt;.llio_perf
+<span class="go">...</span>
+
+<span class="go">Meta    SharedTmp      NodeTotal                      Count           Time(us)</span>
+<span class="go">                                   open            61710260      1832249063537</span>
+<span class="go">                                   close           61710260        85929083797</span>
+<span class="go">                                   lookup         370062812       886258890299</span>
+<span class="go">                                   mknod           98308608      5857672339146</span>
+<span class="go">                                   link                   0                  0</span>
+<span class="go">                                   unlink         100793535      5453654076003</span>
+<span class="go">                                   mkdir              67500           60930489</span>
+<span class="go">                                   rmdir              67340         3076489250</span>
+<span class="go">                                   readdir           148596          336715105</span>
+<span class="go">                                   rename            306757        35293688520</span>
+<span class="go">                                   getattr        478426796      1326148620906</span>
+<span class="go">                                   setattr         55883262        10117612251</span>
+<span class="go">                                   getxattr          350807           24737012</span>
+<span class="go">                                   setxattr               0                  0</span>
+<span class="go">                                   listxattr              0                  0</span>
+<span class="go">                                   removexattr            0                  0</span>
+<span class="go">                                   statfs                 0                  0</span>
+<span class="go">                                   sync                   0                  0</span>
+<span class="go">                                   lock                   0                  0</span>
+</pre></div>
+</div>
+<p>mknod(ファイル作成)とunlink(ファイル削除)にかかった時間が全体の70%以上を占めていることがわかります。</p>
+<p>ジョブのIO時間を減らす簡単な方法は、扱うファイル数を削減することです。
+その他、ボトルネックとして現れるカウンタと、その要因を示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ボトルネックのメタアクセス情報</p></th>
+<th class="head"><p>考えられる要因</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>lookup</p></td>
+<td><div class="line-block">
+<div class="line">システムコール等に指定しているパス名のディレクトリの段数が多い</div>
+<div class="line">ディレクトリ配下に複数のノードからファイルの作成や削除を実行</div>
+<div class="line">多数のファイルが存在しているディレクトリに対して ls コマンドを実行</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>mknod</p></td>
+<td><p>大量のファイル作成</p></td>
+</tr>
+<tr class="row-even"><td><p>unlink</p></td>
+<td><p>大量のファイル削除</p></td>
+</tr>
+<tr class="row-odd"><td><p>sync</p></td>
+<td><div class="line-block">
+<div class="line">2ndLayerCacheの場合、第2階層ストレージ領域への書き出し量が多い</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</section>
+<section id="darshani-o">
+<h2><span class="section-number">8.8.2. </span>Darshanを用いたI/Oの分析<a class="headerlink" href="#darshani-o" title="Link to this heading">¶</a></h2>
+<p>Darshanの詳細については、以下の URL を参照してください。</p>
+<p><a class="reference external" href="https://www.mcs.anl.gov/research/projects/darshan/">https://www.mcs.anl.gov/research/projects/darshan/</a></p>
+<p>ログインノードからプロファイリングデータを解析を行います。
+darshan-util を load して、データを展開します。</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>darshan-parser<span class="w"> </span>usr_a.out_JOBID.darshan<span class="w"> </span><span class="p">|</span><span class="w"> </span>less
+</pre></div>
+</div>
+</div></blockquote>
+<p>以下、384ノード (18,432プロセス) ジョブの例です。</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>...
+# description of columns:
+#   &lt;module&gt;: module responsible for this I/O record.
+#   &lt;rank&gt;: MPI rank.  -1 indicates that the file is shared
+#      across all processes and statistics are aggregated.
+#   &lt;record id&gt;: hash of the record&#39;s file path
+#   &lt;counter name&gt; and &lt;counter value&gt;: statistical counters.
+#      A value of -1 indicates that Darshan could not monitor
+#      that counter, and its value should be ignored.
+#   &lt;file name&gt;: full file path for the record.
+...
+#&lt;module&gt; &lt;rank&gt;  &lt;record id&gt;    &lt;counter&gt;                  &lt;value&gt;     &lt;file name&gt; ...
+POSIX     -1      0123456789123  POSIX_OPENS                    18432    /vol0n0m/data/group/config
+POSIX     -1      0123456789123  POSIX_F_FASTEST_RANK_TIME   0.019958    /vol0n0m/data/group/config
+POSIX     -1      0123456789123  POSIX_F_SLOWEST_RANK_TIME  52.856744    /vol0n0m/data/group/config
+...
+POSIX      0      1234567891234  POSIX_OPENS                        1    /vol0n0m/data/group/tmp.00000
+...
+POSIX      1      1234567891234  POSIX_OPENS                        1    /vol0n0m/data/group/dat.00001
+POSIX      1      1234567891234  POSIX_F_READ_TIME          32.124292    /vol0n0m/data/group/dat.00001
+...
+</pre></div>
+</div>
+<ol class="arabic">
+<li><p>共通ファイルの転送 (/vol0n0m/data/group/config)</p>
+<p>&lt;rank&gt;にはMPI rankが記載され、-1の場合ファイルが全てのプロセスで共有されていることを示します。このとき、読み込み専用の設定ファイル /vol0n0m/data/group/config は<code class="docutils literal notranslate"><span class="pre">llio_transfer</span></code>で共通ファイルとして転送することで読み込み性能の改善が見込めます。</p>
+</li>
+<li><p>中間ファイルの出力改善 (/vol0n0m/data/group/tmp.PROC_NUM)</p>
+<p>各プロセスが生成する中間ファイル /vol0n0m/data/group/tmp.PROC_NUM は、ノード内テンポラリ領域<code class="docutils literal notranslate"><span class="pre">$PJM_LOCALTMP</span></code>に出力することで性能の改善が見込めます。
+Fortranプログラムでスクラッチファイルを利用する場合、環境変数TMPDIRをノード内テンポラリ領域に設定することで、性能の改善が見込めます。</p>
+<p>ログファイルの場合、ノード内テンポラリに出力後に必要なログのみ第2階層ストレージのキャッシュ領域に転送することで、I/O負荷を下げジョブの実行時間を短縮できる可能性があります。</p>
+</li>
+<li><p>I/Oスループットの改善 (/vol0n0m/data/group/dat.PROC_NUM)</p>
+<p>ジョブの中間ファイルと異なり、プログラムが計算結果やチェックポイントを出力する場合は、第2階層ストレージのキャッシュ領域に出力しデータを残す必要があります。
+このとき、複数のボリュームにファイルを出力することでスループット性能が改善する場合があります。</p>
+<p>数千ノード以上がI/Oを行う多ノードジョブの場合、ファイルシステムの性能をつかいきり出力に時間を要することが考えられます。
+「富岳」ではデータ領域として複数のボリュームを提供しており、各ボリューム毎にディスクの使用容量制限を変更できるため、複数のボリュームを利用することで第2階層ストレージへのスループットが向上する可能性があります。
+データ領域の割当変更の詳細は、利用者支援ツールの使用手引書をご確認ください。</p>
+<blockquote>
+<div><p>利用者支援ツール 使用手引書 3. システム管理 データ領域割当変更</p>
+<p><a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/support_tool/">https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/support_tool/</a></p>
+</div></blockquote>
+</li>
+</ol>
+<p>その他、非同期クローズオプションを有効にすることで、第2階層ストレージへの書き出しの待ち合わせ時間を短縮できる可能性があります。
+<a class="reference internal" href="TheSecondLayerStrage.html#asynccloseandsyncclose"><span class="std std-ref">非同期クローズ/同期クローズ</span></a>を確認し、プログラムで利用できないか検討してください。</p>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">8.8. I/Oの最適化</a><ul>
+<li><a class="reference internal" href="#llio">8.8.1. LLIO性能情報を用いたボトルネックの分析</a></li>
+<li><a class="reference internal" href="#darshani-o">8.8.2. Darshanを用いたI/Oの分析</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="IOprofiling.html"
+                          title="前の章へ"><span class="section-number">8.7. </span>I/Oのプロファイリング</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="SelectAvailableVolumes.html"
+                          title="次の章へ"><span class="section-number">8.9. </span>利用ファイルシステム(volume)の選択</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="SelectAvailableVolumes.html" title="8.9. 利用ファイルシステム(volume)の選択"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="IOprofiling.html" title="8.7. I/Oのプロファイリング"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">8. </span>階層化ストレージ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.8. </span>I/Oの最適化</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

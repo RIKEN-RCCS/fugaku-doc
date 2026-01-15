@@ -1,0 +1,149 @@
+.. _IOoptimization:
+
+I/O optimization
+================
+
+Here is an example analysis of the data obtained in the previous section :ref:`IOprofiling`.
+
+Analysis of bottlenecks using LLIO performance information
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Check I/O status by LLIO area.
+
+   .. code-block:: console
+
+     [_LNIlogin]$ awk -f sample.awk <jobname>.<jobid>.llio_perf
+           Area                        Time(us)       % of Time
+     Meta  2ndLayerCache           670517500351             4.0
+           SharedTmp             15490822246315            92.7
+           LocalTmp                 32396742469             0.2
+     I/O   2ndLayerCache           357836957071             2.1
+           SharedTmp               108339293976             0.6
+           LocalTmp                 50591120306             0.3
+
+
+   You can determine that meta-access to shared temporary area accounts for more than 90% of the total.
+
+
+2. Examine the shared temporary area meta-access information.
+
+   .. code-block:: console
+
+     [_LNIlogin]$ less <jobname>.<jobid>.llio_perf
+     ...
+
+     Meta    SharedTmp      NodeTotal                      Count           Time(us)
+                                        open            61710260      1832249063537
+                                        close           61710260        85929083797
+                                        lookup         370062812       886258890299
+                                        mknod           98308608      5857672339146
+                                        link                   0                  0
+                                        unlink         100793535      5453654076003
+                                        mkdir              67500           60930489
+                                        rmdir              67340         3076489250
+                                        readdir           148596          336715105
+                                        rename            306757        35293688520
+                                        getattr        478426796      1326148620906
+                                        setattr         55883262        10117612251
+                                        getxattr          350807           24737012
+                                        setxattr               0                  0
+                                        listxattr              0                  0
+                                        removexattr            0                  0
+                                        statfs                 0                  0
+                                        sync                   0                  0
+                                        lock                   0                  0
+
+
+   You can see that mknod (Create File) and unlink (Delete File) take up more than 70% of the time.
+   You can see that job I/O time can be improved by creating fewer files in the shared temporary area.
+
+   Other counters that appear as bottlenecks and their factors are shown.
+
+   .. list-table::
+    :widths: 10 20
+    :header-rows: 1
+
+    * - meta-access bottlenecks
+      - cause
+  
+    * - lookup
+      - | The number of directory tiers is many
+        | Create or delete files from multiple nodes under a same directory
+        | Execute ``ls`` command for a same directory containing many files
+  
+    * - mknod
+      - Many files creation
+
+    * - unlink
+      - Many files removal
+
+    * - sync
+      - | If the cache area of the second-layer storage, the amount of writing out is large.
+
+Analysis for Darshan
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For details, please refer to the following URL:
+
+https://www.mcs.anl.gov/research/projects/darshan/
+
+
+Analyze the profiling data from the login node.
+Load darshan-util and extract the data.
+
+  .. code-block:: console
+
+     [_LNIlogin]$ darshan-parser usr_a.out_JOBID.darshan | less
+
+
+Below is an example of 384 nodes job (18,432 process).
+
+   .. code-block:: none
+
+      ...
+      # description of columns:
+      #   <module>: module responsible for this I/O record.
+      #   <rank>: MPI rank.  -1 indicates that the file is shared
+      #      across all processes and statistics are aggregated.
+      #   <record id>: hash of the record's file path
+      #   <counter name> and <counter value>: statistical counters.
+      #      A value of -1 indicates that Darshan could not monitor
+      #      that counter, and its value should be ignored.
+      #   <file name>: full file path for the record.
+      ...
+      #<module> <rank>  <record id>    <counter>                  <value>     <file name> ...
+      POSIX     -1      0123456789123  POSIX_OPENS                    18432    /vol0n0m/data/group/config
+      POSIX     -1      0123456789123  POSIX_F_FASTEST_RANK_TIME   0.019958    /vol0n0m/data/group/config
+      POSIX     -1      0123456789123  POSIX_F_SLOWEST_RANK_TIME  52.856744    /vol0n0m/data/group/config
+      ...
+      POSIX      0      1234567891234  POSIX_OPENS                        1    /vol0n0m/data/group/tmp.00000
+      ...
+      POSIX      1      1234567891234  POSIX_OPENS                        1    /vol0n0m/data/group/dat.00001
+      POSIX      1      1234567891234  POSIX_F_READ_TIME          32.124292    /vol0n0m/data/group/dat.00001
+      ...
+
+   1. Transfer of common files (/vol0n0m/data/group/config)
+   
+      <rank> refers to the MPI rank. rank:-1 indicates that the file is shared across all processes and statistics are aggregated. Configuration files to be read only from all processes, /vol0n0m/data/group/config, can be transferred with \ ``llio_transfer``\  to improve performance.
+
+   2. Improved output of temporary files (/vol0n0m/data/group/tmp.PROC_NUM)
+   
+      Intermediate files generated by each process, /vol0n0m/data/group/tmp.PROC_NUM, can be replaced the output destination with a node temporary area \ ``$PJM_LOCALTMP``\  to improve performance.
+      An example is the case of using scratch files in Fortran programs, setting the environment variable TMPDIR to a node temporary area can improve performance.   
+
+
+   3. Improved througput (/vol0n0m/data/group/dat.PROC_NUM)
+
+      Unlike the job's intermediate file, if the program outputs calculation results or checkpoints, they must be output to the cache area of the second-layer storage and the data must be retained.
+      At this time, throughput performance may be improved by outputting files to multiple volumes.
+
+      In the case of a multi-node job with thousands nodes or more performing I/O, it may take a long time to exhaust the performance of the filesystem.
+      Since Fugaku provides multiple volumes as data areas and the disk space usage limit can be changed for each volume, the use of multiple volumes may increase the throughput.
+      
+      For details on changing data area allocation, please refer to the User support tools User’s Guide:
+      
+         https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/support_tool/
+
+
+   Enabling asynchronous close may reduce the waiting time for export to the second-layer storage.
+   Please review \ :ref:`Asynchronous close / synchronous close <AsyncCloseAndSyncClose>`\  and consider whether it is available in your program.

@@ -1,0 +1,164 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.2. 言語環境の複数バージョン提供 &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=89e52957" />
+    
+    <script src="../../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="3.1.3. コンパイル環境設定" href="EnvironmentSettings.html" />
+    <link rel="prev" title="3.1.1. 言語仕様" href="LanguageSpecifications.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="EnvironmentSettings.html" title="3.1.3. コンパイル環境設定"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="LanguageSpecifications.html" title="3.1.1. 言語仕様"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.2. </span>言語環境の複数バージョン提供</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">3.1.2. </span>言語環境の複数バージョン提供<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>言語環境（コンパイラ他）について、複数バージョンの環境を提供します。
+最新版を含め3世代をサポートします。利用者はmoduleコマンドで環境設定を変更することにより、デフォルト以外の環境を利用することができます。</p>
+<nav class="contents local" id="id2">
+<ul class="simple">
+<li><p><a class="reference internal" href="#id3" id="id6">言語環境</a></p></li>
+<li><p><a class="reference internal" href="#id5" id="id7">留意事項</a></p></li>
+</ul>
+</nav>
+<section id="id3">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">3.1.2.1. </span>言語環境</a><a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>以下の表に示す言語環境を提供しています。</p>
+<p>なお、最新環境については富岳ウェブサイトの「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/docs/manuals_r01#langverinfo">言語版数情報</a>」を参照してください。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 27.3%" />
+<col style="width: 36.4%" />
+<col style="width: 36.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>バージョンレベル</p></th>
+<th class="head"><p>利用可否</p></th>
+<th class="head"><p>備考</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>4.12.1 tcsds-1.2.42</p></td>
+<td><p>可</p></td>
+<td><p>4.12.1版。ログイン初期状態</p></td>
+</tr>
+<tr class="row-odd"><td><p>4.12.0 tcsds-1.2.41</p></td>
+<td><p>可</p></td>
+<td><p>4.12.0版。</p></td>
+</tr>
+<tr class="row-even"><td><p>4.11.2 tcsds-1.2.40</p></td>
+<td><p>可</p></td>
+<td><p>4.11.2版。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id5">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">3.1.2.2. </span>留意事項</a><a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>複数バージョンの提供にあたり、次のことに留意願います。</p>
+<ul class="simple">
+<li><p>標準環境（ログイン直後のパス）は、最新版またはそれに準じるパスを設定しています。最新の設定状況は富岳ウェブサイトを参照してください。</p></li>
+<li><p>障害の修正は最新版を基準に実施します。旧版で不具合を見つけた場合は最新版で同様の不具合が発生するかご確認頂いたうえで、お問い合わせください。</p></li>
+<li><p>障害の修正は旧版では実施されません。障害の修正は新版にて提供されます。</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3.1.2. 言語環境の複数バージョン提供</a><ul>
+<li><a class="reference internal" href="#id3">3.1.2.1. 言語環境</a></li>
+<li><a class="reference internal" href="#id5">3.1.2.2. 留意事項</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="LanguageSpecifications.html"
+                          title="前の章へ"><span class="section-number">3.1.1. </span>言語仕様</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="EnvironmentSettings.html"
+                          title="次の章へ"><span class="section-number">3.1.3. </span>コンパイル環境設定</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="EnvironmentSettings.html" title="3.1.3. コンパイル環境設定"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="LanguageSpecifications.html" title="3.1.1. 言語仕様"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.2. </span>言語環境の複数バージョン提供</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

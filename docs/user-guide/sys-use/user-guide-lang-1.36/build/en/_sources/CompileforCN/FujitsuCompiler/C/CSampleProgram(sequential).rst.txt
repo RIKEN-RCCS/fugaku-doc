@@ -1,0 +1,150 @@
+Sequential execution
+====================
+
+The following is an example of compiling a single node job (sequential) C program.
+
+
+1. | Prepare source program.
+   | Prepare sample program as  \ :file:`/home/system/sample/C/single/trad_sample.c`\.
+   | :download:`(Download sample code) <./src/trad_sample.c>`
+
+
+.. code-block:: c
+   :linenos:
+
+   #include <stdio.h>
+   #include <math.h>
+   #include <sys/time.h>
+   
+   #define N  5888
+   
+   double gettimeofday_sec(){
+       struct timeval tv;
+       gettimeofday(&tv, NULL);
+       return tv.tv_sec + (double)tv.tv_usec*1e-6;
+   }
+   
+   int main(){
+       double a[N][N+1];
+       double b[N][N+1];
+       double c[N][N+1];
+       int i, j, k;
+       double t1,t2;
+   
+   //
+   //  print message
+   //
+       printf ("\n");
+       printf ("%d, %d\n", N, N);
+   //
+   //  initialize matrix
+   //
+       for (j = 0; j < N; j++) {
+          for (i = 0; i < N; i++) {
+             a[j][i] = 0.1;
+             b[j][i] = 0.3;
+             c[j][i] = 0.0;
+          }
+       }
+   
+   //
+   //  do matrix multiply
+   //
+       t1 = gettimeofday_sec();
+       for (j = 0; j < N; j++) {
+          for (i = 0; i < N; i++) {
+             for (k = 0; k < N; k++) {
+                c[i][j] = c[i][j] + a[i][k] * b[k][j];
+             }
+          }
+       }
+       t2 = gettimeofday_sec();
+   
+   //
+   //  print result
+   //
+       printf("c[1][1] = %f\n", c[1][1]);
+       printf("time : %f sec.\n", t2 - t1);
+       return 0;
+   }
+
+
+2. Compile sample program.
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -V -Kfast,optmsg=2 -o sample trad_sample.c
+  fccpx: Fujitsu C/C++ Compiler 4.1.0 tcsds-1.2.24
+  simulating gcc version 6.1
+  ccpcompx: Fujitsu C/C++ Compiler 4.1.0 (Feb 26 2020 07:47:51)
+  Optimization messages
+    jwd6001s-i  "trad_sample.c", line 29: SIMD conversion is applied to this loop with the loop variable 'i'.
+    jwd8663o-i  "trad_sample.c", line 29: This loop is not software pipelined because the software pipelining does not improve the performance.
+    jwd8202o-i  "trad_sample.c", line 29: Loop unrolling expanding 2 times is applied to this loop.
+    jwd8101o-i  "trad_sample.c", line 39: Inline expansion is applied to the user defined function 'gettimeofday_sec'.
+    jwd8220o-i  "trad_sample.c", line 40: Optimizations that may cause side effect are applied.
+    jwd8331o-i  "trad_sample.c", line 40: This loop is changed to the matmul library function call.
+    jwd8101o-i  "trad_sample.c", line 47: Inline expansion is applied to the user defined function 'gettimeofday_sec'.
+  GNU assembler version 2.30 (aarch64-linux-gnu) using BFD version version 2.30-49.el7
+  GNU ld version 2.30-49.el7
+    Supported emulations:
+     aarch64linux
+     aarch64elf
+     aarch64elf32
+     aarch64elf32b
+     aarch64elfb
+     armelf
+     armelfb
+     aarch64linuxb
+     aarch64linux32
+     aarch64linux32b
+     armelfb_linux_eabi
+     armelf_linux_eabi
+     i386pep
+     i386pe
+
+
+.. note::
+
+  - By specifying  \ ``-Koptmsg=2``\, Messages are output about optimization functions such as automatic parallelization, SIMD conversion, and loop unrolling. In the above example, jwd6001s-i is applicable.
+  - jwd6001s-i means that the loop has been converted to SIMD. SIMD loops and variables are displayed.
+
+
+3. | Prepare job script.
+   | Prepare job script sample as  \ :file:`/home/system/sample/C/single/trad_job_single.sh`\.
+   | :download:`(Download sample code) <./src/trad_job_single.sh>`
+
+ .. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L "node=1"
+  #PJM -L "rscgrp=small"
+  #PJM -L "elapse=10:00"
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -g groupname
+  #PJM -s
+
+  # execute job
+  ./sample
+
+
+4. Submit a job with  \ :program:`pjsub`\  command.
+
+ .. code-block:: console
+  
+  [_LNlogin]$ pjsub trad_job_single.sh
+  
+  [INFO] PJM 0000 pjsub Job 115 submitted
+
+5. | Chek execution result.
+   | The standard output is output as  \ :file:`job name.job ID.out`\.
+
+ .. code-block:: console
+  
+  [_LNlogin]$ cat trad_job_single.sh.115.out
+
+  5888, 5888
+  c[1][1] = 176.640000
+  time : 1278.064804 sec.
+
+

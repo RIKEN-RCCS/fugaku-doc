@@ -1,0 +1,288 @@
+.. highlight:: none
+
+.. _CompilerforLN:
+
+ログインノード向けバイナリを生成するコンパイラ
+==============================================
+
+.. contents::
+   :local:
+
+Intel oneAPIコンパイラ
+----------------------------------------
+
+ログインノード（Intel）は、Intel oneAPI Base & HPC Toolkitを利⽤することができます。
+
+環境設定
+^^^^^^^^^
+
+Intel oneAPIコンパイラを使⽤するためには必要なパスを設定する必要があります。
+
+パス設定⽤のシェルスクリプト、または、modulefileを利用して必要なパスを設定してください。
+
+1. パス設定⽤のシェルスクリプトを利用する場合
+
+   次のように実行してください。
+
+   .. code-block:: console
+
+      [_LNIlogin]$ source /opt/intel/oneapi/setvars.sh intel64
+      
+      :: initializing oneAPI environment ...
+         bash: BASH_VERSION = 4.4.20(1)-release
+         args: Using "$@" for setvars.sh arguments: intel64
+      :: advisor -- latest
+      :: ccl -- latest
+      :: clck -- latest
+      :: compiler -- latest
+      :: dal -- latest
+      :: debugger -- latest
+      :: dev-utilities -- latest
+      :: dnnl -- latest
+      :: dpcpp-ct -- latest
+      :: dpl -- latest
+      :: inspector -- latest
+      :: ipp -- latest
+      :: ippcp -- latest
+      :: ipp -- latest
+      :: itac -- latest
+      :: mkl -- latest
+      :: mpi -- latest
+      :: tbb -- latest
+      :: vpl -- latest
+      :: vtune -- latest
+      :: oneAPI environment initialized ::
+
+
+2. modulefileを利用する場合
+
+   modulefileを利用する場合は、使用する機能に対応するmodulefileをロードする必要があります。
+   2024.1.0以降を利用する場合はあらかじめ\ ``MODULES_AUTO_HANDLING=1``\ を設定してください。
+   
+   例えば、MKLを利用する場合は\ ``mkl/latest``\ と\ ``compiler/latest``\ をロードします。
+   
+   .. code-block:: console
+
+      [_LNIlogin]$ export MODULES_AUTO_HANDLING=1
+      [_LNIlogin]$ module load mkl/latest
+      Loading mkl/latest
+        Loading requirement: tbb/latest compiler-rt/latest
+      [_LNIlogin]$ module load compiler/latest
+      Loading compiler/latest
+        Loading requirement: oclfpga/latest
+
+   提供しているmodulefileは、\ ``module avail``\ コマンドで確認してください。
+
+コンパイル
+^^^^^^^^^^^
+
+コンパイルコマンドは次の通りです。
+
+.. list-table::
+   :header-rows: 1
+
+   * - コンパイラ種別
+     - コマンド名
+   
+   * - DPC++/C++ Compiler
+     - icx, icpx, dpcpp
+
+   * - Fortran Compiler
+     - ifx
+
+- 逐次（Intel Fortran の例）
+
+  .. code-block:: console
+
+     [_LNIlogin]$ ifx -O3 ソースファイル名
+
+- OpenMP（Intel Fortran の例）
+
+  .. code-block:: console
+
+     [_LNIlogin]$ ifx -O3 -qopenmp ソースファイル名
+
+- Intel oneAPI DPC++ compiler でのコンパイル例（\ `oneAPI Example Compilation <https://software.intel.com/content/www/us/en/develop/documentation/oneapi-programming-guide/top/programming-interface/example-compilation.html>`_\ ）
+
+
+  .. code-block:: console
+
+     [_LNIlogin]$ dpcpp -I${MKLROOT}/include -c axpy.cpp -o axpy.o
+     [_LNIlogin]$ dpcpp axpy.o -fsycl-device-code-split=per_kernel \
+     "${MKLROOT}/lib/intel64"/libmkl_sycl.a -Wl,-export-dynamic -Wl,--start-group \
+     "${MKLROOT}/lib/intel64"/libmkl_intel_ilp64.a \
+     "${MKLROOT}/lib/intel64"/libmkl_sequential.a \
+     "${MKLROOT}/lib/intel64"/libmkl_core.a -Wl,--end-group -lsycl -lOpenCL \
+     -lpthread -lm -ldl -o axpy.out
+
+oneAPIに関する情報
+^^^^^^^^^^^^^^^^^^
+
+| Intel oneAPI コンパイラに関する詳細は、インテル社ホームページを参照ください。
+| https://www.intel.com/content/www/us/en/developer/tools/oneapi/overview.html
+
+| DPC++ (Data Parallel C++) compiler については、以下を参照ください。
+| https://www.intel.com/content/www/us/en/developer/tools/oneapi/dpc-compiler.html
+
+| Intel Fortran compiler については、以下を参照ください。
+| https://www.intel.com/content/www/us/en/developer/tools/oneapi/fortran-compiler.html
+
+
+Arm Compiler for Linux
+----------------------------------
+
+Armログインノードは、Arm Compiler for Linuxを利用することができます。
+
+環境設定
+^^^^^^^^^
+
+Armコンパイラを使用するためには必要なパスを設定する必要があります。
+
+``module avail``\ コマンドでmodulefileを確認して、適宜環境設定を行ってください。
+
+.. code-block:: console
+
+   [_LNAlogin]$ module avail
+
+   --------------------------------------- /opt/arm/modulefiles ---------------------------------------
+   arm22/22.0.2    arm23/23.10     binutils/11.2.0 binutils/9.2.0  gnu/13.2.0
+   arm23/23.04     arm24/24.04     binutils/12.2.0 gnu/11.2.0      gnu10/10.2.0
+   arm23/23.04.1   binutils/10.2.0 binutils/13.2.0 gnu/12.2.0      gnu9/9.2.0
+
+
+
+   [_LNAlogin]$ module load arm24/24.04
+
+
+- gnuが含まれるmodulefileを使用すると、Arm Compiler for Linuxに含まれるGCCコンパイラを使用できます。
+
+ログインノード（Arm）向け実行可能ファイルを生成する場合、\ ``-mcpu=thunderx2t99``\ オプションを指定することで最適化を促進することができます。
+
+
+コンパイル
+^^^^^^^^^^^
+
+コンパイルコマンドは次の通りです。
+
+.. list-table::
+   :header-rows: 1
+
+   * - 言語
+     - コマンド名
+   
+   * - Fortran
+     - armflang
+
+   * - C
+     - armclang
+
+   * - C++
+     - armclang++
+
+- 逐次（C言語の例）
+
+.. code-block:: console
+
+   [_LNAlogin]$ armclang -Ofast ソースファイル名
+
+- OpenMP（C言語の例）
+
+.. code-block:: console
+
+   [_LNAlogin]$ armclang -Ofast -fopenmp ソースファイル名
+
+
+指定可能なコンパイラオプションについては、manコマンドもしくはリファレンスガイドをご確認ください。
+
+Arm Fortran Compiler Developer and Reference Guide
+  https://developer.arm.com/documentation/101380/2404/?lang=en
+
+Arm C/C++ Compiler Developer and Reference Guide
+  https://developer.arm.com/documentation/101458/2404/?lang=en
+
+Arm Compiler for Linux
+  https://developer.arm.com/Tools%20and%20Software/Arm%20Compiler%20for%20Linux
+
+Arm Performance Libraries
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Arm Compiler for LinuxにはArm Performance Libraries (ArmPL) が含まれています。
+ArmPLには以下が含まれています。
+
+- BLAS : Basic Linear Algebra Subprograms (including XBLAS, the extended precision BLAS).
+- LAPACK 3.11.0 : a comprehensive package of higher level linear algebra routines.
+- FFT functions : a set of Fast Fourier Transform routines for real and complex data using the FFTW interface.
+- Sparse linear algebra.
+- libamath : a subset of libm, which is a set of optimized mathematical functions.
+
+
+ArmPLの利用についてはリファレンスガイドをご確認ください。
+
+Arm Performance Libraries Reference Guide
+  https://developer.arm.com/Tools%20and%20Software/Arm%20Performance%20Libraries
+
+
+LLVM（Armログインノード)
+------------------------
+
+LLVMを基盤にもつ、C／C++用コンパイラの利用方法を示します。
+LLVMはArmログインノードで使用できます。
+
+
+環境設定
+^^^^^^^^^^^^^^^^^^^^
+
+LLVMコンパイラの利用環境は、modulefile を利用して設定します。
+
+コンパイルを実行する前に以下を実行して利用環境を設定してください。
+
+.. code-block:: console
+
+   [_LNAlogin]$ module load LLVM-cross-LN
+
+利用できる環境は、以下のとおりです。MPIには対応していません。
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3 2 2 8
+
+   * - ソフトウェア名
+     - 言語
+     - バージョン
+     - コマンド
+
+   * - Clang
+     - C
+     - 10.0.0
+     - clang
+
+   * - Clang++
+     - C++
+     - 10.0.0
+     - clang++
+
+
+コンパイル
+^^^^^^^^^^^^^^^^^^^^
+
+LLVMを使用したC言語プログラムのコンパイル例を示します。
+
+【逐次実行】
+
+ .. code-block:: console
+
+    [_LNAlogin]$ clang -O3  ソースファイル名
+
+
+【OpenMP】
+
+ .. code-block:: console
+
+    [_LNAlogin]$ clang -O3 -fopenmp ソースファイル名
+
+
+.. seealso::
+    
+    上記例は、C++（clang++）の場合も同様の方法となります。
+
+

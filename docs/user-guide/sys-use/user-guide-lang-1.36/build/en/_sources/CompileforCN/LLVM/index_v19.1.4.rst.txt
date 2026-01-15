@@ -1,0 +1,193 @@
+:orphan:
+
+.. _CompilerforLLVM19:
+
+LLVM v19.1.4
+================
+
+It shows how to use C and C++ compilers based on LLVM.
+The compiler is available on the login node (Intel) and compute node.
+
+Environment setting
+---------------------
+
+These compilers are in /vol0004/apps/oss/llvm-v19.1.4
+
+(v19.1.0 has been deprecated due to a minor bug. Please use v19.1.4.)
+
+Execute the followin gcommand to setup the environment before runnig compliers.
+
+login node
+
+.. code-block:: console
+
+   [_LNIlogin]$ . /vol0004/apps/oss/llvm-v19.1.4/init.sh
+
+compute node
+
+.. code-block:: console
+
+   [_CNlogin]$ . /vol0004/apps/oss/llvm-v19.1.4/init.sh
+
+Available compilers are following
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3 2 2 8
+
+   * - Software
+     - Language
+     - Version
+     - Command
+
+   * - Clang
+     - C
+     - 19.1.4
+     - clang
+
+   * - Clang++
+     - C++
+     - 19.1.4
+     - clang++
+
+   * - Flang
+     - Fortran
+     - 19.1.4
+     - flang
+
+
+How to Use
+------------------------
+
+Here is an example of how to compile C.
+The commands are common for both nodes.
+
+ [Sequential execution]
+
+ Login node
+
+ .. code-block:: console
+
+    [_LNIlogin]$ clang -O3 source_file
+
+
+ Compute node
+
+ .. code-block:: console
+
+    [_CNlogin]$ clang -O3 source_file
+
+
+ [OpenMP]
+
+ You can use Fujitsu OpenMP libarary.
+
+ Please add '-Kopenmp' option for Futjistu OpenMP library.
+
+ However, it has been reported that specifying schedule(dynamic) in a #pragma directive may cause linking errors. 
+
+ In such cases, please use "-fopenmp" instead.
+
+ Login node
+
+ .. code-block:: console
+
+    [_LNIlogin]$ clang -O3 -Kopenmp source_file
+
+ Compute node
+
+ .. code-block:: console
+
+    [_CNlogin]$ clang -O3 -Kopenmp source_file
+
+
+ [Fujistu MPI]
+
+ You can use Fujitsu MPI libraries by mpiclang/mpiclang++ commands on login node.
+
+ Please add '-Kopenmp' option for Futjistu OpenMP library.
+
+ However, it has been reported that specifying schedule(dynamic) in a #pragma directive may cause linking errors. 
+
+ In such cases, please use "-fopenmp" instead.
+
+ Login node
+
+ .. code-block:: console
+
+    [_LNIlogin]$ mpiclang -O3 -Kopenmp source_file
+
+ Compute node
+
+ .. code-block:: console
+
+    [_CNlogin]$ mpiclang -O3 -Kopenmp source_file
+
+.. seealso::
+    
+    In the case of C++, please just command to clang++/mpiclang++.
+
+
+How to execute
+-------------------
+
+The compiled binary can be executed either from an interactive job or from a script.
+Here is an example of script.
+
+ [Sequential execution]
+
+ .. code-block:: bash
+
+    #!/bin/sh -x
+    #PJM -L  "node=1"
+    #PJM -L  "rscgrp=small"
+    #PJM -L  "elapse=01:00:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+    #PJM -g groupname
+    #PJM -s
+    #
+
+    . /vol0004/apps/oss/llvm-v19.1.4/init.sh
+    ./a.out
+
+
+ [OpenMP]
+
+ .. code-block:: bash
+
+    #!/bin/sh -x
+    #PJM -L  "node=1"
+    #PJM -L  "rscgrp=small"
+    #PJM -L  "elapse=01:00:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+    #PJM -g groupname
+    #PJM -s
+    #
+
+    export OMP_NUM_THREADS=12
+    . /vol0004/apps/oss/llvm-v19.1.4/init.sh
+    ./a.out
+
+ [Fujistu MPI]
+
+ .. code-block:: bash
+
+    #!/bin/sh -x
+    #PJM -L  "node=1"
+    #PJM -L  "rscgrp=small"
+    #PJM -L  "elapse=01:00:00"
+    #PJM --mpi  "proc=4"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+    #PJM -g groupname
+    #PJM -s
+    #
+
+    export OMP_NUM_THREADS=12
+    . /vol0004/apps/oss/llvm-v19.1.4/init.sh
+    mpiexec ./a.out
+
+
+.. seealso::
+
+    Binaries compiled clang++ can be executed in the same way.
+

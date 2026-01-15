@@ -1,0 +1,16 @@
+.. This document is created by Akiyoshi KURODA, RIKEN R-CCS on 2021/10/15 as Ver. 0.1.0.
+
+AI framework on the Fugaku Users Guide
+===================================================
+
+Here we will explain how to use the AI framework provided on the Fugaku. For more information, see the guide of each framework to be used. 
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Index:
+   :numbered:
+
+   pytorch
+   tensorflow
+   chainer
+

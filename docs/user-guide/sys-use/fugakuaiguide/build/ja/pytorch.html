@@ -1,0 +1,578 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+    <title>1. PyTorch 富岳環境 &#8212; 富岳AIフレームワーク利用ガイド  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="2. TensorFlow 富岳環境" href="tensorflow.html" />
+    <link rel="prev" title="富岳 AIフレームワーク 利用ガイド" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="tensorflow.html" title="2. TensorFlow 富岳環境"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="index.html" title="富岳 AIフレームワーク 利用ガイド"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">富岳AIフレームワーク利用ガイド  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>PyTorch 富岳環境</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="pytorch">
+<h1><span class="section-number">1. </span>PyTorch 富岳環境<a class="headerlink" href="#pytorch" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<section id="license">
+<h2><span class="section-number">1.1. </span>LICENSE条項<a class="headerlink" href="#license" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>提供したパッチおよび手順はOSSに提供(Upstream化)しており、Upstream化されたPyTorch分は修正BSDライセンスに準拠します。</p>
+</section>
+<section id="id1">
+<h2><span class="section-number">1.2. </span>参考情報<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>公開URL <a class="reference external" href="https://github.com/fujitsu/pytorch">https://github.com/fujitsu/pytorch</a></p></li>
+<li><p>PyTorch-1.13.1 手順書 <a class="reference external" href="https://github.com/fujitsu/pytorch/wiki/PyTorch-DNNL_aarch64-build-manual-for-FUJITSU-Software-Compiler-Package-(PyTorch-v1.13.1)-JP">https://github.com/fujitsu/pytorch/wiki/PyTorch-DNNL_aarch64-build-manual-for-FUJITSU-Software-Compiler-Package-(PyTorch-v1.13.1)-JP</a></p></li>
+<li><p>PyTorch-1.10.1 手順書 <a class="reference external" href="https://github.com/fujitsu/pytorch/wiki/PyTorch-DNNL_aarch64-build-manual-for-FUJITSU-Software-Compiler-Package-(PyTorch-v1.10.1)-JP">https://github.com/fujitsu/pytorch/wiki/PyTorch-DNNL_aarch64-build-manual-for-FUJITSU-Software-Compiler-Package-(PyTorch-v1.10.1)-JP</a></p></li>
+<li><p>PyTorch-1.7.0  手順書 <a class="reference external" href="https://github.com/fujitsu/pytorch/wiki/PyTorch-DNNL_aarch64-build-manual-for-FUJITSU-Software-Compiler-Package-(PyTorch-v1.7.0)-JP">https://github.com/fujitsu/pytorch/wiki/PyTorch-DNNL_aarch64-build-manual-for-FUJITSU-Software-Compiler-Package-(PyTorch-v1.7.0)-JP</a></p></li>
+</ul>
+</section>
+<section id="checkout-shsite-packages">
+<h2><span class="section-number">1.3. </span>バージョン (checkout.sh、site-packagesなど参照のこと)<a class="headerlink" href="#checkout-shsite-packages" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>PyTorch ver.1.13.1</p>
+<ul>
+<li><p>Horovod ver.0.26.1</p></li>
+<li><p>oneDNN ver.2.7.0</p></li>
+</ul>
+</li>
+<li><p>Python ver.3.9.x 以降</p>
+<ul>
+<li><p>numpy ver.1.22.x 以降</p></li>
+<li><p>scipy ver.1.7.x 以降</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id2">
+<h2><span class="section-number">1.4. </span>構成<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>最新版のものは、上記GitHubの手順に従いユーザ環境にて構築しご利用下さいませ。
+第2ストレージ階層にPyTorch-1.7.0以前のバージョンについては構築済みのものを公
+開しています。サンプル問題は互換ではありませんが、動かし方や性能取得方法など
+参考にご利用下さい。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/apps/oss/PyTorch-1.7.0/:
+  bin: 実行バイナリ
+  lib, lib64: ライブラリ
+    lib/python3.8/site-packages: PyTorchなどPython module一式
+  include: インクルードファイル
+  build: 構築に用いたscript, patch類
+  example: ResNet-50,OpenNMT,Bert,OpenNMT実行例
+  docs: ドキュメント類
+  old: 旧公開バージョン
+</pre></div>
+</div>
+<p>なお最新版へは順次富岳への組み込みをしておりますが、PyTorch本体内の構造変化
+に伴い、富岳向け高速化が動作しないことがあります。各バージョンの詳しい制限
+事項は上記Wikiを参照下さい。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">1.5. </span>構築方法<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ご自身で構築される場合は、<code class="file docutils literal notranslate"><span class="pre">build</span></code>以下をご参照下さいませ。手順は、上記参考資料に記載されております。パスなど調整の上ご利用下さいませ。<code class="file docutils literal notranslate"><span class="pre">$PATH</span></code>などは適時修正が必要です。構築に3時間程度かかります。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/fujitsu/pytorch.git
+$ cd pytorch                     # これ以降このディレクトリを PYTORCH_TOP と呼びます
+$ git checkout -b r1.13_for_a64fx origin/r1.13_for_a64fx
+$ cd scripts/fujitsu
+$ bash 1_python.sh download
+$       ・・・
+</pre></div>
+</div>
+<p>第2ストレージ階層に配置したバージョンは、Githubで公開されている版をVENVを用いず構築したものです。なるべく絶対パスを埋め込まないように調整しましたので、<code class="file docutils literal notranslate"><span class="pre">$HOME</span></code>へのコピーやステージングでの使用も可能と想定しています。</p>
+</section>
+<section id="id4">
+<h2><span class="section-number">1.6. </span>実行方法<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>本環境一式は、<code class="file docutils literal notranslate"><span class="pre">$PATH</span></code>を通すことでどこに配置しても実行できます。Python moduleはfile数が多いため、多並列では、MDSアクセス高負荷のため<strong class="program">importlib</strong>の時間がかかることが想定されます。<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/use_latest/">利用手引き書</a>の、<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/use_latest/LyeredStorageAndLLIO/TheSecondLayerStrage.html#id9">8.2.4.2. 共通ファイル配布のヒント</a>を参考に、必要な共通ファイルを<strong class="command">llio_transfer</strong>で転送するか、<strong class="command">tar</strong>などで固めて<strong class="command">llio_transfer</strong>で転送し展開することでステージングによる利用が可能です。</p>
+<p><code class="file docutils literal notranslate"><span class="pre">example</span></code>配下にイメージ読み込み無(Dry Benchmark)のResNet-50の実行例として、ノード内MPI並列有/無、train/inference、tracer、fipp/fapp/PAの取得例がございます。また自然言語処理のOpenNMT、Bert、物体検知Mask R-CNNなどのサンプルも入っており、高速化ライブラリを読み込めるようになっております。ご参照下さいませ。</p>
+<p>手順は、上記参考資料に記載あります。パスなど調整の上ご利用下さいませ。</p>
+</section>
+<section id="id7">
+<h2><span class="section-number">1.7. </span>制限事項<a class="headerlink" href="#id7" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>高速化パッチがあたらなかったり、PyTorchの仕様変更により、バージョン更新に伴い性能維持が困難でした。</p>
+<ul class="simple">
+<li><p>構築問題</p>
+<ol class="arabic simple">
+<li><p>SVE版<strong class="command">softmax</strong>/<strong class="command">tanh</strong>関数の潜在バグ(提供版は初期値を設定することで対応済)。</p></li>
+<li><p><strong class="command">-Kast</strong>で構築しないと、非正規化数の取り扱いの問題で遅くなる。富岳では<strong class="command">-Kfast</strong>構築を勧める。</p></li>
+</ol>
+</li>
+<li><p>動作注意</p>
+<ol class="arabic simple">
+<li><p><strong class="command">ulimit -h 8092</strong>を設定しないとSEGVになるサンプルが増えた。</p></li>
+<li><p>単精度複素数<strong class="command">cdotc_()</strong>と<strong class="command">cdotu_()</strong>の内積に関するテストでSSL2内でSEGV発生。</p></li>
+</ol>
+</li>
+<li><p>性能問題</p>
+<ol class="arabic simple">
+<li><p><strong class="command">add</strong>などコード自動生成化などの抽象化に伴い、高速化パッチが適用できくなった。</p></li>
+<li><p>oneDNNライブラリ関数<strong class="command">eltwise</strong>, <strong class="command">pooling_v2</strong>のVer2.6でレベルダウンにより性能が劣化した。Ver.2.7で<strong class="command">eltwize</strong>は回復している。</p></li>
+<li><p>backwardなどで計算経路が変ったため高速化パッチがあたらない。古いコードパスが残っていいたので暫定対処したが、今後のバージョンで高速に動く保証はない。</p></li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="id8">
+<h2><span class="section-number">1.8. </span>チュートリアル<a class="headerlink" href="#id8" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ここでは、富岳でPyTorchを使用して、画像認識のResnetサンプルを動かす手順を記載します。
+富岳にアカウント作成からログインについては<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/startup_guides/StartupGuide-ja.pdf">スタートアップガイド</a>を御参考下さい。ここでは、ログイン後に作業領域<code class="file docutils literal notranslate"><span class="pre">~/tutorial</span></code>での作業を仮定します。</p>
+<section id="id10">
+<h3><span class="section-number">1.8.1. </span>サンプル問題の準備<a class="headerlink" href="#id10" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>PyTorchは、<code class="file docutils literal notranslate"><span class="pre">/vol0004/apps/oss/PyTorch-1.7.0</span></code>があらかじめインストールされてい
+ます。その中の<code class="file docutils literal notranslate"><span class="pre">example</span></code>を作業場所にコピーします。<code class="file docutils literal notranslate"><span class="pre">95_output</span></code>に実行
+例が入っていますので適時ご参照下さいませ。ここではサイズが大きいので、除外してコピーします。
+サンプルはそれ以降のPyTorchのバージョンと互換ではありません。適時置き換えてご利用下さい
+ませ。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cd                                         # $HOMEへ移動
+$ mkdir -p tutorial/PyTorch                  # 作業ディレクトリの作成
+$ cd /vol0004/apps/oss/PyTorch-1.7.0/example # PyTorch環境へ移動
+$ tar -cf - --exclude=95_output --exclude=95_log . | (cd ~/tutorial/PyTorch ; tar -xvf -) # 作業ディレクトリへ実行例を除いてコピー
+$ cd                                         # $HOMEに戻る
+$ cd tutorial/PyTorch                        # 作業ディレクトリへ移動
+$ ls                                         # 作業ディレクトリの中身を確認
+01_resnet   03_Bert        env.src        README.md
+02_OpenNMT  04_Mask-R-CNN  env.src.spack
+</pre></div>
+</div>
+<p>この中に画像認識(Resnet)、自然言語処理(OpenNMT, Bert)、物体検知
+(Mask-R-CNN)のサンプルが入っています。また<code class="file docutils literal notranslate"><span class="pre">env.src</span></code>には、実行に必要
+な環境変数などの設定が入っています。ご自身でPyTorchを動かす時は、PyTorchを動
+かす前に、<strong class="command">$ . env.src</strong>を実行して下さい。</p>
+<p>富岳でジョブを実行するためには、<strong class="command">pjsub job_name.sh</strong>と実行します。
+<code class="file docutils literal notranslate"><span class="pre">job_name.sh</span></code>の先頭にジョブ投入に必要な情報が記載されています。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+#PJM -L &quot;rscunit=rscunit_ft01,rscgrp=small&quot;        # 384ノードまではsmallを使います
+#PJM -L elapse=00:15:00                            # ジョブは最大でも15分で終了します
+#PJM -L &quot;node=1:noncont,freq=2200&quot;                 # 1ノードを2200MHzで使用します
+#PJM --mpi &quot;shape=1,proc=4&quot;                        # 1ノードをMPI 4プロセスで使用します
+#PJM -x PJM_LLIO_GFSCACHE=/vol0004                 # PyTorch本体は/vol0004に置いてあるので指定します
+#PJM -j                                            # 標準エラー出力を標準出力にマージします
+#PJM -S                                            # ジョブ統計情報の詳細を出力します
+</pre></div>
+</div>
+<p>また、インタラクティブモードを使って計算ノードに直接ログインすることも可能です。
+この場合ジョブ実行は<strong class="command">pjsub (job_name).sh</strong>の代わりに
+<strong class="command">bash (job_name).sh</strong>として実行します。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ pjsub (job_name).sh  # バッチジョブでジョブを投入する
+
+$ pjsub --interact -L &quot;node=1&quot; -L &quot;rscunit=rscunit_ft01&quot; -L &quot;rscgrp=int&quot; -L &quot;elapse=1:00:00&quot; --sparam &quot;wait-time=600&quot; -x &quot;PJM_LLIO_GFSCACHE=/vol0004&quot; # 1ノードを1プロセスで1時間使用する
+$ pjsub --interact -L &quot;node=1&quot; -L &quot;rscunit=rscunit_ft01&quot; -L &quot;rscgrp=int&quot; -L &quot;elapse=1:00:00&quot; --sparam &quot;wait-time=600&quot; --mpi &quot;proc=4&quot; -x &quot;PJM_LLIO_GFSCACHE=/vol0004&quot; # 1ノードを4プロセスで1時間使用する
+
+$ bash (job_name).sh  # インタラクティブでジョブを実行する。
+</pre></div>
+</div>
+</section>
+<section id="resnet">
+<h3><span class="section-number">1.8.2. </span>Resnetサンプルの実行<a class="headerlink" href="#resnet" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>ResNet-50のネットワークを用いた画像認識を行なうサンプルコードです。ダミーデータを用い
+ており、推論、学習、データ分散多並列、性能取得、Spackとの併用、LLIOの利用などの実行例
+を用意しています。
+サンプルモデルの設定は必ずしも最速になっているわけではないことに留意してください。
+<code class="file docutils literal notranslate"><span class="pre">/vol0004/apps/oss/PyTorch-1.7.0/example/0*/95_output</span></code>に富岳での実行結果の例
+がありますので比較することができます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cd 01_resnet                 # 画像認識(ResNet-50)のサンプル問題です
+$ ls -1                        # ファイルを確認します。以下、順番を入れ替えています
+submit_val.sh                  # 推論基本動作確認用 (1ノード, 1プロセス、48コア, ダミーデータ) (4分)
+submit_train.sh                # 学習基本動作確認用 (1ノード, 1プロセス、48コア, ダミーデータ) (2分)
+submit_val_multi.sh            # 推論基本動作確認用 (1ノード, 4プロセス、12コア/プロセス, ダミーデータ) (3分)
+submit_train_multi.sh          # 学習基本動作確認用 (1ノード, 4プロセス、12コア/プロセス, ダミーデータ) (4分)
+submit_spack.sh                # 一部PythonやPython moduleをSpackにて使用する例
+submit_tar.sh                  # 大並列を想定して、Python moduleをtarで固めて実行する例
+submit_llio_pre.sh             # 大並列を想定して、llip_transferで転送するファイルリストを作成する例
+submit_llio_main.sh            # 作成されたファイルリストからllio_transferを使用して実行する例
+submit_llio_spack_main.sh      # 大並列を想定して、llip_transferでSpackを併用しつつ転送するファイルリストを作成する例
+submit_llio_spack_pre.sh       # 作成されたファイルリストからllio_transferを試用して実行する例
+submit_trace.sh                # PyTorch Profilerによる性能取得例
+submit_fipp.sh                 # Fujitsu Profiler fippによる性能取得例
+submit_fapp.sh                 # Fujitsu HWカウンタ fappによる性能取得例
+submit_pa.sh                   # Fujitsu HWカウンタ 精密PA性能情報取得例
+run_all.sh                     # 全てのサンプルを一括実行するスクリプト
+run_llio.sh                    # llio_transferを用いてファイルリストを作成し、本計算をするスクリプト
+run_llio_spack.sh              # Spackを使用している時にllio_transferを用いてファイルリストを作成し、本計算をするスクリプト
+run_tar.sh                     # Python関係のファイルをtarで固めて実行するスクリプト
+test_eval.py                   # 1プロセス推論で使用するPythonコード
+test_train.py                  # 1プロセス学習で使用するPythonコード
+pytorch_fapp.py                # PyTorchプロファイラ並びにfappカウンタ区間情報をうめたPythonコード
+pytorch_synthetic_benchmark.py # データ分散多並列で実行する時に使用するPythonコード
+resnet.py                      # ResNet-50のネットワーク定義ファイル
+</pre></div>
+</div>
+<p>1ノードを1プロセスで画像認識の学習する例を実行します。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ pjsub submit_train.sh
+$ less submit_train.sh.(job_id).out
+&gt;&gt; script option: Namespace(batch=256, itr=20, lr=0.001, momentum=0.9, trace=False, type=&#39;cpu_mkltensor&#39;, weight_decay=0.0)
+## Start Training
+[    1] loss: 7.269 time: 2.555 s
+[    2] loss: 5.051 time: 2.320 s
+[    3] loss: 1.229 time: 2.303 s
+[    4] loss: 0.012 time: 2.303 s
+[    5] loss: 0.000 time: 2.304 s         # ダミーデータで学習させているので
+[    6] loss: 0.000 time: 2.304 s         # loss 値はすぐにゼロになります
+[    7] loss: 0.000 time: 2.303 s
+[    8] loss: 0.000 time: 2.303 s
+[    9] loss: 0.000 time: 2.303 s
+（省略）
+</pre></div>
+</div>
+<p>使用できるメモリの範囲でバッチサイズは大きいほど性能の効率は良くなります。但し、
+CPUではピークの性能が高くない（単精度で6.6TF程）ため、多くの場合、多ノードでマルチプロセ
+スで実行する必要があります。<code class="file docutils literal notranslate"><span class="pre">submit_train_multi.sh,</span> <span class="pre">submit_val_multi.sh</span></code>は
+4プロセスでデータ並列学習と推論を実行する例です。 1プロセスのテストで使用しているモ
+デルとは別のモデルを、異なるパラメーで実行しています。 <code class="file docutils literal notranslate"><span class="pre">submit_val_multi.sh</span></code>は4並列で推論を行いますが、 推論の場合、各プロセスは非同期で実行を進めていきます。
+以下は富岳(2.2GHz)の<code class="file docutils literal notranslate"><span class="pre">submit_train_multi.sh</span></code>の出力例です。 4プロセス合計で
+100img/sec以上の値が出ています。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>（省略）
+Running benchmark...
+Iter #0: 28.5 img/sec per CPU             # この値は、rank0 プロセスの値
+Iter #1: 28.5 img/sec per CPU
+Iter #2: 28.5 img/sec per CPU
+Iter #3: 28.5 img/sec per CPU
+Iter #4: 28.5 img/sec per CPU
+Img/sec per CPU: 28.5 +-0.0
+Total img/sec on 4 CPU(s): 114.0 +-0.1    # この値は4プロセスの合計値
+</pre></div>
+</div>
+</section>
+<section id="llio-transferpython-module">
+<h3><span class="section-number">1.8.3. </span>LLIO_transferによるPython moduleなどのデータ転送<a class="headerlink" href="#llio-transferpython-module" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>サンプルでは1ノードを用いた例で実行していますが、3rack 1,000並列を越えてくると、画像デー
+タの増大やPythonモジュールの読み込みに時間がかかるようになるため、予めデータを第1階
+層ストレージに持って行くことをお勧めします。第2階層FEFSへのアクセスを減らすため
+<code class="file docutils literal notranslate"><span class="pre">run_tar.sh</span></code>では、Python環境一式を<strong class="command">tar</strong>で固めて、計算ノードで展開
+するサンプルスクリプトを用意しています。
+しかし、計算ノードでは基本的に<strong class="command">tar</strong>展開処理に伴うファイルI/Oも遅いため、
+<strong class="command">llio_transfer</strong>を用いて、必要なファイルだけ転送する方法を推奨します。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ rm -Rf strace_log               # 不要なファイルを消去します
+$ pjsub submit_llio_pre.sh        # 転送すべきファイルをstraceを用いて検索します
+$ egrep -v &#39;= \-1 ENOENT|O_DIRECTORY&#39; ./strace_log/strace.0.* | egrep O_RDONLY | cut -d\&quot; -f 2  |egrep ^/vol.... &gt;&gt; llio_transfer.list  # 出力されたstraceの結果から、転送するファイルリストを作成します
+$ pjsub submit_llio_main.sh       # lliop_transferを用いた本計算です
+</pre></div>
+</div>
+<p><code class="file docutils literal notranslate"><span class="pre">submit_llip_pre.sh</span></code>で、必要なファイルを取り出すため、ランク0のみ<strong class="command">strace</strong>を動かして、アクセスしたファイルを出力します。<strong class="command">strace</strong>の処理は多少時間がかかるため、
+batchサイズや繰り返し回数は少なく設定しています。ここで得られた<strong class="command">strace</strong>のログから
+<strong class="command">grep</strong>を用いて、転送するファイルリストを作成しています。作成されたファイルリス
+トの例です。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cat llio_transfer.list                      # 転送するファイルの確認
+/vol0004/apps/oss/PyTorch-1.7.0/bin/python3
+/vol0004/apps/oss/PyTorch-1.7.0/lib/libtcmalloc.so
+/vol0004/apps/oss/PyTorch-1.7.0/lib/libpython3.8.so.1.0
+/vol0004/apps/oss/PyTorch-1.7.0/lib/python3.8/encodings/__pycache__/__init__.cpython-38.pyc
+（省略）
+</pre></div>
+</div>
+<p><code class="file docutils literal notranslate"><span class="pre">submit_llio_main.sh</span></code>では、</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cat ./llio_transfer.list | xargs -L 100 llio_transfer
+</pre></div>
+</div>
+<p>として、計算の前にリスト内の1,000ほどのファイルを第1階層に転送しています。</p>
+</section>
+<section id="spackpython-module">
+<h3><span class="section-number">1.8.4. </span>SpackによるPython moduleの利用<a class="headerlink" href="#spackpython-module" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>実際にPyTorchを用いて学習する際には、<code class="file docutils literal notranslate"><span class="pre">/vol0004/apps/oss/PyTorch-1.7.0</span></code>に用意されたPython moduleだけでは足りず、自分でPython moduleを組み込む必要があります。
+一般には、以下の方法で、<code class="file docutils literal notranslate"><span class="pre">$HOME/.local</span></code>に必要なPython moduleを構築して組み込
+むことができます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ . env.src
+$ wget https://(...module_name...)
+$ cd (module_name)
+$ python3 setup.py clean
+$ python3 setup.py bdist_wheel
+$ pip3 install --user dist/*.whl
+</pre></div>
+</div>
+<p>なお、PyTorchで使用するPythonは富士通Cコンパイラのclangモードにて構築しているため、
+上記方法では、Python moduleも富士通コンパイラにて構築されます。</p>
+<p>外部Python moduleを使用する際には、システムからSpackにて提供されているものを使用する
+こともできます。Spackでは、あとからloadしたPythonやPython moduleが、動かすために必要
+な環境変数LD_LIBRARY_PATHやPYTHONPATHが上書きしますので、使いたいモジュールをなるべく
+最後に読み込むようにします。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ pjsub submit_spack.sh
+</pre></div>
+</div>
+<p>実際にSpackの設定や提供モジュールを読み込んでいるのは、<code class="file docutils literal notranslate"><span class="pre">../env.src.spack</span></code>内
+からです。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ # Spack
+$ . /vol0004/apps/oss/spack/share/spack/setup-env.sh                   # Spackを利用するための環境設定
+$ spack load /bo2w4et #py-mpi4py@3.1.2%fj@4.7.0 arch=linux-rhel8-a64fx # mpi4pyをSpackで利用する
+$ export LD_LIBRARY_PATH=/lib64:${LD_LIBRARY_PATH}                     # 現段階で問題が発生することがあるため最後に必ず環境変数を並べ替え
+$ which python3                                                        # どのPythonが動作しているか確認
+$ python3 -c &quot;from mpi4py import MPI&quot;                                  # 動作確認
+</pre></div>
+</div>
+</section>
+<section id="id11">
+<h3><span class="section-number">1.8.5. </span>性能プロファイルの取得<a class="headerlink" href="#id11" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>AI計算をしていると、性能が出ているのかの確認が必要になる場合があります。性能
+プロファイル情報を取得する方法としては、PyTorch標準のtorch.autograd.profiler.profile、
+富士通プロファイラ、Python標準のcProfileなどの利用が使用できます。ここでは、PyTorch標
+準プロファイラ、富士通Profilerの使用例を紹介します。</p>
+<ul class="simple">
+<li><p>PyTorch標準のプロファイラ：NNの関数レベルでコストを出力することができます。若干メモリを多く使用します。Pythonのループ構造(tab位置)が変るため、コード修正が必要になることがあります。</p></li>
+<li><p>富士通プロファイラ：バイナリの関数レベルで分析できます。インバランスやMPIのコストも取得できます。またfappやPAを使用することで、詳細のHWカウンタ情報を取得できます。</p></li>
+<li><p>cProfile：Python処理レベルで分析できます。</p></li>
+</ul>
+<p>PyTorch標準のプロファイラを動かす場合は、</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ pjsub submit_trace.sh
+</pre></div>
+</div>
+<p>です。<code class="file docutils literal notranslate"><span class="pre">pytorch_fapp.py</span></code>内のmainが呼ばれる箇所で、torch.autograd.profiler.profileにより
+プロファルを取得できます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>with torch.autograd.profiler.profile(record_shapes=True) as prof:
+    bench()
+print(prof.key_averages().table(sort_by=&quot;self_cpu_time_total&quot;))
+</pre></div>
+</div>
+<p>結果は、ジョブの標準出力に出力されます、</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ less submit_trace.sh.output.(JOB_ID)/0/stdout.1.0 # 標準出力の内容を確認
+（省略）
+---------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------
+Name                                      Self CPU %   Self CPU    CPU total %     CPU total  CPU time avg         # of Calls
+---------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------
+aten::mkldnn_convolution_backward_weights  29.35%       37.254s        29.41%       37.326s      14.085ms          2650
+aten::mkldnn_convolution_backward_input    28.67%       36.395s        28.67%       36.395s      13.998ms          2600
+aten::mkldnn_convolution                   24.27%       30.804s        24.27%       30.804s      11.624ms          2650
+aten::native_batch_norm_backward            5.04%        6.399s         5.09%        6.460s       2.438ms          2650
+aten::native_batch_norm                     3.87%        4.915s         3.87%        4.915s       1.855ms          2650
+aten::mkldnn_relu_backward                  3.03%        3.850s         3.03%        3.850s       1.572ms          2450
+aten::add_                                  1.45%        1.841s         1.45%        1.841s     108.958us         16900
+（省略）
+</pre></div>
+</div>
+<p>上位コストのうちconvolution処理で、MKL DNNライブラリの処理が呼ばれていることがわかります。
+富士通プロファイラを使用する場合は、</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ pjsub submit_fipp.sh # fippにてコスト分布を取得する場合
+$ pjsub submit_fapp.sh # fappにてHWカウンタ情報などを取得する場合
+$ pjsub submit_pa.sh   # 精密詳細PA17回取りにて、詳細の性能を取得する場合
+</pre></div>
+</div>
+<p>それぞれ、pa*, rep*にプロファイリング情報が出力されるため、ログインノード上で
+<strong class="command">fipppx, fapppx</strong>を使用することで、プロファイルを取得することができます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ fipppx -A -Ibalance,cpupa,call -l 0 -d pa_fipp  # fippにてコスト分布を取得する場合。
+(省略)
+              Cost          %  Operation (s)        Barrier          %    Start      End
+   -------------------------------------------------------------------------------------
+             75590   100.0000      7561.2109          13969    18.4800       --       --   Application
+   -------------------------------------------------------------------------------------
+             14058    18.5977      1406.2031          13969    18.4800       --       --   __?unknown
+              8846    11.7026       884.8591              0     0.0000       --       --   dnnl::impl::cpu::aarch64::jit_aarch64_sve_512_1x1_convolution_bwd_data_t&lt;(dnnl_data_type_t)3, (dnnl_data_type_t)3, (dnnl_data_type_t)3&gt;::execute_backward_data(dnnl::impl::exec_ctx_t const&amp;) const::{lambda(int, int)#1}::operator()(int, int) const
+(省略)
+
+$ fapppx -A -Icpupa,mpi -d pa_fapp # loginノードでHWカウンタなど情報を得る場合
+(省略)
+                   Execution                 Floating-point  Mem throughput  Mem throughput
+      Kind          time(s)          GFLOPS   peak ratio(%)          (GB/s)   peak ratio(%)
+    ---------------------------------------------------------------------------------------
+       AVG         162.9340         59.7380         84.8550          4.6851          0.4575     all 0
+       MAX         185.0194         62.6767         89.0293          4.9344          0.4819
+       MIN         160.5495         49.7601         70.6819          4.1564          0.4059
+(省略)
+</pre></div>
+</div>
+<p>Pythonで<strong class="command">fapp</strong>を使用して区間指定するためには、fappタイマ区間の
+挿入するためのPython wrapperをimportしてます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pytorch_fapp.py:
+  import fapp
+  (省略)
+  fapp.start(&quot;main&quot;,1,1)
+  for x in range(args.num_iters):
+      time = timeit.timeit(benchmark_step, number=args.num_batches_per_iter)
+      img_sec = args.batch_size * args.num_batches_per_iter / time
+      log(&#39;Iter #%d: %.1f img/sec per %s&#39; % (x, img_sec, device))
+      img_secs.append(img_sec)
+  fapp.stop(&quot;main&quot;,1,1)
+  (省略)
+</pre></div>
+</div>
+<p>プロファイラの詳細の情報は、<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/docs/manuals_r01">ポータルのマニュアル</a>から最新の言語環境を選択し、プロファイラ使用手引書をご覧下さいませ。</p>
+</section>
+</section>
+<section id="id13">
+<h2><span class="section-number">1.9. </span>注意<a class="headerlink" href="#id13" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>高速化のために富士通研究所がA64fx向けに組み込んだ<code class="docutils literal notranslate"><span class="pre">oneDNN-2.7.0</span></code>以下のバージョンを使用しています。
+画像認識、自然言語処理解析、物体検知など処理の高速化しております。
+使用するネットワークによっては、不具合や高速に動作しない関数がある可能性もございますので、問題がある場合は、何らかの別の関数に置き換えるなどにより対応下さいますようお願い致します。</p>
+<p>高速化、サポートバージョン、モジュールなどの要望は、使用するネットワークスクリプトをご呈示の上、利用者アカウントのサポートデスク(運技サポートデスク若しくはHPCIサポートデスク)へ御願い致します。対応に数ヶ月を要することもございますのでご了承下さいませ。</p>
+</section>
+<section id="id14">
+<h2><span class="section-number">1.10. </span>将来の対応予定<a class="headerlink" href="#id14" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ol class="arabic simple">
+<li><p>済 OpenNMTの制限事項の解除 (2021.4頃)</p></li>
+<li><p>済 Mask R-CNN対応 (2021.4頃)</p></li>
+<li><p>済 オプショナルPython module: netcdfの提供 (2021.4頃)</p></li>
+<li><p>Spackによるユーザ環境でのbuild (2021後半頃)</p></li>
+<li><p>Singurarityによるコンテナ提供 (2021後半頃)</p></li>
+<li><p>富士通言語環境への追従 (随時)</p></li>
+<li><p>PyTorch, oneDNNバージョンアップへの追従 (随時)</p></li>
+<li><p>旧バージョンへの対応 (2021後半頃)</p></li>
+<li><p>サポートモジュールの拡大 (随時)</p></li>
+<li><p>FX700での提供 (2021後半頃)</p></li>
+</ol>
+</section>
+<section id="id15">
+<h2><span class="section-number">1.11. </span>履歴<a class="headerlink" href="#id15" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>2020/07/05(日) tcsds-1.2.25-02で構築公開</p></li>
+<li><p>2020/08/20(木) tcsds-1.2.26で構築更新</p>
+<ul>
+<li><p>engine.cpp障害対応</p></li>
+</ul>
+</li>
+<li><p>2020/09/08(火) tcsds-1.2.26で構築更新</p>
+<ul>
+<li><p>構築オプション変更</p></li>
+</ul>
+</li>
+<li><p>2020/09/08(火) tcsds-1.2.26bで構築更新</p></li>
+<li><p>2020/10/27(月) tcsds-1.2.27bで構築更新</p>
+<ul>
+<li><p>largepageでの実行例の追加</p></li>
+<li><p>fapp、fapp、PA取得時の例を追加</p></li>
+<li><p>実行スクリプトの調整</p></li>
+</ul>
+</li>
+<li><p>2021/2/18(木) PyTorch-1.6.0、PyTorch-1.7.0公開</p>
+<ul>
+<li><p>tcsds-1.2.29で構築</p></li>
+<li><p>mpi4py、pandas追加</p></li>
+</ul>
+</li>
+<li><p>2021/2/21(日) tcsds-1.3.30aで構築</p>
+<ul>
+<li><p>trace、fipp、fapp、PAサンプル追加</p></li>
+</ul>
+</li>
+<li><p>2021/5/20(木) Mask R-CNN対応、oneDNN-2.1.0L1を組み込み</p>
+<ul>
+<li><p>PyTorch-1.7.0をtcsds-1.3.31で構築</p></li>
+<li><p>OpenNMTのサンプルが止まる問題を修正</p></li>
+</ul>
+</li>
+<li><p>2021/10/15(金) ドキュメント公開(Ver.1.0)</p></li>
+<li><p>2021/12/07(火) ドキュメントアップデート(Ver.1.1) LLIO使用を推奨</p></li>
+<li><p>2021/12/09(木) tcsds-1.2.33で構築</p>
+<ul>
+<li><p>oneDNN追加、llioサンプル追加、spack併用サンプル追加</p></li>
+</ul>
+</li>
+<li><p>2021/12/20(月) tcsds-1.2.34で構築 (Spackサンプル34版未対応)</p></li>
+<li><p>2021/12/26(日) vol0004以外ユーザの対応</p>
+<ul>
+<li><p>ユーザ環境でのサンプル実行対応</p></li>
+<li><p>01_resnet: spack sample, llio sample 未動作</p></li>
+</ul>
+</li>
+<li><p>2021/12/30(木) 01_resnet: spack sample, llio sample対応</p>
+<ul>
+<li><p>exampleをユーザがbuildするとinstallで失敗しますが、<code class="file docutils literal notranslate"><span class="pre">/vol0004/app</span></code>にコピーをしています</p></li>
+</ul>
+</li>
+<li><p>2022/2/28(月) ドキュメントアップデート(Ver.1.2) 日本語チュートリアルを追加</p></li>
+<li><p>2023/7/13(木) ドキュメントアップデート(Ver.1.3) 新バージョン(PyTorch-1.13.1など)に関する記述記載</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1. PyTorch 富岳環境</a><ul>
+<li><a class="reference internal" href="#license">1.1. LICENSE条項</a></li>
+<li><a class="reference internal" href="#id1">1.2. 参考情報</a></li>
+<li><a class="reference internal" href="#checkout-shsite-packages">1.3. バージョン (checkout.sh、site-packagesなど参照のこと)</a></li>
+<li><a class="reference internal" href="#id2">1.4. 構成</a></li>
+<li><a class="reference internal" href="#id3">1.5. 構築方法</a></li>
+<li><a class="reference internal" href="#id4">1.6. 実行方法</a></li>
+<li><a class="reference internal" href="#id7">1.7. 制限事項</a></li>
+<li><a class="reference internal" href="#id8">1.8. チュートリアル</a><ul>
+<li><a class="reference internal" href="#id10">1.8.1. サンプル問題の準備</a></li>
+<li><a class="reference internal" href="#resnet">1.8.2. Resnetサンプルの実行</a></li>
+<li><a class="reference internal" href="#llio-transferpython-module">1.8.3. LLIO_transferによるPython moduleなどのデータ転送</a></li>
+<li><a class="reference internal" href="#spackpython-module">1.8.4. SpackによるPython moduleの利用</a></li>
+<li><a class="reference internal" href="#id11">1.8.5. 性能プロファイルの取得</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id13">1.9. 注意</a></li>
+<li><a class="reference internal" href="#id14">1.10. 将来の対応予定</a></li>
+<li><a class="reference internal" href="#id15">1.11. 履歴</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="index.html"
+                          title="前の章へ">富岳 AIフレームワーク 利用ガイド</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="tensorflow.html"
+                          title="次の章へ"><span class="section-number">2. </span>TensorFlow 富岳環境</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="tensorflow.html" title="2. TensorFlow 富岳環境"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="index.html" title="富岳 AIフレームワーク 利用ガイド"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">富岳AIフレームワーク利用ガイド  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>PyTorch 富岳環境</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, RIKEN R-CCS.
+    </div>
+  </body>
+</html>

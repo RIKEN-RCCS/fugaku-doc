@@ -1,0 +1,651 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8.3. 第2階層ストレージのキャッシュ領域 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="8.4. ノード内テンポラリ領域" href="TemporaryAreaInNode.html" />
+    <link rel="prev" title="8.2. FEFS/LLIOへのファイル操作について" href="WriteForFilesystem.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="TemporaryAreaInNode.html" title="8.4. ノード内テンポラリ領域"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="WriteForFilesystem.html" title="8.2. FEFS/LLIOへのファイル操作について"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">8. </span>階層化ストレージ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.3. </span>第2階層ストレージのキャッシュ領域</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="thesecondlayerstoragecachearea">
+<span id="id1"></span><h1><span class="section-number">8.3. </span>第2階層ストレージのキャッシュ領域<a class="headerlink" href="#thesecondlayerstoragecachearea" title="Link to this heading">¶</a></h1>
+<p>第2階層ストレージはオープンソースのLustreの技術を基にしたFEFS（大規模および高性能な並列分散ファイルシステム）を採用しています。</p>
+<p>ジョブ（計算ノード）から第2階層ストレージへのIOは、第2階層ストレージのキャッシュ領域を経由してアクセスされます。非同期クローズを有効にすることで、計算処理中に第2階層ストレージへの書き出しが可能となり高速化されます。詳細は<a class="reference internal" href="#thesecondlayerstoragecacheareaopt"><span class="std std-ref">ジョブ投入時（pjsub --llio）のオプション</span></a>を参照ください。</p>
+<p>「第2階層ストレージのキャッシュ」は第1階層ストレージに作成されるキャッシュ領域です。</p>
+<ol class="arabic simple">
+<li><p>第2階層ストレージのパスにアクセスすることで、第2階層ストレージのキャッシュ（高速デバイス）経由でアクセスされます。</p></li>
+</ol>
+<figure class="align-default">
+<img alt="../_images/TheSecondLayerStrage_01.png" src="../_images/TheSecondLayerStrage_01.png" />
+</figure>
+<p>第2階層ストレージへ直接アクセスする場合は<a class="reference internal" href="../UsageRules/index.html#diskpoints"><span class="std std-ref">ディスク</span></a>を参照ください。</p>
+<ol class="arabic" start="2">
+<li><p>第2階層ストレージのキャッシュ領域の仕様を説明します。</p>
+<table class="docutils align-default" id="id11">
+<caption><span class="caption-text">第2階層ストレージのキャッシュ領域の仕様</span><a class="headerlink" href="#id11" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目</p></th>
+<th class="head"><p>特性</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>参照範囲</p></td>
+<td><p>すべての計算ノードから参照できます。</p></td>
+</tr>
+<tr class="row-odd"><td><p>生存期間</p></td>
+<td><div class="line-block">
+<div class="line">ジョブ実行可能時間制限内は保持されます。</div>
+<div class="line">第2階層ストレージへの書出し途中でジョブ実行可能時間制限を超えるなどしてジョブが中断された場合は、第2階層ストレージのキャッシュ領域は書き出しが完了していない場合でも削除されます。書き出されなかったファイルは、未書出しファイルの一覧としてファイルに出力します。</div>
+<div class="line">また、上記以外のタイミングで第2階層ストレージのキャッシュ領域のキャッシュが削除されるタイミングは以下となります。</div>
+<div class="line">- ファイルを削除した場合</div>
+<div class="line">- 第2階層ストレージのキャッシュ領域がディスクフルとなった場合</div>
+<div class="line-block">
+<div class="line">(ディスクフルになった場合はLRU方式で古いものから削除される)</div>
+</div>
+<div class="line">- Direct I/O (writeとreadのいずれの場合も該当)が実行された場合</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<div class="line-block">
+<div class="line">LLIOはアクセス高速化のためread/writeした第2階層ストレージ(FEFS)上のファイルデータおよびメタデータをLLIO上で保持、管理しています。この仕組みのため、ジョブ実行中に第2階層ストレージへ直接writeしたファイルはLLIOから認識できません。</div>
+<div class="line">具体例は第2階層ストレージのキャッシュ領域ならびに第2階層ストレージに並行して同一ファイルにread/writeアクセスする利用方法は避けて頂くよう留意願います。</div>
+</div>
+</div>
+<section id="volumeofstrage">
+<span id="id2"></span><h2><span class="section-number">8.3.1. </span>第2階層ストレージのキャッシュの容量<a class="headerlink" href="#volumeofstrage" title="Link to this heading">¶</a></h2>
+<p>第1階層ストレージの領域は、入出力を担うストレージI/Oノード（SIOノード）のSSDから確保されます。
+1つの計算ノードに割り当てられるSSDのサイズは1つのSIOノードが入出力を担う計算ノードの数で等分した容量になります。</p>
+<p>「富岳」では<strong>約87GiB/node</strong>が使用できます。</p>
+<p>約87GiBを、ノード内テンポラリ領域、共有テンポラリ領域、第2階層ストレージのキャッシュ領域に分割して使用します。</p>
+<p>ジョブ実行時に第2階層ストレージのキャッシュ領域の容量を指定することはできません。
+ノード内テンポラリ領域および共有テンポラリ領域の容量を指定し、残りの容量が第2階層ストレージのキャッシュ領域になります。:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>第2階層ストレージのキャッシュ領域 = 87GiB - (ノード内テンポラリ領域 + 共有テンポラリ領域)
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul>
+<li><p>第2階層ストレージのキャッシュ領域は128MiB以上の容量が必要です。容量が128MiBを下回るとジョブ投入時に以下のエラーとなります。ノード内テンポラリ領域、共有テンポラリ領域の容量を見積もる際には留意ください。</p>
+<p>[ERR.] PJM 0049 pjsub Option argument is invalid. sharedtmp-size + localtmp-size must be less than or equal to &lt;size&gt;</p>
+</li>
+<li><p>第2階層ストレージのキャッシュ領域の容量がジョブのキャッシュ利用量に対して小さい場合、以下の事象が発生することがあります。</p>
+<ol class="arabic simple">
+<li><p>ジョブがエラーとなることがあります。</p></li>
+<li><p>キャッシュミスが頻発し、IO速度が遅くなる場合があります。</p></li>
+</ol>
+</li>
+</ul>
+</div>
+</section>
+<section id="fefswritetiming">
+<span id="id3"></span><h2><span class="section-number">8.3.2. </span>第2階層ストレージへの書出しタイミング<a class="headerlink" href="#fefswritetiming" title="Link to this heading">¶</a></h2>
+<p>第2階層ストレージへの書き出しは、計算ノードからの第2階層ストレージキャッシュ領域への書き出し要求とは非同期に行われています。この非同期処理により、それぞれの処理を並列化することでIO処理を高速化しています。
+計算ノードからの書き出しを同期し、各計算ノードやログインノードから情報を参照できるようにするためには、以下のいずれかの手法を選択できます。</p>
+<ul class="simple">
+<li><p>Direct I/Oを用いて書出す。</p></li>
+<li><p>書出し後にsync(2)またはfsync(2)を発行する。</p></li>
+<li><p>書出し後にclose(2)する。(非同期クローズ=OFFの場合)</p></li>
+</ul>
+<figure class="align-default">
+<img alt="../_images/CacheWriteTiming_01.png" src="../_images/CacheWriteTiming_01.png" />
+</figure>
+</section>
+<section id="id4">
+<h2><span class="section-number">8.3.3. </span>ストライプ機能<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>第2階層ストレージのキャッシュおよび第2階層ストレージに対してストライプを設定できます。</p>
+<ol class="arabic simple">
+<li><p>第2階層ストレージのキャッシュおよび第2階層ストレージに対してストライプを設定することにより大容量のシーケンシャルアクセスの高速化が期待できます。</p></li>
+<li><p>第2階層ストレージのキャッシュにストライプを設定することにより、1つのファイルを複数のストレージI/O（SIO）ノードに分散して処理します。</p></li>
+<li><p>加えて第2階層ストレージ（FEFS）にストライプを設定することにより、1つのファイルを複数のOSTに分散して処理します。</p></li>
+<li><p>第2階層ストレージのキャッシュならびに第2階層（FEFS）に対するストライプの設定方法は異なります。</p></li>
+</ol>
+<table class="docutils align-default" id="id12">
+<caption><span class="caption-text">ストライブの設定方法</span><a class="headerlink" href="#id12" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>領域名</p></th>
+<th class="head"><p>pjsub --llioオプション</p></th>
+<th class="head"><p>Lfsコマンド</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>第2階層ストレージのキャッシュ</p></td>
+<td><p>✓</p></td>
+<td><p>－</p></td>
+</tr>
+<tr class="row-odd"><td><p>第2階層ストレージ</p></td>
+<td><p>－</p></td>
+<td><p>✓</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id5">
+<h3><span class="section-number">8.3.3.1. </span>第2階層ストレージのキャッシュに対するストライプ設定<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>複数の第2階層ストレージのキャッシュに分散して格納することにより、ファイルアクセスの帯域幅が向上します。ユーザはジョブ投入時に、アプリケーションのI/O特性に合わせてストライプサイズやストライプカウントを指定します。これにより、第2階層ストレージのキャッシュへの効率の良い転送が可能になります。</p>
+<figure class="align-default">
+<img alt="../_images/StripingFunction_01.png" src="../_images/StripingFunction_01.png" />
+</figure>
+<p>ストライプカウントを3に設定する例を示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjsub<span class="w">  </span>--llio<span class="w">  </span>stripe-count<span class="o">=</span><span class="m">3</span><span class="w">  </span>jobscript.sh
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<ul class="simple">
+<li><p>現在提供している環境はストライブカウントの上限が24です。</p></li>
+<li><p>LLIOのストライプカウントのデフォルトは24です。</p></li>
+</ul>
+</div>
+</section>
+<section id="id6">
+<h3><span class="section-number">8.3.3.2. </span>第2階層ストレージに対するストライプ設定<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>大容量ファイルへのシーケンシャルなアクセスはひとつのOSTの性能に律速するため、シーケンシャルアクセスの高速化としてストライプを設定を選択できます。ストライプを設定することにより、複数のOSTに分散してファイルを配置できるため、シーケンシャルアクセスの高速化が期待できます。</p>
+<div class="line-block">
+<div class="line">ストライプの設定は、lfs setstripe コマンドを用います。本コマンドは、FEFSクライアント（ログインノード，計算ノード）で実行します。</div>
+<div class="line">以下にストライプ数を3に設定する例を示します。</div>
+</div>
+<p>【ストライプ設定】</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lfs<span class="w"> </span>setstripe<span class="w"> </span>-c<span class="w"> </span><span class="m">3</span><span class="w"> </span>./output.file
+</pre></div>
+</div>
+<p>【設定確認】</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lfs<span class="w"> </span>getstripe<span class="w">  </span>./output.file
+
+<span class="go">output.file</span>
+<span class="go">lmm_stripe_count:  3</span>
+<span class="go">lmm_stripe_size:   1048576</span>
+<span class="go">lmm_pattern:       1</span>
+<span class="go">lmm_layout_gen:    0</span>
+<span class="go">lmm_stripe_offset: 5</span>
+<span class="go">        obdidx           objid           objid           group</span>
+<span class="go">             5          547321        0x859f9                0</span>
+<span class="go">            11          547341        0x85a0d                0</span>
+<span class="go">            17          547341        0x95a0c                 0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<ul class="simple">
+<li><p>富岳は、FEFS（2ndfs）と第2階層ストレージのキャッシュ、両方をマウントしアクセスできるため、計算ノード上で以下の使い分けが必要です。</p></li>
+</ul>
+<p>【FEFS(2ndfs)へのストライプ設定】</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>/usr/bin/lfs<span class="w"> </span>setstripe<span class="w"> </span>-c<span class="w"> </span><span class="m">3</span><span class="w"> </span>./output.file
+</pre></div>
+</div>
+</div></blockquote>
+<p>【第2階層キャッシュ経由でストライプ設定】</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lfs<span class="w"> </span>setstripe<span class="w"> </span>-c<span class="w"> </span><span class="m">3</span><span class="w"> </span>./output.file
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>第1階層ストレージのストライプサイズが第2階層ストレージのストライプサイズの倍数でない場合、第2階層ストレージの性能を引き出せない場合があります。第2階層ストレージのストライプサイズとストライプカウントは、lfsコマンドのgetstripeサブコマンドで取得でき、setstripeサブコマンドで変更できます。ただし、どちらの操作もジョブ内で実行してください。指定できるストライプサイズとストライプカウントの上限値、下限値は、第2階層ストレージ(FEFS)の仕様を確認してください。</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="asynccloseandsyncclose">
+<span id="id7"></span><h2><span class="section-number">8.3.4. </span>非同期クローズ/同期クローズ<a class="headerlink" href="#asynccloseandsyncclose" title="Link to this heading">¶</a></h2>
+<p>第2階層ストレージのキャッシュを利用する場合、非同期クローズと同期クローズにより性能・データの書き込み保証に差があります。</p>
+<figure class="align-default">
+<img alt="../_images/8-4-3_AsynchronousCloseAndSynchronousClose_03.png" src="../_images/8-4-3_AsynchronousCloseAndSynchronousClose_03.png" />
+</figure>
+<p>非同期クローズ時の留意事項を示します。</p>
+<ol class="arabic simple">
+<li><p>非同期クローズは、クローズと非同期に計算ノード内キャッシュから、第1階層ストレージ、および第2階層ストレージへの書出す仕組みです。このため、クローズ終了の時点で、第1階層ストレージおよび第2階層ストレージへの書出しは保証されません。</p></li>
+<li><p>ジョブの経過時間制限内であれば、ジョブ終了時のファイルの書き出しは保証されます。</p></li>
+<li><p><strong>計算ノードがダウンした場合やジョブの経過時間制限を超過した場合、計算ノード内キャッシュや第1階層ストレージから第2階層ストレージへの転送は中断されます。このため、キャッシュから第2階層ストレージへの書き出しは保証されません。</strong>
+ジョブのファイルへの出力を保証するためには、必要に応じて同期クローズ機能の利用や、<a class="reference internal" href="#fefswritetiming"><span class="std std-ref">第2階層ストレージへの書出しタイミング</span></a>の手法や、利用者側のプログラムでチェックポイントリスタートを実施するなど、ジョブ実行中にデータの書き出しを明示的に行います。</p></li>
+<li><p>第2階層ストレージへの書き出しに失敗した場合は、標準エラー出力に未書出しファイルの一覧を出力します。
+<strong class="program">pjsub</strong>オプションの指定により指定した箇所に未書出しファイルの一覧を出力することも選択できます。
+以下を指定した場合、path に一覧が出力されます。</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjsub<span class="w">  </span>--llio<span class="w">  </span>uncompleted-fileinfo-path<span class="o">=</span>path,async-close<span class="o">=</span>on
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<ul>
+<li><p>ジョブ終了時に第1階層ストレージ上から第2階層ストレージへの書き出しが完了できない場合、以下のようなメッセージがデフォルトでジョブの標準エラーに出力されます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;file transfer error information&gt;
+&lt;summary&gt;
+total num: 3
+total size: 128000000
+error: E1,E3,E8
+&lt;detail&gt;
+E1 /gfs1/userA/outfile1
+E1 /gfs1/userA/dir/outfile2
+E3,E8 /gfs1/userA/dir/outfile3
+</pre></div>
+</div>
+<p>未書出しファイルの数が1000を超えた場合は、詳細情報として次のメッセージだけが出力されます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;file transfer error information&gt;
+&lt;summary&gt;
+total num: 1000*+
+total size: 1348000000+
+error: E1,E3,E8
+&lt;detail&gt;
+The detailed information is not output because the number of uncompleted files exceeds the upper limit (1000).
+</pre></div>
+</div>
+<p>未書出しファイルの情報を確認し、ジョブの経過時間制限値の調整をお願いします。</p>
+</li>
+<li><p>計算ノードダウンでジョブが中断された場合、LLIOの使用の有無にかかわらず、以下のようなメッセージがジョブの標準エラーに出力されます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;file transfer error information&gt;
+&lt;summary&gt;
+total num: 0+
+total size: 0+
+error:
+&lt;detail&gt;
+</pre></div>
+</div>
+</li>
+</ul>
+<blockquote>
+<div><div class="line-block">
+<div class="line">計算ノードダウンでジョブが中断されたことを確認するには、pjstatコマンドやpjstataコマンドのPC(PJM CODE)の値を確認してください。</div>
+<div class="line">PCの値が20となっている場合は計算ノードダウンでジョブが中断したことを意味します。</div>
+</div>
+</div></blockquote>
+</div>
+</section>
+<section id="llio-transfer">
+<span id="id8"></span><h2><span class="section-number">8.3.5. </span>共通ファイル配布機能 (llio_transfer)<a class="headerlink" href="#llio-transfer" title="Link to this heading">¶</a></h2>
+<p>第2階層ストレージ上にある実行ファイルや設定ファイルなど、すべての計算ノードから読み込まれるファイル（共通ファイル）にはアクセスが集中します。
+アクセスの集中を回避するための機能として共通ファイル配布機能を利用します。共通ファイル配布機能は第1階層ストレージ上の第2階層ストレージのキャッシュ領域に共通ファイルを配布することによりアクセスの集中を分散させます。</p>
+<p>具体的には :command:<cite>llio_transfer</cite>コマンドで共通ファイルを配布します。
+共通ファイルとして扱えるのは読み取り専用のファイルだけです。
+加えて <a class="reference internal" href="#llio-transfer-attention"><span class="std std-ref">共通ファイルに関する注意事項</span></a>も参照ください。</p>
+<p><strong class="command">llio_transfer</strong>コマンドは計算ノードで用いられるコマンドで、第2階層ストレージ上のファイルを第1階層ストレージ上の第2階層ストレージのキャッシュ領域へ配布します。
+ジョブが割り当てられた各々のSIOノードの第1階層ストレージに割り当てられた第2階層ストレージのキャッシュ領域にファイルを配布します。
+計算ノード上のジョブは、物理的に一番近いSIOノードに対しアクセスすることによりSIOノードのアクセス負荷を分散します。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>配布操作：
+/usr/bin/llio_transfer &lt;path&gt; [&lt;path&gt; ...]
+削除操作：
+/usr/bin/llio_transfer --purge &lt;path&gt; [&lt;path&gt; ...]
+</pre></div>
+</div>
+<p><strong class="command">llio_transfer</strong>コマンド使用例</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#PJM -L &quot;node=382&quot;</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;</span>
+<span class="c1">#PJM --llio localtmp-size=10Gi</span>
+<span class="c1">#PJM --llio sharedtmp-size=10Gi</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -s</span>
+
+<span class="c1">### ジョブで使用する全てのSIOにa.outをコピーする（共通ファイル配布機能）</span>
+llio_transfer<span class="w"> </span>./a.out
+
+<span class="c1">### ノード内の1プロセスから，データをコピー</span>
+mpiexec<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;if [ ${PLE_RANK_ON_NODE} -eq 0 ]; then \</span>
+<span class="s1">                   cp -rf ./data/   ${PJM_LOCALTMP} ; \</span>
+<span class="s1">               fi&#39;</span>
+
+<span class="c1">### ノード内テンポラリのファイル参照例</span>
+ls<span class="w"> </span><span class="si">${</span><span class="nv">PJM_LOCALTMP</span><span class="si">}</span>/data
+
+<span class="c1">### キャッシュ内のa.outを使用して実行</span>
+mpiexec<span class="w"> </span>-stdout-proc<span class="w"> </span>./output.%j/%/1000r/stdout<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-stderr-proc<span class="w"> </span>./output.%j/%/1000r/stderr<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>./a.out
+
+<span class="c1">### a.outを第2階層ストレージのキャッシュから削除</span>
+<span class="c1">### ジョブの途中で削除したい場合は次のようにpurgeする</span>
+llio_transfer<span class="w"> </span>--purge<span class="w"> </span>./a.out
+
+<span class="c1">### ジョブの終了前にファイルresult.dataをジョブ実行時の</span>
+<span class="c1">### ディレクトリ${PJM_JOBDIR}(第2階層ストレージのキャッシュ)に、</span>
+<span class="c1">### ジョブID${PJM_JOBID}をつけた名前に変えて退避（必要時）</span>
+cp<span class="w"> </span><span class="si">${</span><span class="nv">PJM_LOCALTMP</span><span class="si">}</span>/result.data<span class="w"> </span><span class="si">${</span><span class="nv">PJM_JOBDIR</span><span class="si">}</span>/result_<span class="si">${</span><span class="nv">PJM_JOBID</span><span class="si">}</span>.data
+
+<span class="c1">### ジョブの終了前にファイルoutput.dataをジョブ実行時の</span>
+<span class="c1">### ディレクトリ${PJM_JOBDIR}(第2階層ストレージのキャッシュ)に，</span>
+<span class="c1">### ジョブID${PJM_JOBID}をつけた名前に変えて退避（必要時）</span>
+cp<span class="w"> </span><span class="si">${</span><span class="nv">PJM_SHAREDTMP</span><span class="si">}</span>/output.data<span class="w"> </span><span class="si">${</span><span class="nv">PJM_JOBDIR</span><span class="si">}</span>/output_<span class="si">${</span><span class="nv">PJM_JOBID</span><span class="si">}</span>.data
+</pre></div>
+</div>
+<div class="admonition attention" id="llio-transfer-attention">
+<p class="admonition-title">注意</p>
+<p><strong class="command">llio_transfer</strong>コマンドで第2階層ストレージのキャッシュへコピーした共通ファイルに関する留意事項を以下に列挙します。</p>
+<ul>
+<li><p>共通ファイルに対する第2階層ストレージのキャッシュ領域経由の削除、ファイルデータ更新やファイル属性更新の操作はエラーで失敗します。</p></li>
+<li><p>読み込みを行うだけのファイルが対象です。</p></li>
+<li><p>転送できる共通ファイルは16,384までです。全ての計算ノードが同時にopenできる共通ファイルは1,024までです。</p></li>
+<li><p>共通ファイルに対するファイルロックは未サポートです。</p></li>
+<li><div class="line-block">
+<div class="line">ジョブ実行中は第2階層ストレージにある共通ファイルのコピー元の変更や削除をしないでください。</div>
+<div class="line">コピー元を変更した場合は、第2階層ストレージのキャッシュにコピーした共通ファイルの内容が不定になる可能性があります。</div>
+<div class="line">加えて、コピー元を削除した場合は、共通ファイルを<strong class="command">llio_transfer</strong>コマンドの<code class="docutils literal notranslate"><span class="pre">--purge</span></code>オプションを用いて削除できなくなり、結果、ジョブが終了するまで第2階層ストレージのキャッシュ領域が共通ファイルに占有されたままになります。</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">ジョブスクリプト内で共通ファイルを削除する場合は、<strong class="command">llio_transfer</strong>コマンドに<code class="docutils literal notranslate"><span class="pre">--purge</span></code>オプションを指定して削除してください。</div>
+<div class="line"><strong class="command">rm</strong>コマンドを用いた場合、失敗し削除できません。</div>
+</div>
+</li>
+<li><p><strong class="command">llio_transfer --purge</strong>を用いて第2階層ストレージのキャッシュから共通ファイルを削除した直後は、ジョブからの共通ファイルのコピー元ファイルの削除、ファイルデータ更新やファイル属性更新の操作がエラーで失敗する場合があります。その場合は、60秒以上の時間を空けて再操作してください。</p></li>
+<li><div class="line-block">
+<div class="line">共通ファイルのコピー先である、第1階層ストレージの &quot;第2階層ストレージのキャッシュ領域&quot; には共通ファイル全体を格納できるだけの容量が必要です。</div>
+<div class="line">第2階層ストレージのキャッシュ領域にコピーされた共通ファイルは、&quot;第2階層ストレージのキャッシュ領域&quot; の利用可能な容量が尽きた場合においても削除されることはありません。第2階層ストレージのキャッシュ領域の空き容量が必要な場合には、ジョブの途中で、<strong class="command">llio_transfer</strong>コマンドに<code class="docutils literal notranslate"><span class="pre">--purge</span></code>オプションを指定してキャッシュ領域から共通ファイルを削除してください。なお、第2階層ストレージのキャッシュ領域の共通ファイルは、ジョブ終了後には自動的に削除されます。</div>
+</div>
+</li>
+<li><p><strong class="command">llio_transfer</strong>コマンドが共通ファイルの領域を確保する前に、ジョブ内で転送元ファイルのキャッシュデータが第1階層ストレージに存在する場合、<strong class="command">llio_transfer</strong>コマンドはエラーになります。ファイルオープンをした場合にキャッシュデータが作成される場合があるため、<strong class="command">llio_transfer</strong>コマンド実行前にジョブ内でファイルオープンをしないでください。</p></li>
+</ul>
+</div>
+<section id="id9">
+<h3><span class="section-number">8.3.5.1. </span>共通ファイルの効果<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<p>実行ファイルや入力ファイルなどの共有ファイルは、<strong class="command">llio_transfer</strong>コマンドを用いてプログラム実行前に配布し利用することを推奨しています。使用する計算ノードの規模が大きくなるにつれてより効果的です。参考に、共通ファイルと第2階層ストレージ上のファイルアクセスを比較した情報を示します。</p>
+<ol class="arabic simple">
+<li><p>多数のモジュールを必要とする実行ファイル</p></li>
+</ol>
+<blockquote>
+<div><p>600ファイル以上から構成されるPythonのスクリプトを用いて、計算ノードがモジュールを読み込み起動するまでに要した時間を比較します。第2階層ストレージ上の、ある共通ファイル対するメタリクエストを処理するサーバは1台であるため、計算ノードが増加しリクエストが増大すると、処理に時間を要します。<strong class="command">llio_transfer</strong>コマンドで共通ファイルとして配布した場合は、第2階層ストレージにアクセスするのは代表のSIO1台だけとなり、リクエストの処理時間が大幅に削減されます。</p>
+<figure class="align-default">
+<img alt="../_images/LoadingTimeForPythonSampleModules_01.png" src="../_images/LoadingTimeForPythonSampleModules_01.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>大量の入力データを必要とする実行ファイル</p></li>
+</ol>
+<blockquote>
+<div><p>計算ノードあたり1GBの共通ファイルを読み込むプログラムの起動時間を比較します。第2階層ストレージ上の、ある共通ファイルを読み込んだ場合に、実データを管理するサーバにアクセスが集中します。<strong class="command">llio_transfer</strong>コマンドで共通ファイルとして配布した場合は、第2階層ストレージのデータを代表のSIO1台が取得し効率よく他のSIOに配置していくため、計算ノードへ効率よくデータを届けることができ、データの転送時間が大幅に削減されます。</p>
+<figure class="align-default">
+<img alt="../_images/LoadingTimeForInputData_01.png" src="../_images/LoadingTimeForInputData_01.png" />
+</figure>
+</div></blockquote>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>数値はジョブ運用中に取得したものであり、システムの基礎性能を示すものではありません。</p></li>
+<li><p>他のジョブのIO状況や割当たったノード形状、共通ファイル容量や数によって転送時間に差が発生します。</p></li>
+<li><p><strong class="command">llio_transfer</strong>コマンドの転送処理は非同期に行われ測定が難しいため、<strong class="command">mpiexec</strong>コマンドでプログラムが起動し完了するまでの時間を比較しています。</p></li>
+</ul>
+</div>
+</section>
+<section id="id10">
+<h3><span class="section-number">8.3.5.2. </span>共通ファイル配布のヒント<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<p>プログラムが参照しているファイルを特定し、配布するためのヒントを記載します。
+多数のモジュールからなるプログラムを実行する場合、全てのモジュールを共通ファイルとして配布するとプログラムの起動時間の短縮が期待されます。しかし、そのようなプログラムが参照しているファイルを全て把握することが難しい場合があります。
+<strong class="command">strace</strong>コマンドで参照ファイルを特定する例を次に示します。</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">ジョブスクリプトを修正します。可能な限り、小規模のジョブで実行してください。</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>./log
+<span class="c1"># mpiexec -stdout-proc ./%n.output.%j/%/384r/stdout -stderr-proc ./%n.output.%j/%/384r/stderr bin/a.out</span>
+mpiexec<span class="w">   </span>-stdout-proc<span class="w"> </span>./%n.output.%j/%/384r/stdout<span class="w"> </span>-stderr-proc<span class="w"> </span>./%n.output.%j/%/384r/stderr<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
+<span class="s1">&#39;if [ $PMIX_RANK -eq 0 ]; then</span>
+<span class="s1">    strace -ff -e trace=open,openat -o ./log/strace.${PMIX_RANK} bin/a.out</span>
+<span class="s1"> else</span>
+<span class="s1">     bin/a.out</span>
+<span class="s1"> fi&#39;</span>
+</pre></div>
+</div>
+<p>ログが大容量になる可能性があるため、Rank=0でオープンのシステムコールに絞ります。これでも出力量が多い場合は、モジュールの読み込み後にプログラムが終了するように修正してください。</p>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><div class="line-block">
+<div class="line">ジョブを実行します。</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">ログを確認し、openされているファイルを探します。</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>egrep<span class="w"> </span>-v<span class="w"> </span><span class="s1">&#39;= \-1 ENOENT|O_DIRECTORY&#39;</span><span class="w"> </span>./log/strace.0.*<span class="w"> </span><span class="p">|</span><span class="w"> </span>egrep<span class="w"> </span>O_RDONLY<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="se">\&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">2</span><span class="w">  </span><span class="p">|</span>egrep<span class="w"> </span>^/vol....
+<span class="go">/vol0004/fjuser/fj0012/job/strace/bin/a.out</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="4">
+<li><div class="line-block">
+<div class="line">ファイル一覧をllio_transfer.listとして用意します。</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">ジョブスクリプトを修正します。ファイル一覧を <strong class="command">llio_transfer</strong>コマンドで転送する例です。</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>./llio_transfer.list<span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-L<span class="w"> </span><span class="m">100</span><span class="w"> </span>llio_transfer
+
+mpiexec<span class="w"> </span>-stdout-proc<span class="w"> </span>./%n.output.%j/%/384r/stdout<span class="w"> </span>-stderr-proc<span class="w"> </span>./%n.output.%j/%/384r/stderr<span class="w"> </span>bin/a.out
+
+cat<span class="w"> </span>./llio_transfer.list<span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-L<span class="w"> </span><span class="m">100</span><span class="w"> </span>llio_transfer<span class="w"> </span>--purge
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="llio-transfer-dir-transfer">
+<span id="dir-transfer"></span><h3><span class="section-number">8.3.5.3. </span>llio_transferを用いたディレクトリ単位の転送ツール（dir_transfer）<a class="headerlink" href="#llio-transfer-dir-transfer" title="Link to this heading">¶</a></h3>
+<p>指定したディレクトリ配下全てのファイルを共通ファイルとして転送する <strong class="command">llio_transfer</strong>コマンドのラッパースクリプトを用意しています。配布するファイル数に注意して利用ください。参照されないファイルまで配布すると、第2階層ストレージのキャッシュ容量や実行時間の浪費となるためご注意ください。</p>
+<p>使用方法</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>配布操作：
+ /home/system/tool/dir_transfer [-l logdirname] dir1 [dir2 [...] ]
+
+削除操作：
+ /home/system/tool/dir_transfer -p [-l logdirname] dir1 [dir2 [...] ]
+
+オプション：
+ -l logdirname      logdirnameで指定したディレクトリに配布または削除した共通ファイル一覧を保存します。
+                    保存ディレクトリが指定されていない場合、カレントディレクトリに一覧を保存します。
+ -p                 配布した共通ファイルを削除します。
+
+引数：
+ dir1 [dir2 [...]]  共通ファイルとして配布または削除するディレクトリを指定します。
+</pre></div>
+</div>
+<p>例）配布操作</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>./log
+/home/system/tool/dir_transfer<span class="w"> </span>-l<span class="w"> </span>./log<span class="w">  </span>./libA<span class="w"> </span>./libB
+</pre></div>
+</div>
+<p>ディレクトリ ./libA および ./libB が転送され、ログが ./log 配下に出力されます。</p>
+<p>例）削除操作</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>./log
+/home/system/tool/dir_transfer<span class="w"> </span>-p<span class="w"> </span>-l<span class="w"> </span>./log<span class="w">  </span>./libA<span class="w"> </span>./libB
+</pre></div>
+</div>
+<p>配布操作または削除操作を行った際に、-l で指定したディレクトリにファイル一覧を作成します。-l の指定がない場合は、カレントディレクトリに出力されます。ジョブ終了後、必要に応じて削除してください。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ls<span class="w"> </span>./log
+<span class="go">llio_transfer.6860009.20211309.list</span>
+<span class="go">llio_transfer.6860009.20211318.purge.list</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="pjsub-llio">
+<span id="thesecondlayerstoragecacheareaopt"></span><h2><span class="section-number">8.3.6. </span>ジョブ投入時（pjsub --llio）のオプション<a class="headerlink" href="#pjsub-llio" title="Link to this heading">¶</a></h2>
+<p>第2階層ストレージのキャッシュに関連するオプションを示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 37.5%" />
+<col style="width: 62.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>pjsubオプション</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>sio-read-cache={on|off}</p></td>
+<td><div class="line-block">
+<div class="line">第2階層ストレージから計算ノードへ読み込んだファイルを第1階層ストレージにキャッシュにするか否かの動作を指定します。</div>
+<div class="line">on: キャッシュします。（デフォルト値）</div>
+<div class="line">off: キャッシュしません。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>stripe-count=count</p></td>
+<td><p>複数の第2階層ストレージのキャッシュに分散する際のファイル当たりのストライプ数を指定します。（デフォルト24）</p></td>
+</tr>
+<tr class="row-even"><td><p>stripe-size=size</p></td>
+<td><p>複数の第2階層ストレージのキャッシュに分散する際のストライプサイズを指定します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>async-close={on|off}</p></td>
+<td><div class="line-block">
+<div class="line">ファイルのクローズを非同期クローズにするか否かの動作を指定します。2階層ストレージのキャッシュから第2階層ストレージ（FEFS）に対する同期/非同期クローズ指定します。本オプションによりデータの書き出し完了の保証に影響がありますので注意が必要です。</div>
+<div class="line"><br /></div>
+<div class="line">on: 非同期クローズ</div>
+<div class="line">off: 同期クローズ（デフォルト値）</div>
+<div class="line"><br /></div>
+<div class="line">on(非同期クローズ)を指定した場合、ファイルのクローズ時に書出し完了は保証されません。</div>
+<div class="line">off(同期クローズ)を指定した場合、ファイルのクローズ時に書出し完了は保証されます。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>perf[,perf-path=path]</p></td>
+<td><div class="line-block">
+<div class="line">LLIO性能情報をファイルに出力します。</div>
+<div class="line">出力先はジョブ投入時のカレントディレクトリ配下で、ファイル名はジョブACL機能で定義されている名前です。なお、パラメーター perf-pathで出力先のファイルを指定できます。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>uncompleted-fileinfo-path=path</p></td>
+<td><p>ジョブ終了時に、第2階層ストレージへの書出しが完了していないファイルの情報の出力先を指定します。指定が無い場合は標準エラー出力に書き出します。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">8.3. 第2階層ストレージのキャッシュ領域</a><ul>
+<li><a class="reference internal" href="#volumeofstrage">8.3.1. 第2階層ストレージのキャッシュの容量</a></li>
+<li><a class="reference internal" href="#fefswritetiming">8.3.2. 第2階層ストレージへの書出しタイミング</a></li>
+<li><a class="reference internal" href="#id4">8.3.3. ストライプ機能</a><ul>
+<li><a class="reference internal" href="#id5">8.3.3.1. 第2階層ストレージのキャッシュに対するストライプ設定</a></li>
+<li><a class="reference internal" href="#id6">8.3.3.2. 第2階層ストレージに対するストライプ設定</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#asynccloseandsyncclose">8.3.4. 非同期クローズ/同期クローズ</a></li>
+<li><a class="reference internal" href="#llio-transfer">8.3.5. 共通ファイル配布機能 (llio_transfer)</a><ul>
+<li><a class="reference internal" href="#id9">8.3.5.1. 共通ファイルの効果</a></li>
+<li><a class="reference internal" href="#id10">8.3.5.2. 共通ファイル配布のヒント</a></li>
+<li><a class="reference internal" href="#llio-transfer-dir-transfer">8.3.5.3. llio_transferを用いたディレクトリ単位の転送ツール（dir_transfer）</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pjsub-llio">8.3.6. ジョブ投入時（pjsub --llio）のオプション</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="WriteForFilesystem.html"
+                          title="前の章へ"><span class="section-number">8.2. </span>FEFS/LLIOへのファイル操作について</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="TemporaryAreaInNode.html"
+                          title="次の章へ"><span class="section-number">8.4. </span>ノード内テンポラリ領域</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="TemporaryAreaInNode.html" title="8.4. ノード内テンポラリ領域"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="WriteForFilesystem.html" title="8.2. FEFS/LLIOへのファイル操作について"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">8. </span>階層化ストレージ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.3. </span>第2階層ストレージのキャッシュ領域</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

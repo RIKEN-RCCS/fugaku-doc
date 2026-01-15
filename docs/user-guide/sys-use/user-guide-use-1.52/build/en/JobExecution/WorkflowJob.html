@@ -1,0 +1,162 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.6. Workflow job &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.7. Master-worker type job" href="MasterWorkerJob.html" />
+    <link rel="prev" title="5.5. Interactive job" href="InteractiveJob.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="MasterWorkerJob.html" title="5.7. Master-worker type job"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="InteractiveJob.html" title="5.5. Interactive job"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.6. </span>Workflow job</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="workflow-job">
+<h1><span class="section-number">5.6. </span>Workflow job<a class="headerlink" href="#workflow-job" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">A workflow job is a collection of multiple jobs that perform execution control (conditional branching and repetition) on a job-by-job basis.</div>
+<div class="line">Like step jobs, this is used when the next job to be executed is determined according to the execution result of a job. However, depending on the contents of the shell script that controls execution, you can control with more flexibility than step jobs.</div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Workflow jobs are not exactly job types, but a way for users to control the submission of multiple jobs using shell scripts.</p>
+</div>
+<section id="job-submission">
+<h2><span class="section-number">5.6.1. </span>Job submission<a class="headerlink" href="#job-submission" title="Link to this heading">¶</a></h2>
+<p>In workflow jobs, the user submits the job with a shell script.</p>
+<div class="line-block">
+<div class="line">For example, a shell script can automatically perform the process of waiting for the end of a specific job and submitting another job, or selecting the next job to submit based on the result of a job.</div>
+<div class="line">User proceed job submitting control with using  <strong class="program">pjwait</strong> command which offered by the job operation software.</div>
+</div>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Waiting for job completion</dt><dd><p>You can wait for the end of one or more jobs in a shell script with using  <strong class="program">pjwait</strong> command.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Get job execution results</dt><dd><p>You can obtain the job end code (job manager processing result), job script end status, and signal number when the job script ends with using  <strong class="program">pjwait</strong> command.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The following is a workflow job flow diagram.</p>
+<figure class="align-default">
+<img alt="../_images/SubmittingAWorkFlowJob_01.png" src="../_images/SubmittingAWorkFlowJob_01.png" />
+</figure>
+<p>When this workflow job is described in a shell script, it will be as follows.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="k">for</span><span class="w"> </span>no<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">3</span><span class="w">                       </span><span class="c1"># Put in order job script job1.sh, job2.sh, job3.sh</span>
+<span class="k">do</span>
+<span class="w">  </span><span class="nv">JID</span><span class="o">=</span><span class="sb">`</span>pjsub<span class="w"> </span>-z<span class="w"> </span>jid<span class="w"> </span>job<span class="si">${</span><span class="nv">no</span><span class="si">}</span>.sh<span class="sb">`</span><span class="w">      </span><span class="c1"># Display job ID with -z option and assign to shell variable JID</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w">               </span><span class="c1"># If the job submission result is other than 0, the workflow job ends</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="w">  </span><span class="k">fi</span>
+<span class="w">  </span><span class="nb">set</span><span class="w"> </span>--<span class="w"> </span><span class="sb">`</span>pjwait<span class="w"> </span><span class="nv">$JID</span><span class="sb">`</span><span class="w">                </span><span class="c1"># Wait for the job to finish and assign the output result to the position parameter (Note)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$2</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">$3</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c1"># If either the job exit code ($ 2) or the job script exit status ($ 3) is not 0,</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="w">                            </span><span class="c1"># the workflow job is terminated.</span>
+<span class="w">  </span><span class="k">fi</span>
+<span class="k">done</span><span class="w">                                  </span><span class="c1"># Go to execute next job</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Depending on the type of job and how to specify the job ID, the output result may be multiple lines so arrangement is needed. About output, refer to  <strong class="command">man</strong> manual of  <strong class="program">pjwait</strong> command.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.6. Workflow job</a><ul>
+<li><a class="reference internal" href="#job-submission">5.6.1. Job submission</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="InteractiveJob.html"
+                          title="previous chapter"><span class="section-number">5.5. </span>Interactive job</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="MasterWorkerJob.html"
+                          title="next chapter"><span class="section-number">5.7. </span>Master-worker type job</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="MasterWorkerJob.html" title="5.7. Master-worker type job"
+             >next</a></li>
+        <li class="right" >
+          <a href="InteractiveJob.html" title="5.5. Interactive job"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.6. </span>Workflow job</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

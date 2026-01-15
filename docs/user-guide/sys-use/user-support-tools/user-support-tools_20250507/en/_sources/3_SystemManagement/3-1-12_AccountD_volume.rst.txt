@@ -1,0 +1,259 @@
+Displaying disk information
+========================================
+
+| 　**[Name]**
+| 　accountj_pt - Display Fugaku Points
+
+| 　**[Style]**
+| 　accountd_volume  [Option]
+| 　※The combined specification of -u and -g is an AND search.
+
+| 　**[Description]**
+| 　Displays the Fugaku Points earned by the user as a result of participating in power-saving operations.
+| 　Fugaku Points are awarded according to the amount of power saved by power-saving.
+| 　Real-time application issues are not applicable. The amount of computational resources obtained 
+| 　according to the points can be prioritized for job execution during a specific period at the end of each term.
+| 　 Node time product will not be added.
+
+| 　**[Option]**
+| 　-u  user name
+| 　Specify user name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.
+
+| 　-g  group name 　
+| 　Specify group name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.
+
+| 　-a 　
+| 　Display disk information for all groups. The -u and -g options are invalid when the -a option is specified.
+
+| 　-s
+| 　The disk usage display unit is changed from the default Gibibyte [GiB] to Kibibyte [KiB].
+ 　
+| 　-c
+| 　Standard output of search results in CSV format. You can also save to a file by using the redirection function.
+ 　
+| 　-f  file system name
+| 　Specify file system name. Specify the mount point you want to display. You can specify prefix matching using * (asterisk).
+| 　　Exact match specification	/vol0001
+
+| 　-h
+| 　Displays the file systems assigned to the group when the group was created.
+
+| 　-i
+| 　Display inode usage.
+
+| 　&#45;-help
+| 　Display command help contents.
+
+| 　**[Return value]**
+| 　Noprmal: 0
+| 　Abnormal: 1
+
+| 　**[Note]**
+| 　None.
+
+| 　**[Use example]**
+| 　【Example 1】	The user displays the disk information for a group.
+.. code-block:: console
+
+   [login]$ accountd_volume -g group1
+   COLLECTDATE : 2022/06/10 13:23:27    unit[GiB]
+   *--------------------------------------------------[GROUP]-----------------------------------------------------*
+   GROUP           FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE
+   group1          /vol0001                     5,120                 1             5,119             770      0.0%
+   group1          /vol0003                 unlimited                 1         unlimited           5,197       ---
+   group1          /vol0004                 unlimited            47,529         unlimited      31,646,353       ---
+   group1          /vol0005                 unlimited                 1         unlimited             143       ---
+   group1          /vol0006                 unlimited                 1         unlimited              11       ---
+   *--------------------------------------------------[USER]------------------------------------------------------*
+   USER            FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE
+   u10001          /vol0001                 unlimited                 0         unlimited               0       ---
+   u10001          /vol0003                 unlimited                 1         unlimited               1       ---
+   u10001          /vol0004                 unlimited                 2         unlimited             146       ---
+   u10001          /vol0005                 unlimited                 0         unlimited               0       ---
+   u10001          /vol0006                 unlimited                 0         unlimited               0       ---
+   u10002          /vol0001                 unlimited                 0         unlimited               0       ---
+   u10002          /vol0003                 unlimited                 0         unlimited               0       ---
+   u10002          /vol0004                 unlimited                 1         unlimited               1       ---
+   u10002          /vol0005                 unlimited                 0         unlimited               0       ---
+   u10002          /vol0006                 unlimited                 0         unlimited               0       ---
+   u10003          /vol0001                 unlimited                 0         unlimited               0       ---
+   u10003          /vol0003                 unlimited                 0         unlimited               0       ---
+   u10003          /vol0004                 unlimited                 4         unlimited          86,426       ---
+   u10003          /vol0005                 unlimited                 0         unlimited               0       ---
+   u10003          /vol0006                 unlimited                 0         unlimited               0       ---
+   [login]$
+
+| 　You can check the disk usage status of the group specified in the -g option and all users belonging to the group. 
+| 　The display unit of disk usage is Gibibyte [GiB] by default. If you want to change the display unit to Kibibyte [KiB], specify the -s option. The unit switching is calculated as 1 KiB (1,024B). The fraction due to unit switching is displayed with the limit value (LIMIT) rounded down and the usage (USAGE) rounded up. The remaining usable amount (AVAILABLE) is a value obtained by subtracting the usage amount (USAGE) from the limit value (LIMIT).
+
+| 　**[Use example]**
+| 　【Example 2】	Display the accounting information that concerns about own disk
+
+.. code-block:: console
+
+   [login]$ accountd_volume -u u10001
+   COLLECTDATE : 2022/06/08 15:14:21    unit[GiB]
+   USER : u10001
+   *--------------------------------------------------[GROUP]-----------------------------------------------------*
+   GROUP           FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE
+   group1          /vol0001                     5,120                 1             5,119             770      0.0%
+   group1          /vol0003                 unlimited                 1         unlimited           5,197       ---
+   group1          /vol0004                 unlimited            47,529         unlimited      31,649,071       ---
+   group1          /vol0005                 unlimited                 1         unlimited             143       ---
+   group1          /vol0006                 unlimited                 1         unlimited              11       ---
+   *--------------------------------------------------[USER]------------------------------------------------------*
+   USER            FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE
+   u10001          /vol0001                 unlimited                 0         unlimited               0       ---
+   u10001          /vol0003                 unlimited                 1         unlimited               1       ---
+   u10001          /vol0004                 unlimited                 1         unlimited             323       ---
+   u10001          /vol0005                 unlimited                 1         unlimited               8       ---
+   u10001          /vol0006                 unlimited                 0         unlimited               0       ---
+   
+   *--------------------------------------------------[GROUP]-----------------------------------------------------*
+   GROUP           FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE
+   *fugaku         /vol0001                 unlimited                88         unlimited         583,517       ---
+   *fugaku         /vol0003                 unlimited             6,495         unlimited       3,916,642       ---
+   *fugaku         /vol0004                 unlimited             7,901         unlimited       1,973,899       ---
+   *fugaku         /vol0005                 unlimited            79,976         unlimited       5,438,315       ---
+   *fugaku         /vol0006                 unlimited            18,223         unlimited       1,229,654       ---
+
+   *--------------------------------------------------[USER]------------------------------------------------------*
+   USER            FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE
+   u10001          /vol0001                 unlimited                 0         unlimited               0       ---
+   u10001          /vol0003                 unlimited                 1         unlimited               1       ---
+   u10001          /vol0004                 unlimited                 1         unlimited             323       ---
+   u10001          /vol0005                 unlimited                 1         unlimited               8       ---
+   u10001          /vol0006                 unlimited                 0         unlimited               0       ---
+   [login]$
+
+
+| 　 \ * (Asterisk) at the beginning of the group name indicates the user's primary group.
+
+| 　Disk accounting information for all groups to which the specified user belongs is displayed.
+ 　
+
+| 　**[Use example]**
+| 　【Example 3】	The system administrator displays the accounting information that concerns all task disk
+
+.. code-block:: console
+
+   [login]$ accountd_volume -a
+   COLLECTDATE : 2022/06/08 15:01:22    unit[GiB]
+   *--------------------------------------------------[GROUP]-----------------------------------------------------*
+   GROUP           FILESYSTEM                   LIMIT             USAGE         AVAILABLE           FILES  USE_RATE
+   group1          /vol0001                     5,120                 1             5,119          12,889      0.0%
+   group1          /vol0003                 unlimited                 1         unlimited               8       ---
+   group1          /vol0004                 unlimited            15,845         unlimited      41,742,218       ---
+   group1          /vol0005                 unlimited                 1         unlimited               8       ---
+   group1          /vol0006                 unlimited                 1         unlimited               8       ---
+   group2          /vol0001                     5,120                 1             5,119             770      0.0%
+   group2          /vol0003                 unlimited                 1         unlimited           5,197       ---
+   group2          /vol0004                 unlimited            47,529         unlimited      31,649,065       ---
+   group2          /vol0005                 unlimited                 1         unlimited             143       ---
+   group2          /vol0006                 unlimited                 1         unlimited              11       ---
+   [login]$
+
+
+| 　You can check the disk usage status assigned to all groups. Displayed in ascending order with group names as keys.
+
+| 　【Example 4】	The system administrator displays the accounting information that concerns all task disk as CSV format
+
+.. code-block:: console
+
+   [login]$ accountd_volume -a -c
+   INFO_H,COLLECT_DATE
+   "INFO","2022/06/08 15:10:28"
+   GROUP_H,GROUP,FILESYSTEM,LIMIT,USAGE,AVAILABLE,FILES,USAGE_RATE
+   "GROUP","group1","/vol0001","5120","1","5119","12889","0.000"
+   "GROUP","group1","/vol0003","unlimited","1","unlimited","8","---"
+   "GROUP","group1","/vol0004","unlimited","15845","unlimited","41742218","---"
+   "GROUP","group1","/vol0005","unlimited","1","unlimited","8","---"
+   "GROUP","group1","/vol0006","unlimited","1","unlimited","8","---"
+   "GROUP","group2","/vol0001","5120","1","5119","770","0.000"
+   "GROUP","group2","/vol0003","unlimited","1","unlimited","5197","---"
+   "GROUP","group2","/vol0004","unlimited","47529","unlimited","31649067","---"
+   "GROUP","group2","/vol0005","unlimited","1","unlimited","143","---"
+   "GROUP","group2","/vol0006","unlimited","1","unlimited","11","---"
+   [login]$
+
+| 　USAGE_RATE is displayed as a-(hyphen) if the disk limit is set or not set (LIMIT is unlimited). The same applies to [Example 1] that is not in CSV format.
+
+
+| 　Indicates the explanation of displaying item.
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 10 20 70
+
+  * - No
+    - Item name
+    - Description
+
+  * - 1
+    - COLLECT DATE
+    - Data gathering date and time
+
+  * - 2
+    - USER
+    - User name
+
+  * - 3
+    - GROUP
+    - Group name
+
+  * - 4
+    - FILESYSTEM
+    - File system name
+
+  * - 5
+    - LIMIT
+    - | Limit value
+      | 　The unit of information follows the display unit.
+      | unit[Display unit]
+      | 
+      | 　　＜Display unit＞
+      | 　　　unit[GiB]　Default is gibibyte display
+      | 　　　unit[KiB]　 Millibyte display when -s option is specified
+
+  * - 6
+    - USAGE
+    - | Disk usage
+      | 　The unit of information follows the display unit.
+      | unit[Display unit]
+      | 
+      | 　　＜Display unit＞
+      | 　　　unit[GiB]　Default is gibibyte display
+      | 　　　unit[KiB]　 Millibyte display when -s option is specified
+
+  * - 7
+    - AVAILABLE
+    - | Disk available usage
+      | 　The unit of information follows the display unit.
+      | unit[Display unit]
+      | 
+      | 　　＜Display unit＞
+      | 　　　unit[GiB]　Default is gibibyte display
+      | 　　　unit[KiB]　 Millibyte display when -s option is specified
+
+  * - 8
+    - FILES
+    - | The number of files created in file system
+      | 　Count 1 file as 1 item
+
+  * - 9
+    - USAGE RATE
+    - | Disk use rate to the limit value
+      | 　This item is displayed in CSV format.
+
+  * - 10
+    - USE RATE
+    - | Disk use rate to the limit value
+
+  * - 11
+    - [GROUP]
+    - Display information about groups
+
+  * - 12
+    - [USER]
+    - Display information about user
+

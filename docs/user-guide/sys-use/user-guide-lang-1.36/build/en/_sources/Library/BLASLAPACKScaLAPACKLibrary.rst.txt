@@ -1,0 +1,710 @@
+BLAS/LAPACK/ScaLAPACK library
+===============================
+
+BLAS / LAPACK / ScaLAPACK can be used from Fortran / C language / C ++.
+
+- BLAS (Basic Linear Algebra Subprograms) is a library for vector and matrix operations.
+- LAPACK (Linear Algebra PACKage) is a library for solving linear algebra problems.
+- ScaLAPACK (Scalable LAPACK) is a library that parallelizes computation in the linear algebra field by message passing.
+
+.. _HowToCompileInFortranBLASLAPACKScaLAPACKLibrary:
+
+How to conpile Fortran
+----------------------
+
+This shows how to compile BLAS / LAPACK / ScaLAPACK in Fortran.
+
+
+
+Compile example is as following:
+
+
+1. MPI / ScaLAPACK / BLAS,LAPACK (Sequential version)
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -Kfast,SVE sample.f90 -SCALAPACK -SSL2
+
+2. MPI / OpenMP / ScaLAPACK / BLAS,LAPACK (Thread parallel version)
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -Kfast,parallel,openmp,SVE sample.f90 -SCALAPACK -SSL2BLAMP
+
+3. Sequetial / BLAS,LAPACK (Sequential version)
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,SVE sample.f90 -SSL2
+
+4. OpenMP / BLAS,LAPACK (Thread parallel version)
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,openmp,SVE sample.f90 -SSL2BLAMP
+
+
+.. seealso::
+
+   - To link BLAS and LAPACK sequential versiton, specify  \ ``-SSL2``\  to  \ :program:`frtpx`\  command.
+   - To use BLAS and LAPACK thread parallel versiton, specify  \ ``-SSL2BLAMP``\.
+   - To link ScaLAPACK, specify  \ ``-SCALAPACK``\  as option to  \ :program:`mpifrtpx`\  command. Also, depending on the type of BLAS, LAPACK sequential version, thread parallel version, specify  \ ``-SSL2``\  or  \ ``-SSL2BLAMP``\  option.
+   - When joining with a login node, if  \ ``-KSVE``\  is enabled, combine libraries that are using  \ ``SVE``\ .
+   - When joining with a login node, if  \ ``-KNOSVE``\  is enabled, combine general purpose libraries.
+   - If combine with computing node, specifying  \ ``-KSVE``\  or  \ ``-KNOSVE``\  combine library using  \ ``SVE``\.
+   - ``-KSVE``\  option's default (when omitted) will be  \ ``-KSVE``\ .
+   - To translate the user program with the native compiler and combine BLAS and LAPACK archive,use  \ :program:`frt`\  command.
+   - To translate a user program written in MPI using a native compiler and combine BLAS and LAPACK archive, use  \ :program:`mpifrt`\  command.
+   
+
+.. _HowToCompileInCBLASLAPACKScaLAPACKLibrary:
+
+How to compile C language
+-------------------------
+
+The following shows how to compile BLAS / LAPACK / ScaLAPACK in C language.
+
+
+
+Compile example is as following:
+
+
+1. MPI / ScaLAPACK / BLAS,LAPACK (Sequential version)
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Kfast,SVE sample.c -SCALAPACK -SSL2
+
+2. MPI / OpenMP / ScaLAPACK / BLAS,LAPACK (Thread parallel version)
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Kfast,parallel,openmp,SVE sample.c -SCALAPACK -SSL2BLAMP
+
+3. Sequential / BLAS,LAPACK (Sequential version)
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,SVE sample.c -SSL2
+
+4. OpenMP / BLAS,LAPACK (Thread parallel version)
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,openmp,SVE sample.c -SSL2BLAMP
+
+.. seealso::
+
+   - To link BLAS and LAPACK sequential versiton, specify ``-SSL2`` to :program:`fccpx` command.
+   - To use BLAS and LAPACK thread parallel versiton, specify ``-SSL2BLAMP``.
+   - To link ScaLAPACK, specify ``-SCALAPACK`` as option to :program:`mpifccpx` command. Also, depending on the type of BLAS, LAPACK sequential version, thread parallel version, specify ``-SSL2`` or ``-SSL2BLAMP``  option.
+   - When joining with a login node, if ``-KSVE`` is enabled, combine libraries that are using ``SVE``.
+   - When joining with a login node, if ``-KNOSVE`` is enabled, combine general purpose libraries.
+   - If combine with computing node, specifying ``-KSVE`` or ``-KNOSVE`` combine library using ``SVE``.
+   - ``-KSVE`` option's default (when omitted) will be ``-KSVE``.
+   - To translate the user program with the native compiler and combine BLAS and LAPACK archive,use :program:`fcc` command.
+   - To translate a user program written in MPI using a native compiler and combine BLAS and LAPACK archive, use :program:`mpifcc` command.
+
+.. _HowToCompileInC++BLASLAPACKScaLAPACKLibrary:
+
+How to compile C++
+------------------
+
+Here is how to compile BLAS / LAPACK / ScaLAPACK in C ++.
+
+
+
+Compile example is as following:
+
+
+1. MPI / ScaLAPACK / BLAS,LAPACK (Sequential version)
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpiFCCpx -Kfast,SVE sample.cc -SCALAPACK -SSL2
+
+2. MPI / OpenMP / ScaLAPACK / BLAS,LAPACK (Thread parallel version)
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpiFCCpx -Kfast,parallel,openmp,SVE sample.cc -SCALAPACK -SSL2BLAMP
+
+3. Sequential / BLAS,LAPACK (Sequential version)
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,SVE sample.cc -SSL2
+
+4. OpenMP / BLAS,LAPACK (Thread parallel version)
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,openmp,SVE sample.cc -SSL2BLAMP
+
+.. seealso::
+
+   - To link BLAS and LAPACK sequential versiton, specify  \ ``-SSL2``\  to  \ :program:`FCCpx`\  command.
+   - To use BLAS and LAPACK thread parallel versiton, specify  \ ``-SSL2BLAMP``\.
+   - To link ScaLAPACK, specify  \ ``-SCALAPACK``\  as option to  \ :program:`mpiFCCpx`\  command. Also, depending on the type of BLAS, LAPACK sequential version, thread parallel version, specify  \ ``-SSL2``\  or  \ ``-SSL2BLAMP``\  option.
+   - When joining with a login node, if  \ ``-KSVE``\  is enabled, combine libraries that are using  \ ``SVE``\ .
+   - When joining with a login node, if  \ ``-KNOSVE``\  is enabled, combine general purpose libraries.
+   - If combine with computing node, specifying  \ ``-KSVE``\  or  \ ``-KNOSVE``\  combine library using  \ ``SVE``\.
+   - ``-KSVE``\  option's default (when omitted) will be  \ ``-KSVE``\ .
+   - To translate the user program with the native compiler and combine BLAS and LAPACK archive,use  \ :program:`fcc`\  command.
+   - To translate a user program written in MPI using a native compiler and combine BLAS and LAPACK archive, use  \ :program:`mpifcc`\  command.
+
+Sample program (ScaLAPACK / FORTRAN)
+------------------------------------
+
+This indicates a example of compiling to job execution using sample program.
+
+1. | Prepare a source program.
+   | Prepare a sample program as  \ :file:`/home/system/sample/SCALAPACK/sample_ScaLAPACK.f`\.
+   | :download:`(Download a sample code)  <./src/sample_ScaLAPACK.f>`
+
+2. Compile a sample program.
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -V -Kfast,optmsg=2 -Nlst=t -o sample_ScaLAPACK  sample_ScaLAPACK.f -SCALAPACK -SSL2
+
+3. | Prepare a job script.
+   | Prepare a job script as  \ :file:`/home/system/sample/SCALAPACK/sample_ScaLAPACK.sh`\.
+   | :download:`(Download a sample code)  <./src/sample_ScaLAPACK.sh>`
+
+4. Submit a job with  \ :program:`pjsub`\  command.
+
+ .. code-block:: console
+
+  [_LNlogin]$ pjsub sample_ScaLAPACK.sh
+  [INFO] PJM 0000 pjsub Job 150 submitted.
+
+
+How to use shared libraries
+---------------------------
+
+BLAS, LAPACK, ScaLAPACK will be static link if combine by the way mentioned in " :ref:`HowToCompileInFortranBLASLAPACKScaLAPACKLibrary` " ":ref:`HowToCompileInCBLASLAPACKScaLAPACKLibrary` " " :ref:`HowToCompileInC++BLASLAPACKScaLAPACKLibrary` " . Separately, a shared library is also provided. The shared library version is different from the static link version in consideration of the case of dynamically loading and using it.
+
+For shared libraries, ILP64 interface libraries which use the 64-bit integer type and 64-bit logical type as parameter of routines as well as LP64 libraries are supported for BLAS and LAPACK. When using the ILP64 interface, specify the ILP64 shared library.
+
+.. contents::
+   :local:
+
+
+How to use successive versions of BLAS and LAPACK from Fortran
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To translate a user program written in Fortran and combine BLAS and LAPACK sequential shared libraries, specify the options mentioned in below list, to  \ :program:`frtpx`\  or  \ :program:`frt`\  command line.
+
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 5,5
+
+    * - Type
+      - combine option
+
+    * - LP64, General-purpose version
+      - \-lfjlapack
+
+    * - LP64, SVE version
+      - \-lfjlapacksve
+
+    * - ILP64, General-purpose version
+      - \-lfjlapack_ilp64
+
+    * - ILP64, SVE version
+      - \-lfjlapacksve_ilp64
+
+
+Specify this option after the user program.
+
+Examples of usage are as follows.
+
+
+
+1. Translate program written in Fortran  \ :file:`a.f`\ , combine SVE version BLAS and LAPACK libraries.
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,optmsg=2 a.f -lfjlapacksve
+
+
+2. Translate program written in Fortran  \ :file:`a.f`\ , combine the general-purpose BLAS and LAPACK libraries.
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,optmsg=2 a.f -lfjlapack
+
+
+3. Translate program written in Fortran  \ :file:`a.f`\ , combine SVE version BLAS and LAPACK libraries with ILP64 interface. The basic integer type and basic logical type of the source program are  ``-CcdII8, -CcdLL8``  option and expand to 8 byte.
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,optmsg=2 -CcdII8 -CcdLL8 a.f -lfjlapacksve_ilp64
+
+
+4. Translate program written in OpenMP Fortran  \ :file:`a.f`\ , combine SVE version BLAS and LAPACK libraries.
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,openmp,optmsg=2 a.f -lfjlapacksve
+
+
+5. Translate program written in Fortran  \ :file:`a.f`\  by native compiler, combine SVE version BLAS and LAPACK libraries.
+
+ .. code-block:: console
+
+  [_LNlogin]$ frt -Kfast,optmsg=2 a.f -lfjlapacksve
+
+
+How to use BLAS, LAPACK thread parallel version from Fotran
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In order to translate user programs written in Fortran and combine thread-parallel shared libraries of BLAS and LAPACK, specify the options shown in the following table in addition to  \ ``-Kopenmp``\  option to  \ ``frtpx``\  or  \ ``frt``\  command line.
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 5,5
+
+    * - Type
+      - combine option
+
+    * - LP64, General-purpose version
+      - \-lfjlapackex
+
+    * - LP64, SVE version
+      - \-lfjlapackexsve
+
+    * - ILP64, General-purpose version
+      - \-lfjlapackex_ilp64
+
+    * - ILP6, SVE version
+      - \-lfjlapackexsve_ilp64
+
+
+| Specify this option after the user program.
+| It is possible to specify  \ ``-Kparallel``\  option instead of  \ ``-Kopenmp``\  option.
+
+Examples of usage are as follows.
+
+1. Translate program written in Fortran  \ :file:`a.f`\ , combine SVE version BLAS and LAPACK thread parallel version libraries.
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,openmp,optmsg=2 a.f -lfjlapackexsve
+
+2. Translate program written in Fortran  \ :file:`a.f`\, combine the general-purpose BLAS and LAPACK thread parallel version libraries.
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,openmp,optmsg=2 a.f -lfjlapackex
+
+3. Translate program written in Fortran  \ :file:`a.f`\ , combine SVE version BLAS and LAPACK thread parallel version libraries with ILP64 interface. The basic integer type and basic logical type of the source program are  ``-CcdII8,-CcdLL8``  option and expand to 8 byte.
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,openmp,optmsg=2 -CcdII8 -CcdLL8 a.f -lfjlapackexsve_ilp64
+
+4. Translate program written in Fortran  \ :file:`a.f`\  by native compiler, combine SVE version BLAS and LAPACK thread parallel libraries.
+
+ .. code-block:: console
+
+  [_CNlogin]$ frt -Kfast,openmp,optmsg=2 a.f -lfjlapackexsve
+
+5. Translate program written in Fortran  \ :file:`a.f`\ as sequential execution program, combines SVE version BLAS and LAPACK thread parallel version libraries.
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,optmsg=2 -c a.f
+  [_LNlogin]$ frtpx -Kfast,openmp a.o -lfjlapackexsve
+  
+
+6. Translate program written in Fortran  \ :file:`a.f`\  as automatic parallelized,  combines SVE version BLAS and LAPACK thread parallel version libraries.
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,parallel,optmsg=2 -c a.f
+  [_LNlogin]$ frtpx -Kfast,parallel a.o -lfjlapackexsve
+
+
+How to use ScaLAPACK from Fortran
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To translate a user program that uses ScaLAPACK and combine a shared library of ScaLAPACK, specify the options shown in the following table by using  \ :program:`mpifrtpx`\  or  \ :program:`mpifrt`\  command.
+
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 5,5
+
+    * - Type
+      - combine option
+
+    * - LP64, General-purpose version
+      - \-lfjscalapack
+
+    * - LP64, SVE version
+      - \-lfjscalapacksve
+
+    * - ILP64, General-purpose version
+      - \-
+
+    * - ILP64, SVE version
+      - \-
+
+| Specify the option for linking ScaLAPACK after the user program, and before the option for linking BLAS and LAPACK.
+| When using the thread parallel version of BLAS and LAPACK, also specify the ``-Kopenmp``\ option.
+
+Examples of usage are as follows.
+
+1. Translate program written in Fortran  \ :file:`a.f`\ , combine the SVE version of the ScaLAPACK library. BLAS and LAPACK combine sequential versions.
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -Kfast,optmsg=2 a.f -lfjscalapacksve -lfjlapacksve
+
+
+2. Translate program written in Fortran  \ :file:`a.f`\ , combines the generic version of the ScaLAPACK library. BLAS and LAPACK combine sequential versions.
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -Kfast,optmsg=2 a.f -lfjscalapack -lfjlapack
+
+
+3. Translate program written in Fortran  \ :file:`a.f`\ , combine the SVE version of the ScaLAPACK library. BLAS and LAPACK combine thread parallel versions.
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -Kfast,openmp,optmsg=2 a.f -lfjscalapacksve -lfjlapackexsve
+
+
+4. Translate program written in Fortran  \ :file:`a.f`\  by native compiler, combine the SVE version of the ScaLAPACK library. BLAS and LAPACK combine thread parallel versions.
+
+ .. code-block:: console
+
+  [_CNlogin]$ mpifrt -Kfast,openmp,optmsg=2 a.f -lfjscalapacksve -lfjlapackexsve
+
+
+.. _UsingBLASandLAPACKSequentialVersionFromCCPPProgramsUsingSharedLibrariesBLASLAPACKScaLAPACKLibrary:
+
+How to use BLAS and LAPACK sequential versions from C and C ++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+| To translate a user program written in C or C ++ and combine a shared library of sequential versions of BLAS and LAPACK, specify \ ``-SSL2``\  or  \ ``-SSL2BLAMP``\  in addition to the below option, to  \ :program:`fccpx`\, :program:`FCCpx`\, :program:`fcc`\  or  \ :program:`FCC`\  command line.
+
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 5,5
+
+    * - Type
+      - combine option
+
+    * - LP64, General-purpose version
+      - \-lfjlapack
+
+    * - LP64, SVE version
+      - \-lfjlapacksve
+
+    * - ILP64, General-purpose version
+      - \-lfjlapack_ilp64
+
+    * - ILP64, SVE version
+      - \-lfjlapacksve_ilp64
+
+| Specify the join option after the user program. It is ok to specify either \ ``-SSL2``\  or  \ ``-SSL2BLAMP``\  option.
+| When using the ILP64 interface library, to use a header file that supports ILP64, specify  \ :file:`-I/opt/FJSVxtclang/include/lapack_ilp64`\  for translating option.
+
+Examples of usage are as follows.
+
+
+1. Translate program written in C  \ :file:`a.c`\, combine SVE version BLAS and LAPACK libraries.
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,optmsg=2 a.c -lfjlapacksve -SSL2
+
+
+2. Translate program written in C  \ :file:`a.c`\ , combines the generic version of the ScaLAPACK library.
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,optmsg=2 a.c -lfjlapack -SSL2
+
+
+3. Translate program written in C  \ :file:`a.c`\ , ILP64 interface SVE version BLAS and LAPACK libraries are combined.
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,optmsg=2 -I/opt/FJSVxtclang/include/lapack_ilp64 a.c -lfjlapacksve_ilp64 -SSL2
+
+
+4. Translate program written in C++  \ :file:`a.cpp`\ , combines SVE version BLAS and LAPACK libraries.
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,optmsg=2 a.cpp -lfjlapacksve -SSL2
+
+
+5. Translate program written in OpenMP C  \ :file:`a.c`\ , combines SVE version BLAS and LAPACK libraries.
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,openmp,optmsg=2 a.c -lfjlapacksve -SSL2
+
+
+6. Translate program written in OpenMP C  \ :file:`a.c`\ by native compiler, combines SVE version BLAS and LAPACK libraries.
+
+ .. code-block:: console
+
+  [_CNlogin]$ fcc -Kfast,openmp,optmsg=2 a.c -lfjlapacksve -SSL2
+
+
+.. _UsingBLASandLAPACKThreadParallelVersionFromCCPPProgramsUsingSharedLibrariesBLASLAPACKScaLAPACKLibrary:
+
+How to use BLAS, LAPACK thread parallel version from C, C ++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To translate the user program and combine the shared library of BLAS and LAPACK thread parallel versions, specify  \ ``-SSL2``\  and  \ ``-SSL2BLAMP``\  in addition to  \ ``-Kopenmp``\ option and following mentioned option, to :program:`fccpx`\, :program:`FCCpx`\, :program:`fcc`\  or  \ :program:`FCC`\  command line.
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 5,5
+
+    * - Type
+      - combine option
+
+    * - LP64, General-purpose version
+      - \-lfjlapackex
+
+    * - LP64, SVE version
+      - \-lfjlapackexsve
+
+    * - ILP64, General-purpose version
+      - \-lfjlapackex_ilp64
+
+    * - ILP64, SVE version
+      - \-lfjlapackexsve_ilp64
+
+| Specify the binding \ option after the user program. It is ok to specify either  \ ``-SSL2``\  or  \ ``-SSL2BLAMP``\  option.
+| It is possible to specify  \ ``-Kparallel``\  option  instead of  \ ``-Kopenmp``\  option.
+| When using the ILP64 interface library, to use a header file that supports ILP64, specify  \ ``-I/opt/FJSVxtclang/include/lapack_ilp64``\  for translating option.
+
+Examples of usage are as follows.
+
+1. Translate program written in C  \ :file:`a.c`\, combines SVE version BLAS and LAPACK thread parallel version library.
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,openmp,optmsg=2 a.c -lfjlapackexsve -SSL2
+
+
+2. Translate program written in CC  \ :file:`a.c`\, combines general-purpose version BLAS and LAPACK thread parallel version library.
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,openmp,optmsg=2 a.c -lfjlapackex -SSL2
+
+
+3. Translate program written in C  \ :file:`a.c`\, ILP64 interface SVE version BLAS and LAPACK thread parallel version library are combined.
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,openmp,optmsg=2 -I/opt/FJSVxtclang/include/lapack_ilp64 a.c -lfjlapackexsve_ilp64 -SSL2
+
+
+4. Translate program written in C++  \ :file:`a.cpp`\, combines SVE version BLAS and LAPACK thread parallel version library.
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,openmp,optmsg=2 a.cpp -lfjlapackexsve -SSL2
+
+
+5. Translate program written in C  \ :file:`a.c`\  as sequential execution program, combines SVE version BLAS and LAPACK thread parallel version library.
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -c -Kfast,optmsg=2 a.c
+  [_LNlogin]$ fccpx -Kopenmp a.o -lfjlapackexsve -SSL2
+
+
+6. Translate program written in C  \ :file:`a.c`\  and automatic parallelized, combines SVE version BLAS and LAPACK thread parallel version library.
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -c -Kfast,parallel,optmsg=2 a.c
+  [_LNlogin]$ fccpx -Kfast,parallel,openmp a.o -lfjlapackexsve -SSL2
+
+
+7. Translate program written in C  \ :file:`a.c`\  by native compiler, combines SVE version BLAS and LAPACK thread parallel library.
+
+ .. code-block:: console
+
+  [_CNlogin]$ fcc -Kfast,openmp,optmsg=2 a.c -lfjlapackexsve -SSL2
+
+
+How to use ScaLAPACK from C and C ++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To translate a user program written in C or C ++ and combine the ScaLAPACK shared library, use  \ :program:`mpifccpx`\, \ :program:`mpiFCCpx`\, \ :program:`mpifcc`\  or \ :program:`mpiFCC`\  command.
+
+Depending on the options shown in the table below and the types of BLAS and LAPACK used, specify option mentioned in the list of  :ref:`UsingBLASandLAPACKSequentialVersionFromCCPPProgramsUsingSharedLibrariesBLASLAPACKScaLAPACKLibrary`  or  \ :ref:`UsingBLASandLAPACKThreadParallelVersionFromCCPPProgramsUsingSharedLibrariesBLASLAPACKScaLAPACKLibrary` . Also, in addition to \ ``-SCALAPACK``\, specify  \ ``-SSL2``\  or  \ ``-SSL2BLAMP``\ .
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 5,5
+
+    * - Type
+      - combine option
+
+    * - LP64, General-purpose version
+      - \-lfjscalapack
+
+    * - LP64, SVE version
+      - \-lfjscalapacksve
+
+    * - ILP64, General-purpose version
+      - \-
+
+    * - ILP64, SVE version
+      - \-
+
+| Specify the ScaLAPACK linkage option after the user program, and before the BLAS and LAPACK linkage options. It is ok to specify either  \ ``-SSL2``\  or  \ ``-SSL2BLAMP``\  option.
+| When using thread parallel version BLAS, LAPACK, specify  \ ``-Kopenmp``\  option at the same time.
+
+
+Examples of usage are as follows.
+
+1. Translate program written in C  \ :file:`a.c`\, combine the SVE version of the ScaLAPACK library. BLAS and LAPACK combine sequential versions.
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Kfast,optmsg=2 a.c -lfjscalapacksve -lfjlapacksve -SSL2 -SCALAPACK
+
+
+2. Translate program written in C  \ :file:`a.c`\, combines the generic version of the ScaLAPACK library. BLAS and LAPACK combine sequential versions.
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Kfast,optmsg=2 a.c -lfjscalapack -lfjlapack -SSL2 -SCALAPACK
+
+
+3. Translate program written in C  \ :file:`a.c`\ , combine the SVE version of the ScaLAPACK library. BLAS and LAPACK combine sequential versions.
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Kfast,optmsg=2 a.c -lfjscalapacksve -lfjlapacksve -SSL2 -SCALAPACK
+
+
+4. Translate program written in C++  \ :file:`a.cpp`\ , combine the SVE version of the ScaLAPACK library. BLAS and LAPACK combine thread parallel versions.
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpiFCCpx -Kfast,openmp,optmsg=2 a.cpp -lfjscalapacksve -lfjlapackexsve -SSL2 -SCALAPACK
+
+
+5. Translate program written in C  \ :file:`a.c`\  by native compiler, combine the SVE version of the ScaLAPACK library. BLAS and LAPACK combine thread parallel versions.
+
+ .. code-block:: console
+
+  [_CNlogin]$ mpifcc -Kfast,openmp,optmsg=2 a.c -lfjscalapacksve -lfjlapackexsve -SSL2 -SCALAPACK
+
+
+How to dynamically load and use BLAS, LAPACK, and ScaLAPACK
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using the BLAS, LAPACK, or ScaLAPACK library dynamically loaded with the dlopen or dlsym function, specify the file name with the dlopen function and load the library.
+
+The following table lists the shared library file names.
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 2 3 3 3
+
+    * - Type
+      - BLAS, LAPACK sequential version
+      - BLAS, LAPACK thread parallel version
+      - BLAS, ScaLAPACK
+
+    * - LP64, General-purpose version
+      - libfjlapack.so
+      - libfjlapackex.so
+      - libfjscalapack.so
+
+    * - LP64, SVE version
+      - libfjlapacksve.so
+      - libfjlapackexsve.so
+      - libfjscalapacksve.so
+
+    * - ILP64, General-purpose version
+      - libfjlapack_ilp64.so
+      - libfjlapackex_ilp64.so
+      - \-
+
+    * - ILP64, SVE version
+      - libfjlapacksve_ilp64.so
+      - libfjlapackexsve_ilp64.so
+      - \-
+
+- When using BLAS, LAPACK, and ScaLAPACK using the dlopen and dlsym functions, there is no need to specify an option to specify the library when combining.
+- When combining user programs that use BLAS, LAPACK thread parallel version, specify  \ ``-Kopenmp``\  option when combining. \
+- If combine the user program by using  \ :program:`fccpx,FCCpx,mpifccpx`\  or  \ :program:`mpiFCCpx`\  command, specify  \ ``-SSL2``\  or  \ ``-SSL2BLAMP``\  option at the same time.
+- If combine the user program and ScaLAPACK library by using  \ :program:`mpifccpx`\  or  \ :program:`mpiFCCpx`\  command, specify  \ ``-SCALAPACK``\  option at the same time.
+
+
+
+Examples of usage are as follows.
+
+1. Translate C program  \ :file:`a.c`\  to dynamically load BLAS, LAPACK thread parallel version , combine.
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,optmsg=2 a.c -SSL2
+
+2. Translate C program  \ :file:`a.c`\  to dynamically load BLAS, LAPACK thread parallel version , combine.
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,openmp,optmsg=2 a.c -SSL2
+
+3. Translate C program  \ :file:`a.c`\  that dynamically loads ScaLAPACK, BLAS, and LAPACK serial versions, combine.
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,optmsg=2 a.c -SSL2
+
+4. Translate C program  \ :file:`a.c`\  that dynamically loads ScaLAPACK, BLAS, and LAPACK thread parallel version, combine.
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Kfast,openmp,optmsg=2 a.c -SSL2 -SCALAPACK
+
+5. Translate C program  \ :file:`a.c`\  to dynamically load BLAS, LAPACK serial version and Fortran program  \ :file:`b.f`\  that calling it, combine.
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -c -Kfast,optmsg=2 a.c
+  [_LNlogin]$ frtpx b.f a.o
+
+6. Translate C program  \ :file:`a.c`\  to dynamically load BLAS, LAPACK thread parallel version and Fortran program  \ :file:`b.f`\  that calling it, combine.
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -c -Kfast,optmsg=2 a.c
+  [_LNlogin]$ frtpx -Kopenmp b.f a.o
+
+7. Translate C program  \ :file:`a.c`\  to dynamically load ScaLAPACK, BLAS, LAPACK sequential version and Fortran program  \ :file:`b.f`\  that calling it, combine.
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -c -Kfast,optmsg=2 a.c
+  [_LNlogin]$ mpifrtpx b.f a.o
+
+8. Translate C program  \ :file:`a.c`\  to dynamically load ScaLAPACK, BLAS, LAPACK thread parallel version and Fortran program  \ :file:`b.f`\  that calling it, combine.
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -c -Kfast,optmsg=2 a.c
+  [_LNlogin]$ mpifrtpx -Kopenmp b.f a.o
+

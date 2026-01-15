@@ -1,0 +1,59 @@
+.. _pjsubOptions(MPI-related)MPI:
+
+Job submitting command option (MPI) 
+===================================
+
+| To execute MPI program, it is required to specify  \ :program:`pjsub`\  option appropriately.
+| This indicates 1 dimention specification example.
+
+
+[Job script]
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L "node=24"               # Specify number of node (1 dimention specification)
+  #PJM -L "rscgrp=small"
+  #PJM --mpi "shape=12"           # Static process shape specification
+  #PJM --mpi "proc=12"            # Maximum number of static processes
+  #PJM -g groupname               # group name
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N # volume names that job uses
+  #
+  mpiexec  -n  12 ./a.out         # Execute a.out by parallel process number 24
+
+
+1. -L "node=24"
+    Shape / number of compute node is kept desired with  \ ``-L node``\. Since one-dimensional shape (24) is specified, 24 computing nodes are secured in one dimension.
+
+.. figure:: ./img/pjsubOptions(MPI-related)_01.png
+   :align: center
+   :scale: 80
+
+
+2. --mpi "shape=12"
+    Determine the area to which you want to allocate static processes by  \ ``--mpi shape``\. \ ``--mpi shape``\  specifies the same dimention (1 dimention / 2 dimentions / 3 dimentions) specified in  \ ``-L node``\. If omitted  \ ``--mpi shape``\, it will be  \ ``-L node``\  value.
+
+.. figure:: ./img/pjsubOptions(MPI-related)_02.png
+   :align: center
+   :scale: 80
+
+
+3. --mpi rank-map-bynode/--mpi rank-map-hostfile/--mpi rank-map-bychip
+    Assign a rank for the static process. Ranks are assigned in the  \ ``--mpi shape``\  range. 
+
+
+4. mpiexec
+    Execute MPI program with  \ :program:`mpiexec`\  command. Specify the number of static processes with  \ ``-n``\  option. If omitted  \ ``-n``\  option, it will be  \ ``--mpi proc``\  value.
+
+.. figure:: ./img/pjsubOptions(MPI-related)_03.png
+   :align: center
+   :scale: 80
+
+
+5. Dynamic process creation
+    When a dynamic process is created by MPI_Comm_spawn, a process is created in an unassigned (dynamic process assignment area).
+
+.. figure:: ./img/pjsubOptions(MPI-related)_04.png
+   :align: center
+   :scale: 80
+

@@ -1,0 +1,484 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6.6. Rank assignment &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6.7. Job shape (Torus)" href="JobShape%28torus%29.html" />
+    <link rel="prev" title="6.5. Specification when submitting an MPI job" href="SpecificationsForMPIJob.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="JobShape%28torus%29.html" title="6.7. Job shape (Torus)"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="SpecificationsForMPIJob.html" title="6.5. Specification when submitting an MPI job"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.6. </span>Rank assignment</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="rank-assignment">
+<h1><span class="section-number">6.6. </span>Rank assignment<a class="headerlink" href="#rank-assignment" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">For MPI, to identify process, the number called “Rank” is assigned which is the similar to process number.</div>
+<div class="line">The rule of rank assignment, it can be specified from  <strong class="program">pjsub</strong> command’s  <code class="docutils literal notranslate"><span class="pre">--mpi</span></code> option.</div>
+</div>
+<section id="rank-map-bynode">
+<h2><span class="section-number">6.6.1. </span>Rank-map-bynode<a class="headerlink" href="#rank-map-bynode" title="Link to this heading">¶</a></h2>
+<p>When one process is created on a compute node,  <code class="docutils literal notranslate"><span class="pre">rank-map-bynode</span></code> moves to the next compute node and automatically allocates it in a round-robin fashion. The origin of the coordinates is rank 0, the rank is arranged in the axis direction of the first character of  <code class="docutils literal notranslate"><span class="pre">rank-map-bynode</span></code>, and when the upper limit is reached, the character moves to the next character.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>rank-map-bynode[=rankmap]</p></td>
+<td><div class="line-block">
+<div class="line">To  <code class="docutils literal notranslate"><span class="pre">rankmap</span></code>, specify  <code class="docutils literal notranslate"><span class="pre">XY|YX|XYZ|XZY|YXZ|YZX|ZXY|ZYX</span></code>.</div>
+<div class="line">To  <code class="docutils literal notranslate"><span class="pre">rankmap</span></code>, specify the same number of dimention specified in   <code class="docutils literal notranslate"><span class="pre">shape</span></code>.</div>
+<div class="line">If 1 dimention, cannot specify  <code class="docutils literal notranslate"><span class="pre">rankmap</span></code>.</div>
+<div class="line">If 2 dimentions, specify letter  <code class="docutils literal notranslate"><span class="pre">XY</span></code>, 3 dimentions, specify letter  <code class="docutils literal notranslate"><span class="pre">XYZ</span></code> combinations.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">rankmap</span></code> default is as following.</div>
+</div>
+<ul class="simple">
+<li><p>If 1 dimention job, one-dimensional coordinates become rank numbers.</p></li>
+<li><p>If 2 dimentions job, it is the same as [<code class="docutils literal notranslate"><span class="pre">XY</span></code>] in case of dimentional job.</p></li>
+<li><p>If 3 dimentions job, it is the same as [<code class="docutils literal notranslate"><span class="pre">XYZ</span></code>] in case of dimentional job.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="rank-map-bynode-1-dimention">
+<h2><span class="section-number">6.6.2. </span>rank-map-bynode (1 dimention)<a class="headerlink" href="#rank-map-bynode-1-dimention" title="Link to this heading">¶</a></h2>
+<p>This indicates 1 dimention specification example.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=8&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-bynode&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_01.png"><img alt="../_images/RankAssignment_01.png" src="../_images/RankAssignment_01.png" style="width: 649.6px; height: 132.8px;" /></a>
+</figure>
+</section>
+<section id="rank-map-bynode-2-dimentions">
+<h2><span class="section-number">6.6.3. </span>rank-map-bynode (2 dimentions)<a class="headerlink" href="#rank-map-bynode-2-dimentions" title="Link to this heading">¶</a></h2>
+<p>This indicates 2 dimentions specification example.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=3x3&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-bynode=XY&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_02.png"><img alt="../_images/RankAssignment_02.png" src="../_images/RankAssignment_02.png" style="width: 624.8000000000001px; height: 302.40000000000003px;" /></a>
+</figure>
+</section>
+<section id="rank-map-bynode-3-dimentions">
+<h2><span class="section-number">6.6.4. </span>rank-map-bynode (3 dimentions)<a class="headerlink" href="#rank-map-bynode-3-dimentions" title="Link to this heading">¶</a></h2>
+<p>This indicates 3 dimentions specification example.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=3x3x2&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-bynode=XYZ&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_03.png"><img alt="../_images/RankAssignment_03.png" src="../_images/RankAssignment_03.png" style="width: 469.6px; height: 622.4000000000001px;" /></a>
+</figure>
+</section>
+<section id="rank-map-bynode-the-multiple-process-specification-in-node-1-dimention">
+<h2><span class="section-number">6.6.5. </span>rank-map-bynode (the multiple process specification in node (1 dimention))<a class="headerlink" href="#rank-map-bynode-the-multiple-process-specification-in-node-1-dimention" title="Link to this heading">¶</a></h2>
+<p>This indicates the example of specifying multiple process in node.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=8&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;proc=16&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-bynode&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_04.png"><img alt="../_images/RankAssignment_04.png" src="../_images/RankAssignment_04.png" style="width: 575.2px; height: 133.6px;" /></a>
+</figure>
+</section>
+<section id="rank-map-bychip">
+<h2><span class="section-number">6.6.6. </span>rank-map-bychip<a class="headerlink" href="#rank-map-bychip" title="Link to this heading">¶</a></h2>
+<p>When an n process is created on a compute node, <code class="docutils literal notranslate"><span class="pre">rank-map-bychip</span></code> moves to the next compute node and is automatically allocated in a round-robin fashion.  The origin of the coordinates is rank 0, the rank is arranged in the axis direction of the first character of  <code class="docutils literal notranslate"><span class="pre">rank-map-bychip</span></code>, and when the upper limit is reached, the character moves to the next character.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>rank-map-bynode[=rankmap]</p></td>
+<td><div class="line-block">
+<div class="line">To  <code class="docutils literal notranslate"><span class="pre">rankmap</span></code>, specify  <code class="docutils literal notranslate"><span class="pre">XY|YX|XYZ|XZY|YXZ|YZX|ZXY|ZYX</span></code>.</div>
+<div class="line">To  <code class="docutils literal notranslate"><span class="pre">rankmap</span></code>, specify the same number of dimention specified in   <code class="docutils literal notranslate"><span class="pre">shape</span></code>.</div>
+<div class="line">If 1 dimention, cannot specify  <code class="docutils literal notranslate"><span class="pre">rankmap</span></code>.</div>
+<div class="line">If 2 dimentions, specify letter  <code class="docutils literal notranslate"><span class="pre">XY</span></code>, 3 dimentions, specify letter  <code class="docutils literal notranslate"><span class="pre">XYZ</span></code> combinations.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">rankmap</span></code> default is as following.</div>
+</div>
+<ul class="simple">
+<li><p>If 1 dimention job, one-dimensional coordinates become rank numbers.</p></li>
+<li><p>If 2 dimentions job, it is the same as [<code class="docutils literal notranslate"><span class="pre">XY</span></code>] in case of dimentional job.</p></li>
+<li><p>If 3 dimentions job, it is the same as [<code class="docutils literal notranslate"><span class="pre">XYZ</span></code>] in case of dimentional job.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This indicates  <code class="docutils literal notranslate"><span class="pre">rank-map-bychip</span></code> specification example.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=3x3&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;proc=18&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-bychip:XY&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_05.png"><img alt="../_images/RankAssignment_05.png" src="../_images/RankAssignment_05.png" style="width: 345.6px; height: 241.60000000000002px;" /></a>
+</figure>
+</section>
+<section id="rank-map-hostfile">
+<h2><span class="section-number">6.6.7. </span>rank-map-hostfile<a class="headerlink" href="#rank-map-hostfile" title="Link to this heading">¶</a></h2>
+<p>Assign a rank based on the coordinates specified in the rank map file.</p>
+<p>This indicates  <code class="docutils literal notranslate"><span class="pre">rank-map-hostfile</span></code> specification example.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=2x2x2&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-hostfile=filename&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Set  <code class="docutils literal notranslate"><span class="pre">filename</span></code> in  current directory where executes  <strong class="program">pjsub</strong>command.</p></li>
+<li><p>For rank specification in  <code class="docutils literal notranslate"><span class="pre">filename</span></code>, specify one-, two-, or three-dimensional coordinates according to the node shape.</p></li>
+<li><p>To <code class="docutils literal notranslate"><span class="pre">filename</span></code>, write one coordinate per line and specify it in parentheses.</p></li>
+</ol>
+</section>
+<section id="rank-map-hostfile-1-dimention">
+<h2><span class="section-number">6.6.8. </span>rank-map-hostfile (1 dimention)<a class="headerlink" href="#rank-map-hostfile-1-dimention" title="Link to this heading">¶</a></h2>
+<p>To specify one-dimensional coordinates, specify (X).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=8&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-hostfile=filename&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<p>Host map file (1 dimention specification example)</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(0)      &lt;-- Rank 0
+(1)      &lt;-- Rank 1
+(2)      &lt;-- Rank 2
+(3)      &lt;-- Rank 3
+(7)      &lt;-- Rank 4
+(6)      &lt;-- Rank 5
+(5)      &lt;-- Rank 6
+(4)      &lt;-- Rank 7
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_06.png"><img alt="../_images/RankAssignment_06.png" src="../_images/RankAssignment_06.png" style="width: 613.6px; height: 113.60000000000001px;" /></a>
+</figure>
+</section>
+<section id="rank-map-hostfile-2-dimentions">
+<h2><span class="section-number">6.6.9. </span>rank-map-hostfile (2 dimentions)<a class="headerlink" href="#rank-map-hostfile-2-dimentions" title="Link to this heading">¶</a></h2>
+<p>To specify two-dimensional coordinates, specify (X,Y).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=4x2&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-hostfile=filename&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<p>Host map file (2 dimentions specification example)</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(0,0)      &lt;-- Rank 0
+(1,0)      &lt;-- Rank 1
+(2,0)      &lt;-- Rank 2
+(3,0)      &lt;-- Rank 3
+(3,1)      &lt;-- Rank 4
+(2,1)      &lt;-- Rank 5
+(1,1)      &lt;-- Rank 6
+(0,1)      &lt;-- Rank 7
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_07.png"><img alt="../_images/RankAssignment_07.png" src="../_images/RankAssignment_07.png" style="width: 396.0px; height: 152.0px;" /></a>
+</figure>
+</section>
+<section id="rank-map-hostfile-3-dimentions">
+<h2><span class="section-number">6.6.10. </span>rank-map-hostfile (3 dimentions)<a class="headerlink" href="#rank-map-hostfile-3-dimentions" title="Link to this heading">¶</a></h2>
+<p>To specify two-dimensional coordinates, specify (X,Y,Z).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=2x2x2&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-hostfile=filename&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<p>Host map file (3 dimentions specification example)</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(0,0,0)      &lt;-- Rank 0
+(1,0,0)      &lt;-- Rank 1
+(0,1,0)      &lt;-- Rank 2
+(1,1,0)      &lt;-- Rank 3
+(0,0,1)      &lt;-- Rank 4
+(0,1,1)      &lt;-- Rank 5
+(1,0,1)      &lt;-- Rank 6
+(1,1,1)      &lt;-- Rank 7
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_08.png"><img alt="../_images/RankAssignment_08.png" src="../_images/RankAssignment_08.png" style="width: 395.20000000000005px; height: 192.0px;" /></a>
+</figure>
+</section>
+<section id="rank-map-hostfile-the-multiple-rank-specification-in-node">
+<h2><span class="section-number">6.6.11. </span>rank-map-hostfile (the multiple rank specification in node)<a class="headerlink" href="#rank-map-hostfile-the-multiple-rank-specification-in-node" title="Link to this heading">¶</a></h2>
+<p>At host map file (<code class="docutils literal notranslate"><span class="pre">rank-map-hostfile</span></code>), the following is an example of assigning multiple processes in a node.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=2x2&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;proc=8&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-hostfile=filename&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-bynode&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<p>Host map file (2 dimentions specification example)</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(0,0)      &lt;-- Rank 0
+(0,0)      &lt;-- Rank 1
+(1,0)      &lt;-- Rank 2
+(1,0)      &lt;-- Rank 3
+(0,1)      &lt;-- Rank 4
+(0,1)      &lt;-- Rank 5
+(1,1)      &lt;-- Rank 6
+(1,1)      &lt;-- Rank 7
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_09.png"><img alt="../_images/RankAssignment_09.png" src="../_images/RankAssignment_09.png" style="width: 316.8px; height: 167.20000000000002px;" /></a>
+</figure>
+</section>
+<section id="rank-map-hostfile-rank-map-bychip-the-multiple-rank-specification-in-node">
+<h2><span class="section-number">6.6.12. </span>rank-map-hostfile/rank-map-bychip (the multiple rank specification in node)<a class="headerlink" href="#rank-map-hostfile-rank-map-bychip-the-multiple-rank-specification-in-node" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">Specifying  <code class="docutils literal notranslate"><span class="pre">rank-map-hostfile</span></code> and  <code class="docutils literal notranslate"><span class="pre">rank-map-bychip</span></code> is available.</div>
+<div class="line">At the coordinates (one line) specified in the host map file, assign  <code class="docutils literal notranslate"><span class="pre">proc/shape</span></code> process number (rounded up after the decimal point) based on the number of  <code class="docutils literal notranslate"><span class="pre">proc=</span></code> and  <code class="docutils literal notranslate"><span class="pre">shape=</span></code>specified in a job script. If  <code class="docutils literal notranslate"><span class="pre">shape</span></code> is not specified,  alternatively use the number specified by  <code class="docutils literal notranslate"><span class="pre">node=</span></code>.</div>
+<div class="line">In next example, it will be  <code class="docutils literal notranslate"><span class="pre">proc/node=8/4=2</span></code>.</div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=2x2&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;proc=8&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-hostfile=filename&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-bychip&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<p>Host map file (2 dimentions specification example)</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(0,0)      &lt;-- Rank 0,1
+(0,1)      &lt;-- Rank 2,3
+(1,1)      &lt;-- Rank 4,5
+(1,0)      &lt;-- Rank 6,7
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_10.png"><img alt="../_images/RankAssignment_10.png" src="../_images/RankAssignment_10.png" style="width: 292.0px; height: 171.20000000000002px;" /></a>
+</figure>
+</section>
+<section id="notes-on-when-using-host-map-file">
+<h2><span class="section-number">6.6.13. </span>Notes on when using host map file<a class="headerlink" href="#notes-on-when-using-host-map-file" title="Link to this heading">¶</a></h2>
+<p>Here is the notes about host map file.</p>
+<ul>
+<li><p>Empty line in the file is ignored.</p></li>
+<li><p>The coordinates described in the file must be within the range specified by the  <code class="docutils literal notranslate"><span class="pre">shape</span></code> parameter that represents the shape of the node.</p>
+<ul class="simple">
+<li><p>Example) If  <code class="docutils literal notranslate"><span class="pre">shape=2x3</span></code> is specified, the coordinates that can be described are (0,0), (0,1), (0,2), (1,0), (1,1), (1,2) .</p></li>
+</ul>
+</li>
+<li><p>If specify  <code class="docutils literal notranslate"><span class="pre">rank-map-hostfile</span></code> and  <code class="docutils literal notranslate"><span class="pre">rank-map-bychip</span></code> parameter at the same time, the description in the file must follow:</p>
+<ul class="simple">
+<li><p>The number of coordinates described in the file should be the same as the number of nodes indicated by the shape specified by the  <code class="docutils literal notranslate"><span class="pre">shape</span></code> parameter.</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p>Example) If it’s  <code class="docutils literal notranslate"><span class="pre">shape=3x2</span></code>since there are six nodes, describe six coordinates in the file.</p></li>
+<li><p>Described coordinates number is fewer than the number of node that indicates the shape specified by the <code class="docutils literal notranslate"><span class="pre">shape</span></code> parameter,  <strong class="program">pjsub</strong> command rejects job acceptance.</p></li>
+<li><p>Described coordinates number is larger than the number of node that indicates the shape specified by the <code class="docutils literal notranslate"><span class="pre">shape</span></code> parameter, the rest coordinates are ignored.</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Multiple same coordinates cannot be described in the file. If you describe the same coordinates,  <strong class="program">pjsub</strong> command will be error.</p></li>
+</ul>
+</li>
+<li><p>If specify  <code class="docutils literal notranslate"><span class="pre">rank-map-hostfile</span></code> and  <code class="docutils literal notranslate"><span class="pre">rank-map-bynode</span></code> parameter at the same time, the description in the file must follow:</p>
+<ul class="simple">
+<li><p>Number of coordinates described in the file is fewer than the number of process that specified with  <code class="docutils literal notranslate"><span class="pre">shape</span></code> parameter, after assigning to the last coordinate node, return to the first coordinate node and assign.
+If the number of coordinates is greater than the number of processes specified by the  <code class="docutils literal notranslate"><span class="pre">shape</span></code> parameter, the remaining coordinates will be ignored.</p></li>
+<li><p>In the file, the same coordinates can be described as long as they are less than the number of CPU cores per computation node.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">6.6. Rank assignment</a><ul>
+<li><a class="reference internal" href="#rank-map-bynode">6.6.1. Rank-map-bynode</a></li>
+<li><a class="reference internal" href="#rank-map-bynode-1-dimention">6.6.2. rank-map-bynode (1 dimention)</a></li>
+<li><a class="reference internal" href="#rank-map-bynode-2-dimentions">6.6.3. rank-map-bynode (2 dimentions)</a></li>
+<li><a class="reference internal" href="#rank-map-bynode-3-dimentions">6.6.4. rank-map-bynode (3 dimentions)</a></li>
+<li><a class="reference internal" href="#rank-map-bynode-the-multiple-process-specification-in-node-1-dimention">6.6.5. rank-map-bynode (the multiple process specification in node (1 dimention))</a></li>
+<li><a class="reference internal" href="#rank-map-bychip">6.6.6. rank-map-bychip</a></li>
+<li><a class="reference internal" href="#rank-map-hostfile">6.6.7. rank-map-hostfile</a></li>
+<li><a class="reference internal" href="#rank-map-hostfile-1-dimention">6.6.8. rank-map-hostfile (1 dimention)</a></li>
+<li><a class="reference internal" href="#rank-map-hostfile-2-dimentions">6.6.9. rank-map-hostfile (2 dimentions)</a></li>
+<li><a class="reference internal" href="#rank-map-hostfile-3-dimentions">6.6.10. rank-map-hostfile (3 dimentions)</a></li>
+<li><a class="reference internal" href="#rank-map-hostfile-the-multiple-rank-specification-in-node">6.6.11. rank-map-hostfile (the multiple rank specification in node)</a></li>
+<li><a class="reference internal" href="#rank-map-hostfile-rank-map-bychip-the-multiple-rank-specification-in-node">6.6.12. rank-map-hostfile/rank-map-bychip (the multiple rank specification in node)</a></li>
+<li><a class="reference internal" href="#notes-on-when-using-host-map-file">6.6.13. Notes on when using host map file</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="SpecificationsForMPIJob.html"
+                          title="previous chapter"><span class="section-number">6.5. </span>Specification when submitting an MPI job</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="JobShape%28torus%29.html"
+                          title="next chapter"><span class="section-number">6.7. </span>Job shape (Torus)</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="JobShape%28torus%29.html" title="6.7. Job shape (Torus)"
+             >next</a></li>
+        <li class="right" >
+          <a href="SpecificationsForMPIJob.html" title="6.5. Specification when submitting an MPI job"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.6. </span>Rank assignment</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

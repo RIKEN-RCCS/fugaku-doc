@@ -1,0 +1,373 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.19. Job list display command affected by the failure &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.20. Note" href="JobExecConsiderpoints.html" />
+    <link rel="prev" title="5.18. Obtaining TofuD TNR statistics" href="TofuStatistics.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="JobExecConsiderpoints.html" title="5.20. Note"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="TofuStatistics.html" title="5.18. Obtaining TofuD TNR statistics"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.19. </span>Job list display command affected by the failure</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="job-list-display-command-affected-by-the-failure">
+<h1><span class="section-number">5.19. </span>Job list display command affected by the failure<a class="headerlink" href="#job-list-display-command-affected-by-the-failure" title="Link to this heading">¶</a></h1>
+<section id="job-events">
+<h2><span class="section-number">5.19.1. </span>job_events<a class="headerlink" href="#job-events" title="Link to this heading">¶</a></h2>
+<p>You can use the <strong class="program">job_events</strong> command to check the following.</p>
+<ul class="simple">
+<li><p>Jobs affected by evict in LLIO (Second-layer storage cache) and FEFS (Second-layer storage).</p></li>
+<li><p>Jobs where power capping occurred.</p></li>
+<li><p>Jobs where OOM (Out of memory) occurred.</p></li>
+<li><p>Jobs affected by hardware failures.</p></li>
+<li><p>Jobs where LLIO usage limit was exceeded.</p></li>
+<li><p>Jobs affected by other system failures.</p></li>
+</ul>
+<blockquote>
+<div><dl>
+<dt>evict</dt><dd><p>A function of the Luster file system, and is a process to disconnect clients that are judged to be abnormal.</p>
+<p>This is done to keep the file system available.</p>
+</dd>
+<dt>Power capping</dt><dd><p>Keep the CPU frequency lower than in Normal mode and reduce the power consumption when the power limit is exceeded.</p>
+<p>For details, please refer to <a class="reference internal" href="../PowerControlFunction/index.html#powermodeusage"><span class="std std-ref">Use example</span></a>. Use and job exectution.</p>
+</dd>
+<dt>OOM (Out of memory)</dt><dd><p>If a job causes a compute node to run out of memory, the job will abend.</p>
+</dd>
+<dt>Hard failure</dt><dd><p>The hardware is out of order.</p>
+</dd>
+<dt>LLIO Usage Limit Exceeded</dt><dd><p>LLIO Usage Limit is exceeded.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>[Name]</p>
+<p><strong class="program">job_events</strong></p>
+<p>[Style]</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>job_events [-g GROUP_NAME] [-c] [-h]
+job_events [-g GROUP_NAME] --llio [-j -JOBID]
+</pre></div>
+</div>
+<p>[Option]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18.2%" />
+<col style="width: 81.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option name</p></th>
+<th class="head"><p>Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-g GROUP_NAME</p></td>
+<td><div class="line-block">
+<div class="line">By specifying the group name after the <code class="docutils literal notranslate"><span class="pre">-g</span></code> option, the jobs in the specified group will be displayed.</div>
+<div class="line">However, if you do not have reference authority, the job is not displayed.</div>
+<div class="line">The <code class="docutils literal notranslate"><span class="pre">-g</span></code> option requires the group name to be specified.</div>
+<div class="line">If the <code class="docutils literal notranslate"><span class="pre">-g</span></code> option is omitted, jobs belonging to all groups the user is a member of will be displayed.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-c</p></td>
+<td><p>The search results are output with CSV format.</p></td>
+</tr>
+<tr class="row-even"><td><p>--llio</p></td>
+<td><p>Display file paths that exceed the LLIO utilization limit.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-j JOBID</p></td>
+<td><div class="line-block">
+<div class="line">The display target is the group specified in [GROUP_NAME]. * Available only when the <code class="docutils literal notranslate"><span class="pre">--llio</span></code> option is specified.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-h</p></td>
+<td><p>Print a help message.</p></td>
+</tr>
+</tbody>
+</table>
+<p>[Display examples]</p>
+<ul class="simple">
+<li><p>Example 1. To check for jobs affected by the failure across all your groups (default behavior).</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>job_events
+<span class="go">JOBID           RETRY MD USER    GROUP     ST  JOB_START           JOB_END             MESSAGES</span>
+<span class="go">1111111             0 NM user01  group01   EXT 2024/04/12 13:21:50 2024/04/12 14:24:46 Filesystem I/O error</span>
+<span class="go">2222222[2]          0 BU user02  group01   EXT 2024/05/17 14:47:49 2024/05/17 14:57:51 POWER CAPPING:2024/05/17 14:50:00</span>
+<span class="go">2222222[3]          0 BU user02  group01   EXT 2024/05/17 14:47:49 2024/05/17 14:57:51 POWER CAPPING:2024/05/17 14:50:00,Filesystem I/O error</span>
+<span class="go">3333333             0 NM user03  group01   EXT 2024/06/11 14:49:04 2024/06/11 14:53:11 CN high load</span>
+<span class="go">4444444             0 NM user01  group02   EXT 2024/07/10 13:53:56 2024/07/10 13:54:18 Out Of Memory</span>
+<span class="go">5555555             0 NM user02  group02   EXT 2024/08/02 18:21:36 2024/08/02 18:37:56 POWER CAPPING:2024/08/02 18:30:00,Filesystem I/O error,Out Of Memory</span>
+<span class="go">5555555             1 NM user02  group02   EXT 2024/08/02 18:50:33 2024/08/02 19:42:12 Hardware error</span>
+<span class="go">6666666             0 NM user04  group01   EXT 2024/09/13 10:41:36 2024/09/13 14:25:02 Out Of Memory,CN high load</span>
+<span class="go">7777777             0 NM user05  group02   EXT 2024/10/04 12:11:14 2024/10/04 13:05:01 Job scheduler hang</span>
+<span class="go">8888888             0 NM user01  group03   EXT 2024/10/18 20:07:15 2024/10/18 21:21:44 LLIO Limit Over</span>
+</pre></div>
+</div>
+<p>A message is displayed according to each situation.</p>
+<ul class="simple">
+<li><p>If an eviction occurs, “Filesystem I/O error” is displayed.</p></li>
+<li><p>If power capping occurs, “POWER CAPPING: Date and Time of Occurrence” is displayed.</p></li>
+<li><p>If an OOM occurs, “Out of Memory” is displayed.</p></li>
+<li><p>If a hardware failure occurs, “Hardware error” is displayed.</p></li>
+<li><p>If the LLIO limit is exceeded, “LLIO Limit Over” is displayed. You can check the exceeded file path using the  <strong class="program">job_events --llio</strong> command.</p></li>
+<li><p>If a failure other than those listed above occurs, a failure-specific message will be displayed.</p></li>
+<li><p>If there are no affected jobs, “There are no affected jobs.” is displayed.</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Example 2. To check for jobs affected by the failure within a specific group (e.g., group01).</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>job_events<span class="w"> </span>-g<span class="w"> </span>group01
+<span class="go">JOBID           RETRY MD USER    GROUP     ST  JOB_START           JOB_END             MESSAGES</span>
+<span class="go">1111111             0 NM user01  group01   EXT 2024/04/12 13:21:50 2024/04/12 14:24:46 Filesystem I/O error</span>
+<span class="go">2222222[2]          0 BU user02  group01   EXT 2024/05/17 14:47:49 2024/05/17 14:57:51 POWER CAPPING:2024/05/17 14:50:00</span>
+<span class="go">2222222[3]          0 BU user02  group01   EXT 2024/05/17 14:47:49 2024/05/17 14:57:51 POWER CAPPING:2024/05/17 14:50:00,Filesystem I/O error</span>
+<span class="go">3333333             0 NM user03  group01   EXT 2024/06/11 14:49:04 2024/06/11 14:53:11 CN high load</span>
+<span class="go">6666666             0 NM user04  group01   EXT 2024/09/13 10:41:36 2024/09/13 14:25:02 Out Of Memory,CN high load</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>Example 3. To display information about jobs affected by the failure in CSV format.</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>job_events<span class="w"> </span>-c
+<span class="go">JOBID,RETRY,MD,USER,GROUP,ST,JOB_START,JOB_END,MESSAGES</span>
+<span class="go">1111111,0,NM,user01,group01,EXT,2024/04/12 13:21:50,2024/04/12 14:24:46,&quot;Filesystem I/O error&quot;</span>
+<span class="go">2222222[2],0,BU,user02,group01,EXT,2024/05/17 14:47:49,2024/05/17 14:57:51,&quot;POWER CAPPING:2024/05/17 14:50:00&quot;</span>
+<span class="go">2222222[3],0,BU,user02,group01,EXT,2024/05/17 14:47:49,2024/05/17 14:57:51,&quot;POWER CAPPING:2024/05/17 14:50:00,Filesystem I/O error&quot;</span>
+<span class="go">3333333,0,NM,user03,group01,EXT,2024/06/11 14:49:04,2024/06/11 14:53:11,&quot;CN high load&quot;</span>
+<span class="go">4444444,0,NM,user01,group02,EXT,2024/07/10 13:53:56,2024/07/10 13:54:18,&quot;Out Of Memory&quot;</span>
+<span class="go">5555555,0,NM,user02,group02,EXT,2024/08/02 18:21:36,2024/08/02 18:37:56,&quot;POWER CAPPING:2024/08/02 18:30:00,Filesystem I/O error,Out Of Memory&quot;</span>
+<span class="go">5555555,1,NM,user02,group02,EXT,2024/08/02 18:50:33,2024/08/02 19:42:12,&quot;Hardware error&quot;</span>
+<span class="go">6666666,0,NM,user04,group01,EXT,2024/09/13 10:41:36,2024/09/13 14:25:02,&quot;Out Of Memory,CN high load&quot;</span>
+<span class="go">7777777,0,NM,user05,group02,EXT,2024/10/04 12:11:14,2024/10/04 13:05:01,&quot;Job scheduler hang&quot;</span>
+<span class="go">8888888,0,NM,user01,group03,EXT,2024/10/18 20:07:15,2024/10/18 21:21:44,&quot;LLIO Limit Over&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>Example 4. To view the file paths that caused LLIO utilization limit excesses.</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>job_events<span class="w"> </span>--llio
+<span class="go">JOBID            FILEPATH</span>
+<span class="go">123456789_1      /vol000?/groupA/data/AAAA/BBBB/CCCC/fileA</span>
+<span class="go">123456789_1      /vol000?/groupA/data/AAAA/BBBB/CCCC/fileB</span>
+<span class="go">123456789_2      /vol000?/groupA/data/AAAA/BBBB/CCCC/fileC</span>
+<span class="go">123456800        /vol000?/groupB/data/DDDD/EEEE/FFFF/fileG</span>
+<span class="go">123456801[1]     /vol000?/groupC/data/HHHH/IIII/JJJJ/fileK</span>
+<span class="go">123456802        The path could not be found.</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Displays the file paths that exceeded the LLIO usage limit.</p></li>
+<li><p>In some jobs, the file path may not be found. In such cases, “The path could not be found.” is displayed.</p></li>
+<li><p>If no jobs were affected, “No jobs exceed the LLIO limit.” is displayed.</p></li>
+</ul>
+</div></blockquote>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If a job has been affected by eviction, resubmit the job.</p>
+<p>This command uses the results of the <strong class="program">pjstata</strong> command execution. So, if you executed many jobs, it may take some time to output.</p>
+<p>Power capping occurences can also be checked with the .stats file or pjstat -s option.</p>
+<p>If the LLIO usage limit is exceeded, please take action after referring to <a class="reference internal" href="../LayeredStorageAndLLIO/LLIOconsiderpoints.html#llioconsiderpoints"><span class="std std-ref">Important Notices</span></a>.</p>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>There is a time lag between when a failure occurs and when that information is reflected by the <strong class="program">job_events</strong> command, and it varies depending on the function.</p>
+<p>The time lag for each function is shown below.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 71.4%" />
+<col style="width: 28.6%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Time lag</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Jobs affected by evict</p></td>
+<td><div class="line-block">
+<div class="line">2 hours</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Jobs where power capping occurred</p></td>
+<td><div class="line-block">
+<div class="line">1 day</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>Jobs where OOM (Out of memory) occurred</p></td>
+<td><div class="line-block">
+<div class="line">2 hours</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Jobs affected by hardware failures</p></td>
+<td><div class="line-block">
+<div class="line">1 hours</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>Jobs where LLIO usage limit was exceeded</p></td>
+<td><div class="line-block">
+<div class="line">20 minutes</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+</section>
+<section id="show-evict-node">
+<h2><span class="section-number">5.19.2. </span>show_evict_node<a class="headerlink" href="#show-evict-node" title="Link to this heading">¶</a></h2>
+<p>Describes <strong class="program">show_evict_node</strong> command, which displays the time during which IO errors may have occurred in the file system on the login node and in the prepost environment.</p>
+<p>[Name]</p>
+<p><strong class="program">show_evict_node</strong></p>
+<p>[Style]</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>show_evict_node  [--hostname HOSTNAME]
+                 [--start yyyy/mm/dd hh:mm:ss]
+                 [--end yyyy/mm/dd hh:mm:ss]
+</pre></div>
+</div>
+<p>[Option]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18.2%" />
+<col style="width: 81.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option name</p></th>
+<th class="head"><p>Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>--hostname HOSTNAME</p></td>
+<td><p>HOSTNAME specifies the nodes to display.</p></td>
+</tr>
+<tr class="row-odd"><td><p>--start yyyy/mm/dd hh:mm:ss</p></td>
+<td><p>Specify the start date and time to display in “yyyy/mm/dd hh:mm:ss” format.</p></td>
+</tr>
+<tr class="row-even"><td><p>--end yyyy/mm/dd hh:mm:ss</p></td>
+<td><p>Specify the end date and time to display in “yyyy/mm/dd hh:mm:ss” format.</p></td>
+</tr>
+</tbody>
+</table>
+<p>[Display examples]</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>show_evict_node
+<span class="go">NODE    FSNAME  DATE</span>
+<span class="go">ppm02   vol0006 2021/10/14 19:22:04 - 2021/10/14 19:26:14</span>
+<span class="go">csgw1   vol0004 2021/10/14 03:00:06 - 2021/10/14 03:01:42</span>
+<span class="go">ppm02   vol0003 2021/10/16 16:08:16 - 2021/10/16 16:10:14</span>
+<span class="go">login6  vol0004 2021/10/25 12:35:28</span>
+<span class="go">login3  vol0005 2021/11/07 13:37:53 - 2021/11/07 13:38:06</span>
+<span class="go">login3  vol0001 2021/11/07 14:08:28 - 2021/11/07 14:09:05</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.19. Job list display command affected by the failure</a><ul>
+<li><a class="reference internal" href="#job-events">5.19.1. job_events</a></li>
+<li><a class="reference internal" href="#show-evict-node">5.19.2. show_evict_node</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="TofuStatistics.html"
+                          title="previous chapter"><span class="section-number">5.18. </span>Obtaining TofuD TNR statistics</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="JobExecConsiderpoints.html"
+                          title="next chapter"><span class="section-number">5.20. </span>Note</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="JobExecConsiderpoints.html" title="5.20. Note"
+             >next</a></li>
+        <li class="right" >
+          <a href="TofuStatistics.html" title="5.18. Obtaining TofuD TNR statistics"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.19. </span>Job list display command affected by the failure</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

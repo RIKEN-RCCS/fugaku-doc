@@ -1,0 +1,119 @@
+コンパイルコマンド
+======================
+
+|post-k|\ では、Fortran／C／C++コンパイラを利用することができます。
+
+コンパイルコマンドには、ログインノード上で使用するクロスコンパイラと、計算ノード上で使用するネイティブコンパイラがあります。
+
+1. コンパイルコマンド
+   
+   Fortran、C、C++ 言語向けのコンパイルコマンド、自動並列を有効にするオプション、OpenMPを有効にするオプションは、以下の表のとおりです。
+
+  .. list-table:: 
+     :header-rows: 1
+     :widths: 1,4,2,4,3
+
+
+     * - 言語
+       - コンパイルコマンド（ネイティブコンパイラ）
+       - コンパイルモード
+       - 自動並列有効化オプション
+       - OpenMP有効化オプション
+
+     * - Fortran
+       - frtpx（frt）
+       - \-
+       - -Kparallel \ :superscript:`*1`\
+       - -Kopenmp \ :superscript:`*2`\
+
+     * - C
+       - fccpx（fcc）
+       - tradモード
+       - -Kparallel \ :superscript:`*1`\
+       - -Kopenmp \ :superscript:`*2`\
+
+     * - C
+       - fccpx（fcc）
+       - clangモード
+       - \-
+       - -fopenmp \ :superscript:`*2`\
+
+     * - C++
+       - FCCpx（FCC）
+       - tradモード
+       - -Kparallel \ :superscript:`*1`\
+       - -Kopenmp \ :superscript:`*2`\
+
+     * - C++
+       - FCCpx（FCC）
+       - clangモード
+       - \-
+       - -fopenmp \ :superscript:`*2`\
+
+  .. note::
+    :superscript:`*` 1：自動並列化オプションのデフォルトは無効です。
+    
+    :superscript:`*` 2：OpenMP化オプションのデフォルトは無効です。
+
+  .. seealso::
+    分割コンパイルを実施する場合、自動並列有効化オプション、OpenMP有効化オプションを指定したオブジェクトを含む場合は、リンク時にも同じオプションを指定してください。
+
+
+
+2. MPIプログラムのコンパイルコマンド
+   
+   MPIを使用したプログラムをコンパイルする場合は、以下の表のコマンドを使用します。利用者は、MPIのヘッダファイル／ライブラリの位置を意識することなく、コンパイル／リンクすることができます。
+
+
+  .. list-table:: 
+     :header-rows: 1
+     :widths: 1,4,2,4,3
+
+     * - 言語
+       - コンパイルコマンド（ネイティブコンパイラ）
+       - コンパイルモード
+       - 自動並列有効化オプション
+       - OpenMP有効化オプション
+
+     * - Fortran
+       - mpifrtpx（mpifrt）
+       - \-
+       - -Kparallel \ :superscript:`*1`
+       - -Kopenmp \ :superscript:`*2`
+
+     * - C
+       - mpifccpx（mpifcc）
+       - tradモード
+       - -Kparallel \ :superscript:`*1`
+       - -Kopenmp \ :superscript:`*2`
+
+     * - C
+       - mpifccpx（mpifcc）
+       - clangモード
+       - \-
+       - -fopenmp \ :superscript:`*2`\
+
+     * - C++
+       - mpiFCCpx（mpiFCC）
+       - tradモード
+       - -Kparallel \ :superscript:`*1`
+       - -Kopenmp \ :superscript:`*2`
+
+     * - C++
+       - mpiFCCpx（mpiFCC）
+       - clangモード
+       - \-
+       - -fopenmp \ :superscript:`*2`\
+
+  .. note::
+    :superscript:`*` 1：自動並列化オプションのデフォルトは無効です。
+    
+    :superscript:`*` 2：OpenMP化オプションのデフォルトは無効です。
+
+  .. seealso::
+    - 分割コンパイルを実施する場合、MPIプログラムを含むリンク時にはMPI用のコンパイルコマンドを用いてリンクしてください。
+    - 分割コンパイルを実施する場合、自動並列有効化オプション、OpenMP有効化オプションを指定したオブジェクトを含む場合は、リンク時にも同じオプションを指定してください。
+
+
+
+

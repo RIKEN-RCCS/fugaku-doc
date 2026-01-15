@@ -1,0 +1,197 @@
+.. _IOprofiling:
+
+I/O profiling
+==========================================
+
+An example of getting I/O profiling data is shown in this section.
+
+Please refer to  \ :ref:`the next chapter <IOoptimization>`\  for examples of data analysis.
+
+LLIO performance information
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can specify the ``--llio perf`` option at job submission to obtain LLIO performance information as job output.
+This allows you to later analyze how the job is accessing the first-layer storage.
+
+Here are some examples of bottlenecks (meta access) identified and improved using LLIO performance information.
+For more information on LLIO performance information, refer to "2.7. 2 LLIO Performance Information" in the LLIO User's Guide.
+
+Do not specify the ``--llio perf`` option for jobs that require large compute nodes. Please refer to: :ref:`llioconsiderpoints` .
+
+
+
+1. Runs the job with the ``--llio perf`` option when the job is submitted.
+
+
+
+2. After the job completes, verify that the LLIO performance information is being output.
+     Example) <jobname>.<jobid>.llio_perf
+
+
+
+3. Calculate the time taken by each of the three LLIO functions from the LLIO performance information.
+
+   Prepare a consolidation script similar to the following:.
+
+   .. code-block:: console
+
+    [_LNIlogin]$ cat sample.awk
+    /^SIO Infomation/,/END/ {
+       sumflg=1
+    }
+    /^I\/O     2ndLayerCache   NodeTotal/,/^I\/O     2ndLayerCache   ComputeNode/ {
+       if($3 == "Sum" && sumflg == 1){sum1 += $6}
+    }
+    /^I\/O     SharedTmp       NodeTotal/,/^I\/O     SharedTmp       ComputeNode/ {
+       if($3 == "Sum" && sumflg == 1){sum2 += $6}
+    }
+    /^I\/O     LocalTmp        NodeTotal/,/^I\/O     LocalTmp        ComputeNode/ {
+       if($3 == "Sum" && sumflg == 1){sum3 += $6}
+    }
+    /^Meta    2ndLayerCache   NodeTotal/,/^Meta    SharedTmp       NodeTotal/ {
+       if(NF == 3 && sumflg == 1){sum4 += $3}
+    }
+    /^Meta    SharedTmp       NodeTotal/,/^Meta    LocalTmp        NodeTotal/ {
+       if(NF == 3 && sumflg == 1){sum5 += $3}
+    }
+    /^Meta    LocalTmp        NodeTotal/,/^Resource        2ndLayerCache   CacheOperation/ {
+       if(NF == 3 && sumflg == 1){sum6 += $3}
+    }
+    END {
+       total = sum1+sum2+sum3+sum4+sum5+sum6;
+       printf("%-20s %20s %15s\n", "     Area","Time(us)", "% of Time");
+       printf("%-20s %20d %15.1f\n", "Meta 2ndLayerCache", sum4, (sum4/total)*100);
+       printf("%-20s %20d %15.1f\n", "     SharedTmp", sum5, (sum5/total)*100);
+       printf("%-20s %20d %15.1f\n", "     LocalTmp", sum6,(sum6/total)*100);
+       printf("%-20s %20d %15.1f\n", "I/O  2ndLayerCache", sum1,(sum1/total)*100);
+       printf("%-20s %20d %15.1f\n", "     SharedTmp", sum2,(sum2/total)*100);
+       printf("%-20s %20d %15.1f\n", "     LocalTmp", sum3,(sum3/total)*100);
+    }
+
+
+   Execute with LLIO performance information specified as an argument.
+
+   .. code-block:: console
+    
+    [_LNIlogin]$ awk -f sample.awk <jobname>.<jobid>.llio_perf
+
+
+
+4. Compare the times(microsecond) calculated above.
+
+   .. code-block:: none
+
+           Area                        Time(us)       % of Time
+     Meta  2ndLayerCache           670517500351             4.0
+           SharedTmp             15490822246315            92.7
+           LocalTmp                 32396742469             0.2
+     I/O   2ndLayerCache           357836957071             2.1
+           SharedTmp               108339293976             0.6
+           LocalTmp                 50591120306             0.3
+
+
+   You can determine that meta-access to shared temporary area accounts for more than 90% of the total.
+
+
+Darshan
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Darshan is a scalable HPC I/O characterization tool.
+This tool is provided by Spack and can be used as a job I/O analysis.
+For more information, please refer to the following URL:
+
+https://www.mcs.anl.gov/research/projects/darshan/
+
+
+1. Getting data summarizing the I/O activity
+
+   Here is an example of how to get the data.
+   Load Darshan from Spack to get I/O profiling data for a program running on mpiexec. 
+   For ``darshan-runtime`` to be load, ``scheduler=fj``, which retains the job ID information, is recommended.
+   
+   .. code-block:: console
+
+     [_LNIlogin]$ spack find -lv  darshan-runtime
+     -- linux-rhel8-a64fx / fj@4.10.0 --------------------------------
+     kkioahn darshan-runtime@3.4.0~apmpi~apmpi_sync~apxc~hdf5+mpi build_system=autotools scheduler=NONE
+     czlow63 darshan-runtime@3.4.0~apmpi~apmpi_sync~apxc~hdf5+mpi build_system=autotools scheduler=fj
+     ==> 2 installed packages
+     
+
+   Job script description
+
+   .. code-block:: bash
+
+     . /vol0004/apps/oss/spack/share/spack/setup-env.sh
+     spack load /czlow63
+
+     export DARSHAN_LOG_DIR_PATH=/2ndfs/group/your_dir/       # a
+     # export DARSHAN_ENABLE_NONMPI=1                         # b
+   
+     export LD_LIBRARY_PATH=`/home/system/tool/sort_libp`     # c
+     /home/system/tool/sort_libp -s -a                        # 
+
+     mpiexec -stdout-proc ./%n.output.%j/%/1000r/stdout \
+             -stderr-proc ./%n.output.%j/%/1000r/stderr \
+             -x LD_PRELOAD=libdarshan.so  ./a.out  
+
+.. note:: 
+   
+ a. | Use /2ndfs area as the data output destination. By default, profiling data is accessed by all compute nodes. If the output is on a scale of several thousand nodes or more, \ :ref:`LLIO limitations <llioconsiderpoints>`\  may be exceeded and the node may slow down.
+
+ b. | If non-MPI, \ ``export DARSHAN_ENABLE_NONMPI=1``\  and enable LD_PRELOAD.
+
+ c. | For the purpose of reducing the search load for dynamic libraries, /lib64 is added, duplicate paths is eliminated, and paths in 2ndfs and the cache area of the second-layer storage are reordered backward. The command also transfers Darshan's library as a common file with llio_transfer. For details, see \ :ref:`sort_libp <sort_libp>`\ .
+
+
+2. Checking data
+
+   After the job is executed, check that profiling data is output to the directory specified in the DARSHAN_LOG_DIR_PATH environment variable.
+
+   .. code-block:: console
+
+      [_LNIlogin]$ ls -l /2ndfs/group/your_dir/
+      -r-------- 1 usr   group   13701394 Nov 18 08:08 usr_a.out_JOBID.darshan
+
+   Verify that profiling data can be extracted from the login node.
+
+   .. code-block:: console
+
+      [_LNIlogin]$ spack find -lv darshan-util
+      -- linux-rhel8-cascadelake / gcc@13.2.0 -------------------------
+      dnpyrbu darshan-util@3.4.0~apmpi~apxc~bzip2 build_system=autotools
+      euiezk6 darshan-util@3.4.4~apmpi~apxc~bzip2 build_system=autotools
+      ==> 2 installed packages
+      [_LNIlogin]$ spack load /euiezk6
+      [_LNIlogin]$ darshan-parser  usr_a.out_JOBID.darshan | less
+
+
+   Example of output
+
+   .. code-block:: none
+
+      ...
+      # description of columns:
+      #   <module>: module responsible for this I/O record.
+      #   <rank>: MPI rank.  -1 indicates that the file is shared
+      #      across all processes and statistics are aggregated.
+      #   <record id>: hash of the record's file path
+      #   <counter name> and <counter value>: statistical counters.
+      #      A value of -1 indicates that Darshan could not monitor
+      #      that counter, and its value should be ignored.
+      #   <file name>: full file path for the record.
+      ...
+      #<module> <rank>  <record id>    <counter>                  <value>     <file name> ...
+      POSIX     -1      0123456789123  POSIX_OPENS                    18432    /vol0n0m/data/group/config
+      POSIX     -1      0123456789123  POSIX_F_FASTEST_RANK_TIME   0.019958    /vol0n0m/data/group/config
+      POSIX     -1      0123456789123  POSIX_F_SLOWEST_RANK_TIME  52.856744    /vol0n0m/data/group/config
+      ...
+      POSIX      0      1234567891234  POSIX_OPENS                        1    /vol0n0m/data/group/tmp.00000
+      ...
+      POSIX      1      1234567891234  POSIX_OPENS                        1    /vol0n0m/data/group/dat.00001
+      POSIX      1      1234567891234  POSIX_F_READ_TIME          32.124292    /vol0n0m/data/group/dat.00001
+
+
+.. attention:: 
+
+ - If LLIO asynchronous close is enabled, the I/O time may not be measured because close may return immediately even if the file has not yet been written to the cache area of the second-layer storage.

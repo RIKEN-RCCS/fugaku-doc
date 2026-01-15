@@ -1,0 +1,87 @@
+.. highlight:: none
+
+Execution command format
+========================
+
+MPI program execution format by :program:`mpiexec` command is as following.
+
+.. code-block:: console
+
+   $ mpiexec  opiton execution module execution module option
+
+.. note::
+
+   Incompatible Points of :program:`mpiexec`
+
+   The mpiexec command has been customized for use in the Fugaku, so it is partly incompatible with the one described in MPI Users Guide. This section describes the incompatible points of :program:`mpiexec`.
+
+   Collection of Application Information
+
+      The following information of executed applications is collected for the sake of improvement of operation of the Fugaku:
+
+      - Compiler information
+      - Symbol table
+      - Shared library information
+      - MD5 hash checksum
+      - Type and strings of executable file
+
+      You can inhibit information collection about your application by setting the following environment variable::
+
+         #PJM -x "APPLOG=NO"
+
+      Information collection is performed only at the beginning of :program:`mpiexec` , so it does not affect the performance of running jobs. 
+      Also, it does not so much affect execution time of jobs.
+
+|
+
+:program:`mpiexec` command option specification example
+
+- When running MPI programs in 8 parallelMPI (``-n 8``)
+
+ .. code-block:: console
+
+  $ mpiexec -n 8 -std-proc procfile ./a.out
+
+ .. note::
+
+   When ``-n`` option is omitted, default value is applied.
+
+- When running JAVA MPI programs in 8 parallel (``-n 8``)
+
+ .. code-block:: console
+
+    $ mpiexec -n 8 -std-proc procfile java -classpath ./dir JavaTest
+
+ .. note::
+
+    Class path is specified with java command's ``-classpath`` option.
+
+
+- If executes some MPI jobs at the same time
+
+ 1. MPMD
+
+    It is possible to execute programs multiply by deviding execution unit with colon ":" .
+    Sum of  \ ``-n``\  is set as not over  \ ``--mpi proc=N``\ .
+
+    [Style]
+
+    .. code-block:: console
+
+      $ mpiexec [global options] -n N1 [local options] Execution file 1 : -n N2 [local options] Execution file 2 : ...
+
+    [Example]
+
+    Execute MPI program executable file  \ :file:`a.out`, \ :file:`b.out`, \ :file:`c.out`\  as per 2, 4, 6 parallel process
+
+    .. code-block:: console
+
+     $ mpiexec -std-proc procfile -n 2 ./a.out : -n 4 ./b.out : -n 6 ./c.out
+
+    .. attention::
+       If it's Java program, execution by MPMD model is not guaranteed.
+
+ 2. Back ground job
+   
+    To sexecute some back groud jobs at the same time, specify the coordinates of the node to use by specifying  \ ``-vcoordfile``\  option. Be careful not to use the same node between jobs that run at the same time. You can run up to 128 at the same time in the background.
+

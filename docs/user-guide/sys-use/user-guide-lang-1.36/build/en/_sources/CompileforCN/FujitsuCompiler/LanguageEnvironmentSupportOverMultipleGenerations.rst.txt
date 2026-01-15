@@ -1,0 +1,49 @@
+Multiple version offering of language environment
+=================================================
+
+We offer multiple version environment about language environment (compiler, etc).
+Support 3 generations including the latest version. The user can use an environment other than the default by changing the environment settings with the module command.
+
+.. contents::
+   :local:
+
+
+Language environment
+--------------------
+
+Offering the language environment indicated in below table.
+
+About latest environment, please see "`Language version <https://www.fugaku.r-ccs.riken.jp/en/docs/manuals_r01#langverinfo>`_" information on the Fugaku website.
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 20, 30, 50
+
+
+  * - Version level
+    - Availability
+    - Note
+
+  * - 4.12.1 tcsds-1.2.42
+    - Available
+    - Version 4.12.1. Initial login state.
+
+  * - 4.12.0 tcsds-1.2.41
+    - Available
+    - Version 4.12.0.
+
+  * - 4.11.2 tcsds-1.2.40
+    - Available
+    - Version 4.11.2.
+
+Note
+----
+
+Please noted about the multiple version offers.
+
+- In the standard environment (the path immediately after login), the latest version or a path equivalent thereto is set. Please refer to the Fugaku website for the latest settings.
+- Correction of problems will be implemented based on the latest version. If you find a bug in the old version, please check if the same problem occurs in the latest version and contact us.
+- Bug revision cannot be proceeded on the old version. It will be offered on the latest version.
+
+.. - The environment used at compile time and at run time must be at the same version level.
+

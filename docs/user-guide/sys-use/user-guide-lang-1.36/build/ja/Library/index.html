@@ -1,0 +1,131 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5. 数学ライブラリ &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.1. 概要" href="Overview.html" />
+    <link rel="prev" title="4. ログインノード向けバイナリを生成するコンパイラ" href="../CompileforLN/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Overview.html" title="5.1. 概要"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="../CompileforLN/index.html" title="4. ログインノード向けバイナリを生成するコンパイラ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5. </span>数学ライブラリ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">5. </span>数学ライブラリ<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>数学ライブラリについて説明します。</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Overview.html">5.1. 概要</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SSLIILibrary.html">5.2. SSL IIライブラリ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SSLIILibrary.html#fortran">5.2.1. Fortranコンパイル方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SSLIILibrary.html#ssl2-fortran">5.2.2. サンプルプログラム（SSL2／Fortran）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SSLIILibrary.html#c">5.2.3. C言語から利用する場合のプログラム復帰値</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="C-SSLIILibrary.html">5.3. C-SSL II ライブラリ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="C-SSLIILibrary.html#c">5.3.1. C言語コンパイル方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="C-SSLIILibrary.html#c-ssl-ii-c">5.3.2. サンプルプログラム（C-SSL II/C）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="C-SSLIILibrary.html#id1">5.3.3. C++コンパイル方法</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="BLASLAPACKScaLAPACKLibrary.html">5.4. BLAS／LAPACK／ScaLAPACKライブラリ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="BLASLAPACKScaLAPACKLibrary.html#fortran">5.4.1. Fortranコンパイル方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BLASLAPACKScaLAPACKLibrary.html#c">5.4.2. C言語コンパイル方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BLASLAPACKScaLAPACKLibrary.html#howtocompileinc-blaslapackscalapacklibrary">5.4.3. C++コンパイル方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BLASLAPACKScaLAPACKLibrary.html#scalapack-fortran">5.4.4. サンプルプログラム（ScaLAPACK／FORTRAN）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="BLASLAPACKScaLAPACKLibrary.html#id2">5.4.5. 共有ライブラリの利用方法</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FastBasicOperationsLibraryForQuadruplePrecision.html">5.5. 高速4倍精度基本演算ライブラリ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="FastBasicOperationsLibraryForQuadruplePrecision.html#fortran">5.5.1. Fortran 版の結合方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FastBasicOperationsLibraryForQuadruplePrecision.html#c">5.5.2. C++版の結合方法</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../CompileforLN/index.html"
+                          title="前の章へ"><span class="section-number">4. </span>ログインノード向けバイナリを生成するコンパイラ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="Overview.html"
+                          title="次の章へ"><span class="section-number">5.1. </span>概要</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Overview.html" title="5.1. 概要"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="../CompileforLN/index.html" title="4. ログインノード向けバイナリを生成するコンパイラ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5. </span>数学ライブラリ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

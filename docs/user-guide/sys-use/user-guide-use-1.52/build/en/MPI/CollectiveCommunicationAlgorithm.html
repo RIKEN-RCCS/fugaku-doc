@@ -1,0 +1,200 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6.12. Collective Communication Algorithms(knomial, rabenseifner) in MPI &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="7. Power control function" href="../PowerControlFunction/index.html" />
+    <link rel="prev" title="6.11. MPI statistic information" href="MPIStatisticalInformation.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../PowerControlFunction/index.html" title="7. Power control function"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="MPIStatisticalInformation.html" title="6.11. MPI statistic information"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.12. </span>Collective Communication Algorithms(knomial, rabenseifner) in MPI</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="collective-communication-algorithms-knomial-rabenseifner-in-mpi">
+<h1><span class="section-number">6.12. </span>Collective Communication Algorithms(knomial, rabenseifner) in MPI<a class="headerlink" href="#collective-communication-algorithms-knomial-rabenseifner-in-mpi" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">Starting with language environment tcsds-1.2.42, we have added the Knomial algorithm for Bcast and the Rabenseifner algorithm for Reduce and Allreduce. These algorithms are faster than existing algorithms in certain areas.</div>
+<div class="line">If the communication of the application program you are using utilizes this high-speed area, performance may be improved by employing the added algorithm.</div>
+</div>
+<div class="line-block">
+<div class="line">The Knomial algorithm is an evolution of the traditional Binomial algorithm, promising more efficient broadcast communication.</div>
+<div class="line">It has also been confirmed to be faster than existing algorithms in the small message size domain at bychip.</div>
+<div class="line">The Rabenseifner algorithm is implemented using a combination of recursive vector halving and recursive distance doubling for the Reduce-scatter phase, followed by either Binomial Gather or Recursive Doubling Allgather.</div>
+</div>
+<div class="line-block">
+<div class="line">The Knomial and Rabenseifner algorithms are particularly effective when the job shape is not specified and a 3D shape has not been assigned.</div>
+<div class="line">On the other hand, for 3D jobs, performance may be lower than existing algorithms, so please exercise caution when using them.</div>
+</div>
+<div class="line-block">
+<div class="line">When using the Knomial algorithm or the Rabenseifner algorithm, the algorithm must be specified.</div>
+<div class="line">If thsese algorithm is not specified, the system selects high-speed algorithms available prior to tcsds-1.2.41 according to such information as the argument of the collective communication routine and the shape of the communicator, when the blocking collective communication routine is called.</div>
+</div>
+<p>As reference information for selecting the Knomial algorithm and Rabenseifner algorithm, measurement results using Intel(R) MPI Benchmarks 2021.3 are published in the <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/faq/20251104_01">FAQ How to use Collective Communication Algorithms(knomial, rabenseifner) in MPI</a>.</p>
+<section id="how-to-specify-algorithms">
+<h2><span class="section-number">6.12.1. </span>How to Specify Algorithms<a class="headerlink" href="#how-to-specify-algorithms" title="Link to this heading">¶</a></h2>
+<p>There are three methods for specifying algorithms:</p>
+<ol class="arabic simple">
+<li><p>Specify MCA parameters</p></li>
+<li><p>Specify using an Info object</p></li>
+<li><p>Select algorithms using external input file</p></li>
+</ol>
+<p>For details on the specification method, refer to Chapter 8 “Speeding Up Blocking Collective Communication” in <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/docs/manuals_r01#LANGMAN">Manuals</a> “MPI User’s Guide”.</p>
+<section id="mca-parameters">
+<h3><span class="section-number">6.12.1.1. </span>MCA parameters<a class="headerlink" href="#mca-parameters" title="Link to this heading">¶</a></h3>
+<p>Specifies the algorithm to use for the MCA parameter at the time of execution. This selection method does not require retranslation of the application program.</p>
+<p>Example to specify the Knomial algorithm as the algorithm of the Bcast routine:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec --mca coll_select_bcast_algorithm knomial ./a.out
+</pre></div>
+</div>
+<p>Example to specify the Rabenseifner algorithm as the algorithm of the Reduce routine:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec --mca coll_select_reduce_algorithm rabenseifner ./a.out
+</pre></div>
+</div>
+<p>Example to specify the Rabenseifner algorithm as the algorithm of the Allreduce routine:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec --mca coll_select_allreduce_algorithm rabenseifner ./a.out
+</pre></div>
+</div>
+</section>
+<section id="specify-using-an-info-object">
+<h3><span class="section-number">6.12.1.2. </span>Specify using an Info object<a class="headerlink" href="#specify-using-an-info-object" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">Specify the algorithm to be used for the info object within the application program. This selection method requires retranslation of the application program.</div>
+<div class="line">For details, refer to Section 8.3.1.4 “Selecting Algorithms by Info Object” in <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/docs/manuals_r01#LANGMAN">Manuals</a> “MPI User’s Guide”.</div>
+</div>
+<p>The following is an example of part of a program that specifies the Rabenseifer algorithm during the Reduce routine for the communicator MPI_COMM_WORLD.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">MPI_Info</span><span class="w"> </span><span class="n">info</span><span class="p">;</span>
+<span class="n">MPI_Info_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">info</span><span class="p">);</span>
+<span class="n">MPI_Info_set</span><span class="p">(</span><span class="n">info</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;reduce_rules&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;rabenseifner&quot;</span><span class="p">);</span>
+<span class="n">MPI_Comm_set_info</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">info</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="select-algorithms-using-external-input-file">
+<h3><span class="section-number">6.12.1.3. </span>Select algorithms using external input file<a class="headerlink" href="#select-algorithms-using-external-input-file" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">Specify the algorithm in an external input file, and designate the external input file using the MCA parameter during execution.</div>
+<div class="line">For details, refer to Section 8.3.1.5 “Selecting Algorithms by External Input File” in <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/docs/manuals_r01#LANGMAN">Manuals</a> “MPI User’s Guide”.</div>
+</div>
+<p>The following is an example of the external input file described the rules to select algorithms entered for using Knomial as the Bcast algorithm and specifying the segment size.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>header:
+  version: 1.0
+  require: mtofu,base
+
+bcast:
+  knomial(segsize=65536)
+</pre></div>
+</div>
+<p>The external input files is used by specifying the filename with the MCA parameter during execution.
+The following is an example specification for using the /path/to/my_rules.conf file as an external input file.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec --mca coll_select_dectree_file /path/to/my_rules.conf ./a.out
+</pre></div>
+</div>
+</section>
+<section id="notes">
+<h3><span class="section-number">6.12.1.4. </span>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h3>
+<p>If the language environment used at the time of execution is earlier than version tcsds-1.2.42, the Knomial algorithm and Rabenseifner algorithm cannot be used. If it cannot be used, the message is putput in the standard error output, the algorithm specification is ignored.</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">6.12. Collective Communication Algorithms(knomial, rabenseifner) in MPI</a><ul>
+<li><a class="reference internal" href="#how-to-specify-algorithms">6.12.1. How to Specify Algorithms</a><ul>
+<li><a class="reference internal" href="#mca-parameters">6.12.1.1. MCA parameters</a></li>
+<li><a class="reference internal" href="#specify-using-an-info-object">6.12.1.2. Specify using an Info object</a></li>
+<li><a class="reference internal" href="#select-algorithms-using-external-input-file">6.12.1.3. Select algorithms using external input file</a></li>
+<li><a class="reference internal" href="#notes">6.12.1.4. Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="MPIStatisticalInformation.html"
+                          title="previous chapter"><span class="section-number">6.11. </span>MPI statistic information</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../PowerControlFunction/index.html"
+                          title="next chapter"><span class="section-number">7. </span>Power control function</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../PowerControlFunction/index.html" title="7. Power control function"
+             >next</a></li>
+        <li class="right" >
+          <a href="MPIStatisticalInformation.html" title="6.11. MPI statistic information"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.12. </span>Collective Communication Algorithms(knomial, rabenseifner) in MPI</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

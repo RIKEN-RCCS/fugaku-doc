@@ -1,0 +1,27 @@
+fugaku package
+==============
+
+.. automodule:: fugaku
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+fugaku.client module
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: fugaku.client
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+fugaku.error module
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: fugaku.error
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

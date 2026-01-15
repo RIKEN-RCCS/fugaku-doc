@@ -1,0 +1,288 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.17. サンプルスクリプト &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.18. TofuD TNR 統計情報の取得" href="TofuStatistics.html" />
+    <link rel="prev" title="5.16. ジョブ異常終了時の確認" href="CheckingAbnormalEndOfJob.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="TofuStatistics.html" title="5.18. TofuD TNR 統計情報の取得"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="CheckingAbnormalEndOfJob.html" title="5.16. ジョブ異常終了時の確認"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.17. </span>サンプルスクリプト</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">5.17. </span>サンプルスクリプト<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>ジョブスクリプトのサンプルを示します。</p>
+<p>スクリプトの行頭にある &quot;#PJM&quot; にはジョブのオプションを指定します。</p>
+<p>「富岳」は、課題の<a class="reference internal" href="../UsageRules/index.html#group"><span class="std std-ref">グループ</span></a>とジョブで使用する<a class="reference internal" href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html#selectavailablevolumes"><span class="std std-ref">データ領域のvolume</span></a>の情報も必要です。</p>
+<section id="id2">
+<h2><span class="section-number">5.17.1. </span>通常ジョブ（逐次プログラム）<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>逐次プログラムを実行するジョブスクリプトの例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=1&quot;                          # 割り当てノード 1ノード</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;                    # リソースグループの指定</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;                 # 経過時間制限 1時間</span>
+<span class="c1">#PJM -g groupname                          # 課題のグループ指定</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N         # ジョブで使用するデータ領域のvolume</span>
+<span class="c1">#PJM -s                                    # 統計情報出力</span>
+<span class="c1">#</span>
+
+./a.out<span class="w">                                    </span><span class="c1"># a.out を実行</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>逐次プログラム（<code class="file docutils literal notranslate"><span class="pre">a.out</span></code>）は、割当ノードとして1ノードを指定（<code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">&quot;node=1&quot;</span></code>）します。</p></li>
+<li><p><code class="file docutils literal notranslate"><span class="pre">./a.out</span></code>を実行します。</p></li>
+</ol>
+</section>
+<section id="mpi-2">
+<h2><span class="section-number">5.17.2. </span>通常ジョブ（MPI／2次元形状）<a class="headerlink" href="#mpi-2" title="Link to this heading">¶</a></h2>
+<p>MPIプログラムを2次元形状で投入するジョブスクリプトの例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=2x2&quot;                        # 割当ノード形状 2x2ノード （2次元形状）</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;                    # リソースグループの指定</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;                 # 経過時間制限 1時間</span>
+<span class="c1">#PJM --mpi &quot;shape=2x2&quot;                     # プロセスの形状2x2</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;           # 1ノードあたりに生成するMPIプロセス数の上限値</span>
+<span class="c1">#PJM -g groupname                          # 課題のグループ指定</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N         # ジョブで使用するデータ領域のvolume</span>
+<span class="c1">#PJM -s                                    # 統計情報出力</span>
+<span class="c1">#</span>
+
+mpiexec<span class="w"> </span>./a.out<span class="w">                            </span><span class="c1"># a.outを実行</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code>で、要求するノード形状を指定します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>で、静的に起動するプロセスの形状を指定します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">max-proc-per-node</span></code>で、1ノードあたりに生成するMPIプロセス数の上限値を指定します。</p></li>
+<li><p><strong class="program">mpiexec</strong>でMPIプログラムを実行します。</p></li>
+</ol>
+</section>
+<section id="mpi-3">
+<h2><span class="section-number">5.17.3. </span>通常ジョブ（MPI／3次元形状）<a class="headerlink" href="#mpi-3" title="Link to this heading">¶</a></h2>
+<p>MPIプログラムを3次元形状で投入するジョブスクリプトの例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=2x2x2&quot;                      # 割当ノード形状 2x2x2ノード （3次元形状）</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;                    # リソースグループの指定</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;                 # 経過時間制限 1時間</span>
+<span class="c1">#PJM --mpi &quot;shape=2x2x2&quot;                   # プロセスの形状2x2x2</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;           # 1ノードあたりに生成するMPIプロセス数の上限値</span>
+<span class="c1">#PJM -g groupname                          # 課題のグループ指定</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N         # ジョブで使用するデータ領域のvolume</span>
+<span class="c1">#PJM -s                                    # 統計情報出力</span>
+<span class="c1">#</span>
+
+mpiexec<span class="w"> </span>./a.out<span class="w">                            </span><span class="c1"># a.outを実行</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code>で、要求するノード形状を指定します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>で、静的に起動するプロセスの形状を指定します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">max-proc-per-node</span></code>で、1ノードあたりに生成するMPIプロセス数の上限値を指定します。</p></li>
+<li><p><strong class="program">mpiexec</strong>でMPIプログラムを実行します。</p></li>
+</ol>
+</section>
+<section id="id3">
+<h2><span class="section-number">5.17.4. </span>通常ジョブ（スレッド並列（自動並列））<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>スレッド並列（自動並列）プログラムを実行するジョブスクリプトの例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=1&quot;                          # 割り当てノード 1ノード</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;                    # リソースグループの指定</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;                 # 経過時間制限 1時間</span>
+<span class="c1">#PJM -g groupname                          # 課題のグループ指定</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N         # ジョブで使用するデータ領域のvolume</span>
+<span class="c1">#PJM -s                                    # 統計情報出力</span>
+<span class="c1">#</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">PARALLEL</span><span class="o">=</span><span class="m">8</span><span class="w">                          </span><span class="c1"># スレッド数の指定</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="si">${</span><span class="nv">PARALLEL</span><span class="si">}</span><span class="w">         </span><span class="c1"># スレッド数の指定</span>
+
+./a.out<span class="w">                                    </span><span class="c1"># プログラム a.out を実行</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code>で、要求するノード数を指定します。</p></li>
+<li><p>スレッド数を環境変数 PARALLEL と OMP_NUM_THREADS に指定します。省略時は48スレッドで動作します。</p></li>
+<li><p><code class="file docutils literal notranslate"><span class="pre">./a.out</span></code>を実行します。</p></li>
+</ol>
+</section>
+<section id="openmp">
+<h2><span class="section-number">5.17.5. </span>通常ジョブ（スレッド並列（OpenMP））<a class="headerlink" href="#openmp" title="Link to this heading">¶</a></h2>
+<p>スレッド並列（OpenMP）プログラムを実行するジョブスクリプトの例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=1&quot;                          # 割り当てノード 1ノード</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;                    # リソースグループの指定</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;                 # 経過時間制限 1時間</span>
+<span class="c1">#PJM -g groupname                          # 課題のグループ指定</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N         # ジョブで使用するデータ領域のvolume</span>
+<span class="c1">#PJM -s                                    # 統計情報出力</span>
+<span class="c1">#</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">PARALLEL</span><span class="o">=</span><span class="m">8</span><span class="w">                          </span><span class="c1"># スレッド数の指定</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="si">${</span><span class="nv">PARALLEL</span><span class="si">}</span><span class="w">         </span><span class="c1"># スレッド数の指定</span>
+
+./a.out<span class="w">                                    </span><span class="c1"># プログラム a.out を実行</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code>で、要求するノード数／ノード形状を指定します。</p></li>
+<li><p>スレッド数を環境変数 PARALLEL と OMP_NUM_THREADS に指定します。省略時は48スレッドで動作します。</p></li>
+<li><p><code class="file docutils literal notranslate"><span class="pre">./a.out</span></code>を実行します。</p></li>
+</ol>
+</section>
+<section id="mpi-1">
+<h2><span class="section-number">5.17.6. </span>通常ジョブ（フラットMPI／1次元形状）<a class="headerlink" href="#mpi-1" title="Link to this heading">¶</a></h2>
+<p>MPIプログラムをフラットMPIで1次元形状で投入するジョブスクリプトの例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=8&quot;                          # 割当ノード数 8 （1次元形状）</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;                    # リソースグループの指定</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;                 # 経過時間制限 1時間</span>
+<span class="c1">#PJM --mpi &quot;shape=8&quot;                       # プロセスの形状を指定</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=48&quot;          # 1ノードあたりに生成するMPIプロセス数の上限値</span>
+<span class="c1">#PJM -g groupname                          # 課題のグループ指定</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N         # ジョブで使用するデータ領域のvolume</span>
+<span class="c1">#PJM -s                                    # 統計情報出力</span>
+<span class="c1">#</span>
+
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">384</span><span class="w"> </span>./a.out<span class="w">                     </span><span class="c1"># a.outを実行</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code>で、要求するノード数を指定します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>で、静的に起動するプロセスの形状を指定します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max-proc-per-node=48</span></code>で、1ノードあたりに生成するMPIプロセス数の上限値を指定します。</p></li>
+<li><p><strong class="program">mpiexec</strong>でMPIプログラムを実行します。</p></li>
+</ol>
+</section>
+<section id="id4">
+<h2><span class="section-number">5.17.7. </span>通常ジョブ（ハイブリッド並列）<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>スレッド並列とプロセス並列の両方を使用する方法をハイブリッド並列と呼びます。</p>
+<p>ここではMPIによる並列とスレッド並列を併用したジョブスクリプトの例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=2x3x2&quot;                      # 割当ノード数 12 （3次元形状）</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;                    # リソースグループの指定</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;                 # 経過時間制限 1時間</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;           # 1ノードあたりに生成するMPIプロセス数の上限値</span>
+<span class="c1">#PJM -g groupname                          # 課題のグループ指定</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N         # ジョブで使用するデータ領域のvolume</span>
+<span class="c1">#PJM -s                                    # 統計情報出力</span>
+<span class="c1">#</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">PARALLEL</span><span class="o">=</span><span class="m">12</span><span class="w">                         </span><span class="c1"># スレッド数の指定</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="si">${</span><span class="nv">PARALLEL</span><span class="si">}</span><span class="w">         </span><span class="c1"># スレッド数の指定</span>
+
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">48</span><span class="w"> </span>./a.out<span class="w">                      </span><span class="c1"># a.outを実行</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code>で、要求するノード数を指定します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max-proc-per-node=4</span></code>で、1ノードあたりに生成するMPIプロセス数の上限値を指定します。</p></li>
+<li><p>環境変数<code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code>で、スレッド数を指定します。</p></li>
+<li><p><strong class="program">mpiexec</strong>でMPIプログラムを実行します。</p></li>
+</ol>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.17. サンプルスクリプト</a><ul>
+<li><a class="reference internal" href="#id2">5.17.1. 通常ジョブ（逐次プログラム）</a></li>
+<li><a class="reference internal" href="#mpi-2">5.17.2. 通常ジョブ（MPI／2次元形状）</a></li>
+<li><a class="reference internal" href="#mpi-3">5.17.3. 通常ジョブ（MPI／3次元形状）</a></li>
+<li><a class="reference internal" href="#id3">5.17.4. 通常ジョブ（スレッド並列（自動並列））</a></li>
+<li><a class="reference internal" href="#openmp">5.17.5. 通常ジョブ（スレッド並列（OpenMP））</a></li>
+<li><a class="reference internal" href="#mpi-1">5.17.6. 通常ジョブ（フラットMPI／1次元形状）</a></li>
+<li><a class="reference internal" href="#id4">5.17.7. 通常ジョブ（ハイブリッド並列）</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="CheckingAbnormalEndOfJob.html"
+                          title="前の章へ"><span class="section-number">5.16. </span>ジョブ異常終了時の確認</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="TofuStatistics.html"
+                          title="次の章へ"><span class="section-number">5.18. </span>TofuD TNR 統計情報の取得</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="TofuStatistics.html" title="5.18. TofuD TNR 統計情報の取得"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="CheckingAbnormalEndOfJob.html" title="5.16. ジョブ異常終了時の確認"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.17. </span>サンプルスクリプト</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

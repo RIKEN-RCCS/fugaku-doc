@@ -1,0 +1,288 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.2. GNU Compiler Collectionと富士通MPIの連携 &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=89e52957" />
+    
+    <script src="../../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="3.3. LLVM" href="../LLVM/index.html" />
+    <link rel="prev" title="3.1.14. 言語間結合（オブジェクトの互換性について）" href="../FujitsuCompiler/InterlanguageLinkage/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../LLVM/index.html" title="3.3. LLVM"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="../FujitsuCompiler/InterlanguageLinkage/index.html" title="3.1.14. 言語間結合（オブジェクトの互換性について）"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U"><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.2. </span>GNU Compiler Collectionと富士通MPIの連携</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="gnu-compiler-collectionmpi">
+<span id="gcc-mpi"></span><h1><span class="section-number">3.2. </span>GNU Compiler Collectionと富士通MPIの連携<a class="headerlink" href="#gnu-compiler-collectionmpi" title="Link to this heading">¶</a></h1>
+<section id="id1">
+<h2><span class="section-number">3.2.1. </span>機能の概要<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<p>本機能により、GNU Compiler Collection (GCC) に含まれるコンパイラと富士通MPIを組み合わせて使うことができます。</p>
+<p>使い方は2種類あり、1つはログインノードで計算ノード用のプログラムをクロスコンパイルする方法、もう1つは計算ノード上でコンパイルする方法です。</p>
+</section>
+<section id="id2">
+<h2><span class="section-number">3.2.2. </span>ログインノードでのクロスコンパイル方法<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>クロスコンパイルが可能なGCCコンパイラは、/vol0004/apps/oss/gcc-arm-11.2.1 (または旧版gcc-arm-10.3.1) にあります。</p>
+<p>コンパイルを実行する前に、以下を実行して利用環境を設定します。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_LNlogin]$ . /vol0004/apps/oss/gcc-arm-11.2.1/setup-env.sh
+</pre></div>
+</div>
+<p>この方法で利用できるコンパイラのバージョンは以下の通りです。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 13.3%" />
+<col style="width: 13.3%" />
+<col style="width: 53.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ソフトウェア名</p></th>
+<th class="head"><p>言語</p></th>
+<th class="head"><p>バージョン</p></th>
+<th class="head"><p>コマンド</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>gcc (GCC)</p></td>
+<td><p>C</p></td>
+<td><p>10.3.1 または 11.2.1</p></td>
+<td><p>gcc</p></td>
+</tr>
+<tr class="row-odd"><td><p>g++ (GCC)</p></td>
+<td><p>C++</p></td>
+<td><p>10.3.1 または 11.2.1</p></td>
+<td><p>g++</p></td>
+</tr>
+<tr class="row-even"><td><p>GNU Fortran (GCC)</p></td>
+<td><p>Fortran</p></td>
+<td><p>10.3.1 または 11.2.1</p></td>
+<td><p>gfortran</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>これらのコンパイラを用いてMPIプログラムをクロスコンパイルするには、一例として以下のように行います。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_LNlogin]$ gcc -c test.c -o test.o
+[_LNlogin]$ mpifccpx test.o -o test.exe
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>バージョン11.2.1でオプション-std=c++17を使用する場合、下記のように-lstdc++ パスを加える必要があります。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_LNlogin]$ export LOPT=&quot;-L/vol0004/apps/oss/spack-v0.19/opt/spack/linux-rhel8-a64fx/gcc-8.5.0/gcc-12.2.0-sxcx7kmt3qiktffgzzvrj2wmup3g32bc/lib64 -lstdc++&quot;
+[_LNlogin]$ g++ -std=c++17 -fopenmp -c test.cpp -o test.o
+[_LNlogin]$ mpiFCCpx ${LOPT} -fopenmp test.o -o test.exe
+</pre></div>
+</div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>バージョン11.2.1を用いてmpiFCCpxでリンクした際に、
+undefined reference to '__libc_single_threaded' が表示されてエラーとなる場合、
+バージョンを10.3.1へダウングレードすると問題が解決する可能性があります。</p>
+</div>
+<p>Fortranを利用する場合は、以下のように行います。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_LNlogin]$ gfortran -c test.f90 -o test.o \
+              -I/vol0004/apps/oss/mpigcc/fjmpi-gcc11/include \
+              -I/vol0004/apps/oss/mpigcc/fjmpi-gcc11/include/mpi/fujitsu
+[_LNlogin]$ mpifrtpx test.o -o test.exe \
+              -L/opt/FJSVxtclanga/tcsds-latest/lib64
+</pre></div>
+</div>
+<p>上記のsetup-env.shを実行している場合、インクルードパス・ライブラリパスを設定した環境変数を利用できます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_LNlogin]$ $FC -c test.f90 -o test.o
+[_LNlogin]$ $MPIFC test.o -o test.exe
+</pre></div>
+</div>
+<p>GCCコンパイラでオブジェクトファイルをコンパイルし、リンカとして富士通コンパイラを用いることで富士通MPIとの連携が可能になります。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">3.2.3. </span>計算ノード上でのコンパイル方法<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>以下のコマンドを、会話型ジョブにおいてコマンドラインで実行するか、ジョブスクリプト中に記述することにより、必要な環境変数が設定され <a class="footnote-reference brackets" href="#spack" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> 、</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_CNlogin]$ . /vol0004/apps/oss/spack/share/spack/setup-env.sh
+[_CNlogin]$ spack load fujitsu-mpi%gcc@8.5.0
+</pre></div>
+</div>
+<p>または</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_CNlogin]$ spack load fujitsu-mpi%gcc@12.2.0
+</pre></div>
+</div>
+<p>以下のコンパイル用コマンドが利用可能になります。これらは計算ノードでのみ利用可能で、クロスコンパイルはできません。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mpicc</span></code>（C用）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mpicxx</span></code>（C++用）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mpifort</span></code>（Fortran用）</p></li>
+</ul>
+<p>これらのコマンドは、それぞれGCCの<code class="docutils literal notranslate"><span class="pre">gcc</span></code>、<code class="docutils literal notranslate"><span class="pre">g++</span></code>、<code class="docutils literal notranslate"><span class="pre">gfortran</span></code>コマンドに対するラッパとして機能します。したがって、元のコマンドと同じオプションを受け付けます。</p>
+<p>この方法で利用できるコンパイラのバージョンは以下の通りです。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 13.3%" />
+<col style="width: 13.3%" />
+<col style="width: 53.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ソフトウェア名</p></th>
+<th class="head"><p>言語</p></th>
+<th class="head"><p>バージョン</p></th>
+<th class="head"><p>コマンド</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>gcc (GCC)</p></td>
+<td><p>C</p></td>
+<td><p>8.5.0 または 12.2.0</p></td>
+<td><p>gcc</p></td>
+</tr>
+<tr class="row-odd"><td><p>g++ (GCC)</p></td>
+<td><p>C++</p></td>
+<td><p>8.5.0 または 12.2.0</p></td>
+<td><p>g++</p></td>
+</tr>
+<tr class="row-even"><td><p>GNU Fortran (GCC)</p></td>
+<td><p>Fortran</p></td>
+<td><p>8.5.1 または 12.2.0</p></td>
+<td><p>gfortran</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="id5">
+<h2><span class="section-number">3.2.4. </span>プログラムの実行<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>逐次実行は、環境変数LD_LIBRARY_PATH にGCCクロスコンパイラのライブラリを追加し、実行します。</p>
+<p>MPI並列実行は、通常の場合と同じく <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code> コマンドにより実行することができます。逐次実行と違い、環境変数LD_LIBRARY_PATH は必要ありません。 <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code>コマンドの形式 (オプション指定など) や実行時の設定 (MCAパラメータなど) は、通常の場合に準じます。</p>
+<p>[逐次実行]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=1&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">GCC</span><span class="o">=</span><span class="s2">&quot;/vol0004/apps/oss/gcc-arm-11.2.1&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$LD_LIBRARY_PATH</span><span class="s2">:</span><span class="nv">$GCC</span><span class="s2">/aarch64-linux-gnu/lib:</span><span class="nv">$GCC</span><span class="s2">/aarch64-linux-gnu/lib64&quot;</span>
+
+./a.out
+</pre></div>
+</div>
+<p>[MPI並列実行]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=12&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<p class="rubric">註</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="spack" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">1</a><span class="fn-bracket">]</span></span>
+<p>本機能の環境設定に、パッケージ管理ツール Spack を利用しています。Spack の詳細については
+<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/FugakuSpackGuide/">富岳Spack利用ガイド</a>を御覧ください。</p>
+</aside>
+</aside>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3.2. GNU Compiler Collectionと富士通MPIの連携</a><ul>
+<li><a class="reference internal" href="#id1">3.2.1. 機能の概要</a></li>
+<li><a class="reference internal" href="#id2">3.2.2. ログインノードでのクロスコンパイル方法</a></li>
+<li><a class="reference internal" href="#id3">3.2.3. 計算ノード上でのコンパイル方法</a></li>
+<li><a class="reference internal" href="#id5">3.2.4. プログラムの実行</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../FujitsuCompiler/InterlanguageLinkage/index.html"
+                          title="前の章へ"><span class="section-number">3.1.14. </span>言語間結合（オブジェクトの互換性について）</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../LLVM/index.html"
+                          title="次の章へ"><span class="section-number">3.3. </span>LLVM</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../LLVM/index.html" title="3.3. LLVM"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="../FujitsuCompiler/InterlanguageLinkage/index.html" title="3.1.14. 言語間結合（オブジェクトの互換性について）"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.2. </span>GNU Compiler Collectionと富士通MPIの連携</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

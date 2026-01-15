@@ -1,0 +1,1223 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>7. Power control function &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="8. Layered storage" href="../LayeredStorageAndLLIO/index.html" />
+    <link rel="prev" title="6.12. Collective Communication Algorithms(knomial, rabenseifner) in MPI" href="../MPI/CollectiveCommunicationAlgorithm.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../LayeredStorageAndLLIO/index.html" title="8. Layered storage"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../MPI/CollectiveCommunicationAlgorithm.html" title="6.12. Collective Communication Algorithms(knomial, rabenseifner) in MPI"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7. </span>Power control function</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="power-control-function">
+<span id="powermodeset"></span><h1><span class="section-number">7. </span>Power control function<a class="headerlink" href="#power-control-function" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2><span class="section-number">7.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The Fugaku has a power control function (power saving function) during job execution settings are made to save power.
+The power available to the system is finite, and if the value expected by the operation side is exceeded during job execution, the power consumption may be reduced by forcibly reducing the CPU clock used by the job.</p>
+<p>User can proceed the change when submitting a job or executing a job depending on the job characteristic. Settable item is called “Power knob” and the setting operation is called “Power knob operation”.</p>
+<p>The following power knob values are set as default.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Power knob name</p></th>
+<th class="head"><p>Descripiton</p></th>
+<th class="head"><p>Setting value (Default)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>freq</p></td>
+<td><p>CPU frequency (MHz)</p></td>
+<td><p>2200 (Boost mode)</p></td>
+</tr>
+<tr class="row-odd"><td><p>throttling_state</p></td>
+<td><p>HBM memory access limit</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-even"><td><p>issue_state</p></td>
+<td><p>Computing core direction issuing limit</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ex_pipe_state</p></td>
+<td><p>Computing core’s number of EX</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-even"><td><p>eco_state</p></td>
+<td><p>Computing core ecomode status</p></td>
+<td><p>2 : Use only On and FLA</p></td>
+</tr>
+<tr class="row-odd"><td><p>retention_state</p></td>
+<td><p>Computing core Retention status transition availability</p></td>
+<td><p><a class="reference internal" href="#retentionnote1"><span class="std std-ref">Note1</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>retention_state_acores</p></td>
+<td><p>Assistant core (other than core 0) Retention status transition availability</p></td>
+<td><p>0 (Does not transition to Retention)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block" id="retentionnote1">
+<div class="line"><br /></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note1: The default value of retention_state is set as follows depending on the node size of the job.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Node size of the job</p></th>
+<th class="head"><p>setting value (default)</p></th>
+<th class="head"><p>the ability to change</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>9216 nodes or fewer</p></td>
+<td><p>1 (trasition to Retention state)</p></td>
+<td><p>able to change</p></td>
+</tr>
+<tr class="row-odd"><td><p>9217 nodes or more</p></td>
+<td><p>0 (do not trasition to Retention state)</p></td>
+<td><p>unable to change</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>If retention_state is “1 (trasition to Retention state)”, the state transitions to a lower power state (Retention State) when no processes are running on the core.
+If the core is in the Retention state, it takes approximately 3ms to transition to the Run state.</p>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Compute nodes that also serve as IO (CN/BIO, CN/ SIO, CN/GIO) are set with an emphasis on performance. The power knob value is set as follows.</p>
+<p>For power knobs that cannot be changed, the power knob specification at the time of job submission is ignored, and a change in the Power API results in an error.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 18.2%" />
+<col style="width: 27.3%" />
+<col style="width: 27.3%" />
+<col style="width: 27.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Power knob name</p></th>
+<th class="head"><p>Descripiton</p></th>
+<th class="head"><p>Setting value</p></th>
+<th class="head"><p>the ability to change</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>freq</p></td>
+<td><p>CPU frequency (MHz)</p></td>
+<td><p>2200 (Boost mode)</p></td>
+<td><p>unable to change</p></td>
+</tr>
+<tr class="row-odd"><td><p>throttling_state</p></td>
+<td><p>HBM memory access limit</p></td>
+<td><p>0 (No limit)</p></td>
+<td><p>unable to change</p></td>
+</tr>
+<tr class="row-even"><td><p>issue_state</p></td>
+<td><p>Computing core direction issuing limit</p></td>
+<td><p>0 (No limit)</p></td>
+<td><p>able to change</p></td>
+</tr>
+<tr class="row-odd"><td><p>ex_pipe_state</p></td>
+<td><p>Computing core’s number of EX</p></td>
+<td><p>0 (No limit)</p></td>
+<td><p>able to change</p></td>
+</tr>
+<tr class="row-even"><td><p>eco_state</p></td>
+<td><p>Computing core ecomode status</p></td>
+<td><p>2 : Use only On and FLA</p></td>
+<td><p>able to change</p></td>
+</tr>
+<tr class="row-odd"><td><p>retention_state</p></td>
+<td><p>Computing core Retention status transition availability</p></td>
+<td><p>0 (Does not transition to Retention)</p></td>
+<td><p>Only jobs with 9216 nodes or less can be changed.</p></td>
+</tr>
+<tr class="row-even"><td><p>retention_state_acores</p></td>
+<td><p>Assistant core (other than core 0) Retention status transition availability</p></td>
+<td><p>0 (Does not transition to Retention)</p></td>
+<td><p>unable to change</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Please refer to <a class="reference internal" href="../UsageRules/index.html#usagerulesionode"><span class="std std-ref">I/O node</span></a> for the IO node identification.</p>
+</div>
+</section>
+<section id="power-mode-power-knob-operation-at-job-submisson">
+<span id="powermodepowerknob"></span><h2><span class="section-number">7.2. </span>Power mode (Power knob operation at job submisson)<a class="headerlink" href="#power-mode-power-knob-operation-at-job-submisson" title="Link to this heading">¶</a></h2>
+<p>It is possible to direct the power knob use when submitting a job.</p>
+<section id="function-overview">
+<span id="powermodefunction"></span><h3><span class="section-number">7.2.1. </span>Function overview<a class="headerlink" href="#function-overview" title="Link to this heading">¶</a></h3>
+<p>User can proceed the power knob operation when submitting a job.
+By specifying the power knob name and power knob value as a custom resource with the -L option or -rsc-list option of the pjsub command, the job is executed with the specified power knob value from the start of job execution.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;&lt;Power knob name&gt;=&lt;Power knob value&gt;&quot;</span><span class="w"> </span>job.sh
+</pre></div>
+</div>
+<p>Describing the controrable power knob by the user below.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 30.0%" />
+<col style="width: 30.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Power knob name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Specifiable power knob value</p></th>
+<th class="head"><p>Default value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>freq</p></td>
+<td><p>CPU frequency (MHz)</p></td>
+<td><div class="line-block">
+<div class="line">2000 : Normal mode</div>
+<div class="line">2200 : Boost mode</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">2200</div>
+<div class="line">※Maximum performance</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>throttling_state</p></td>
+<td><p>HBM access restriction</p></td>
+<td><div class="line-block">
+<div class="line">0:No restriction</div>
+<div class="line">1:90% of the number of requests</div>
+<div class="line">2:80% of the number of requests</div>
+<div class="line">3:70% of the number of requests</div>
+<div class="line">4:60% of the number of requests</div>
+<div class="line">5:50% of the number of requests</div>
+<div class="line">6:40% of the number of requests</div>
+<div class="line">7:30% of the number of requests</div>
+<div class="line">8:20% of the number of requests</div>
+<div class="line">9:10% of the number of requests</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">0</div>
+<div class="line">※Maximum performance</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>issue_state</p></td>
+<td><p>Instruction issue restriction for computing cores</p></td>
+<td><div class="line-block">
+<div class="line">0 : 4 instructions</div>
+<div class="line">1 : 2 instructions</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">0</div>
+<div class="line">※Maximum performance</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>ex_pipe_state</p></td>
+<td><p>Number of compute core EXes</p></td>
+<td><div class="line-block">
+<div class="line">0 : Use AB</div>
+<div class="line">1 : Use only A</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">0</div>
+<div class="line">※Maximum performance</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>eco_state</p></td>
+<td><p>Eco mode state of computing cores</p></td>
+<td><div class="line-block">
+<div class="line">0 : Use Off, FLAB</div>
+<div class="line">1 : Use only Off and FLA</div>
+<div class="line">2 : Use only On and FLA</div>
+</div>
+</td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>retention_state</p></td>
+<td><p>Retention state</p></td>
+<td><div class="line-block">
+<div class="line">0: do not transition to Retention state</div>
+<div class="line">1: transition to Retention state</div>
+</div>
+</td>
+<td><p><a class="reference internal" href="#retentionnote1"><span class="std std-ref">Note1</span></a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="use-example">
+<span id="powermodeusage"></span><h3><span class="section-number">7.2.2. </span>Use example<a class="headerlink" href="#use-example" title="Link to this heading">¶</a></h3>
+<p>This indicates the power knob operation example when submitting a job.</p>
+<ol class="arabic">
+<li><p>Submit a job using 48 nodes as Boost mode and Eco mode enabled (default)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;node=48,freq=2200,eco_state=2&quot;</span><span class="w"> </span>job.sh
+</pre></div>
+</div>
+<p>At this case, the following power knob value is used before job execution starts.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Power knob name</p></th>
+<th class="head"><p>Adopted value at job execution</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>freq</p></td>
+<td><p>2200 (Boost mode)</p></td>
+</tr>
+<tr class="row-odd"><td><p>throttling_state</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-even"><td><p>issue_state</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ex_pipe_state</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-even"><td><p>eco_state</p></td>
+<td><p>2 (On, only use FLA)</p></td>
+</tr>
+<tr class="row-odd"><td><p>retention_state</p></td>
+<td><p><a class="reference internal" href="#retentionnote1"><span class="std std-ref">Note1</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>retention_state_acores</p></td>
+<td><p>0 (Non Retention)</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p>Submit a job using 48 nodes as Normal mode</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;node=48,freq=2000,eco_state=0&quot;</span><span class="w"> </span>job.sh
+</pre></div>
+</div>
+<p>If proceeded changing of number of CPU frequency and power knob operation, the following power knob value is used as an initial value when job execution.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Power knob name</p></th>
+<th class="head"><p>Adopted value at job execution</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>freq</p></td>
+<td><p>2000 (Normal mode)</p></td>
+</tr>
+<tr class="row-odd"><td><p>throttling_state</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-even"><td><p>issue_state</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ex_pipe_state</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-even"><td><p>eco_state</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-odd"><td><p>retention_state</p></td>
+<td><p><a class="reference internal" href="#retentionnote1"><span class="std std-ref">Note1</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>retention_state_acores</p></td>
+<td><p>0 (Non Retention)</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div></blockquote>
+<ol class="arabic" start="3">
+<li><p>Submit a job using 48 nodes as Normal mode and Eco mode enabled</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;node=48,freq=2000,eco_state=2&quot;</span><span class="w"> </span>job.sh
+</pre></div>
+</div>
+<p>At this case, the following power knob value is used before job execution starts.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Power knob name</p></th>
+<th class="head"><p>Adopted value at job execution</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>freq</p></td>
+<td><p>2000 (Normal mode)</p></td>
+</tr>
+<tr class="row-odd"><td><p>throttling_state</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-even"><td><p>issue_state</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ex_pipe_state</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-even"><td><p>eco_state</p></td>
+<td><p>2 (On, only use FLA)</p></td>
+</tr>
+<tr class="row-odd"><td><p>retention_state</p></td>
+<td><p><a class="reference internal" href="#retentionnote1"><span class="std std-ref">Note1</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>retention_state_acores</p></td>
+<td><p>0 (Non Retention)</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p>Submit a job using 12 nodes as Boost mode <a class="footnote-reference brackets" href="#f1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;node=12,freq=2200,eco_state=0&quot;</span><span class="w"> </span>job.sh
+</pre></div>
+</div>
+<p>At this case, the following power knob value is used before job execution starts.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Power knob name</p></th>
+<th class="head"><p>Adopted value at job execution</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>freq</p></td>
+<td><p>2200 (Boost mode)</p></td>
+</tr>
+<tr class="row-odd"><td><p>throttling_state</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-even"><td><p>issue_state</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ex_pipe_state</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-even"><td><p>eco_state</p></td>
+<td><p>0 (No limit)</p></td>
+</tr>
+<tr class="row-odd"><td><p>retention_state</p></td>
+<td><p><a class="reference internal" href="#retentionnote1"><span class="std std-ref">Note1</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>retention_state_acores</p></td>
+<td><p>0 (Non Retention)</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p>Execute by specifying in the job execution script</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L &quot;node=2x2x2&quot;               # Assign node format 2x2x2 nodes (3D format)</span>
+<span class="c1">#PJM -L &quot;elapse=01:00:00&quot;          # Running time limit 1h</span>
+<span class="c1">#PJM -L &quot;freq=2200&quot;                # CPU clock specification</span>
+<span class="c1">#PJM -L &quot;eco_state=2&quot;              # Eco mode setting</span>
+<span class="c1">#PJM --mpi &quot;shape=2x2x2&quot;           # Process format 2x2x2</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;   # Upper limit value of number of MPI process created each node</span>
+<span class="c1">#PJM -g groupname                  # group name</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N # volume names that job uses</span>
+<span class="c1">#PJM -s                            # Output statistic information</span>
+<span class="c1">#</span>
+
+mpiexec<span class="w"> </span>./a.out<span class="w">                    </span><span class="c1"># Execute a.out</span>
+</pre></div>
+</div>
+</li>
+<li><p>Submit a job using 192 nodes as disabled computing core Retention transition</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;node=192,retention_state=0&quot;</span><span class="w"> </span>job.sh
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul>
+<li><aside class="footnote-list brackets">
+<aside class="footnote brackets" id="f1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p><strong>The submission of jobs in Boost mode execution currently results in an error.</strong></p>
+</aside>
+</aside>
+</li>
+<li><p>When executed in Boost mode, the possibility of exceeding the power consumption threshold set on the system side increases. If the threshold is exceeded, the CPU frequency will be kept lower than in Normal mode. If this control is activated, the date and time of the excess will be displayed in ‘POWER CAPPING DATE’ displayed by the pjstat -s command. If not, the date and time display will be-.</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="power-api">
+<h2><span class="section-number">7.3. </span>Power API<a class="headerlink" href="#power-api" title="Link to this heading">¶</a></h2>
+<p>At the Fugaku, power API to proceed power measurement and control is provided.
+By executing a program using the Power API as a job, the user can measure and control the power of the job.</p>
+<section id="id2">
+<h3><span class="section-number">7.3.1. </span>Function overview<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p>User can proceed the power knob operation during job execution.
+At the Fugaku, it has a power measurement and control interface using the Power API, and the power knob can be operated by describing the Power API function in C language or Fortran programs.
+Also it is possible to measure the electricity at that time.</p>
+<p>Avaiable Power API at the Fugaku is the expanded one of version 2.0, published at Sandia National Laboratories.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul>
+<li><div class="line-block">
+<div class="line">To see the detail of Power API, please refer to the web page of Sandia National Laboratories.</div>
+<div class="line"><a class="reference external" href="http://powerapi.sandia.gov/">http://powerapi.sandia.gov/</a></div>
+</div>
+</li>
+<li><p>About the specific the Fugaku  information, please refer to the manual “Job Operation Software API user’s Guide for Power API”.</p></li>
+</ul>
+</div>
+</section>
+<section id="how-to-create-power-api-program">
+<h3><span class="section-number">7.3.2. </span>How to create Power API program<a class="headerlink" href="#how-to-create-power-api-program" title="Link to this heading">¶</a></h3>
+<p>Here explains about how to create Power API program.</p>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#the-flow-of-creating-power-api-program" id="id5">The flow of creating Power API program</a></p></li>
+<li><p><a class="reference internal" href="#power-api-initialization" id="id6">Power API Initialization</a></p></li>
+<li><p><a class="reference internal" href="#obtain-object" id="id7">Obtain Object</a></p></li>
+<li><p><a class="reference internal" href="#electricity-power-measurement-control" id="id8">Electricity power measurement/control</a></p></li>
+<li><p><a class="reference internal" href="#finalization" id="id9">Finalization</a></p></li>
+</ul>
+</nav>
+<section id="the-flow-of-creating-power-api-program">
+<h4><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">7.3.2.1. </span>The flow of creating Power API program</a><a class="headerlink" href="#the-flow-of-creating-power-api-program" title="Link to this heading">¶</a></h4>
+<p>Basic flow of Power API program is as following.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Initialization</p></li>
+<li><p>Obtain the target of power measurement and control Object</p></li>
+<li><p>Conduct power measurement and control for the target program section</p></li>
+<li><p>Finalization</p></li>
+</ol>
+<blockquote>
+<div><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>In the Power API, devices that are targets of power measurement and control are called Objects.</p>
+</div>
+</div></blockquote>
+</div></blockquote>
+</section>
+<section id="power-api-initialization">
+<h4><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">7.3.2.2. </span>Power API Initialization</a><a class="headerlink" href="#power-api-initialization" title="Link to this heading">¶</a></h4>
+<p>By calling initialization function  <code class="docutils literal notranslate"><span class="pre">PWR_CntxtInit()</span></code>, initialize Power API.
+By initialization, obtain Power API context.</p>
+<p>Specifiable PWR_CntxtType and PWR_Role to  <code class="docutils literal notranslate"><span class="pre">PWR_CntxtInit()</span></code> function argument is as following.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>PWR_CntxtType</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PWR_CNTXT_DEFAULT</p></td>
+<td><p>Power API standard function is available to use</p></td>
+</tr>
+<tr class="row-odd"><td><p>PWR_CNTXT_FX1000(FX1000)</p></td>
+<td><p>Extention function for the Fugaku  compute node is available to use</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To PWR_Role,  <strong>PWR_ROLE_APP</strong> is only specifiable that means application user.</p>
+</div>
+</div></blockquote>
+</section>
+<section id="obtain-object">
+<h4><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">7.3.2.3. </span>Obtain Object</a><a class="headerlink" href="#obtain-object" title="Link to this heading">¶</a></h4>
+<p>In the Power API, a device that is the target of power measurement and control is called an Object.
+The target system of Power API is represented by the object tree of the compute node.
+Obtain an Object to specify the device for power control / measurement in Power API.
+Each node in the object tree of the compute node indicates an Object.</p>
+<p>the Fugaku compute node’s Object tree</p>
+<figure class="align-center" id="compute-node-s-object-tree">
+<img alt="Object tree image" src="../_images/NodeObjectTree01.png" />
+</figure>
+<p>Each object’s detail is as following.</p>
+<p>Object at the Fugaku compute node</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 50.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>PWR_ObjType</p></th>
+<th class="head"><p>Unique name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PWR_OBJ_NODE</p></td>
+<td><p>plat.node</p></td>
+<td><p>Whole of node</p></td>
+</tr>
+<tr class="row-odd"><td><p>PWR_OBJ_SOCKET</p></td>
+<td><p>plat.node.cpu</p></td>
+<td><p>CPU Socket</p></td>
+</tr>
+<tr class="row-even"><td><p>PWR_OBJ_MEM</p></td>
+<td><p>plat.node.memN (N = 0, 1, 2, 3)</p></td>
+<td><p>Memory</p></td>
+</tr>
+<tr class="row-odd"><td><p>PWR_OBJ_POWER_PLANE</p></td>
+<td><p>plat.node.pci</p></td>
+<td><p>PCI express</p></td>
+</tr>
+<tr class="row-even"><td><p>PWR_OBJ_NIC</p></td>
+<td><p>plat.node.tofuopt</p></td>
+<td><p>Optical module</p></td>
+</tr>
+<tr class="row-odd"><td><p>PWR_OBJ_POWER_PLANE</p></td>
+<td><p>plat.node.cpu.uncmg</p></td>
+<td><p>Excluding assistant cores, CMG, and Tofu in CPU</p></td>
+</tr>
+<tr class="row-even"><td><p>PWR_OBJ_POWER_PLANE</p></td>
+<td><p>plat.node.cpu.acores</p></td>
+<td><p>Assisitant core group</p></td>
+</tr>
+<tr class="row-odd"><td><p>PWR_OBJ_POWER_PLANE</p></td>
+<td><div class="line-block">
+<div class="line">plat.node.cpu.cmgN</div>
+<div class="line">(N = 0, 1, 2, 3)</div>
+</div>
+</td>
+<td><p>CMG</p></td>
+</tr>
+<tr class="row-even"><td><p>PWR_OBJ_NIC</p></td>
+<td><p>plat.node.cpu.tofu</p></td>
+<td><p>Tofu</p></td>
+</tr>
+<tr class="row-odd"><td><p>PWR_OBJ_CORE</p></td>
+<td><div class="line-block">
+<div class="line">plat.node.cpu.acores.coreL</div>
+<div class="line">(Compute node: L = 0, 1 Compute node and I / O node: L = 0-3)</div>
+</div>
+</td>
+<td><p>Assistant core</p></td>
+</tr>
+<tr class="row-even"><td><p>PWR_OBJ_POWER_PLANE</p></td>
+<td><p>plat.node.cpu.cmgN.cores</p></td>
+<td><p>compute core group in CMG</p></td>
+</tr>
+<tr class="row-odd"><td><p>PWR_OBJ_POWER_PLANE</p></td>
+<td><p>plat.node.cpu.cmgN.cores.l2cache</p></td>
+<td><p>L2 cashe</p></td>
+</tr>
+<tr class="row-even"><td><p>PWR_OBJ_CORE</p></td>
+<td><div class="line-block">
+<div class="line">plat.node.cpu.cmgN.cores.coreM</div>
+<div class="line">(M = 12 to 59) There are 12 cores per CMG.</div>
+<div class="line">M is a serial number, and the possible range of M in cmgN can be expressed by the following formula.</div>
+<div class="line-block">
+<div class="line">12(N + 1) less than M &lt; 12(N + 2)</div>
+</div>
+</div>
+</td>
+<td><p>compute core</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Note that the unique name of the Object used in the Power API is expressed by arranging the names of the nodes traversing the tree starting from the root of the tree (plat.node) and separating them with “.” please.</p>
+<p>For example, at <a class="reference internal" href="#compute-node-s-object-tree"><span class="std std-ref">Object tree</span></a> , if the object of cores under cmg0 is expressed by a unique name, it will be plat.node.cmg0.cores.</p>
+<p>There are 2 ways to obtain Object.</p>
+<ol class="arabic simple">
+<li><p>Explicitly specify the unique name of the Object</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>A unique name is a string that identifies an Object.</p></li>
+<li><p>This method is effective when the unique name of the Object you want to acquire is clear in advance.</p></li>
+<li><p>The user specifies Object’s unique name that want to get the argument of the PWR_CntxtGetObjByName function.</p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Proceed Object tree search</p></li>
+</ol>
+<blockquote>
+<div><p>This method is effective when you do not know in advance the unique name of the Object you want to acquire, or when it is desirable not to describe system-specific expressions in the program to improve the portability of the program.</p>
+</div></blockquote>
+</div>
+</section>
+<section id="electricity-power-measurement-control">
+<h4><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">7.3.2.4. </span>Electricity power measurement/control</a><a class="headerlink" href="#electricity-power-measurement-control" title="Link to this heading">¶</a></h4>
+<p>At Power API, the target electricity power measurement/control type is called Attribute.</p>
+<p>For instance, to Attribute, electricity amount and frequency is indicated.
+The user can measure and control electricity power by specifying Object and Attribute.</p>
+<p>For electricity power measurement/control, following function is used.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PWR_ObjAttrGetValue</p></td>
+<td><p>Obtain the value of electricity power measurement/control.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PWR_ObjAttrSetValue</p></td>
+<td><p>Set the value of Electricity power control.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="finalization">
+<h4><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">7.3.2.5. </span>Finalization</a><a class="headerlink" href="#finalization" title="Link to this heading">¶</a></h4>
+<p>By calling finalization function  <code class="docutils literal notranslate"><span class="pre">PWR_CntxtDestroy()</span></code>, close Power API.
+Destory obtained context by finalization.</p>
+</section>
+</section>
+<section id="use-direction-power-api-from-within-the-program">
+<h3><span class="section-number">7.3.3. </span>Use direction Power API from within the program<a class="headerlink" href="#use-direction-power-api-from-within-the-program" title="Link to this heading">¶</a></h3>
+<p>Here explains about Use direction Power API from within the program.</p>
+<nav class="contents local" id="id3">
+<ul class="simple">
+<li><p><a class="reference internal" href="#header-file" id="id10">Header file</a></p></li>
+<li><p><a class="reference internal" href="#how-to-compile" id="id11">How to compile</a></p></li>
+<li><p><a class="reference internal" href="#how-to-execute" id="id12">How to execute</a></p></li>
+<li><p><a class="reference internal" href="#sample-program" id="id13">Sample program</a></p></li>
+</ul>
+</nav>
+<section id="header-file">
+<h4><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">7.3.3.1. </span>Header file</a><a class="headerlink" href="#header-file" title="Link to this heading">¶</a></h4>
+<p>To use Power API in program, it is required to load next header file.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>File name</p></th>
+<th class="head"><p>Path</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>pwr.h</p></td>
+<td><p>/opt/FJSVtcs/pwrm/aarch64/include</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-to-compile">
+<h4><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">7.3.3.2. </span>How to compile</a><a class="headerlink" href="#how-to-compile" title="Link to this heading">¶</a></h4>
+<p>To create execution file, it is required to proceed including of Power API header file and linking with Power API library.
+Power API is as  <code class="file docutils literal notranslate"><span class="pre">libpwr.so</span></code>.</p>
+<p>Specify next option when compiling and linking.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Specification case</p></th>
+<th class="head"><p>Option</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>When compiling</p></td>
+<td><p>-I/opt/FJSVtcs/pwrm/aarch64/include</p></td>
+</tr>
+<tr class="row-odd"><td><p>When linking</p></td>
+<td><p>-L/opt/FJSVtcs/pwrm/aarch64/lib64 -lpwr</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-to-execute">
+<h4><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">7.3.3.3. </span>How to execute</a><a class="headerlink" href="#how-to-execute" title="Link to this heading">¶</a></h4>
+<p>It is not required to specify specially about Power API to job script.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM --L &quot;node=1&quot;</span>
+<span class="c1">#PJM --L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM --L &quot;elapse=3:00&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -s</span>
+
+<span class="c1"># execute job</span>
+./pwrget
+./pwrstat
+./pwrget_multi
+</pre></div>
+</div>
+</section>
+<section id="sample-program">
+<h4><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">7.3.3.4. </span>Sample program</a><a class="headerlink" href="#sample-program" title="Link to this heading">¶</a></h4>
+<p>Two types of sample programs use the Power API: sample programs in C language and sample program in Fortran language.
+Sample programs in each language are placed in the following directory under the login node:</p>
+<ul>
+<li><p>Sample programs in Fortran language:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/system/sample/PowerAPI/fortran
+</pre></div>
+</div>
+</li>
+<li><p>Sample programs in C language:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/home/system/sample/PowerAPI/c
+</pre></div>
+</div>
+</li>
+</ul>
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Sample Programs Contained in Directories</span><a class="headerlink" href="#id4" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Sample Program</p></th>
+<th class="head"><p>File Name (C Language)</p></th>
+<th class="head"><p>File Name (Fortran Language)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Electrical energy measurement</p></td>
+<td><p>pwrget.c</p></td>
+<td><p>pwrget.f</p></td>
+</tr>
+<tr class="row-odd"><td><p>Power control</p></td>
+<td><p>pwrset.c</p></td>
+<td><p>pwrset.f03</p></td>
+</tr>
+<tr class="row-even"><td><p>Statistical information acquisition</p></td>
+<td><p>pwrstat.c</p></td>
+<td><p>pwrstat.f03</p></td>
+</tr>
+<tr class="row-odd"><td><p>Electrical energy measurement of multiple Objects</p></td>
+<td><p>pwrget_multi.c</p></td>
+<td><p>pwrget_multi.f03</p></td>
+</tr>
+<tr class="row-even"><td><p>Power control of multiple Objects</p></td>
+<td><p>pwrset_multi.c</p></td>
+<td><p>pwrset_multi.f03</p></td>
+</tr>
+<tr class="row-odd"><td><p>Definition of Power API functions, variables, and types in Fortran (corresponding to header file)</p></td>
+<td><p>-</p></td>
+<td><div class="line-block">
+<div class="line">pwrf.f03</div>
+<div class="line">pwrtypesf.f03</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Please change and compile these sample programs as appropriate after copying them to your own directory on the login node.</p>
+<p>When compiling sample programs in C language, please specify the file name of the sample program to be compiled.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>fccpx -I/opt/FJSVtcs/pwrm/aarch64/include -c pwrget.c
+fccpx -L/opt/FJSVtcs/pwrm/aarch64/lib64 -lpwr -o pwrget pwrget.o
+</pre></div>
+</div>
+<p>When compiling sample programs in Fortran language, please compile pwrf.f03 first, then specify the file name of the sample program to be compiled.</p>
+<p>pwrf.f03 defines the cross-language bindings for the Power API functions required to run the Fortran sample programs.
+Please add definitions as needed.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>frtpx -c pwrf.f03
+frtpx -I/opt/FJSVtcs/pwrm/aarch64/include -c pwrget.f03
+frtpx -L/opt/FJSVtcs/pwrm/aarch64/lib64 -lpwr -o pwrget pwrget.o
+</pre></div>
+</div>
+</section>
+</section>
+<section id="electric-power-measurement-point">
+<h3><span class="section-number">7.3.4. </span>Electric power measurement point<a class="headerlink" href="#electric-power-measurement-point" title="Link to this heading">¶</a></h3>
+<p>It is possible to measure estimated and measured power types at compute node.</p>
+<p>A hardware module that can measure power is called a power measurement point.
+It is decsribed with the following Attribute at Power API.</p>
+<p>[Types of measurable power]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 20.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Measurement type</p></th>
+<th class="head"><p>Points of electric power measurement</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PWR_ATTR_ENERGY</p></td>
+<td><p>Estimated power</p></td>
+<td><ul class="simple">
+<li><p>Node</p></li>
+<li><p>Compute core group in CMG</p></li>
+<li><p>L2 Cache</p></li>
+<li><p>Memory</p></li>
+<li><p>Tofu</p></li>
+<li><p>Other modules in CPU</p></li>
+<li><p>Assistant core</p></li>
+<li><p>Optical module</p></li>
+<li><p>PCI Express</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>PWR_ATTR_MEASURED_ENERGY</p></td>
+<td><p>Measured power</p></td>
+<td><ul class="simple">
+<li><p>Node</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>The estimated power of the node at the compute node represents the normalized power of the job. The estimated power of the node is the sum of the estimated power of the following objects.</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">Compute</span> <span class="pre">core</span> <span class="pre">group</span> <span class="pre">in</span> <span class="pre">CMG</span> <span class="pre">+</span> <span class="pre">L2</span> <span class="pre">Cache</span> <span class="pre">+</span> <span class="pre">Memory</span> <span class="pre">+</span> <span class="pre">Tofu</span> <span class="pre">+</span> <span class="pre">Other</span> <span class="pre">modules</span> <span class="pre">in</span> <span class="pre">CPU</span></code></p>
+</div></blockquote>
+<p>Assistant core is used in the process other than job.
+The estimated power of the optical module and PCI Express varies depending on the node to which the job is assigned.
+Thus, not included in the estimated power of the node.</p>
+<p>PWR_ATTR_MEASURED_ENERGY is extention Attribute at  the Fugaku  compute node.
+Measurement is possible only when the parameter PWR_CntxtType type is set to PWR_CNTXT_FX1000 at initialization.</p>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Understanding the interval for obtaining power-related information</p>
+<ul>
+<li><div class="line-block">
+<div class="line">Various types of power (estimated) available within the job by PowerAPI</div>
+<div class="line">They are obtained when the PowerAPI is issued, so it depends on the issuing interval.</div>
+<div class="line">The hardware refresh interval is 1 ms.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">The amount of power (measured) available within the job by PowerAPI</div>
+<div class="line">It is obtained when the PowerAPI is issued, so it depends on the issuing interval.</div>
+<div class="line">The hardware refresh interval is 5 ms.</div>
+</div>
+</li>
+</ul>
+</div>
+</section>
+<section id="power-control-point">
+<h3><span class="section-number">7.3.5. </span>Power control point<a class="headerlink" href="#power-control-point" title="Link to this heading">¶</a></h3>
+<p>Power knob is the function to set hard ware status related to compute node electric power.
+A hardware module that can operate the power knob is called a power control point.
+Compute node power knob corresponds to the following Attribute of Power API.</p>
+<p>[Type of power knob]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18.2%" />
+<col style="width: 18.2%" />
+<col style="width: 18.2%" />
+<col style="width: 45.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Power knob function</p></th>
+<th class="head"><p>Power control point</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PWR_ATTR_FREQ</p></td>
+<td><p>Frequency change</p></td>
+<td><p>CPU Socket</p></td>
+<td><div class="line-block">
+<div class="line">Limit CPU frequency.</div>
+<div class="line">Specifiable value is as following (Unit :Hz).</div>
+<div class="line">2200000000</div>
+<div class="line">2000000000</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>PWR_ATTR_THROTTLING_STATE</p></td>
+<td><p>Memory access control</p></td>
+<td><p>Memory</p></td>
+<td><div class="line-block">
+<div class="line">To limit memory issue request, control memory access controller and the bus use rate in between memories.</div>
+<div class="line">Specifiable value is as following.</div>
+<div class="line">0: Bus use rate 100%</div>
+<div class="line">1: Bus use rate 90%</div>
+<div class="line">2: Bus use rate 80%</div>
+<div class="line">3: Bus use rate 70%</div>
+<div class="line">4: Bus use rate 60%</div>
+<div class="line">5: Bus use rate 50%</div>
+<div class="line">6: Bus use rate 40%</div>
+<div class="line">7: Bus use rate 30%</div>
+<div class="line">8: Bus use rate 20%</div>
+<div class="line">9: Bus use rate 10%</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>PWR_ATTR_ISSUE_STATE</p></td>
+<td><p>Order issue limit</p></td>
+<td><p>CPU Core</p></td>
+<td><div class="line-block">
+<div class="line">Control numberr of order that CPU core executes at the same time.</div>
+<div class="line">Specifiable value is as following.</div>
+<div class="line">0: 4 order</div>
+<div class="line">1: 2 order</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>PWR_ATTR_EX_PIPE_STATE</p></td>
+<td><p>EXA only</p></td>
+<td><p>CPU core</p></td>
+<td><div class="line-block">
+<div class="line">Control number of pipe that order that use general registers can use.</div>
+<div class="line">0: Use pipe A or B</div>
+<div class="line">1: Use only pipe A</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>PWR_ATTR_ECO_STATE</p></td>
+<td><p>Eco mode and FLA only mode</p></td>
+<td><p>CPU core</p></td>
+<td><div class="line-block">
+<div class="line">FLA only controls the number of pipes available for FP and SIMD registers. Eco mode is a function to increase the power reduction effect when FLA only is enabled.</div>
+<div class="line">Specifiable value is as following.</div>
+<div class="line">0: Ecomode unabled, FLA only unabled</div>
+<div class="line">1: Ecomode unabled, FLA only enabled</div>
+<div class="line">2: Ecomode enabled, FLA only enabled</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>PWR_ATTR_RETENTION_STATE</p></td>
+<td><p>Retention mode</p></td>
+<td><p>CPU core</p></td>
+<td><div class="line-block">
+<div class="line">Controls whether to transition to a lower power state (Retention state) when a process is not running on the CPU core.</div>
+<div class="line">Specifiable value is as following.</div>
+<div class="line">0: Not transit to Retention mode</div>
+<div class="line">1: Transit to Retention mode</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>PWR_ATTR_THROTTLING_STATE, PWR_ATTR_ISSUE_STATE, PWR_ATTR_EX_PIPE_STATE, PWR_ATTR_ECO_STATE, and PWR_ATTR_RETENTION_STATE are extended attributes on the Fugaku compute nodes.
+Control is possible only when the argument PWR_CntxtType type is specified to PWR_CNTXT_FX1000 at initialization.</p></li>
+<li><p>PWR_ATTR_RETENTION_STATE is available for jobs with 9216 nodes or fewer.</p></li>
+</ul>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>By using PWR_MD_MIN and PWR_MD_MAX, the user can know the upper and lower limits of the power knob that can be set currently.</p>
+</div>
+</section>
+<section id="note">
+<h3><span class="section-number">7.3.6. </span>Note<a class="headerlink" href="#note" title="Link to this heading">¶</a></h3>
+<section id="the-power-amount-becomes-larger-than-the-expected-value-when-a-specific-state-transition-is-performed">
+<h4><span class="section-number">7.3.6.1. </span>The power amount becomes larger than the expected value when a specific state transition is performed.<a class="headerlink" href="#the-power-amount-becomes-larger-than-the-expected-value-when-a-specific-state-transition-is-performed" title="Link to this heading">¶</a></h4>
+<p>It has been confirmed that the power amount does not fall below the expected value when the following state transition is performed.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>PWR_ATTR_ECO_STATE(1)         : Eco mode disabled, use FLA only
+     ⇩
+PWR_ATTR_RETENTION_STATE(1)   : Allow transition to Retention state
+     ⇩
+PWR_ATTR_ECO_STATE(0)         : Eco mode disabled, use FLA and B
+     ⇩
+<span class="hll">PWR_ATTR_RETENTION_STATE(1)   : Allow transition to Retention state &lt;- Power is larger than the expected value
+</span></pre></div>
+</div>
+<p>You can use one of the following workarounds:</p>
+<ol class="arabic">
+<li><p>Workaround 1: Do not use PWR_ATTR_ECO_STATE(1)</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span class="hll">PWR_ATTR_ECO_STATE(0)         : Eco mode disabled, use FLA and B
+</span>     ⇩
+PWR_ATTR_RETENTION_STATE(1)   : Allow transition to Retention state
+     ⇩
+PWR_ATTR_ECO_STATE(0)         : Eco mode disabled, use FLA and B
+     ⇩
+PWR_ATTR_RETENTION_STATE(1)   : Allow transition to Retention state
+</pre></div>
+</div>
+</li>
+<li><p>Workaround 2: Do not allow transition from PWR_ATTR_ECO_STATE(1) to Retention state</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>PWR_ATTR_ECO_STATE(1)         : Eco mode disabled, use FLA only
+     ⇩
+<span class="hll">PWR_ATTR_ECO_STATE(0)         : Eco mode disabled, use FLA and B ← add 1 line
+</span>PWR_ATTR_RETENTION_STATE(1)   : Allow transition to Retention state
+     ⇩
+PWR_ATTR_ECO_STATE(0)         : Eco mode disabled, use FLA and B
+     ⇩
+PWR_ATTR_RETENTION_STATE(1)   : Allow transition to Retention state
+</pre></div>
+</div>
+</li>
+<li><p>Workaround 3: Transit PWR_ATTR_ECO_STATE(0) via PWR_ATTR_ECO_STATE(2)</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>PWR_ATTR_ECO_STATE(1)         : Eco mode disabled, use FLA only
+     ⇩
+PWR_ATTR_RETENTION_STATE(1)   : Allow transition to Retention state
+     ⇩
+<span class="hll">PWR_ATTR_ECO_STATE(2)         : Eco mode enabled, use FLA only ← add 1 line
+</span>PWR_ATTR_ECO_STATE(0)         : Eco mode disabled, use FLA and B
+     ⇩
+PWR_ATTR_RETENTION_STATE(1)   : Allow transition to Retention state
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">7. Power control function</a><ul>
+<li><a class="reference internal" href="#overview">7.1. Overview</a></li>
+<li><a class="reference internal" href="#power-mode-power-knob-operation-at-job-submisson">7.2. Power mode (Power knob operation at job submisson)</a><ul>
+<li><a class="reference internal" href="#function-overview">7.2.1. Function overview</a></li>
+<li><a class="reference internal" href="#use-example">7.2.2. Use example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#power-api">7.3. Power API</a><ul>
+<li><a class="reference internal" href="#id2">7.3.1. Function overview</a></li>
+<li><a class="reference internal" href="#how-to-create-power-api-program">7.3.2. How to create Power API program</a><ul>
+<li><a class="reference internal" href="#the-flow-of-creating-power-api-program">7.3.2.1. The flow of creating Power API program</a></li>
+<li><a class="reference internal" href="#power-api-initialization">7.3.2.2. Power API Initialization</a></li>
+<li><a class="reference internal" href="#obtain-object">7.3.2.3. Obtain Object</a></li>
+<li><a class="reference internal" href="#electricity-power-measurement-control">7.3.2.4. Electricity power measurement/control</a></li>
+<li><a class="reference internal" href="#finalization">7.3.2.5. Finalization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#use-direction-power-api-from-within-the-program">7.3.3. Use direction Power API from within the program</a><ul>
+<li><a class="reference internal" href="#header-file">7.3.3.1. Header file</a></li>
+<li><a class="reference internal" href="#how-to-compile">7.3.3.2. How to compile</a></li>
+<li><a class="reference internal" href="#how-to-execute">7.3.3.3. How to execute</a></li>
+<li><a class="reference internal" href="#sample-program">7.3.3.4. Sample program</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#electric-power-measurement-point">7.3.4. Electric power measurement point</a></li>
+<li><a class="reference internal" href="#power-control-point">7.3.5. Power control point</a></li>
+<li><a class="reference internal" href="#note">7.3.6. Note</a><ul>
+<li><a class="reference internal" href="#the-power-amount-becomes-larger-than-the-expected-value-when-a-specific-state-transition-is-performed">7.3.6.1. The power amount becomes larger than the expected value when a specific state transition is performed.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../MPI/CollectiveCommunicationAlgorithm.html"
+                          title="previous chapter"><span class="section-number">6.12. </span>Collective Communication Algorithms(knomial, rabenseifner) in MPI</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../LayeredStorageAndLLIO/index.html"
+                          title="next chapter"><span class="section-number">8. </span>Layered storage</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../LayeredStorageAndLLIO/index.html" title="8. Layered storage"
+             >next</a></li>
+        <li class="right" >
+          <a href="../MPI/CollectiveCommunicationAlgorithm.html" title="6.12. Collective Communication Algorithms(knomial, rabenseifner) in MPI"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7. </span>Power control function</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

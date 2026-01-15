@@ -1,0 +1,475 @@
+.. _AccessToTheSystemLogin:
+
+Login
+=====
+
+
+Loggin to to the Fugaku by using local account,  logging to login node with using SSH Version2 (Publick key authentication).
+
+Create an SSH key pair (public key and private key) on the user terminal in advance and register the public key from the Fugaku website screen.
+Register only the public key. When a private key is registered, processing such as temporary suspension of login may be performed as a security measure.
+
+.. note::
+
+   If you change the permissions of the following directories and files under the home directory of the login node, you will not be able to login using ssh.
+   
+   - home directory  permission (700)
+   - ~/.ssh directory permission (700)
+   - ~/.ssh/authorized_keys permission (600)
+
+   Do not change these permissions.
+
+.. _GeneratingPrivateKeyAndPublicKey:
+
+Private key/Public key creation
+--------------------------------
+
+To use  the Fugaku,  create the pair of private key and public key on the user device. Recommended creating type is from following.
+
+- Ed25519
+- ECDSA (NIST P 521)
+- RSA (Key long more than 2048bit) : For how to use RSA keys, refer to "`Operation change regarding ssh access to login nodes <https://www.fugaku.r-ccs.riken.jp/en/operation/20230210_01>`_" on the Fugaku website.
+
+This section describes the procedure for creating key pair of Ed25519 (public / private keys) using UNIX / Linux (OpenSSH) and Windows (puttygen). To use puttygen, it is necessary to install the terminal emulator PuTTY (patty) in advance.
+
+.. contents::
+   :local:
+
+.. _UnixLinuxMacOpenSSH:
+
+Unix/Linux/Mac (OpenSSH)
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Execute a command :command:`ssh-keygen` on the user's device, create a private / public key pair.
+
+1. Start terminal and execute a command :command:`ssh-keygen`.
+
+  - If Mac(OS X), start Terminal(:menuselection:`Application --> Utility --> Terminal`)  and execute a command :command:`ssh-keygen`.
+  - If UNIX/Linux, start terminal emulator and execute a command :command:`ssh-keygen`.
+
+
+  .. code-block:: console
+
+    [terminal]$ ssh-keygen -t ed25519
+    Generating public/private ed25519 key pair.
+    Enter file in which to save the key (/home/username/.ssh/id_ed25519):
+    Enter passphrase (empty for no passphrase):  # Enter passphrase
+    Enter same passphrase again:                 # Re-enter the same passphrase
+    Your identification has been saved in /home/username/.ssh/id_ed25519.
+    Your public key has been saved in /home/username/.ssh/id_ed25519.pub.
+    The key fingerprint is:
+    SHA256:khbWyIyUqMnyjK1Ok78l8EivKbQLNgP3vyhjYBgvif8 namehostname
+    The key's randomart image is:
+    +--[ED25519 256]--+
+    |   ...           |
+    |  ...+ o         |
+    |.o  . * .        |
+    |=.   . o         |
+    |=@    + S        |
+    |@o%  . .         |
+    |=%.= .           |
+    |*=O =            |
+    |+=+=Eo.          |
+    +----[SHA256]-----+
+
+
+  .. note::
+
+    - Set a passphrase that is difficult for others to guess, just like a password. Please be sure to set a passphrase. We recommend a passphrase length of at least 15 characters.
+
+2. | Once execute :command:`ssh-keygen`, two types are created: a private key (id_ed25519) and a public key (id_ed25519.pub) on :file:`.ssh` directory under the home directory.
+   | Register the public key (id_ed25519.pub) using the Fugaku website.
+
+
+Windows (PuTTYgen)
+^^^^^^^^^^^^^^^^^^^
+
+Create a private / public key that can be used with PuTTY / WinSCP with puttygen.
+
+1. | Start puttygen.
+   | Select :guilabel:`"EdDSA"` for type of key and select :guilabel:`"Ed25519 (255 bits)"` to generate, then click :guilabel:`"Generate"`.
+
+  .. figure:: ./img/GeneratingPrivateKeyAndPublicKey_01.png
+     :scale: 70
+     :align: center
+
+2. Move the mouse cursor randomly.
+
+  .. figure:: ./img/GeneratingPrivateKeyAndPublicKey_02.png
+     :scale: 70
+     :align: center
+
+
+3. | Save the public key.
+   | Copy the displayed contents on "Public key for pasting in to OpenSSH authorized_keys file:" to the clip board (It is recommended to paste on the notepad).
+   | The contents pasted on the clip board (Public key) is registered with using the Fugaku website.
+
+  .. figure:: ./img/GeneratingPrivateKeyAndPublicKey_05.png
+     :scale: 70
+     :align: center
+     
+4. Input a passphrase to both :guilabel:`"Key passphrase"` and :guilabel:`"Confirm passphrase"`. After inputting, click :guilabel:`"Save private key"` and save the private key. Remember to enter your passphrase when you log in to the login node.
+
+  .. figure:: ./img/GeneratingPrivateKeyAndPublicKey_03.png
+     :scale: 70
+     :align: center
+
+  .. Attention::
+
+    Set a passphrase that is difficult for others to guess, just like a password. Please be sure to set a passphrase. We recommend a passphrase length of at least 15 characters.
+
+
+5. Input a file name for storing the private key to :guilabel:`"File name(N)"`, click :guilabel:`"Save(S)"`. The private key is stored.
+
+  .. figure:: ./img/GeneratingPrivateKeyAndPublicKey_04.png
+     :scale: 70
+     :align: center
+
+.. _RegisteringAPublicKey:
+
+Public key registration
+------------------------
+
+.. contents::
+   :local:
+
+Registration using Fugaku website
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Log in to the Fugaku website(https://www.fugaku.r-ccs.riken.jp/en),  then click :guilabel:`[User Portal]`  from menu.
+
+.. figure:: ./img/RegisteringAPublicKey_01.png
+   :scale: 40
+   :align: center
+
+2. Click :guilabel:`[Publickey registration]`  from menu.
+
+.. figure:: ./img/RegisteringAPublicKey_02.png
+   :scale: 40
+   :align: center
+
+3. Copy and paste the public key to be used to :guilabel:`"Publickey registration"`\  area.
+
+.. figure:: ./img/RegisteringAPublicKey_03.png
+   :scale: 40
+   :align: center
+
+4. Click :guilabel:`[Registar]`\ then register.
+
+5. Confirm the content and click on  \ :guilabel:`[Register]`\ .
+
+.. figure:: ./img/RegisteringAPublicKey_04.png
+   :scale: 35
+   :align: center
+
+6. When the "Registration has been Completed." screen appears, the public key registration is complete.
+
+.. figure:: ./img/RegisteringAPublicKey_06.png
+   :scale: 35
+   :align: center
+
+.. note::
+
+   Only one public key can be registered per operation. For the second and subsequent operations, additional registration is required. If you want to register two or more public keys, repeat the same operation.
+
+
+7. If the public key is incorrect, an error message will be displayed. Check the public key and execute the registration process again.
+
+.. figure:: ./img/RegisteringAPublicKey_07.png
+   :scale: 35
+   :align: center
+   
+
+..
+
+
+Additional registration of public key
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+| This section describes the procedure for registering additional public keys in the login node.
+| There are a method of registering additionally using the Fugaku website and a method of editing the file directly by logging in to the login node. This section shows how to edit a file on the login node.
+
+
+1. Edit \ :file:`~/.ssh/authorized_keys`\  on login node.
+
+  .. code-block:: console
+  
+    [_LNlogin]$ vi  ~/.ssh/authorized_keys
+    
+    
+    Press [i] key to enter vi editor insert mode.
+    Click the right mouse button and paste the contents of .ssh / id_rsa.pub.
+    
+    Press the [esc] key, enter [wq!], and press the [Enter] key.
+
+2. Change permission of private key registered \ :file:`authorized_keys`\.
+
+  .. code-block:: console
+  
+    [_LNlogin]$ chmod  600  ~/.ssh/authorized_keys
+
+Accessing direction
+--------------------
+
+
+| This indicates how to access to  the Fugaku\.
+| To login to the login node, execute the steps of "\ :ref:`GeneratingPrivateKeyAndPublicKey`\ " and it is required that the public key is registered to login node.
+| Program development (Creating program/Compiling) and job controlling (Job submission/Job status display/Job deleting) are proceeded from login node.
+
+.. contents::
+   :local:
+
+Login node
+^^^^^^^^^^^
+
+Access by the following host name from the user device
+
+Host name : ``login.fugaku.r-ccs.riken.jp``
+
+
+This indicates the execution example of :command:`ssh` command.
+
+
+[Public key authentication]
+
+.. code-block:: console
+
+  [terminal]$ ssh  username@login.fugaku.r-ccs.riken.jp
+  The authenticity of host 'XXXXXX (nnn.nnn.nnn.nnn)' can't be established.
+  XXXXX key fingerprint is XX: XX: XX: XX: XX: XX: XX: XX: XX:XX:XX:XX:XX:XX:XX:XX.
+  Are you sure you want to continue connecting (yes/no)? yes   # Enter yes (Initial)
+  Enter passphrase for key '/home/groupname/username/.ssh/id_ed25519':  # Enter pass phrase
+  [_LNlogin]$ 
+
+
+1. When the first loggin in, the confirmation message about registering the host key (Are you sure you want to continue connecting) is displayed. Enter "yes".
+#. Specify :command:`ssh`'s option ``-X``  to enable X11 Forwarding function when connecting to the login node.
+#. Specify  :command:`ssh`'s  ``-A`` to enable SSH Agent-forwarding function when connecting to the login node.
+#. Operating the multiple device's login node. About home area (:file:`/home`) and deta area (:file:`/vol0n0m/data`), share with the each login node. It is the same with the language software environmet.
+
+.. note::
+
+   If you :ref:`created the key pair<UnixLinuxMacOpenSSH>` by entering the file name of the key file, specify the file name of the key file in the ``-i`` option of the :command:`ssh` command.
+   
+   ``[terminal]$ ssh -i key_filename username@login.fugaku.r-ccs.riken.jp``
+
+.. _LoginNodePuTTYSetup:
+
+Login node (PuTTY)
+^^^^^^^^^^^^^^^^^^^
+
+This indicates how to login to the login node with using Windows (PuTTY). 
+
+
+1. | Start PuTTY. Set the private key which stored in the user device.
+   | Click on :guilabel:`[Browse]` from  :menuselection:`[Connection] --> [SSH] --> [Auth] --> [Credentials]`.
+   | Select the pribate key created with puttygen.
+
+  .. figure:: ./img/AccessingTheKComputer_01.png
+     :align: center
+
+2. | Select  :guilabel:`[Session]`.
+   | To  :guilabel:`[Host Name(or IP address)]`, enter login node host name ``login.fugaku.r-ccs.riken.jp``. To save the set contents, input the name to save to  :guilabel:`[Saved Sessions]` and click on  :guilabel:`[Save]`. From the second logging in, select the saved name and click  :guilabel:`[Load]`.
+
+  .. figure:: ./img/AccessingTheKComputer_03.png
+     :align: center
+
+3. To enable X11 forwarding function when connecting to the login node, before click :guilabel:`[Open]`,  open  :menuselection:`[Connection] --> [SSH] --> [X11]`\  and  put the check to :guilabel:`[Enable X11 forwarding]`.
+
+  .. figure:: ./img/AccessingTheKComputer_04.png
+     :align: center
+
+4. To enable Agent-forwarding function when connecting to the login node, before click :guilabel:`[Open]`, open :menuselection:`[Connection] --> [SSH] --> [Auth]` and  put the check to :guilabel:`[Allow agent forwarding]`.
+
+  .. figure:: ./img/AccessingTheKComputer_05.png
+     :align: center
+
+5. Click on :guilabel:`[Open]`. It starts connecting to the login node.
+
+
+6. When the first login, about the host key registration, the confirmation screen will be shown. Click on :guilabel:`"Yes(Y)"`.
+
+  .. figure:: ./img/AccessingTheKComputer_06.png
+     :align: center
+
+
+8. Input local account name and pass phrase and loging to the login node.
+
+  .. code-block:: console
+
+    login as: username                                       # Enter a local account
+    Authenticating with public key "imported-openssh-key"
+    Passphrase for key "imported-openssh-key": passphrase     # Enter a pass phrase
+    Last login: Tue Mar 27 09:57:12 2018 from xxx.xxx.xxx.xxx
+    login$
+
+
+How to directly specify a login node
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+| You are currently using ``login.fugaku.r-ccs.riken.jp`` to access a login node.
+| If it is difficult to connect with this hostname, specify a login node individually and access.
+
+To specify the login node directly, use the following hostname:.
+
+.. code-block:: none
+
+   login1 : login1.fugaku.r-ccs.riken.jp
+   login2 : login2.fugaku.r-ccs.riken.jp
+   login3 : login3.fugaku.r-ccs.riken.jp
+   login4 : login4.fugaku.r-ccs.riken.jp
+   login5 : login5.fugaku.r-ccs.riken.jp
+   login6 : login6.fugaku.r-ccs.riken.jp
+
+
+Arm login node
+^^^^^^^^^^^^^^^
+
+The Arm login node is a login node with an Armv8-based Arm processor.
+
+The Arm login node is logged in via the normal login node with Intel CPU.
+Users cannot log in directly to the Arm login node from the Internet.
+
+Please execute ``ssh arm1`` on the login node to log in.
+The host-based authentication is used for the connection between the login node and the Arm login node, so authentication by users is not required .
+
+.. code-block:: console
+
+   [_LNIlogin]$ ssh arm1
+   Last login: XXX MMM DD HH:MM:SS 2020 from 10.4.254.NN
+   [_LNAlogin]$
+
+The Arm login node is configured as follows:
+
+- home area and data area are common to other login nodes. However, NFS mount is used.
+- Commands such as pjsub and pjstat are not available.
+- Provides direct Internet access. Proxy setting is not required.
+- The Arm compiler and LLVM10.0.0 (build with asis) is installed.
+- When using the compiler, check the module file by executing ``module avail`` and set the environment settings properly.
+
+
+File transfer method
+---------------------
+
+| Files can be transferred via the login node using the file transfer program (scp / sftp) installed on the user terminal. You can use  \ ``login.fugaku.r-ccs.riken.jp``\  for transfer.
+| Use of protocols (ftp / r commands) that are vulnerable to security is prohibited.
+| For file transfer, the procedure for "  \ :ref:`GeneratingPrivateKeyAndPublicKey`\ " must be performed, and the public key must be registered on the login node.
+
+.. contents::
+   :local:
+
+File transfer (sftp)
+^^^^^^^^^^^^^^^^^^^^^
+
+1. :program:`sftp`\  command execution example
+
+  .. code-block:: console
+
+    [terminal]$ sftp username@k-10g.r-ccs.riken.jp
+    Enter passphrase for key '/home/groupname/username/.ssh/id_rsa':  # input passphrase
+    sftp>
+
+2. File transfer example (:program:`put`\)
+
+  .. code-block:: console
+
+    sftp> put a.f90  
+    Uploading a.f90 to /home/groupname/username/a.f90
+    sample.f90                                         100%   18     0.0KB/s   00:00
+    sftp>
+
+3. File transfer example (:program:`get`\)
+
+  .. code-block:: console
+
+    sftp> get sample.sh.o9110  
+    Fetching sample.sh.o9110 to /home/groupname/username/sample.sh.o9110
+    sample.sh.o9110                                    100%   18     0.0KB/s   00:00
+    sftp> 
+
+
+File transfer (scp)
+^^^^^^^^^^^^^^^^^^^^
+
+1. :program:`scp`\  example of command execution is shown below. (From terminal to login node)
+
+  .. code-block:: console
+
+    [terminal]$ scp  local_file  username@k-10g.r-ccs.riken.jp:remote_file
+    Enter passphrase for key '/home/groupname/username/.ssh/id_rsa':  #  Input passphrase
+    [terminal]$ 
+
+2. :program:`scp`\  example of command execution is shown below. (Login node to terminal)
+
+  .. code-block:: console
+
+    [terminal]$ scp  username@k-10g.r-ccs.riken.jp:remote_file  local_file  
+    Enter passphrase for key '/home/groupname/username/.ssh/id_rsa': #   Input passphrase
+    [terminal]$ 
+
+
+
+Windows (WinSCP)
+^^^^^^^^^^^^^^^^^
+
+For Windows, use a file transfer program such as WinSCP to transfer the file to the login node. An example of connection with WinSCP is shown below.
+
+1. Start WinSCP and select  \ :guilabel:`[New Site]`\ .
+#. Input login node host name (\ ``login.fugaku.r-ccs.riken.jp``\ ) to  :guilabel:`"Host name"`\ .
+#. Input the user name to  :guilabel:`"User name"`\ .
+#. Click on  :guilabel:`[Advanced...]`\ .
+
+.. figure:: ./img/FileTransfer_01.png
+   :align: center
+   :scale: 70
+
+5. Set the putty private key file name to  :guilabel:`[Authentication]`\ 's  \ :guilabel:`"Private key file"`\  and click on  \ :guilabel:`[OK]`\ .
+
+.. figure:: ./img/FileTransfer_02.png
+   :align: center
+   :scale: 70
+
+
+6. Click on  :guilabel:`"Save"`\  and save the setting value.
+
+.. figure:: ./img/FileTransfer_03.png
+   :align: center
+   :scale: 70
+
+7. Select the saved setting value and connect by clicking  \ :guilabel:`"Login"`\ .
+
+.. figure:: ./img/FileTransfer_04.png
+   :align: center
+   :scale: 70
+
+8. After the connection is completed, a screen similar to Explorer will be displayed, and you can transfer files by dragging and dropping them.
+ 
+
+Login shell
+------------
+
+Login shell is   :file:`/bin/bash` .
+
+
+E-mail distribution of Fugaku operation information
+---------------------------------------------------
+
+| An operation information mail is delivered to Fugaku account (uid).
+| In order to receive the mail, the user must register the forwarding destination mail address. (If you do not register, the mail is discarded.)
+
+We will send you an email about the following operation information. The content of distribution will be gradually expanded.
+
+- Information of jobs affected by a system failure.
+- Operation information
+- Others
+
+
+[How to register your e-mail address]
+
+Create a ":file:`.forward`" file in the user's home directory and register the email address that you want to receive.
+Examples of ":file:`.forward`" and filtering configurations will be in the `FAQ <https://www.fugaku.r-ccs.riken.jp/en/faq/20220324_01>`_.
+
+.. code-block:: console
+
+   [_LNlogin]$ vi ~/.forward
+   *****@*****.com

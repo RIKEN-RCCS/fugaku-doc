@@ -1,0 +1,656 @@
+ジョブ状態の表示
+=================
+
+ユーザが投入したジョブの実行状況などを確認する方法について説明します。
+
+ジョブの状態は、\ :program:`pjstat`\ コマンドで確認することができます。
+
+
+通常ジョブ
+-----------
+
+ジョブ投入後、ジョブの実行状況などを確認する方法について説明します
+
+.. contents::
+   :local:
+
+ジョブの一覧表示
+^^^^^^^^^^^^^^^^^
+
+ジョブ状態の一覧表示には、\ :program:`pjstat`\ コマンドを使用します。
+
+.. code-block:: console
+
+  [_LNlogin]$ pjstat
+
+  JOB_ID  JOB_NAME  MD  ST   USER   START_DATE      ELAPSE_LIM  NODE_REQUIRE  VNODE  CORE  V_MEM
+  238     job.sh    NM  RUN  user1  11/17 09:01:41  0001:00:00  12:2x3x2      -      -     -
+  239     bulk.sh   BU  RUN  user1  11/17 09:01:42  0001:00:00  12:2x3x2      -      -     -
+  240     step.sh   ST  RUN  user1  11/17 09:01:42  -           -             -      -     -
+  241     job2.sh   NM  RUN  user1  11/17 09:01:42  0001:00:00  2             -      -     -
+
+.. seealso::
+
+   デフォルトでは、\ :program:`pjstat`\ コマンドを実行したユーザが参照可能なジョブだけ表示されます。
+
+特定のジョブの表示
+^^^^^^^^^^^^^^^^^^^
+
+:program:`pjstat`\ 実行時にジョブIDやサブジョブIDを指定することができます。
+
+.. code-block:: console
+
+  [_LNlogin]$ pjstat 238
+
+  JOB_ID  JOB_NAME  MD  ST   USER   START_DATE      ELAPSE_LIM  NODE_REQUIRE  VNODE  CORE  V_MEM
+  238     job.sh    NM  RUN  user1  11/17 09:01:41  0001:00:00  12:2x3x2      -      -     -
+
+  [_LNlogin]$ pjstat '239[1]'
+  JOB_ID  JOB_NAME  MD  ST   USER   START_DATE      ELAPSE_LIM  NODE_REQUIRE  -      -     -
+  239[1]  bulk.sh   BU  RUN  user1  11/17 09:01:42  0001:00:00  12:2x3x2      -      -     -
+
+:program:`pjstat`\ 実行時にジョブIDやサブジョブIDを複数指定することができます。
+
+.. code-block:: console
+
+  [_LNlogin]$ pjstat 238 239
+
+  JOB_ID  JOB_NAME  MD  ST   USER   START_DATE      ELAPSE_LIM  NODE_REQUIRE  VNODE  CORE  V_MEM
+  238     job.sh    NM  RUN  user1  11/17 09:01:41  0001:00:00  12:2x3x2      -      -     -
+  239     bulk.sh   BU  RUN  user1  11/17 09:01:42  0001:00:00  12:2x3x2      -      -     -
+
+
+また、ジョブID やサブジョブID は複数指定でき、列挙する方式と範囲を指定する方式があります。
+
+- 列挙
+
+  .. code-block:: console
+
+     [_LNlogin]$ pjstat 238 239                              # ジョブID
+     [_LNlogin]$ pjstat '239[1]' '239[2]' '239[3]' '239[4]'  # バルクジョブのサブジョブID
+     [_LNlogin]$ pjstat 240_0 240_1 240_2 240_3              # ステップジョブのサブジョブID
+
+- 範囲の指定
+
+  ジョブID または バルク番号、ステップ番号をハイフンでつなげると、範囲指定となります。
+  
+  .. code-block:: console
+
+     [_LNlogin]$ pjstat 238-240    # ジョブID 238、239、240
+     [_LNlogin]$ pjstat '239[1-5]' # サブジョブID 239[1]、239[2]、239[3]、239[4]、239[5]
+     [_LNlogin]$ pjstat 240_0-4    # サブジョブID 240_0、240_1、240_2、240_3、240_4
+
+.. attention::
+
+   pjstat コマンドの引数にバルクジョブのサブジョブIDを指定する場合、括弧'[]'がシェルによって処理されないようにシングルクォートなどでエスケープしてください。
+
+
+pjstatの出力項目
+^^^^^^^^^^^^^^^^^
+
+:program:`pjstat`\ の出力結果の項目と内容は以下のとおりです。
+
+ジョブ情報一覧の項目
+
+.. list-table:: 
+   :widths: 2 8
+   :header-rows: 1
+
+   * - 項目名
+     - 内容
+
+   * - JOB_ID
+     - ジョブIDです。
+
+   * - JOB_NAME
+     - ジョブ名です。
+
+   * - MD
+     - ジョブモデルです。
+
+       - NM は通常ジョブ、または、会話型ジョブ
+       - ST はステップジョブ
+       - BU はバルクジョブ
+       - MW はマスタ・ワーカ型ジョブ
+
+   * - ST
+     - | ジョブの現在の処理状態です。
+       | 詳細は後述のジョブのステータスを参照してください。
+
+   * - USER
+     - 実行ユーザ名です。
+
+   * - START_DATE
+     - ジョブが実行前の場合は実行開始予定時刻を表示し、実行中、および、実行後の場合は実際に開始した時刻を表示します。
+       
+       - 実行開始予定時刻の場合は、実行開始予定時刻が括弧"( )"で囲まれます。
+       - 開始予定時刻は、再スケジューリング時に変更される場合があります。
+
+   * - ELAPSE_LIM
+     - 経過時間制限を表示します。
+
+   * - NODE_REQUIRE
+     - - ノード割り当てジョブの場合
+
+         ジョブの投入時に指定したノード数とノード形状 "nnnnnn:XXxYYxZZ"
+
+         上記のフォーマットに収まりきらない場合は、ノード形状のみ出力します。
+
+       - 仮想ノード割り当てジョブの場合
+
+         ジョブ投入時に指定した仮想ノード数。現在は、"1" を出力します。
+
+       - ステップジョブのサマリ情報の場合
+
+         "-"（ハイフン）を出力します
+
+   * - VNODE
+     - 仮想ノード数を表示します。
+
+   * - CORE
+     - 仮想ノードあたりのCPUコア数を表示します。
+
+   * - V_MEM
+     - 仮想ノードあたりのメモリ量を表示します。
+
+
+ジョブのステータスの項目
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ジョブのステータス（ST）項目の状態一覧を示します。
+
+.. list-table:: 
+   :widths: 2 2 10
+   :header-rows: 1
+   
+
+   * - 表示内容
+     - 状態
+     - 説明
+
+   * - ACC
+     - ACCEPT
+     - ジョブ投入が受け付けられた状態です。
+
+   * - CCL
+     - CANCEL
+     - ジョブ投入者または管理者からの指示で、ジョブが中止された状態です。
+
+   * - ERR
+     - ERROR
+     - ジョブ運用管理機能で検出したエラーにより、投入済みの状態を保ったままジョブが中止された状態です。
+
+       - エラージョブはユーザー自身で削除する必要があります。
+       - 一定期間経過したエラージョブはシステム側で削除することがあります。
+
+   * - EXT
+     - EXIT
+     - ジョブが終了した状態です。
+
+   * - HLD
+     - HOLD
+     - ジョブの実行を中止し、投入済みの状態で固定された状態です。
+
+       - 不要になったHLDジョブはユーザー自身で削除する必要があります。
+
+   * - QUE
+     - QUEUED
+     - ジョブが受け付けられ、実行の順番が来るのを待っている状態です。
+
+   * - RJT
+     - REJECT
+     - ジョブの受付けが拒否された状態です。
+
+   * - RNA
+     - RUNNING-A
+     - ジョブの実行に必要な資源を獲得している状態です。
+
+   * - RNE
+     - RUNNING-E
+     - エピローグ処理が実行されている状態です。
+
+   * - RNO
+     - RUNOUT
+     - ジョブの終了処理をしている状態です。
+
+   * - RNP
+     - RUNNING-P
+     - プロローグ処理が実行されている状態です。
+
+   * - RSM
+     - RESUME
+     - リジューム処理をしている状態です。
+
+   * - RUN
+     - RUNNING
+     - ジョブが実行されている状態です。
+
+   * - SPD
+     - SUSPENDED
+     - サスペンド済みの状態です。
+
+   * - SPP
+     - SUSPEND
+     - サスペンド処理をしている状態です。
+
+
+出力メッセージ一覧
+^^^^^^^^^^^^^^^^^^^
+
+| :program:`pjstat`\ コマンドに、\ ``-v``\ オプションを指定するとREASONが出力されます。
+| REASONは、ジョブを実行する、しないにかかわらず、そのジョブの何らかの処理に対する結果コードに対応するメッセージです。
+| 出力されるメッセージの意味は以下のとおりです。
+
+.. list-table:: 
+   :widths: 3 7
+   :header-rows: 1
+
+   * - メッセージ
+     - 説明
+
+   * - （なし）
+     - エラーはありません。
+
+   * - MM/DD hh:mm DELAY
+     - 実行開始予定時刻が、指定した実行開始時刻以降になりました。
+
+   * - ANOTHER JOB STARTED
+     - ジョブの実行可能時間の最小値を超えて実行していたジョブが、後続のジョブを実行するために終了させられました。
+
+   * - DEADLINE SCHEDULE STARTED
+     - ジョブの実行可能時間の最小値を超えて実行していたジョブが、デッドラインスケジュールの開始により終了させられました。
+
+   * - ELAPSE LIMIT EXCEEDED
+     - 経過時間制限を超過しました。
+
+   * - FILE IO ERROR
+     - ユーザのジョブ投入時のカレントディレクトリにアクセス不能です。
+
+   * - GATE CHECK
+     - ジョブマネージャー出口機能によってキャンセルされました。
+
+   * - IMPOSSIBLE SCHED
+     - スケジューリングができませんでした。
+
+   * - INSUFF CPU
+     - 物理的にCPU数が不足しています。
+
+   * - INSUFF MEMORY
+     - 物理的にメモリ量が不足しています。
+
+   * - INSUFF NODE
+     - 物理的にノード数が不足しています。
+
+   * - INSUFF CustomResourceName
+     - 資源名CustomResourceName で定義されているカスタム資源が不足しています。
+
+   * - INTERNAL ERROR
+     - 内部エラーです。
+
+   * - INVALID HOSTFILE
+     - :program:`pjsub`\ コマンドの\ ``rank-map-hostfile``\ パラメーターで指定したホストファイルが不正です。
+
+   * - LIMIT OVER MEMORY
+     - ジョブ実行中にメモリ量制限を超過しました。
+
+   * - LOST COMM
+     - 並列プロセスの全対全通信が保証されません。
+
+   * - NO CURRENT DIR
+     - ユーザのジョブ投入時のカレントディレクトリまたは標準入力/標準出力/標準エラー出力ファイルにアクセスできませんでした。
+
+   * - NOT EXIST CustomResourceName
+     - 資源名 CustomResourceName のカスタム資源は定義されていません。
+
+   * - RESUME FAIL
+     - リジュームに失敗しました。
+
+   * - RSCGRP NOT EXIST
+     - リソースグループが存在しません。
+
+   * - RSCGRP STOP
+     - リソースグループが停止しています。
+
+   * - RSCUNIT NOT EXIST
+     - リソースユニットが存在しません。
+
+   * - RSCUNIT STOP
+     - リソースユニットが停止しています。
+
+   * - RUNLIMIT EXCEED
+     - ジョブの同時実行制限数を超過しました。
+
+   * - SUSPEND FAIL
+     - サスペンドに失敗しました。
+
+   * - USELIMIT EXCEED
+     - 同時使用ノード数制限または同時使用CPUコア数制限による実行待ちです。
+
+   * - USER NOT EXIST
+     - ジョブの実行ユーザがシステムに存在しません。
+
+   * - WAIT SCHED
+     - スケジューリング対象ジョブ数の制限に達したため、スケジューリングの対象外になりました。
+
+   * - そのほかの文字列
+     - - \ :program:`pjdel`\ 、\ :program:`pjhold`\ 、または、\ :program:`pmsuspend`\ コマンドの\ ``--reason``\ オプションで指定したメッセージ
+
+       - ジョブマネージャー出口機能、ジョブスケジューラー出口機能、または、ジョブ資源管理出口機能で管理者が設定したメッセージ
+       
+       \ :program:`pjhold`\ および \ :program:`pmsuspend`\ コマンドの\ ``--reason``\ オプションによるメッセージの場合は、"\ `コマンド実行ユーザ名:message`\ "の形式で表示されます。``--reason``\ オプションの指定がない場合は、"\ `コマンド実行ユーザ名:`\ "が表示されます。
+
+状態別のジョブ数表示
+^^^^^^^^^^^^^^^^^^^^^
+
+:program:`pjstat`\コマンドに、\ ``--with-summary``\ を指定すると、状態別のジョブ数とジョブの詳細が表示されます。
+
+表示される情報とその意味を以下に示します。
+
+.. code-block:: console
+
+  [_LNlogin]$ pjstat --with-summary
+
+     ACCEPT QUEUED RUNING RUNOUT  HOLD  ERROR REJECT  EXIT CANCEL  TOTAL
+          n      n      n      n     n      n      n     n      n      n
+   s      n      n      n      n     n      n      n     n      n      n
+
+   JOB_ID JOB_NAME MD ST USER START_DATE     ELAPSE_LIM            NODE_REQUIRE VNODE CORE V_MEM
+   XXXXXX XXXXXXXX XX XX XXXX MM/DD hh:mm:ss hhhh:mm:ss-hhhh:mm:ss nnn:XXxYYxZZ nnnnn nnnn nnnMiB
+
+.. seealso::
+
+  状態別のジョブ数表示において先頭に "s" の付いた行は、サブジョブを含めたジョブ数を表示します。
+  
+  pjstat --summary を指定した場合、状態別のジョブ数のみ表示します。
+
+
+:program:`pjstat`\ コマンドの出力項目 (状態別のジョブ数)
+
+.. list-table:: 
+    :widths: 2 8
+    :header-rows: 1
+
+    * - 項目
+      - 説明
+
+    * - ACCEPT
+      - ジョブ受付け待ち状態のジョブ数を表示します。
+
+    * - QUEUED
+      - ジョブ実行待ち状態のジョブ数を表示します。
+
+    * - RUNING
+      - 実行中のジョブ数を表示します。
+
+    * - RUNOUT
+      - ジョブの終了待ち状態のジョブ数を表示します。
+
+    * - HOLD
+      - ユーザによる固定状態のジョブ数を表示します。
+
+    * - ERROR
+      - エラーによる固定状態のジョブ数を表示します。
+
+    * - REJECT
+      - 受付けが拒否された状態のジョブ数を表示します。
+
+    * - EXIT
+      - 終了したジョブ数を表示します。
+
+    * - CANCEL
+      - 中止されたジョブ数を表示します。
+
+    * - TOTAL
+      - 表示されている状態別ジョブ数の合計を表示します。
+
+ステップジョブ
+---------------
+
+| ステップジョブの状態は、\ :program:`pjstat`\コマンドで表示することができます。
+| サブジョブ情報を参照する場合には、``-E``\ オプションが必要となります。また、サブジョブは投入順に逐次実行されるため先頭のサブジョブの実行が終了するまで、次のサブジョブのスケジューリングは実施されません。
+| したがって、状態表示を行った場合に、"START_DATE" 欄に "\-" が表示されることがあります。
+
+
+- 通常の表示
+
+ .. code-block:: console
+
+   [_LNlogin]$ pjstat
+   JOB_ID JOB_NAME MD ST  USER  START_DATE     ELAPSE_LIM NODE_REQUIRE VNODE CORE V_MEM
+   240    step.sh  ST RUN user1 11/17 09:01:42 -          -            -     -    -
+
+- サブジョブを含めた表示（\ ``-E``\ オプションを付加）
+
+ .. code-block:: console
+
+   [_LNlogin]$ pjstat -E
+   JOB_ID JOB_NAME MD ST  USER  START_DATE     ELAPSE_LIM ...(省略)...
+   240    step.sh  ST RUN user1 11/17 09:01:42 -          ...(省略)...
+   240_0  step.sh  ST RUN user1 11/17 09:01:42 0001:00:00 ...(省略)...
+   240_1  step.sh  ST QUE user1 -              0001:00:00 ...(省略)...
+   240_2  step.sh  ST QUE user1 -              0001:00:00 ...(省略)...
+   240_3  step.sh  ST QUE user1 -              0001:00:00 ...(省略)...
+   240_4  step.sh  ST QUE user1 -              0001:00:00 ...(省略)...
+
+
+バルクジョブ
+-------------
+
+| バルクジョブの状態は、\ :program:`pjstat`\ コマンドで表示することができます。
+| サブジョブ情報を参照する場合には、``-E``\ オプションが必要となります。
+
+- 通常の表示
+
+  .. code-block:: console
+
+   [_LNlogin]$ pjstat
+   JOB_ID JOB_NAME MD ST  USER  START_DATE     ELAPSE_LIM NODE_REQUIRE VNODE CORE V_MEM
+   239    bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 12:2x3x2     -     -    -
+
+- サブジョブを含む表示（``-E``\ オプションを付加）
+
+  .. code-block:: console
+
+   [_LNlogin]$ pjstat -E
+   JOB_ID JOB_NAME MD ST  USER  START_DATE     ELAPSE_LIM ...(省略)...
+   239    bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(省略)...
+   239[1] bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(省略)...
+   239[2] bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(省略)...
+   239[3] bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(省略)...
+   239[4] bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(省略)...
+   239[5] bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(省略)...
+
+
+計算リソース
+-------------
+
+課題毎の計算リソースの表示は、\ :command:`accountj`\ コマンドを利用して確認できます。
+
+ジョブ毎の計算リソースおよび係数の表示は、\ :program:`pjstata`\ コマンドを利用して確認できます。
+
+各コマンドの利用方法は、\ `利用者支援ツール 使用手引書 (利用者編)利用ガイド <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/support_tool/>`_\ の「3.1 コマンド解説」を参照ください。
+
+ジョブ統計情報
+---------------
+
+ジョブの統計情報は、\ :command:`pjsub`\ のオプションに\ ``-s``\ 、または、\ ``-S``\ を付けて実行した場合に、拡張子が「stats」のファイルを出力します。
+ジョブ統計情報は、\ :command:`pjstat`\ コマンドを用いて参照することも可能です。
+
+\ :command:`pjstat`\ コマンドを使用する場合は、以下のオプションを利用します。
+
+.. code-block:: none
+
+   pjstat {-s|-S} --history [day=N] [jobid]
+   
+[使用例]
+
+.. code-block:: console
+
+   [_LNlogin]$ pjstat -S --history day=7 22269
+   
+ジョブ統計情報の各項目については、manマニュアル pjstatsinfo(7)を参照してください。
+
+.. code-block:: console
+
+   [_LNlogin]$ man pjstatsinfo
+
+電力の情報
+^^^^^^^^^^^
+
+ジョブ統計情報には次のような電力の情報が含まれています。
+
+- CMG 単位の計算コア群平均消費電力 (推定)
+- CMG 単位の L2 キャッシュ平均消費電力 (推定)
+- CMG 単位のメモリ平均消費電力 (推定)
+- Tofu 平均消費電力 (推定)
+- CPU 内周辺平均消費電力 (推定)
+- 光モジュール平均消費電力 (推定)
+- PCI-E 平均消費電力 (推定)
+- ノード平均消費電力 (推定)
+- ノード平均消費電力 (実測)
+
+.. attention::
+
+   電力関連情報の取得間隔について
+
+   - | ジョブ統計情報にて出力される電力情報の元となる電力測定は1分間隔です。
+     | 実行時間が1分未満のジョブでは適切なタイミングで電力測定ができない場合があり、表示された値と実際に使用した電力の乖離が大きくなることがあります。
+
+   - ジョブ統計情報にて出力される電力情報 AVG は、1分単位で計測した情報を処理した値です。
+
+
+「富岳」では、ジョブ実行中に消費電力が運用側で設定した値を超過した場合、該当ジョブが使用しているノードのCPUクロックを強制的に下げる場合があります。
+統計情報の出力はジョブの消費電力の目安となります。
+
+より詳細な消費電力の調査が必要な場合は、PowerAPIやプロファイラを利用してください。
+
+ジョブ統計情報の出力例（抜粋）
+
+.. code-block:: none
+
+   AVG POWER CONSUMPTION OF CORES/CMG(0) (IDEAL) : 21.394424
+   AVG POWER CONSUMPTION OF CORES/CMG(1) (IDEAL) : 21.355174
+   AVG POWER CONSUMPTION OF CORES/CMG(2) (IDEAL) : 21.362863
+   AVG POWER CONSUMPTION OF CORES/CMG(3) (IDEAL) : 21.363552
+   ENERGY CONSUMPTION OF CORES/CMG(0) (IDEAL) : 0.012945
+   ENERGY CONSUMPTION OF CORES/CMG(1) (IDEAL) : 0.012922
+   ENERGY CONSUMPTION OF CORES/CMG(2) (IDEAL) : 0.012926
+   ENERGY CONSUMPTION OF CORES/CMG(3) (IDEAL) : 0.012927
+   AVG POWER CONSUMPTION OF L2CACHE/CMG(0) (IDEAL) : 1.349224
+   AVG POWER CONSUMPTION OF L2CACHE/CMG(1) (IDEAL) : 1.337747
+   AVG POWER CONSUMPTION OF L2CACHE/CMG(2) (IDEAL) : 1.323286
+   AVG POWER CONSUMPTION OF L2CACHE/CMG(3) (IDEAL) : 1.323401
+
+電力制限機能（パワーキャッピング）
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ジョブの消費電力が閾値を越えて電力制限機能が働いた場合、ジョブ統計情報の「POWER CAPPING DATE」に閾値を越えた時刻が出力されます。
+
+電力制限を受けたかどうかの確認は「POWER CAPPING DATE」を参照ください。
+
+
+性能情報の算出
+^^^^^^^^^^^^^^^
+
+ジョブ統計情報は性能情報を算出するための情報（PERF COUNT）が含まれています。
+この情報はノードごとに出力されるため、\ ``-S``\ オプションを付けた場合に出力されます。
+
+出力例(抜粋)
+
+.. code-block:: none
+
+ PERF COUNT 1                : 4385694044
+ PERF COUNT 2                : 3968
+ PERF COUNT 3                : 0
+ PERF COUNT 4                : 267598
+ PERF COUNT 5                : 328895
+ PERF COUNT 6                : 0
+ PERF COUNT 7                : 2398547
+ PERF COUNT 8                : 98275
+ PERF COUNT 9                : 237498
+
+性能情報の算出は次のように計算します。
+
+.. list-table::
+  :header-rows: 1
+
+  * - 性能情報
+    - 算出方法
+
+  * - 実行サイクル数
+    - SUM（PERF COUNT 1）
+
+  * - 浮動小数点命令演算数
+    - SUM（PERF COUNT 2）＋ SUM（PERF COUNT 3）× 4
+
+  * - メモリ読み出し要求数
+    - SUM（PERF COUNT 4）/ 12
+
+  * - メモリ書き出し要求数
+    - SUM（PERF COUNT 5）/ 12
+
+  * - スリープサイクル数
+    - SUM（PERF COUNT 6）
+
+  * - EFFECTIVE_INST_SPEC*
+    - SUM（PERF COUNT 7）
+
+  * - SIMD_INST_RETIRED*
+    - SUM（PERF COUNT 8）
+
+  * - SVE_INST_RETIRED*
+    - SUM（PERF COUNT 9）
+
+\*参考：\ `https://github.com/fujitsu/A64FX/blob/master/doc/A64FX_PMU_Events_v1.3.pdf <https://github.com/fujitsu/A64FX/blob/master/doc/A64FX_PMU_Events_v1.3.pdf>`_
+
+  
+.. attention::
+
+  ジョブ統計情報から算出される性能情報は実行したアプリ単位ではなくジョブ単位であることに留意ください。
+
+  ジョブスクリプト中で、\ :command:`xospastop`\ コマンドを実行した場合やプロファイラを実行した場合は、PERF COUNTの計測が行われません。アプリの詳細な性能情報が必要な場合はプロファイラなどをご利用ください。
+
+ジョブ状態表示コマンドのオプション
+-----------------------------------
+
+ジョブ状態表示コマンド（\ :program:`pjstat`\ ）の代表的なオプションを示します。
+
+詳細は「ジョブ運用ソフトウェア - エンドユーザ向けガイド」を参照してください。
+
+.. list-table:: 
+    :widths: 3 9
+    :header-rows: 1
+
+    * - オプション名
+      - 機能
+
+    * - \-H、\-\-history [day=value]
+      - | 処理が終了したジョブ（REJECT、EXIT、CANCEL状態）の情報だけを表示します。
+        | ``-H``\ または\ ``--history``\ の引数を指定しない場合は、過去3日間に終了したジョブの情報を出力します。
+        | day=value により過去のvalue日間に終了したジョブの情報を出力します。値は整数 [1-90] が指定可能です。
+        | 「富岳」は最大90日の情報を保持しています。
+        | 例: ``pjstat -H day=90``
+
+    * - \-v
+      - 標準形式では出力されないジョブ情報を追加で表示します。
+
+    * - \-s
+      - | 資源使用状況や資源制限値などの詳細情報を出力します。
+        | 出力される情報は、\ :ref:`JobExecutionStatisticalInformation`\ を参照してください。
+        | ``-v``\ または、\ ``-S``\ オプションと併用した場合は、エラーメッセージを出力して終了します。
+
+    * - \-S
+      - | ``-s``\オプションで出力される情報に加え、そのジョブに設定されているノード単位の情報についても追加で出力します。
+        | 出力される情報は、\ :ref:`JobExecutionStatisticalInformation`\ を参照してください。
+        | ``-v``\ または、\ ``-s``\ オプションと併用した場合は、エラーメッセージを出力して終了します。
+
+    * - \-E、 \-\-expand
+      - サブジョブが存在するとき、そのサブジョブの一覧も出力します。
+
+    * - \-\-limit
+      - ユーザのジョブ投入に関する制限値と現在の使用量を表示します。
+
+    * - \-\-help
+      - ヘルプを表示します。
+
+

@@ -1,0 +1,222 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Supercomputer Fugaku User Guide - Language and development environment - Version 1.36 &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=f85107c5" />
+    
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Introduction" href="Introduction/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Introduction/index.html" title="1. Introduction"
+             accesskey="N">next</a></li>
+        <li class="nav-item nav-item-0"><a href="#">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Supercomputer Fugaku User Guide - Language and development environment - Version 1.36</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="supercomputer-fugaku-user-guide-language-and-development-environment-version-version">
+<h1>Supercomputer Fugaku User Guide - Language and development environment - Version 1.36<a class="headerlink" href="#supercomputer-fugaku-user-guide-language-and-development-environment-version-version" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Index:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Introduction/index.html">1. Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#purpose-of-this-documentation">1.1. Purpose of this documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#description-used-in-this-document">1.2. Description used in this document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#abbreviations-and-aliases">1.3. Abbreviations and aliases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#trademarks">1.4. Trademarks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#change-log">1.5. Change log</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Compilers/index.html">2. Compiler type</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CompileforCN/index.html">3. Compilers that generate binaries for compute nodes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CompileforCN/FujitsuCompiler/index.html">3.1. Fujitsu compiler</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/FujitsuCompiler/LanguageSpecifications.html">3.1.1. Language specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/FujitsuCompiler/LanguageEnvironmentSupportOverMultipleGenerations.html">3.1.2. Multiple version offering of language environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/FujitsuCompiler/EnvironmentSettings.html">3.1.3. Compiler Environment Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/FujitsuCompiler/CompileCommands.html">3.1.4. Compile command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/FujitsuCompiler/RuntimeEnvironmentVariables.html">3.1.5. Runtime environment variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/FujitsuCompiler/HowToCheckTheVersion.html">3.1.6. How to check the version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/FujitsuCompiler/Fortran/index.html">3.1.7. Fortran</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/FujitsuCompiler/C/index.html">3.1.8. C language</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/FujitsuCompiler/C%2B%2B/index.html">3.1.9. C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/FujitsuCompiler/ParallelExecutionDebugger/index.html">3.1.10. Debugger for Parallel Applications function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/FujitsuCompiler/Profiler/index.html">3.1.11. Profiler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/FujitsuCompiler/ManualReference.html">3.1.12. Manual</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/FujitsuCompiler/DevelopmentSupportTools/index.html">3.1.13. Integrated development environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/FujitsuCompiler/InterlanguageLinkage/index.html">3.1.14. Mixed Language Programming (About Object Compatibility)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CompileforCN/GCC_MPI/index.html">3.2. Combination of GNU Compiler Collection and Fujitsu MPI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/GCC_MPI/index.html#overview">3.2.1. Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/GCC_MPI/index.html#compiling-on-a-login-node">3.2.2. Compiling on a Login Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/GCC_MPI/index.html#compiling-on-a-computation-node">3.2.3. Compiling on a Computation Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/GCC_MPI/index.html#run">3.2.4. Run</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CompileforCN/LLVM/index.html">3.3. LLVM</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/LLVM/index.html#usage-of-llvm-compilers">3.3.1. Usage of LLVM compilers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforCN/LLVM/index.html#migration-from-fujitsu-compiler">3.3.2. Migration from Fujitsu compiler</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CompileforLN/index.html">4. Compilers that generate binaries for login nodes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CompileforLN/index.html#intel-oneapi">4.1. Intel oneAPI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CompileforLN/index.html#environment-setting">4.1.1. Environment setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforLN/index.html#to-compile">4.1.2. To compile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforLN/index.html#about-intel-oneapi-compiler">4.1.3. About Intel oneAPI compiler</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CompileforLN/index.html#arm-compiler-for-linux">4.2. Arm Compiler for Linux</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CompileforLN/index.html#id1">4.2.1. Environment setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforLN/index.html#id2">4.2.2. To compile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforLN/index.html#arm-performance-libraries">4.2.3. Arm Performance Libraries</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CompileforLN/index.html#llvm-arm-loign-node">4.3. LLVM (Arm loign node)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CompileforLN/index.html#id3">4.3.1. Environment setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CompileforLN/index.html#id4">4.3.2. To compile</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Library/index.html">5. Math library</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Library/Overview.html">5.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Library/SSLIILibrary.html">5.2. SSL II library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Library/SSLIILibrary.html#how-to-fortran-compile">5.2.1. How to Fortran compile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Library/SSLIILibrary.html#sample-program-ssl2-fortran">5.2.2. Sample program (SSL2 / Fortran)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Library/SSLIILibrary.html#program-return-value-when-used-from-c-language">5.2.3. Program return value when used from C language</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Library/C-SSLIILibrary.html">5.3. C-SSL II library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Library/C-SSLIILibrary.html#how-to-compile-c-language">5.3.1. How to compile C language</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Library/C-SSLIILibrary.html#sample-program-c-ssl-ii-c">5.3.2. Sample program (C-SSL II/C)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Library/C-SSLIILibrary.html#how-to-compile-c">5.3.3. How to compile C++</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Library/BLASLAPACKScaLAPACKLibrary.html">5.4. BLAS/LAPACK/ScaLAPACK library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Library/BLASLAPACKScaLAPACKLibrary.html#how-to-conpile-fortran">5.4.1. How to conpile Fortran</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Library/BLASLAPACKScaLAPACKLibrary.html#how-to-compile-c-language">5.4.2. How to compile C language</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Library/BLASLAPACKScaLAPACKLibrary.html#how-to-compile-c">5.4.3. How to compile C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Library/BLASLAPACKScaLAPACKLibrary.html#sample-program-scalapack-fortran">5.4.4. Sample program (ScaLAPACK / FORTRAN)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Library/BLASLAPACKScaLAPACKLibrary.html#how-to-use-shared-libraries">5.4.5. How to use shared libraries</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Library/FastBasicOperationsLibraryForQuadruplePrecision.html">5.5. High-speed quadruple precision basic arithmetic library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Library/FastBasicOperationsLibraryForQuadruplePrecision.html#how-to-combine-fortran-versions">5.5.1. How to combine Fortran versions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Library/FastBasicOperationsLibraryForQuadruplePrecision.html#how-to-conbine-c-version">5.5.2. How to conbine C ++ version</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="PAPI/index.html">6. Use of PAPI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="PAPI/index.html#overview">6.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PAPI/index.html#compiling-link">6.2. Compiling link</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PAPI/index.html#how-to-execute">6.3. How to execute</a></li>
+<li class="toctree-l2"><a class="reference internal" href="PAPI/index.html#notes">6.4. Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ScriptingLanguage/index.html">7. Script language</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ScriptingLanguage/index.html#overview">7.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ScriptingLanguage/index.html#python">7.2. Python</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScriptingLanguage/index.html#python2">7.2.1. Python2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScriptingLanguage/index.html#python3">7.2.2. Python3</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ScriptingLanguage/index.html#ruby">7.3. Ruby</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScriptingLanguage/index.html#environment-variable">7.3.1. Environment variable</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ScriptingLanguage/index.html#java">7.4. Java</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ScriptingLanguage/index.html#compiler-environment-setting">7.4.1. Compiler environment setting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScriptingLanguage/index.html#compile-command">7.4.2. Compile command</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ScriptingLanguage/index.html#execution-direction">7.4.3. Execution direction</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MigratingFromK/index.html">8. Migration from K</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MigratingFromK/index.html#overview">8.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MigratingFromK/index.html#language-environment-correspondance">8.2. Language environment correspondance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MigratingFromK/index.html#version-check-method">8.3. Version check method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MigratingFromK/index.html#incompatible-item">8.4. Incompatible item</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="MigratingFromK/index.html#fortran">8.4.1. Fortran</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MigratingFromK/index.html#c-language">8.4.2. C language</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MigratingFromK/index.html#c">8.4.3. C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MigratingFromK/index.html#mpi">8.4.4. MPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MigratingFromK/index.html#tool">8.4.5. Tool</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Introduction/index.html"
+                          title="next chapter"><span class="section-number">1. </span>Introduction</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Introduction/index.html" title="1. Introduction"
+             >next</a></li>
+        <li class="nav-item nav-item-0"><a href="#">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Supercomputer Fugaku User Guide - Language and development environment - Version 1.36</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

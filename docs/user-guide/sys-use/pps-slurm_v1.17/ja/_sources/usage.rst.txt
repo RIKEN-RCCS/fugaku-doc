@@ -1,0 +1,490 @@
+ログイン
+========
+
+| プリポスト環境はインターネットから直接接続することはできないため、プリポスト環境を利用するには、まず初めにログインノードにログインする必要があります。
+| ログインノードへのログイン方法は「\ `利用手引書 －利用およびジョブ実行編－ <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/use_latest/>`_\ 」をご参照ください。
+
+ファイル転送
+============
+
+| ユーザホーム領域は富岳本体システムと共通化されているため、ログインノードへ\ ``scp``\ コマンド等を用いてファイル転送することで、プリポスト環境で参照・使用することができます。
+| ユーザホーム領域のストレージ容量・ファイル数の制限は、富岳本体システムの場合と同様の制限を受けます。
+| ファイル転送の詳細は「\ `利用手引書 －利用およびジョブ実行編－ <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/use_latest/>`_\ 」もしくは 「\ `利用手引書 －高速転送ガイド－ <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/high_speed_io_guide/>`_」を参照してください。
+
+
+コンパイル
+==========
+
+GCC
+---
+
+GCCを用いたコンパイル例です。
+
+* 大容量メモリノード
+
+.. code-block:: console
+ 
+   [Login]$ srun -p mem1 -n 1 --mem 22G --time=5 --pty bash -i
+   [MEM]$ gcc -o a.out sample.c
+
+* GPUノード
+
+.. code-block:: console
+ 
+   [Login]$ srun -p gpu1 -n 1 --mem 2574 --time=5 --pty bash -i
+   [GPU]$ gcc -o a.out sample.c
+
+.. note:: 
+
+   ログインノード上でGCCを使用してコンパイルされたプログラムも、プリポスト環境で実行可能です。
+
+
+Intelコンパイラ
+---------------
+
+計算ノードでIntelコンパイラを使用する場合、インタラクティブジョブでジョブを投入し、環境変数を設定してください。
+
+Intelコンパイラを用いたコンパイル例です。
+
+* 大容量メモリノード
+
+.. code-block:: console
+ 
+   [Login]$ srun -p mem1 -n 1 --mem 22G --time=5 --pty bash -i
+   [MEM]$ . /opt/intel/oneapi/setvars.sh intel64
+   [MEM]$ icc -o a.out sample.c
+
+* GPUノード
+
+.. code-block:: console
+ 
+   [Login]$ srun -p gpu1 -n 1 --mem 2574 --time=5 --pty bash -i
+   [GPU]$ . /opt/intel/oneapi/setvars.sh intel64
+   [GPU]$ icc -o a.out sample.c
+
+.. note:: 
+   
+   ログインノードでIntelコンパイラを使用してコンパイルされたプログラムも、プリポスト環境で実行可能です。
+
+
+| Intelコンパイラに関する詳細は、「\ `利用手引書 －言語開発環境編－ <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/lang_latest/CompileforLN/index.html>`_\ 」をご確認ください。
+| 
+
+
+NVIDIA CUDA Compiler
+--------------------
+
+インタラクティブジョブでGPUノードにログインし、環境変数を設定してください。
+
+CUDA Compilerを用いたコンパイル例です。
+
+.. code-block:: console
+ 
+   [Login]$ srun -p gpu1 -n 1 --mem 2574 --time=5 --pty bash -i
+   [GPU]$ export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+   [GPU]$ export LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+   [GPU]$ nvcc -o a.out sample.cu
+
+.. attention:: 
+
+   NVIDIA CUDAコンパイラは、GPUノードでのみ利用可能です。
+
+   コンパイルされた a.out を実行するには、SLURMオプションによってGPU本体のリソース確保が必要です。（詳細は\ :ref:`batchjob`\ 以降を参照）
+
+| NVIDIA CUDAコンパイラに関する情報は、NVIDIA社ホームページを参照ください。
+| https://developer.nvidia.com/cuda-toolkit-archive
+
+
+富士通コンパイラ（クロスコンパイラ）
+-------------------------------------
+
+| プリポスト環境のインタラクティブジョブにおいて、富士通コンパイラ（クロスコンパイラ）を使用することができます。
+| ログインノードでコンパイルする際に、メモリ不足等でコンパイルができない場合等にご利用ください。
+| なお、コンパイルしたモジュールをプリポスト環境で実行することはできません。
+| 詳細は「`利用手引書 －言語開発環境編－ <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/lang_latest/CompileforCN/FujitsuCompiler/index.html>`_\ 」を参照してください。
+
+富士通コンパイラを用いたコンパイル例です。
+
+.. code-block:: console
+
+   [Login]$ srun -p gpu1 -n 1 --mem 2574 --time=5 --pty bash -i
+   [GPU]$ frtpx -o a.out sample.f90
+
+
+ジョブの実行方法
+=================
+
+| ジョブ実行には、バッチジョブとインタラクティブジョブによる2種類の方法があります。
+| バッチジョブは、あらかじめジョブスクリプトを作成しジョブを投入する方法で、長時間実行する場合などに適しています。
+| 一方、インタラクティブジョブでは、ユーザがコマンド実行を会話的に行うことができるため、バッチジョブ投入前のデバッグ等に使用することができます。
+
+| プリポスト環境のジョブスケジューリングは、「フェアシェア」機能を使用してジョブの実行順序を決定します。
+| フェアシェアは、過去のジョブによるリソース使用実績に基づいてジョブの優先度を調整する仕組みです。
+| リソース使用実績が少ないユーザほど優先度が高くなり、ジョブの実行開始が優先されます。
+| 逆に、使用実績が多いユーザは優先度が低くなり、ジョブの実行開始が後回しになります。
+ 
+
+ジョブキュー（パーティション）
+------------------------------
+
+| プリポスト環境でジョブを実行するには、ジョブキューを指定する必要があります。
+| 指定の方法は、バッチジョブもしくはインタラクティブジョブの投入方法のセクションをご確認ください。
+
+現在、提供されているジョブキューの一覧を以下に示します。[#A1]_
+
+.. list-table::
+   :header-rows: 1
+
+   * - キュー名 (PartitionName)
+     - ノード名 (Nodes)
+     - デフォルト経過時間 [h] (DefaultTime)
+     - 最大経過時間 [h] (MaxTime)
+     - ジョブあたりデフォルトCPU数 (cpus-per-task)
+     - ジョブあたり最大CPU数 (MaxTRESPerJob=cpu)
+     - ジョブあたりデフォルトメモリ量 (DefMemPerNode)
+     - ジョブあたり最大メモリ量 (MaxMemPerNode)
+     - ユーザあたりの最大ジョブ実行数 (MaxJobPerUser)
+     - ジョブあたりの最大ノード数 (MaxNodes)
+
+   * - gpu1
+     - | pps[01-06] 
+     - | 0.5
+     - | 3
+     - | 1
+     - | 72
+     - | 2574M
+     - | 185344M
+       | (181G)
+     - | 5
+     - | 1
+
+   * - gpu2
+     - | pps[07-08]
+     - | 0.5
+     - | 24
+     - | 1
+     - | 36
+     - | 2574M
+     - | 92672M
+       | (90G)
+     - | 1
+     - | 1
+
+   * - mem1
+     - | ppm01
+     - | 0.5
+     - | 3
+     - | 1
+     - | 224
+     - | 22863M
+     - | 5121496M [#A2]_
+       | (5001G)
+     - | 5
+     - | 1
+
+   * - mem2
+     - | ppm[02-03]
+     - | 0.5
+     - | 24
+     - | 1
+     - | 56
+     - | 22863M
+     - | 1536000M
+       | (1500G)
+     - | 1
+     - | 1
+
+   * - ondemand-reserved [#A3]_
+     - | wheel[1-2]
+     - | 0.5
+     - | 720
+     - | 1
+     - | 8
+     - | 4096M
+     - | 32768M
+       | (32G)
+     - | 50
+     - | 1
+.. note:: 
+
+   * gpu1, mem1は短時間用ジョブ、gpu2, mem2は長時間用ジョブのキューとして用意されています。
+   * リソース量を指定せずにジョブ投入した場合に、デフォルト値が適用されます。ジョブ投入時に要求CPU数、メモリ量、経過時間をジョブスクリプトもしくはSlurmのコマンドオプションで指定することをお願い致します。
+
+.. [#A1] Hyper-Threading (HT)は有効になっています。(#CPUs = #physical_cores × 2)
+
+.. [#A2] スクラッチ領域にメモリの一部分が使用されているため、搭載メモリ量より小さく設定されています。
+
+.. [#A3] ondemand-reservedキューは主にOpen OnDemandからの利用を想定しておりhidden属性が設定されています。このキューはワークフローや開発環境といった資源を消費しない長時間ジョブのために用意されています (WHEELやVSCodeなど)。そのため、資源をオーバーサブスクライブする一方で長時間の実行を許可しています。このキューについては、運用の都合により事前連絡なしでジョブを強制終了することがあります。
+
+
+.. _batchjob:
+
+バッチジョブ
+------------
+
+プリポスト環境へバッチジョブとしてジョブを投入するには、ジョブスクリプトを作成し、ログインノード上でSlurmコマンドを実行します。
+
+逐次ジョブ
+^^^^^^^^^^
+
+逐次ジョブのジョブスクリプト例です。
+
+* 大容量メモリノード (1cpu)
+
+.. code-block:: bash
+   
+   #!/bin/bash	
+   #SBATCH -p mem1      # キューの指定
+   #SBATCH -n 1         # CPU数の指定
+   #SBATCH --mem 22G    # メモリ量の指定 [GB]
+   ./a.out
+
+* 大容量メモリノード (1node)
+
+.. code-block:: bash
+   
+   #!/bin/bash	
+   #SBATCH -p mem1      # キューの指定
+   #SBATCH -n 224       # CPU数の指定
+   #SBATCH --mem 5001G  # メモリ量の指定 [GB]
+   ./a.out
+
+* GPUノード (1cpu)
+
+.. code-block:: bash
+   
+   #!/bin/bash	
+   #SBATCH -p gpu1      # キューの指定
+   #SBATCH -n 1         # CPU数の指定
+   #SBATCH --mem 2574   # メモリ量の指定 [MB]
+   ./a.out
+
+* GPUノード (1node)
+
+.. code-block:: bash
+   
+   #!/bin/bash	
+   #SBATCH -p gpu1      # キューの指定
+   #SBATCH -n 72        # CPU数の指定
+   #SBATCH --mem 181G   # メモリ量の指定 [GB]
+   ./a.out
+
+
+OpenMP
+^^^^^^
+
+OpenMPを用いたジョブスクリプト例です。
+
+* Intelコンパイラ＋OpenMP
+
+.. code-block:: bash
+
+   #!/bin/bash
+   #SBATCH -p gpu1               # キューの指定
+   #SBATCH --cpus-per-task=72    # タスクごとに使用するCPU数を指定
+   export OMP_NUM_THREADS=72	
+   export KMP_AFFINITY=granularity=fine,compact	
+   . /opt/intel/oneapi/setvars.sh intel64	
+   ./a.out	
+
+
+* GCC + OpenMP
+
+.. code-block:: bash
+
+   #!/bin/bash
+   #SBATCH -p mem1              # キューの指定
+   #SBATCH --cpus-per-task=224  # タスクごとに使用するコア数を指定
+   export OMP_NUM_THREADS=224
+   ./a.out
+
+
+MPI
+^^^
+
+MPIを用いたジョブスクリプト例です。
+
+* Intelコンパイラ + Intel MPI
+
+.. code-block:: bash
+
+   #!/bin/bash	
+   #SBATCH -p mem1               # キューの指定
+   #SBATCH --cpus-per-task=224   # タスクごとに使用するコア数の指定
+   #SBATCH -t 00:10:00           # ジョブ実行時間の制限を指定
+   . /opt/intel/oneapi/setvars.sh intel64	
+   mpiexec -n 224 ./a.out	
+
+
+* GCC + OpenMPI
+
+.. code-block:: bash
+
+   #!/bin/bash	
+   #SBATCH -p gpu1                # キューの指定
+   #SBATCH -n 72                  # タスク数の指定
+   #SBATCH -t 00:10:00            # ジョブ実行時間の制限を指定
+   . /vol0004/apps/oss/spack/share/spack/setup-env.sh
+   spack load openmpi@3.1.6%gcc@8.5.0
+   mpiexec --use-hwthread-cpus -n 72 --mca btl_openib_if_include mlx5_0 ./a.out	
+
+..  #!/bin/bash	
+..   #SBATCH -p gpu1                # キューの指定
+..   #SBATCH -n 72                  # タスク数の指定
+..   #SBATCH -t 00:10:00            # ジョブ実行時間の制限を指定
+..   export PATH=/usr/mpi/gcc/openmpi/bin:${PATH}	
+..   export LD_LIBRARY_PATH=/usr/mpi/gcc/openmpi/lib64:${LD_LIBRARY_PATH}	
+..   unset SLURM_JOBID
+..   mpiexec --use-hwthread-cpus -n 72 --mca btl_openib_if_include mlx5_0 ./a.out	
+
+.. attention:: 
+
+   * GCC＋Open MPIを使用する際、各ノードに対する最大コア数の半分以上を利用する場合は、\ **--use-hwthread-cpus**\ オプションが必要です。
+..   * GCC+OpenMPIの場合は、mpiexec前に **unset SLURM_JOBID** を追加してください。基本的にはプリインストールのOpenMPIではなく、**spack load openmpi** の使用を推奨します。
+
+
+GPU
+^^^
+
+GPUを用いたジョブスクリプト例です。
+
+.. code-block:: bash
+   
+   #!/bin/bash	
+   #SBATCH -p gpu1                # キューの指定
+   #SBATCH --gpus-per-node=1      # 利用するGPU数の指定
+   ./a.out
+
+GPUを2台使用する場合は、\ ``--gpus-per-node=2``\ を指定してください。
+
+.. code-block:: bash
+   
+   #!/bin/bash	
+   #SBATCH -p gpu1                # キューの指定
+   #SBATCH --gpus-per-node=2      # GPUを2台使用する場合の指定
+   ./a.out
+
+インタラクティブジョブ
+----------------------
+
+| インタラクティブジョブでは、必要となるリソースをSlurmコマンドのオプションとして、ログインノード上で直接指定し、実行します。
+| リソースが確保できればインタラクティブジョブに遷移します。その後は、会話的にコマンドが実行できます。
+
+インタラクティブジョブのジョブ投入コマンドの例です。
+
+* 大容量メモリノード (1cpu)
+
+.. code-block:: console
+ 
+   [Login]$ srun -p mem1 -n 1 --mem 22G --time=5 --pty bash -i
+
+* 大容量メモリノード (1node)
+
+.. code-block:: console
+ 
+   [Login]$ srun -p mem1 -n 224 --mem 5001G --time=5 --pty bash -i
+
+* GPUノード (1cpu, GPUなし)
+
+.. code-block:: console
+ 
+   [Login]$ srun -p gpu1 -n 1 --mem 2574 --time=5 --pty bash -i
+
+* GPUノード (1node, GPUなし)
+
+.. code-block:: console
+ 
+   [Login]$ srun -p gpu1 -n 72 --mem 181G --time=5 --pty bash -i
+
+* GPUノード (1cpu, 1GPU)
+
+.. code-block:: console
+ 
+   [Login]$ srun -p gpu1 -n 1 --mem 2574 --time=5 --gpus-per-node=1 --pty bash -i
+
+   [GPU]$ nvidia-smi
+   +---------------------------------------------------------------------------------------+
+   | NVIDIA-SMI 535.216.01             Driver Version: 535.216.01   CUDA Version: 12.2     |
+   |-----------------------------------------+----------------------+----------------------+
+   | GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+   | Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+   |                                         |                      |               MIG M. |
+   |=========================================+======================+======================|
+   |   0  Tesla V100-PCIE-32GB           Off | 00000000:18:00.0 Off |                    0 |
+   | N/A   41C    P0              37W / 250W |      0MiB / 32768MiB |      1%      Default |
+   |                                         |                      |                  N/A |
+   +-----------------------------------------+----------------------+----------------------+
+
+   +---------------------------------------------------------------------------------------+
+   | Processes:                                                                            |
+   |  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+   |        ID   ID                                                             Usage      |
+   |=======================================================================================|
+   |  No running processes found                                                           |
+   +---------------------------------------------------------------------------------------+
+
+* GPUノード (1node, 2GPU)
+
+.. code-block:: console
+ 
+   [Login]$ srun -p gpu1 -n 72 --mem 181G --time=5 --gpus-per-node=2 --pty bash -i
+
+   [GPU]$ nvidia-smi
+   +---------------------------------------------------------------------------------------+
+   | NVIDIA-SMI 535.216.01             Driver Version: 535.216.01   CUDA Version: 12.2     |
+   |-----------------------------------------+----------------------+----------------------+
+   | GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+   | Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+   |                                         |                      |               MIG M. |
+   |=========================================+======================+======================|
+   |   0  Tesla V100-PCIE-32GB           Off | 00000000:18:00.0 Off |                    0 |
+   | N/A   39C    P0              39W / 250W |      0MiB / 32768MiB |      0%      Default |
+   |                                         |                      |                  N/A |
+   +-----------------------------------------+----------------------+----------------------+
+   |   1  Tesla V100-PCIE-32GB           Off | 00000000:AF:00.0 Off |                    0 |
+   | N/A   38C    P0              38W / 250W |      0MiB / 32768MiB |      1%      Default |
+   |                                         |                      |                  N/A |
+   +-----------------------------------------+----------------------+----------------------+
+
+   +---------------------------------------------------------------------------------------+
+   | Processes:                                                                            |
+   |  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+   |        ID   ID                                                             Usage      |
+   |=======================================================================================|
+   |  No running processes found                                                           |
+   +---------------------------------------------------------------------------------------+
+
+スクラッチ領域（大容量メモリノードで使用可）
+--------------------------------------------
+
+| 大容量メモリノードのキュー (mem1, mem2) にジョブを投入した場合、**/worktmp** 配下にジョブ毎の作業用ディレクトリが作成されます。
+| メモリを使用した高速なファイルシステムであり、一時的なスクラッチ領域として使用することができます。
+| ジョブ毎に作成された作業用ディレクトリは、そのジョブを投入したユーザのみアクセスすることができます。
+| なお、スクラッチ領域が作成されるのは、大容量メモリノードのみで、GPUノードにはありません。
+
+.. attention::
+
+   * ジョブが使用できる領域は、/worktmp/${SLURM_JOBID} となります。
+   * スクラッチ領域は、ジョブおよびユーザ間で共有されており、最大で1TBとなっています。
+   * スクラッチ領域が、他ジョブ（もしくはユーザ）の使用によって最大容量に達していた場合は、書き込みに失敗します。
+   * ジョブ終了後、当該ディレクトリ (/worktmp/${SLURM_JOBID}) は自動的に削除されます。
+
+ジョブスクリプトの例です。
+
+.. code-block:: bash
+
+   #!/bin/bash
+   #SBATCH -p mem1
+   #SBATCH -n 1
+   export TMPDIR=/worktmp/${SLURM_JOBID}
+   dd if=/dev/zero of=${TMPDIR}/foo.dat bs=100M count=1
+
+
+その他
+---------
+
+プリポスト環境上でX Window Systemを利用する場合、\ ``srun``\ コマンドに\ ``--x11``\ オプションを付与し、インタラクティブジョブでジョブ投入してください。
+
+.. code-block:: console
+ 
+   [Login]$ srun --x11 -p gpu1 -n 1 --time=5 --pty bash -i

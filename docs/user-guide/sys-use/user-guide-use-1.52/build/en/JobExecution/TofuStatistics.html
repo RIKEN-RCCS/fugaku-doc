@@ -1,0 +1,284 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.18. Obtaining TofuD TNR statistics &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.19. Job list display command affected by the failure" href="ShowAffectedJobs.html" />
+    <link rel="prev" title="5.17. Sample Scripts" href="SampleScripts.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="ShowAffectedJobs.html" title="5.19. Job list display command affected by the failure"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="SampleScripts.html" title="5.17. Sample Scripts"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.18. </span>Obtaining TofuD TNR statistics</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="obtaining-tofud-tnr-statistics">
+<h1><span class="section-number">5.18. </span>Obtaining TofuD TNR statistics<a class="headerlink" href="#obtaining-tofud-tnr-statistics" title="Link to this heading">¶</a></h1>
+<p><strong>Overview</strong></p>
+<blockquote>
+<div><p>Users can obtain TofuD TNR (Tofu network router) statistics.
+For each TNR port (A,C,B-,B+,X-,X+,Y-,Y+,Z-,Z+), the following statistics can be obtained.</p>
+<ul class="simple">
+<li><p>zero credit state cyscles</p></li>
+<li><p>total packets sent and received</p></li>
+<li><p>total bytes of packets sent and received(1/16 value)</p></li>
+</ul>
+<p>Zero credit state cycles represent the total number of cycles when the remaining amount of destination buffer was zero. Since the operating frequency is 425MHz, one cycle corresponds to approximately 2.35 nanoseconds. Users can see the number of cycles (time) that communication was stopped due to congestion.</p>
+<p>By obtaining statistics with a time interval and taking the difference between the read values, it is possible to know the communication amount.</p>
+<p>The total bytes of packets sent and received represent 1/16 of the total bytes sent and received.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Please refer to “ <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/fugaku_information#tofud-interconnect">Fugaku System Configuration</a> “ on the Fugaku website for the configuration information of TofuD.</p>
+</div>
+</div></blockquote>
+<p><strong>Understanding the interface for obtaining statistics (ioctl)</strong></p>
+<blockquote>
+<div><p>TNR statistics can be obtained with the <strong class="command">ioctl(2)</strong> interface provided by the TofuD driver.
+Specify the followings as arguments to call <strong class="command">ioctl</strong>.</p>
+<blockquote>
+<div><ul>
+<li><p>the first argument of ioctl : fd number when opening /proc/tofu/dev/info</p></li>
+<li><p>the second argument of ioctl: _IOWR(‘d’, 9, long)</p></li>
+<li><p>the third argument of ioctl : Address of the following structure (tof_get_port_stat)</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">tof_get_port_stat</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="n">port_no</span><span class="p">;</span>
+<span class="w">      </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">mask</span><span class="p">;</span>
+<span class="w">      </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">pa</span><span class="p">[</span><span class="mi">31</span><span class="p">];</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+<p>The port_no variable and mask variable in the tof_get_port_stat structure are input parameters of ioctl. For the pa variable, the statistics of the port specified by port_no is stored.
+The correspondence between the index of the pa variable (array) and the available statistics is as follows.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Index of the pa variable</p></th>
+<th class="head"><p>Description of obtained results</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>number of zero credit state cyscles in virtual channel 0 (VC0)</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>number of zero credit state cyscles in virtual channel 1 (VC1)</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>number of zero credit state cyscles in virtual channel 2 (VC2)</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>number of zero credit state cyscles in virtual channel 3 (VC3)</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>total sent packets</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>total sent bytes(1/16 value)</p></td>
+</tr>
+<tr class="row-even"><td><p>16</p></td>
+<td><p>total received packets</p></td>
+</tr>
+<tr class="row-odd"><td><p>17</p></td>
+<td><p>total received bytes(1/16 value)</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Specify the port ID based on the table below for the port_no variable.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Logical port</p></th>
+<th class="head"><p>Port ID</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>C</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>B-</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p>B+</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>X-</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p>X+</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-even"><td><p>Y-</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-odd"><td><p>Y+</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td><p>Z-</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-odd"><td><p>Z+</p></td>
+<td><p>10</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Set a bitmask to the mask variable.</p>
+<ul class="simple">
+<li><p>Obtain pa[n] when 0</p></li>
+<li><p>Do not obtain pa[n] when 1</p></li>
+</ul>
+<p>For example, in order to obtain pa[0],pa[1],pa[2],pa[3], specify 0xFFFFFFF0 for mask.
+If you want to obtain all the statistics in the table above, specify 0xFFFFFF30 for mask.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>Hardware register access occurs when obtaining statistics. If you cannot ignore the latency, please specify the information that needs to be obtained by using mask. An indeterminate number is returned for the statistics not obtained by mask.</p></li>
+<li><p>A value of 1/16 is stored for the total bytes of packets sent and received. To convert to an actual value, multiply by 16.</p></li>
+</ul>
+</div>
+<p>The following error is set in errno when ioctl call fails.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Operation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>EINVAL</p></td>
+<td><p>Specify a value other than 1-10 for port_no</p></td>
+</tr>
+<tr class="row-odd"><td><p>EFAULT</p></td>
+<td><p>User space and kernel space data copy failed</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div></blockquote>
+<p><strong>Sample program</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>A sample program is provided to obtain TofuD TNR statistics by ioctl.</dt><dd><p><a class="reference download internal" download="" href="../_downloads/1e3ad0a12fed9345ec2d05ff06f4e871/get_port_stat.c"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">get_port_stat.c</span></code></a></p>
+</dd>
+</dl>
+<p>Here is an example of how to compile and run the program on a compute node.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>fcc<span class="w"> </span>get_port_stat.c<span class="w"> </span>-o<span class="w"> </span>get_port_stat
+<span class="gp">[_CNlogin]$ </span>./get_port_stat
+<span class="go">port_name,pa[0],pa[1],pa[2],pa[3],pa[6],pa[7],pa[16],pa[17]</span>
+<span class="go">A,0,27910272727454,420730647535,0,2464338799405,153641653215667,2934762493226,214395948656466</span>
+<span class="go">C,0,18924412834175,489428671284,0,2073545237108,156157972293252,2329968905612,188700401742674</span>
+<span class="go">B-,0,3762767544996,390704871815,250024,2243406296215,163990760948475,1978652407038,126890968786478</span>
+<span class="go">B+,397823126596,4891130840161,478845006012,44572,2102091704677,162165504844619,1572638411965,101847294931163</span>
+<span class="go">X-,131270521308116,18178231547705,1130725761941,24741113620,6310974937394,446507465546870,6129539107432,430123327647998</span>
+<span class="go">X+,210371927252085,25664573932559,2226337318599,11202950790,6079358975087,425306776312583,6331250757071,446564108159829</span>
+<span class="go">Y-,1239911977558,3394055414680,80637718934,164614927485,366061771695,26837543897751,513661116740,43540705115890</span>
+<span class="go">Y+,2619521829150,10313768124615,104613494016,78053815908,738388103253,65146082508265,566950117829,45821629417759</span>
+<span class="go">Z-,1989340756317,307229854310,208198959208,198717930578,181498497720,13130612346246,238798680681,19827909732205</span>
+<span class="go">Z+,1256929737324,1423913574375,131643193373,170725424408,242929503717,18650318528973,205296746334,14306341870088</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="SampleScripts.html"
+                          title="previous chapter"><span class="section-number">5.17. </span>Sample Scripts</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="ShowAffectedJobs.html"
+                          title="next chapter"><span class="section-number">5.19. </span>Job list display command affected by the failure</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="ShowAffectedJobs.html" title="5.19. Job list display command affected by the failure"
+             >next</a></li>
+        <li class="right" >
+          <a href="SampleScripts.html" title="5.17. Sample Scripts"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.18. </span>Obtaining TofuD TNR statistics</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,289 @@
+システム構成
+============
+
+概要
+----
+
+プリポスト環境の構成を以下に示します。
+
+.. figure:: img/01.png
+
+計算ノード
+----------
+
+| 計算ノードは、3種類のハードウェア・スペックで構成されています。
+| ログインノードからジョブ投入コマンドを実行することにより、指定した計算ノードにジョブを割り当てて実行されます。
+| すべての計算ノードは、EDR対応のInfiniBandで接続されています。
+
+- GPUノード： 2CPU構成で192GBメモリを搭載した x86_64アーキテクチャのノード、8台
+- 大容量メモリノード： 4CPU構成で6TBメモリを搭載した x86_64アーキテクチャのノード、3台
+- WHEEL用ノード： 2CPU構成で256GBメモリを搭載した x86_64アーキテクチャのノード、2台
+
+
+.. list-table::
+   :header-rows: 1
+
+   * - ノードタイプ
+     - ノード名
+   
+   * - GPUノード
+     - pps01
+    
+   * - 〃
+     - pps02
+    
+   * - 〃
+     - pps03
+    
+   * - 〃
+     - pps04
+    
+   * - 〃
+     - pps05
+    
+   * - 〃
+     - pps06
+    
+   * - 〃
+     - pps07
+    
+   * - 〃
+     - pps08
+    
+   * - 大容量メモリノード
+     - ppm01
+    
+   * - 〃
+     - ppm02
+    
+   * - 〃
+     - ppm03
+
+   * - WHEEL用ノード
+     - wheel1
+    
+   * - 〃
+     - wheel2
+
+
+GPUノード
+^^^^^^^^^
+
+GPUノードのハードウェア仕様は以下の通りです。
+
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 30 
+
+   * - Server
+     - FUJITSU Server PRIMERGY RX2540 M5
+   
+   * - CPU
+     - Intel Xeon Gold 6240 (2.60GHz/18core), 2個搭載
+
+   * - メモリ
+     - 192GBメモリ (16GB 2933 RDIMM x12)
+
+   * - システムディスク
+     - SAS 600GB/10krpm x2 (RAID1)
+	
+   * - InfiniBandネットワーク
+     - EDR対応(100Gbps) x1
+    
+   * - Ethernetネットワーク
+     - 10Gbps(SFP+) x1, 1Gbps(RJ-45) x2
+    
+   * - GPUアクセラレータ
+     - NVIDIA Tesla V100(32GB) x2
+    
+   * - OS
+     - RHEL 8.10 (kernel 4.18.0-553)
+
+
+大容量メモリノード
+^^^^^^^^^^^^^^^^^^
+
+大容量メモリノードのハードウェア仕様は以下の通りです。
+
+　・大容量メモリノード#1,#2
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 30 
+
+   * - Server	
+     - FUJITSU Server PRIMERGY RX4770 M5
+    
+   * - CPU
+     - Intel Xeon Platinum 8280L (2.70GHz/28core), 4個搭載
+    
+   * - メモリ
+     - 6,144GBメモリ (128GB 2933 LRDIMM x48)
+   
+   * - システムディスク
+     - SAS 600GB/10krpm x2 (RAID1)
+   
+   * - InfiniBandネットワーク
+     - EDR対応(100Gbps) x1
+    
+   * - Ethernetネットワーク
+     - 10Gbps(SFP+) x2, 1Gbps(RJ-45) x4
+    
+   * - OS
+     - RHEL 8.10 (kernel 4.18.0-553)
+
+　・大容量メモリノード#3
+ 
+.. list-table::
+   :header-rows: 0
+   :widths: 10 30 
+
+   * - Server	
+     - FUJITSU Server PRIMERGY RX4770 M6
+    
+   * - CPU
+     - Intel Xeon Platinum 8360HL (3.00GHz/24core), 4個搭載
+    
+   * - メモリ
+     - 6,144GBメモリ (128GB 3200 LRDIMM x48)
+   
+   * - システムディスク
+     - SAS 900GB/10krpm x2 (RAID1)
+   
+   * - InfiniBandネットワーク
+     - EDR対応(100Gbps) x1
+    
+   * - Ethernetネットワーク
+     - 1Gbps(RJ-45) x4
+    
+   * - OS
+     - RHEL 8.10 (kernel 4.18.0-553)
+
+WHEEL用ノード
+^^^^^^^^^^^^^
+
+WHEEL用ノードのハードウェア仕様は以下の通りです。
+
+.. list-table::
+   :header-rows: 0
+   :widths: 10 30 
+
+   * - Server	
+     - FUJITSU Server PRIMERGY RX2540 M6
+    
+   * - CPU
+     - Intel Xeon Gold 6338 (2GHz/32core), 2個搭載
+    
+   * - メモリ
+     - 256GBメモリ (16GB 3200 RDIMM x16)
+   
+   * - システムディスク
+     - SAS 900GB/10krpm x2 (RAID1)
+   
+   * - InfiniBandネットワーク
+     - EDR対応(100Gbps) x1
+    
+   * - Ethernetネットワーク
+     - 10Gbps(SFP+) x1, 1Gbps(RJ-45) x4
+    
+   * - OS
+     - RHEL 8.10 (kernel 4.18.0-553)
+
+
+管理ノード
+----------
+
+| 管理ノードは2台で構成されており、SLURMジョブマネージャーは冗長構成としています。
+| ジョブ管理のためのDBは、管理ノード #1と管理ノード #2で稼動しています。 
+
+.. list-table::
+   :header-rows: 1
+
+   * - ノード名称
+     - ノード名
+
+   * - 管理ノード #1 (主系)
+     - ppctl1
+
+      
+   * - 管理ノード #2 (副系)
+     - ppctl2
+
+
+ソフトウェア構成
+----------------
+
+プリポスト環境で使用している主なソフトウェアは以下の通りです。
+
+
+.. list-table::
+   :header-rows: 0
+
+   * - OS
+     - RHEL 8.10 (kernel 4.18.0-553)
+    
+   * - SLURMソフトウェア
+     - Slurm version 24.05.3
+    
+   * - DBソフトウェア（SLURM用）
+     - MariaDB Server 10.3
+    
+   * - 富岳運用ソフトウェア（一部機能を使用）
+     - FUJITSU Software Technical Computing Suite V4.0L20A
+
+   * - CUDA Toolkit
+     - 12.8
+
+
+コンパイラ言語環境
+^^^^^^^^^^^^^^^^^^
+
+プリポスト環境では、GCC、Intelコンパイラ、NVIDIA CUDA Compiler [#C1]_ および富士通コンパイラ [#C2]_ を利用することができます。
+
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 8 25 8
+
+   * - ソフトウェア名
+     - 言語	
+     - バージョン
+     - コマンド例
+
+   * - GCC（RHEL 8.10 標準提供）
+     - | Fortran
+       | C	
+       | C++
+     - | 8.5.0 20210514 (Red Hat 8.5.0-26)	
+     - | g++
+       | gfortran
+       | gcc
+     
+   * - | Intel oneAPI Base & HPC Toolkit
+     - | Fortran
+       | C		
+       | C++
+     - | FAQ「\ `ログインノード上のIntelコンパイラ <https://www.fugaku.r-ccs.riken.jp/faq/20210701_01>`_」を参照
+     - | ifort
+       | icc
+       | icpc
+
+   * - NVIDIA CUDA Compiler
+     - C/C++
+     - Build cuda_12.8.r12.8/compiler.35404655_0
+     - nvcc
+
+   * - 富士通コンパイラ（クロスコンパイラ）
+     - | Fortran
+       | C		
+       | C++
+     - | 「\ `利用手引書 －言語開発環境編－ <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/lang_latest/CompileforCN/FujitsuCompiler/index.html>`_\ 」を参照
+     - | frtpx
+       | fccpx
+       | FCCpx
+
+.. [#C1] NVIDIA CUDA CompilerはGPUノードでのみ利用可能です。
+
+.. [#C2] 富士通コンパイラは、ログインノードと同様クロスコンパイラです。
+

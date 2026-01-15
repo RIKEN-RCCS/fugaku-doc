@@ -1,0 +1,654 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8.3. Cache Area of Second-Layer Storage &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="8.4. Node Temporary Area" href="TemporaryAreaInNode.html" />
+    <link rel="prev" title="8.2. About File Operations to FEFS/LLIO" href="WriteForFilesystem.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="TemporaryAreaInNode.html" title="8.4. Node Temporary Area"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="WriteForFilesystem.html" title="8.2. About File Operations to FEFS/LLIO"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">8. </span>Layered storage</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.3. </span>Cache Area of Second-Layer Storage</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cache-area-of-second-layer-storage">
+<span id="thesecondlayerstoragecachearea"></span><h1><span class="section-number">8.3. </span>Cache Area of Second-Layer Storage<a class="headerlink" href="#cache-area-of-second-layer-storage" title="Link to this heading">¶</a></h1>
+<p>Second-layer storage uses FEFS (Large Scale, High Performance Parallel Distributed File System) based on the open source Luster technology.</p>
+<p>For IO from a job (compute node) to the second-layer storage, it is accessed through the second-layer storage cache area. Enabling asynchronous close allows for faster writes to second tier storage during calculation processing. For details, refer to <a class="reference internal" href="#thesecondlayerstoragecacheareaopt"><span class="std std-ref">Option when Job submitting (pjsub --llio)</span></a>.</p>
+<p>“Cache area of second-layer storage” is a cache area created for first tier storage.</p>
+<ol class="arabic simple">
+<li><p>By accessing the path of the second-layer storage, it is accessed via the second tier cache (high-speed device).</p></li>
+</ol>
+<figure class="align-default">
+<img alt="../_images/TheSecondLayerStrage_01.png" src="../_images/TheSecondLayerStrage_01.png" />
+</figure>
+<p>Refer to <a class="reference internal" href="../UsageRules/index.html#diskpoints"><span class="std std-ref">Disk</span></a> for direct access to the second-layer storage.</p>
+<ol class="arabic" start="2">
+<li><p>This section describes the specifications of the cache area of the second-layer storage.</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Specification of the cache area of the second-layer storage</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>Characteristic</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Reference area</p></td>
+<td><p>Able to refer from all compute node.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lifetime</p></td>
+<td><div class="line-block">
+<div class="line">It is retained if it is within the job execution time limit.</div>
+<div class="line">If a job is interrupted due to the job execution time limit being exceeded during writing to the second-layer storage, the cache area of the second-layer storage is deleted. Files that have not been exported are output to the file as a list of unexported files.</div>
+<div class="line">Also, if any of the following conditions are met, the cache in the cache area of the second-layer storage is deleted.</div>
+<div class="line">- if the file is deleted.</div>
+<div class="line">- if the cache area of second-layer storage becomes disk full.</div>
+<div class="line-block">
+<div class="line">(When the disk becomes full, it is removed from the old one by LRU method.)</div>
+</div>
+<div class="line">- When Direct I/O (Either write or read) is performed.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<div class="line-block">
+<div class="line">LLIO maintains and manages read/write file data and metadata on the second-layer storage (FEFS) for fast access. Files written directly from second-layer storage during a job may not be visible from LLIO.</div>
+<div class="line">Therefore, do not perform read/write access to the same file in parallel from the second-layer storage cache area and the second-layer storage.</div>
+</div>
+</div>
+<section id="the-cache-area-of-second-layer-storage-size">
+<span id="volumeofstrage"></span><h2><span class="section-number">8.3.1. </span>The Cache Area of Second-Layer Storage size<a class="headerlink" href="#the-cache-area-of-second-layer-storage-size" title="Link to this heading">¶</a></h2>
+<p>The area of the first-layer storage is secured from the SSD of the storage I / O node (SIO node) that handles input and output.
+The size of the SSD allocated to one compute node is the capacity divided equally by the number of compute nodes in which one SIO node is responsible for input and output.</p>
+<p>The Fugaku can use <strong>About 87GiB/node</strong> .</p>
+<p>Approximately 87 GiB is divided into the temporary area within the node, the shared temporary area, and the cache area of the second-layer storage.</p>
+<p>The cache area of the second-layer storage cannot be specified when executing a job.
+Specify the capacity of the node temporary area and shared temporary area in the node, and the remaining capacity becomes the cache area of the second-layer storage.:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cache area of the second-layer storage= 87GiB - (node temporary area + shared temporary area)
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul>
+<li><p>The cache area of the second-layer storage must have a capacity of 128 MiB or more. If the capacity is less than 128 MiB, the following error occurs when the job is submitted. Please be careful when estimating the capacity of the temporary area and shared temporary area in the node.</p>
+<p>[ERR.] PJM 0049 pjsub Option argument is invalid. sharedtmp-size + localtmp-size must be less than or equal to &lt;size&gt;</p>
+</li>
+<li><p>If the amount of cache area space in the second-layer storage is small relative to the cache usage of a job, the following events may occur:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Job may result in error.</p></li>
+<li><p>Cache misses occur frequently and can slow IO speeds.</p></li>
+</ol>
+</div>
+</section>
+<section id="writing-timing-to-second-layer-storage">
+<span id="fefswritetiming"></span><h2><span class="section-number">8.3.2. </span>Writing timing to second-layer storage<a class="headerlink" href="#writing-timing-to-second-layer-storage" title="Link to this heading">¶</a></h2>
+<p>Writes to the second-layer storage are asynchronous with requests from Compute Nodes to write to the second-layer storage cache region. This asynchronous processing speeds up IO processing by parallelizing each process.
+You can choose one of the following techniques to synchronize exports from Compute Nodes and make information visible from each Compute Node or Login Node:</p>
+<ul class="simple">
+<li><p>Write using Direct I/O.</p></li>
+<li><p>Issue sync (2) or fsync (2) after writing.</p></li>
+<li><p>close (2) after writing. (When asynchronous close = OFF)</p></li>
+</ul>
+<figure class="align-default">
+<img alt="../_images/CacheWriteTiming_01.png" src="../_images/CacheWriteTiming_01.png" />
+</figure>
+</section>
+<section id="stripe">
+<h2><span class="section-number">8.3.3. </span>Stripe<a class="headerlink" href="#stripe" title="Link to this heading">¶</a></h2>
+<p>You can set stripes for the second-layer storage cache and the second-layer storage.</p>
+<ol class="arabic simple">
+<li><p>Configuring stripes for second-layer storage caches and second-layer storage can accelerate high-capacity sequential access.</p></li>
+<li><p>Distribute a file across multiple storage I/O (SIO) nodes by setting a stripe on the cache for second-layer storage.</p></li>
+<li><p>In addition, a second-layer storage (FEFS) stripe allows a file to be distributed across multiple OSTs for processing.</p></li>
+<li><p>How you configure the cache for second-layer storage and the stripe for second-layer storage (FEFS) is different.</p></li>
+</ol>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Method to set the stripe</span><a class="headerlink" href="#id2" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Area name</p></th>
+<th class="head"><p>pjsub --llio option</p></th>
+<th class="head"><p>Lfs command</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Second-layer storage cashe</p></td>
+<td><p>✓</p></td>
+<td><p>－</p></td>
+</tr>
+<tr class="row-odd"><td><p>Second-layer storage</p></td>
+<td><p>－</p></td>
+<td><p>✓</p></td>
+</tr>
+</tbody>
+</table>
+<section id="stripe-setting-to-second-layer-storage-cashe">
+<h3><span class="section-number">8.3.3.1. </span>Stripe setting to second-layer storage cashe<a class="headerlink" href="#stripe-setting-to-second-layer-storage-cashe" title="Link to this heading">¶</a></h3>
+<p>By distributing and storing in multiple second-layer storage caches, file access bandwidth is improved. When submitting a job, the user specifies the stripe size and stripe count according to the I / O characteristics of the application. This enables efficient transfer to the second-layer storage cache.</p>
+<figure class="align-default">
+<img alt="../_images/StripingFunction_01.png" src="../_images/StripingFunction_01.png" />
+</figure>
+<p>This indicates example of setting stripe count 3.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjsub<span class="w">  </span>--llio<span class="w">  </span>stripe-count<span class="o">=</span><span class="m">3</span><span class="w">  </span>jobscript.sh
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The environment currently provided has a maximum stripe count of 24.</p></li>
+<li><p>LLIO stripe count defaults to 24.</p></li>
+</ul>
+</div>
+</section>
+<section id="stripe-setting-to-second-layer-storage">
+<h3><span class="section-number">8.3.3.2. </span>Stripe setting to second-layer storage<a class="headerlink" href="#stripe-setting-to-second-layer-storage" title="Link to this heading">¶</a></h3>
+<p>Because sequential access to large files is rate-limiting to the performance of a single OST, you can choose to configure stripes for faster sequential access. By setting up stripes, you can distribute files across multiple OSTs and expect faster sequential access.</p>
+<div class="line-block">
+<div class="line">To set stripe, proceed with lfs setstripe command. This command is executed with FEFS client (login node, compute node).</div>
+<div class="line">Indicates the example of setting number of stripe 3.</div>
+</div>
+<p>【Stripe setting】</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lfs<span class="w"> </span>setstripe<span class="w"> </span>-c<span class="w"> </span><span class="m">3</span><span class="w"> </span>./output.file
+</pre></div>
+</div>
+<p>【Setting confirmation】</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lfs<span class="w"> </span>getstripe<span class="w">  </span>./output.file
+
+<span class="go">output.file</span>
+<span class="go">lmm_stripe_count:  3</span>
+<span class="go">lmm_stripe_size:   1048576</span>
+<span class="go">lmm_pattern:       1</span>
+<span class="go">lmm_layout_gen:    0</span>
+<span class="go">lmm_stripe_offset: 5</span>
+<span class="go">        obdidx           objid           objid           group</span>
+<span class="go">             5          547321        0x859f9                0</span>
+<span class="go">            11          547341        0x85a0d                0</span>
+<span class="go">            17          547341        0x95a0c                 0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Since The Fugaku can mount and access both FEFS (2ndfs) and The Cache Area of Second-Layer Storage, it is necessary to use the following on compute nodes.</p></li>
+</ul>
+<p>【FEFS(2ndfs) Stripe setting】</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>/usr/bin/lfs<span class="w"> </span>setstripe<span class="w"> </span>-c<span class="w"> </span><span class="m">3</span><span class="w"> </span>./output.file
+</pre></div>
+</div>
+</div></blockquote>
+<p>【The Cache Area of Second-Layer Storage Stripe setting】</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lfs<span class="w"> </span>setstripe<span class="w"> </span>-c<span class="w"> </span><span class="m">3</span><span class="w"> </span>./output.file
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>If the stripe size of first-layer storage is not a multiple of the stripe size of second-layer storage, the performance of second-layer storage may not be gained. You can obtain the stripe size and stripe count of second-layer storage by using the getstripe sub command of the lfs command. You can change them by using the setstripe sub command of the lfs command. However, both of these operations must be performed within a job. Confirm the specification of the second-layer storage (FEFS) about available upper and lower limit of the stripe size and the stripe counts.</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="asynchronous-close-synchronous-close">
+<span id="asynccloseandsyncclose"></span><h2><span class="section-number">8.3.4. </span>Asynchronous close / synchronous close<a class="headerlink" href="#asynchronous-close-synchronous-close" title="Link to this heading">¶</a></h2>
+<p>To second-layer storage cashe, there is a gap to performance/data writing guarantee depending on asynchronous close / synchronous close.</p>
+<figure class="align-default">
+<img alt="../_images/8-4-3_AsynchronousCloseAndSynchronousClose_03.png" src="../_images/8-4-3_AsynchronousCloseAndSynchronousClose_03.png" />
+</figure>
+<p>Notes on when Asynchronous closing is as below.</p>
+<ol class="arabic simple">
+<li><p>Asynchronous close starts writing to the first-layer storage and the second-layer storage from the cache in the compute node at the same time as the close. At the end of the close, writing to the first-layer storage and the second-layer storage is not guaranteed.</p></li>
+<li><p>If the job is within the elapsed time limit, writing the file at the end of the job is guaranteed.</p></li>
+<li><p><strong>If the compute node goes down or the elapsed time limit is exceeded, the transfer from the cache in the compute node or the transfer from first-layer storage to the second-layer storage will be interrupted. Writing from the cache to the second-layer storage is not guaranteed.</strong>
+To guarantee file output for a job, data must be written out explicitly during job execution, for example by enabling the synchronous close feature if necessary, or using the <a class="reference internal" href="#fefswritetiming"><span class="std std-ref">Writing timing to second-layer storage</span></a> technique,or by performing a checkpoint restart in a user program.</p></li>
+<li><p>A list of files that failed to be written to the second-layer storage can be obtained by specifying the  <strong class="program">pjsub</strong> option. When the following is specified, a list is output to path.</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjsub<span class="w">  </span>--llio<span class="w">  </span>uncompleted-fileinfo-path<span class="o">=</span>path,async-close<span class="o">=</span>on
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul>
+<li><p>If a write from the first-layer storage to the second-layer storage is not completed at the end of a job, a message like the following is output to the standard error of the job by default.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;file transfer error information&gt;
+&lt;summary&gt;
+total num: 3
+total size: 128000000
+error: E1,E3,E8
+&lt;detail&gt;
+E1 /gfs1/userA/outfile1
+E1 /gfs1/userA/dir/outfile2
+E3,E8 /gfs1/userA/dir/outfile3
+</pre></div>
+</div>
+<p>If the number of unwritten files exceeds 1000, only the following message is output as detailed information.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;file transfer error information&gt;
+&lt;summary&gt;
+total num: 1000*+
+total size: 1348000000+
+error: E1,E3,E8
+&lt;detail&gt;
+The detailed information is not output because the number of uncompleted files exceeds the upper limit (1000).
+</pre></div>
+</div>
+<p>Check the unwritten file information and adjust the elapse limit of the job.</p>
+</li>
+<li><p>The following message is also generated when a job was interrupted due to the compute node down with or without LLIO.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;file transfer error information&gt;
+&lt;summary&gt;
+total num: 0+
+total size: 0+
+error:
+&lt;detail&gt;
+</pre></div>
+</div>
+</li>
+</ul>
+<blockquote>
+<div><div class="line-block">
+<div class="line">In order to confirm that the job was interrupted due to the computing node down, please check the PC(PJM CODE) value of the pjstat and pjstata commands.</div>
+<div class="line">If the value of PC is 20, it means that the job was interrupted due to the computing node down.</div>
+</div>
+</div></blockquote>
+</div>
+</section>
+<section id="common-file-distribution-function-llio-transfer">
+<span id="llio-transfer"></span><h2><span class="section-number">8.3.5. </span>Common file distribution function (llio_transfer)<a class="headerlink" href="#common-file-distribution-function-llio-transfer" title="Link to this heading">¶</a></h2>
+<p>Access is concentrated on files (common files) read from all compute nodes, such as executable files and configuration files on the the second-layer storage.
+Use the common file distribution function as a function to avoid centralized access. The common file distribution function distributes common files to the cache area of the second-layer storage on the second-layer storage to distribute the concentration of access.</p>
+<p><strong class="command">llio_transfer</strong> Distribute the common file with the command.
+Only read-only files can be treated as common files.
+Please refer to <a class="reference internal" href="#llio-transfer-attention"><span class="std std-ref">Notes on common files</span></a> .</p>
+<p><strong class="command">llio_transfer</strong> The command is a command used by the compute node and distributes files on the second-layer storage to the cache area of the second-layer storage on the first-layer storage.
+Distributes the files to the cache area of the second-layer storage of the first-layer storage of all SIO nodes to which the job is assigned.
+Jobs on the compute node distribute the access load on the SIO node by accessing the physically closest SIO node.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Distribution operation：
+/usr/bin/llio_transfer &lt;path&gt; [&lt;path&gt; ...]
+Delete operation：
+/usr/bin/llio_transfer --purge &lt;path&gt; [&lt;path&gt; ...]
+</pre></div>
+</div>
+<p><strong class="command">llio_transfer</strong> Command usage examples</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#PJM -L &quot;node=382&quot;</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;</span>
+<span class="c1">#PJM --llio localtmp-size=10Gi</span>
+<span class="c1">#PJM --llio sharedtmp-size=10Gi</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -s</span>
+
+<span class="c1">### Copy a.out to all SIOs used in the job (Common file distribution function)</span>
+llio_transfer<span class="w"> </span>./a.out
+
+<span class="c1">### Copy data from one process in a node</span>
+mpiexec<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;if [ ${PLE_RANK_ON_NODE} -eq 0 ]; then \</span>
+<span class="s1">                   cp -rf ./data/   ${PJM_LOCALTMP} ; \</span>
+<span class="s1">               fi&#39;</span>
+
+<span class="c1">### In node temporary file reference examples</span>
+ls<span class="w"> </span><span class="si">${</span><span class="nv">PJM_LOCALTMP</span><span class="si">}</span>/data
+
+<span class="c1">### Execute using a.out in cache</span>
+mpiexec<span class="w"> </span>-stdout-proc<span class="w"> </span>./output.%j/%/1000r/stdout<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-stderr-proc<span class="w"> </span>./output.%j/%/1000r/stderr<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>./a.out
+
+<span class="c1">### Delete a.out from second-layer storage cache</span>
+<span class="c1">### When deleting it in the middle of the job, purge as follows</span>
+llio_transfer<span class="w"> </span>--purge<span class="w"> </span>./a.out
+
+<span class="c1">### When the file result.data is executed before the job ends</span>
+<span class="c1">### In the directory $ {PJM_JOBDIR} (on second=layer storage cache),</span>
+<span class="c1">### Change to the name with job ID $ {PJM_JOBID} and evacuate (when necessary)</span>
+cp<span class="w"> </span><span class="si">${</span><span class="nv">PJM_LOCALTMP</span><span class="si">}</span>/result.data<span class="w"> </span><span class="si">${</span><span class="nv">PJM_JOBDIR</span><span class="si">}</span>/result_<span class="si">${</span><span class="nv">PJM_JOBID</span><span class="si">}</span>.data
+
+<span class="c1">### When the file output.data is executed before the job ends</span>
+<span class="c1">### In the directory $ {PJM_JOBDIR} (on the second-layer storage cache),</span>
+<span class="c1">### Change to the name with job ID $ {PJM_JOBID} and evacuate (when necessary)</span>
+cp<span class="w"> </span><span class="si">${</span><span class="nv">PJM_SHAREDTMP</span><span class="si">}</span>/output.data<span class="w"> </span><span class="si">${</span><span class="nv">PJM_JOBDIR</span><span class="si">}</span>/output_<span class="si">${</span><span class="nv">PJM_JOBID</span><span class="si">}</span>.data
+</pre></div>
+</div>
+<div class="admonition attention" id="llio-transfer-attention">
+<p class="admonition-title">Attention</p>
+<p><strong class="command">llio_transfer</strong> Note the following regarding the common files copied to the cache of the second-layer storage by the command.</p>
+<ul>
+<li><p>Operations such as deleting a common file via the cache area of the second-layer storage, updating file data, and updating file attributes will fail with an error.</p></li>
+<li><p><strong class="command">llio_transfer</strong> is only available for read files.</p></li>
+<li><p>The number of files that can be transferred as the common files is 16,384 or less. The number of files that a job can open as the common files at the same time is 1,024 or less.</p></li>
+<li><p>File locking on the common files is not supported.</p></li>
+<li><div class="line-block">
+<div class="line">Do not change or delete the copy source of the common-layer in the second-layer storage while the job is executing.</div>
+<div class="line">If you change the copy source, the contents of the common files copied to the cache of the second-layer storage may become undefined.</div>
+<div class="line">Also, if it is deleted, the common file cannot be deleted with the <code class="docutils literal notranslate"><span class="pre">--purge</span></code> option of the <strong class="command">llio_transfer</strong> command, and the cache area of the second-layer storage remains occupied by the common file until the job is completed.</div>
+</div>
+</li>
+<li><p>When deleting the common file in the job script, specify the <code class="docutils literal notranslate"><span class="pre">--purge</span></code> option in the <strong class="command">llio_transfer</strong> command and delete it. <strong class="command">rm</strong> command fails with an error and cannot be deleted.</p></li>
+<li><p>Immediately after deleting the common file from the cache of the second-layer storage with: command:<strong class="command">llio_transfer --purge</strong>, the operation of deleting the copy source file of the common file from the job, updating the file data, and updating the file attribute may fail with an error.</p></li>
+<li><div class="line-block">
+<div class="line">The “cache area of the second-layer storage” of the first-layer storage, which is the copy destination of the common files, must have enough capacity to store the entire common files.</div>
+<div class="line">Common files copied to the cache area of the second-layer storage will not be deleted even if this area is full.If free space in the cache area of the second-layer storage is required, delete the common files from the cache area by specifying <code class="docutils literal notranslate"><span class="pre">--purge</span></code> option in <strong class="command">llio_transfer</strong> command in the middle of the job. The common files in the cache area of the second-layer storage are automatically deleted after the job ends.</div>
+</div>
+</li>
+<li><p>When the cache data of the transfer source file exists in the first-layer storage in the job before the command allocates the area of the common file, <strong class="command">llio_transfer</strong> command will result in an error. Do not open the file in the job before executing <strong class="command">llio_transfer</strong> command, as cached data may be created when the file is opened.</p></li>
+</ul>
+</div>
+<section id="effects-of-the-common-file">
+<h3><span class="section-number">8.3.5.1. </span>Effects of the common file<a class="headerlink" href="#effects-of-the-common-file" title="Link to this heading">¶</a></h3>
+<p>Common files such as execution files and input data are recommended to be distributed and used with <strong class="command">llio_transfer</strong> command. It is more effective as the number of compute nodes used increases. For reference, here is information comparing the access of common files and files on the second-layer strage.</p>
+<ol class="arabic simple">
+<li><p>Execution files that requires a large number of modules</p></li>
+</ol>
+<blockquote>
+<div><p>Compares the time required for compute nodes to load modules and start up, using a Python script with more than 600 files. Since there is only one server that processes meta requests for a common file on the second-layer storage, as the number of compute nodes increases and requests increase, processing takes time. When distributing as a common file with <strong class="command">llio_transfer</strong> command, only one primary SIO accesses the second-layer sotrage and the request processing time is greatly minimized.</p>
+<figure class="align-default">
+<img alt="../_images/LoadingTimeForPythonSampleModules_01.png" src="../_images/LoadingTimeForPythonSampleModules_01.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Execution files that requires a large number of input data</p></li>
+</ol>
+<blockquote>
+<div><p>Compares startup times for programs that read a common file of 1GB per compute node. When reading a common file on the secondary-layer storage, access is concentrated on the server that manages the actual data. When distributing as a common file with <strong class="command">llio_transfer</strong> command, the data in the second-layer storage is acquired by one primary SIO and efficiently distributed to another SIO, so that the data can be efficiently delivered to compute nodes and the data transfer time can be greatly minimized.</p>
+<figure class="align-default">
+<img alt="../_images/LoadingTimeForInputData_01.png" src="../_images/LoadingTimeForInputData_01.png" />
+</figure>
+</div></blockquote>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>The figures are obtained during job operation and do not indicate the basic performance of the system.</p></li>
+<li><p>The transfer time differs depending on the IO status of other jobs, the node shape allocated, and the common file size and number.</p></li>
+<li><p>Since the transfer process of <strong class="command">llio_transfer</strong> command is asynchronous and difficult to measure, we compare the time from the start of the program to the completion with <strong class="command">mpiexec</strong> command.</p></li>
+</ul>
+</div>
+</section>
+<section id="tips-for-common-file-distribution">
+<h3><span class="section-number">8.3.5.2. </span>Tips for common file distribution<a class="headerlink" href="#tips-for-common-file-distribution" title="Link to this heading">¶</a></h3>
+<p>Describes tips for identifying and distributing files referenced by programs.
+When executing a program consisting of a large number of modules, distributing all the modules as common files is expected to reduce the start-up time of the program. However, it may be difficult to know all the files that are referenced by programs.
+The following example identifies reference files with the <strong class="command">strace</strong> command:</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">Modify the job script. Run a job as small as possible.</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>./log
+<span class="c1"># mpiexec -stdout-proc ./%n.output.%j/%/384r/stdout -stderr-proc ./%n.output.%j/%/384r/stderr bin/a.out</span>
+mpiexec<span class="w">   </span>-stdout-proc<span class="w"> </span>./%n.output.%j/%/384r/stdout<span class="w"> </span>-stderr-proc<span class="w"> </span>./%n.output.%j/%/384r/stderr<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
+<span class="s1">&#39;if [ $PMIX_RANK -eq 0 ]; then</span>
+<span class="s1">    strace -ff -e trace=open,openat -o ./log/strace.${PMIX_RANK} bin/a.out</span>
+<span class="s1"> else</span>
+<span class="s1">     bin/a.out</span>
+<span class="s1"> fi&#39;</span>
+</pre></div>
+</div>
+<p>This example limits the log to collect open system calls with Rank=0 not to increase log size. If the log size is still large, please modify the program to exit after loading the modules.</p>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><div class="line-block">
+<div class="line">Run the job.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Check the log for open files.</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>egrep<span class="w"> </span>-v<span class="w"> </span><span class="s1">&#39;= \-1 ENOENT|O_DIRECTORY&#39;</span><span class="w"> </span>./log/strace.0.*<span class="w"> </span><span class="p">|</span><span class="w"> </span>egrep<span class="w"> </span>O_RDONLY<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="se">\&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="m">2</span><span class="w">  </span><span class="p">|</span>egrep<span class="w"> </span>^/vol....
+<span class="go">/vol0004/fjuser/fj0012/job/strace/bin/a.out</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="4">
+<li><div class="line-block">
+<div class="line">Prepare the file list as llio_transfer.list.</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Modify the job script. This is an example of transferring the file list with the <strong class="command">llio_transfer</strong> command.</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>./llio_transfer.list<span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-L<span class="w"> </span><span class="m">100</span><span class="w"> </span>llio_transfer
+
+mpiexec<span class="w"> </span>-stdout-proc<span class="w"> </span>./%n.output.%j/%/384r/stdout<span class="w"> </span>-stderr-proc<span class="w"> </span>./%n.output.%j/%/384r/stderr<span class="w"> </span>bin/a.out
+
+cat<span class="w"> </span>./llio_transfer.list<span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-L<span class="w"> </span><span class="m">100</span><span class="w"> </span>llio_transfer<span class="w"> </span>--purge
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="tool-dir-transfer-to-transfer-directories-using-llio-transfer-command">
+<span id="dir-transfer"></span><h3><span class="section-number">8.3.5.3. </span>Tool(dir_transfer) to transfer directories using llio_transfer command<a class="headerlink" href="#tool-dir-transfer-to-transfer-directories-using-llio-transfer-command" title="Link to this heading">¶</a></h3>
+<p>A wrapper script of the <strong class="command">llio_transfer</strong> command is provided to transfer all files under a specified directory as common files. Please pay attention to the number of files to distribute in using this wrapper script. Note that distributing unreferenced files wastes cache area and increases times to transfer to the second-layer storage.</p>
+<p>Synopsis</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Distribution operation:
+ /home/system/tool/dir_transfer [-l logdirname] dir1 [dir2 [...] ]
+
+Delete operation:
+ /home/system/tool/dir_transfer -p [-l logdirname] dir1 [dir2 [...] ]
+
+Options:
+ -l logdirname      Save a common file list in directory specified by pathname.
+                    If no directory path is given, save in the current directory.
+ -p                 Deletes a distributed common file.
+
+Arguments:
+ dir1 [dir2 [...]]  Specify directories to distribute or remove as common files.
+</pre></div>
+</div>
+<p>Example) Distribution operation</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Distribution<span class="w"> </span>operation
+mkdir<span class="w"> </span>./log
+/home/system/tool/dir_transfer<span class="w"> </span>-l<span class="w"> </span>./log<span class="w">  </span>./libA<span class="w"> </span>./libB
+</pre></div>
+</div>
+<p>Directories ./libA and ./libB are transferred and logs are output under ./log</p>
+<p>Example) Delete operation</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Delete<span class="w"> </span>operation
+mkdir<span class="w"> </span>./log
+/home/system/tool/dir_transfer<span class="w"> </span>-p<span class="w"> </span>-l<span class="w"> </span>./log<span class="w">  </span>./libA<span class="w"> </span>./libB
+</pre></div>
+</div>
+<p>Creates a file list in the directory specified by -l during the distribution or delete operation. If -l is not specified, this script generates output files in the current directory. Please delete the output files after the job finishes if necessary.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ls<span class="w"> </span>./log
+<span class="go">llio_transfer.6860009.20211309.list</span>
+<span class="go">llio_transfer.6860009.20211318.purge.list</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="option-when-job-submitting-pjsub-llio">
+<span id="thesecondlayerstoragecacheareaopt"></span><h2><span class="section-number">8.3.6. </span>Option when Job submitting (pjsub --llio)<a class="headerlink" href="#option-when-job-submitting-pjsub-llio" title="Link to this heading">¶</a></h2>
+<p>Here indicates the option about the second-layer storage cashe.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 37.5%" />
+<col style="width: 62.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>pjsub option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>sio-read-cache={on|off}</p></td>
+<td><div class="line-block">
+<div class="line">Specify whether to use the file read from the second-layer storage to the compute node as a cache of the second-layer storage.</div>
+<div class="line">on: Proceed cache. (Default value)</div>
+<div class="line">off: Does not proceed cashe.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>stripe-count=count</p></td>
+<td><div class="line-block">
+<div class="line">Specify the number of stripes per file when distributing to multiple second-layer storage caches.(Default 24)</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>stripe-size=size</p></td>
+<td><div class="line-block">
+<div class="line">Specify the stripe size when distributing to multiple second-layer storage caches.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>async-close={on|off}</p></td>
+<td><div class="line-block">
+<div class="line">Specify whether to close the file asynchronously. Specify synchronous / asynchronous close for the second-layer storage (FEFS) from the two tier storage cache. Note that this option affects the guarantee of data writing completion.</div>
+<div class="line"><br /></div>
+<div class="line">on: Asynchronous close</div>
+<div class="line">off: Synchronous close (Default value)</div>
+<div class="line"><br /></div>
+<div class="line">If on(Asynchronous close) is specified, write completion when file closing is not guaranteed.</div>
+<div class="line">If off(Synchronous close) is specified, write completion when file closing is guaranteed.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>perf[,perf-path=path]</p></td>
+<td><div class="line-block">
+<div class="line">Output LLIO performance information to the file.</div>
+<div class="line">The output destination is under the current directory when the job is submitted, and the file name is the name defined by the job ACL function. The output destination file can be specified with the parameter perf-path.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>uncompleted-fileinfo-path=path</p></td>
+<td><div class="line-block">
+<div class="line">At the end of the job, specify the output destination for information about files that have not yet been written to the second-layer storage. If not specified, it will be written to standard error output.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">8.3. Cache Area of Second-Layer Storage</a><ul>
+<li><a class="reference internal" href="#the-cache-area-of-second-layer-storage-size">8.3.1. The Cache Area of Second-Layer Storage size</a></li>
+<li><a class="reference internal" href="#writing-timing-to-second-layer-storage">8.3.2. Writing timing to second-layer storage</a></li>
+<li><a class="reference internal" href="#stripe">8.3.3. Stripe</a><ul>
+<li><a class="reference internal" href="#stripe-setting-to-second-layer-storage-cashe">8.3.3.1. Stripe setting to second-layer storage cashe</a></li>
+<li><a class="reference internal" href="#stripe-setting-to-second-layer-storage">8.3.3.2. Stripe setting to second-layer storage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#asynchronous-close-synchronous-close">8.3.4. Asynchronous close / synchronous close</a></li>
+<li><a class="reference internal" href="#common-file-distribution-function-llio-transfer">8.3.5. Common file distribution function (llio_transfer)</a><ul>
+<li><a class="reference internal" href="#effects-of-the-common-file">8.3.5.1. Effects of the common file</a></li>
+<li><a class="reference internal" href="#tips-for-common-file-distribution">8.3.5.2. Tips for common file distribution</a></li>
+<li><a class="reference internal" href="#tool-dir-transfer-to-transfer-directories-using-llio-transfer-command">8.3.5.3. Tool(dir_transfer) to transfer directories using llio_transfer command</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#option-when-job-submitting-pjsub-llio">8.3.6. Option when Job submitting (pjsub --llio)</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="WriteForFilesystem.html"
+                          title="previous chapter"><span class="section-number">8.2. </span>About File Operations to FEFS/LLIO</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="TemporaryAreaInNode.html"
+                          title="next chapter"><span class="section-number">8.4. </span>Node Temporary Area</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="TemporaryAreaInNode.html" title="8.4. Node Temporary Area"
+             >next</a></li>
+        <li class="right" >
+          <a href="WriteForFilesystem.html" title="8.2. About File Operations to FEFS/LLIO"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">8. </span>Layered storage</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.3. </span>Cache Area of Second-Layer Storage</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

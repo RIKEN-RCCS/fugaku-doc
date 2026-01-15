@@ -1,0 +1,428 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8.6. Important Notices &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="8.7. I/O profiling" href="IOprofiling.html" />
+    <link rel="prev" title="8.5. Shared temporary area" href="SharedTemporaryArea.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="IOprofiling.html" title="8.7. I/O profiling"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="SharedTemporaryArea.html" title="8.5. Shared temporary area"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">8. </span>Layered storage</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.6. </span>Important Notices</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="important-notices">
+<span id="llioconsiderpoints"></span><h1><span class="section-number">8.6. </span>Important Notices<a class="headerlink" href="#important-notices" title="Link to this heading">¶</a></h1>
+<p>Please note the following points regarding the LLIO provided in this environment.</p>
+<ul>
+<li><p>Please use with the following restrictions. ENOMEM raises an error if the limit is exceeded. (Restriction)</p>
+<ul>
+<li><p>The maximum number of files that a job can open at the same time is <code class="docutils literal notranslate"><span class="pre">1,024</span> <span class="pre">*</span> <span class="pre">(the</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">compute</span> <span class="pre">nodes</span> <span class="pre">used</span> <span class="pre">by</span> <span class="pre">the</span> <span class="pre">job)</span></code> or less, which is the total of the three areas provided by LLIO.</p>
+<ul>
+<li><p>When opening the same file from multiple compute nodes, it is counted as one file regardless of the number of compute nodes.</p></li>
+<li><p>When transferring with <strong class="program">llio_transfer</strong> and using it as a shared file, it is counted as a different file, so it is counted by the number of compute nodes opened at the same time.</p></li>
+<li><div class="line-block">
+<div class="line">If a stripe count of LLIO is 2 or more, each stripe is counted as one file.</div>
+<div class="line">(If even one file has a stripe count of 4, the number of files is counted as 4.)</div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>When using one file from multiple processes, I / O will slow down or SIO from going down unless both of the following two conditions are fulfilled.</p>
+<ol class="arabic">
+<li><p>The number of nodes where processes that use the same file exist is 7,000 or less.</p></li>
+<li><div class="line-block">
+<div class="line">The total number of processes that use the same file is 28,000 or less.</div>
+<div class="line">(No upper limit on the number of processes per compute node)</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><p>Files transferred with <strong class="program">llio_transfer</strong> are treated as different files. Consider using <strong class="program">llio_transfer</strong>.</p>
+</div></blockquote>
+</li>
+<li><p>The number of files that can be created in the temporary area inside the node is up to 10 million files per compute node. (Restrictions)</p></li>
+<li><p>You can not get number of blocks and i-node in shared temporary area. (df command shows no data)</p></li>
+<li><p>There is a case that you can not get correct file size via LLIO when some compute nodes execute the following instructions at the same time on cache area of second-layer storage.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Node A</p></th>
+<th class="head"><p>Node B</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>truncate</p></td>
+<td><p>read</p></td>
+</tr>
+<tr class="row-odd"><td><p>truncate</p></td>
+<td><p>write</p></td>
+</tr>
+<tr class="row-even"><td><p>truncate</p></td>
+<td><p>truncate</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>The cache area of second-layer storage or shared temporary area may have the following behavior:</p>
+<ul class="simple">
+<li><p>If file_A is deleted or renamed and recreated on compute node_A, then “open(2)” of file_A fails on compute node_B.</p></li>
+<li><p>A deleted or renamed file is opened on compute node_A.</p></li>
+</ul>
+<p>FEFS does not have this behavior.</p>
+<p>This specification can be addressed by:</p>
+<ul class="simple">
+<li><p>On compute node_B, execute the ls command on the parent directory of file_A before “open(2)” file_A.</p></li>
+<li><p>Compute node_B waits 60 seconds from the re-creation of file_A on compute node_A before “open(2)” file_A.</p></li>
+</ul>
+</li>
+<li><p>There is a case that a file may exist on the first-layer storage when you write and delete the file at the same time on cache area of second-layer storage or shared temporary area. (the file will be deleted at job end)</p></li>
+<li><p>Also check “Notes on when Asynchronous closing” in  <a class="reference internal" href="TheSecondLayerStrage.html#asynccloseandsyncclose"><span class="std std-ref">Asynchronous close / synchronous close</span></a> .</p></li>
+<li><p>You must set up stripes if you create files in the shared temporary area that are at least the size specified in “sharedtmp-size” per file. Refer to <a class="reference internal" href="SharedTemporaryArea.html#stripesettingforsharedtemporaryarea"><span class="std std-ref">Stripe setting for shared temporary area</span></a> for more information on stripe setting.</p></li>
+<li><p>Keep in mind that the following options can affect READ performance</p>
+<ul class="simple">
+<li><p>If the “cn-cache-size” option is not set to a large value corresponding to the amount of READ on the application side, processing for cache misses or cache reuse may degrade performance.</p></li>
+<li><p>If cn-cache-size is not large enough, you can turn OFF “auto-readahead option” to reduce performance degradation. If the auto-readahead setting is ON when the amount of data to be read is larger than the amount of cache on the LLIO client, read-ahead may cause necessary data to be ejected from the cache before it is read by the application, resulting in many cache misses and degraded READ performance.</p></li>
+</ul>
+</li>
+<li><p>The pjsub options <code class="docutils literal notranslate"><span class="pre">--all-mount-gfscache</span></code> and <code class="docutils literal notranslate"><span class="pre">--no-check-gfscache</span></code> cannot be specified in a job script. If you specify this option, an error occurs when the job is submitted, so specify this option on the command line.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>(Restrictions) may change depending on future operational status.</p>
+</div>
+<section id="notes-on-high-parallel-jobs-1000-or-more-parallel">
+<h2><span class="section-number">8.6.1. </span>Notes on High Parallel Jobs (1000 or more parallel)<a class="headerlink" href="#notes-on-high-parallel-jobs-1000-or-more-parallel" title="Link to this heading">¶</a></h2>
+<p>Depending on how the file is accessed when running a highly parallel job, I/O can take a long time or place a heavy load on the file system.
+This section provides notes on performing file I/O in a highly parallel job. Be sure to check the following for secure file access:.</p>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#about-read-files" id="id1">About “Read Files”</a></p></li>
+<li><p><a class="reference internal" href="#about-write-files" id="id2">About “Write Files”</a></p></li>
+<li><p><a class="reference internal" href="#direct-access-to-second-layer-storage" id="id3">Direct access to second-layer storage</a></p></li>
+</ul>
+</nav>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<section id="about-read-files">
+<span id="filereadnotes"></span><h3><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">8.6.1.1. </span>About “Read Files”</a><a class="headerlink" href="#about-read-files" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p>Pretransferring Common Files</p>
+<div class="line-block">
+<div class="line">Files that are commonly read from each rank, such as executables, input data, and configuration parameters, should be placed in first tier storage using <strong class="program">llio_transfer</strong>.</div>
+<div class="line">For more information, see <a class="reference internal" href="OverView.html#simultaneousaccesstollio"><span class="std std-ref">Simultaneous access to common files from all processes</span></a>.</div>
+</div>
+<p>For information about <strong class="program">llio_transfer</strong>, see <a class="reference internal" href="TheSecondLayerStrage.html#llio-transfer"><span class="std std-ref">Common file distribution function (llio_transfer)</span></a>.</p>
+<p>Only read only files are eligible for <strong class="program">llio_transfer</strong>.</p>
+<p>The behavior with and without the <strong class="program">llio_transfer</strong> command is as follows:.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">Without the <strong class="program">llio_transfer</strong></div>
+</div>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_01.png" src="../_images/NotesOnHighParallelJobs_01.png" />
+</figure>
+<ul class="simple">
+<li><p>Without the <strong class="program">llio_transfer</strong>, reading from the second-layer storage to the compute node goes through the SIO, GIO nodes.</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">When to Use the <strong class="program">llio_transfer</strong></div>
+</div>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_02.png" src="../_images/NotesOnHighParallelJobs_02.png" />
+</figure>
+<ul class="simple">
+<li><p>The <strong class="program">llio_transfer</strong> creates a cache of files to be read in common for all SIO assigned to a job.</p></li>
+</ul>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_03.png" src="../_images/NotesOnHighParallelJobs_03.png" />
+</figure>
+<ul class="simple">
+<li><p>Each compute node (parallel process) can be read at high speed by accessing the physically nearest SIO.</p></li>
+</ul>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ol class="arabic" start="2">
+<li><p>Caching Read Data</p>
+<p>Files read from the second-layer storage to the compute nodes can be cached in the first-layer storage.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">When not to cache</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_04.png" src="../_images/NotesOnHighParallelJobs_04.png" />
+</figure>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">When Caching (default)</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_05.png" src="../_images/NotesOnHighParallelJobs_05.png" />
+</figure>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_06.png" src="../_images/NotesOnHighParallelJobs_06.png" />
+</figure>
+<ul class="simple">
+<li><p>The default behavior is to cache. Refer to <a class="reference internal" href="TheSecondLayerStrage.html#thesecondlayerstoragecacheareaopt"><span class="std std-ref">Option when Job submitting (pjsub --llio)</span></a> for how to change.</p></li>
+<li><p>Performance may improve if each compute node (parallel process) reads the same file multiple times.</p></li>
+<li><p>The first read is from the second-layer storage, so there is no caching effect.</p></li>
+<li><p>Accessing the same file from many nodes concentrates on one SIO and may take a long time to read.</p></li>
+<li><p>Use <strong class="program">llio_transfer</strong> for files read from all compute nodes.</p></li>
+</ul>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+<section id="about-write-files">
+<span id="filewritenotes"></span><h3><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">8.6.1.2. </span>About “Write Files”</a><a class="headerlink" href="#about-write-files" title="Link to this heading">¶</a></h3>
+<ol class="arabic">
+<li><p>Output to standard output/standard error output file</p>
+<p>The standard output/standard error output file should be a separate file, and the destination directory should be separated by a rank number.</p>
+<p>Example) Divide directories into 1000 ranks and output.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec -stdout-proc ./%/1000R/%j.stdout
+        -stderr-proc ./%/1000R/%j.stderr ./a.out
+</pre></div>
+</div>
+<p>For details, <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/docs/manuals_r01#JOS">Job Operation Software End-user’s Guide</a> refer to  below.</p>
+<ul class="simple">
+<li><p>“2.3.6.9  Standard output/standard error output of the mpiexec command [FX]”</p></li>
+</ul>
+<div class="line-block">
+<div class="line">Since maintenance in September 2021, the default setting (<code class="docutils literal notranslate"><span class="pre">PLE_MPI_STD_EMPTYFILE=off</span></code>) is to not create an empty file if the standard output/standard error output file output is 0.</div>
+<div class="line">See <a class="reference internal" href="../MPI/InputOutputRedirection.html#stdoutstderroutforlargejobs"><span class="std std-ref">About standard output / standard error output when executing large-scale jobs</span></a> .</div>
+</div>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ol class="arabic" start="2">
+<li><p>Number of files to be created in the directory</p>
+<p>Create no more than 100,000 file directories in one directory.
+In the case of making them at the same time, please limit them to 1000 pieces as described in the next section.</p>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ol class="arabic" start="3">
+<li><p>Number of files to be created concurrently in the directory</p>
+<p>If you want to output the calculation results of each process to a file at the same time, make sure that you create no more than 1000 files or directories under 1 directory.</p>
+<p>For example, to output the calculation results from each process of a 4000 process parallel job to a file, separate the output directories as follows:.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>../output/0/Output files up to    0 -  999 processes
+          1/Output files up to 1000 - 1999 processes
+          2/Output files up to 2000 - 2999 processes
+          3/Output files up to 3000 - 3999 processes
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ol class="arabic" start="4">
+<li><p>Simultaneous file creation and reference processing under a directory</p>
+<p>If you output the standard output file from multiple processes to the same directory and then read the executable file from multiple processes, this can put a heavy load on the entire file system.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec -stdout-proc ./file_stdout ./a.out
+</pre></div>
+</div>
+<p>The executable should be distributed to the SIO with llio_transfer.</p>
+<p>The standard output/standard error output should be output as described in “1. Output to the standard output/standard error output file”.</p>
+<p>See also the note in <a class="reference internal" href="../UsageRules/index.html#diskpoints"><span class="std std-ref">Disk</span></a>.</p>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ol class="arabic" start="5">
+<li><p>Number of files handled by the job</p>
+<p>If you are working with large numbers of files across a highly parallel job, be careful if you are working with large numbers of files per node.</p>
+<p>It is described in <a class="reference internal" href="#llioconsiderpoints"><span class="std std-ref">Important Notices</span></a>, so please check the content carefully.</p>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ol class="arabic" start="6">
+<li><p>Asynchronous close</p>
+<p>It provides an asynchronous close function that writes asynchronously when a file is closed.
+By using this function, you do not have to wait for the completion of writing, and the job can be finished earlier.
+The default is synchronous close, so you may want to enable asynchronous close.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">Synchronous Close Image (default)</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_07.png" src="../_images/NotesOnHighParallelJobs_07.png" />
+</figure>
+<ul class="simple">
+<li><p>Synchronous close guarantees completion of write to the first-layer and the second-layer storage at the end of the close.</p></li>
+<li><p>When a program closes a file, it waits for the file to be written to the second-layer storage.</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">Asynchronous Close Image</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_08.png" src="../_images/NotesOnHighParallelJobs_08.png" />
+</figure>
+<ul>
+<li><p>Asynchronous close does not wait for writes to first-layer storage (SSD on SIO), not just to the second-layer storage. It is asynchronous, including writes to the first-layer storage.</p></li>
+<li><div class="line-block">
+<div class="line">The job terminates after the write operation to the second-layer storage is complete. (Write processing does not continue after the job ends.)</div>
+<div class="line">However, if the job execution time limit is exceeded or the job becomes abnormal due to node down, the write operation to the second-layer storage is canceled.</div>
+</div>
+</li>
+<li><p>If an attempt to write to the second-layer storage fails, “list of unwritten files” is printed on standard error.</p></li>
+<li><p>Asynchronous close can be enabled in <code class="docutils literal notranslate"><span class="pre">--llio</span> <span class="pre">async-close=on</span></code>. For more information about asynchronous close, see <a class="reference internal" href="TheSecondLayerStrage.html#asynccloseandsyncclose"><span class="std std-ref">Asynchronous close / synchronous close</span></a>.</p></li>
+</ul>
+</li>
+</ol>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+<section id="direct-access-to-second-layer-storage">
+<span id="directaccessto2ndfs"></span><h3><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">8.6.1.3. </span>Direct access to second-layer storage</a><a class="headerlink" href="#direct-access-to-second-layer-storage" title="Link to this heading">¶</a></h3>
+<p>Use /2ndfs, which provides direct access to the second-layer storage from compute nodes, if you encounter limitations in using the first-layer storage or if cache utilization is not beneficial.
+Keep in mind, however, that capacity cannot be increased like data area.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">/home,/vol0<em>n</em>0<em>m</em>/data access image</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_09.png" src="../_images/NotesOnHighParallelJobs_09.png" />
+</figure>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">/2ndfs access image</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/NotesOnHighParallelJobs_10.png" src="../_images/NotesOnHighParallelJobs_10.png" />
+</figure>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+</section>
+<section id="mpi-io">
+<h2><span class="section-number">8.6.2. </span>MPI-IO<a class="headerlink" href="#mpi-io" title="Link to this heading">¶</a></h2>
+<p>Read <a class="reference internal" href="#llioconsiderpoints"><span class="std std-ref">Important Notices</span></a> for using a file from multiple processes before using MPI-IO.</p>
+<blockquote>
+<div><div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Using MPI-IO in the cache area of second-layer storage is a specification that cannot write asynchronously because the cache cannot be used effectively.
+For details about performance, see “<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/perf/Perf-FS.pdf">Performance of File System</a>”.</p>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">8.6. Important Notices</a><ul>
+<li><a class="reference internal" href="#notes-on-high-parallel-jobs-1000-or-more-parallel">8.6.1. Notes on High Parallel Jobs (1000 or more parallel)</a><ul>
+<li><a class="reference internal" href="#about-read-files">8.6.1.1. About “Read Files”</a></li>
+<li><a class="reference internal" href="#about-write-files">8.6.1.2. About “Write Files”</a></li>
+<li><a class="reference internal" href="#direct-access-to-second-layer-storage">8.6.1.3. Direct access to second-layer storage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mpi-io">8.6.2. MPI-IO</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="SharedTemporaryArea.html"
+                          title="previous chapter"><span class="section-number">8.5. </span>Shared temporary area</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="IOprofiling.html"
+                          title="next chapter"><span class="section-number">8.7. </span>I/O profiling</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="IOprofiling.html" title="8.7. I/O profiling"
+             >next</a></li>
+        <li class="right" >
+          <a href="SharedTemporaryArea.html" title="8.5. Shared temporary area"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">8. </span>Layered storage</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.6. </span>Important Notices</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

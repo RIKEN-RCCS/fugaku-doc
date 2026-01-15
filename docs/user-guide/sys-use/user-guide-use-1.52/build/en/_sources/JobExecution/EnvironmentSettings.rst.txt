@@ -1,0 +1,101 @@
+Environment setting
+===================
+
+When a job is executed, the default language environment is set automatically.
+When using a language environment other than the default, use the module command to set another language environment.
+
+Please refer to `Supercomputer Fugaku Users Guide - Language and development environment - <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/lang_latest/>`_ for the language setting.
+
+
+Please note the following about setting the environment variable (LD_LIBRARY_PATH, PATH).
+
+* Searching LD_LIBRARY_PATH or PATH may affect the execution time of large parallel jobs using 10,000 processes or more. In order to search for paths efficiently, you should register only the required paths without duplication, or set the path that is searched frequently to the top.
+
+* When multiple libraries are included in the LD_LIBRARY_PATH for search such as spack, transferring library files as common files with llio_transfer improves the search cost. For information of llio_transfer, please see \ :ref:`llio_transfer`\ .
+
+* Please set /lib64 to the beginning of LD_LIBRARY_PATH.
+
+  Example)
+      
+  .. code-block:: console
+
+     export LD_LIBRARY_PATH=/lib64:$LD_LIBRARY_PATH
+
+.. _sort_libp:
+
+Tools to reduce search load on dynamic libraries(sort_libp)
+------------------------------------------------------------
+
+Changing the dynamic library searching path (LD_LIBRARY_PATH) can reduce system load and search time. At Fugaku, the search time can be reduced by specifying a local path with a shorter access time at the biginning and specifying the second layer storage cache with a slower access time behind. In order to reduce search time, we provide a script (/home/system/tool/sort_libp) to add /lib64, eliminate path deduplication, and output a search path that the paths of 2ndfs and the second layer storage cache are reordered to backward. If the libraries required for the application cannot be searched due to the change of search order, please adjust the order of paths by referring to the script output.
+
+Example)
+
+.. code-block:: console
+
+   export LD_LIBRARY_PATH=`/home/system/tool/sort_libp`
+
+
+| All files under each directory specified in "LD_LIBRARY_PATH" can be transferred to LLIO as common files by specifying the following option.
+| When using it, please check the precautions of :ref:`llio_transfer` and :ref:`dir_transfer`.
+
+
+Synopsis
+
+.. code-block:: console
+
+   Transfer spack libraries:
+    /home/system/tool/sort_libp -s [-l dirname]
+   
+   Transfer non-spack libraries:
+    /home/system/tool/sort_libp -a [-l dirname]
+   
+   Transfer all libraries:
+    /home/system/tool/sort_libp -s -a [-l dirname]
+   
+
+Options
+
+.. list-table::
+   :header-rows: 1
+   :widths: 4 8
+
+   * - Options
+     - Description
+
+   * - \-s
+     - | Transfer the spack libraries (libraries under /vol0004/apps/oss/) in the environment variable LD_LIBRARY_PATH.
+
+   * - \-a
+     - | Transfer the libraries (libraries under /vol000[2-6]/, /home/) other than spack in the environment variable LD_LIBRARY_PATH.
+
+   * - \-l dirname
+     - | The dirname argument specifies the directory where the llio_transfer log is stored.
+       | The default is "./sort_libp.${PJM_SUBJOBID}".
+
+   * - \-h
+     - | Shows how to use the command.
+
+
+| The following shows an example of a job script.
+| If the option is specified, the result of reordering LD_LIBRARY_PATH will be printed, but it is recommended to reorder the path after error handling of the transfer is done according to the example.
+| If a common file is not distributed correctly and many processes access the file, I/O may slow down.
+
+
+Example of job script description
+
+.. code-block:: console
+
+   # Remove duplicate pathes, sort, and set /lib64 to LD_LIBRARY_PATH
+   export LD_LIBRARY_PATH=`/home/system/tool/sort_libp`
+   # Transfer library and store transfer log in LOG_DIR/
+   /home/system/tool/sort_libp -s -a -l LOG_DIR/
+
+   # Error Handling for Transfers
+   if [ $? -eq 0 ]; then
+   :
+   else
+       echo "[ERROR] Error in sort_libp."
+       exit 1
+   fi
+
+

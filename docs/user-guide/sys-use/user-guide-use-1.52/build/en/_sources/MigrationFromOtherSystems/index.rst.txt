@@ -1,0 +1,354 @@
+Migration from other systems
+============================
+
+
+Overview
+--------
+
+Here indicates about main compile option which is incompatible when migrating the program from other Fujitsu system (PC cluster and Supercomputer K) to the Fugaku and other company's compiler (Intel compiler and gcc).
+
+
+Migration from K
+----------------
+
+Here indicates main difference between the Fugaku and Supercomputer K.
+
+.. list-table::
+  :header-rows: 1
+
+  * - Item
+    - K
+    - Fugaku
+    - Note
+
+  * - Executable file
+    - SPARC VIIIfx format
+    - Armv8.2-A format
+    - Incompatible. Re-compile is required.
+
+  * - Staging
+    - Yes
+    - No
+    - 
+
+  * - Recommended number of process in node
+    - 1
+    - 4
+    - Due to having 4 CMG (Core Memory Group, NUMA node) in 1 node
+
+  * - Maximum number of thread in node
+    - 8
+    - 48
+    - 12 thread/process when 4 process/node
+
+  * - Large page
+    - 4MiB/32MiB/256MiB
+    - 4MiB
+    - 
+
+  * - Endian
+    - Big endian
+    - Little Endian
+    - Incompatible on binary data
+
+  * - Language environment setting direction
+    - Uses Env_base file
+    - Uses Environment Modules
+    - Default environment is loaded when logging in and job execution
+
+Please refer to "14. Migration from K" of "Supercomputer Fugaku Users Guide -Language and development environment- " about main incompatible of language environment.
+
+Based on the difference in above, we indicate the change example of job script in below.
+
+[Supercomputer K job script example]
+
+.. code-block:: bash 
+
+   #!/bin/sh -x
+   #PJM --rsc-list  "node=8"                   # Number of assign node 8  (1 dementional format)
+   #PJM --rsc-list  "elapse=01:00:00"          # Running time limit 1 hour
+   #PJM --stg-transfiles all
+   #PJM --mpi "use-rankdir"                    # Rank number directory use declaration
+   #PJM --stgin "rank=* ./a.out %r:./"         # Stage in ./a.out to each rank
+   #PJM -s                                     # Output statistic information
+   #
+   . /work/system/Env_base                     # Set environment variables
+   #
+   export OMP_NUM_THREADS=8
+   mpiexec -n 8 ./a.out    # Execute a.out
+
+Change job script as following.
+
+- Delete the definition about staging (--stg-transfiles, use-rankdir, --stgin, --stgout etc). If definition is still existing, nothing works.
+- Since 1node 4 process, it is using max-proc-per-node=4 here.
+- To make number of process to 8, change number of node to 2. If number of node is 8, it executes with 32 process.
+- Since default language environment is set when job execution, delete environment variables setting.
+
+[Fugaku job script example]
+
+
+.. code-block:: bash
+
+   #!/bin/sh -x
+   #PJM --rsc-list  "node=2"                   # Number of assign node 2 (1 dementional format)
+   #PJM --rsc-list  "elapse=01:00:00"          # Running time limit 1 hour
+   #PJM --mpi max-proc-per-node=4              # Upper limit of number of MPI process that created at 1 node
+   #PJM -g groupname                         # group name
+   #PJM -x PJM_LLIO_GFSCACHE=/vol000N          # volume names that job uses
+   #PJM -s                                     # Output statistic information
+   #
+ 
+   export OMP_NUM_THREADS=12
+   mpiexec -n 8 ./a.out    # Execute a.out
+
+
+When executing a job, the directory where pjsub is executed operates as the current directory of the job.
+When executing multiple jobs at the same time, make sure that input / output data does not conflict between jobs.
+
+
+Migration from other Fujitsu systems
+------------------------------------
+
+This indicates about the migration from other Fujitsu systems, compile option and the difference of optimization directive.
+
+
+Option difference
+^^^^^^^^^^^^^^^^^
+
+Here indicates representative option because of migration from other systems.
+
+
+.. list-table::
+   :header-rows: 1
+   :widths: 1 1 1 1 2
+
+   * - PC cluster
+     - "K"
+     - FX100
+     - |post-k-only|
+     - Changed point
+
+   * - \-Kfast
+     - \-Kfast
+     - \-Kfast
+     - \-Kfast
+     - 
+
+   * - \-Kparallel
+     - \-Kparallel
+     - \-Kparallel
+     - \-Kparallel
+     - 
+
+   * - \-Kopenmp
+     - \-Kopenmp
+     - \-Kopenmp
+     - \-Kopenmp
+     - 
+
+   * - None
+     - \-KXFILL
+     - \-KXFILL
+     - \-Kzfill
+     - Changed option name at "Fugaku"
+
+   * - None
+     - \-Kuxsimd
+     - \-Kuxsimd
+     - None
+     - Abolished option at "Fugaku"
+
+   * - \-Kopenmp_tls
+     - \-Kopenmp_tls
+     - \-Kopenmp_tls
+     - None
+     - Abolished option at "Fugaku"
+
+
+Optimization indicator (OCL) difference
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Here indicates added to changed representative OCL.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 1 1 1 1 2
+
+   * - PC cluster
+     - "K"
+     - FX100
+     - |post-k-only|
+     - Changed point
+
+   * - None
+     - XFILL
+     - XFILL
+     - ZFILL
+     - Name changed at "Fugaku"
+
+   * - None
+     - UXSIMD
+     - UXSIMD
+     - None
+     - Abolished at "Fugaku"
+
+
+Migration from other systems
+----------------------------
+
+Here indicates main option difference about Intel compiler and GNU.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 2 2 2 2 2
+   
+   * - Item
+     - Induces optimisation option for speeding up
+     - Automatic parallel
+     - OpenMP
+     - Change local variables to automatic variables
+
+   * - Fugaku
+     - \-Kfast
+     - \-Kparallel
+     - \-Kopenmp
+     - \-Kauto
+
+   * - Intel compiler
+     - \-O3 -xHost
+     - \-parallel
+     - \-openmp
+     - \-auto
+
+   * - GNU
+     - \-O3
+     - \-
+     - \-fopenmp
+     - \-
+
+.. seealso::
+
+
+  1. | If change to  \ :program:`fccpx`\  from  GCC  (\ :program:`gcc`\)
+     | In addition to fccpx, C11 specification understand based on GNU C extentional specification.
+  
+  #. | If change to  \ :program:`fccpx`\  from Intel compiler  (\ :program:`ifort`\)
+  
+     | Display option to extend Fortran fixed specification.
+     | Fugaku: ``-Fwide``\(Up to 255 letters)
+     | Intel compiler :\ ``-132``
+
+
+Endian
+------
+
+Here explains about Endian and about comparing with Supercomputer K and target compilers.
+
+
+Overview
+^^^^^^^^
+
+At Supercomputer K, Big Endian is used.
+On the other hands, the Fugaku  and around devices uses Little Endian.
+
+Indicates Endian used on each node.
+
+.. _Endian on each node:
+
+.. csv-table:: Endian on each node
+  :header-rows: 1
+
+   Node type, K, Fugaku
+   Computing node, Big Endian, Little Endian
+   Login node, Little Endian, Little Endian
+
+It is required to change Endian to use the binary data that is created with Supercomputer K.
+Indicates the policy of change at :ref:`Data migration (change) policy` .
+
+.. _Data migration (change) policy:
+
+.. csv-table:: Data migration (change) policy
+  :header-rows: 1
+
+  Language, Change direction
+  Fortran (Input and output without style), Uses language software change function
+  Fortran(Other), Change by the user
+  C,Change by the user
+  C++,Change by the user
+  MPI-IO,Change by the user
+
+
+Target compiler
+^^^^^^^^^^^^^^^
+
+The target compiler in this section is as following.
+On these compilers, Some Endian conversion functions are provided for Fortran binary data.
+
+.. contents::
+   :local:
+
+.. _Fujitsu compiler:
+
+Fujitsu compiler
+++++++++++++++++
+
+At Fujitsu compiler, execution option and change command are offered.
+
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 3 7
+
+   * - Function
+     - Explanation
+
+   * - Execution option
+     - By putting ``-Wl,-T`` to the execution option of Fortran program, Endian change is exeuted when Fortran input/output.
+
+   * - Change command
+     - Offeres  \ ``fcvendianpx``\  command.
+       Use as  \ ``fcvendianpx inputfilename outputfilename type``\
+       ``type``  specifies data type to change (one of these values: 2, 4, 8, 16).
+
+.. _Intel compiler:
+
+Intel compiler
+++++++++++++++
+
+At Intel compiler, compile option and environment variables when execution are offered.
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 3 7
+
+   * - Function
+     - Explanation
+
+   * - Compile option
+     - By compiling with putting  \ ``-convert big_endian`` , ``-convert little_endian``\ , it is possible to make numeric data format without style to Big Endian or Little Endian.
+
+   * - Environment variables when execution
+     - Specify environment variables  \ ``F_UFMTENDIAN = MODE (MODE = big | little)``\.
+
+.. _GNU compiler(GCC):
+
+GNU compiler(GCC)
++++++++++++++++++
+
+At gfortran, convert specifier by extending the OPEN statement and execution option are offered.
+
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 3 7
+
+   * - Function
+     - Explanation
+
+   * - OPEN statement's extention
+     - Specify  \ ``CONVERT='BIG_ENDIAN'``\  and  \ ``CONVERT='LITTLE_ENDIAN'``\  to OPEN statement. Specify such as  \ ``open(file='big.dat',form='unformatted', convert='big_endian')``\.
+
+   * - Execution option
+     - Specify  \ ``-fconvert=big-endian``\  and  \ ``-fconvert=little-endian``\ .
+
+

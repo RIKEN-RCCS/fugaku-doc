@@ -1,0 +1,220 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>3.1.11. Change the disk quota limit on each VOLUME &#8212; User support tools User&#39;s Guide (for User)  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.1.12. Displaying Fugaku Points" href="3-1-12_AccountJ_pt.html" />
+    <link rel="prev" title="3.1.10. Displaying quotas on data area" href="3-1-10_Chkdiskspace.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-12_AccountJ_pt.html" title="3.1.12. Displaying Fugaku Points"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="3-1-10_Chkdiskspace.html" title="3.1.10. Displaying quotas on data area"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" accesskey="U"><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.11. </span>Change the disk quota limit on each VOLUME</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="change-the-disk-quota-limit-on-each-volume">
+<h1><span class="section-number">3.1.11. </span>Change the disk quota limit on each VOLUME<a class="headerlink" href="#change-the-disk-quota-limit-on-each-volume" title="Permalink to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[Name]</strong></div>
+<div class="line">　chgdisklimit -  Display groups’ disk usage and limits on data area</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Style]</strong></div>
+<div class="line">　chgdisklimit  [Option]</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Description]</strong></div>
+<div class="line">　The chgdisklimit command can set disk quota limit within the range that does not exceed the disk space assigned to group.</div>
+<div class="line">　Group managers and system administrators can set disk quota limit on each VOLUME, but users cannot.</div>
+<div class="line">　If VOLUME is low on free space, you can either request to increase the amount of disk space allocated to group or</div>
+<div class="line">　lower the quota limit for other VOLUME. The inode is set according to the disk quota limit.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Option]</strong></div>
+<div class="line">　  -g GROUP_NAME</div>
+<div class="line">　        Specify group name. You can specify only a single name and exact matching.</div>
+<div class="line"><br /></div>
+<div class="line">　  -m VOLUME_NAME</div>
+<div class="line">　        The first two digits represent the VOLUME number and the last two digits represent the MDT number.</div>
+<div class="line"><br /></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>The VOLUME specified with the -m option should be chosen by using the chkdiskspace command to check the FREE (available space) of each VOLUME, and selecting a VOLUME that has more free space than the amount you wish to allocate.</p>
+</div>
+<div class="line-block">
+<div class="line">　  -B QUOTA_LIMIT_VALUE</div>
+<div class="line">　        QUOTA_LIMIT_VALUE is expressed in units of TiB.</div>
+<div class="line">　　　　　　　【Example】vol0401</div>
+<div class="line"><br /></div>
+<div class="line">　 –help</div>
+<div class="line">　        Display this help and exit.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Return value]</strong></div>
+<div class="line">　Noprmal: 0</div>
+<div class="line">　Abnormal: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Note]</strong></div>
+<div class="line">　None.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Use example]</strong></div>
+<div class="line">　【Example 1】  Group managers and system administrators Change the disk limits.</div>
+</div>
+<div class="line-block">
+<div class="line">　In the following example, the remaining 5 TiB of capacity can be allocated to any volume.</div>
+<div class="line">　You can check the total quota for a specified group by using chkdiskspace command.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>chkdiskspace<span class="w"> </span>-g<span class="w"> </span>group001
+<span class="go">COLLECTDATE : 2022/02/20 11:27:36    unit[TiB]</span>
+<span class="go">[group001] LIMIT:10 ALLOC:5</span>
+<span class="go">*----------------[SYSTEM]-----------------|-----------------------------[GROUP]--------------------------------------*</span>
+<span class="go">VOLUME          SIZE            FREE            LIMIT     USAGE  USE_RATE            ILIMIT           FILES IUSE_RATE</span>
+<span class="go">vol0300         7,000           6,990             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0301         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0302         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0303         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0400         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0401         7,000           6,995             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0402         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0403         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0500         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0501         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0502         3,000           2,995               5      0.01      0.0%         1,500,000              64      0.0%</span>
+<span class="go">vol0503         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0600         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0601         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0602         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0603         3,000           2,995             ---      0.01       ---               ---               1       ---</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">　Here, a quota of 5 TiB is set on vol0401.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>chgdisklimit<span class="w"> </span>-g<span class="w"> </span>group001<span class="w"> </span>-m<span class="w"> </span>vol0401<span class="w"> </span>-B<span class="w"> </span><span class="m">5</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">　The output of chkdiskspace indicates that the chgdisklimit command was successful.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>chkdiskspace<span class="w"> </span>-g<span class="w"> </span>group001
+<span class="go">COLLECTDATE : 2022/02/20 11:27:36    unit[TiB]</span>
+<span class="go">[group001] LIMIT:10 ALLOC:10</span>
+<span class="go">*----------------[SYSTEM]-----------------|-----------------------------[GROUP]--------------------------------------*</span>
+<span class="go">VOLUME          SIZE            FREE            LIMIT     USAGE  USE_RATE            ILIMIT           FILES IUSE_RATE</span>
+<span class="go">vol0300         7,000           6,990             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0301         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0302         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0303         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0400         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0401         7,000           6,990               5      0.01      0.0%         1,500,000              64      0.0%</span>
+<span class="go">vol0402         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0403         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0500         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0501         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0502         3,000           2,995               5      0.01      0.0%         1,500,000              64      0.0%</span>
+<span class="go">vol0503         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0600         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0601         7,000           7,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0602         3,000           3,000             ---      0.01       ---               ---               1       ---</span>
+<span class="go">vol0603         3,000           2,995             ---      0.01       ---               ---               1       ---</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="3-1-10_Chkdiskspace.html"
+                          title="previous chapter"><span class="section-number">3.1.10. </span>Displaying quotas on data area</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="3-1-12_AccountJ_pt.html"
+                          title="next chapter"><span class="section-number">3.1.12. </span>Displaying Fugaku Points</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-12_AccountJ_pt.html" title="3.1.12. Displaying Fugaku Points"
+             >next</a></li>
+        <li class="right" >
+          <a href="3-1-10_Chkdiskspace.html" title="3.1.10. Displaying quotas on data area"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" ><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.11. </span>Change the disk quota limit on each VOLUME</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Potal Top</a>
+    </div>
+  </body>
+</html>

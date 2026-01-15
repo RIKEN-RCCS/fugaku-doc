@@ -1,0 +1,33 @@
+概要
+====================
+
+「富岳」を利用するためには、富岳ウェブサイトやログインノードを利用します。
+
+ここでは、富岳ウェブサイト利用時に必要となるクライアント証明書のインストール方法、ログインノードの接続に必要となるSSH公開鍵の作成および登録方法を示します。
+
+設定の流れを次に示します。
+
+.. figure:: ./img/AccessToTheSystemOveview_01.png
+   :align: center
+
+.. list-table::
+   :header-rows: 1
+
+   * - 項目
+     - 参照先
+
+   * - クライアント証明書のインストール
+     - :ref:`InstallingClientCertificate`
+
+   * - 鍵ペア作成
+     - :ref:`GeneratingPrivateKeyAndPublicKey`
+
+   * - 公開鍵登録
+     - :ref:`RegisteringAPublicKey`
+
+   * - ターミナルソフトの設定
+     - :ref:`LoginNodePuTTYSetup`
+
+   * - ログイン
+     - :ref:`LoginNodePuTTYSetup`
+

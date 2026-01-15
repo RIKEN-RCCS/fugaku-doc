@@ -1,0 +1,161 @@
+Assign resource change
+======================
+
+| 　**[Name]**
+| 　resourcemod - Expand / shrink the assign resource for each job or user
+
+| 　**[Style]**
+| 　resourcemod  -g  group name  [-u  user name] [-rscgrp  resource group name] [-resource  resource value] [-distrsc  Resource allocation by period]
+| 　resourcemod  -f  file name
+
+| 　**[Description]**
+| 　resourcemod command is used to change the usage restrictions set for each group, each resource group, or each user. The change format includes a single format for changing the budget limit of one resource group or user and a CSV format for changing a plurality of budget limits at once.  
+To return the already set calculation resource frame to "unlimited", omit specifying the "-resource" option.
+Use the resourceadd command for the condition that the calculation resource frame is set for the first time and there is no record of job submission.
+To check whether the calculation resource frame has already been set or whether the job has been submitted, use the accountj command and check the status of the target condition.
+When the target information line exists, it will be the target of this command.
+【Example】	$ accountj -g group01 -E
+Use the above accountj command to check the status after setting the resourcemod command.
+
+.. figure:: img/3_SystemManagement_03.png
+
+| 　The computing resource allocation frame is a computing resource frame allocated by a registration organization in accordance with an application from a user at the time of assignment selection. Users cannot go beyond this limit to submit and execute jobs at  \ |post-k|\ .
+
+| 　The theme manager, subtheme manager can set the sub theme resource to the group.
+| 　The theme manager, sub-theme manager, and project manager can set assignment assignment resources for a hierarchy below the group (resource group and user hierarchy in the above diagram). However, only the system administrator can set the limit value for a single resource group under the group.
+| 　Also, the general user cannot use the command.
+
+| 　**[Option]**
+| 　-g  group name
+| 　Specify group name.
+
+| 　-u  user name
+| 　Specify user name.
+ 　
+| 　-rscgrp  resource group name
+| 　Specify resouce group name.
+ 　
+| 　-resource  assign resource
+| 　Specify the computing resource frame you want to change (Node number x runtime limit value). Specify a positive integer value. The unit of the numerical value is node seconds [node · s]. If 0 (zero) is specified, use is prohibited.
+To return the set budget limit to "unlimited", omit specifying this option.
+ 　
+| 　-distrsc  Resource allocation by period
+| 　Specify resource allocation by period. Valid when updating for a group, otherwise ignored. The amount of resources allocated to the group for each period does not affect carry-forward processing.
+ 　
+| 　-f  File name
+| 　When the assignment resource of the assignment is already distributed to the job type and the user, a file in which information for changing the budget limit or the job type resource name is specified.
+ 　
+| 　【File layout】
+| 　Required column　○: Required,  △: Required depending on resource type
+
+   .. list-table:: 
+     :header-rows: 1
+     :widths: 5 20 20 5 30
+   
+     * - No
+       - Item name
+       - Category
+       - Required
+       - Note
+   
+     * - 1
+       - RTYPE
+       - Alphabetic characters
+       - ○
+       - | Resource type
+         | Group: GROUP
+         | Usr: USER
+         | Resource group: :RSCG
+         | User-resource group: USER_RSCG
+   
+     * - 2
+       - GROUP
+       - Single-byte alphanumeric symbol
+       - ○
+       - Group name
+   
+     * - 3
+       - USER
+       - Single-byte alphanumeric characters
+       - △
+       - | User name
+         | When resource group specified, NULL
+   
+     * - 4
+       - RSCGRP
+       - Single-byte alphanumeric characters
+       - △
+       - | Resource group name
+         | When user specified, NULL
+   
+     * - 5
+       - LIMIT
+       - Number
+       - 
+       - | Computing resource frame
+         | (Node number x Run time limit value)
+         | ※Specify a positive integer value. The unit of the numerical value is node seconds [node · s]. If 0 (zero) is specified, use is prohibited.
+   
+     * - 6
+       - DISTRSC
+       - Single-byte alphanumeric symbol
+       - 
+       - | Resource allocation by period
+         | Specify the period area and the amount of resource during that moment.
+         | Specification example
+         | 20190401-20190930:100,20191001-20200331:200
+
+| 　【File setting example】
+| 　・If changing the assign resource frame
+
+.. code-block:: none 
+
+   RTYPE,GROUP,USER, RSCGRP,LIMIT,DISTRSC　...Header
+   GROUP,group01,,,100,　...Assign to the group
+   USER,group01,user1,,100,　...Assign to the user
+   RSCG,group01,,rg1,100,　...Assign to the resource group
+   USER_RSCG,group01,user1,rg1,100,　... Assign to the user and resource group combination
+
+| 　&#45;-help
+| 　Display command help contents.
+
+| 　**[Return value]**
+| 　Normal: 0
+| 　Abnormal: 1
+
+| 　**[Note]**
+| 　None.
+
+| 　**[Use example]**
+| 　【Example 1】	Change the group limit value
+
+.. code-block:: console 
+
+   [login]$ resourcemod -g group01 -resource 100
+   Updated 1 resource information.
+   [login]$
+
+　【Example 2】	Change the user limit value
+
+.. code-block:: console 
+
+   [login]$ resourcemod -g group01 -u user1 -resource 100
+   Updated 1 resource information.
+   [login]$
+
+　【Example 3】	Change the limit value of the user and resource group conbination
+
+.. code-block:: console 
+
+   [login]$ resourcemod -g group01 -u user1 –rscgrp rg1 -resource 100
+   Updated 1 resource information.
+   [login]$
+
+　【Example 4】	Change the limit value to the multiple condition for bulk
+
+.. code-block:: console 
+
+   [login]$ resourcemod -f resourcemod.csv
+   Updated 4 resource information.
+   [login]$
+

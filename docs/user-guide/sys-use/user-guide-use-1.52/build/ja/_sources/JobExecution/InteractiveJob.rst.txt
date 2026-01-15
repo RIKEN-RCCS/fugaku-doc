@@ -1,0 +1,188 @@
+会話型ジョブ
+================
+
+会話型ジョブとは、割り当てた資源内で、ジョブを対話的に実行するジョブタイプで、以下の特徴があります。
+
+- 端末から対話的に実行される 
+- 再実行は不可である 
+
+
+
+ジョブの投入
+-------------
+
+ジョブの投入は、\ :program:`pjsub`\ コマンドの\ ``--interact``\ オプションを使用します。
+
+| ジョブは、対話型で実行する方法と、事前に作成したジョブスクリプトを指定する方法があります。
+| また、投入時には会話型ジョブに割り当てられたリソースグループの指定が必要です。
+
+- :program:`pjsub`\ コマンドで対話型で実行する方法
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjsub --interact -g groupname -L "node=1" -L "rscgrp=int" -L "elapse=1:00:00" --sparam "wait-time=600"
+    [INFO] PJM 0000 pjsub Job 405918 submitted.
+    [INFO] PJM 0081 .connected.
+    [INFO] PJM 0082 pjsub Interactive job 405918 started.
+    [_CNlogin]$ module list
+    Currently Loaded Modulefiles:
+      1) lang/tcsds-1.2.31
+    [_CNlogin]$ ./a.out
+    (省略)
+    [_CNlogin]$ exit
+    [_LNlogin]$
+
+- :program:`pjsub`\ コマンドでジョブスクリプトを指定してジョブを投入
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjsub --interact  ./sample.sh  # 事前に作成したジョブスクリプトを指定
+    [INFO] PJM 0000 pjsub Job 405918 submitted.
+    [INFO] PJM 0081 .connected.
+    [INFO] PJM 0082 pjsub Interactive job 405918 started.
+    (省略)... #← ジョブスクリプトの出力内容
+    [INFO] PJM 0083 pjsub Interactive job 405918 completed.
+
+コマンド形式
+-------------
+
+会話型ジョブは、\ :program:`pjsub`\ コマンドに\ ``--interact``\ を指定して実行します。
+
+[書式]
+
+.. code-block:: none
+
+  pjsub --interact -g groupname -L "elapse=1:00:0" [--sparam wait-time=waittime] [options] [script-file] 
+
+
+| 会話型ジョブでは、即時に計算資源を割り当て、実行を試みます。
+| 資源不足により、即時実行できない場合は、\ ``--sparam wait-time``\ で指定された時間、資源割り当てを待ちます。
+
+
+.. list-table::
+   :header-rows: 1
+   :widths: 2 8
+
+   * - オプション
+     - 説明
+
+   * - elapse=\ *elapsedtime*
+     - | ジョブの最大実行可能時間を指定します。
+       | 省略時は10秒です。
+
+   * - \-\-sparam "wait-time=\ *waittime*\ "
+     - | 計算資源割り当て待ち時間を秒単位で指定します。
+       | ``waittime``\ に指定可能な範囲は、0～36000 および unlimited で、デフォルト値は 0 となります。
+       | ``unlimited``\ が指定された場合、計算資源が割り当てられるまで待ち続けます。
+       | 計算資源割り当てのタイムアウトを避けるには60秒以上の指定を推奨します。
+
+
+[オプション指定例]
+
+会話型ジョブが、計算資源割り当て待ち時間を超えてキャンセルされた場合、以下のようなメッセージを表示し、\ :program:`pjsub`\ コマンドは終了します。
+
+.. code-block:: console
+
+   [_LNlogin]$ pjsub --interact -g groupname --sparam "wait-time=600" # 資源割り当て待ちを最長600秒(10分)待つ
+   [INFO] PJM 0000 pjsub Job 291 submitted.
+   [INFO] PJM 0081 .
+   [INFO] PJM 0080 pjsub Interactive job 291 is canceled due to the resource allocation timeout.
+          The timeout period "t" can be specified by "--sparam wait-time=t".
+
+コマンドのオプションブロック
+-----------------------------
+
+会話型ジョブのオプションには、\ :program:`pjsub`\ コマンドのオプションを指定することが可能です。
+ただし、一部のオプションは、会話型ジョブ実行時には無効となります。なお、無効なオプションを指定した場合、エラーにはならず無視されます。
+
+以下に会話型ジョブで無効となるオプションを示します。
+
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 4 6
+
+   * - オプション
+     - 指定内容
+   
+   * - \-\-at
+     - ジョブ実行開始時間
+   
+   * - -e、\-\-err
+     - 標準エラー出力ファイル
+   
+   * - -j
+     - 標準エラー出力を標準出力ファイルへ出力
+   
+   * - \-\-bulk、\-\-step
+     - 各種ジョブモデルの指定
+   
+   * - -m e
+     - 実行終了メール通知
+   
+   * - -m r
+     - 実行再開メール通知
+   
+   * - \-\-restart
+     - ジョブの自動再実行の有効化
+   
+   * - -o、\-\-out
+     - 標準出力ファイル
+   
+   * - -p
+     - ジョブの優先度
+   
+   * - -w
+     - \ :program:`pjsub`\コマンドの復帰待ち合わせタイミング
+
+
+スクリプトファイルブロック
+---------------------------
+
+| 会話型ジョブは、通常のジョブと同様に、\ :program:`pjsub`\ コマンド実行時に\ ``script-file``\ の指定が可能です。
+| \ ``script-file``\が指定された場合、指定されたスクリプトファイルが実行されます。指定されたスクリプトファイルの実行が終われば会話型ジョブは終了します。
+
+
+- スクリプトファイル（\ :file:`./sample.sh`\ ）を指定した場合の実行例
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjsub --interact --sparam "wait-time=3600" ./sample.sh 
+    [INFO] PJM 0000 pjsub Job 488 submitted.
+    .connected.
+    [INFO] PJM 0082 pjsub Interactive job 488 started.
+     MPI communication start. size= 8
+     MPI communication end
+     result is 0+1+...size-1.check result( 28 )
+    [INFO] PJM 0083 pjsub Interactive job 488 completed.
+
+  .. note::
+
+    ``script-file``\ の指定がない場合、ジョブはプロンプトを表示し、入力待ちの状態となります。以降、\ :program:`pjdel`\ コマンド、標準入力のクローズ等により実行がキャンセルされるまで、ジョブは実行状態となります。
+
+
+- スクリプトファイルの指定がない場合の実行例
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjsub --interact -g groupname -L "node=8" -L "rscgrp=int" -L "elapse=00:10:0" --sparam "wait-time=3600"
+    [INFO] PJM 0000 pjsub Job 490 submitted.
+    .connected.
+    [INFO] PJM 0082 pjsub Interactive job 490 started.
+    [_CNlogin]$ export PARALLEL=8
+    [_CNlogin]$ export OMP_NUM_THREADS=$PARALLEL
+    [_CNlogin]$ mpiexec ./sample_mpi
+     MPI communication start. size= 8
+     MPI communication end
+     result is 0+1+...size-1.check result( 28 )
+    [_CNlogin]$ exit
+    exit
+    [INFO] PJM 0083 pjsub Interactive job 490 completed.
+    [_LNlogin]$
+
+
+  .. seealso::
+
+    会話型ジョブ実行では、擬似端末を使用してジョブの一連の動作を対話的に行いますが、\ ``script-file``\ が指定された場合は、擬似端末は使用されません。
+
+

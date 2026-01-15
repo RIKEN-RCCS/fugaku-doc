@@ -1,0 +1,713 @@
+Notes on job operations
+=======================
+
+Availability of commands and required options vary depending on the job status.
+This section shows whether operations on jobs are possible depending on the job status and job type.
+
+
+.. seealso::
+
+   The meanings of the symbols in the table are as follows.
+   
+   
+    | Possible : Operations on jobs are possible
+    | Impossible : Cannot operate on jobs
+    | - : The job will never be in that state
+   
+   
+   For bulk jobs and step jobs, the two-tiered cell has the following meaning:
+   
+    | Upper row: Operations for bulk jobs and step jobs (specify the job ID as the operation target)
+    | Lower row: Operation for bulk job or sub job of step job (specify sub job ID as operation target)
+   
+   
+   A cell that is not double-tiered is common to both bulk jobs, step jobs, and their sub jobs.
+
+Delete job (pjdel)
+-------------------
+
+For job deleting (  \ :program:`pjdel`\  ) is as followings.
+
+.. list-table:: 
+   :widths: 2 2 2 2 2
+   :header-rows: 1
+
+   * - Job status
+     - Normal job, master-worker type job
+     - Bulk job
+     - Step job
+     - Interactive job
+
+   * - ACCEPT
+     - Possible
+     - Possible
+     - Possible
+     - Possible
+
+   * - REJECT
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - QUEUED
+     - Possible
+     - Possible
+     - Possible
+     - Possible
+
+   * - RUNNING-A
+     - Possible
+     - | \-
+       | Possible (sub job)
+     - | \-
+       | Possible (sub job)
+     - Possible
+
+   * - RUNNING-P
+     - Impossible :superscript:`*`
+     - | \-
+       | Impossible :superscript:`*` (sub job)
+     - Impossible :superscript:`*`
+     - Impossible :superscript:`*`
+
+   * - RUNNING
+     - Possible
+     - Possible
+     - Possible
+     - Possible
+
+   * - RUNNING-E
+     - Impossible :superscript:`*`
+     - | \-
+       | Impossible :superscript:`*` (sub job)
+     - Impossible :superscript:`*`
+     - Impossible :superscript:`*`
+
+   * - RUNOUT
+     - Impossible
+     - | Possible
+       | Impossible (sub job)
+     - | \-
+       | Impossible (sub job)
+     - Possible
+
+   * - CANCEL
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - ERROR
+     - Possible
+     - Possible
+     - Possible
+     - \-
+
+   * - EXIT
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - HOLD
+     - Possible
+     - Possible
+     - Possible
+     - \-
+
+   * - SUSPEND
+     - Possible
+     - Possible
+     - Possible
+     - \-
+
+   * - SUSPENDED
+     - Possible
+     - Possible
+     - Possible
+     - \-
+
+   * - RESUME
+     - Possible
+     - Possible
+     - Possible
+     - \-
+
+.. note::
+
+   (:superscript:`*`) If specified  \ ``--enforce``\  option, it is possible to control. However the authority is required to specify  \ ``--enforce``\  option.
+
+Job hold (pjhold)
+------------------
+
+For job holding ( \ :program:`pjhold`\ ) is as followings.
+
+.. list-table:: 
+   :widths: 2 2 2 2 2
+   :header-rows: 1
+
+   * - Job status
+     - Normal job, master-worker type job
+     - Bulk job
+     - Step job
+     - Interactive job
+
+   * - ACCEPT
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - REJECT
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - QUEUED
+     - Possible
+     - Possible
+     - Possible
+     - Impossible
+
+   * - RUNNING-A
+     - Possible :superscript:`*1`
+     - | \-
+       | Possible :superscript:`*1` (sub job)
+     - | \-
+       | Possible :superscript:`*1` (sub job)
+     - Impossible
+
+   * - RUNNING-P
+     - Impossible :superscript:`*2`
+     - | \-
+       | Impossible :superscript:`*2` (sub job)
+     - Impossible :superscript:`*2`
+     - Impossible
+
+   * - RUNNING
+     - Possible :superscript:`*1`
+     - | Possible :superscript:`*3`
+       | Possible :superscript:`*1` (sub job)
+     - Possible :superscript:`*1`
+     - Impossible
+
+   * - RUNNING-E
+     - Impossible :superscript:`*2`
+     - | \-
+       | Impossible :superscript:`*2` (sub job)
+     - Impossible :superscript:`*2`
+     - Impossible
+
+   * - RUNOUT
+     - Impossible
+     - Impossible
+     - | \-
+       | Impossible(sub job)
+     - Impossible
+
+   * - CANCEL
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - ERROR
+     - Impossible
+     - Impossible
+     - Impossible
+     - \-
+
+   * - EXIT
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - HOLD
+     - Impossible
+     - Impossible
+     - Impossible
+     - \-
+
+   * - SUSPEND
+     - Possible
+     - Possible
+     - Possible
+     - \-
+
+   * - SUSPENDED
+     - Possible
+     - Possible
+     - Possible
+     - \-
+
+   * - RESUME
+     - Possible
+     - Possible
+     - Possible
+     - \-
+
+.. note::
+
+  | (:superscript:`*1`) If specifying  \ ``--norestart``\  option of  \ :program:`pjsub`\  command when submitting job or sub job, cannot control.
+  | (:superscript:`*2`) If specify  ``--enforce``  option, it is possible to control. However the authority is required to specify \ ``--enforce``\  option.
+  | (:superscript:`*3`) This applies to sub jobs in the bulk job that can be pinned. Ignores sub jobs that cannot be fixed.
+
+Unpin a job (pjrls)
+--------------------
+
+For job canceling the job hold, (\ :program:`pjrls`\ ) is as followings.
+
+.. list-table:: 
+   :widths: 2 2 2 2 2
+   :header-rows: 1
+
+   * - Job status
+     - Normal job, master-worker type job
+     - Bulk job
+     - Step job
+     - Interactive job
+
+   * - ACCEPT
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - REJECT
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - QUEUED
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - RUNNING-A
+     - Impossible
+     - | \-
+       | Impossible(sub job)
+     - | \-
+       | Impossible(sub job)
+     - Impossible
+
+   * - RUNNING-P
+     - Impossible
+     - | \-
+       | Impossible(sub job)
+     - Impossible
+     - Impossible
+
+   * - RUNNING
+     - Impossible
+     - | Possible :superscript:`*1`
+       | Impossible(sub job)
+     - Impossible
+     - Impossible
+
+   * - RUNNING-E
+     - Impossible
+     - | \-
+       | Impossible(sub job)
+     - Impossible
+     - Impossible
+
+   * - RUNOUT
+     - Impossible
+     - | Possible :superscript:`*1`
+       | Impossible(sub job)
+     - Impossible
+     - Impossible
+
+   * - CANCEL
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - ERROR
+     - Impossible
+     - Impossible
+     - Impossible
+     - \-
+
+   * - EXIT
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - HOLD
+     - Possible
+     - Possible
+     - Possible
+     - \-
+
+   * - SUSPEND
+     - Impossible
+     - Impossible
+     - Impossible
+     - \-
+
+   * - SUSPENDED
+     - Impossible
+     - Impossible
+     - Impossible
+     - \-
+
+   * - RESUME
+     - Impossible
+     - Impossible
+     - Impossible
+     - \-
+
+.. note::
+
+   (:superscript:`*1`) This applies to sub jobs in the bulk job that can be unpinned. Ignores sub jobs that cannot be unpinned.
+
+Wait for job (pjwait)
+----------------------
+
+For job waiting (\ :program:`pjwait`\ ) is as followings.
+
+.. list-table:: 
+   :widths: 2 2 2 2 2
+   :header-rows: 1
+
+   * - Job status
+     - Normal job, master-worker type job
+     - Bulk job
+     - Step job
+     - Interactive job
+
+   * - ACCEPT
+     - Possible
+     - Possible
+     - Possible
+     - Possible :superscript:`*1`
+
+   * - REJECT
+     - Possible
+     - Possible
+     - Possible
+     - Possible :superscript:`*1`
+
+   * - QUEUED
+     - Possible
+     - Possible
+     - Possible
+     - Possible :superscript:`*1`
+
+   * - RUNNING-A
+     - Possible
+     - | \-
+       | Possible(sub job)
+     - | \-
+       | Possible(sub job)
+     - Possible :superscript:`*1`
+
+   * - RUNNING-P
+     - Possible
+     - | \-
+       | Possible(sub job)
+     - Possible
+     - Possible :superscript:`*1`
+
+   * - RUNNING
+     - Possible
+     - Possible
+     - Possible
+     - Possible :superscript:`*1`
+
+   * - RUNNING-E
+     - Possible
+     - | \-
+       | Possible(sub job)
+     - Possible
+     - Possible :superscript:`*1`
+
+   * - RUNOUT
+     - Possible
+     - Possible
+     - | \-
+       | Possible(sub job)
+     - Possible :superscript:`*1`
+
+   * - CANCEL
+     - Possible
+     - Possible
+     - Possible
+     - Possible :superscript:`*1`
+
+   * - ERROR
+     - Possible
+     - Possible
+     - Possible
+     - \-
+
+   * - EXIT
+     - Possible
+     - Possible
+     - Possible
+     - Possible :superscript:`*1`
+
+   * - HOLD
+     - Possible
+     - Possible
+     - Possible
+     - \-
+
+   * - SUSPEND
+     - Possible
+     - Possible
+     - Possible
+     - \-
+
+   * - SUSPENDED
+     - Possible
+     - Possible
+     - Possible
+     - \-
+
+   * - RESUME
+     - Possible
+     - Possible
+     - Possible
+     - \-
+
+.. note::
+
+   (:superscript:`*1`) :program:`pjwait`\  command does not wait for interactive job ending and closes normally without any notice.
+
+Send signal to job (pjsig)
+---------------------------
+
+For sending signal to job (\ :program:`pjsig`\ ) is as followings.
+
+.. list-table:: 
+   :widths: 2 2 2 2 2
+   :header-rows: 1
+
+   * - Job status
+     - Normal job, master-worker type job
+     - Bulk job
+     - Step job
+     - Interactive job
+
+   * - ACCEPT
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - REJECT
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - QUEUED
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - RUNNING-A
+     - Impossible
+     - | \-
+       | Impossible(sub job)
+     - | \-
+       | Impossible(sub job)
+     - Impossible
+
+   * - RUNNING-P
+     - Impossible
+     - | \-
+       | Impossible(sub job)
+     - Impossible
+     - Impossible
+
+   * - RUNNING
+     - Possible
+     - Possible
+     - Possible
+     - Possible
+
+   * - RUNNING-E
+     - Impossible
+     - | \-
+       | Impossible(sub job)
+     - Impossible
+     - Impossible
+
+   * - RUNOUT
+     - Impossible
+     - Impossible
+     - | \-
+       | Impossible(sub job)
+     - Impossible
+
+   * - CANCEL
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - ERROR
+     - Impossible
+     - Impossible
+     - Impossible
+     - \-
+
+   * - EXIT
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - HOLD
+     - Impossible
+     - Impossible
+     - Impossible
+     - \-
+
+   * - SUSPEND
+     - Impossible
+     - Impossible
+     - Impossible
+     - \-
+
+   * - SUSPENDED
+     - Impossible
+     - Impossible
+     - Impossible
+     - \-
+
+   * - RESUME
+     - Impossible
+     - Impossible
+     - Impossible
+     - \-
+
+Job parameter change (pjalter)
+-------------------------------
+
+For job parameter change ( \ :program:`pjalter`\ ) is as followings.
+
+.. list-table:: 
+   :widths: 2 2 2 2 2
+   :header-rows: 1
+
+   * - Job status
+     - Normal job, master worker type job
+     - Bulk job
+     - Step job
+     - Interactive job
+
+   * - ACCEPT
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - REJECT
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - QUEUED
+     - Possible
+     - | Possible
+       | Impossible(sub job)
+     - Possible :superscript:`*1`
+     - Impossible
+
+   * - RUNNING-A
+     - Impossible
+     - | \-
+       | Impossible(sub job)
+     - | \-
+       | Impossible(sub job)
+     - Impossible
+
+   * - RUNNING-P
+     - Impossible
+     - | \-
+       | Impossible(sub job)
+     - Impossible
+     - Impossible
+
+   * - RUNNING
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - RUNNING-E
+     - Impossible
+     - | \-
+       | Impossible(sub job)
+     - Impossible
+     - Impossible
+
+   * - RUNOUT
+     - Impossible
+     - Impossible
+     - | \-
+       | Impossible(sub job)
+     - Impossible
+
+   * - CANCEL
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - ERROR
+     - Possible
+     - | Possible
+       | Impossible(sub job)
+     - Possible :superscript:`*1`
+     - \-
+
+   * - EXIT
+     - Impossible
+     - Impossible
+     - Impossible
+     - Impossible
+
+   * - HOLD
+     - Possible
+     - | Possible
+       | Impossible(sub job)
+     - Possible :superscript:`*1`
+     - \-
+
+   * - SUSPEND
+     - Impossible
+     - Impossible
+     - Impossible
+     - \-
+
+   * - SUSPENDED
+     - Impossible
+     - Impossible
+     - Impossible
+     - \-
+
+   * - RESUME
+     - Impossible
+     - Impossible
+     - Impossible
+     - \-
+
+.. note::
+
+  | (:superscript:`*1`) The resource unit name cannot be changed for operations on sub jobs.
+  | (:superscript:`*2`) If the administrator has permitted the setting in the job operation management function, you can only change the elapsed time limit value for the running job. However, you can only change the age limit with the end user's rights.

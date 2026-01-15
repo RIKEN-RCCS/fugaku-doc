@@ -1,0 +1,23 @@
+.. SatelliteFugaku Guide documentation master file, created by
+   sphinx-quickstart on Fri Jun  7 17:14:57 2024.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+.. Welcome to SatelliteFugaku Guide's documentation!
+
+Satellite Fugaku User Guide
+=================================================
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Contents:
+   :numbered:
+
+   intro
+
+.. Indices and tables
+.. ==================
+.. 
+.. * :ref:`genindex`
+.. * :ref:`modindex`
+.. * :ref:`search`

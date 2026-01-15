@@ -1,0 +1,778 @@
+﻿
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>1. About Satellite Fugaku &#8212; Satellite Fugaku User Guide  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=658d757c" />
+    
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Satellite Fugaku User Guide" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="Satellite Fugaku User Guide"
+             accesskey="P">previous</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">Satellite Fugaku User Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>About Satellite Fugaku</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="about-satellite-fugaku">
+<h1><span class="section-number">1. </span>About Satellite Fugaku<a class="headerlink" href="#about-satellite-fugaku" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p>“Satellite Fugaku” is a computer system built on a commercial cloud as a software stack equivalent to “Fugaku,” which was installed as a demonstration and development environment for “Virtual Fugaku” advocated by R-CCS.</p></li>
+<li><p>Fugaku users can use Satellite Fugaku.</p></li>
+<li><p>See <a class="reference internal" href="#system"><span class="std std-ref">System Configuration</span></a> and <a class="reference internal" href="#software"><span class="std std-ref">Software Configuration</span></a> for configuration of Satellite Fugaku.</p></li>
+</ul>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<ul class="simple">
+<li><p>Satellite Fugaku is a very small trial environment, shared by many users.</p></li>
+<li><p>Each resource is not abundant, so please be careful when using it.</p></li>
+<li><p>Satellite Fugaku may be suspended without prior notice.</p></li>
+<li><p>Please check <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en">Fugaku website</a> for announcement information.</p></li>
+</ul>
+</div>
+</section>
+<section id="login-and-logout">
+<h1><span class="section-number">2. </span>Login and Logout<a class="headerlink" href="#login-and-logout" title="Link to this heading">¶</a></h1>
+<p>Since the Satellite Fugaku environment cannot be connected directly from the Internet, you must first log into the Fugaku login node to use it.
+For details on how to log in to the Fugaku login node, refer to <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html">Supercomputer Fugaku Users Guide - Use and job execution</a>.</p>
+<p>At login, execute the following command on the Fugaku login node:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>ssh<span class="w"> </span>sflogin1
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<ul class="simple">
+<li><p>UID/GID is the same as Fugaku.</p></li>
+<li><p>There are data directories for each project in Satellite Fugaku, so if you use a single account, please change your group by executing id command and newgrp command as the following example:</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>id
+<span class="nv">uid</span><span class="o">=</span><span class="m">99999</span><span class="o">(</span>u19999<span class="o">)</span><span class="w"> </span><span class="nv">gid</span><span class="o">=</span><span class="m">59999</span><span class="o">(</span>fugaku<span class="o">)</span><span class="w"> </span><span class="nv">groups</span><span class="o">=</span><span class="m">59999</span><span class="o">(</span>fugaku<span class="o">)</span>,99999<span class="o">(</span>hp999999<span class="o">)</span>
+sflogin1$<span class="w"> </span>newgrp<span class="w"> </span>hp999999
+</pre></div>
+</div>
+</div>
+<p>To log out, execute the following command.
+You are back logged in to the Fugaku login node.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span><span class="nb">exit</span>
+</pre></div>
+</div>
+<p>You can also login to the login node of Satellite Fugaku on a web browser.
+Please refer <a class="reference internal" href="#fugakuood"><span class="std std-ref">Linkage with Fugaku Open Ondemand</span></a>.</p>
+</section>
+<section id="how-to-use-file-system">
+<h1><span class="section-number">3. </span>How to Use File System<a class="headerlink" href="#how-to-use-file-system" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id9">Summary</a></p></li>
+<li><p><a class="reference internal" href="#the-home-directory" id="id10">The Home Directory</a></p></li>
+<li><p><a class="reference internal" href="#the-data-directory" id="id11">The Data Directory</a></p></li>
+<li><p><a class="reference internal" href="#data-transfer-from-to-fugaku" id="id12">Data Transfer from/to Fugaku</a></p></li>
+<li><p><a class="reference internal" href="#others" id="id13">Others</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">3.1. </span>Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Satellite Fugaku is a trial environment and differs from Fugaku in the use of the file system.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<ul class="simple">
+<li><p><strong>The following information may be changed due to future operating conditions.</strong></p></li>
+<li><p><strong>User data is not backed up by system. Please back up by users.</strong></p></li>
+</ul>
+</div>
+<ul class="simple">
+<li><p><strong>The home directory and data derectory are also exists in Satellite Fugaku, but file systems are different from Fugaku and are not shared.</strong></p></li>
+<li><p>Since the total disk capacity is small, please use the minimum necessary amount of both the home directory and data directory.</p></li>
+<li><p>Data required for job execution is stored in the data directory. The data directory is on a shared file system (Lustre file system), with directories for each project.</p></li>
+<li><p>Data required for job execution can be copied from the second-layer storage of Fugaku. For more detail, please see <a class="reference internal" href="#nfs"><span class="std std-ref">Data Transfer from/to Fugaku</span></a>.</p></li>
+<li><p>Both the home directory and the data directory are Quota limited.</p></li>
+<li><p>Both the home directory and the data directory are not expandable. When it becomes available, it will be announced on the Fugaku website.</p></li>
+</ul>
+</section>
+<section id="the-home-directory">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">3.2. </span>The Home Directory</a><a class="headerlink" href="#the-home-directory" title="Link to this heading">¶</a></h2>
+<p>The user’s home directory is created with the same path as Fugaku.
+However, the data in the directory is not synchronized.</p>
+<p>The quota limit is 10 GB per user.</p>
+<p>The home directory is shared by the login node and the compute nodes in Satellite Fugaku.</p>
+</section>
+<section id="the-data-directory">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">3.3. </span>The Data Directory</a><a class="headerlink" href="#the-data-directory" title="Link to this heading">¶</a></h2>
+<p>The data directory has a different path than Fugaku.
+The following directories are provided for each project. Use these areas to store job input and output files.</p>
+<p><code class="docutils literal notranslate"><span class="pre">/lustre01/groupname/</span></code></p>
+<p>The quota limit is 200 GB per project.</p>
+<p>The data directory is shared by the login node and the compute nodes in Satellite Fugaku.</p>
+</section>
+<section id="data-transfer-from-to-fugaku">
+<span id="nfs"></span><h2><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">3.4. </span>Data Transfer from/to Fugaku</a><a class="headerlink" href="#data-transfer-from-to-fugaku" title="Link to this heading">¶</a></h2>
+<p>The login node of Satellite Fugaku mounts the second-layer storage of Fugaku as NFS in Satellite Fugaku environment.
+You can copy the data necessary for job execution to the data directory of Satellite Fugaku. An example of how to copy is shown below.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>cp<span class="w"> </span>/vol000X/groupname/...<span class="w"> </span>/lustre01/groupname/...
+</pre></div>
+</div>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<ul class="simple">
+<li><p>The second-layer storage of Fugaku is not accessible from the compute nodes of Satellite Fugaku.</p></li>
+<li><p>Do not copy more than 50 GB of data per one attempts, and keep minimum data transfer.</p></li>
+</ul>
+</div>
+<p>The second-layer storage of Fugaku can be accessed from the following mount points at the login node of Satellite Fugaku.
+Symbolic links are not created. Directories and files must be accessed by the absolute path.</p>
+<ul class="simple">
+<li><p>/vol0001</p></li>
+<li><p>/vol0002</p></li>
+<li><p>/vol0003</p></li>
+<li><p>/vol0004</p></li>
+<li><p>/vol0005</p></li>
+<li><p>/vol0006</p></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<ul class="simple">
+<li><p>The absolute path (file path) at the second-layer storage of Fugaku can be found on the Fugaku login node as follows:</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>readlink<span class="w"> </span>-f<span class="w"> </span>&lt;filepath&gt;
+</pre></div>
+</div>
+</div>
+</section>
+<section id="others">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">3.5. </span>Others</a><a class="headerlink" href="#others" title="Link to this heading">¶</a></h2>
+<p>There is a file system with Virtual Fugaku Environment (Spack) installed (/efs01).
+This directory is for the purpose of installing OSS provided as a Virtual Fugaku Environment (Spack) only and is not writable by the user.</p>
+<p>How to use Virtual Fugaku Environment (Spack) is as follows.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>.<span class="w"> </span>/efs01/apps/oss/spack/share/spack/setup-env.sh
+</pre></div>
+</div>
+</section>
+</section>
+<section id="compile">
+<h1><span class="section-number">4. </span>Compile<a class="headerlink" href="#compile" title="Link to this heading">¶</a></h1>
+<p>You can compile only by GCC.
+You would like to confirm the information of available compilers, please refer <a class="reference internal" href="#compilers"><span class="std std-ref">Compilers</span></a>.
+An example of how to execute compiling is bellow.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>gcc<span class="w"> </span>-o<span class="w"> </span>a.out<span class="w"> </span>sample.c
+</pre></div>
+</div>
+</section>
+<section id="job-execution">
+<h1><span class="section-number">5. </span>Job Execution<a class="headerlink" href="#job-execution" title="Link to this heading">¶</a></h1>
+<p>There are two ways to run jobs: batch jobs and interactive jobs.
+A batch job is a method of creating a job script in advance and submitting jobs.
+This type is suitable for long-running operations.
+Interactive jobs, on the other hand, allow users to execute commands interactively.
+This can be used for debugging before batch jobs are submitted.</p>
+<nav class="contents local" id="id1">
+<ul class="simple">
+<li><p><a class="reference internal" href="#job-queues" id="id14">Job Queues</a></p></li>
+<li><p><a class="reference internal" href="#batch-jobs" id="id15">Batch Jobs</a></p></li>
+<li><p><a class="reference internal" href="#interactive-jobs" id="id16">Interactive Jobs</a></p></li>
+<li><p><a class="reference internal" href="#slurm-commands" id="id17">Slurm Commands</a></p></li>
+</ul>
+</nav>
+<section id="job-queues">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">5.1. </span>Job Queues</a><a class="headerlink" href="#job-queues" title="Link to this heading">¶</a></h2>
+<p>The following job queues are available at Satellite Fugaku.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<ul class="simple">
+<li><p><strong>The following information may be changed due to future operating conditions.</strong></p></li>
+</ul>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Queue Name</p></th>
+<th class="head"><p>Node Name</p></th>
+<th class="head"><p>Total Nodes</p></th>
+<th class="head"><p>Total Available Cores</p></th>
+<th class="head"><p>Maximum Elapsed Time</p></th>
+<th class="head"><p>Maximum Memory Amount Per Node</p></th>
+<th class="head"><p>Maximum Nodes Per Job</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>satf01</p></td>
+<td><p>satf01-dy-g3e-[1-8]</p></td>
+<td><p>8</p></td>
+<td><p>512</p></td>
+<td><p>24 H</p></td>
+<td><p>128 GB</p></td>
+<td><p>8</p></td>
+</tr>
+</tbody>
+</table>
+<p>You can use sinfo command to check the status of compute nodes as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>sinfo
+PARTITION<span class="w"> </span>AVAIL<span class="w">  </span>TIMELIMIT<span class="w">  </span>NODES<span class="w">  </span>STATE<span class="w"> </span>NODELIST
+satf01*<span class="w">      </span>up<span class="w">   </span>infinite<span class="w">      </span><span class="m">7</span><span class="w">  </span>idle~<span class="w"> </span>satf01-dy-g3e-<span class="o">[</span><span class="m">2</span>-8<span class="o">]</span>
+satf01*<span class="w">      </span>up<span class="w">   </span>infinite<span class="w">      </span><span class="m">1</span><span class="w">    </span>mix<span class="w"> </span>satf01-dy-g3e-1
+</pre></div>
+</div>
+<p>The status of compute nodes are described as follows in <code class="docutils literal notranslate"><span class="pre">STATE</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>STATE</p></th>
+<th class="head"><p>Meanings</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>idle~</p></td>
+<td><p>Power Off</p></td>
+</tr>
+<tr class="row-odd"><td><p>idle</p></td>
+<td><p>Idle (all CPU cores are not allocated to any jobs)</p></td>
+</tr>
+<tr class="row-even"><td><p>mix</p></td>
+<td><p>Some CPU cores are allocated to jobs and the others are idle.</p></td>
+</tr>
+<tr class="row-odd"><td><p>alloc</p></td>
+<td><p>All CPU cores are allocated to jobs</p></td>
+</tr>
+</tbody>
+</table>
+<p>For details on how to use sinfo command, refer to <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/pps-slurm/slurm.html">Pre/Post Environment Users Guide</a> and the official document of Slurm.</p>
+<p>You can use the following commands to check job queue information:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>scontrol<span class="w"> </span>show<span class="w"> </span>partition
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Up to 8 compute nodes will start currently, but it is not that all nodes are always stand by.</p></li>
+<li><p>Compute nodes that have finished running jobs remain idle for 10 minutes, and then they will stop.</p></li>
+<li><p>If jobs need to start new compute nodes for job execution, it takes about five minutes to start the job execution.</p></li>
+</ul>
+</div>
+</section>
+<section id="batch-jobs">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink"><span class="section-number">5.2. </span>Batch Jobs</a><a class="headerlink" href="#batch-jobs" title="Link to this heading">¶</a></h2>
+<p>To submit a job as a batch job, create a job script.
+Run the Slurm command on the login node of Satellite Fugaku.</p>
+<p>The submitted job is automatically scheduled and executed.</p>
+<p>The same node is shared by multiple jobs. If you want to measure the job’s performance, execute the job so that the node is occupied.</p>
+<p>The following shows examples of job execution.</p>
+<ol class="arabic simple">
+<li><p>sequential job</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>cat<span class="w"> </span>job.sh
+<span class="c1">#!/bin/bash</span>
+<span class="c1">#SBATCH -p satf01</span>
+<span class="c1">#SBATCH -n 1</span>
+<span class="c1">#SBATCH --time 00:30:00</span>
+<span class="c1">#SBATCH --mem 1G</span>
+./a.out
+sflogin1$<span class="w"> </span>sbatch<span class="w"> </span>job.sh
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>OpenMP</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>cat<span class="w"> </span>mp.sh
+<span class="c1">#!/bin/bash</span>
+<span class="c1">#SBATCH -p satf01</span>
+<span class="c1">#SBATCH --time 00:30:00</span>
+<span class="c1">#SBATCH --cpus-per-task=2</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">2</span>
+./a.out
+sflogin1$<span class="w"> </span>sbatch<span class="w"> </span>mp.sh
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>OpenMPI</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>cat<span class="w"> </span>mpi.sh
+<span class="c1">#!/bin/bash</span>
+<span class="c1">#SBATCH -p satf01</span>
+<span class="c1">#SBATCH -n 2</span>
+<span class="c1">#SBATCH --time 00:30:00</span>
+mpiexec<span class="w"> </span>--use-hwthread-cpus<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span>./a.out
+sflogin1$<span class="w"> </span>sbatch<span class="w"> </span>mpi.sh
+</pre></div>
+</div>
+<p>The status of the submitted job can be checked as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>squeue
+</pre></div>
+</div>
+</section>
+<section id="interactive-jobs">
+<h2><a class="toc-backref" href="#id16" role="doc-backlink"><span class="section-number">5.3. </span>Interactive Jobs</a><a class="headerlink" href="#interactive-jobs" title="Link to this heading">¶</a></h2>
+<p>In an interactive job, you can specify the required resources as options to the Slurm command.
+Specify and execute directly on the login node of Satellite Fugaku.
+When resources are allocated, the interactive job starts.
+You can then run the command interactively.
+The following is an example of a job submission command for an interactive job.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<ul class="simple">
+<li><p><strong>Please definately limit the elapsed time (--time).</strong></p></li>
+</ul>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>srun<span class="w"> </span>-N1<span class="w"> </span>-n1<span class="w"> </span>--job-name<span class="w"> </span><span class="s2">&quot;InteractiveJob&quot;</span><span class="w"> </span>--time<span class="w"> </span><span class="m">00</span>:30:00<span class="w"> </span>--pty<span class="w"> </span>bash<span class="w"> </span>-i
+</pre></div>
+</div>
+</section>
+<section id="slurm-commands">
+<h2><a class="toc-backref" href="#id17" role="doc-backlink"><span class="section-number">5.4. </span>Slurm Commands</a><a class="headerlink" href="#slurm-commands" title="Link to this heading">¶</a></h2>
+<p>The main Slurm commands available in Satellite Fugaku are bollow.
+For details on how to use each command, refer to <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/pps-slurm/slurm.html">Pre/Post Environment Users Guide</a> and the official document of Slurm.</p>
+<ul class="simple">
+<li><p>sinfo</p></li>
+<li><p>squeue</p></li>
+<li><p>sbatch</p></li>
+<li><p>srun</p></li>
+<li><p>scancel</p></li>
+</ul>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<ul class="simple">
+<li><p>The job execution history command (sacct) is currently unavailable. When it becomes available, it will be announced on the Fugaku website.</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="system-configuration">
+<span id="system"></span><h1><span class="section-number">6. </span>System Configuration<a class="headerlink" href="#system-configuration" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="id3">
+<ul class="simple">
+<li><p><a class="reference internal" href="#system-configuration-diagram" id="id18">System Configuration Diagram</a></p></li>
+<li><p><a class="reference internal" href="#specification-of-servers" id="id19">Specification of Servers</a></p></li>
+</ul>
+</nav>
+<section id="system-configuration-diagram">
+<h2><a class="toc-backref" href="#id18" role="doc-backlink"><span class="section-number">6.1. </span>System Configuration Diagram</a><a class="headerlink" href="#system-configuration-diagram" title="Link to this heading">¶</a></h2>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/satf01_system.svg"><img alt="_images/satf01_system.svg" src="_images/satf01_system.svg" style="width: 800px;" />
+</a>
+</figure>
+</section>
+<section id="specification-of-servers">
+<h2><a class="toc-backref" href="#id19" role="doc-backlink"><span class="section-number">6.2. </span>Specification of Servers</a><a class="headerlink" href="#specification-of-servers" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Login node</p></li>
+</ul>
+<p>Node name: sflogin1</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Server</p></td>
+<td><p>AWS EC2</p></td>
+</tr>
+<tr class="row-even"><td><p>CPU</p></td>
+<td><p>AWS Graviton3E (2.60 GHz/64 core)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Memory</p></td>
+<td><p>128 GB</p></td>
+</tr>
+<tr class="row-even"><td><p>Local Storage</p></td>
+<td><p>1 TB</p></td>
+</tr>
+<tr class="row-odd"><td><p>OS</p></td>
+<td><p>RHEL 8.10 (4.18.0-553.5.1.el8_10.aarch64)</p></td>
+</tr>
+<tr class="row-even"><td><p>Shared File System</p></td>
+<td><p>Lustre File System 12 TB (quota 200 GB/group), EFS (Only for Virtual Fugaku Environment(Spack), READ ONLY)</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Compute Nodes</p></li>
+</ul>
+<p>Node names: satfs01-dy-g3e-[1-8]</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Server</p></td>
+<td><p>AWS EC2</p></td>
+</tr>
+<tr class="row-even"><td><p>CPU</p></td>
+<td><p>AWS Graviton3E (2.60GHz/64core)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Memory</p></td>
+<td><p>128 GB</p></td>
+</tr>
+<tr class="row-even"><td><p>Local Storage</p></td>
+<td><p>35 GB</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cluster Network</p></td>
+<td><p>EFA enabled</p></td>
+</tr>
+<tr class="row-even"><td><p>OS</p></td>
+<td><p>RHEL 8.10 (4.18.0-553.5.1.el8_10.aarch64)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Shared File System</p></td>
+<td><p>Lustre File System 12 TB (quota 200 GB/group), EFS (Only for Virtual Fugaku Environment(Spack), READ ONLY)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<ul class="simple">
+<li><p>Up to 8 compute nodes will start currently, but it is not that all nodes are always stand by.</p></li>
+<li><p>Compute nodes that have finished running jobs remain idle for 10 minutes, and then they will stop.</p></li>
+<li><p>If jobs need to start new compute nodes for job execution, it takes about five minutes to start the job execution.</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="software-configuration">
+<span id="software"></span><h1><span class="section-number">7. </span>Software Configuration<a class="headerlink" href="#software-configuration" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="id4">
+<ul class="simple">
+<li><p><a class="reference internal" href="#virtual-fugaku-environment-spack" id="id20">Virtual Fugaku Environment (Spack)</a></p></li>
+<li><p><a class="reference internal" href="#compilers" id="id21">Compilers</a></p></li>
+<li><p><a class="reference internal" href="#mpi-environment" id="id22">MPI Environment</a></p></li>
+</ul>
+</nav>
+<section id="virtual-fugaku-environment-spack">
+<h2><a class="toc-backref" href="#id20" role="doc-backlink"><span class="section-number">7.1. </span>Virtual Fugaku Environment (Spack)</a><a class="headerlink" href="#virtual-fugaku-environment-spack" title="Link to this heading">¶</a></h2>
+<p>Satellite Fugaku offers a software stack defined as Virtual Fugaku ver.1.
+The Virtual Fugaku ver.1 software stack is implemented as a Spack recipe.
+You can get a list of available OSSs by running the following command.</p>
+<p>it only shows explicitly installed packages with an option -x, though many other dependent packages are installed.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<ul class="simple">
+<li><p>Please check the latest OSS list on login node.</p></li>
+</ul>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>.<span class="w"> </span>/efs01/apps/oss/spack/share/spack/setup-env.sh
+sflogin1$<span class="w"> </span>spack<span class="w"> </span>find<span class="w"> </span>-x
+--<span class="w"> </span>linux-rhel8-neoverse_v1<span class="w"> </span>/<span class="w"> </span>gcc@8.5.0<span class="w"> </span>--------------------------
+gcc@14.1.0
+
+--<span class="w"> </span>linux-rhel8-neoverse_v1<span class="w"> </span>/<span class="w"> </span>gcc@14.1.0<span class="w"> </span>-------------------------
+genesis@2.1.3
+gnuplot@6.0.0
+gromacs@2024.2
+gsl@2.7.1
+lammps@20230802.3
+metis@5.1.0
+openbabel@3.1.1
+openfoam@2312
+openfoam-org@10
+paraview@5.12.1
+parmetis@4.0.3
+petsc@3.21.2
+py-ase@3.21.1
+py-matplotlib@3.9.0
+py-mpi4py@3.1.6
+py-numpy@1.26.4
+py-pandas@2.1.4
+py-scikit-learn@1.5.0
+py-scipy@1.13.1
+py-toml@0.10.2
+quantum-espresso@7.3.1
+scale@5.4.4
+tmux@3.4
+</pre></div>
+</div>
+</section>
+<section id="compilers">
+<span id="id5"></span><h2><a class="toc-backref" href="#id21" role="doc-backlink"><span class="section-number">7.2. </span>Compilers</a><a class="headerlink" href="#compilers" title="Link to this heading">¶</a></h2>
+<p>The following compilers are available:</p>
+<ul class="simple">
+<li><p>gcc 8.5.0</p></li>
+<li><p>gcc 14.1.0 ( please execute <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">spack</span> <span class="pre">load</span> <span class="pre">gcc</span></code> before you use )</p></li>
+</ul>
+</section>
+<section id="mpi-environment">
+<h2><a class="toc-backref" href="#id22" role="doc-backlink"><span class="section-number">7.3. </span>MPI Environment</a><a class="headerlink" href="#mpi-environment" title="Link to this heading">¶</a></h2>
+<p>You can use OpenMPI 4.1.6 ( <code class="docutils literal notranslate"><span class="pre">/opt/amazon/openmpi</span></code> ) as default.</p>
+</section>
+</section>
+<section id="linkage-with-fugaku-open-ondemand">
+<span id="fugakuood"></span><h1><span class="section-number">8. </span>Linkage with Fugaku Open Ondemand<a class="headerlink" href="#linkage-with-fugaku-open-ondemand" title="Link to this heading">¶</a></h1>
+<p>You can also use the command line interface of the login node of Satellite Fugaku via Fugaku Open OnDemand.</p>
+<p>Therefore, you can use the login node of Satellite Fugaku on a web browser.</p>
+<p>Please select “Satellite Fugaku Shell Access” in “Passenger Apps” of Fugaku Open OnDemand.
+How to use Fugaku Open OnDemand is explained in <a class="reference external" href="https://riken-rccs.github.io/ondemand_fugaku/index.html">Fugaku Open OnDemand Guide</a>.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/terminal_on_fugakuood.png"><img alt="_images/terminal_on_fugakuood.png" src="_images/terminal_on_fugakuood.png" style="width: 700px;" />
+</a>
+</figure>
+</section>
+<section id="singularity">
+<span id="id6"></span><h1><span class="section-number">9. </span>Singularity<a class="headerlink" href="#singularity" title="Link to this heading">¶</a></h1>
+<p>Satellite Fugaku supports Singularity (singularity-ce version 4.1.4).</p>
+<p>Singularity is a container runtime developed specifically for HPC environments. It provides a secure container environment while maintaining user privileges, running efficiently and lightweight.</p>
+<p>This document explains the basic operations of Singularity and provides execution examples.</p>
+<p>For detailed information, please refer to the <a class="reference external" href="https://docs.sylabs.io/guides/4.1/user-guide/index.html">official user guide</a>.</p>
+<nav class="contents local" id="id7">
+<ul class="simple">
+<li><p><a class="reference internal" href="#running-container-images" id="id23">Running Container Images</a></p></li>
+<li><p><a class="reference internal" href="#creating-container-images" id="id24">Creating Container Images</a></p></li>
+<li><p><a class="reference internal" href="#using-singularity-on-compute-nodes" id="id25">Using Singularity on Compute Nodes</a></p></li>
+</ul>
+</nav>
+<section id="running-container-images">
+<h2><a class="toc-backref" href="#id23" role="doc-backlink"><span class="section-number">9.1. </span>Running Container Images</a><a class="headerlink" href="#running-container-images" title="Link to this heading">¶</a></h2>
+<p>Singularity allows simple container operations using straightforward commands.</p>
+<ol class="arabic simple">
+<li><p>Acquiring an Image</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>pull<span class="w"> </span>docker://ubuntu:latest
+</pre></div>
+</div>
+<p>This command retrieves the <cite>ubuntu:latest</cite> image and creates a file named <cite>ubuntu_latest.sif</cite>.</p>
+<ol class="arabic simple" start="2">
+<li><p>Running a Container</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>run<span class="w"> </span>ubuntu_latest.sif
+</pre></div>
+</div>
+<p>This executes the <cite>runscript</cite> within <cite>ubuntu_latest.sif</cite>. If a <cite>runscript</cite> is not defined, it opens in shell mode.</p>
+<ol class="arabic simple" start="3">
+<li><p>Executing Commands Inside a Container</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ubuntu_latest.sif<span class="w"> </span>ls<span class="w"> </span>/usr
+</pre></div>
+</div>
+<p>This lists the contents of the <cite>/usr</cite> directory within the container.</p>
+<ol class="arabic simple" start="4">
+<li><p>Opening an Interactive Shell</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>shell<span class="w"> </span>ubuntu_latest.sif
+</pre></div>
+</div>
+<p>Opens an interactive Singularity shell.</p>
+<ol class="arabic simple" start="5">
+<li><p>Binding Filesystems</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--bind<span class="w"> </span>/data:/mnt<span class="w"> </span>ubuntu_latest.sif<span class="w"> </span>ls<span class="w"> </span>/mnt
+</pre></div>
+</div>
+<p>Binds the host’s <cite>/data</cite> directory to <cite>/mnt</cite> inside the container.</p>
+</section>
+<section id="creating-container-images">
+<h2><a class="toc-backref" href="#id24" role="doc-backlink"><span class="section-number">9.2. </span>Creating Container Images</a><a class="headerlink" href="#creating-container-images" title="Link to this heading">¶</a></h2>
+<p>Singularity supports two primary image formats:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>SIF（Singularity Image Format）</strong>:</dt><dd><p>The standard format for Singularity images, containing all container data in a single file.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Sandbox (directory format)</strong>:</dt><dd><p>Managed as directories, useful during development and debugging.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>build<span class="w"> </span>--sandbox<span class="w"> </span>my_sandbox/<span class="w"> </span>docker://ubuntu:latest
+</pre></div>
+</div>
+<p>This section describes creating SIF images.</p>
+<p>To create containers with general user privileges, the fakeroot feature is utilized.</p>
+<ol class="arabic simple">
+<li><p>Obtaining the Base Image</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>build<span class="w"> </span>ubuntu_latest.sif<span class="w"> </span>docker://ubuntu:latest
+</pre></div>
+</div>
+<p>Converts the Docker Hub image <cite>ubuntu:latest</cite> to a Singularity Image (SIF format).</p>
+<ol class="arabic simple" start="2">
+<li><p>Building the Image</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>build<span class="w"> </span>--fakeroot<span class="w"> </span>my_image.sif<span class="w"> </span>Singularity.def
+</pre></div>
+</div>
+<p>Creates <cite>my_image.sif</cite> based on the definitions provided in the definition file <cite>Singularity.def</cite>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<ul class="simple">
+<li><p>You can verify image details as shown below:</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>inspect<span class="w"> </span>my_image.sif
+</pre></div>
+</div>
+<p>Displays metadata of the image (environment variables, labels, runscript, etc.).</p>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Writing the Definition File</p></li>
+</ol>
+<p>Below is an example of a definition file.</p>
+<ul class="simple">
+<li><p>Header Section</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bootstrap:<span class="w"> </span>docker
+From:<span class="w"> </span>ubuntu:20.04
+</pre></div>
+</div>
+<p>Creates a container based on the Docker image of Ubuntu 20.04.</p>
+<ul class="simple">
+<li><p>%post Section</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>%post
+<span class="w">    </span>apt-get<span class="w"> </span>update
+<span class="w">    </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>build-essential
+<span class="w">    </span>apt-get<span class="w"> </span>clean
+<span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span>/var/lib/apt/lists/*
+</pre></div>
+</div>
+<p>Removes unnecessary data to optimize container size.</p>
+<ul class="simple">
+<li><p>%runscript Section</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>%runscript
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;This is a custom Singularity container!&quot;</span>
+<span class="w">    </span><span class="nb">exec</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>%environment Section</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>%environment
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/opt/myapp/bin:<span class="nv">$PATH</span>
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">MY_VAR</span><span class="o">=</span><span class="s2">&quot;custom_value&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="using-singularity-on-compute-nodes">
+<h2><a class="toc-backref" href="#id25" role="doc-backlink"><span class="section-number">9.3. </span>Using Singularity on Compute Nodes</a><a class="headerlink" href="#using-singularity-on-compute-nodes" title="Link to this heading">¶</a></h2>
+<p>Singularity containers can be executed on compute nodes.</p>
+<p>Satellite Fugaku uses Slurm as the job scheduler. Job scripts should be written as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH --job-name=my_singularity_job</span>
+<span class="c1">#SBATCH --output=output.txt</span>
+<span class="c1">#SBATCH --ntasks=1</span>
+<span class="c1">#SBATCH --time=00:10:00</span>
+singularity<span class="w"> </span>run<span class="w"> </span>my_container.sif<span class="w"> </span>python<span class="w"> </span>my_script.py
+</pre></div>
+</div>
+</section>
+</section>
+<section id="revision-history">
+<h1><span class="section-number">10. </span>Revision History<a class="headerlink" href="#revision-history" title="Link to this heading">¶</a></h1>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Version</p></th>
+<th class="head"><p>Date</p></th>
+<th class="head"><p>Detail</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1.0</p></td>
+<td><p>2024-07-16</p></td>
+<td><p>Creation of the first edition</p></td>
+</tr>
+<tr class="row-odd"><td><p>1.1</p></td>
+<td><p>2024-07-26</p></td>
+<td><p>Chapter 2: Add how to login from Fugaku Open OnDemand/Chapter 8: Add how to start CLI of login node of Satellite Fugaku from Fugaku Open OnDemand</p></td>
+</tr>
+<tr class="row-even"><td><p>1.2</p></td>
+<td><p>2025-02-28</p></td>
+<td><p>Chapter 9: Add how to use Singularity</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1. About Satellite Fugaku</a></li>
+<li><a class="reference internal" href="#login-and-logout">2. Login and Logout</a></li>
+<li><a class="reference internal" href="#how-to-use-file-system">3. How to Use File System</a><ul>
+<li><a class="reference internal" href="#summary">3.1. Summary</a></li>
+<li><a class="reference internal" href="#the-home-directory">3.2. The Home Directory</a></li>
+<li><a class="reference internal" href="#the-data-directory">3.3. The Data Directory</a></li>
+<li><a class="reference internal" href="#data-transfer-from-to-fugaku">3.4. Data Transfer from/to Fugaku</a></li>
+<li><a class="reference internal" href="#others">3.5. Others</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#compile">4. Compile</a></li>
+<li><a class="reference internal" href="#job-execution">5. Job Execution</a><ul>
+<li><a class="reference internal" href="#job-queues">5.1. Job Queues</a></li>
+<li><a class="reference internal" href="#batch-jobs">5.2. Batch Jobs</a></li>
+<li><a class="reference internal" href="#interactive-jobs">5.3. Interactive Jobs</a></li>
+<li><a class="reference internal" href="#slurm-commands">5.4. Slurm Commands</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#system-configuration">6. System Configuration</a><ul>
+<li><a class="reference internal" href="#system-configuration-diagram">6.1. System Configuration Diagram</a></li>
+<li><a class="reference internal" href="#specification-of-servers">6.2. Specification of Servers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#software-configuration">7. Software Configuration</a><ul>
+<li><a class="reference internal" href="#virtual-fugaku-environment-spack">7.1. Virtual Fugaku Environment (Spack)</a></li>
+<li><a class="reference internal" href="#compilers">7.2. Compilers</a></li>
+<li><a class="reference internal" href="#mpi-environment">7.3. MPI Environment</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#linkage-with-fugaku-open-ondemand">8. Linkage with Fugaku Open Ondemand</a></li>
+<li><a class="reference internal" href="#singularity">9. Singularity</a><ul>
+<li><a class="reference internal" href="#running-container-images">9.1. Running Container Images</a></li>
+<li><a class="reference internal" href="#creating-container-images">9.2. Creating Container Images</a></li>
+<li><a class="reference internal" href="#using-singularity-on-compute-nodes">9.3. Using Singularity on Compute Nodes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#revision-history">10. Revision History</a></li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">Satellite Fugaku User Guide</a></p>
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="Satellite Fugaku User Guide"
+             >previous</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">Satellite Fugaku User Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>About Satellite Fugaku</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, RIKEN R-CCS.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Potal Top</a>
+    </div>
+  </body>
+</html>

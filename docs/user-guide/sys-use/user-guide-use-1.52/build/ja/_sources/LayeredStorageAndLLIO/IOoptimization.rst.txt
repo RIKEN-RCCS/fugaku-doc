@@ -1,0 +1,151 @@
+.. _IOoptimization:
+
+I/Oの最適化
+===========
+
+前項\ :ref:`I/Oのプロファイリング <IOprofiling>`\ で取得したデータの分析例を示します。
+
+LLIO性能情報を用いたボトルネックの分析
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. LLIO領域別のI/O状況を確認します。
+
+   .. code-block:: console
+   
+     [_LNIlogin]$ awk -f sample.awk <jobname>.<jobid>.llio_perf
+           Area                        Time(us)       % of Time
+     Meta  2ndLayerCache           670517500351             4.0
+           SharedTmp             15490822246315            92.7
+           LocalTmp                 32396742469             0.2
+     I/O   2ndLayerCache           357836957071             2.1
+           SharedTmp               108339293976             0.6
+           LocalTmp                 50591120306             0.3
+
+
+   この例では、共有テンポラリ領域へのメタアクセスが全体の90%以上を占めていると判断できます。
+
+2. 更にLLIO性能情報を直接確認し、ボトルネックとなっている共有テンポラリ領域のメタアクセス情報を確認します。
+
+   .. code-block:: console
+
+     [_LNIlogin]$ less <jobname>.<jobid>.llio_perf
+     ...
+
+     Meta    SharedTmp      NodeTotal                      Count           Time(us)
+                                        open            61710260      1832249063537
+                                        close           61710260        85929083797
+                                        lookup         370062812       886258890299
+                                        mknod           98308608      5857672339146
+                                        link                   0                  0
+                                        unlink         100793535      5453654076003
+                                        mkdir              67500           60930489
+                                        rmdir              67340         3076489250
+                                        readdir           148596          336715105
+                                        rename            306757        35293688520
+                                        getattr        478426796      1326148620906
+                                        setattr         55883262        10117612251
+                                        getxattr          350807           24737012
+                                        setxattr               0                  0
+                                        listxattr              0                  0
+                                        removexattr            0                  0
+                                        statfs                 0                  0
+                                        sync                   0                  0
+                                        lock                   0                  0
+
+   mknod(ファイル作成)とunlink(ファイル削除)にかかった時間が全体の70%以上を占めていることがわかります。
+   
+   ジョブのIO時間を減らす簡単な方法は、扱うファイル数を削減することです。
+   その他、ボトルネックとして現れるカウンタと、その要因を示します。
+
+   .. list-table::
+    :widths: 10 20
+    :header-rows: 1
+
+    * - ボトルネックのメタアクセス情報
+      - 考えられる要因
+  
+    * - lookup
+      - | システムコール等に指定しているパス名のディレクトリの段数が多い
+        | ディレクトリ配下に複数のノードからファイルの作成や削除を実行
+        | 多数のファイルが存在しているディレクトリに対して ls コマンドを実行
+  
+    * - mknod
+      - 大量のファイル作成
+
+    * - unlink
+      - 大量のファイル削除
+
+    * - sync
+      - | 2ndLayerCacheの場合、第2階層ストレージ領域への書き出し量が多い
+
+
+Darshanを用いたI/Oの分析
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Darshanの詳細については、以下の URL を参照してください。
+
+https://www.mcs.anl.gov/research/projects/darshan/
+
+
+ログインノードからプロファイリングデータを解析を行います。
+darshan-util を load して、データを展開します。
+
+  .. code-block:: console
+
+     [_LNIlogin]$ darshan-parser usr_a.out_JOBID.darshan | less
+
+以下、384ノード (18,432プロセス) ジョブの例です。
+
+   .. code-block:: none
+
+      ...
+      # description of columns:
+      #   <module>: module responsible for this I/O record.
+      #   <rank>: MPI rank.  -1 indicates that the file is shared
+      #      across all processes and statistics are aggregated.
+      #   <record id>: hash of the record's file path
+      #   <counter name> and <counter value>: statistical counters.
+      #      A value of -1 indicates that Darshan could not monitor
+      #      that counter, and its value should be ignored.
+      #   <file name>: full file path for the record.
+      ...
+      #<module> <rank>  <record id>    <counter>                  <value>     <file name> ...
+      POSIX     -1      0123456789123  POSIX_OPENS                    18432    /vol0n0m/data/group/config
+      POSIX     -1      0123456789123  POSIX_F_FASTEST_RANK_TIME   0.019958    /vol0n0m/data/group/config
+      POSIX     -1      0123456789123  POSIX_F_SLOWEST_RANK_TIME  52.856744    /vol0n0m/data/group/config
+      ...
+      POSIX      0      1234567891234  POSIX_OPENS                        1    /vol0n0m/data/group/tmp.00000
+      ...
+      POSIX      1      1234567891234  POSIX_OPENS                        1    /vol0n0m/data/group/dat.00001
+      POSIX      1      1234567891234  POSIX_F_READ_TIME          32.124292    /vol0n0m/data/group/dat.00001
+      ...
+
+
+   1. 共通ファイルの転送 (/vol0n0m/data/group/config)
+   
+      <rank>にはMPI rankが記載され、-1の場合ファイルが全てのプロセスで共有されていることを示します。このとき、読み込み専用の設定ファイル /vol0n0m/data/group/config は\ ``llio_transfer``\ で共通ファイルとして転送することで読み込み性能の改善が見込めます。
+
+   2. 中間ファイルの出力改善 (/vol0n0m/data/group/tmp.PROC_NUM)
+   
+      各プロセスが生成する中間ファイル /vol0n0m/data/group/tmp.PROC_NUM は、ノード内テンポラリ領域\ ``$PJM_LOCALTMP``\ に出力することで性能の改善が見込めます。
+      Fortranプログラムでスクラッチファイルを利用する場合、環境変数TMPDIRをノード内テンポラリ領域に設定することで、性能の改善が見込めます。
+      
+      ログファイルの場合、ノード内テンポラリに出力後に必要なログのみ第2階層ストレージのキャッシュ領域に転送することで、I/O負荷を下げジョブの実行時間を短縮できる可能性があります。
+
+
+   3. I/Oスループットの改善 (/vol0n0m/data/group/dat.PROC_NUM)
+
+      ジョブの中間ファイルと異なり、プログラムが計算結果やチェックポイントを出力する場合は、第2階層ストレージのキャッシュ領域に出力しデータを残す必要があります。
+      このとき、複数のボリュームにファイルを出力することでスループット性能が改善する場合があります。
+
+      数千ノード以上がI/Oを行う多ノードジョブの場合、ファイルシステムの性能をつかいきり出力に時間を要することが考えられます。
+      「富岳」ではデータ領域として複数のボリュームを提供しており、各ボリューム毎にディスクの使用容量制限を変更できるため、複数のボリュームを利用することで第2階層ストレージへのスループットが向上する可能性があります。
+      データ領域の割当変更の詳細は、利用者支援ツールの使用手引書をご確認ください。
+      
+         利用者支援ツール 使用手引書 3. システム管理 データ領域割当変更
+
+         https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/support_tool/
+
+   
+   その他、非同期クローズオプションを有効にすることで、第2階層ストレージへの書き出しの待ち合わせ時間を短縮できる可能性があります。
+   \ :ref:`非同期クローズ/同期クローズ <AsyncCloseAndSyncClose>`\ を確認し、プログラムで利用できないか検討してください。

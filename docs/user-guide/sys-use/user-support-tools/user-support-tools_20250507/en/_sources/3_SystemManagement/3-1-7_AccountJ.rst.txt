@@ -1,0 +1,473 @@
+User payment information displaying (job)
+=========================================
+
+| 　**[Name]**
+| 　accountj - Display the user user payment information for job
+
+| 　**[Style]**
+| 　accountj  -t theme name  [-r the type of information display]  [-s]  [-h]  [-b generation number]  [-c]
+| 　accountj  [-r the type of information display]  [-s]  [-h]  [-g group name]  [-E[-u user name]] [-c]
+| 　accountj  -g group name  [-r the type of information display]  [-s]  [-h]  [-E[-u user name]]  [-b generation number]  [-c]
+| 　※Combination specification of -g and -u is AND search.
+
+| 　**[Description]**
+| 　accountj command displays charging information related to the used job. Charging information is displayed for each group to which it belongs.
+| 　The node time product (number of nodes × execution elapsed time × charging unit price coefficient) and power consumption are managed in the charging information about the job.
+| 　Power consumption is based on the ACCT_ECON value of the pjstata command.
+| 　Since the usage rate of the resource allocated to the assignment can be confirmed, it can be used to determine whether or not a job can be submitted.
+| 　To display charging information in detail for each resource by designating the type of the resource to be displayed.
+
+| 　For the theme / sub-theme / group unit, in addition to the usage rate from the allocated resource amount for each fiscal year, if resources are allocated every six months, the usage status for each half year can also be confirmed.
+ 　
+| 　Users and project managers can display job accounting information of members belonging to the group.
+
+| 　**[Option]**
+| 　-t  theme name
+| 　Specify theme name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.
+ 　
+| 　-g  group name
+| 　Specify group name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.
+| 　When not specified, job accounting information for all groups to which the user belongs is displayed.
+ 　
+| 　-E
+| 　Change the information display range to all layers (only the group route).
+| 　　　-u  user name
+| 　　　Specify user name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.
+| 　　　This option is enabled when the -E option is specified.
+ 　
+| 　-r the type of information display
+| 　Select the type of information display from the following. If the -r option is omitted, all resources are displayed.
+| 　1|n|N:Display node time product
+| 　2|e|E:Display power
+ 　
+| 　-s
+| 　The display unit of the node time product is changed from the default megasecond [Ms] to second [s].
+| 　The power consumption display unit changes from the default megawatt hour [MWh] to the watt hour [Wh].
+ 　
+| 　-h
+| 　The display unit of the node time product is changed from the default megasecond [Ms] to time [h].
+| 　Valid only when node time product is specified for the resource type.
+ 　
+| 　-c
+| 　Standard output the search result as CSV format.
+| 　If this option is specified, the display unit for the node time product is seconds [s] and the display unit for the power is watt hour [Wh].
+ 　
+| 　-b  generation number
+| 　Can be specified only when the -g option is specified. Specifies the number of past generations to be displayed. If this option is not specified, the latest information is displayed.
+| 　Permission to display information is subject to the permission at the time of command execution.
+ 　
+| 　&#45;-help
+| 　Display command help contents.
+ 　
+| 　**[Return value]**
+| 　Normal: 0
+| 　Abnormal: 1
+
+| 　**[Note]**
+| 　None.
+
+| 　**[Display contents]**
+| 　Charging information is displayed for each management unit such as theme, subtheme, group, etc.
+| 　A separator line indicates what administrative unit is displayed below it.
+
+.. figure:: img/3_SystemManagement_18.png
+
+| 　Items for each management unit are as follows.
+| 　THEME：View the assigned resources and resource consumption for a theme
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - Item name
+      - Description
+  
+    * - THEME
+      - Theme Name
+  
+    * - LIMIT
+      - Amount of allocated resources
+  
+    * - USAGE
+      - Amount of used resources
+  
+    * - RUNNING
+      - Amount of resources submited and execution
+
+    * - AVAILABLE
+      - Amount of available resources
+
+    * - USAGE_RATE
+      - Percentage of used resources(USAGE / LIMIT)
+
+| 　THEME_PERIOD：Displays the amount of resources allocated and consumption of each theme period
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - Item name
+      - Description
+  
+    * - PERIOD
+      - Indicates the period in which resources are managed for each period
+  
+    * - LIMIT
+      - Amount of resources allocated per period
+  
+    * - USAGE
+      - Value used within the amount of resources allocated per period out of the amount of resources used per period
+  
+    * - ADVANCE
+      - The amount of used resources used in excess of the allocated resources for each period
+
+    * - AVAILABLE
+      - | Past period: The amount of resources that became unconsumable out of the allocated resources for each period
+        | Current and future periods: The amount of available resources within the assigned resources per period
+
+    * - USAGE_TOTAL
+      - Amount of used resources by period
+
+| 　SUBTHEME：View the assigned resources and resource consumption for a subtheme
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - Item name
+      - Description
+  
+    * - SUBTHEME
+      - Subtheme Name
+  
+    * - PARENT
+      - Upper layer name
+  
+    * - LIMIT
+      - Amount of allocated resources
+  
+    * - USAGE
+      - Amount of used resources
+  
+    * - RUNNING
+      - Amount of resources submited and execution
+
+    * - AVAILABLE
+      - Amount of available resources
+
+    * - USAGE_RATE
+      - Percentage of used resources(USAGE / LIMIT)
+
+| 　SUBTHEME_PERIOD：Displays the amount of resources allocated and consumption of each subtheme period
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - Item name
+      - Description
+  
+    * - PERIOD
+      - Indicates the period in which resources are managed for each period
+  
+    * - LIMIT
+      - Amount of resources allocated per period
+  
+    * - USAGE
+      - Value used within the amount of resources allocated per period out of the amount of resources used per period
+  
+    * - ADVANCE
+      - The amount of used resources used in excess of the allocated resources for each period
+
+    * - AVAILABLE
+      - | Past period: The amount of resources that became unconsumable out of the allocated resources for each period
+        | Current and future periods: The amount of available resources within the assigned resources per period
+
+    * - USAGE_TOTAL
+      - Amount of used resources by period
+
+| 　GROUP：View the assigned resources and resource consumption for a group
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - Item name
+      - Description
+  
+    * - GROUP
+      - Group Name
+  
+    * - PARENT
+      - Upper layer name
+  
+    * - LIMIT
+      - Amount of allocated resources
+  
+    * - USAGE
+      - Amount of used resources
+  
+    * - RUNNING
+      - Amount of resources submited and execution
+
+    * - AVAILABLE
+      - Amount of available resources
+
+    * - USAGE_RATE
+      - Percentage of used resources(USAGE / LIMIT)
+
+| 　RESOURCE_GROUP：View resource consumption by resource group
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - Item name
+      - Description
+  
+    * - RESOURCE_GROUP
+      - Resource group name
+  
+    * - LIMIT
+      - Amount of allocated resources
+  
+    * - USAGE
+      - Amount of used resources
+  
+    * - RUNNING
+      - Amount of resources submited and execution
+
+    * - AVAILABLE
+      - Amount of available resources
+
+    * - USAGE_RATE
+      - Percentage of used resources(USAGE / LIMIT)
+
+| 　USER：View resource consumption by user
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - Item name
+      - Description
+  
+    * - USER
+      - User Name
+  
+    * - LIMIT
+      - Amount of allocated resources
+  
+    * - USAGE
+      - Amount of used resources
+  
+    * - RUNNING
+      - Amount of resources submited and execution
+
+    * - AVAILABLE
+      - Amount of available resources
+
+    * - USAGE_RATE
+      - Percentage of used resources(USAGE / LIMIT)
+
+| 　USER_RESOURCEGROUP：View resource consumption by user and resource group
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - Item name
+      - Description
+  
+    * - USER_RESOURCEGROUP
+      - User Name + Resource Group Name
+  
+    * - LIMIT
+      - Amount of allocated resources
+  
+    * - USAGE
+      - Amount of used resources
+  
+    * - RUNNING
+      - Amount of resources submited and execution
+
+    * - AVAILABLE
+      - Amount of available resources
+
+    * - USAGE_RATE
+      - Percentage of used resources(USAGE / LIMIT)
+
+| 　**[Use example]**
+| 　【Example 1】	Display the accounting information that the group they are belonging to
+
+.. code-block:: console 
+
+   [login]$ accountj
+   COLLECTDATE : 2021-03-09 10:30:00   unit[Ms,MWh]
+   *-----[ SUBTHEME ]---------------------------------------------------------------------*
+   SUBTHEME                 PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+   group001                Y20HP00          2,000             0         2,000             0
+   *-----[ SUBTHEME_PERIOD ]--------------------------------------------------------------*
+                            PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+   group001                      1          1,000             0         1,000             0
+   group001                      2          1,000             0         1,000             0
+   *-----[ GROUP ]------------------------------------------------------------------------*
+   GROUP                    PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+   group001               group001      unlimited             0     unlimited             0
+
+   *-----[ SUBTHEME ]---------------------------------------------------------------------*
+   SUBTHEME                 PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+   group002                Y20HP01          1,000             0         1,000             0
+   *-----[ SUBTHEME_PERIOD ]--------------------------------------------------------------*
+                            PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+   group002                      1            500             0           500             0
+   group002                      2            500             0           500             0
+   *-----[ GROUP ]------------------------------------------------------------------------*
+   GROUP                    PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+   group002               group002      unlimited             0     unlimited             0
+
+
+| 　The resource allocation information of all groups to which the executing user belongs and the upper sub-theme layer is displayed. An upper limit value and a consumption state are displayed for each resource of the node time product (N) and the power (E).
+| 　The resource limits available for the assignment are set in the subtheme layer, so 【SUBTHEME】 displays the resource limits and consumption status.
+| 　If resources are allocated for each period, the upper limit value and consumption status for each period are displayed in 【SUBTHEME _ PERIOD】.
+
+| 　【Example 2】	Display the power accounting information for the group to which you belong
+
+.. code-block:: console 
+
+   [login]$ accountj -g group001 -r 2
+   COLLECTDATE : 2021-03-09 10:30:00   unit[MWh]
+   *-----[ SUBTHEME ]--------------------------------------------------------------------------------------------------*
+   SUBTHEME              PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE
+   group001             Y20HP00            1,000                 0                 0             1,000            0.000%
+   *-----[ SUBTHEME_PERIOD ]-------------------------------------------------------------------------------------------*
+                           PERIOD          LIMIT             USAGE           ADVANCE         AVAILABLE       USAGE_TOTAL
+   group001                     1            500                 0                 0               500                 0
+   group001                     2            500                 0               ---               500                 0
+   *-----[ GROUP ]-----------------------------------------------------------------------------------------------------*
+   GROUP                 PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE
+   group001            group001        unlimited                 0                 0               ---               ---
+
+| 　Displays power billing information for the specified group.
+
+| 　【Example 3】	Display the job accounting information of pre-generation
+
+.. code-block:: console 
+
+   [login]$ accountj -g group001 -b 1
+
+　As using -b option, the past generation job accounting information can be displayed. If this option is not specified, accounting for the latest billing information is displayed. 
+　
+| 　【Example 4】	Display units in default mega seconds [Ms] and megawatt hours [MWh]
+
+.. figure:: img/3_SystemManagement_11.png
+
+| 　If the limit value (LIMIT), usage amount (USAGE), submitting job usage planned amount (RUNNING), and usable amount (AVAILABLE) values are all displayed as "0 (zero)", try changing the display unit. This case may be caused by the fact that it is less than megasecond [Ms] or megawatt hours [MWh].
+　
+| 　【Example 5】	Change the display units from Mega seconds [Ms] to Node seconds [MWh] to Watt hours [Wh]
+
+.. figure:: img/3_SystemManagement_12.png
+
+| 　You can use the -s option to change the display units to Node Second or Watt Hour Wh. Unit switching is calculated as 1K (1,000). The fraction due to unit switching is displayed with the limit value (LIMIT) rounded down and the usage (USAGE) rounded up. The remaining usable amount (AVAILABLE) is a value obtained by subtracting the usage amount (USAGE) and the submitting job usage planned amount (RUNNING) from the limit value (LIMIT).
+| 　The submitting job usage planned amount (RUNNING) includes executing job and resource amount of waiting to execute job. 
+| 　The usage rate (USAGE_RATE) is rounded off to the second decimal place.
+　
+| 　【Example 6】	Change the display unit from the default megasecond [Ms] to hour [h] and display
+
+.. figure:: img/3_SystemManagement_13.png
+
+| 　By using the -h option, the display unit of the node time product can be changed from the default megasecond [Ms] to time [h]. The fraction due to unit switching is displayed with the limit value (LIMIT) rounded down and the usage (USAGE) rounded up. The remaining usable amount (AVAILABLE) is a value obtained by subtracting the usage amount (USAGE) and the submitting job usage planned amount (RUNNING) from the limit value (LIMIT).
+| 　The submitting job usage planned amount (RUNNING) includes executing job and resource amount of waiting to execute job. 
+| 　The usage rate (USAGE_RATE) is rounded off to the second decimal place.
+
+| 　【Example 7】	Display the information display range to all layers  (only the group route).
+
+.. code-block:: console 
+
+  [login]$ accountj -E
+  COLLECTDATE : 2023-08-25 16:35:44   unit[Ms,MWh]
+  *-----[ THEME ]--------------------------------------------------------------------------*
+  THEME                                   LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  Y23FM00                           10,000,000,000            40     1,000,000             1
+  [20230401-20240331]
+  *-----[ THEME_PERIOD ]-------------------------------------------------------------------*
+                            PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  20230401-20230930               1  5,000,000,000            40       500,000             1
+  20231001-20240331               2  5,000,000,000             0       500,000             0
+  *-----[ SUBTHEME ]-----------------------------------------------------------------------*
+  SUBTHEME                   PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  group001                  Y23FM00          2,231            40        10,000             1
+  *-----[ SUBTHEME_PERIOD ]----------------------------------------------------------------*
+                            PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  group001                       1          1,115            40         5,000             1
+  group001                       2          1,115             0         5,000             0
+  *-----[ GROUP ]--------------------------------------------------------------------------*
+  GROUP                      PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  group001                 group001      unlimited            40     unlimited             1
+  *-----[ RESOURCE_GROUP ]-----------------------------------------------------------------*
+  RESOURCE_GROUP                          LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  small                                  unlimited             0     unlimited             0
+  int                                    unlimited             0     unlimited             0
+  large                                  unlimited            10     unlimited             0
+  pt-Aug                                         0             0     unlimited             0
+  pt-Feb                                         0             0     unlimited             0
+  *-----[ USER ]---------------------------------------------------------------------------*
+  USER                                    LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  user1                                  unlimited             0     unlimited             0
+  user2                                  unlimited             0     unlimited             0
+  user3                                  unlimited             0     unlimited             0
+  *-----[ USER_RESOURCEGROUP ]-------------------------------------------------------------*
+  USER                                    LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  user1_int                              unlimited             0     unlimited             0
+  user1_large                            unlimited             0     unlimited             0
+  user1_small                            unlimited             0     unlimited             0
+  user2_int                              unlimited             0     unlimited             0
+  user2_large                            unlimited             0     unlimited             0
+  user2_small                            unlimited             0     unlimited             0
+  user3_int                              unlimited             0     unlimited             0
+  user3_large                            unlimited             0     unlimited             0
+  user3_small                            unlimited             0     unlimited             0
+
+| 　You can use the -E option to display the information display range to all layers. You can also check the usage status of each resource group.
+
+| 　【Example 8】	Display job billing information for a specified user
+
+.. code-block:: console 
+
+  [login]$ accountj -E -u user1
+  COLLECTDATE : 2023-08-25 16:35:44   unit[Ms,MWh]
+  *-----[ THEME ]--------------------------------------------------------------------------*
+  THEME                                   LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  Y23FM00                           10,000,000,000            40     1,000,000             1
+  [20230401-20240331]
+  *-----[ THEME_PERIOD ]-------------------------------------------------------------------*
+                            PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  20230401-20230930               1  5,000,000,000            40       500,000             1
+  20231001-20240331               2  5,000,000,000             0       500,000             0
+  *-----[ SUBTHEME ]-----------------------------------------------------------------------*
+  SUBTHEME                   PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  group001                  Y23FM00          2,231            40        10,000             1
+  *-----[ SUBTHEME_PERIOD ]----------------------------------------------------------------*
+                            PERIOD       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  group001                       1          1,115            40         5,000             1
+  group001                       2          1,115             0         5,000             0
+  *-----[ GROUP ]--------------------------------------------------------------------------*
+  GROUP                      PARENT       LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  group001                 group001      unlimited            40     unlimited             1
+  *-----[ RESOURCE_GROUP ]-----------------------------------------------------------------*
+  RESOURCE_GROUP                          LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  small                                  unlimited             0     unlimited             0
+  int                                    unlimited             0     unlimited             0
+  large                                  unlimited            10     unlimited             0
+  pt-Aug                                         0             0     unlimited             0
+  pt-Feb                                         0             0     unlimited             0
+  *-----[ USER ]---------------------------------------------------------------------------*
+  USER                                    LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  user1                                  unlimited             0     unlimited             0
+  *-----[ USER_RESOURCEGROUP ]-------------------------------------------------------------*
+  USER                                    LIMIT(N)      USAGE(N)      LIMIT(E)      USAGE(E)
+  user1_int                              unlimited             0     unlimited             0
+  user1_large                            unlimited             0     unlimited             0
+  user1_small                            unlimited             0     unlimited             0
+
+| 　Job accounting information of a designated user is displayed for every group to which the user belongs.

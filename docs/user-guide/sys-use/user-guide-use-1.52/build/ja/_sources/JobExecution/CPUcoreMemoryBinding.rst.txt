@@ -1,0 +1,92 @@
+CPUコアとメモリのバインド
+================================
+
+| デフォルトでジョブを実行すると、CPUコアに近い（同一CMG の）メモリを優先的に確保しようとします。
+| 同一CMGのメモリを獲得できなかった場合は、CPUコアと異なる CMGからメモリを獲得します。
+
+| メモリを獲得する CMG を限定したい場合は、\ :program:`numctl` コマンドを利用してメモリをバインドしてください。
+| MPI ジョブの場合は、MCA パラメーター\ ``plm_ple_memory_allocation_policy``\ を利用してメモリをバインドします。
+
+
+1. numactl の利用
+
+ - \ :program:`numactl` コマンドで使用する CPUコア、CPUノード、および、メモリノードの番号を次に示します。
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 2 2 2 2
+
+    * - CMG
+      - CPUコア番号
+      - CPUノード番号
+      - メモリノード番号
+
+    * - CMG0
+      - 12 \- 23
+      - 4
+      - 4
+
+    * - CMG1
+      - 24 \- 35
+      - 5
+      - 5
+
+    * - CMG2
+      - 36 \- 47
+      - 6
+      - 6
+
+    * - CMG3
+      - 48 \- 59
+      - 7
+      - 7
+
+ - CMG0 の CPU とメモリを使用する場合
+   
+ .. code-block:: bash
+   
+    numactl --cpunodebind 4 --membind 4 ./a.out
+
+2. MCA パラメーターの利用（MPI ジョブ）
+
+ - MPI ジョブでMCA パラメーターを使用する場合
+ 
+ .. code-block:: bash
+
+   mpiexec -mca plm_ple_memory_allocation_policy bind_local ./a.out
+
+ - MPI ジョブでMCA パラメーターを環境変数で使用する場合
+ 
+ .. code-block:: bash
+
+   export OMPI_MCA_plm_ple_memory_allocation_policy=bind_local
+   mpiexec ./a.out
+
+ [MCA パラメーター（plm_ple_memory_allocation_policy）の設定値]
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 2 8
+
+    * - 設定値
+      - 説明
+
+    * - bind_local
+      - | プロセスのローカルノード集合に属する各NUMA ノードで、ノードID の若い順にメモリを割り当てます。ローカルノード集合に属するNUMA ノードのメモリに空きが無い場合、割り当てに失敗します。省略値は localalloc です。
+        | なお「ローカルノード集合」とは、プロセスが割り当たった各CPU(コア)の属するNUMA ノードの和集合です。
+
+    * - localalloc
+      - プロセスが動作中のCPU（コア）の属するNUMA ノードからメモリを割り当てます。CPU（コア）の属するNUMA ノードのメモリに空きが無い場合、CPU（コア）からのアクセスコストが小さい順にメモリ割り当てを行います。
+
+.. attention::
+
+   メモリをバインドした場合、バインドしたメモリノード内で必要なメモリ量が獲得できなかった時、プログラムが異常終了します。
+
+.. seealso::
+
+   [メモリが獲得できなかった場合のエラー]
+   
+   メモリをバインドした場合、利用可能なメモリ量を越える要求を出すと、OOM killer によるプロセス刈り取りが行われます。このためプログラムが異常終了します。異常終了時は、PJM CODE=23 が記録されます。
+   
+   PJM CODEは、ジョブスクリプト、または、\ :program:`pjsub` コマンドのオプションに\ ``-s``\ 、または、\ ``-S``\ を指定したさいに出力されるジョブ統計情報で確認することができます。
+

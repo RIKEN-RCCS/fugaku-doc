@@ -1,0 +1,216 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+    <title>2.1.3. ログイン履歴検索 &#8212; 利用者支援ツール 使用手引書 (利用者編)  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="3. システム管理" href="../3_SystemManagement/3_SystemManagement.html" />
+    <link rel="prev" title="2.1.2. グループ情報表示" href="2-1-2_GroupInfo.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../3_SystemManagement/3_SystemManagement.html" title="3. システム管理"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="2-1-2_GroupInfo.html" title="2.1.2. グループ情報表示"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="2_UserManagement.html" ><span class="section-number">2. </span>利用者管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="2-1_CommandExpranation.html" accesskey="U"><span class="section-number">2.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.1.3. </span>ログイン履歴検索</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">2.1.3. </span>ログイン履歴検索<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[名前]</strong></div>
+<div class="line">　loginhistory - ログイン履歴を表示する</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[書式]</strong></div>
+<div class="line">　loginhistory  [オプション]</div>
+<div class="line">　※-u, -n, -d, -cの複合指定はAND検索、同一オプション内での複数指定はOR検索になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[説明]</strong></div>
+<div class="line">　loginhistory コマンドは、スーパーコンピュータ「富岳」 へのログイン状況を確認するために使用する。誰が何時、どのくらいの頻度でアクセスしたのかなどを確認する場合に使用する。表示結果が複数行に及ぶ場合は接続開始日時が新しい順に表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　オプションを指定しない場合は、保持している履歴情報をすべて表示する。</div>
+<div class="line">　なお、検索結果が0件の場合はヘッダ部のみ表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[オプション]</strong></div>
+<div class="line">　-u  ユーザ名...</div>
+<div class="line">　ユーザ名を指定する。スペースに続けて複数指定が可能であるが、アスタリスクを使用した前方／中間／後方一致指定はできない。完全一致指定のみ可能で、ディレクトリサービス(OpenLDAP)に存在しないユーザ名が指定されていた場合には対象ユーザについてはエラー出力し、正常なデータのみ表示する。</div>
+<div class="line">　ユーザ名に特定のアカウントを指定することで、指定したアカウントのログイン状況を確認することができる。これにより、アカウントが不正利用されていないかなどの調査に利用することもできる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-n  行数</div>
+<div class="line">　行数を指定する。行数を指定した場合は、接続開始日時が新しい順に指定された行数分が表示される。行数を指定しなければ全件表示になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-d  接続開始日付</div>
+<div class="line">　接続開始日付を指定する。接続開始日付を指定しなければ全件表示になる。</div>
+<div class="line">　接続開始日付の指定形式には</div>
+<div class="line">　　範囲指定　　yyyymmdd:yyyymmdd</div>
+<div class="line">　　指定日以降　yyyymmdd:</div>
+<div class="line">　　指定日以前　:yyyymmdd</div>
+<div class="line">　　指定日　　　yyyymmdd</div>
+<div class="line">　が存在する。</div>
+</div>
+<div class="line-block">
+<div class="line">　-c</div>
+<div class="line">　CSV形式にて標準出力に表示する。ファイルに出力したい場合にはリダイレクトを使用する。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[復帰値]</strong></div>
+<div class="line">　正常時: 0</div>
+<div class="line">　異常時: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[備考]</strong></div>
+<div class="line">　なし。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[使用例]</strong></div>
+<div class="line">　【例1】 ユーザ名fjse0100のログイン情報を最新の5件のみ表示する</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/2_UserManagement_15.png" src="../_images/2_UserManagement_15.png" />
+</figure>
+<div class="line-block">
+<div class="line">　ログイン中の場合には、 END_DATETIME (CONNECT_TIME) ヘッダ列に「still logged in」と表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　【例2】 ユーザ名fjse0100のログイン情報をCSV形式で表示する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>loginhistory<span class="w"> </span>-u<span class="w"> </span>fjse0100<span class="w"> </span>-c
+<span class="go">USER,NODE,TERMINAL,START_DATE,START_TIME,END_DATE,END_TIME,CONNECT_TIME</span>
+<span class="go">“fjse0100”,”node01”,”term001”,”2010/01/22”,”13:35”,””,””,””</span>
+<span class="go">  “fjse0100”,”node01”,”term001”,”2010/01/20”,”13:50”,”2010/01/21”,”16:35”,”1+02:45”</span>
+<span class="go">“fjse0100”,”node01”,”term001”,”2010/01/20”,”13:40”,””,””,””</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　CSV形式での表示では、日時が分割され、ログイン中など値が存在しない項目は、空文字(NULL)で表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　【例3】 ユーザ名fjse0100のログイン情報をCSV形式でファイル出力する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>loginhistory<span class="w"> </span>-u<span class="w"> </span>fjse0100<span class="w"> </span>-c<span class="w"> </span>&gt;<span class="w"> </span>fjse0100.csv
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　CSV形式にて標準出力に表示する-cオプションを指定し、リダイレクション機能を使用することでファイルに保存できる。</div>
+</div>
+<div class="line-block">
+<div class="line">　【例4】 全件の情報を表示する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>loginhistory
+<span class="go">USER      NODE     TERMINAL   START_DATETIME     END_DATETIME (CONNECT_TIME)</span>
+<span class="go">fjse0100  node01   term001    2022/01/22 13:35   still logged in</span>
+<span class="go">fjse0100  node01   term001    2022/01/21 10:25 - 2022/01/21 16:35 (06:10)</span>
+<span class="go">fjse0102  node02   term001    2022/01/20 14:25 - 2022/01/21 16:35 (1+02:10)</span>
+<span class="go">fjse0100  node01   term001    2022/01/20 13:50 - 2022/01/21 16:35 (1+02:45)</span>
+<span class="go">fjse0103  node03   term002    2022/01/20 13:50 - 2022/01/21 19:35 (1+05:45)</span>
+<span class="go">fjse0100  node01   term001    2022/01/20 13:40   still logged in</span>
+<span class="go">fjse0104  node01   term004    2022/01/18 13:40   still logged in</span>
+<span class="go">fjse0103  node03   term003    2022/01/18 13:00 - 2022/01/21 19:35 (3+06:35)</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　オプションを何も指定しないことで全件のログイン情報を表示することができる。</div>
+</div>
+<div class="line-block">
+<div class="line">　表示項目の説明を示す。</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/2_UserManagement_16.png" src="../_images/2_UserManagement_16.png" />
+</figure>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="2-1-2_GroupInfo.html"
+                          title="前の章へ"><span class="section-number">2.1.2. </span>グループ情報表示</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../3_SystemManagement/3_SystemManagement.html"
+                          title="次の章へ"><span class="section-number">3. </span>システム管理</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../3_SystemManagement/3_SystemManagement.html" title="3. システム管理"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="2-1-2_GroupInfo.html" title="2.1.2. グループ情報表示"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="2_UserManagement.html" ><span class="section-number">2. </span>利用者管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="2-1_CommandExpranation.html" ><span class="section-number">2.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.1.3. </span>ログイン履歴検索</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

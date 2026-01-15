@@ -1,0 +1,219 @@
+.. highlight:: none
+
+.. _TemporaryAreaInNode:
+
+Node Temporary Area
+======================
+
+Provides a node temporary area as a temporary area for files used locally in the same job process in the same job. This area can only be referenced within one compute node.
+
+#. Node temporary area cannnot shered by the multiple compute node.
+#. Node temporary area is available when job starting and deleted when job closing. Save such as job execution result files must be placed on the second-layer storage cache area or 2ndfs area.
+#. To use node temporary area, when job submiting, it is required to specify the preferred area size with  ``--llio localtmp-size`` of :program:`pjsub` command option.
+#. The name of node temporary area can be refered with environment variable  ``${PJM_LOCALTMP}`` in a job.
+
+
+.. figure:: img/TemporaryAreaInNode_01.png
+
+   
+5. Here describes style of temporary area in node
+
+   
+   .. list-table:: Style of temporary area in node 
+     :header-rows: 1         
+     :widths: 10 20   
+   
+     * - Item
+       - Characteristic
+
+     * - Reference area
+       - Of the compute nodes assigned to a job, it can be referenced only from the same job running on that compute node.
+
+     * - Lifetime
+       - Initialized before job starts and deleted after job closing.
+
+
+Node temporary area size
+---------------------------------
+
+When using a node temporary area, its size can be specified when submitting a job.
+The parameter ``localtmp-size`` of the  ``--llio`` option of the :program:`pjsub` command specifies the size of the temporary area in the node per node. If you do not specify the size, it will be the default value (0MiB) set by the job ACL function.
+
+.. list-table:: 
+  :header-rows: 1     
+  :widths: 30 30 40      
+
+  * - Area name
+    - Option
+    - Specification value
+
+  * - Temporary area in node
+    - \-\-llio-localtmp-size
+    - Temporary area size in node per 1 node
+
+
+Please specify the size so that it meets the following.At least 128MiB must be assigned to  :ref:`VolumeOfStrage`.::
+
+   128MiB <= 87GiB - (localtmp-size + sharedtmp-size)
+
+
+How to use
+----------
+
+By specifying option when job submission, temporary area in node can be used
+
+1. Submit a job.
+
+  .. code-block:: console
+
+     $ pjsub --llio localtmp-size=30Gi jobscript.sh
+
+ Alternatively, you can specify the size of the node temporary area in the job script.
+
+  .. code-block:: bash
+
+     #!/bin/bash
+     #PJM --llio localtmp-size=30Gi
+     
+     
+2. The path name (directory name) of the node temporary area is set in the environment variable PJM_LOCALTMP. You can find out with the environment variable PJM_LOCALTMP set in the job. The following is an example of a simple job that uses the node temporary area as a temporary data storage destination.
+
+   .. code-block:: bash
+
+      prog1 -o ${PJM_LOCALTMP}/out.data
+
+3. Program prog2 reads file out.data and output the final computed result result.data to directory ``${PJM_LOCALTMP}``.
+
+   .. code-block:: bash
+
+      prog2 -i ${PJM_LOCALTMP}/out.data -o ${PJM_LOCALTMP}/result.data
+
+4. Before ending the job, save the file result.data in the directory ``${PJM_JOBDIR}`` (on the global file system) at the time of job execution with the job ID $ {PJM_JOBID} appended.
+
+   .. code-block:: bash
+
+      cp ${PJM_LOCALTMP}/result.data ${PJM_JOBDIR}/result_${PJM_JOBID}.data
+
+5. When copying a file from the second tier storage to the temporary area in the node, copy using only one process in the node. Here is an example of copying.
+
+   .. code-block:: bash
+
+      mpiexec sh -c 'if [ ${PLE_RANK_ON_NODE} -eq 0 ]; then 
+                         cp -rf ./data/   ${PJM_LOCALTMP} ; 
+                     fi'
+
+You can create a different output file for each parallel process in the node temporary area. The rank number in the program executed by mpiexec is set in the environment variable PMIX _ RANK. Here is an example using the touch command:
+
+1. | Create a file for each process.
+
+  .. code-block:: none
+
+     mpiexec sh -c 'touch ${PJM_LOCALTMP}/result_${PMIX_RANK}.data'
+
+2. Save different output files for each parallel process from the node temporary area to the second layer storage area.
+
+  .. code-block:: none
+
+     mpiexec sh -c 'cp ${PJM_LOCALTMP}/result_${PMIX_RANK}.data ${PJM_JOBDIR}/result_${PMIX_RANK}_${PJM_JOBID}.data'
+
+
+Job submitting option (pjsub \-\-llio)
+--------------------------------------
+
+Here describes the option related to node temporary area.
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 30 50 
+
+  * - pjsub option
+    - Description
+
+  * - localtmp-size=size	
+    - | Specify shared temporary area size.
+      | Shared temporary area path name is set to environment variable PJM_LOCALTMP in a job.
+
+  * - async-close={on|off}	
+    - | Specifies whether to close the node temporary area file asynchronously or not.
+      | Specify synchronous / asynchronous close from the cache in the compute node to the temporary area in the node.
+      |
+      | on: Asynchronous close
+      | off: Synchronous close (Default value)
+
+  * - perf[,perf-path=path]	
+    - | Output LLIO performance information to the file.
+      | The output destination is under the current directory when the job is submitted, and the file name is the name defined by the job ACL function. Also with the parameter ``perf-path``, target output file can be specified.
+
+
+Option related to cashe in compute node
+---------------------------------------
+
+If there is enough memory allocated to the job, high-speed input / output can be expected by using the free memory as a cache in the compute node.
+
+| Display option when job submitting (pjsub) related to cashe in compute node.
+| Specify with the pjsub \-\-llio option. Specified option can refer to the Environment variables described at the bottom of the description from within the job.
+
+.. list-table::
+  :header-rows: 1      
+  :widths: 30 50        
+
+  * - pjsub option	
+    - Desripton
+
+  * - auto-readahead={on|off}	
+    - | Specify whether to automatically read ahead in the cache in the compute node when a job tries to read a continuous area on the first-layer storage or the second-layer storage multiple times in a row.
+      | To enable (on) auto-readahead. it is required to enable (on) cn-read-cache.
+      | 
+      | on: Read in ahead. (Default value)
+      | off: Does not read in ahead.
+      | Environment variables ${PJM_LLIO_AUTO_READAHEAD}
+
+  * - cn-cache-size=size	
+    - | Specifies the size of the cache in the compute node. It is allocated from the memory allocated to the job.
+      | Environment variables ${PJM_LLIO_CN_CACHE_SIZE}
+
+  * - cn-cached-write-size=size	
+    - | Specify the threshold value of whether to cache when writing to the first-layer storage.
+      | When writing to the first-layer storage, if the write size is less than the specified value, it will not be immediately written to the storage but will be temporarily cached in the cache in the compute node. This parameter is used to reduce the number of transfers to the first-layer storage and improve performance by exporting small sizes in a batch.
+      | Environment variables PJM_LLIO_CN_CACHED_WRITE_SIZE
+
+
+Usage example of node temporary area
+--------------------------------------------------
+
+TMPDIR
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Program performance can be improved by specifying node temporary area to the environment variable :envvar:`TMPDIR`. An example is the case of using scratch files in Fortran programs. The :file:`/etc/profile` provided by the system sets the environment variable HOME to :envvar:`TMPDIR`. Changing the program's IO destination from the second-layer storage area to a faster node temporary area reduces scratch file access time and improves performance.
+
+Here describes a setting example of :envvar:`TMPDIR`.
+
+   .. code-block:: bash
+
+      export TMPDIR=$PJM_LOCALTMP
+
+
+Specify the size of node temporary area to use and submit a job.
+
+   .. code-block:: bash
+
+      #!/bin/bash
+      #PJM --llio localtmp-size=5Gi
+
+
+Unzip of archive files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When unzipping an archive file in the node temporary area, performance can be improved by using it with :ref:`llio_transfer`. Unzipping an archive file on the second-layer storage from a large number of compute nodes results in intensive access and severely degrades IO performance. You can improve performance by distributing the archive file as a common file and distributing access.
+
+Here describes an example of unzipping an archive file .
+
+   .. code-block:: bash
+
+      llio_transfer ./archive.tar
+
+      mpiexec sh -c 'if [ ${PLE_RANK_ON_NODE} -eq 0 ]; then \
+                         tar xf ./archive.tar -C $PJM_LOCALTMP; \
+                     fi'
+
+      llio_transfer --purge ./archive.tar

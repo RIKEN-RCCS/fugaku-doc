@@ -1,0 +1,302 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>3.1.4. Resource assign information displaying &#8212; User support tools User&#39;s Guide (for User)  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.1.5. Job execution history search" href="3-1-5_Pjstat.html" />
+    <link rel="prev" title="3.1.3. Assign resource deleting" href="3-1-3_ResourceDel.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-5_Pjstat.html" title="3.1.5. Job execution history search"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="3-1-3_ResourceDel.html" title="3.1.3. Assign resource deleting"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" accesskey="U"><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.4. </span>Resource assign information displaying</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="resource-assign-information-displaying">
+<h1><span class="section-number">3.1.4. </span>Resource assign information displaying<a class="headerlink" href="#resource-assign-information-displaying" title="Permalink to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[Name]</strong></div>
+<div class="line">　resourceinfo - Display the assign resource linking information</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Style]</strong></div>
+<div class="line">　resourceinfo  [Option]</div>
+<div class="line">　※-g, -u, -rscunit, -rscgrp combined specification is AND search, multiple specification within the same option is OR search.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Description]</strong></div>
+<div class="line">　resourceinfo command displays information related to the computational resources assigned to the assignment.</div>
+</div>
+<div class="line-block">
+<div class="line">　The project manager, the higher-level theme manager of the target group, and the sub-theme manager can display resource allocation information of members belonging to the group.</div>
+<div class="line">　The system administrator can display the allocated resource information of all members registered in the system. However it is required to be authorized the administrator authorith described in  System management function .</div>
+<div class="line">　If no option is specified, only the resource information of the project manager, system administrator, theme manager, and sub-theme manager is displayed.</div>
+</div>
+<div class="line-block">
+<div class="line">　【Resource assign setting example】</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/3_SystemManagement_05.png" src="../_images/3_SystemManagement_05.png" />
+</figure>
+<p>　【Output result】</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 6.7%" />
+<col style="width: 26.7%" />
+<col style="width: 26.7%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>No</p></th>
+<th class="head"><p>Item name</p></th>
+<th class="head"><p>Category</p></th>
+<th class="head"><p>Note</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>RTYPE</p></td>
+<td><p>Alphabetic characters</p></td>
+<td><div class="line-block">
+<div class="line">Resource type</div>
+<div class="line">User: USER</div>
+<div class="line">Resource group: RSCG</div>
+<div class="line">User-resource group: :USER_RSCG</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>GROUP</p></td>
+<td><p>Single-byte alphanumeric symbol</p></td>
+<td><p>Group name</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>USER</p></td>
+<td><p>Single-byte alphanumeric characters</p></td>
+<td><div class="line-block">
+<div class="line">User name</div>
+<div class="line">NULL when specified group and job type</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>RSCUNT</p></td>
+<td><p>Single-byte alphanumeric characters</p></td>
+<td><div class="line-block">
+<div class="line">Resource unit name</div>
+<div class="line">NULL when specified group and user</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>RSCGRP</p></td>
+<td><p>Single-byte alphanumeric characters</p></td>
+<td><div class="line-block">
+<div class="line">Resource unit name</div>
+<div class="line">NULL when specified group and user</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>LIMIT</p></td>
+<td><p>Number</p></td>
+<td><div class="line-block">
+<div class="line">Computing resource frame</div>
+<div class="line">　(Node x run time limit value)</div>
+<div class="line">※In the assignment, the upper limit value of the computing resources that can be submitted to the job is displayed.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">　【Resource assign information display example】</div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&quot;RTYPE&quot;,&quot;GROUP&quot;,&quot;USER&quot;,&quot;RSCUNT&quot;,&quot;RSCGRP&quot;,&quot;LIMIT&quot;     ...header line
+&quot;RSCG&quot;,&quot;grp01&quot;,&quot;&quot;,&quot;common&quot;,&quot;small&quot;,100            ...Assign to the resource group
+&quot;USER&quot;,&quot;grp01&quot;,&quot;user1&quot;,&quot;common&quot;,&quot;&quot;,&quot;&quot;            ...Assign to the user
+&quot;USER_RSCG&quot;,&quot;grp01&quot;,&quot;user1&quot;,&quot;common&quot;,&quot;small&quot;,&quot;&quot;  ...Assign to the user and resource group combination
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Option]</strong></div>
+<div class="line">　-g  group name…</div>
+<div class="line">　Specify group name. Multiple designations can be made following a space, but front / middle / backward matching designation using an asterisk is not possible. Only exact match specification is possible.</div>
+</div>
+<div class="line-block">
+<div class="line">　-u  user name…</div>
+<div class="line">　Specify user name. Multiple designations can be made following a space, but front / middle / backward matching designation using an asterisk is not possible. Only exact match specification is possible.</div>
+</div>
+<div class="line-block">
+<div class="line">　-rscunit  resource unit name…</div>
+<div class="line">　Specify recourse unit name that you want to confirm the computing resource use. Multiple designations can be made following a space, but front / middle / backward matching designation using an asterisk is not possible. Only exact match specification is possible.</div>
+</div>
+<div class="line-block">
+<div class="line">　-rscgrp  resource group name…</div>
+<div class="line">　Specify recourse group name that you want to confirm the computing resource use. Multiple designations can be made following a space, but front / middle / backward matching designation using an asterisk is not possible. Only exact match specification is possible.</div>
+</div>
+<div class="line-block">
+<div class="line">　--help</div>
+<div class="line">　Display command help contents.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Return value]</strong></div>
+<div class="line">　Normal: 0</div>
+<div class="line">　Abnormal: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Note]</strong></div>
+<div class="line">　None.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Use example]</strong></div>
+<div class="line">　【Example 1】  Login with the user user1 and display without specifying option.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>resourceinfo
+<span class="go">RTYPE,GROUP,USER,RSCUNT,RSCGRP,LIMIT</span>
+<span class="go">“USER”,”group01”,”user1”,”ru1”,”rg1”,”60”</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　If no option is specified, even the project manager and system administrator can only display their own resource information.</div>
+<div class="line"><br /></div>
+<div class="line">　【Example 2】  Login with the user user1 and display with specifying option.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>resourceinfo<span class="w"> </span>-g<span class="w"> </span>group01
+<span class="go">RTYPE,GROUP,USER,RSCUNT,RSCGRP,LIMIT</span>
+<span class="go">“RSCG”,”group01”,””,”ru1”,”rg1”,”80”</span>
+<span class="go">“RSCG_USER”,”group01”,”user1”,”ru1”,”rg1”,”60”</span>
+<span class="go">“RSCG_USER”,”group01”,”user2”,”ru1”,”rg1”,”40”</span>
+<span class="go">“USER”,”group01”,”user1”,”ru1”,””,”60”</span>
+<span class="go">“USER_RSCG”,”group01”,”user1”,”ru1”,”rg1”,”60”</span>
+<span class="go">“USER”,”group01”,”user2”,”ru1”,””,”40”</span>
+<span class="go">“USER_RSCG”,”group01”,”user2”,”ru1”,”rg1”,”40”</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　If the option is specified and the person in charge of the project is a project manager or system administrator, the project manager displays the allocated resource information of members belonging to the group, and the system administrator displays the allocated resource information of all members registered in the system. It can be displayed.</div>
+</div>
+<div class="line-block">
+<div class="line">　【Example 3】  Login with the user user2 and display with specifying option.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>resourceinfo<span class="w"> </span>-g<span class="w"> </span>group01
+<span class="go">RTYPE,GROUP,USER,RSCUNT,RSCGRP,LIMIT</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　Whether specifying option or not, the user cannot display even it is thier assign resource information.</div>
+</div>
+<div class="line-block">
+<div class="line">　【Example 4】  Login with the user user1 and display specific user assign resource.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>resourceinfo<span class="w"> </span>-g<span class="w"> </span>group01<span class="w"> </span>-u<span class="w"> </span>user2<span class="w"> </span>-rscunit<span class="w"> </span>ru1<span class="w"> </span>-rscgrp<span class="w"> </span>rg1
+<span class="go">RTYPE,GROUP,USER,RSCUNT,RSCGRP,LIMIT</span>
+<span class="go">”USER”,“group01”,”user2”,”ru1”,”rg1”,”40”</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　The project manager of the assignment group 01 can display the resource allocation information of the members belonging to the group. -G, -u, -rscunit, -rscgrp combined specification is AND search, multiple specification within the same option is OR search.</div>
+</div>
+<div class="line-block">
+<div class="line">　【例5】 Login with the user user1 and display the multiple user assign resource.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>resourceinfo<span class="w"> </span>-g<span class="w"> </span>group01<span class="w"> </span>-u<span class="w"> </span>user1<span class="w"> </span>user2<span class="w"> </span>-rscunit<span class="w"> </span>ru1<span class="w"> </span>-rscgrp<span class="w"> </span>rg1
+<span class="go">RTYPE,GROUP,USER,RSCUNT,RSCGRP,LIMIT</span>
+<span class="go">”USER”,“group01”,”user1”,”ru1”,”rg1”,”60”</span>
+<span class="go">”USER”,“group01”,”user2”,”ru1”,”rg1”,”40”</span>
+</pre></div>
+</div>
+<p>　The project manager of the assignment group 01 can display the resource allocation information of the members belonging to the group. -G, -u, -rscunit, -rscgrp combined specification is AND search, multiple specification within the same option is OR search.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="3-1-3_ResourceDel.html"
+                          title="previous chapter"><span class="section-number">3.1.3. </span>Assign resource deleting</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="3-1-5_Pjstat.html"
+                          title="next chapter"><span class="section-number">3.1.5. </span>Job execution history search</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-5_Pjstat.html" title="3.1.5. Job execution history search"
+             >next</a></li>
+        <li class="right" >
+          <a href="3-1-3_ResourceDel.html" title="3.1.3. Assign resource deleting"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" ><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.4. </span>Resource assign information displaying</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Potal Top</a>
+    </div>
+  </body>
+</html>

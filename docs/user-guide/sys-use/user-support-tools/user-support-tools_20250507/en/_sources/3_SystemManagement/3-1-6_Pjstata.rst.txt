@@ -1,0 +1,349 @@
+Job execution result search
+===========================
+
+| 　**[Name]**
+| 　pjstata - Display the job execution result
+
+| 　**[Style]**
+| 　pjstata  [Option]
+| 　※Combination specification of -j, -n, -d, -u, -g, -a, -e, -s, -t, -b is AND search.
+
+| 　**[Description]**
+| 　pjstata command displays a job execution result (accounting result). When the display result includes a plurality of lines, the job submission time, job ID, step number, and generation number are displayed in ascending order as composite keys.
+
+| 　It is possible to display the accounting information of the completed job. The charging information is obtained by applying a discount rate of the charging coefficient to the node time product. Used for the purpose of confirming the charge performance for each job.
+ 　
+| 　Users and project managers can display job information of members belonging to the group. The system administrator can display job information of all members registered in the system. However, it is required to be given the administrator authority which is described in System management function. If the job ID, user name or group name is not specified as an option, even the project manager and system administrator can display only their own job information.
+
+| 　If the "-b" option indicating the number of generations is not specified, jobs for the current year are displayed.
+
+| 　**[Option]**
+| 　-j  job ID
+| 　Specify job ID.
+
+| 　-n  line
+| 　Specify line. When the number of lines is specified, the number of lines specified in ascending order is displayed with the job input time, job ID, step number, and generation number as composite keys. If no number of lines is specified, all items are displayed.
+ 　
+| 　-d  Date of job start time
+| 　Specify date of job start time. If no job start time date is specified, all items are displayed.
+| 　If this option is specified without "-b" option indicating the number of generations, jobs for all generations are displayed.
+ 　
+| 　The job start time date specification format has the following patterns.
+| 　　Specify the period　　yyyymmdd:yyyymmdd
+| 　　Specify after-date　yyyymmdd:
+| 　　Specify before-date 　:yyyymmdd
+| 　　Specify date　　　yyyymmdd
+
+| 　-u  user name
+| 　Specify user name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.
+ 　
+| 　-g  group name
+| 　Specify group name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.
+ 　
+| 　-a
+| 　Displays job information for all users. The -u and -g options are invalid when the -a option is specified.
+ 　
+| 　-e  node ID
+| 　If you want to display only a specific node, specify the node ID. The node ID can be a boot IO node or a compute node. When specifying, describe in hexadecimal.
+ 　
+| 　-s  yyyymmddhh24miss: yyyymmddhh24miss[:stat]
+| 　Specify the date and time of the job start time and job end time in year, month, day, hour, minute, and second, and specify the job status. This makes it possible to acquire a list of jobs that have been executed within the specified period. Furthermore, the job status can be narrowed down and displayed.
+| 　If this option is specified without "-b" option indicating the number of generations, jobs for all generations are displayed.
+ 　
+| 　There are the following patterns for specifying the date and time of the job start time and job end time.
+| 　　Specify the period　　Job start time：Job end time
+| 　　(Example) yyyymmddhh24miss:yyyymmddhh24miss
+| 　　Specify date　　　Job start time:
+| 　　(Example) yyyymmddhh24miss:
+| 　　Specify date　　　: Job end time
+| 　　(Example) :yyyymmddhh24miss
+
+| 　For job status specification format...
+| 　　Specified status　stat
+| 　　Unspecified
+| 　are existing
+| 　If not specified, EXT and CCL are assumed to be selected.
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 20 60
+
+  * - Specification format
+    - Description
+
+  * - EXT
+    - Job termination completed status
+
+  * - CCL
+    - Closed status caused from job stopped
+
+| 　The -s option specification format is obtained by concatenating the job start time and job end time date and time specification format with the job status specification format with a: (colon).
+
+| 　-c
+| 　Standard output the searchh result as CSV format. By using redirection function, saving to file is possible.
+ 　
+| 　-b  generation number
+| 　Specify the number of past generations that you want to display. If this option is not specified, job information for the current year is displayed.
+| 　Information display authority follows the authority at the time of command execution.
+ 
+| 　-t job end date
+| 　Specify job end date. If it is not specified, displays all.
+| 　If there is no value in the job end time, displays based on the date of the job submission acceptance.
+| 　If this option is specified without "-b" option indicating the number of generations, jobs for all generations are displayed.
+
+| 　There are following patterns about job end date specification format.
+| 　　Specified the period　　yyyymmdd:yyyymmdd
+| 　　After-specified date　yyyymmdd:
+| 　　Before-specified date　:yyyymmdd
+| 　　Specified date　　　yyyymmdd
+　
+| 　&#45;-help
+| 　Display command help contsnts.
+ 　
+| 　**[Return value]**
+| 　Normal: 0
+| 　Abnormal: 1
+
+| 　**[Note]**
+| 　None.
+
+| 　**[Use example]**
+
+　【Example 1】	Display job information submitted by yourself (fjse0001)
+
+.. code-block:: console 
+
+   [login]$ pjstata
+   JOBID   SNO BLKNO GENNO JOB_NAME  MD JTYPE USER     GROUP      ST   RSC_UNT  RSC_GRP EC  PC  ERR_CD  
+   367430            0     g11F2DB.s NM BT    fjse0001  fjse      EXT  unit1    small   0   0   0       
+   369249            0     parmer8K1 NM BT    fjse0001  fjse      EXT  unit1    small   0   0   0       
+   [login]$ 
+
+.. code-block:: console
+
+   JOB_START       JOB_END         ELAPSE_TIM  NODE_NUM  RATE  ACCT_RSC     POINT    PERIOD_NUM  RETRY
+   04/26 14:44:47  04/26 14:50:02  0000:05:14  1280      100%  401920       10.12    -           0
+   04/27 13:18:41  04/27 13:20:05  0000:01:24  2         100%  168          -5.11    -           0
+
+　【Example 2】	Filter by the date of the start time of the job submitted by yourself (fjse0001)
+
+.. code-block:: console 
+
+   [login]$ pjstata -d 20210427:
+   JOBID   SNO BLKNO GENNO JOB_NAME  MD JTYPE USER     GROUP      ST   RSC_UNT  RSC_GRP EC  PC  ERR_CD  
+   369249            0     parmer8K1 NM BT    fjse0001  fjse      EXT  unit1    small   0   0   0       
+   [login]$ 
+
+.. code-block:: console 
+
+   JOB_START       JOB_END         ELAPSE_TIM  NODE_NUM  RATE  ACCT_RSC   POINT     PERIOD_NUM  RETRY
+   04/27 13:18:41  04/27 13:20:05  0000:01:24  2         100%  168        -5.11     -           0
+
+　【Example 3】	Get a list of jobs that were running within a specified period
+
+.. code-block:: console 
+
+   [login]$ pjstata -s 2021042600000:20210427235959
+   JOBID   SNO BLKNO GENNO JOB_NAME  MD JTYPE USER     GROUP      ST   RSC_UNT  RSC_GRP EC  PC  ERR_CD  
+   367430            0     g11F2DB.s NM BT    fjse0001  fjse      EXT  unit1    small   0   0   0       
+   369249            0     parmer8K1 NM BT    fjse0001  fjse      EXT  unit1    small   0   0   0       
+   [login]$ 
+
+.. code-block:: console 
+
+   JOB_START       JOB_END         ELAPSE_TIM  NODE_NUM  RATE  ACCT_RSC    POINT     PERIOD_NUM  RETRY
+   04/26 14:44:47  04/26 14:50:02  0000:05:14  1280      100%  401920      10.12     -           0
+   04/27 13:18:41  04/27 13:20:05  0000:01:24  2         100%  168         -5.11     -           0
+
+| 　A list of jobs that were running within the specified period from April 26, 2021 00:00:00 to April 27, 2021 23:59:59 can be acquired for the finished jobs. .
+
+| 　【Example 4】	System administrator displays all job information
+
+.. code-block:: console 
+
+   [login]$ pjstata -a
+   JOBID   SNO BLKNO GENNO JOB_NAME  MD JTYPE USER     GROUP      ST   RSC_UNT  RSC_GRP EC  PC  ERR_CD  
+   367393            0     STDIN     NM IN    user0516  group059  EXT  unit1    small   0   11  0       
+   367430            0     g11F2DB.s NM BT    fjse0001  fjse      EXT  unit1    small   0   0   0       
+   367452            0     job_tmp.s NM BT    user0043  group009  EXT  unit1    small   1   0   0       
+   367537            0     k_pjsub_3 NM BT    user0125  group084  EXT  unit1    small   0   0   0       
+   367541            0     sub.sh    NM BT    user0515  group058  EXT  unit1    small   1   0   0       
+   369249            0     parmer8K1 NM BT    fjse0001  fjse      EXT  unit1    small   0   0   0       
+   [login]$  
+
+.. code-block:: console 
+
+   JOB_START       JOB_END         ELAPSE_TIM  NODE_NUM  RATE  ACCT_RSC    POINT    PERIOD_NUM  RETRY
+   04/26 13:56:39  04/26 14:26:40  0000:30:01  72        100%  129672      10.12    -           0
+   04/26 14:44:47  04/26 14:50:02  0000:05:14  1280      100%  401920      -5.11    -           0
+   04/26 14:14:34  04/26 14:14:34  0000:00:00  1         100%  0            0.00    -           0
+   04/26 14:50:51  04/26 14:51:50  0000:00:58  3072      100%  178176       0.00    -           0
+   04/26 14:49:51  04/26 14:52:49  0000:02:58  1         100%  178          0.00    -           0
+   04/27 13:18:41  04/27 13:20:05  0000:01:24  2         100%  168          0.00    -           0
+
+| 　Indicates the explanation of display item.
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 20 40 100
+  
+    * - No.
+      - Item name
+      - 説明
+
+    * - 1
+      - JOBID
+      - Job ID
+         
+    * - 2
+      - SNO
+      - Step number
+
+    * - 3
+      - BLKNO
+      - Bulk number 
+
+    * - 4
+      - GENNO
+      - Generation number
+
+    * - 5
+      - JOB_NAME
+      - Job name
+ 
+    * - 6
+      - MD
+      - Job model
+        
+        NM：Normal job
+
+        ST：Step job
+
+        BU：Bulk job
+
+        MW：Master worker job
+
+
+    * - 7
+      - JTYPE
+      - Job type
+
+        BATCH　：Batch job
+
+        INTRACT：Interactive job
+
+    * - 8
+      - USER
+      - User name
+
+    * - 9
+      - GROUP
+      - Group name
+         
+    * - 10
+      - ST
+      - Job process status
+
+        EXT：Completed job closing
+
+        CCL：Closed by job cancelling
+   
+    * - 11  
+      - RSC_UNT
+      - Submitting resource unit name  
+
+    * - 12
+      - RSC_GRP
+      - Submitting resource group name 
+
+    * - 13
+      - EC
+      - User script end code  
+         
+    * - 14
+      - PC
+      - PJM code
+
+    * - 15
+      - ERR_CD
+      - Error code  
+
+    * - 16
+      - JOB_START
+      - Job start time 
+
+    * - 17
+      - JOB_END
+      - Job end time
+         
+    * - 18
+      - ELAPSE_TIM
+      - Job execution time
+
+    * - 19
+      - NODE_NUM
+      - Number of assign node 
+
+    * - 20
+      - RATE
+      - Price unit factor
+
+    * - 21
+      - ACCT_RSC
+      - Computing resource value
+
+    * - 22
+      - ERATE
+      - Power Accounting price unit         
+
+    * - 23
+      - ACCT_ECON [\*\1]
+      - Power Accounting
+
+    * - 24
+      - POINT
+      - Points earned by running the job
+
+        Rounded to the second decimal place
+
+    * - 25
+      - PERIOD_NUM
+      - Price target period [\*\2]
+
+         Indicates the period when the executed job was charged
+        
+    * - 26
+      - RETRY
+      - Number of retries
+
+| 　[\*\1]  ACCT_ECON is based on the ECON2 value of the pjstatj command.
+| 　[\*\2] Whether or not it is an object of periodic management depends on the subtheme to which the subject belongs. If "[ SUBTHEME_PERIOD ]" is displayed in the information when executing the accountj command without any options, it is an object of the periodic management.
+ 　
+| 　Next, it is a case where it is confirmed in which period each job is charged.
+ 　
+| 　Example) Check what period you were charged for job ID369249
+
+.. code-block:: console
+
+   login$ pjstata -j 369249
+   JOBID  SNO BLKNO GENNO  JOB_NAME  MD JTYPE USER     GROUP  ...  ACCT_ECON  POINT   PERIOD_NUM RETRY
+   369249           0      permer8K1 NM BT    fjse0001  fjse  ...  0.011446   10.12   2          0       
+
+
+| 　In this case, since PERIOD_NUM is “2”, it can be determined that the second period (the first half of 2022) was charged. The PERIOD_NUM value shows the period that was charged. PERIOD_NUM displays the value "-" if the group has no period.
+ 　
+| 　Example) Output the current job in CSV format
+
+.. code-block:: console
+
+   login$ pjstata -j 969249
+   JOBID  SNO BLKNO GENNO  JOB_NAME  MD JTYPE USER     GROUP  ...  ACCT_ECON  POINT   PERIOD_NUM RETRY
+   369249           0      sample    NM BT    fjse0001  fjse  ...  0.011446   10.12   2          0       
+
+   login$ pjstata -j 969249 -c
+   JOBID,SNO,BLKNO,GENNO,JOB_NAME,MD,JTYPE,USER,GROUP,          ...  ACCT_ECON,POINT,PERIOD_NUM,RETRY
+   "369249","","","0","permer8K1","NM","BT","fjse0001","fjse",  ...  "0.011446","10.12","2"          0       
+
+
+　By using the -c option, the search results can be standard output in CSV format. When output in CSV format, (hyphen) is displayed as a blank character (NULL).
+

@@ -1,0 +1,370 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8.4. Node Temporary Area &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="8.5. Shared temporary area" href="SharedTemporaryArea.html" />
+    <link rel="prev" title="8.3. Cache Area of Second-Layer Storage" href="TheSecondLayerStrage.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="SharedTemporaryArea.html" title="8.5. Shared temporary area"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="TheSecondLayerStrage.html" title="8.3. Cache Area of Second-Layer Storage"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">8. </span>Layered storage</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.4. </span>Node Temporary Area</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="node-temporary-area">
+<span id="temporaryareainnode"></span><h1><span class="section-number">8.4. </span>Node Temporary Area<a class="headerlink" href="#node-temporary-area" title="Link to this heading">¶</a></h1>
+<p>Provides a node temporary area as a temporary area for files used locally in the same job process in the same job. This area can only be referenced within one compute node.</p>
+<ol class="arabic simple">
+<li><p>Node temporary area cannnot shered by the multiple compute node.</p></li>
+<li><p>Node temporary area is available when job starting and deleted when job closing. Save such as job execution result files must be placed on the second-layer storage cache area or 2ndfs area.</p></li>
+<li><p>To use node temporary area, when job submiting, it is required to specify the preferred area size with  <code class="docutils literal notranslate"><span class="pre">--llio</span> <span class="pre">localtmp-size</span></code> of <strong class="program">pjsub</strong> command option.</p></li>
+<li><p>The name of node temporary area can be refered with environment variable  <code class="docutils literal notranslate"><span class="pre">${PJM_LOCALTMP}</span></code> in a job.</p></li>
+</ol>
+<figure class="align-default">
+<img alt="../_images/TemporaryAreaInNode_01.png" src="../_images/TemporaryAreaInNode_01.png" />
+</figure>
+<ol class="arabic" start="5">
+<li><p>Here describes style of temporary area in node</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Style of temporary area in node</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>Characteristic</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Reference area</p></td>
+<td><p>Of the compute nodes assigned to a job, it can be referenced only from the same job running on that compute node.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lifetime</p></td>
+<td><p>Initialized before job starts and deleted after job closing.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<section id="node-temporary-area-size">
+<h2><span class="section-number">8.4.1. </span>Node temporary area size<a class="headerlink" href="#node-temporary-area-size" title="Link to this heading">¶</a></h2>
+<p>When using a node temporary area, its size can be specified when submitting a job.
+The parameter <code class="docutils literal notranslate"><span class="pre">localtmp-size</span></code> of the  <code class="docutils literal notranslate"><span class="pre">--llio</span></code> option of the <strong class="program">pjsub</strong> command specifies the size of the temporary area in the node per node. If you do not specify the size, it will be the default value (0MiB) set by the job ACL function.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 30.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Area name</p></th>
+<th class="head"><p>Option</p></th>
+<th class="head"><p>Specification value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Temporary area in node</p></td>
+<td><p>--llio-localtmp-size</p></td>
+<td><p>Temporary area size in node per 1 node</p></td>
+</tr>
+</tbody>
+</table>
+<p>Please specify the size so that it meets the following.At least 128MiB must be assigned to  <a class="reference internal" href="TheSecondLayerStrage.html#volumeofstrage"><span class="std std-ref">The Cache Area of Second-Layer Storage size</span></a>.:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>128MiB &lt;= 87GiB - (localtmp-size + sharedtmp-size)
+</pre></div>
+</div>
+</section>
+<section id="how-to-use">
+<h2><span class="section-number">8.4.2. </span>How to use<a class="headerlink" href="#how-to-use" title="Link to this heading">¶</a></h2>
+<p>By specifying option when job submission, temporary area in node can be used</p>
+<ol class="arabic simple">
+<li><p>Submit a job.</p></li>
+</ol>
+<blockquote>
+<div><blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjsub<span class="w"> </span>--llio<span class="w"> </span>localtmp-size<span class="o">=</span>30Gi<span class="w"> </span>jobscript.sh
+</pre></div>
+</div>
+</div></blockquote>
+<p>Alternatively, you can specify the size of the node temporary area in the job script.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#PJM --llio localtmp-size=30Gi</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><p>The path name (directory name) of the node temporary area is set in the environment variable PJM_LOCALTMP. You can find out with the environment variable PJM_LOCALTMP set in the job. The following is an example of a simple job that uses the node temporary area as a temporary data storage destination.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>prog1<span class="w"> </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">PJM_LOCALTMP</span><span class="si">}</span>/out.data
+</pre></div>
+</div>
+</li>
+<li><p>Program prog2 reads file out.data and output the final computed result result.data to directory <code class="docutils literal notranslate"><span class="pre">${PJM_LOCALTMP}</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>prog2<span class="w"> </span>-i<span class="w"> </span><span class="si">${</span><span class="nv">PJM_LOCALTMP</span><span class="si">}</span>/out.data<span class="w"> </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">PJM_LOCALTMP</span><span class="si">}</span>/result.data
+</pre></div>
+</div>
+</li>
+<li><p>Before ending the job, save the file result.data in the directory <code class="docutils literal notranslate"><span class="pre">${PJM_JOBDIR}</span></code> (on the global file system) at the time of job execution with the job ID $ {PJM_JOBID} appended.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span><span class="si">${</span><span class="nv">PJM_LOCALTMP</span><span class="si">}</span>/result.data<span class="w"> </span><span class="si">${</span><span class="nv">PJM_JOBDIR</span><span class="si">}</span>/result_<span class="si">${</span><span class="nv">PJM_JOBID</span><span class="si">}</span>.data
+</pre></div>
+</div>
+</li>
+<li><p>When copying a file from the second tier storage to the temporary area in the node, copy using only one process in the node. Here is an example of copying.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mpiexec<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;if [ ${PLE_RANK_ON_NODE} -eq 0 ]; then</span>
+<span class="s1">                   cp -rf ./data/   ${PJM_LOCALTMP} ;</span>
+<span class="s1">               fi&#39;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>You can create a different output file for each parallel process in the node temporary area. The rank number in the program executed by mpiexec is set in the environment variable PMIX _ RANK. Here is an example using the touch command:</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">Create a file for each process.</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec sh -c &#39;touch ${PJM_LOCALTMP}/result_${PMIX_RANK}.data&#39;
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Save different output files for each parallel process from the node temporary area to the second layer storage area.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec sh -c &#39;cp ${PJM_LOCALTMP}/result_${PMIX_RANK}.data ${PJM_JOBDIR}/result_${PMIX_RANK}_${PJM_JOBID}.data&#39;
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="job-submitting-option-pjsub-llio">
+<h2><span class="section-number">8.4.3. </span>Job submitting option (pjsub --llio)<a class="headerlink" href="#job-submitting-option-pjsub-llio" title="Link to this heading">¶</a></h2>
+<p>Here describes the option related to node temporary area.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 37.5%" />
+<col style="width: 62.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>pjsub option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>localtmp-size=size</p></td>
+<td><div class="line-block">
+<div class="line">Specify shared temporary area size.</div>
+<div class="line">Shared temporary area path name is set to environment variable PJM_LOCALTMP in a job.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>async-close={on|off}</p></td>
+<td><div class="line-block">
+<div class="line">Specifies whether to close the node temporary area file asynchronously or not.</div>
+<div class="line">Specify synchronous / asynchronous close from the cache in the compute node to the temporary area in the node.</div>
+<div class="line"><br /></div>
+<div class="line">on: Asynchronous close</div>
+<div class="line">off: Synchronous close (Default value)</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>perf[,perf-path=path]</p></td>
+<td><div class="line-block">
+<div class="line">Output LLIO performance information to the file.</div>
+<div class="line">The output destination is under the current directory when the job is submitted, and the file name is the name defined by the job ACL function. Also with the parameter <code class="docutils literal notranslate"><span class="pre">perf-path</span></code>, target output file can be specified.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="option-related-to-cashe-in-compute-node">
+<h2><span class="section-number">8.4.4. </span>Option related to cashe in compute node<a class="headerlink" href="#option-related-to-cashe-in-compute-node" title="Link to this heading">¶</a></h2>
+<p>If there is enough memory allocated to the job, high-speed input / output can be expected by using the free memory as a cache in the compute node.</p>
+<div class="line-block">
+<div class="line">Display option when job submitting (pjsub) related to cashe in compute node.</div>
+<div class="line">Specify with the pjsub --llio option. Specified option can refer to the Environment variables described at the bottom of the description from within the job.</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 37.5%" />
+<col style="width: 62.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>pjsub option</p></th>
+<th class="head"><p>Desripton</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>auto-readahead={on|off}</p></td>
+<td><div class="line-block">
+<div class="line">Specify whether to automatically read ahead in the cache in the compute node when a job tries to read a continuous area on the first-layer storage or the second-layer storage multiple times in a row.</div>
+<div class="line">To enable (on) auto-readahead. it is required to enable (on) cn-read-cache.</div>
+<div class="line"><br /></div>
+<div class="line">on: Read in ahead. (Default value)</div>
+<div class="line">off: Does not read in ahead.</div>
+<div class="line">Environment variables ${PJM_LLIO_AUTO_READAHEAD}</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>cn-cache-size=size</p></td>
+<td><div class="line-block">
+<div class="line">Specifies the size of the cache in the compute node. It is allocated from the memory allocated to the job.</div>
+<div class="line">Environment variables ${PJM_LLIO_CN_CACHE_SIZE}</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>cn-cached-write-size=size</p></td>
+<td><div class="line-block">
+<div class="line">Specify the threshold value of whether to cache when writing to the first-layer storage.</div>
+<div class="line">When writing to the first-layer storage, if the write size is less than the specified value, it will not be immediately written to the storage but will be temporarily cached in the cache in the compute node. This parameter is used to reduce the number of transfers to the first-layer storage and improve performance by exporting small sizes in a batch.</div>
+<div class="line">Environment variables PJM_LLIO_CN_CACHED_WRITE_SIZE</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="usage-example-of-node-temporary-area">
+<h2><span class="section-number">8.4.5. </span>Usage example of node temporary area<a class="headerlink" href="#usage-example-of-node-temporary-area" title="Link to this heading">¶</a></h2>
+<section id="tmpdir">
+<h3><span class="section-number">8.4.5.1. </span>TMPDIR<a class="headerlink" href="#tmpdir" title="Link to this heading">¶</a></h3>
+<p>Program performance can be improved by specifying node temporary area to the environment variable <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>. An example is the case of using scratch files in Fortran programs. The <code class="file docutils literal notranslate"><span class="pre">/etc/profile</span></code> provided by the system sets the environment variable HOME to <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>. Changing the program’s IO destination from the second-layer storage area to a faster node temporary area reduces scratch file access time and improves performance.</p>
+<p>Here describes a setting example of <span class="target" id="index-2"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">TMPDIR</span><span class="o">=</span><span class="nv">$PJM_LOCALTMP</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Specify the size of node temporary area to use and submit a job.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#PJM --llio localtmp-size=5Gi</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="unzip-of-archive-files">
+<h3><span class="section-number">8.4.5.2. </span>Unzip of archive files<a class="headerlink" href="#unzip-of-archive-files" title="Link to this heading">¶</a></h3>
+<p>When unzipping an archive file in the node temporary area, performance can be improved by using it with <a class="reference internal" href="TheSecondLayerStrage.html#llio-transfer"><span class="std std-ref">Common file distribution function (llio_transfer)</span></a>. Unzipping an archive file on the second-layer storage from a large number of compute nodes results in intensive access and severely degrades IO performance. You can improve performance by distributing the archive file as a common file and distributing access.</p>
+<p>Here describes an example of unzipping an archive file .</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>llio_transfer<span class="w"> </span>./archive.tar
+
+mpiexec<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;if [ ${PLE_RANK_ON_NODE} -eq 0 ]; then \</span>
+<span class="s1">                   tar xf ./archive.tar -C $PJM_LOCALTMP; \</span>
+<span class="s1">               fi&#39;</span>
+
+llio_transfer<span class="w"> </span>--purge<span class="w"> </span>./archive.tar
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">8.4. Node Temporary Area</a><ul>
+<li><a class="reference internal" href="#node-temporary-area-size">8.4.1. Node temporary area size</a></li>
+<li><a class="reference internal" href="#how-to-use">8.4.2. How to use</a></li>
+<li><a class="reference internal" href="#job-submitting-option-pjsub-llio">8.4.3. Job submitting option (pjsub --llio)</a></li>
+<li><a class="reference internal" href="#option-related-to-cashe-in-compute-node">8.4.4. Option related to cashe in compute node</a></li>
+<li><a class="reference internal" href="#usage-example-of-node-temporary-area">8.4.5. Usage example of node temporary area</a><ul>
+<li><a class="reference internal" href="#tmpdir">8.4.5.1. TMPDIR</a></li>
+<li><a class="reference internal" href="#unzip-of-archive-files">8.4.5.2. Unzip of archive files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="TheSecondLayerStrage.html"
+                          title="previous chapter"><span class="section-number">8.3. </span>Cache Area of Second-Layer Storage</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="SharedTemporaryArea.html"
+                          title="next chapter"><span class="section-number">8.5. </span>Shared temporary area</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="SharedTemporaryArea.html" title="8.5. Shared temporary area"
+             >next</a></li>
+        <li class="right" >
+          <a href="TheSecondLayerStrage.html" title="8.3. Cache Area of Second-Layer Storage"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">8. </span>Layered storage</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.4. </span>Node Temporary Area</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

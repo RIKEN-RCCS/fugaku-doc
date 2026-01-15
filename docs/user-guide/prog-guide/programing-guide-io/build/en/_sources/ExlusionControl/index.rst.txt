@@ -1,0 +1,63 @@
+Exclusion Control
+=================
+
+The following methods are available for exclusive control:
+
+- Exclusive control using a directory
+
+- Exclusive control using file locking
+  (Same behavior for FEFS/LLIO.)
+
+Exclusive Control Using a Directory
+-----------------------------------
+
+This method locks a directory based on its existence.
+The following code example shows exclusive processing.
+
+.. code-block:: none
+
+  #!/bin/bash
+
+  LOCK_DIR=./lock
+
+  # Check and create lock directory.
+  while :
+  do
+    mkdir $LOCK_DIR > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+      sleep 10
+      continue
+    fi
+    break
+  done
+
+  # Describe the exclusive processing.
+  # Care must be taken not to leave a lock directory if the script exits prematurely
+
+  # Delete Lock Directory.
+  rmdir $LOCK_DIR
+
+
+Exclusive Control Using File Locking
+------------------------------------
+
+This is a method of exclusive control using file locking.
+The following code example shows exclusive processing.
+
+.. code-block:: none
+
+  #!/bin/bash
+
+  LOCK_FILE=./file.lock
+
+  # Create Lock File
+  touch ${LOCK_FILE}
+  {
+    flock 9 # Wait for an exclusive lock to be acquired.
+
+    # Describe the exclusive processing.
+
+  } 9>$LOCK_FILE
+
+For information on using the flock command and precautions, refer to the online documentation.
+

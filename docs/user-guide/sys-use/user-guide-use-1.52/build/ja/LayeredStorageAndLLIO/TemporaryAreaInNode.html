@@ -1,0 +1,371 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8.4. ノード内テンポラリ領域 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="8.5. 共有テンポラリ領域" href="SharedTemporaryArea.html" />
+    <link rel="prev" title="8.3. 第2階層ストレージのキャッシュ領域" href="TheSecondLayerStrage.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="SharedTemporaryArea.html" title="8.5. 共有テンポラリ領域"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="TheSecondLayerStrage.html" title="8.3. 第2階層ストレージのキャッシュ領域"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">8. </span>階層化ストレージ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.4. </span>ノード内テンポラリ領域</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="temporaryareainnode">
+<span id="id1"></span><h1><span class="section-number">8.4. </span>ノード内テンポラリ領域<a class="headerlink" href="#temporaryareainnode" title="Link to this heading">¶</a></h1>
+<p>同一ジョブ内の同一ジョブプロセス内でローカルに使用するファイルの一時領域として、ノード内テンポラリ領域を提供します。この領域は1つの計算ノードの中だけで参照できます。</p>
+<ol class="arabic simple">
+<li><p>ノード内テンポラリ領域は、複数の計算ノードから共有できません。</p></li>
+<li><p>ノード内テンポラリ領域は、ジョブ開始時に使用可能になり、ジョブ終了時に消去されます。ジョブ実行結果ファイルなど退避は第2階層ストレージのキャッシュ領域(または2ndfs領域)に配置する必要があります。</p></li>
+<li><p>ノード内テンポラリ領域を使用するには、ジョブ投入時に<strong class="program">pjsub</strong>コマンドのオプションで、<code class="docutils literal notranslate"><span class="pre">--llio</span> <span class="pre">localtmp-size</span></code>で任意の領域サイズを指定する必要があります。</p></li>
+<li><p>ノード内テンポラリ領域のパス名は、ジョブ内で環境変数<code class="docutils literal notranslate"><span class="pre">${PJM_LOCALTMP}</span></code>により参照できます。</p></li>
+</ol>
+<figure class="align-default">
+<img alt="../_images/TemporaryAreaInNode_01.png" src="../_images/TemporaryAreaInNode_01.png" />
+</figure>
+<ol class="arabic" start="5">
+<li><p>ノード内テンポラリ領域の仕様を以下に説明します。</p>
+<table class="docutils align-default" id="id7">
+<caption><span class="caption-text">ノード内テンポラリ領域の仕様</span><a class="headerlink" href="#id7" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目</p></th>
+<th class="head"><p>特性</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>参照範囲</p></td>
+<td><p>ジョブに割り当てられた計算ノードの中で、その計算ノードで動作する同一ジョブからのみ参照できます。</p></td>
+</tr>
+<tr class="row-odd"><td><p>生存期間</p></td>
+<td><p>ジョブ起動前に初期化され、ジョブ終了時に削除されます。</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<section id="id2">
+<h2><span class="section-number">8.4.1. </span>ノード内テンポラリ領域の容量<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>ノード内テンポラリ領域を使う場合、そのサイズはジョブ投入時に指定できます。
+<strong class="program">pjsub</strong>コマンドの<code class="docutils literal notranslate"><span class="pre">--llio</span></code>オプションのパラメーター<code class="docutils literal notranslate"><span class="pre">localtmp-size</span></code>で1ノード当たりのノード内テンポラリ領域のサイズを指定します。サイズを指定しない場合は、ジョブACL機能で設定されているデフォルト値(0MiB)になります。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>領域名</p></th>
+<th class="head"><p>オプション</p></th>
+<th class="head"><p>指定値</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ノード内テンポラリ領域</p></td>
+<td><p>--llio localtmp-size</p></td>
+<td><p>1ノード当たりのノード内テンポラリ領域サイズ</p></td>
+</tr>
+</tbody>
+</table>
+<p>サイズの指定は次を満たすようにしてください。<a class="reference internal" href="TheSecondLayerStrage.html#volumeofstrage"><span class="std std-ref">第2階層ストレージのキャッシュの容量</span></a>に128MiB以上を割り当てる必要があります。:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>128MiB &lt;= 87GiB - (localtmp-size + sharedtmp-size)
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h2><span class="section-number">8.4.2. </span>利用方法<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>ジョブ投入時にオプションを指定することで、ノード内テンポラリ領域を利用できます。</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">ジョブを投入します。</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjsub<span class="w"> </span>--llio<span class="w"> </span>localtmp-size<span class="o">=</span>30Gi<span class="w"> </span>jobscript.sh
+</pre></div>
+</div>
+<p>別の指定方法として、ジョブスクリプトにノード内テンポラリ領域のサイズを指定することもできます。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#PJM --llio localtmp-size=30Gi</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><p>ノード内テンポラリ領域のパス名（ディレクトリ名）は、環境変数PJM_LOCALTMPに設定されます。ジョブ内で設定されている環境変数PJM_LOCALTMPで知ることができます。以下は、ノード内テンポラリ領域を一時的なデータの格納先として利用する簡単なジョブの例です。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>prog1<span class="w"> </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">PJM_LOCALTMP</span><span class="si">}</span>/out.data
+</pre></div>
+</div>
+</li>
+<li><p>ファイルout.dataをプログラムprog2が読み込んで、ディレクトリ<code class="docutils literal notranslate"><span class="pre">${PJM_LOCALTMP}</span></code>に最終的な計算結果result.dataを出力します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>prog2<span class="w"> </span>-i<span class="w"> </span><span class="si">${</span><span class="nv">PJM_LOCALTMP</span><span class="si">}</span>/out.data<span class="w"> </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">PJM_LOCALTMP</span><span class="si">}</span>/result.data
+</pre></div>
+</div>
+</li>
+<li><p>ジョブの終了前にファイルresult.dataをジョブ実行時のディレクトリ<code class="docutils literal notranslate"><span class="pre">${PJM_JOBDIR}</span></code>(グローバルファイルシステム上)に、ジョブID${PJM_JOBID}をつけた名前に変えて退避します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span><span class="si">${</span><span class="nv">PJM_LOCALTMP</span><span class="si">}</span>/result.data<span class="w"> </span><span class="si">${</span><span class="nv">PJM_JOBDIR</span><span class="si">}</span>/result_<span class="si">${</span><span class="nv">PJM_JOBID</span><span class="si">}</span>.data
+</pre></div>
+</div>
+</li>
+<li><p>ノード内テンポラリ領域に第2階層ストレージからファイルをコピーする場合は、ノード内の1プロセスのみを利用してコピーを行います。コピーする例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mpiexec<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;if [ ${PLE_RANK_ON_NODE} -eq 0 ]; then  \</span>
+<span class="s1">                   cp -rf ./data/   ${PJM_LOCALTMP} ; \</span>
+<span class="s1">               fi&#39;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>並列プロセス毎に異なる出力ファイルをノード内テンポラリ領域に作成することができます。mpiexecで実行したプログラム内のランク番号は、環境変数PMIX_RANKに設定されます。touchコマンドを用いた例を示します。</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">プロセス毎にファイルを作成します。</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec sh -c &#39;touch ${PJM_LOCALTMP}/result_${PMIX_RANK}.data&#39;
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>並列プロセス毎に異なる出力ファイルをノード内テンポラリ領域から第2階層ストレージ領域に退避します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpiexec sh -c &#39;cp ${PJM_LOCALTMP}/result_${PMIX_RANK}.data ${PJM_JOBDIR}/result_${PMIX_RANK}_${PJM_JOBID}.data&#39;
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="pjsub-llio">
+<h2><span class="section-number">8.4.3. </span>ジョブ投入時（pjsub --llio）のオプション<a class="headerlink" href="#pjsub-llio" title="Link to this heading">¶</a></h2>
+<p>ノード内テンポラリ領域に関連するオプションを示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 37.5%" />
+<col style="width: 62.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>pjsubオプション</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>localtmp-size=size</p></td>
+<td><div class="line-block">
+<div class="line">ノード内テンポラリ領域のサイズを指定します。</div>
+<div class="line">ノード内テンポラリ領域のパス名は、ジョブ内で環境変数PJM_LOCALTMPに設定されます。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>async-close={on|off}</p></td>
+<td><div class="line-block">
+<div class="line">ノード内テンポラリ領域↑のファイルのクローズを非同期クローズにするか否かの動作を指定します。</div>
+<div class="line">計算ノード内のキャッシュからノード内テンポラリ領域に対する同期/非同期クローズ指定します。</div>
+<div class="line"><br /></div>
+<div class="line">on: 非同期クローズ</div>
+<div class="line">off: 同期クローズ（デフォルト値）</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>perf[,perf-path=path]</p></td>
+<td><div class="line-block">
+<div class="line">LLIO性能情報をファイルに出力します。</div>
+<div class="line">出力先はジョブ投入時のカレントディレクトリ配下で、ファイル名はジョブACL機能で定義されている名前です。なお、パラメーター<code class="docutils literal notranslate"><span class="pre">perf-path</span></code>で出力先のファイルを指定できます。</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id4">
+<h2><span class="section-number">8.4.4. </span>計算ノード内のキャッシュに関連するオプション<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>ジョブに割り当てられた計算ノードのメモリに余裕がある場合は、空いたメモリを計算ノード内キャッシュとして使用することにより高速なファイル入出力が期待できます。</p>
+<div class="line-block">
+<div class="line">指定方法として、計算ノード内のキャッシュに関連するジョブ投入時（<strong class="program">pjsub</strong>）のオプションを示します。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">--llio</span></code>オプションで指定します。指定されたオプションは、説明の下段に記載する環境変数をジョブ内から参照できます。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 37.5%" />
+<col style="width: 62.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>pjsubオプション</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>auto-readahead={on|off}</p></td>
+<td><div class="line-block">
+<div class="line">ジョブが複数回続けて第1階層ストレージまたは第2階層ストレージ上の連続した領域を読み込もうとした場合に、自動的に計算ノード内のキャッシュに先読みをするか否かの動作を指定します。</div>
+<div class="line">auto-readaheadを有効(on)にするには、cn-read-cacheを有効(on)にする必要があります。</div>
+<div class="line"><br /></div>
+<div class="line">on: 先読みをします。（デフォルト値）</div>
+<div class="line">off: 先読みをしません。</div>
+<div class="line">環境変数PJM_LLIO_AUTO_READAHEAD</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>cn-cache-size=size</p></td>
+<td><div class="line-block">
+<div class="line">計算ノード内キャッシュのサイズを指定します。ジョブに割り当てられたメモリから確保されます。</div>
+<div class="line">環境変数PJM_LLIO_CN_CACHE_SIZE</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>cn-cached-write-size=size</p></td>
+<td><div class="line-block">
+<div class="line">第1階層ストレージへの書込み時にキャッシュするか否かのしきい値を指定します。</div>
+<div class="line">第1階層ストレージへの書込みの際に、書込みサイズが指定した値以下の場合は、すぐにはストレージに書き出さず、一時的に計算ノード内キャッシュにキャッシュします。小さなサイズについてはまとめて書き出すことで、第1階層ストレージへの転送回数を減らし、性能を向上させるためのパラメーターです。</div>
+<div class="line">環境変数PJM_LLIO_CN_CACHED_WRITE_SIZE</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id5">
+<h2><span class="section-number">8.4.5. </span>ノード内テンポラリ領域の活用例<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<section id="tmpdir">
+<h3><span class="section-number">8.4.5.1. </span>TMPDIR<a class="headerlink" href="#tmpdir" title="Link to this heading">¶</a></h3>
+<p>環境変数<span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>に、ノード内テンポラリ領域を指定することによりプログラムのファイルアクセスの性能改善を期待できます。例として、Fortranプログラムでスクラッチファイルを利用する場合が挙げられます。システムの<code class="file docutils literal notranslate"><span class="pre">/etc/profile</span></code>で、<span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>に環境変数 <span class="target" id="index-2"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">HOME</span></code>を設定しています。プログラムのIO先を、第2階層ストレージ領域からノード内テンポラリ領域に変更することにより、スクラッチ・ファイルのアクセス時間が短縮され、性能の改善が見込めます。</p>
+<p><span class="target" id="index-3"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>の設定例を示します。</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">TMPDIR</span><span class="o">=</span><span class="nv">$PJM_LOCALTMP</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>使用するノード内テンポラリ領域の容量を指定して、ジョブを投入してください。</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#PJM --llio localtmp-size=5Gi</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="id6">
+<h3><span class="section-number">8.4.5.2. </span>アーカイブファイルの展開<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>アーカイブファイルをノード内テンポラリ領域へ展開する場合、<a class="reference internal" href="TheSecondLayerStrage.html#llio-transfer"><span class="std std-ref">共通ファイル配布機能 (llio_transfer)</span></a>と組み合わせて利用することによりファイルアクセスの性能改善を期待できます。
+多数の計算ノードから第2階層ストレージ上のアーカイブファイルを展開する場合はアクセスが集中しIO性能が極端に劣化します。そのため、アーカイブファイルを共通ファイルとして配布し、アクセスを分散させることで性能の改善が見込めます。</p>
+<p>アーカイブファイルの展開例を示します。</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>llio_transfer<span class="w"> </span>./archive.tar
+
+mpiexec<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;if [ ${PLE_RANK_ON_NODE} -eq 0 ]; then \</span>
+<span class="s1">                   tar xf ./archive.tar -C $PJM_LOCALTMP; \</span>
+<span class="s1">               fi&#39;</span>
+
+llio_transfer<span class="w"> </span>--purge<span class="w"> </span>./archive.tar
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">8.4. ノード内テンポラリ領域</a><ul>
+<li><a class="reference internal" href="#id2">8.4.1. ノード内テンポラリ領域の容量</a></li>
+<li><a class="reference internal" href="#id3">8.4.2. 利用方法</a></li>
+<li><a class="reference internal" href="#pjsub-llio">8.4.3. ジョブ投入時（pjsub --llio）のオプション</a></li>
+<li><a class="reference internal" href="#id4">8.4.4. 計算ノード内のキャッシュに関連するオプション</a></li>
+<li><a class="reference internal" href="#id5">8.4.5. ノード内テンポラリ領域の活用例</a><ul>
+<li><a class="reference internal" href="#tmpdir">8.4.5.1. TMPDIR</a></li>
+<li><a class="reference internal" href="#id6">8.4.5.2. アーカイブファイルの展開</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="TheSecondLayerStrage.html"
+                          title="前の章へ"><span class="section-number">8.3. </span>第2階層ストレージのキャッシュ領域</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="SharedTemporaryArea.html"
+                          title="次の章へ"><span class="section-number">8.5. </span>共有テンポラリ領域</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="SharedTemporaryArea.html" title="8.5. 共有テンポラリ領域"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="TheSecondLayerStrage.html" title="8.3. 第2階層ストレージのキャッシュ領域"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">8. </span>階層化ストレージ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.4. </span>ノード内テンポラリ領域</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

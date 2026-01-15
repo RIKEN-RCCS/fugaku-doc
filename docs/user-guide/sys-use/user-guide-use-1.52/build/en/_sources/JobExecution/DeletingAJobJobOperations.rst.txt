@@ -1,0 +1,148 @@
+Deleting a job
+==============
+
+Able to delete the submitted job by the user with  \ :program:`pjdel`\  command. Also deletable the executing job.
+
+[Execution example]
+
+- If execute  \ :program:`pjdel`\  and job deletion was accepted successfully, the message below will be displayed.
+
+ .. code-block:: console
+
+   [INFO] PJM 0100 pjdel Accepted job jobid.
+
+- If execute  \ :program:`pjdel`\  and specify the job which does not exist, the message below will be displayed.
+
+ .. code-block:: console
+
+   [ERR.] PJM 0112 pjdel Job "Unexisting job ID" does not exist.
+
+
+Normal job
+-----------
+
+Indicates how to delete normal jobs.
+
+
+Here, the following is the normal job.
+
+- Normal job
+- Interactive job
+- Master/Worker type job
+
+Here is the use example.
+
+- Example of deleting a job.
+
+  If execute by specifying job ID to  :program:`pjdel`\  command, the job is deleted.
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 12345678
+    [INFO] PJM 0100 pjdel Accepted job 12345678.
+
+
+- Example of deleting the multiple job
+
+  If execute by specifying the multiple job ID to  :program:`pjdel`\  command, the specified job is deleted.
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 12345678 12345680
+    [INFO] PJM 0100 pjdel Accepted job 12345678.
+    [INFO] PJM 0100 pjdel Accepted job 12345680.
+
+Step job
+---------
+
+Indicates how to delete step jobs.
+
+| To delete a job, specify the job ID as shown in the following example.
+| Specify job ID and execute  \ :program:`pjdel`\  command, all sub job will be canceled.
+| If a sub job ID is specified, the specified sub job is canceled.
+| 
+| The usage example is as follows:
+
+- When canceling all sub jobs by specifying a job ID
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 12345678
+    [INFO] PJM 0100 pjdel Accepted job 12345678_0.
+    [INFO] PJM 0100 pjdel Accepted job 12345678_1.
+    [INFO] PJM 0100 pjdel Accepted job 12345678_2.
+
+
+- Canceling by specifying one sub job ID
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 12345678_3
+    [INFO] PJM 0100 pjdel Accepted job 12345678_3.
+
+- Canceling by specifying a sub job range
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 12345678_2-5
+    [INFO] PJM 0100 pjdel Accepted job 12345678_2.
+    [INFO] PJM 0100 pjdel Accepted job 12345678_3.
+    [INFO] PJM 0100 pjdel Accepted job 12345678_4.
+    [INFO] PJM 0100 pjdel Accepted job 12345678_5.
+
+
+Bulk job
+---------
+
+Indicates how to delete a bulk job.
+
+| To delete a job, specify the job ID as shown in the following example.
+| Specify job ID and execute  \ :program:`pjdel`\  command, all sub job will be canceled.
+| If a sub job ID is specified, the specified sub job is canceled.
+| 
+| The usage example is as follows:
+
+- When canceling all sub jobs by specifying a job ID
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 28128
+     [INFO] PJM 0100 pjdel Accepted job 28128.
+
+- Canceling by specifying one sub job ID
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 1362939[3]
+     [INFO] PJM 0100 pjdel Accepted job 1362939[3].
+
+- Canceling by specifying a sub job range
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 1363254[0-2]
+     [INFO] PJM 0100 pjdel Accepted job 1363254[0-2].
+
+Job delete command options
+---------------------------
+
+Typical options of  \ :program:`pjdel`\  command are shown.
+
+For details, refer to "Job Operation Software End User Guide".
+
+ .. list-table:: 
+   :widths: 2 8
+   :header-rows: 1
+
+   * - Option name
+     - Function
+
+   * - &#45;-enforce
+     - When canceling a job that is running a prolog script or epilog script, specify  \ ``--enforce``\  option. Also if specify  \ ``--enforce``\  option and execute  \ :program:`pjdel`\  command to the job which is executing job script, delete the job without running the epilog script.
+
+   * - &#45;-llio-flush
+     - When canceling a job that is being executed, wait for flushing of unwritten files within the range of the job elapsed time limit.
+
+   * - &#45;-help
+     - Shows help.
+

@@ -1,0 +1,372 @@
+.. _InstallingClientCertificate:
+
+クライアント証明書のインストール
+================================
+
+クライアント証明書は富岳ウェブサイトをアクセスする時に使用します。富岳ウェブサイトをアクセスするWebブラウザにインストールしてください。
+
+「富岳」の富岳ウェブサイトにアクセスするために必要なクライアント証明書のインストール方法を示します。
+「スタートアップガイド」を参照してクライアント証明書を既にインストールしている場合は本作業は不要です。
+
+クライアント証明書をインストールする前に次の二つを用意してください。
+
+- クライアント証明書:"ユーザーアカウント名.p12"ファイル
+- クライアント証明書のパスフレーズ
+
+クライアント証明書
+   アカウント発行が完了すると申請時に記載したメールアドレス宛てにクライアント証明書が電子メールで送付されます。電子メールに添付されている"ローカルアカウント名.p12"ファイルを、クライアント証明書をインストールする機器（パソコンなど）に保存してください。
+   "ローカルアカウント名.p12"ファイルには、クライアントの秘密鍵、クライアント証明書（公開鍵）、クライアント証明書発行局のルート証明書が含まれています。
+   
+   
+クライアント証明書のパスフレーズ
+   パスフレーズは、クライアント証明書とは別に、書面またはPDFファイルで送付されます。
+   パスフレーズはクライアント証明書をインストールする時に必要となります。安全な場所に保管してください。
+
+ここでは、富岳ウェブサイトの推奨Webブラウザにクライアント証明書を登録する手続きについて説明します。
+
+.. note::
+
+  指定のWebブラウザと異なるものを利用する場合は、自身でWebブラウザの証明書管理方法を確認し、利用するWebブラウザにクライアント証明書のインストールを行ってください。
+
+
+Firefoxへの証明書のインストール（Windows）
+-------------------------------------------
+
+Microsoft WindwsでFirefoxを利用する場合のインストール手順を示します。
+Firefoxのバージョンによって画面に差異がある場合があります。
+画面が異なる場合はFirefoxの情報を確認して作業を実施してください。
+
+
+1. Firefoxを起動し、\ :guilabel:`[オプション]`\ の画面を開きます。
+   :guilabel:`[プライバシーとセキュリティ]`\ の\ :guilabel:`[証明書を表示]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_01.png
+     :scale: 60
+     :align: center
+
+
+2. 証明書マネージャが起動したら、\ :guilabel:`[あなたの証明書]`\ を選択して、:guilabel:`[インポート...]`\をクリックします。
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_02.png
+     :scale: 70
+     :align: center
+
+3. クライアント証明書:"ローカルアカウント名.p12"ファイルを選択し\ :guilabel:`[開く]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_03.png
+     :scale: 70
+     :align: center
+
+4. クライアント証明書のパスフレーズを :guilabel:`パスワード欄`\に入力し、:guilabel:`[OK]`\をクリックします。
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_04.png
+     :scale: 70
+     :align: center
+
+  .. Attention::
+    
+    クライアント証明書のパスフレーズが正しくない場合エラーが表示され、次の画面に進めません。
+
+5. クライアント証明書が登録されたことを確認してください。
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_05.png
+     :scale: 70
+     :align: center
+
+6. :guilabel:`[認証局証明書]`\ を選択し表示される一覧から「RIKEN R-CCS」を選択して\ :guilabel:`表示`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_06.png
+     :scale: 70
+     :align: center
+
+7. 証明書のFingerprintsが(SHA-1): ``EEED846F FC733A73 328F4561 39BDB995 D5174BBC``\ であることを確認してください。
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_08.png
+     :scale: 70
+     :align: center
+
+
+
+8. 続けて、クライアント証明書利用時に入力するパスワードを設定します。:guilabel:`セキュリティデバイス...`\をクリックします。
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_09.png
+     :scale: 70
+     :align: center
+
+9. デバイスマネージャが起動したら、:guilabel:`Software Security Device`\を選択し、:guilabel:`パスワードを変更...`\をクリックします。
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_10.png
+     :scale: 70
+     :align: center
+
+10. クライアント証明書利用時に要求される任意のパスワードを設定し、:guilabel:`OK`\をクリックします
+
+  .. figure:: ./img/InstallingIntoFirefox_windows_11.png
+     :scale: 70
+     :align: center
+
+11. パスワードの登録が完了したら、デバイスマネージャを閉じます。クライアント証明書利用時のパスワードの設定作業は以上です。ここで設定したパスワードはクライアント証明書を利用するときに使用します。
+
+
+Firefoxへの証明書のインストール（Mac）
+---------------------------------------
+
+1. Firefoxを起動し、メニューから :guilabel:`[環境設定...]`\をクリックします。
+
+  .. figure:: ./img/InstallingIntoFirefox_01.png
+     :scale: 70
+     :align: center
+
+2. :guilabel:`プライバシーとセキュリティ`\タブの :guilabel:`[証明書を表示...]`\をクリックします。
+
+  .. figure:: ./img/InstallingIntoFirefox_02.png
+     :scale: 70
+     :align: center
+
+3. 証明書マネージャが起動したら、:guilabel:`[あなたの証明書]`\を選択して、:guilabel:`[読み込む...]`\をクリックします。
+
+  .. figure:: ./img/InstallingIntoFirefox_03.png
+     :scale: 70
+     :align: center
+
+4. パソコンに保存した"ローカルアカウント名.p12"ファイルを選択し、:guilabel:`[開く]`\をクリックします。
+
+  .. figure:: ./img/InstallingIntoFirefox_04.png
+     :scale: 70
+     :align: center
+
+5. 入手したクライアント証明書のパスフレーズを :guilabel:`パスワード欄`\に入力し、:guilabel:`[OK]`\をクリックします。
+
+  .. figure:: ./img/InstallingIntoFirefox_05.png
+     :scale: 70
+     :align: center
+
+  .. Attention::
+    
+    クライアント証明書のパスフレーズが正しくない場合エラーが表示され、次の画面に進めません。
+
+6. クライアント証明書が登録されたことを確認し、:guilabel:`[OK]`\をクリックして証明書マネージャを終了します。以上で、クライアント証明書のインストール作業は完了です。
+
+  .. figure:: ./img/InstallingIntoFirefox_06.png
+     :scale: 70
+     :align: center
+
+7. 続けて、クライアント証明書利用時に入力するパスワードを設定します。:guilabel:`セキュリティデバイス...`\をクリックします。
+
+  .. figure:: ./img/InstallingIntoFirefox_07.png
+     :scale: 70
+     :align: center
+
+8. デバイスマネージャが起動したら、:guilabel:`Software Security Device`\を選択し、:guilabel:`パスワードを変更...`\をクリックします。
+
+  .. figure:: ./img/InstallingIntoFirefox_08.png
+     :scale: 70
+     :align: center
+
+9. クライアント証明書利用時に要求される任意のパスワードを設定し、:guilabel:`OK`\をクリックします
+
+  .. figure:: ./img/InstallingIntoFirefox_09.png
+     :scale: 70
+     :align: center
+
+10. :guilabel:`OK`\をクリックします。
+
+  .. figure:: ./img/InstallingIntoFirefox_10.png
+     :scale: 70
+     :align: center
+
+11. :guilabel:`OK`\をクリックして、デバイスマネージャを閉じます。クライアント証明書利用時のパスワードの設定作業は以上です。
+
+  .. figure:: ./img/InstallingIntoFirefox_11.png
+     :scale: 70
+     :align: center
+
+Chromeへの証明書のインストール（Windows）
+------------------------------------------
+
+Microsoft WindwsでChromeを利用する場合のインストール手順を示します。
+Chromeのバージョンによって画面に差異がある場合があります。
+画面が異なる場合はChromeの情報を確認して作業を実施してください。
+
+
+1. Chromeを起動し、\ :guilabel:`[設定]`\ の画面を開きます。
+   :guilabel:`[プライバシーとセキュリティ]`\ の\ :guilabel:`[セキュリティ]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_01.png
+     :scale: 60
+     :align: center
+
+2. :guilabel:`[証明書の管理]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_02.png
+     :scale: 60
+     :align: center
+
+3. :guilabel:`[Windowsからインポートした証明書を管理する]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_19.png
+     :scale: 70
+     :align: center
+
+4. 証明書マネージャが起動したら、\ :guilabel:`[個人]`\ を選択して、:guilabel:`[インポート...]`\をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_03.png
+     :scale: 70
+     :align: center
+
+5. 証明書のインポートウイザードが開いたら\ :guilabel:`[次へ]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_04.png
+     :scale: 70
+     :align: center
+
+6. :guilabel:`[参照]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_05.png
+     :scale: 70
+     :align: center
+
+7. ファイルの種類を\ :guilabel:`[Personal Information Exchange(*.pfx,*.p12)]`\ に変更します。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_06.png
+     :scale: 70
+     :align: center
+
+8. "ユーザーアカウント名.p12"ファイルを選択し、\ :guilabel:`[開く]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_07.png
+     :scale: 70
+     :align: center
+
+9. ファイル名を設定した後、\ :guilabel:`[次へ]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_08.png
+     :scale: 70
+     :align: center
+
+
+10. クライアント証明書のパスフレーズを\ :guilabel:`パスワード欄`\に入力し、インポートオプションの\ :guilabel:`[秘密キーの保護を強力にする`\ にチェックを付け、\ :guilabel:`[次へ]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_09.png
+     :scale: 70
+     :align: center
+
+  .. Attention::
+    
+    クライアント証明書のパスフレーズが正しくない場合エラーが表示され、次の画面に進めません。
+
+
+11. :guilabel:`証明書の種類に基づいて、自動的に証明書ストアを選択する`\ をチェックし、\ :guilabel:`[次へ]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_10.png
+     :scale: 70
+     :align: center
+
+12. :guilabel:`[完了]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_11.png
+     :scale: 70
+     :align: center
+
+13. 引き続き「新しい秘密交換キーをインポートします」画面が表示されますので、\ :guilabel:`[セキュリティレベルの設定]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_12.png
+     :scale: 100
+     :align: center
+
+14. :guilabel:`[高]`\ をチェックし、\ :guilabel:`[次へ]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_13.png
+     :scale: 100
+     :align: center
+
+15. パスワードを設定し、\ :guilabel:`[完了]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_14.png
+     :scale: 100
+     :align: center
+
+16. :guilabel:`[OK]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_15.png
+     :scale: 100
+     :align: center
+
+17. :guilabel:`[OK]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_16.png
+     :scale: 100
+     :align: center
+
+18. セキュリティ警告が出た場合は、拇印が(SHA-1): ``EEED846F FC733A73 328F4561 39BDB995 D5174BBC``\ であることを確認したうえで、\ :guilabel:`[はい]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_17.png
+     :scale: 100
+     :align: center
+
+19. 以上でクライアント証明書のインストールは完了です。
+
+  .. figure:: ./img/InstallingIntoChrome_windows_18.png
+     :scale: 70
+     :align: center
+
+Chromeへの証明書のインストール（Mac）
+--------------------------------------
+
+MacでChromeを利用する場合のインストール手順を示します。
+macOSでは、クライアント証明書を「キーチェーンアクセス」で管理しています。
+
+
+1. クライアント証明書:"ユーザーアカウント名.p12"ファイルをダブルクリックします。最初にパスワード入力画面が表示されます。
+   クライアント証明書のパスフレーズを入力し、\ :guilabel:`[OK]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_01.png
+     :scale: 100
+     :align: center
+
+  .. Attention::
+    
+    クライアント証明書のパスフレーズが正しくない場合エラーが表示され、次の画面に進めません。
+
+2. 「キーチェーンアクセス」画面を開き、クライアント証明書を発行したサーバの証明書（RIKEN R-CCS）をダブルクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_02.png
+     :scale: 60
+     :align: center
+
+3. 「ルート認証局」の「信頼」をクリックし、「この証明書を使用するとき：」のリストから「常に信頼する」を選択して、画面を閉じます。
+
+  .. figure:: ./img/InstallingIntoChrome_03.png
+     :scale: 90
+     :align: center
+
+4. 信頼設定の変更を反映するため、Macの管理者ユーザ名とパスワードが要求されます。これらを入力し、\ :guilabel:`［設定をアップデート］`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_04.png
+     :scale: 100
+     :align: center
+
+5. 「キーチェーンアクセス」画面で、Controlキーを押しながらクライアント証明書（名前欄にローカルアカウント名が表記されたもの）をクリックし、\ :guilabel:`「新規識別プリファレンス」`\ を選択します。
+
+  .. figure:: ./img/InstallingIntoChrome_05.png
+     :scale: 70
+     :align: center
+
+6. 「場所またはメールアドレス：」に「https://www.fugaku.r-ccs.riken.jp/」と入力し、\ :guilabel:`[追加]`\ をクリックします。
+
+  .. figure:: ./img/InstallingIntoChrome_06.png
+     :scale: 70
+     :align: center
+
+7. 同様の手順で「https://api.fugaku.r-ccs.riken.jp/」を登録します。
+
+  .. figure:: ./img/InstallingIntoChrome_07.png
+     :scale: 70
+     :align: center
+
+8. 「キーチェーンアクセス」に入力した「https://www.fugaku.r-ccs.riken.jp/」「https://api.fugaku.r-ccs.riken.jp/」の「識別プリファレンス」が追加されたことを確認し、画面を閉じます。インストール作業はこれで完了です。
+
+
+
+
+

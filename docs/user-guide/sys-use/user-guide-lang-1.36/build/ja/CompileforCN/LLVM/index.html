@@ -1,0 +1,1190 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.3. LLVM &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=89e52957" />
+    
+    <script src="../../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="4. ログインノード向けバイナリを生成するコンパイラ" href="../../CompileforLN/index.html" />
+    <link rel="prev" title="3.2. GNU Compiler Collectionと富士通MPIの連携" href="../GCC_MPI/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../CompileforLN/index.html" title="4. ログインノード向けバイナリを生成するコンパイラ"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="../GCC_MPI/index.html" title="3.2. GNU Compiler Collectionと富士通MPIの連携"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U"><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.3. </span>LLVM</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="llvm">
+<span id="compilerforcnllvm"></span><h1><span class="section-number">3.3. </span>LLVM<a class="headerlink" href="#llvm" title="Link to this heading">¶</a></h1>
+<p>LLVMを基盤にもつ、C／C++／Fortran用コンパイラの利用方法を示します。
+計算ノード向けバイナリを出力するLLVMはログインノード(Intel)、計算ノードの双方で利用可能です。</p>
+<section id="id1">
+<h2><span class="section-number">3.3.1. </span>LLVMの利用方法<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<section id="id2">
+<h3><span class="section-number">3.3.1.1. </span>コンパイル環境設定<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p>LLVMコンパイラは、</p>
+<p>ログインノード(クロス環境)では/vol0004/apps/r/OSS_CN/llvm-21.1.0/cross_clangfxにあります。
+計算ノード(ネイティブ環境)では/vol0004/apps/r/OSS_CN/llvm-21.1.0/own_clangfxにあります。</p>
+<p>(今までのバージョンを利用したい方は、'<a class="reference internal" href="index_v19.1.4.html#compilerforllvm19"><span class="std std-ref">lvm-v19.1.4</span></a>' をご利用ください。)</p>
+<p>コンパイルを実行する前に以下を実行して利用環境を設定してください。</p>
+<p>ログインノード</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>module<span class="w"> </span>load<span class="w"> </span>LLVM/llvmorg-21.1.0
+</pre></div>
+</div>
+<p>計算ノード</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>module<span class="w"> </span>load<span class="w"> </span>LLVM/llvmorg-21.1.0
+</pre></div>
+</div>
+<p>利用できる環境は、以下のとおりです。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 13.3%" />
+<col style="width: 13.3%" />
+<col style="width: 53.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ソフトウェア名</p></th>
+<th class="head"><p>言語</p></th>
+<th class="head"><p>バージョン</p></th>
+<th class="head"><p>コマンド</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Clang</p></td>
+<td><p>C</p></td>
+<td><p>21.1.0</p></td>
+<td><p>clang</p></td>
+</tr>
+<tr class="row-odd"><td><p>Clang++</p></td>
+<td><p>C++</p></td>
+<td><p>21.1.0</p></td>
+<td><p>clang++</p></td>
+</tr>
+<tr class="row-even"><td><p>Flang</p></td>
+<td><p>Fortran</p></td>
+<td><p>21.1.0</p></td>
+<td><p>flang</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="id3">
+<h3><span class="section-number">3.3.1.2. </span>コンパイルコマンド<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>LLVMを使用したC言語プログラムのコンパイル例を示します。
+コマンドはログインノード、計算ノード共通です。
+翻訳時オプションに関しては、LLVMのClang/Flangに準じます。</p>
+<p>(特にflangでは翻訳に時間がかかる場合があります。
+計算ノードで実行する際には、下に述べるようにpjsubのオプションでキャッシュ容量を多めに割り当ててください)</p>
+<p>【逐次実行】</p>
+<dl>
+<dt>ログインノード</dt><dd><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>clang<span class="w"> </span>-O3<span class="w">  </span>ソースファイル名
+</pre></div>
+</div>
+</dd>
+<dt>計算ノード</dt><dd><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>clang<span class="w"> </span>-O3<span class="w">  </span>ソースファイル名
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>【OpenMP】</p>
+<p>OpenMP利用には、&quot;-fopenmp&quot;をご使用ください。</p>
+<dl>
+<dt>ログインノード</dt><dd><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>clang<span class="w"> </span>-O3<span class="w"> </span>-fopenmp<span class="w"> </span>ソースファイル名
+</pre></div>
+</div>
+</dd>
+<dt>計算ノード</dt><dd><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>clang<span class="w"> </span>-O3<span class="w"> </span>-fopenmp<span class="w"> </span>ソースファイル名
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>【MPI】</p>
+<p>MPIライブラリはmpiclang/mpiclang++/mpiflangコマンドにより利用可能です。</p>
+<dl>
+<dt>ログインノード</dt><dd><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>mpiclang<span class="w"> </span>-O3<span class="w"> </span>-fopenmp<span class="w"> </span>source_file
+</pre></div>
+</div>
+</dd>
+<dt>計算ノード</dt><dd><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>mpiclang<span class="w"> </span>-O3<span class="w"> </span>-fopenmp<span class="w"> </span>source_file
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>上記例は、C++ (mpiclang++), Fortran (mpiflang) の場合も同様の方法となります。</p>
+</div>
+<p>ジョブスクリプトによるコンパイル例</p>
+<p>計算ノードにジョブを割り当てる際には、pjsubのオプションに--llio cn-cache-size=1Giを指定してください。
+指定しない場合、翻訳時間が長くなる可能性があります。</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=1&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM --llio cn-cache-size=1Gi</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+module<span class="w"> </span>purge
+module<span class="w"> </span>load<span class="w"> </span>LLVM/llvmorg-21.1.0
+
+mpiclang<span class="w"> </span>-o<span class="w"> </span>sample1.out<span class="w"> </span>sample1.c
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="id4">
+<h3><span class="section-number">3.3.1.3. </span>実行方法<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>コンパイルされたプログラムの実行は、ジョブスクリプト、インタラクティブジョブ双方で可能です。</p>
+<p>ジョブスクリプト例を示します。
+高並列で実行する場合は、性能向上のため、実行ファイルとLLVMライブラリをllio_transferを使い転送してください。</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=128&quot;</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+module<span class="w"> </span>purge
+module<span class="w"> </span>load<span class="w"> </span>LLVM/llvmorg-21.1.0
+llio_transfer<span class="w"> </span><span class="sb">`</span>find<span class="w"> </span><span class="si">${</span><span class="nv">LLVM_BASEDIR</span><span class="si">}</span>/lib64<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="se">\*</span>.so<span class="se">\*</span><span class="sb">`</span>
+llio_transfer<span class="w"> </span><span class="sb">`</span>find<span class="w"> </span><span class="si">${</span><span class="nv">MPI_HOME</span><span class="si">}</span>/lib64<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="se">\*</span>.so<span class="se">\*</span><span class="sb">`</span>
+llio_transfer<span class="w"> </span>sample1.out
+
+mpiexec<span class="w"> </span>./sample1.out
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>C++, Fortranプログラムの実行も同様の方法となります。</p>
+</div>
+</section>
+<section id="id5">
+<h3><span class="section-number">3.3.1.4. </span>ライブラリの利用<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>このLLVMで利用できるOpenBLAS、 FFTWが用意されています。</p>
+<p>こちらのライブラリは他のコンパイラからは使用できません。</p>
+<section id="openblas">
+<h4><span class="section-number">3.3.1.4.1. </span>OpenBLASの利用方法<a class="headerlink" href="#openblas" title="Link to this heading">¶</a></h4>
+<dl>
+<dt>格納場所は以下です。</dt><dd><table class="docutils align-default">
+<colgroup>
+<col style="width: 27.3%" />
+<col style="width: 72.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ライブラリの分類</p></th>
+<th class="head"><p>インストールディレクトリ</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LP64, 逐次</p></td>
+<td><p>/vol0004/apps/r/OSS_CN/llvm/openblas-seq</p></td>
+</tr>
+<tr class="row-odd"><td><p>LP64, スレッド並列</p></td>
+<td><p>/vol0004/apps/r/OSS_CN/llvm/openblas-omp</p></td>
+</tr>
+<tr class="row-even"><td><p>ILP64, 逐次</p></td>
+<td><p>/vol0004/apps/r/OSS_CN/llvm/openblas-seq-ilp64</p></td>
+</tr>
+<tr class="row-odd"><td><p>ILP64, スレッド並列</p></td>
+<td><p>/vol0004/apps/r/OSS_CN/llvm/openblas-omp-ilp64</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<section id="id6">
+<h5><span class="section-number">3.3.1.4.1.1. </span>プログラム翻訳方法<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h5>
+<p>OpenBLASを利用するプログラムを翻訳する場合は、富岳LLVMを使用するための環境設定を行った上で、
+リンク時のオプションに-lopenblasを追加してください。</p>
+<p>またスレッド並列ライブラリを利用する場合は、オプションに-fopenmpを追加してください。</p>
+<p>さらに言語に応じて、以下のオプションを追加してください。</p>
+<p>C/C++の場合:</p>
+<ul class="simple">
+<li><p>-Lオプションおよび-IオプションでOpenBLASをインストールしたディレクトリ(${OPENBLAS_DIR})のライブラリおよびヘッダを指定してください</p></li>
+<li><p>-lflang_rt.runtimeを指定してください</p></li>
+</ul>
+<p>Fortranの場合:</p>
+<ul class="simple">
+<li><p>-LオプションでOpenBLASをインストールしたディレクトリ(${OPENBLAS_DIR})のライブラリを指定してください</p></li>
+</ul>
+</section>
+<section id="id7">
+<h5><span class="section-number">3.3.1.4.1.2. </span>プログラム実行方法<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h5>
+<p>OpenBLASを利用するプログラムを実行する場合は、LD_LIBRARY_PATHに${OPENBLAS_DIR}/libを追加してください。</p>
+<p>オリジナルOpenBLASからの変更点</p>
+<p>オリジナルOpenBLAS 0.3.26に対して、A64FX向けに以下のルーチンをチューニングしています。</p>
+<ul class="simple">
+<li><p>DGEMM</p></li>
+<li><p>SGEMM</p></li>
+</ul>
+</section>
+</section>
+<section id="fftw">
+<h4><span class="section-number">3.3.1.4.2. </span>FFTWの利用方法<a class="headerlink" href="#fftw" title="Link to this heading">¶</a></h4>
+<p>FFTWは/vol0004/apps/r/OSS_CN/llvm/fftw3に格納されています(FFTW_DIR)。</p>
+<p>FFTWを利用するを利用するプログラムを翻訳する場合は、富岳LLVMを使用するための環境設定を行った上で、
+リンク時のオプションに以下のライブラリを追加してください。</p>
+<ul class="simple">
+<li><p>単精度の逐次ライブラリ           : -lfftw3f -lm</p></li>
+<li><p>単精度のスレッド並列ライブラリ       : -lfftw3f_omp -lfftw3f -lm</p></li>
+<li><p>倍精度の逐次ライブラリ           : -lfftw3 -lm</p></li>
+<li><p>倍精度のスレッド並列ライブラリ       : -lfftw3_omp -lfftw3 -lm</p></li>
+</ul>
+<p>またスレッド並列ライブラリを利用する場合は、オプションに-fopenmpを追加してください。</p>
+<p>さらに言語に応じて、以下のオプションを追加してください。</p>
+<p>C/C++の場合:</p>
+<ul class="simple">
+<li><p>-Lオプションおよび-IオプションでFFTWをインストールしたディレクトリ(${FFTW_DIR})のライブラリおよびヘッダを指定してください</p></li>
+<li><p>-lflang_rt.runtimeを指定してください</p></li>
+</ul>
+<p>Fortranの場合:</p>
+<ul class="simple">
+<li><p>-LオプションでFFTWをインストールしたディレクトリ(${FFTW_DIR})のライブラリを指定してください</p></li>
+</ul>
+<section id="id8">
+<h5><span class="section-number">3.3.1.4.2.1. </span>プログラム実行方法<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h5>
+<p>FFTWを利用するプログラムを実行する場合は、LD_LIBRARY_PATHに${FFTW_DIR}/libを追加してください。</p>
+<p>オリジナルFFTWからの変更点</p>
+<ul class="simple">
+<li><p>各種SIMD命令に対応するためのヘッダファイルをSVE命令に対応</p></li>
+<li><p>プラン生成と呼ばれる自動チューニング機構で、選択されない処理ルートを除去することで効率化を実施</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="id9">
+<h3><span class="section-number">3.3.1.5. </span>注意事項<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<section id="real-kind-16-complex-kind-16">
+<h4><span class="section-number">3.3.1.5.1. </span>REAL(KIND=16) および COMPLEX(KIND=16) 型に関する注意点<a class="headerlink" href="#real-kind-16-complex-kind-16" title="Link to this heading">¶</a></h4>
+<p>ログインノード上にあるクロス環境のflangでは、
+REAL(KIND=16)およびCOMPLEX(KIND=16)型を使用したFortranプログラムのコンパイル時に、
+以下のエラーが発生します。</p>
+<p>エラーが発生する翻訳例</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flang<span class="w"> </span>complex16.f90
+error:<span class="w"> </span>Semantic<span class="w"> </span>errors<span class="w"> </span><span class="k">in</span><span class="w"> </span>complex16.f90
+<span class="w"> </span>./complex16.f90:3:3:<span class="w"> </span>error:<span class="w"> </span>COMPLEX<span class="o">(</span><span class="nv">KIND</span><span class="o">=</span><span class="m">16</span><span class="o">)</span><span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>an<span class="w"> </span>enabled<span class="w"> </span><span class="nb">type</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>this<span class="w"> </span>target
+<span class="w"> </span>complex<span class="o">(</span><span class="nv">kind</span><span class="o">=</span><span class="m">16</span><span class="o">)</span><span class="w"> </span>::<span class="w"> </span>x
+<span class="w"> </span>^^^^^^^^^^^^^^^^^^^^^
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flang<span class="w"> </span>real16.f90
+error:<span class="w"> </span>Semantic<span class="w"> </span>errors<span class="w"> </span><span class="k">in</span><span class="w"> </span>real16.f90
+<span class="w"> </span>./real16.f90:3:3:<span class="w"> </span>error:<span class="w"> </span>REAL<span class="o">(</span><span class="nv">KIND</span><span class="o">=</span><span class="m">16</span><span class="o">)</span><span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>an<span class="w"> </span>enabled<span class="w"> </span><span class="nb">type</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>this<span class="w"> </span>target
+<span class="w"> </span>real<span class="o">(</span><span class="nv">kind</span><span class="o">=</span><span class="m">16</span><span class="o">)</span><span class="w"> </span>::<span class="w"> </span>x,<span class="w"> </span>y,<span class="w"> </span>z
+<span class="w"> </span>^^^^^^^^^^^^^^^^^^^^^^^^
+</pre></div>
+</div>
+</div></blockquote>
+<p>回避方法</p>
+<p>この制限はログインノード上にあるクロス環境のflangに特有のものであり、計算ノード上にあるネイティブ環境のflangでは
+正常にコンパイルが可能です。
+そのため、これらの型を使用する場合は、計算ノードにあるネイティブ環境のflangを用いて
+コンパイルを行ってください。</p>
+</section>
+<section id="id10">
+<h4><span class="section-number">3.3.1.5.2. </span>言語間結合における注意事項<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h4>
+<section id="id11">
+<h5><span class="section-number">3.3.1.5.2.1. </span>結合時の翻訳コマンドと必須オプション<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h5>
+<p>LLVMコンパイラで作成したFortran、C、C++のオブジェクトプログラムを組み合わせて結合する際には、以下の点に注意してください。</p>
+<dl>
+<dt>C++オブジェクト(libstdc++を利用)をリンクする場合</dt><dd><p>コマンド<strong class="command">clang</strong>または<strong class="command">flang</strong>を使用してリンクする際は、オプション<code class="docutils literal notranslate"><span class="pre">-lstdc++</span></code>を指定してください。</p>
+</dd>
+<dt>Fortranオブジェクトをリンクする場合</dt><dd><p>コマンド<strong class="command">clang</strong>または<strong class="command">clang++</strong>を使用してリンクする際は、以下のオプションを指定してください。</p>
+<p><code class="docutils literal notranslate"><span class="pre">L${LLVM_BASEDIR}/lib64</span> <span class="pre">-lflang_rt.runtime</span></code></p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+</section>
+<section id="id12">
+<h2><span class="section-number">3.3.2. </span>富士通コンパイラからの移行<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h2>
+<p>本章では、富士通コンパイラで開発・ビルドされたアプリケーションを、LLVM（<a class="reference external" href="https://llvm.org/">https://llvm.org/</a>）コンパイラ環境へ円滑に移行するために、両コンパイラの仕様および動作の違いについて説明します。</p>
+<section id="id13">
+<h3><span class="section-number">3.3.2.1. </span>翻訳コマンド<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<p>富士通コンパイラとLLVMコンパイラの翻訳コマンドの違いを示します。富士通コンパイラの場合、ネイティブコンパイラとクロスコンパイラでコマンド名が異なります。一方、LLVMコンパイラでは、ネイティブ／クロスの区別なく同一のコマンド名になります。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目</p></th>
+<th class="head"><p>富士通コンパイラ</p></th>
+<th class="head"><p>LLVMコンパイラ</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>C コンパイラ</p></td>
+<td><div class="line-block">
+<div class="line">fcc</div>
+<div class="line">fccpx</div>
+</div>
+</td>
+<td><p>clang</p></td>
+</tr>
+<tr class="row-odd"><td><p>C++ コンパイラ</p></td>
+<td><div class="line-block">
+<div class="line">FCC</div>
+<div class="line">FCCpx</div>
+</div>
+</td>
+<td><p>clang++</p></td>
+</tr>
+<tr class="row-even"><td><p>Fortran コンパイラ</p></td>
+<td><div class="line-block">
+<div class="line">frt</div>
+<div class="line">frtpx</div>
+</div>
+</td>
+<td><p>flang</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="llvm-migration-compiler-option">
+<span id="id14"></span><h3><span class="section-number">3.3.2.2. </span>翻訳時オプション<a class="headerlink" href="#llvm-migration-compiler-option" title="Link to this heading">¶</a></h3>
+<p>富士通コンパイラ（tradモード、clangモード）とLLVMコンパイラでは、翻訳時オプションの体系や指定方法に違いがあります。本節では、両コンパイラの翻訳時オプション対応表を、移行時の参考情報として提示します。</p>
+<p>表:<a class="reference internal" href="#llvmguide-table1"><span class="std std-ref">共通機能を持つ翻訳時オプション</span></a>では、富士通コンパイラとLLVMコンパイラでオプション名が共通で、機能概要も同一である翻訳時オプションを一覧化しています。表:<a class="reference internal" href="#llvmguide-table2-1"><span class="std std-ref">類似機能を持つ翻訳時オプション(C/C++コンパイラ向け)</span></a>および表:<a class="reference internal" href="#llvmguide-table2-2"><span class="std std-ref">類似機能を持つ翻訳時オプション(Fortranコンパイラ向け)</span></a>は、オプション名は異なるが、機能概要は同一である翻訳時オプションをまとめています。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<ul class="simple">
+<li><p>富士通コンパイラ固有の翻訳時オプション(例:-Kや-ffj)は、LLVMコンパイラでは利用できません。これらを指定すると翻訳時エラーとなり、処理は中断されます。富士通コンパイラ固有の翻訳時オプションの例は、<a class="reference internal" href="#llvm-fj-non-compatible"><span class="std std-ref">非互換機能</span></a>を参照ください。</p></li>
+<li><p>機能概要が同じオプションであっても、最適化の結果が異なる場合があります。
+移行後は、動作検証を行うことを推奨します。</p></li>
+</ul>
+</div>
+<span id="llvmguide-table1"></span><table class="docutils align-default" id="id25">
+<caption><span class="caption-text">共通機能を持つ翻訳時オプション</span><a class="headerlink" href="#id25" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 100.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>オプション名</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-Dname[=tokens]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-E</p></td>
+</tr>
+<tr class="row-even"><td><p>-Idir</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Ldir</p></td>
+</tr>
+<tr class="row-even"><td><p>-P</p></td>
+</tr>
+<tr class="row-odd"><td><p>-S</p></td>
+</tr>
+<tr class="row-even"><td><p>-Uname</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wtool,arg1[,arg2]…</p></td>
+</tr>
+<tr class="row-even"><td><p>-c</p></td>
+</tr>
+<tr class="row-odd"><td><p>-g</p></td>
+</tr>
+<tr class="row-even"><td><p>-g0</p></td>
+</tr>
+<tr class="row-odd"><td><p>-lname</p></td>
+</tr>
+<tr class="row-even"><td><p>-o pathname</p></td>
+</tr>
+<tr class="row-odd"><td><p>-shared</p></td>
+</tr>
+<tr class="row-even"><td><p>-v</p></td>
+</tr>
+<tr class="row-odd"><td><p>-w</p></td>
+</tr>
+</tbody>
+</table>
+<span id="llvmguide-table2-1"></span><table class="docutils align-default" id="id26">
+<caption><span class="caption-text">類似機能を持つ翻訳時オプション(C/C++コンパイラ向け)</span><a class="headerlink" href="#id26" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 33.0%" />
+<col style="width: 33.0%" />
+<col style="width: 34.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>富士通コンパイラ tradモードのオプション名</p></th>
+<th class="head"><p>富士通コンパイラ clangモードのオプション名</p></th>
+<th class="head"><p>LLVM 21 clang/clang++の オプション名</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-KA64FX</p></td>
+<td><p>-mcpu=a64fx</p></td>
+<td><p>-mcpu=a64fx</p></td>
+</tr>
+<tr class="row-odd"><td><p>-KARMV8_1_A</p></td>
+<td><p>-march=armv8.1-a</p></td>
+<td><p>-march=armv8.1-a</p></td>
+</tr>
+<tr class="row-even"><td><p>-KARMV8_2_A</p></td>
+<td><p>-march=armv8.2-a</p></td>
+<td><p>-march=armv8.2-a</p></td>
+</tr>
+<tr class="row-odd"><td><p>-KARMV8_3_A</p></td>
+<td><p>-march=armv8.3-a</p></td>
+<td><p>-march=armv8.3-a</p></td>
+</tr>
+<tr class="row-even"><td><p>-KARMV8_A</p></td>
+<td><p>-march=armv8-a</p></td>
+<td><p>-march=armv8-a</p></td>
+</tr>
+<tr class="row-odd"><td><p>-KGENERIC_CPU</p></td>
+<td><p>-mcpu=generic</p></td>
+<td><p>-mcpu=generic</p></td>
+</tr>
+<tr class="row-even"><td><p>-K{PIC|pic}</p></td>
+<td><p>-f{PIC|pic}</p></td>
+<td><p>-f{PIC|pic}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kcmodel={small|large}</p></td>
+<td><p>-mcmodel={small|large}</p></td>
+<td><p>-mcmodel={small|large}</p></td>
+</tr>
+<tr class="row-even"><td><p>-K{eval|noeval}</p></td>
+<td><p>-f{fast-math|no-fast-math}</p></td>
+<td><p>-f{fast-math|no-fast-math}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kfast</p></td>
+<td><p>-Ofast</p></td>
+<td><p>-O3 -ffast-math</p></td>
+</tr>
+<tr class="row-even"><td><p>-Kfp_contract</p></td>
+<td><p>-ffp-contract=fast</p></td>
+<td><p>-ffp-contract={fast|on|fast-honor-pragmas}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Knofp_contract</p></td>
+<td><p>-ffp-contract=off</p></td>
+<td><p>-ffp-contract=off</p></td>
+</tr>
+<tr class="row-even"><td><p>-Kfp_relaxed</p></td>
+<td><p>-ffj-fp-relaxed</p></td>
+<td><p>-freciprocal-mathまたは -mrecip</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Knofp_relaxed</p></td>
+<td><p>-ffj-no-fp-relaxed</p></td>
+<td><p>-fno-reciprocal-mathまたは -mrecip=none</p></td>
+</tr>
+<tr class="row-even"><td><p>-K{largepage|nolargepage}</p></td>
+<td><p>-ffj-{largepage|no-largepage}</p></td>
+<td><p><a class="reference internal" href="#llvm-largepage-function"><span class="std std-ref">ラージページ機能</span></a>参照</p></td>
+</tr>
+<tr class="row-odd"><td><p>-K{lib|nolib}</p></td>
+<td><p>-f{builtin|no-builtin}</p></td>
+<td><p>-f{builtin|no-builtin}</p></td>
+</tr>
+<tr class="row-even"><td><p>-K{omitfp|noomitfp}</p></td>
+<td><p>-f{omit-frame-pointer|no-omit-frame-pointer}</p></td>
+<td><p>-f{omit-frame-pointer|no-omit-frame-pointer}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-K{openmp|noopenmp}</p></td>
+<td><p>-f{openmp|no-openmp}</p></td>
+<td><p>-f{openmp|no-openmp}</p></td>
+</tr>
+<tr class="row-even"><td><p>-K{openmp_simd|noopenmp_simd}</p></td>
+<td><p>-f{openmp-simd|no-openmp-simd}</p></td>
+<td><p>-f{openmp-simd|no-openmp-simd}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Koptmsg=2</p></td>
+<td><p>-Rpass=.*</p></td>
+<td><p>-Rpass=.*</p></td>
+</tr>
+<tr class="row-even"><td><p>-K{simd|nosimd}</p></td>
+<td><p>-f{vectorize|no-vectorize}</p></td>
+<td><p>-f{vectorize|no-vectorize}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-K{strict_aliasing|nostrict_aliasing}</p></td>
+<td><p>-f{strict-aliasing|no-strict-aliasing}</p></td>
+<td><p>-f{strict-aliasing|no-strict-aliasing}</p></td>
+</tr>
+<tr class="row-even"><td><p>-Kswp</p></td>
+<td><p>-ffj-swp</p></td>
+<td><p>-mllvm -aarch64-enable-pipeliner</p></td>
+</tr>
+<tr class="row-odd"><td><p>-K{unroll|nounroll}</p></td>
+<td><p>-f{unroll-loops|no-unroll-loops}</p></td>
+<td><p>-f{unroll-loops|no-unroll-loops}</p></td>
+</tr>
+<tr class="row-even"><td><p>-N{exceptions|noexceptions}</p></td>
+<td><p>-f{exceptions|no-exceptions}</p></td>
+<td><p>-f{exceptions|no-exceptions}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-V</p></td>
+<td><p>--version</p></td>
+<td><p>--version</p></td>
+</tr>
+<tr class="row-even"><td><p>{-x-|-x0}</p></td>
+<td><p>-f{inline-functions|no-inline-functions}</p></td>
+<td><p>-f{inline-functions|no-inline-functions}</p></td>
+</tr>
+</tbody>
+</table>
+<span id="llvmguide-table2-2"></span><table class="docutils align-default" id="id27">
+<caption><span class="caption-text">類似機能を持つ翻訳時オプション(Fortranコンパイラ向け)</span><a class="headerlink" href="#id27" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>富士通コンパイラ tradモードのオプション名</p></th>
+<th class="head"><p>LLVM 21 flangのオプション名</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-KA64FX</p></td>
+<td><p>-mcpu=a64fx</p></td>
+</tr>
+<tr class="row-odd"><td><p>-KARMV8_1_A</p></td>
+<td><p>-march=armv8.1-a</p></td>
+</tr>
+<tr class="row-even"><td><p>-KARMV8_2_A</p></td>
+<td><p>-march=armv8.2-a</p></td>
+</tr>
+<tr class="row-odd"><td><p>-KARMV8_3_A</p></td>
+<td><p>-march=armv8.3-a</p></td>
+</tr>
+<tr class="row-even"><td><p>-KARMV8_A</p></td>
+<td><p>-march=armv8-a</p></td>
+</tr>
+<tr class="row-odd"><td><p>-KGENERIC_CPU</p></td>
+<td><p>-mcpu=generic</p></td>
+</tr>
+<tr class="row-even"><td><p>-K{PIC|pic}</p></td>
+<td><p>-f{PIC|pic}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kcmodel={small|large}</p></td>
+<td><p>-mcmodel={small|large}</p></td>
+</tr>
+<tr class="row-even"><td><p>-K{eval|noeval}</p></td>
+<td><p>-f{fast-math|no-fast-math}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kfast</p></td>
+<td><p>-O3 -ffast-math -fstack-arrays</p></td>
+</tr>
+<tr class="row-even"><td><p>-Kfp_contract</p></td>
+<td><p>-ffp-contract={fast|on}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Knofp_contract</p></td>
+<td><p>-ffp-contract=off</p></td>
+</tr>
+<tr class="row-even"><td><p>-Kfp_relaxed</p></td>
+<td><p>-freciprocal-mathまたは -mrecip</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Knofp_relaxed</p></td>
+<td><p>-fno-reciprocal-mathまたは -mrecip=none</p></td>
+</tr>
+<tr class="row-even"><td><p>-K{largepage|nolargepage}</p></td>
+<td><p><a class="reference internal" href="#llvm-largepage-function"><span class="std std-ref">ラージページ機能</span></a>参照</p></td>
+</tr>
+<tr class="row-odd"><td><p>-K{omitfp|noomitfp}</p></td>
+<td><p>-f{omit-frame-pointer|no-omit-frame-pointer}</p></td>
+</tr>
+<tr class="row-even"><td><p>-K{openmp|noopenmp}</p></td>
+<td><p>-f{openmp|no-openmp}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Koptmsg=2</p></td>
+<td><p>-Rpass=.*</p></td>
+</tr>
+<tr class="row-even"><td><p>-K{simd|nosimd}</p></td>
+<td><p>-f{vectorize|no-vectorize}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kswp</p></td>
+<td><p>-mllvm -aarch64-enable-pipeliner</p></td>
+</tr>
+<tr class="row-even"><td><p>-K{unroll|nounroll}</p></td>
+<td><p>-f{unroll-loops|no-unroll-loops}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-V</p></td>
+<td><p>--version</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="llvm-fj-non-compatible">
+<span id="id15"></span><h3><span class="section-number">3.3.2.3. </span>非互換機能<a class="headerlink" href="#llvm-fj-non-compatible" title="Link to this heading">¶</a></h3>
+<p>LLVMコンパイラでは、富士通コンパイラおよびA64FX固有の機能が利用できません。主な非対応機能を以下に示します。</p>
+<ol class="arabic">
+<li><p>富士通コンパイラ固有の翻訳時オプション</p>
+<p>以下のような富士通コンパイラ固有の翻訳時オプションをLLVMコンパイラに指定した場合、翻訳時エラーとなり処理が中断されます。</p>
+<ul class="simple">
+<li><p>-Kオプション(例: -Kfast)</p></li>
+<li><p>-Nオプション(例: -NRtrap)</p></li>
+<li><p>-ffjオプション(例: -ffj-fjprof)</p></li>
+<li><p>数学ライブラリ関連オプション(例: -SSL2、-lfjlapacksve)</p></li>
+<li><dl class="simple">
+<dt>その他、富士通コンパイラ特有のオプション（例: -A’name(token)’）</dt><dd><p>※類似機能のオプションについては<a class="reference internal" href="#llvm-migration-compiler-option"><span class="std std-ref">翻訳時オプション</span></a>内の表:<a class="reference internal" href="#llvmguide-table2-1"><span class="std std-ref">類似機能を持つ翻訳時オプション(C/C++コンパイラ向け)</span></a>および表:<a class="reference internal" href="#llvmguide-table2-2"><span class="std std-ref">類似機能を持つ翻訳時オプション(Fortranコンパイラ向け)</span></a>を参照してください。</p>
+</dd>
+</dl>
+</li>
+</ul>
+</li>
+<li><p>富士通コンパイラ固有の最適化指示子</p>
+<p>ソースコード内に富士通コンパイラ固有の最適化指示子が記述されている場合、LLVMコンパイラでは認識されず、無視されます。</p>
+</li>
+<li><p>富士通コンパイラ固有の環境変数</p>
+<p>以下のような富士通コンパイラ固有の環境変数は、富士通コンパイラでの翻訳時や、富士通コンパイラで作成したバイナリ実行時に使用されていましたが、LLVMコンパイラでは設定しても動作に影響を与えず、無視されます。</p>
+<ul class="simple">
+<li><p>翻訳コマンドの環境変数(例: fcc_ENV)</p></li>
+<li><p>実行時環境変数(例: FLIB_C_MESSAGE)</p></li>
+</ul>
+</li>
+<li><p>あらかじめ定義されたマクロ名</p>
+<p>富士通コンパイラでは、<code class="docutils literal notranslate"><span class="pre">__FUJITSU</span></code>や<code class="docutils literal notranslate"><span class="pre">__CLANG_FUJITSU</span></code>などのマクロがあらかじめ定義されており、ソースコード内で条件分岐に利用されている場合があります。これらのマクロは LLVM コンパイラでは定義されていません。条件分岐に利用している場合は、期待通りの処理が行われるか確認することを推奨します。</p>
+</li>
+<li><p>A64FX固有の機能 (環境変数やオプションを通じて利用)</p>
+<p>以下の機能は、富士通コンパイラでは主に環境変数、翻訳時オプション、最適化指示子を通じて制御されていましたが、LLVMコンパイラではこれらの制御手段が提供されません。これらの機能を利用していたアプリケーションは、移行時に動作の違いが生じる可能性があるため、動作検証を通じて確認することを推奨します。</p>
+<ul class="simple">
+<li><p>ハードウェアバリア (例: 環境変数FLIB_BARRIER=HARD)</p></li>
+<li><p>セクタキャッシュ機能 (例: 最適化指示子scache_isolate_way L2=n1)</p></li>
+<li><p>ハードウェアプリフェッチアシスト機能 (例: -Khpctag)</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="id16">
+<h3><span class="section-number">3.3.2.4. </span>代替手段<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<section id="llvm-largepage-function">
+<span id="id17"></span><h4><span class="section-number">3.3.2.4.1. </span>ラージページ機能<a class="headerlink" href="#llvm-largepage-function" title="Link to this heading">¶</a></h4>
+<p>富士通コンパイラでは、ラージページ機能がデフォルトで有効となっており、特別な設定を行わずに利用可能でした。これにより、環境やアプリケーションによっては性能向上が期待できる場合があります。一方、LLVMコンパイラではこの機能が標準では有効になっていないため、利用するには明示的な指定が必要です。</p>
+<p>「富岳」環境では、翻訳時（リンク時）オプションに以下を追加することで、HPC拡張のラージページ機能を使用することができます。</p>
+<p><code class="docutils literal notranslate"><span class="pre">-L/opt/FJSVxos/mmm/lib64</span> <span class="pre">-lmpg</span> <span class="pre">-Wl,-T/opt/FJSVxos/mmm/util/bss-2mb.lds</span></code></p>
+<p>このオプションは、他のライブラリよりも前に指定してください。ラージページ機能の詳細はマニュアル「ジョブ運用ソフトウェア エンドユーザ向けガイド HPC拡張機能編」を参照してください。</p>
+<p>翻訳例:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>clang<span class="w"> </span>a.c<span class="w"> </span>-L/opt/FJSVxos/mmm/lib64<span class="w"> </span>-lmpg<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>Wl,-T/opt/FJSVxos/mmm/util/bss-2mb.lds
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>LLVMコンパイラでは、メモリ割り付けの動作が富士通コンパイラと異なる可能性があります。移行時には意図通りに動作するかを、実際のビルドや動作検証を通じて確認することを推奨します。</p>
+</div>
+</section>
+</section>
+<section id="id18">
+<h3><span class="section-number">3.3.2.5. </span>オブジェクト・ソース非互換<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<section id="id19">
+<h4><span class="section-number">3.3.2.5.1. </span>オブジェクト非互換<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h4>
+<p>富士通コンパイラ(tradモードおよびclangモード)とLLVMコンパイラでは、生成されるファイル（オブジェクトファイル、アセンブラソースファイル、モジュールファイル.modなど）に互換性がありません。そのため、すべてのソースコードをLLVMコンパイラで再翻訳する必要があります。</p>
+<p>なお、富士通clangモードはLLVMベースであるものの、富士通独自の拡張が加えられており、純粋なLLVMとは動作が異なります。部分的に互換性があるように見える場合でも、意図しない動作につながる可能性があるため、オブジェクトの再利用は推奨しません。</p>
+</section>
+<section id="id20">
+<h4><span class="section-number">3.3.2.5.2. </span>ソース非互換<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h4>
+<p>LLVMコンパイラは、標準的な言語仕様（C/C++/Fortran）に準拠していますが、富士通コンパイラで利用可能だった独自の組込み関数やサービスルーチンはサポートされていません。これらに依存したソースコードは、LLVMでは修正が必要になる場合があります。</p>
+</section>
+<section id="id21">
+<h4><span class="section-number">3.3.2.5.3. </span>実行結果の非互換<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h4>
+<p>富士通コンパイラとLLVMコンパイラでは、同一のソースコードであっても実行結果に差異が生じる可能性があります。この非互換は、主に以下の2点に起因します。移行後の検証では、数値的な整合性および出力形式の互換性について確認することを推奨します。</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">数値計算の精度や誤差の違い</div>
+<div class="line">コンパイラの最適化の違いや、数値計算ライブラリの実装差異により、数値計算の精度や誤差が異なる場合があります。</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">出力仕様の違い</div>
+<div class="line">浮動小数点の表示形式（桁数、指数表記、空白の扱いなど）など出力結果の見た目やフォーマットが異なる可能性があります。</div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<section id="id22">
+<h3><span class="section-number">3.3.2.6. </span>ファイル名のサフィックスについて<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
+<p>富士通コンパイラ（tradモード／clangモード）で使用されていたファイル名のサフィックスについて、それらがLLVMコンパイラ（clang, clang++, flang）で利用可能かどうかを示します。</p>
+<p>Cコンパイラ<strong class="command">clang</strong>は、下記表のファイルのサフィックスのファイルを入力として翻訳可能です。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ファイルの種別</p></th>
+<th class="head"><p>ファイルのサフィックス</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Cソースファイル</p></td>
+<td><p>.c</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cソースファイル</p></td>
+<td><p>.i</p></td>
+</tr>
+<tr class="row-even"><td><p>アセンブラソースファイル</p></td>
+<td><p>.s</p></td>
+</tr>
+<tr class="row-odd"><td><p>前処理を要するアセンブラソースファイル</p></td>
+<td><p>.S</p></td>
+</tr>
+<tr class="row-even"><td><p>オブジェクトファイル</p></td>
+<td><p>.o</p></td>
+</tr>
+</tbody>
+</table>
+<p>C++コンパイラ<strong class="command">clang++</strong>は、下記表のファイルのサフィックスのファイルを入力として翻訳可能です。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ファイルの種別</p></th>
+<th class="head"><p>ファイルのサフィックス</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>C++ソースファイル</p></td>
+<td><p>.cc</p></td>
+</tr>
+<tr class="row-odd"><td><p>C++ソースファイル</p></td>
+<td><p>.CC</p></td>
+</tr>
+<tr class="row-even"><td><p>C++ソースファイル</p></td>
+<td><p>.cpp</p></td>
+</tr>
+<tr class="row-odd"><td><p>C++ソースファイル</p></td>
+<td><p>.CPP</p></td>
+</tr>
+<tr class="row-even"><td><p>C++ソースファイル</p></td>
+<td><p>.cxx</p></td>
+</tr>
+<tr class="row-odd"><td><p>C++ソースファイル</p></td>
+<td><p>.CXX</p></td>
+</tr>
+<tr class="row-even"><td><p>C++ソースファイル</p></td>
+<td><p>.c++</p></td>
+</tr>
+<tr class="row-odd"><td><p>C++ソースファイル</p></td>
+<td><p>.C++</p></td>
+</tr>
+<tr class="row-even"><td><p>C++ソースファイル</p></td>
+<td><p>.C</p></td>
+</tr>
+<tr class="row-odd"><td><p>C++ソースファイル</p></td>
+<td><p>.cp</p></td>
+</tr>
+<tr class="row-even"><td><p>C++ソースファイル</p></td>
+<td><p>.ii</p></td>
+</tr>
+<tr class="row-odd"><td><p>アセンブラソースファイル</p></td>
+<td><p>.s</p></td>
+</tr>
+<tr class="row-even"><td><p>前処理を要するアセンブラソースファイル</p></td>
+<td><p>.S</p></td>
+</tr>
+<tr class="row-odd"><td><p>オブジェクトファイル</p></td>
+<td><p>.o</p></td>
+</tr>
+</tbody>
+</table>
+<p>Fortranコンパイラ<strong class="command">flang</strong>は、以下の表に示すファイルサフィックスを持つソースファイルを入力として翻訳可能です。ファイル形式（固定形式／自由形式）は、ファイルの拡張子に基づいて自動的に判別されるため、特別なオプション指定は不要です。</p>
+<p>アセンブラソースファイル（拡張子 .s）は<strong class="command">flang</strong>での翻訳ができず、翻訳時エラーが発生するため、処理には<strong class="command">clang</strong>または<strong class="command">clang++</strong>を使用してください。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.0%" />
+<col style="width: 33.0%" />
+<col style="width: 34.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ファイルの種別</p></th>
+<th class="head"><p>ファイルのサフィックス</p></th>
+<th class="head"><p>形式</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Fortran原始プログラム</p></td>
+<td><p>.f</p></td>
+<td><p>固定形式</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fortran原始プログラム</p></td>
+<td><p>.for</p></td>
+<td><p>固定形式</p></td>
+</tr>
+<tr class="row-even"><td><p>Fortran原始プログラム</p></td>
+<td><p>.f90</p></td>
+<td><p>自由形式</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fortran原始プログラム</p></td>
+<td><p>.f95</p></td>
+<td><p>自由形式</p></td>
+</tr>
+<tr class="row-even"><td><p>Fortran原始プログラム</p></td>
+<td><p>.f03</p></td>
+<td><p>自由形式</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fortran原始プログラム</p></td>
+<td><p>.f08</p></td>
+<td><p>自由形式</p></td>
+</tr>
+<tr class="row-even"><td><p>前処理指令Fortran原始プログラム</p></td>
+<td><p>.F</p></td>
+<td><p>固定形式</p></td>
+</tr>
+<tr class="row-odd"><td><p>前処理指令Fortran原始プログラム</p></td>
+<td><p>.FOR</p></td>
+<td><p>固定形式</p></td>
+</tr>
+<tr class="row-even"><td><p>前処理指令Fortran原始プログラム</p></td>
+<td><p>.F90</p></td>
+<td><p>自由形式</p></td>
+</tr>
+<tr class="row-odd"><td><p>前処理指令Fortran原始プログラム</p></td>
+<td><p>.F95</p></td>
+<td><p>自由形式</p></td>
+</tr>
+<tr class="row-even"><td><p>前処理指令Fortran原始プログラム</p></td>
+<td><p>.F03</p></td>
+<td><p>自由形式</p></td>
+</tr>
+<tr class="row-odd"><td><p>前処理指令Fortran原始プログラム</p></td>
+<td><p>.F08</p></td>
+<td><p>自由形式</p></td>
+</tr>
+<tr class="row-even"><td><p>オブジェクトファイル</p></td>
+<td><p>.o</p></td>
+<td><p>-</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="simd">
+<h3><span class="section-number">3.3.2.7. </span>SIMD組込み関数<a class="headerlink" href="#simd" title="Link to this heading">¶</a></h3>
+<p>富士通コンパイラ（clangモード）では、”Arm C Language Extensions”バージョン00bet1(First public release)に記載されているSIMD組込み関数が利用可能でした。</p>
+<p>LLVMコンパイラ（clang）では、Arm社の公開しているACLE（Arm C Language Extensions）仕様に基づき、SIMD組込み関数への対応が段階的に進められています。ただし、最新のACLE仕様に完全準拠しているわけではなく、仕様変更や実装差異により、期待通りに動作しない可能性があります。そのため、移行にあたっては使用するSIMD組込み関数がLLVM環境でサポートされているかどうかを、実際のビルドや動作検証を通じて確認することを推奨します。</p>
+<p>なお、SIMD組込み関数の詳細については、Arm社が開発者向けに公開しているドキュメントを参照してください。仕様はGitHub &lt;<a class="reference external" href="https://github.com/ARM-software/acle/releases">https://github.com/ARM-software/acle/releases</a>&gt; にて確認できます。</p>
+</section>
+<section id="gnu-c-c-fortran">
+<h3><span class="section-number">3.3.2.8. </span>GNU互換機能（C/C++およびFortran）<a class="headerlink" href="#gnu-c-c-fortran" title="Link to this heading">¶</a></h3>
+<p>LLVMコンパイラ（clangおよびflang）では、GNU C/C++およびGNU Fortranコンパイラの拡張仕様や互換オプションの一部が利用可能です。富士通コンパイラ（trad/clangモード）で使用されていた機能の多くは、LLVM環境でも利用できると考えられますが、仕様変更や実装の違いにより、動作に影響が出る可能性があります。そのため、移行にあたっては、使用している拡張構文や互換オプションがLLVM環境でも意図通りに動作するかを、実際のビルドや動作検証を通じて確認することを推奨します。</p>
+</section>
+<section id="id23">
+<h3><span class="section-number">3.3.2.9. </span>言語仕様<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h3>
+<section id="id24">
+<h4><span class="section-number">3.3.2.9.1. </span>言語規格<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h4>
+<p>以下の表では、富士通コンパイラとLLVMコンパイラが対応している言語規格の違いを示します。「(一部)」と記載されている規格については、該当コンパイラがその規格の全機能をサポートしているわけではなく、部分的な対応にとどまっていることを意味します。</p>
+<p>なお、富士通コンパイラでは、製品としての動作保証や技術支援の対象として対応範囲が定義されており、LLVMコンパイラでは、実装されている機能の有無に基づいて対応状況が示されています。</p>
+<p>各対応状況の詳細については、以下のドキュメント・ページを参照ください。(2025年9月時点の情報に基づく)</p>
+<ul>
+<li><div class="line-block">
+<div class="line">富士通コンパイラのサポート状況</div>
+<div class="line">「利用手引書 －言語開発環境編－」</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">LLVMコンパイラ(clang/flang)のサポート状況</div>
+<div class="line">C言語&lt;<a class="reference external" href="https://clang.llvm.org/c_status.html">https://clang.llvm.org/c_status.html</a>&gt;</div>
+<div class="line">C++言語&lt;<a class="reference external" href="https://clang.llvm.org/cxx_status.html">https://clang.llvm.org/cxx_status.html</a>&gt;</div>
+<div class="line">Fortran言語&lt;<a class="reference external" href="https://releases.llvm.org/21.1.0/tools/flang/docs/FortranStandardsSupport.html">https://releases.llvm.org/21.1.0/tools/flang/docs/FortranStandardsSupport.html</a>&gt;</div>
+</div>
+</li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 26.7%" />
+<col style="width: 26.7%" />
+<col style="width: 26.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目</p></th>
+<th class="head"><p>富士通コンパイラ tradモード</p></th>
+<th class="head"><p>富士通コンパイラ clangモード</p></th>
+<th class="head"><p>LLVMコンパイラ</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>C 言語規格</p></td>
+<td><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line">C11規格</div>
+<div class="line">C99規格</div>
+<div class="line">C89規格</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line">C11規格</div>
+<div class="line">C99規格</div>
+<div class="line">C89規格</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">C23規格(一部)</div>
+<div class="line">C17規格(一部)</div>
+<div class="line">C11規格(一部)</div>
+<div class="line">C99規格</div>
+<div class="line">C89規格</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>C++ 言語規格</p></td>
+<td><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line">C++17規格(一部)</div>
+<div class="line">C++14規格</div>
+<div class="line">C++11規格</div>
+<div class="line">C++03規格</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line">C++17規格</div>
+<div class="line">C++14規格</div>
+<div class="line">C++11規格</div>
+<div class="line">C++03規格</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">C++23規格(一部)</div>
+<div class="line">C++20規格(一部)</div>
+<div class="line">C++17規格</div>
+<div class="line">C++14規格</div>
+<div class="line">C++11規格</div>
+<div class="line">C++03規格</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>Fortran 言語規格</p></td>
+<td><div class="line-block">
+<div class="line"><br /></div>
+<div class="line">Fortran2018規格(一部)</div>
+<div class="line">Fortran2008規格</div>
+<div class="line">Fortran2003規格</div>
+<div class="line">Fortran95規格</div>
+<div class="line">Fortran90規格</div>
+<div class="line">Fortran77規格</div>
+</div>
+</td>
+<td><p>なし</p></td>
+<td><div class="line-block">
+<div class="line">Fortran2023規格(一部)</div>
+<div class="line">Fortran2018規格(一部)</div>
+<div class="line">Fortran2008規格(一部)</div>
+<div class="line">Fortran2003規格(一部)</div>
+<div class="line">Fortran95規格</div>
+<div class="line">Fortran90規格</div>
+<div class="line">Fortran77規格</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="openmp-api">
+<h4><span class="section-number">3.3.2.9.2. </span>OpenMP API仕様<a class="headerlink" href="#openmp-api" title="Link to this heading">¶</a></h4>
+<p>対応しているOpenMP API仕様の違いを下記表に示します。「(一部)」と記載されている規格については、該当コンパイラがその規格の全機能をサポートしているわけではなく、部分的な対応にとどまっていることを意味します。「(一部)」の記載がない規格については、公式ドキュメントに基づき、サポートされている最新バージョンのみを記載しています。</p>
+<p>なお、富士通コンパイラでは、製品としての動作保証や技術支援の対象として対応範囲が定義されており、LLVMコンパイラでは、実装されている機能の有無に基づいて対応状況が示されています。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 25.0%" />
+<col style="width: 30.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目</p></th>
+<th class="head"><p>富士通コンパイラ tradモード</p></th>
+<th class="head"><p>富士通コンパイラ clangモード</p></th>
+<th class="head"><p>LLVMコンパイラ</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>C/C++ OpenMP</p></td>
+<td><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line">OpenMP 4.5(一部)</div>
+<div class="line">OpenMP 4.0(一部)</div>
+<div class="line">OpenMP 3.1</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><br /></div>
+<div class="line">OpenMP 5.0(一部)</div>
+<div class="line">OpenMP 4.5</div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">OpenMP 5.1(一部)</div>
+<div class="line">OpenMP 5.0(一部)</div>
+<div class="line">OpenMP 4.5</div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Fortran OpenMP</p></td>
+<td><div class="line-block">
+<div class="line">OpenMP 5.0(一部)</div>
+<div class="line">OpenMP 4.5</div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><p>なし</p></td>
+<td><div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line">OpenMP 4.0(一部)</div>
+<div class="line">OpenMP 3.1</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line">※富士通コンパイラのサポート状況は、以下のドキュメントを参照しています。</div>
+<div class="line">“C言語使用手引書”, “C++言語使用手引書”, &quot;Fortran使用手引書&quot;</div>
+<div class="line">“利用手引書 －言語開発環境編－“</div>
+</div>
+<p>※clang/flangのサポート状況については、下記ページを参照しています。表は、2025年9月時点の情報です。</p>
+<ul>
+<li><div class="line-block">
+<div class="line">clangのOpenMPサポート</div>
+<div class="line">&lt;<a class="reference external" href="https://releases.llvm.org/21.1.0/tools/clang/docs/OpenMPSupport.html">https://releases.llvm.org/21.1.0/tools/clang/docs/OpenMPSupport.html</a>&gt;</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">flangのOpenMPサポート</div>
+<div class="line">&lt;<a class="reference external" href="https://releases.llvm.org/21.1.0/tools/flang/docs/OpenMPSupport.html">https://releases.llvm.org/21.1.0/tools/flang/docs/OpenMPSupport.html</a>&gt;</div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3.3. LLVM</a><ul>
+<li><a class="reference internal" href="#id1">3.3.1. LLVMの利用方法</a><ul>
+<li><a class="reference internal" href="#id2">3.3.1.1. コンパイル環境設定</a></li>
+<li><a class="reference internal" href="#id3">3.3.1.2. コンパイルコマンド</a></li>
+<li><a class="reference internal" href="#id4">3.3.1.3. 実行方法</a></li>
+<li><a class="reference internal" href="#id5">3.3.1.4. ライブラリの利用</a></li>
+<li><a class="reference internal" href="#id9">3.3.1.5. 注意事項</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id12">3.3.2. 富士通コンパイラからの移行</a><ul>
+<li><a class="reference internal" href="#id13">3.3.2.1. 翻訳コマンド</a></li>
+<li><a class="reference internal" href="#llvm-migration-compiler-option">3.3.2.2. 翻訳時オプション</a></li>
+<li><a class="reference internal" href="#llvm-fj-non-compatible">3.3.2.3. 非互換機能</a></li>
+<li><a class="reference internal" href="#id16">3.3.2.4. 代替手段</a></li>
+<li><a class="reference internal" href="#id18">3.3.2.5. オブジェクト・ソース非互換</a></li>
+<li><a class="reference internal" href="#id22">3.3.2.6. ファイル名のサフィックスについて</a></li>
+<li><a class="reference internal" href="#simd">3.3.2.7. SIMD組込み関数</a></li>
+<li><a class="reference internal" href="#gnu-c-c-fortran">3.3.2.8. GNU互換機能（C/C++およびFortran）</a></li>
+<li><a class="reference internal" href="#id23">3.3.2.9. 言語仕様</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../GCC_MPI/index.html"
+                          title="前の章へ"><span class="section-number">3.2. </span>GNU Compiler Collectionと富士通MPIの連携</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../../CompileforLN/index.html"
+                          title="次の章へ"><span class="section-number">4. </span>ログインノード向けバイナリを生成するコンパイラ</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../CompileforLN/index.html" title="4. ログインノード向けバイナリを生成するコンパイラ"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="../GCC_MPI/index.html" title="3.2. GNU Compiler Collectionと富士通MPIの連携"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.3. </span>LLVM</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

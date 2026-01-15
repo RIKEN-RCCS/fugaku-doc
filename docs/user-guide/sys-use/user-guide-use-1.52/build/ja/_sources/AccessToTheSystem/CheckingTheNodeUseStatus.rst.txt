@@ -1,0 +1,78 @@
+ノード使用状況確認
+=====================
+
+
+全体の使用可能ノード数、空きノード数の確認には、\ :program:`pjshowrsc`\コマンドを使用します。
+
+.. code-block:: console
+  
+  [_LNlogin]$ pjshowrsc
+  [ CLST: cluster1]
+  RSCUNIT           NODE
+                    TOTAL  FREE  ALLOC
+  ResourceUnitName     14    13      1
+
+.. note::
+
+    \ :program:`pjshowrsc`\コマンドを実行したユーザーが投入権限を持つグループに所属していない場合、情報は表示されません。
+
+    また、グループを指定せずに\ :program:`pjshowrsc`\コマンドを実行した場合は、情報が表示されないことがあります。
+    その場合は、以下のように\ ``-g``\ オプションで所属するグループを指定することで、そのグループの権限で使用可能な計算資源の状態を確認できます。
+
+.. code-block:: console
+  
+  [_LNlogin]$ pjshowrsc -g [グループ名]
+
+また、\ :program:`pjstat`\ に\ ``--summary``\ オプションを指定するとジョブ数のサマリが表示されます。ジョブ数のサマリでは、\ :program:`pjstat`\ コマンドを実行したユーザ（\ ``-A``\ オプション指定時は全ユーザ）が投入したジョブの数が、以下のように状態ごとに集計されて表示されます。
+
+.. code-block:: console
+  
+  [_LNlogin]$ pjstat --summary
+  
+    ACCEPT QUEUED RUNING RUNOUT   HOLD  ERROR REJECT   EXIT CANCEL  TOTAL
+         0      0      0      0      0      0      0      0      0      0
+  s      0      0      0      0      0      0      0      0      0      0
+
+.. note::
+
+    行頭に "s" がある行はサブジョブを含むジョブ数です。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 3 7
+
+   * - 項目名
+     - 内容
+   
+   * - ACCEPT
+     - ジョブ受付待ち状態のジョブ数
+   
+   * - QUEUED
+     - ジョブ実行待ち状態のジョブ数
+   
+   * - RUNING
+     - 実行中のジョブ数
+   
+   * - RUNOUT
+     - ジョブの終了待ち状態のジョブ数
+   
+   * - HOLD
+     - ユーザによる固定状態のジョブ数
+   
+   * - ERROR
+     - エラーによる固定状態のジョブ数
+   
+   * - REJECT
+     - 受付けが拒否された状態のジョブ数
+   
+   * - EXIT
+     - 終了した状態のジョブ数
+   
+   * - CANCEL
+     - ユーザまたは管理者によって中止された状態のジョブ数
+   
+   * - TOTAL
+     - 総ジョブ数
+
+
+

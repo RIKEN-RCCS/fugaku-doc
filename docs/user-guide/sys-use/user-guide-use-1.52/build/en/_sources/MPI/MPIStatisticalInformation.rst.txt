@@ -1,0 +1,356 @@
+MPI statistic information
+=========================
+
+In job script, by specifying the following table MCA parameter, it can display the statistic information concerning to MPI communication.
+About MPI statistic information detail, please see "MPI User's Guide"-"6.15 MPI Statistical Information".
+
+- \-mca mpi_print_stats
+- \-mca mpi_print_stats_ranks
+
+
+[mpi_print_stats]
+
+.. list-table::
+   :header-rows: 1
+   :widths: 2 1 9
+
+   * - Area
+     - Value
+     - Specification contents
+
+   * - None
+     - 0
+     - Specifies not to output MPI statistics. If a value other than an integer from 0 to 4 is specified for this parameter, the value 0 is assumed to be specified. The default value of this parameter is 0.
+
+   * - Whole mode
+     - 1
+     - Specifies that MPI statistics are to be output to the standard error output. However, in this case, the MPI statistics of all the parallel processes are summarized, and the parallel processes with rank number 0 belonging to MPI_COMM_WORLD are output.
+
+   * - Whole mode
+     - 2
+     - Specifies that MPI statistics are to be output to the standard error output. However, in this case, MPI statistics for each parallel process are output by each parallel process itself. Which parallel process to output is determined by specifying MCA parameter  \ ``mpi_print_stats_ranks``\.
+
+   * - Section mode
+     - 3
+     - Same as parameter value 1. However, it is necessary to specify the FJMPI_COLLECTION_PRINT routine to output to the standard error output. Furthermore, the output contents are divided into a header part, a body part including section lines, and a footer part and output.
+
+   * - Section mode
+     - 4
+     - Same as parameter value 2. However, it is necessary to specify the FJMPI_COLLECTION_PRINT routine to output to the standard error output. Furthermore, the output contents are divided into a header part, a body part including section lines, and a footer part and output.
+
+
+[mpi_print_stats_ranks]
+
+.. list-table::
+   :header-rows: 1
+   :widths: 2 6
+
+   * - Value
+     - Specification contents
+
+   * - Integer value than 0
+     - Identify parallel process rank number to output MPI statistic information. This parameter is only available when specify 2 or 4 to MCA parameter  \ ``mpi_print_stats``\. Specify the rank number belonging to MPI_COMM_WORLD. Multiple rank numbers can be specified by separating the rank numbers with commas ",". If you specify a rank number that does not exist in this parameter, the specification of that rank number will be ignored.
+
+   * - \-1
+     - Specify to output all parallel process MPI statistic information. This parameter is only available when specify 2 or 4 to MCA parameter  \ ``mpi_print_stats``\. If specify the lower number than \-1 to this parameter, it will be considered as \-1 is specified. This parameter's omitting value is -1.
+
+
+Whole mode
+----------
+
+Gather statistic information of whole of MPI application and output.
+
+It is available by specifying \ ``1``\  or  \ ``2``\ to MCA option   \ ``mpi_print_stats``\.
+
+
+[Option specification example]
+
+.. code-block:: console
+
+  $ mpiexec -n 16 -mca mpi_print_stats 1 ./a.out
+
+
+Section mode
+------------
+
+It can be used by specifying  \ ``3``\  or  \ ``4``\  to MCA option  \ ``mpi_print_stats``\  and using the section specification routine described later.
+
+In MPI application, gather the statistic information that the user specified the section area and output.
+
+[Option specification example]
+
+.. code-block:: console
+
+  $ mpiexec -n 16 -mca mpi_print_stats 3 ./a.out
+
+.. contents::
+   :local:
+
+
+Setion specification routine
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following table shows a list of specific routines for the section-specific MPI statistical information interface. When using the section mode, it is necessary to specify the measurement section (FJMPI_COLLECTION_START / FJMPI_COLLECTION_STOP) and output (FJMPI_COLLECTION_PRINT) in the source code.
+
+To use this interface, it is required to specify 3 or 4 to MCA option  \ ``mpi_print_stats``\ .
+
+ .. list-table::
+  :header-rows: 1
+  :widths: 3 1 5 1
+  
+  * - Routine name
+    - Argument
+    - Function overview
+    - Sync process
+
+  * - FJMPI_COLLECTION_START
+    - None
+    - Start gathering of section specification MPI statistic information
+    - \-
+
+  * - FJMPI_COLLECTION_STOP
+    - None
+    - Stop gathering of section specification MPI statistic information
+    - \-
+
+  * - FJMPI_COLLECTION_PRINT
+    - String type
+    - Output gathering data of section specification MPI statistic information
+    - :superscript:`*`\1
+
+  * - FJMPI_COLLECTION_CLEAR
+    - None
+    - Initialize gathering data of section specification MPI statistic information
+    - \-
+
+..
+
+  .. note::
+    :superscript:`*`\1 : Only when mpi_print_stats is 3, sync process is included in FJMPI_COLLECTION_PRINT.
+
+
+
+For details of the section specification routine, refer to "The MPI Statistical Information Section Specifying Routine" in the manual "MPI User's Guide".
+
+| The use image of the section specification MPI routine is shown below.
+| If the specified section (FJMPI_Collection_start / FJMPI_Collection_stop) is repeatedly executed, the measured values will be accumulated. FJMPI_Collection_clear needs to be executed to clear the measurement value and perform measurement.
+
+| If the FJMPI_Collection_clear on the 9th line is absent in the image below using the section specification MPI routine, the accumulated value of processing 1 and processing 2 is output in FJMPI_Collection_print on the 15th line.
+| 
+
+ [Section specification MPI routine use image]
+
+ .. code-block:: c
+     :linenos:
+
+     MPI_Init();
+     for(i = 0; i < N; i++){
+        FJMPI_Collection_start();
+        //(Process 1)
+        FJMPI_Collection_stop();
+     }
+     FJMPI_Collection_print("main1");  // Tirak value of process 1 in for-sentence is output
+     
+     FJMPI_Collection_clear();         // Initialixe statistic information
+     
+     FJMPI_Collection_start();
+     //(Process 2)
+     FJMPI_Collection_stop();
+     
+     FJMPI_Collection_print("main2");  // Statistic information in line 12 process 2
+     
+     MPI_Finalize();
+
+
+| The specification of section mode (FJMPI_COLLECTION_START / FJMPI_COLLECTION_STOP) cannot be a nest.
+| If it is specified as a nest, cannot guaranteed the output result. Be careful when specifying.
+
+| The operation example when nesting is specified is shown below.
+| If FJMPI_Collection_start is continued, only statrting time is reset after the 2nd time.
+| If FJMPI_Collection_stop is continued, stop data gathering at the 1st time and nothing happens after the 2nd time.
+| As a result, in the FJMPI_Collection_print on the 8th line, Time is displayed from the 3rd to 5th lines, and other (other than Time) statistical information is displayed from the 1st to 5th lines.
+
+ [If setting specification of section mode to the nest]
+
+ .. code-block:: c
+    :linenos:
+
+     FJMPI_Collection_start();
+     //(Process 1)
+     FJMPI_Collection_start();   // Note *1
+     //(Process 2)
+     FJMPI_Collection_stop();    // Note *2
+     //(Process 3)
+     FJMPI_Collection_stop();    // Note *3
+     FJMPI_Collection_print("s1");
+
+ .. note::
+
+    | :superscript:`*`\1: Only start time is reset that is used for calculation of time displayed in the output function. Counter value is continued.
+    | :superscript:`*`\2: Stop data gathering.
+    | :superscript:`*`\3: Nothing proceeded.
+
+Section mode application examples
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+| This section shows how to measure from MPI_Init to MPI_Finalize without changing the source using the section mode. Use this function when the section specification routine cannot be inserted into the source code.
+| The global mode collects execution information for the entire MPI application. For this reason, the totals include communication that occurs in the internal processing of MPI_Init. Since the MPI_Init internal processing is included, the number of non-target communication times appears in the statistical information as the parallelism increases. In the application example shown here, MPI_Init and MPI_Finalize are excluded from measurement using the section mode.
+
+.. Attention::
+   
+   When executing a program using the procedure using PMPI shown here, the profiler and runtime information output function cannot be used. When using the profiler and runtime information output function, do not use the init_finalize_hook program shown here.
+
+
+1. | Prepara source program for section specification
+   | Prepare  " \ :file:`init_finalize_hookf.f`\ "  if executing MPI_Init/MPI_Finalize from Fortran or "\ :file:`init_finalize_hookc.c` " if executing from C/C++.
+   | Compile depending on using language
+
+   [init_finalize_hookf.f]
+   
+  .. code-block:: Fortran
+
+    SUBROUTINE MPI_INIT( ierr )
+    INCLUDE "mpif.h"
+    INTEGER ierr
+
+    CALL PMPI_INIT( ierr )
+
+    CALL FJMPI_Collection_start()
+
+    RETURN
+    END
+    SUBROUTINE MPI_FINALIZE( ierr )
+    INCLUDE "mpif.h"
+    INTEGER ierr
+    CHARACTER*(2) STR
+
+    STR=""
+
+    CALL FJMPI_Collection_stop()
+    CALL FJMPI_Collection_print(STR)
+
+    CALL PMPI_FINALIZE( ierr )
+
+    RETURN
+    END
+
+
+  [init_finalize_hookc.c]
+
+  .. code-block:: c
+
+    #include <mpi.h>
+    #include <mpi-ext.h>
+    #include <stdio.h>
+
+    int MPI_Init(int *argc, char ***argv)
+    {
+        int rc;
+
+        rc = PMPI_Init(argc, argv);
+    
+        FJMPI_Collection_start();
+    
+        return rc;
+     }
+
+    int MPI_Finalize()
+    {
+        int rc;
+    
+        FJMPI_Collection_stop();
+        FJMPI_Collection_print("");
+    
+        rc = PMPI_Finalize();
+    
+        return rc;
+    }
+
+
+  [Compile execution]
+
+  .. code-block:: console
+
+    $ mpifrtpx -G -KPIC init_finalize_hookf.f -o libhookf.so
+    $ mpifrtpx -c -KPIC init_finalize_hookf.f
+    $ mpifccpx -G -KPIC init_finalize_hookc.c -o libhookc.so
+    $ mpifccpx -c -KPIC init_finalize_hookc.c
+
+2. | Execution by dynamic linking
+   | If it is difficult to re-link the execution module, execute it using dynamic linking. In this method, the MPI latency performance is lower than in the case of the static link described later.
+
+  To execute by dynamic link, when execution, only specify  \ :file:`libhookf.so`\  (\ :file:`libhookc.so`)  to  \ ``LD_PRELOAD``\  by  \ ``LD_PRELOAD``\ . As shown in the following dynamic link execution example (job script), execute by adding the specification of  \ ``LD_PRELOAD``\  to  \ :file:`libhookf.so`\  (If C/C++,  \ :file:`libhookc.so`\) .
+
+  .. code-block:: bash
+  
+    #!/bin/bash -x
+    #
+    #PJM -L "node=8"
+    #PJM -L "rscgrp=small"
+    #PJM -L "elapse=01:00:00"
+    #PJM -g groupname
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -s
+    #
+    
+  
+    
+    mpiexec -x LD_PRELOAD=./libhookf.so -mca mpi_print_stats 3 ./a.out
+
+
+3. | Execution by static link
+   | This is the way to proceed execution module re-linking.
+   | Recreate the execution module by linking  \ :file:`init_finalize_hookf.o`\  (or  \ :file:`init_finalize_hookc.o`\). With created execution module, gather MPI statistic information.
+   | How to re-link is indicated as below. Link by adding  \ :file:`init_finalize_hookf.o`\  (or  \ :file:`init_finalize_hookc.o`\) when linking.
+   | Execute the execution module that is created on re-linking.
+
+  .. code-block:: console
+
+    $ mpifrtpx -o a.out init_finalize_hookf.o # Program object
+    $ mpifccpx -o a.out init_finalize_hookc.o # Program object
+
+
+  [Execution example by static link (job script)]
+
+  .. code-block:: bash
+
+    #!/bin/bash -x
+    #
+    #PJM -L "node=8"
+    #PJM -L "rscgrp=small"
+    #PJM -L "elapse=01:00:00"
+    #PJM -g groupname
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -s
+    #
+    
+  
+    
+    mpiexec -mca mpi_print_stats 3 ./a.out
+
+
+Output contents of section mode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+On section mode, if FJMPI_COLLECTION_PRINT is not specified, the statistic information is not output. As specified FJMPI_COLLECTION_PRINT, the statistic information is output.
+
+For details on each output item, see "Contents of MPI statistical information output for section specifying output mode" in the "MPI User's Guide".
+
+.. note::
+
+  The statictic information of Hasty_Rendezvous is displayed when "Use Hasty Rendezvous communication (\ ``--mca pml_ob1_use_hasty_rendezvous 1``\) " is specified.
+
+
+
+Notes on using section mode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- If FJMPI_COLLECTION_PRINT is not specified, the statistic information is not output.
+- If specified  \ ``3``\  to  \ ``mpi_print_stats``\, sync process is proceeded in FJMPI_COLLECTION_PRINT.
+- Do not specify measurement section specification (FJMPI_COLLECTION_START/ FJMPI_COLLECTION_STOP) to the nest. If so, the result is not guaranteed.
+- Until specifying FJMPI_COLLECTION_CLEAR, the statistical information of the measurement section is accumulated. When setting multiple measurement sections, keep in mind which section is accumulated.
+- The argument (character string) of FJMPI_COLLECTION_PRINT is output to the section heading when output. It has no effect other than being output to the headline. The character string must be a printable character within 30 characters.
+
+
+
+

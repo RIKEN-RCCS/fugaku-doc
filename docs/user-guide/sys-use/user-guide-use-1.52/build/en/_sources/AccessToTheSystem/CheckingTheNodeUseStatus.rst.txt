@@ -1,0 +1,80 @@
+Check node usage
+================
+
+To check the total number of available nodes and free nodes, use \ :program:`pjshowrsc`\  command.
+
+
+
+
+.. code-block:: console
+  
+  [_LNlogin]$ pjshowrsc
+  [ CLST: cluster1]
+  RSCUNIT           NODE
+                    TOTAL  FREE  ALLOC
+  ResourceUnitName     14    13      1
+
+.. note::
+
+    If the user executing the \ :program:`pjshowrsc`\  command does not belong to a group with submission privileges, no information will be displayed.
+
+    Additionally, executing the \ :program:`pjshowrsc`\  command without specifying a group may result in no information being displayed.
+    In such cases, you can specify the group you belong to using the \ ``-g``\  option as shown below to check the status of computational resources available under that group's permissions.
+
+.. code-block:: console
+  
+  [_LNlogin]$ pjshowrsc -g [GROUP_NAME]
+
+Also, a summary of the number of jobs is displayed if specify \ ``--summary``\  option to \ :program:`pjstat`\ . At a summary of the number of job, the number of jobs submitted by the user who executed the \ :program:`pjstat`\  command (all users when the \ ``-A`` \ option is specified) is aggregated and displayed for each status as shown below.
+
+.. code-block:: console
+  
+  [_LNlogin]$ pjstat --summary
+  
+    ACCEPT QUEUED RUNING RUNOUT   HOLD  ERROR REJECT   EXIT CANCEL  TOTAL
+         0      0      0      0      0      0      0      0      0      0
+  s      0      0      0      0      0      0      0      0      0      0
+
+.. note::
+
+    The line with "s" at the beginning of the line is the number of jobs including sub jobs.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 3 7
+
+   * - item name
+     - contents
+   
+   * - ACCEPT
+     - Number of jobs waiting to receive jobs
+   
+   * - QUEUED
+     - Number of jobs waiting to execute jobs
+   
+   * - RUNING
+     - Number of jobs running
+   
+   * - RUNOUT
+     - Number of jobs waiting to finish jobs
+   
+   * - HOLD
+     - Number of jobs fixed by the user
+   
+   * - ERROR
+     - Number of jobs in fixed status due to errors
+   
+   * - REJECT
+     - Number of jobs that have been rejected
+   
+   * - EXIT
+     - Number of jobs completed
+   
+   * - CANCEL
+     - Number of jobs that have been canceled by the user or admin
+   
+   * - TOTAL
+     - Number of jobs total
+
+
+

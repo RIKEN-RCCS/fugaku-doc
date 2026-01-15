@@ -1,0 +1,266 @@
+.. _SelectAvailableVolumes:
+
+Selecting a usage file system (volume)
+========================================
+
+| When submitting a job, the user must specify an additional file system (hereafter referred to as volume) to be used by the job.
+| Before the job starts running, it mounts the user-specified file system on the compute node to establish access to the second-layer storage cache area.
+
+ volume specified at job submission
+   * Data area required for job execution (/vol0002-6)
+   * Spack space (/ vol0004) for system-provided Spack (public instance)
+
+ volume that you do not need to specify at job submission time
+   * 2ndfs (/ vol0001)
+   * volume of home area
+
+ .. attention::
+
+   Do not use home space as a job execution environment because there is less space available(The home space is as small as 20 GiB).
+
+ .. seealso::
+
+   * | The paths to the user's data area (/vol0\ *n*\ 0\ *m*/data/<\ *groupname*\ >) are symbolic links.
+     | The meaning of the path name is as follows.
+     |   \ *n*\ :volume number(2～6)
+     |   \ *m*\ :MDT number(0～7)
+   * | The volume number of the data area must be specified in the PJM_LLIO_GFSCACHE environment variable in step :ref:`VolumeSpecificationJobs`.
+   * | See also :ref:`diskpoints`.
+
+|
+
+.. _EnvironmentVariablesandpjsubOptions:
+
+Environment Variables and pjsub Options
+------------------------------------------
+
+Use the following environment variables and the pjsub option to specify the volume used by the job.
+
+
+.. list-table:: Environment variables that can be specified when a job is submitted
+  :header-rows: 1
+  :widths: 30 50
+
+  * - Environment variable name
+    - Details
+
+  * - PJM_LLIO_GFSCACHE	
+    - | Specifies the volume to be used as the second-layer storage cache area in the ``pjsub -x`` option or job script.
+      | Specify PJM_LLIO_GFSCACHE=pathname
+      | The possible path name is /vol0002,/vol0003,/vol0004,/vol0005,/vol0006.
+      | To specify more than one, delimiting them with ":".
+  * - PJM_LLIO_SHAREDTMP	
+    - | Specifies the volume to be used as the MDT for the shared temporary area in the ``pjsub -x`` option or job script.
+      | Specify PJM_LLIO_SHAREDTMP=pathname
+      | The possible path name is /vol0002,/vol0003,/vol0004,/vol0005,/vol0006.
+      | To specify more than one, delimiting them with ":".
+        
+
+
+\
+
+
+.. list-table:: pjsub options that can be specified when submitting a job
+  :header-rows: 1
+  :widths: 30 50
+
+  * - pjsub options
+    - Details
+  
+  * - --all-mount-gfscache
+    - | All volumes are assumed to be specified in the environment variable (PJM_LLIO_GFSCACHE). Synonymous with the following settings:.
+      | PJM_LLIO_GFSCACHE=/vol0002:/vol0003:/vol0004:/vol0005:/vol0006
+
+  * - --no-check-gfscache
+    - | The setting status of the environment variable (PJM_LLIO_GFSCACHE) is not checked when a job is submitted.
+      | Submit the job regardless of the environment variable (PJM_LLIO_GFSCACHE).
+
+  * - --no-check-directory
+    - | The current directory is not checked when a job is submitted.
+      | If you want to submit jobs outside of the group data area, specify this option.
+
+
+.. attention::
+
+ * The pjsub options ``--all-mount-gfscache`` , ``--no-check-gfscache``and ``--no-check-directory`` cannot be specified in a job script. If you specify this option, an error occurs when the job is submitted, so specify this option on the command line.
+
+
+
+.. seealso::
+
+ * Although you can specify multiple volumes in the environment variable (PJM_LLIO_GFSCACHE and PJM_LLIO_SHAREDTMP), you should specify as few volumes as necessary to make them less susceptible to failures.
+
+|
+
+
+.. _VolumeSpecificationJobs:
+
+Job submission method
+------------------------------------------
+
+To submit a job by specifying the volume to be used by the job:.
+
+[When specified with pjsub options]
+
+
+ .. code-block:: bash
+
+   login$ pjsub -x PJM_LLIO_GFSCACHE=/vol0004:/vol0005
+
+[When specifying in a job script]
+
+
+ .. code-block:: bash
+
+   #PJM -x PJM_LLIO_GFSCACHE=/vol0004:/vol0005
+
+[When specifying in a job script : When using a single account]
+
+ .. code-block:: bash
+
+   #PJM -x PJM_LLIO_GFSCACHE=/vol0004:/vol0005
+   #PJM -g groupname     # Specifying a group when using a single account
+
+|
+
+
+Example.1) Submitting a job from a volume in the data area
+
+
+1. Check the pathname of the volume in the data area where the job resides.
+
+  | Get the volume number from the data area path (/vol0\ *n*\ 0\ *m*/data/<\ *groupname*\ >).
+  | If the path of the data area is /vol0501/data/<\ *groupname*\ >, the part 5 of /vol05 is the volume number, and the path name set to PJM_LLIO_GFSCACHE is "/vol0005".
+
+
+2. Specifies the path name of the volume to be used for the job script.
+
+ .. code-block:: bash
+
+   login$ cd /vol0n0m/data/groupname/username
+
+   login$ vi jobscript
+   #!/bin/bash
+   #PJM -L "node=4"
+   #PJM -L "rscgrp=small"
+   #PJM -L "elapse=1:00:00"
+   #PJM --mpi "max-proc-per-node=4"
+   #PJM -x PJM_LLIO_GFSCACHE=/vol0005     # Set /vol0005
+   #PJM -g groupname
+
+   llio_transfer ./a.out
+   mpiexec ./a.out
+   llio_transfer --purge ./a.out
+
+
+
+3. Submit the job.
+
+
+ .. code-block:: bash
+
+   login$ pjsub jobscript
+
+\
+
+
+ .. seealso::
+
+   * You do not need to specify a path name if the data area to be used is the same volume as the home area.
+
+|
+
+
+Example.2) Submit a job utilizing the Spack (public instance) provided by the system
+
+
+1. Specifies the path name of the volume to be used for the job script. (When using Spack, specify /vol0004.)
+
+ .. code-block:: bash
+
+   login$ cd /vol0n0m/data/groupname/username
+
+   login$ vi jobscript
+   #!/bin/bash
+   #PJM -L "node=4"
+   #PJM -L "rscgrp=small"
+   #PJM -L "elapse=1:00:00"
+   #PJM --mpi "max-proc-per-node=4"
+   #PJM -x PJM_LLIO_GFSCACHE=/vol0004     # Set /vol0004
+   #PJM -g groupname
+
+   . /vol0004/apps/oss/spack/share/spack/setup-env.sh
+   export LD_LIBRARY_PATH=/lib64:$LD_LIBRARY_PATH
+   spack load gromacs@2021.3
+
+   ...
+
+
+2. Submit the job.
+
+ .. code-block:: bash
+
+   login$ pjsub jobscript
+
+\
+
+
+ .. seealso::
+
+   * You do not need to specify this if /vol0004 is the pathname of the volume where the home directory resides. You can use it without specifying it.
+   
+|
+
+
+Example.3) Specifying the pjsub option "--all-mount-gfscache" or "--no-check-gfscache"
+
+
+1. Creating a Job Script (Do not specify the PJM_LLIO_GFSCACHE environment variable.)
+
+ .. code-block:: bash
+
+   login$ vi jobscript
+   #!/bin/bash
+   #PJM -L "node=4"
+   #PJM -L "rscgrp=small"
+   #PJM -L "elapse=1:00:00"
+   #PJM --mpi "max-proc-per-node=4"
+   #PJM -g groupname
+
+   llio_transfer ./a.out
+   mpiexec ./a.out
+   llio_transfer --purge ./a.out
+
+
+2. job submission
+
+ .. code-block:: bash
+
+   login$ pjsub --all-mount-gfscache jobscript
+
+ or
+
+ .. code-block:: bash
+
+   login$ pjsub --no-check-gfscache jobscript
+
+|
+
+
+.. attention::
+
+ If the volume required to run the job is not set in the environment variable, the following error occurs:.
+
+ * | If you place and submit a job in a different volume than the one that contains the home directory, an error occurs when you submit the job.
+   | The current directory is contained in vol000X, so set PJM_LLIO_GFSCACHE to vol000X.(ex. -x PJM_LLIO_GFSCACHE=/vol000X)
+   
+ * | If /vol0004 is not specified in the environment variable for a job that uses Spack, an error occurs when the job is submitted.
+   | If you use Spack, set PJM_LLIO_GFSCACHE to vol0004.(ex. pjsub -x PJM_LLIO_GFSCACHE=/vol0004)
+   | Specify --no-check-gfscache option if you do not want to use Spack and want to submit jobs.
+ 
+ * | If you do not specify a valid volume in the environment variable (for example, if you specify a volume that does not exist), an error occurs when the job is submitted.
+   | [ERR.] PJM 0045 pjsub path isn't on the global file system.
+
+ * | If the environment variable specifies a volume that has failed and is no longer operational, the job fails with PJM CODE=180.
+ 
+ 

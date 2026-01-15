@@ -1,0 +1,286 @@
+Step job
+========
+
+A step job is a batch job that gives the job an execution order or dependency.
+
+- The multiple job is called as sub job which consists of step job.
+- Execute each sub job when subumitting sub job.
+- You can control whether to execute the next sub job based on the return code of the first executed sub job.
+- Cannot conbine with interactive job.
+- Resource allocation for sub jobs is performed for each sub job in the same way as for normal jobs. You can specify different resources (number of compute nodes, amount of memory, etc.) for each sub job.
+
+
+This indicates the workflow image of step job.
+
+  .. figure:: ./img/07020000_1.png
+     :scale: 70
+
+
+Job submitting
+---------------
+
+| Step job specifies and submits ``--step`` to  :program:`pjsub`.
+| After that, specifies and submits sub job one by one.
+
+[Method of specifying the job ID]
+
+Submit a sub job with the job ID of the step job. 
+In this case, the options of the first sub job differ from the options of the second and subsequent sub jobs.
+
+
+1. Start step job (Specify ``--step``)
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjsub --step [--sparam "sn=stepno"] Script file
+
+2. Execute sujob after the second (Specify ``--step``, ``--sparam  "jid=jobid"``)
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjsub --step --sparam  "jid=jobid [,sn=stepno]" Script file
+
+
+Example) When submitting two sub jobs in a step job
+
+ .. code-block:: console
+
+   [_LNlogin]$ pjsub --step sub_job0.sh
+    [INFO.] PJM 0000 pjsub Job 64856_0 submitted.
+   [_LNlogin]$ pjsub --step --sparam "jid=64856" sub_job1.sh
+    [INFO.] PJM 0000 pjsub Job 64856_1 submitted.
+   [_LNlogin]$ pjsub --step --sparam "jid=64856" sub_job2.sh
+    [INFO.] PJM 0000 pjsub Job 64856_2 submitted.
+
+
+ .. Attention::
+
+  - Processes with ``jid`` specified as the second and subsequent sub jobs. Note that if ``jid`` is not specified, it will be processed as the start of a new step job.
+  - The second and subsequent sub jobs can be submitted if any of the previously submitted sub jobs remain. If the step job specified by ``jid``  has already ended, the following message is displayed and the job cannot be submitted.
+
+   | $ pjsub --step --sparam "jid=64856" sub_job3.sh
+   | [ERR.] PJM 0012 pjsub Job 64856 does not exist.
+
+[Method of specifying the job name]
+
+Make the sub job name same and submit sub job with the job name specified. 
+In this method, the first job and the jobs after that can be submitted by same way basically.
+
+1. Start step job (Specify ``--step``, ``--sparam "jnam="``)
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjsub --step --sparam "jnam=jobname[,sn=stepno]" Script file
+
+2. Execute sujob after the second (Specify ``--step``, ``--sparam "jnam="``）
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjsub --step --sparam  "jnam=jobname[,sn=stepno]" Script file
+
+
+Example) When submitting two sub jobs in a step job
+
+ .. code-block:: console
+
+   [_LNlogin]$ pjsub --step --sparam "jnam=mystepjob" sub_job0.sh
+   [INFO] PJM 0000 pjsub Job 11716781_0 submitted.
+   [_LNlogin]$ pjsub --step --sparam "jnam=mystepjob" sub_job1.sh
+   [INFO] PJM 0000 pjsub Job 11716781_1 submitted.
+   [_LNlogin]$ pjsub --step --sparam "jnam=mystepjob" sub_job2.sh
+   [INFO] PJM 0000 pjsub Job 11716781_2 submitted.
+
+
+ .. Attention::
+
+    - If the step job which has the corresponding job name does not exist, new step job will be created.
+    - If ``--sparam "jnam="`` option is specified, the job name specified with the option is set to the sub job regardless of the``-N`` or ``--name`` option.
+    - Two or more step jobs of the same job name might exist. If you submit a sub job specified job name with ``--sparam "jnam="`` option, the sub job is assumed to be associate with the latest step job.
+
+
+Step job option
+----------------
+
+Step job options are as followings:
+
+.. list-table:: 
+  :header-rows: 1
+  :widths: 3 7
+
+
+  * - option
+    - Description
+
+  * - &#45;-step
+    - | Required option
+      | Indicates it's a step job
+
+  * - &#45;-sparam "jid=jobid"
+    - | Specify when submitting the second and subsequent sub jobs.
+      | Specify the job ID of the existing step job in the  ``jobid`` part.
+      | If jid is omitted, it is submitted as a new step job.
+
+  * - &#45;-sparam "jnam=jobname"
+    - | If you want to submit a step job that each sub jobs of the job name are the same name, you can use this option. 
+      | When the argument ``jid`` and arguments ``jnam`` has been specified at the same time, the error occurs (incorrect  specified  option combination).
+
+  * - &#45;-sparam "sn=stepno"
+    - | Specify the step number of the sub job.
+      | The specified step number becomes the step number of the submitted sub job.
+      | For the step number, specify a value greater than the maximum step number that has been submitted.
+      | Step number can be specified as 0~65535.
+      | If this specification is omitted, 0 is set for the first sub job, and the maximum step number of the submitted sub job is set to +1 for the second and subsequent sub jobs.
+
+Sub job ID
+-----------
+
+| A sub job of a step job is given a "sub job ID" that combines the job ID and step number.
+| As the step number, a serial number (0 to 65535) within one job (one step job including sub jobs) is set.
+
+[The example of step job's sub job ID]
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 2, 2, 2
+
+
+   * - Job ID
+     - Step job number
+     - Sub job ID
+
+   * - 12345
+     - 1
+     - 12345_1
+
+   * - 12345
+     - 2
+     - 12345_2
+
+.. note::
+
+   If the job ID is "12345" and the step number is "1", the sub job ID is "12345_1".
+
+Referencing job execution results
+----------------------------------
+
+| When the job ends, the job execution result is output to a file in the current directory when the sub job is submitted.
+| If the directory at the time of submission is changed for each sub job, it is output to each directory.
+| The file name of job execution result is as followings:
+
+[Output file for each sub job]
+
+ .. list-table:: 
+   :widths: 4 5
+   :header-rows: 1
+
+   * - Style
+     - Description
+
+   * - Job name.Sub job ID.out
+     - Data written to the standard output by the sub job.
+
+   * - Job name.Sub job ID.err
+     - Data written to the standard error output by the sub job.
+
+   * - Job name.Sub job ID.stats
+     - This is the file to which the sub job statistical information is output.
+
+
+[Output file for each step job]
+
+ .. list-table:: 
+   :widths: 4 5
+   :header-rows: 1
+
+   * - Style
+     - Description
+
+   * - The first jobe name.Job ID.stats 
+     - This file contains step job statistical information.
+
+.. attention::
+
+  - Job name is the file name of the specified job script specifiled with :program:`pjsub` command.
+  - If the job name starts with a single-byte number, the character "J" is added to the beginning of the output file name.
+  - In the output file name, the job name part (including the letter "J" added at the beginning) is limited to 63 characters.
+  - If a job is submitted from the standard input instead of a job script, the job name will be "STDIN".
+  - If standard output and standard error output are specified for the same file name for a step job, the output of each sub job is mixed.
+
+
+Example) Step job execution result file name
+
+.. code-block:: none
+
+  sub_job1.sh.70990.stats      # Step job statistical information file
+  sub_job1.sh.70990_0.err      # Standard job output result file for sub job 0
+  sub_job1.sh.70990_0.stats    # Sub job 0 statistical information output file
+  sub_job1.sh.70990_0.out      # Sub job 0 standard output result file
+  sub_job2.sh.70990_1.err      # Sub job 1 standard error output result file
+  sub_job2.sh.70990_1.stats    # Sub job 1 statistical information output file
+  sub_job2.sh.70990_1.out      # Sub job 1 standard output result file
+  sub_job3.sh.70990_2.err      # Standard job output result file for sub job 2
+  sub_job3.sh.70990_2.stats    # Sub job 2 statistical information output file
+  sub_job3.sh.70990_2.out      # Sub job 2 standard output result file
+
+.. Attention::
+
+  These files as output to current directoy when executed :program:`pjsub` if the place to output is not specified. Please be aware that it's output to different directories if the current directory is different to :program:`pjsub` for each sub job.
+
+
+Job submission example with dependency
+---------------------------------------
+
+Using step jobs, it is possible to control whether subsequent jobs are executed by referring to the return value of the job executed first.
+
+When submitting the second and subsequent sub-jobs, use the ``--sparam sd=`` option to specify what action to take depending on the result of the preceding sub-job.
+This is called the "dependency expression" of the step job. For details on dependency expressions, see "How to submit a step job" in the manual "Job Operation Software End-user's Guide".
+
+[Dependency expression format]
+
+.. code-block:: none
+
+   --sparam "sd=form[:[deletetype][:stepno[:stepno[...]]]]"
+
+
+Here is an example:
+
+1. Setting the return value
+  
+  The return value referenced by the step job is the return value of the job script. Write a job script to specify the return value of the script.
+
+  .. code-block:: bash
+
+    mpiexec ./sample_mpi
+    exit $?   #Return value
+
+  .. note::
+
+    Set script return value to :file:`./sample_mpi` return value using :command:`exit`.
+
+
+2. Job submission example
+
+  This example to not execute :file:`sub_job3.sh` if :file:`sub_job2.sh` return value is not 0.
+
+  .. code-block:: console
+
+   [_LNlogin]$ pjsub --step sub_job1.sh
+   [INFO] PJM 0000 pjsub Job 71080_0 submitted.
+   [_LNlogin]$ pjsub --step --sparam "jid=71080" sub_job2.sh
+   [INFO] PJM 0000 pjsub Job 71080_1 submitted.
+   [_LNlogin]$ pjsub --step --sparam "jid=71080,sd=ec!=0:one:1" sub_job3.sh
+   [INFO] PJM 0000 pjsub Job 71080_2 submitted.
+
+  .. note::
+
+    The option specification values in the above example are as follows.
+    
+     ``ec`` :Job script end status of the dependent sub job
+     
+     ``one`` :Only this sub job is deleted, and subsequent sub jobs that depend on the results of this sub job are not deleted.
+     
+     ``1`` :Refer to the end status of sub job No.1.
+
+
+
+

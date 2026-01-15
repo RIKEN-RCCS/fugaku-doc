@@ -1,0 +1,352 @@
+MPI統計情報
+==============
+
+ジョブスクリプトの中で、以下の表に示すMCAパラメータを指定することで、MPI通信に関する統計情報を表示することができます。
+MPI統計情報の詳細については、「MPI使用手引書」-「6.15 MPI統計情報」を参照してください。
+
+- \-mca mpi_print_stats
+- \-mca mpi_print_stats_ranks
+
+
+[mpi_print_stats]
+
+.. list-table::
+   :header-rows: 1
+   :widths: 2 1 9
+
+   * - 範囲
+     - 値
+     - 指定内容
+
+   * - なし
+     - 0
+     - MPI統計情報を出力しないことを指定します。本パラメーターに値0から4の整数値以外の値を指定した場合、値0が指定されたものとみなされます。本パラメーターの省略値は0です。
+
+   * - 全体モード
+     - 1
+     - MPI統計情報を標準エラー出力に出力することを指定します。ただし、この場合、すべての並列プロセスのMPI統計情報が総括され、MPI_COMM_WORLDに属するランク番号が 0 の並列プロセスによって出力されます。
+
+   * - 全体モード
+     - 2
+     - MPI統計情報を標準エラー出力に出力することを指定します。ただし、この場合、並列プロセスごとのMPI統計情報が、それぞれの並列プロセス自身によって出力されます。どの並列プロセスを出力対象とするかは、MCAパラメーター\ ``mpi_print_stats_ranks``\ によって指定することができます。
+
+   * - 区間モード
+     - 3
+     - パラメーター値1と同様です。ただし、標準エラー出力に出力させるためにはFJMPI_COLLECTION_PRINTルーチンの指定が必要です。更に出力内容は、ヘッダー部、section行を含めたボディー部、フッター部に分けて出力されます。
+
+   * - 区間モード
+     - 4
+     - パラメーター値2と同様です。ただし、標準エラー出力に出力させるためにはFJMPI_COLLECTION_PRINTルーチンの指定が必要です。更に出力内容は、ヘッダー部、section行を含めたボディー部、フッター部に分けて出力されます。
+
+
+[mpi_print_stats_ranks]
+
+.. list-table::
+   :header-rows: 1
+   :widths: 2 6
+
+   * - 値
+     - 指定内容
+
+   * - 0 以上の整数値
+     - MPI統計情報を出力する並列プロセスのランク番号を特定します。本MCAパラメーターは、MCAパラメーター\ ``mpi_print_stats``\ に、2または4を指定した場合にだけ有効となります。MPI_COMM_WORLDに属するランク番号を指定してください。コンマ","でランク番号を区切ることで、複数のランク番号を指定することもできます。 本パラメーターに存在しないランク番号を指定した場合、そのランク番号の指定は無視されます。
+
+   * - \-1
+     - すべての並列プロセスのMPI統計情報を出力することを指定します。 本MCAパラメーターは、MCAパラメーター\ ``mpi_print_stats``\ に、2または4を指定した場合にだけ有効となります。本パラメーターに\-1より小さい値を指定した場合、\-1が指定されたものとみなされます。本パラメーターの省略値は-1です。
+
+
+全体モード
+-------------
+
+MPIアプリケーション全体の統計情報を収集し出力します。
+
+MCAオプション\ ``mpi_print_stats``\ に、\ ``1``\ 、または、\ ``2``\ を指定することで利用できます。
+
+
+【オプション指定例】
+
+.. code-block:: console
+
+  $ mpiexec -n 16 -mca mpi_print_stats 1 ./a.out
+
+
+区間モード
+-------------------
+
+MCAオプション\ ``mpi_print_stats``\ に、\ ``3``\ 、または、\ ``4``\ を指定し、後述の区間指定ルーチンを併用することで利用できます。
+
+MPIアプリケーションの中で、ユーザが範囲指定した区間の統計情報を収集し出力します。
+
+【オプション指定例】
+
+.. code-block:: console
+
+  $ mpiexec -n 16 -mca mpi_print_stats 3 ./a.out
+
+.. contents::
+   :local:
+
+
+区間指定ルーチン
+^^^^^^^^^^^^^^^^^^^^^
+
+区間指定MPI統計情報インターフェースについて、具体的なルーチンの一覧を以下の表に示します。区間モードを利用する場合は、ソースコードに測定区間の指定（FJMPI_COLLECTION_START/ FJMPI_COLLECTION_STOP）と出力指定（FJMPI_COLLECTION_PRINT）を行う必要があります。
+
+本インターフェースを利用するには、MCAオプション\ ``mpi_print_stats``\ に、3または4を指定する必要があります。
+
+ .. list-table::
+  :header-rows: 1
+  :widths: 3 1 5 1
+  
+  * - ルーチン名
+    - 引数
+    - 機能概要
+    - 同期処理
+
+  * - FJMPI_COLLECTION_START
+    - なし
+    - 区間指定MPI統計情報の採取開始
+    - \-
+
+  * - FJMPI_COLLECTION_STOP
+    - なし
+    - 区間指定MPI統計情報の採取停止
+    - \-
+
+  * - FJMPI_COLLECTION_PRINT
+    - 文字列型
+    - 区間指定MPI統計情報の採取データ出力
+    - :superscript:`*`\1
+
+  * - FJMPI_COLLECTION_CLEAR
+    - なし
+    - 区間指定MPI統計情報の採取データ初期化
+    - \-
+
+..
+
+  .. note::
+    :superscript:`*`\1：mpi_print_stats が3のときのみ、FJMPI_COLLECTION_PRINT内部で、同期処理が入ります。
+
+
+
+区間指定ルーチンの詳細はマニュアル「MPI使用手引書」の「区間指定MPI統計情報インターフェース仕様」を参照してください。
+
+| 区間指定MPIルーチンの使用イメージを以下の区間指定MPIルーチン使用イメージに示します。
+| 測定区間の指定（FJMPI_Collection_start / FJMPI_Collection_stop）した区間が繰り返し実行される場合、測定値は累積されます。測定値をクリアして測定を行うにはFJMPI_Collection_clearを実行する必要があります。
+
+| 以下の区間指定MPIルーチン使用イメージで、9行目のFJMPI_Collection_clearが無かった場合は15行目のFJMPI_Collection_printで処理１と処理２の累積した値が出力されます。
+| 
+
+ [区間指定MPIルーチン使用イメージ]
+
+ .. code-block:: c
+     :linenos:
+
+     MPI_Init();
+     for(i = 0; i < N; i++){
+        FJMPI_Collection_start();
+        //(処理1)
+        FJMPI_Collection_stop();
+     }
+     FJMPI_Collection_print("main1");  // for文内部の処理1の合計値が出力されます
+     
+     FJMPI_Collection_clear();         // 統計情報を初期化します
+     
+     FJMPI_Collection_start();
+     //(処理2)
+     FJMPI_Collection_stop();
+     
+     FJMPI_Collection_print("main2");  // 12行目の処理2の統計情報が出力されます
+     
+     MPI_Finalize();
+
+
+| 測定区間の指定（FJMPI_COLLECTION_START/ FJMPI_COLLECTION_STOP）は入れ子にできません。
+| 入れ子の状態で指定されていた場合は、出力される結果を保証しません。指定時に留意ください。
+
+| 入れ子に指定してしまった場合の動作例を以下に示します。
+| FJMPI_Collection_startが連続した場合、2回目以降は開始時間のみがリセットされます。
+| FJMPI_Collection_stopが連続した場合、1回目でデータ採取を停止し2回目以降は何もしません。
+| この結果、8行目のFJMPI_Collection_printでは、Timeは3行目から5行目が、その他（Time以外）の統計情報には1行目から5行目の統計情報が表示されます。
+
+ [測定区間の指定を入れ子にした例]
+
+ .. code-block:: c
+    :linenos:
+
+     FJMPI_Collection_start();
+     //(処理1)
+     FJMPI_Collection_start();   // 注釈 *1
+     //(処理2)
+     FJMPI_Collection_stop();    // 注釈 *2
+     //(処理3)
+     FJMPI_Collection_stop();    // 注釈 *3
+     FJMPI_Collection_print("s1");
+
+ .. note::
+
+    :superscript:`*`\1：出力関数で表示されるTimeの計算に使われる開始時刻だけがリセットされます。カウンタの値はそのまま継続されます。
+    
+    :superscript:`*`\2：データ採取を停止します。
+    
+    :superscript:`*`\3：何も処理をしません。
+
+区間モードの応用例
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+| 区間モードを利用してソースの変更を行わずにMPI_Init後からMPI_Finalize前までを測定する方法を示します。ソースコード中に区間指定ルーチンを挿入できない場合等にご利用ください。
+| 全体モードはMPIアプリケーション全体の実行情報を収集します。このためMPI_Initの内部処理で発生する通信も含めて集計しています。MPI_Initの内部処理も含むため、高並列になるほど目的以外の通信回数が統計情報に出てきます。ここに示す応用例では、区間モードを利用して、MPI_InitとMPI_Finalizeを測定対象外とします。
+
+.. Attention::
+   
+   ここに示すPMPIを利用した手順でプログラムを実行する場合、プロファイラおよび実行時情報出力機能を利用することはできません。プロファイラおよび実行時情報出力機能を利用する場合は、ここで示すinit_finalize_hookのプログラムを使用しないようにしてください。
+
+
+1. | 区間指定用ソースプログラムの準備
+   | MPI_Init/MPI_FinalizeをFortranから実行している場合は「\ :file:`init_finalize_hookf.f08`\ 」を、C/C++から実行している場合は「\ :file:`init_finalize_hookc.c`\ 」を用意します。
+   | 使用している言語に合わせてコンパイルします。
+
+   [init_finalize_hookf.f08]
+   
+  .. code-block:: Fortran
+
+    SUBROUTINE MPI_INIT( ierr )
+    INCLUDE "mpif.h"
+    INTEGER ierr
+
+    CALL PMPI_INIT( ierr )
+
+    CALL FJMPI_Collection_start()
+
+    RETURN
+    END
+    SUBROUTINE MPI_FINALIZE( ierr )
+    INCLUDE "mpif.h"
+    INTEGER ierr
+    CHARACTER*(2) STR
+
+    STR=""
+
+    CALL FJMPI_Collection_stop()
+    CALL FJMPI_Collection_print(STR)
+
+    CALL PMPI_FINALIZE( ierr )
+
+    RETURN
+    END
+
+
+  [init_finalize_hookc.c]
+
+  .. code-block:: c
+
+    #include <mpi.h>
+    #include <mpi-ext.h>
+    #include <stdio.h>
+
+    int MPI_Init(int *argc, char ***argv)
+    {
+        int rc;
+
+        rc = PMPI_Init(argc, argv);
+    
+        FJMPI_Collection_start();
+    
+        return rc;
+     }
+
+    int MPI_Finalize()
+    {
+        int rc;
+    
+        FJMPI_Collection_stop();
+        FJMPI_Collection_print("");
+    
+        rc = PMPI_Finalize();
+    
+        return rc;
+    }
+
+
+  [コンパイル実行]
+
+  .. code-block:: console
+
+    $ mpifrtpx -G -KPIC init_finalize_hookf.f08 -o libhookf.so
+    $ mpifrtpx -c -KPIC init_finalize_hookf.f08
+    $ mpifccpx -G -KPIC init_finalize_hookc.c -o libhookc.so
+    $ mpifccpx -c -KPIC init_finalize_hookc.c
+
+2. | 動的リンクによる実行
+   | 実行モジュールの再リンクが困難な場合は、動的リンクによる実行を行います。本方法では後述の静的リンクの場合に比べてMPIレイテンシ性能が劣化します。
+
+  動的リンクによる実行は、実行時に\ ``LD_PRELOAD``\ で\ :file:`libhookf.so`\ （\ :file:`libhookc.so`）を\ ``LD_PRELOAD``\ に指定するだけです。以下の動的リンクによる実行例（ジョブスクリプト）に示すように\ :file:`libhookf.so`\（C/C++の場合は\ :file:`libhookc.so`\ ）に、\ ``LD_PRELOAD``\ の指定を追加して実行します。
+
+  .. code-block:: bash
+  
+    #!/bin/bash -x
+    #
+    #PJM -L "node=8"
+    #PJM -L "rscgrp=small"
+    #PJM -L "elapse=01:00:00"
+    #PJM -g groupname
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -s
+    #
+    
+    mpiexec -x LD_PRELOAD=./libhookf.so -mca mpi_print_stats 3 ./a.out
+
+
+3. | 静的リンクによる実行
+   | 実行モジュールの再リンクを行う方法です。
+   | :file:`init_finalize_hookf.o`\ （または、\ :file:`init_finalize_hookc.o`\ ）をリンクして実行モジュールを作り直します。できあがった実行モジュールでMPI統計情報を収集します。
+   | 再リンク方法の例を次に示します。\ :file:`init_finalize_hookf.o`\ （または、\ :file:`init_finalize_hookc.o`\ ）をリンク時に追加してリンクしてください。
+   | 再リンクしてできあがった実行モジュールを実行します。
+
+  .. code-block:: console
+
+    $ mpifrtpx -o a.out init_finalize_hookf.o #プログラムのオブジェクト
+    $ mpifccpx -o a.out init_finalize_hookc.o #プログラムのオブジェクト
+
+
+  【静的リンクによる実行例（ジョブスクリプト）】
+
+  .. code-block:: bash
+
+    #!/bin/bash -x
+    #
+    #PJM -L "node=8"
+    #PJM -L "rscgrp=small"
+    #PJM -L "elapse=01:00:00"
+    #PJM -g groupname
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -s
+    #
+    
+    mpiexec -mca mpi_print_stats 3 ./a.out
+
+
+区間モードの出力内容
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+区間モードでは、FJMPI_COLLECTION_PRINTが指定されていない場合、統計情報は出力されません。FJMPI_COLLECTION_PRINTは、指定される度に統計情報が出力されます。
+
+各出力項目については、マニュアル「MPI使用手引書」の「区間指定出力モードMPI統計情報の出力内容」を参照してください。
+
+.. note::
+
+  Hasty_Rendezvousの統計情報は「Hasty Rendezvous通信を使用する（\ ``--mca pml_ob1_use_hasty_rendezvous 1``\ ）」を指定した場合のみ表示されます。
+
+
+区間モード使用時の留意事項
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- FJMPI_COLLECTION_PRINTの指定がない場合は統計情報は出力されません。
+- FJMPI_COLLECTION_PRINT使用時、MCAパラメーター\ ``mpi_print_stats``\ に 3を指定した場合、同じ MPI_COMM_WORLD に属する全プロセスが同時に呼び出す必要があります。正しく呼び出しを行わないと、デッドロックの原因となります。
+- 測定区間の指定（FJMPI_COLLECTION_START/ FJMPI_COLLECTION_STOP）を入れ子に指定しないでください。入れ子になっていた場合の結果は保証されません。
+- FJMPI_COLLECTION_CLEARを指定するまで、測定区間の統計情報は累積されます。複数の測定区間を設定する場合は、どの区間が累積されるかに留意ください。
+- FJMPI_COLLECTION_PRINTの引数（文字列）は出力時にSection見出しに出力されます。見出しに出力される以外の効果はありません。文字列は印字可能な文字で30文字以内としてください。
+
+
+

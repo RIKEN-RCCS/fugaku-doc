@@ -1,0 +1,1131 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3. 利用規則 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="4. システム利用" href="../AccessToTheSystem/index.html" />
+    <link rel="prev" title="2. 利用方法" href="../MethodOfUse/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../AccessToTheSystem/index.html" title="4. システム利用"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="../MethodOfUse/index.html" title="2. 利用方法"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>利用規則</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">3. </span>利用規則<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<section id="id2">
+<h2><span class="section-number">3.1. </span>概要<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>「富岳」の利用に係る基本事項を示します。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">3.2. </span>利用規模／利用環境<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">利用可能な機能、利用規模（利用可能な計算ノード数）、ファイルシステムの種類／容量を以下の表に示します。</div>
+<div class="line">コンパイラ、MPIライブラリ、数学ライブラリ、プログラム開発支援ツール（プロファイラ／デバッガ）、運用ソフトウェア（ジョブ投入／ジョブ状態表示／ジョブ削除）については、システム保守等により本書に記載された版数と異なる場合があります。これらの版数を更新する場合は、別途広報いたします。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目</p></th>
+<th class="head"><p>内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>計算ノード数</p></td>
+<td><p>158,976</p></td>
+</tr>
+<tr class="row-odd"><td><p>言語ソフトウェア</p></td>
+<td><p>Technical Computing Suite V4.0L20A Development Studio</p></td>
+</tr>
+<tr class="row-even"><td><p>プログラム開発</p></td>
+<td><p>ログインノード</p></td>
+</tr>
+<tr class="row-odd"><td><p>ジョブ投入</p></td>
+<td><p>ログインノード</p></td>
+</tr>
+<tr class="row-even"><td><p>ホーム領域</p></td>
+<td><p>第2階層ストレージ(FEFS)</p></td>
+</tr>
+<tr class="row-odd"><td><p>データ領域</p></td>
+<td><p>第2階層ストレージ(FEFS)</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id4">
+<h3><span class="section-number">3.2.1. </span>利用可能なジョブ規模<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>1～82,944 ノード</p>
+<p>利用可能なジョブ規模はリソースグループにより異なります。</p>
+<p>リソースグループは富岳ウェブサイトの「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/resource_group_config">Resource group configuration</a>」を参照してください。</p>
+</section>
+</section>
+<section id="id5">
+<h2><span class="section-number">3.3. </span>ローカルアカウント管理<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">ローカルアカウント管理について示します。</div>
+<div class="line">「富岳」を利用するにあたり、「富岳」にログインするための「富岳」固有のローカルアカウントについて説明します。</div>
+</div>
+<section id="id6">
+<h3><span class="section-number">3.3.1. </span>ログイン<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>ローカルアカウントを利用したシステムへのログインはSSH公開鍵認証となります。</p>
+</section>
+<section id="id7">
+<h3><span class="section-number">3.3.2. </span>クライアント証明書による認証<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">マニュアル参照など富岳ウェブサイトへのアクセスは、クライアント証明書による認証となります。</div>
+<div class="line">クライアント証明書は、利用者登録が完了すると利用者宛に送付されます。</div>
+</div>
+</section>
+<section id="id8">
+<h3><span class="section-number">3.3.3. </span>プロジェクト責任者の責任範囲<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">各種申請を行う際の責任者となります。</div>
+<div class="line">ディスク領域拡大等の申請を行う際には、プロジェクト責任者の確認が必要です。</div>
+</div>
+</section>
+<section id="id9">
+<h3><span class="section-number">3.3.4. </span>更新処理<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">年度を跨り課題を継続する際は、新年度利用の申請を行います。</div>
+<div class="line">新年度利用が承認された場合は現在利用の課題、アカウントを継続して利用可能です。</div>
+<div class="line">シングルアカウントを利用し、新たに所属する課題がある場合、シングルアカウントのセカンダリグループに追加します。</div>
+</div>
+<div class="line-block">
+<div class="line">課題が終了する場合は、課題期間終了後、1カ月がログイン猶予期間となります。</div>
+<div class="line">この猶予期間内にデータの取得を完了させてください。</div>
+<div class="line">シングルアカウントを利用している場合、課題期間終了後1カ月でシングルアカウントのセカンダリグループから該当の課題を削除します。その結果、シングルアカウントの所属する課題がなくなった場合、シングルアカウント自体も利用停止となり、ログインできなくなります。</div>
+</div>
+</section>
+</section>
+<section id="resource">
+<span id="id10"></span><h2><span class="section-number">3.4. </span>リソース<a class="headerlink" href="#resource" title="Link to this heading">¶</a></h2>
+<p>利用可能な計算ノード数、および、ディスクについて示します。</p>
+<section id="id11">
+<h3><span class="section-number">3.4.1. </span>計算ノード<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<p>指定できる計算ノード数は、リソースグループごとに下限値、最大値が異なります。</p>
+<p>指定できるジョブ形状（1次元、2次元、3次元）は、リソースグループごとに最大値が異なります。
+2次元、3次元については、各軸の入れ替えが可能です。
+例えば各軸の最大値が<code class="docutils literal notranslate"><span class="pre">4x6x16</span></code>であった場合、軸を入れ換えた<code class="docutils literal notranslate"><span class="pre">16x4x6</span></code>の形状も利用できます。</p>
+<p>指定できるノード割り当て方法（noncont、mesh、torus）は、リソースグループごとに異なります。</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>385ノード以上が利用できるリソースグループはtorusのみ利用可能です。デフォルトはtorusです。</p></li>
+<li><p>384ノード以下が利用できるリソースグループはnoncont（デフォルト)、mesh、torusが指定可能なリソースグループと、torusのみ利用可能なリソースグループを用意しています。meshまたはtorusを指定した場合、noncont（デフォルト)と比べてジョブ実行までの待ち時間が長くなります。</p></li>
+<li><p>離散割り当て（noncont）を含むリソースグループは、meshまたはtorusを指定した場合でも離散割り当てジョブの影響を受ける場合があります。ベンチマーク測定等厳密な性能測定を行いたい場合はtorusのみが利用できるリソースグループを利用してください。</p></li>
+</ul>
+</div></blockquote>
+<p>リソースグループは富岳ウェブサイトの「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/resource_group_config">Resource group configuration</a>」を参照してください。</p>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>ジョブ形状は、軸ごとに最大値を持っています。ジョブ投入時には、この軸の最大値を超えないように指定する必要があります。</p>
+</div>
+</section>
+<section id="id13">
+<h3><span class="section-number">3.4.2. </span>ジョブ投入数の確認<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<p><strong class="program">pjstat</strong>コマンドの<code class="docutils literal notranslate"><span class="pre">--limit</span></code>オプションでは、<strong class="program">pjacl</strong>コマンドで表示される内容のうち、ユーザのジョブ投入における資源の制限値と現在の割り当て量を確認できます。</p>
+<p>[リソースユニット内での資源の制限値と割り当て量]</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span>--limit
+<span class="go">System Resource Information:</span>
+<span class="go">RSCUNIT: rscunit_ft01</span>
+<span class="go">USER: user1</span>
+<span class="go"> LIMIT-NAME                    LIMIT  ALLOC</span>
+<span class="go"> ru-accept                       100      0   # 1</span>
+<span class="go"> ru-accept-allsubjob       unlimited      0   # 2</span>
+<span class="go"> ru-accept-bulksubjob      unlimited      0   # 3</span>
+<span class="go"> ru-accept-stepsubjob      unlimited      0   # 4</span>
+<span class="go"> ru-run-job                unlimited      0   # 5</span>
+<span class="go"> ru-run-bulksubjob         unlimited      0   # 6</span>
+<span class="go"> ru-use-node               unlimited      0   # 7</span>
+<span class="go"> ru-interact-accept        unlimited      0   # 8</span>
+<span class="go"> ru-interact-run-job       unlimited      0   # 9</span>
+<span class="go"> ru-interact-use-node      unlimited      0   # 10</span>
+<span class="go"> ru-use-core               unlimited      0   # 11</span>
+<span class="go"> ru-interact-use-core      unlimited      0   # 12</span>
+<span class="go">GROUP: group1</span>
+<span class="go"> LIMIT-NAME                    LIMIT  ALLOC</span>
+<span class="go"> ru-accept                 unlimited      0</span>
+<span class="go"> ru-accept-allsubjob       unlimited      0</span>
+<span class="go"> ru-accept-bulksubjob      unlimited      0</span>
+<span class="go"> ru-accept-stepsubjob      unlimited      0</span>
+<span class="go"> ru-run-job                unlimited      0</span>
+<span class="go"> ru-run-bulksubjob         unlimited      0</span>
+<span class="go"> ru-use-node               unlimited      0</span>
+<span class="go"> ru-interact-accept        unlimited      0</span>
+<span class="go"> ru-interact-run-job       unlimited      0</span>
+<span class="go"> ru-interact-use-node      unlimited      0</span>
+<span class="go"> ru-use-core               unlimited      0</span>
+<span class="go"> ru-interact-use-core      unlimited      0</span>
+<span class="go">ALL:</span>
+<span class="go"> LIMIT-NAME                    LIMIT  ALLOC</span>
+<span class="go"> ru-accept                 unlimited      0</span>
+<span class="go"> ru-accept-allsubjob       unlimited      0</span>
+<span class="go"> ru-accept-bulksubjob      unlimited      0</span>
+<span class="go"> ru-accept-stepsubjob      unlimited      0</span>
+<span class="go"> ru-run-job                unlimited      0</span>
+<span class="go"> ru-run-bulksubjob         unlimited      0</span>
+<span class="go"> ru-use-node               unlimited      0</span>
+<span class="go"> ru-interact-accept        unlimited      1</span>
+<span class="go"> ru-interact-run-job       unlimited      0</span>
+<span class="go"> ru-interact-use-node      unlimited      0</span>
+<span class="go"> ru-use-core               unlimited      0</span>
+<span class="go"> ru-interact-use-core      unlimited      0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<ol class="arabic simple">
+<li><p>バッチジョブの同時受付け数</p></li>
+<li><p>バルクジョブおよびステップジョブのサブジョブの同時受付制限数</p></li>
+<li><p>バルクジョブのサブジョブの同時受付制限数</p></li>
+<li><p>ステップジョブのサブジョブの同時受付制限数</p></li>
+<li><p>バッチジョブの同時実行数</p></li>
+<li><p>バルクジョブのサブジョブの同時実行制限数</p></li>
+<li><p>バッチジョブのノードの同時使用数</p></li>
+<li><p>会話型ジョブの同時受付け数</p></li>
+<li><p>会話型ジョブの同時実行数</p></li>
+<li><p>会話型ジョブのノードの同時使用数</p></li>
+<li><p>バッチジョブのCPUコアの同時使用数</p></li>
+<li><p>会話型ジョブのCPUコアの同時使用数</p></li>
+</ol>
+</div>
+</div></blockquote>
+<p><strong class="program">pjstat</strong>コマンドの<code class="docutils literal notranslate"><span class="pre">--limit</span></code>オプションで表示される項目と内容は以下のとおりです。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LIMIT-NAME</p></td>
+<td><p>制限値の名称</p></td>
+</tr>
+<tr class="row-odd"><td><p>RSCUNIT</p></td>
+<td><p>リソースユニット名</p></td>
+</tr>
+<tr class="row-even"><td><p>GROUP</p></td>
+<td><p>OSにおけるグループ名</p></td>
+</tr>
+<tr class="row-odd"><td><p>LIMIT</p></td>
+<td><p>制限値</p></td>
+</tr>
+<tr class="row-even"><td><p>ALLOC</p></td>
+<td><p>現在の割り当て値</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>[リソースグループの下限設定について]</p>
+<blockquote>
+<div><p>リソースグループには、指定できるノード数に下限を設定しています。下限値より少ないノード数を指定していた場合、<strong class="program">pjsub</strong>実行時に次のようなエラーメッセージが表示され、ジョブが受け付けられません。</p>
+<p>ノード数の指定が下限値より小さかった場合のエラー表示は以下のとおりです。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;rscgrp=large&quot;</span><span class="w"> </span>sample.sh
+<span class="go">[ERR.] PJM 0054 pjsub node=1 is less than the lower limit (385).</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="howtospecifyresourcegroups">
+<span id="id14"></span><h3><span class="section-number">3.4.3. </span>リソースグループの使用方法<a class="headerlink" href="#howtospecifyresourcegroups" title="Link to this heading">¶</a></h3>
+<p>リソースグループを使用する場合は、リソース名を指定する必要があります。</p>
+<ul class="simple">
+<li><p>リソースグループ small による実行コマンド例</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;rscgrp=small&quot;</span><span class="w"> </span>sample.sh
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="id15">
+<h3><span class="section-number">3.4.4. </span>リソースグループの利用状況<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<p>システムにおける資源の利用状況は、<strong class="program">pjshowrsc</strong>コマンドで確認します。</p>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>シングルアカウントを利用している場合は、newgrpコマンドで個別の課題グループ（例：hpxxxxxx）に変更したうえでpjshowrscコマンドを実行してください。</p>
+</div>
+<ul class="simple">
+<li><p>リソースグループのごとのサマリ表示</p></li>
+</ul>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">--rscgrp</span></code>オプションを引数なしで指定すると、すべてのリソースグループについて表示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjshowrsc<span class="w"> </span>--rscgrp
+<span class="go">[ CLST: clst ]</span>
+<span class="go">[ RSCUNIT: rscunit_ft01 ]</span>
+<span class="go">RSCGRP  NODE</span>
+<span class="go">       TOTAL FREE ALLOC</span>
+<span class="go">group1     36    24   12</span>
+<span class="go">group2     36    24   12</span>
+<span class="go">group3     36    24   12</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>特定のリソースグループについてのサマリ表示</p></li>
+</ul>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">--rscgrp</span></code>オプションの引数にリソースグループ名を指定すると、指定したリソースグループ情報を表示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjshowrsc<span class="w"> </span>--rscgrp<span class="w"> </span>group2
+<span class="go">[ CLST: clst ]</span>
+<span class="go">[ RSCUNIT: rscunit_ft01 ]</span>
+<span class="go">RSCGRP  NODE</span>
+<span class="go">        TOTAL FREE ALLOC</span>
+<span class="go">group2     36    24   12</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="diskpoints">
+<span id="id16"></span><h3><span class="section-number">3.4.5. </span>ディスク<a class="headerlink" href="#diskpoints" title="Link to this heading">¶</a></h3>
+<p>ファイルシステムの種類について示します。</p>
+<ul class="simple">
+<li><p>ディスク領域として、ホーム領域、データ領域、シェア領域、tmpfs領域および2ndfs領域の5種類を用意します。</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>領域</p></th>
+<th class="head"><p>ファイルシステム</p></th>
+<th class="head"><p>割り当てvolume</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ホーム領域</p></td>
+<td><p>グローバル・ファイルシステム（FEFS,LLIO）</p></td>
+<td><p>/vol0002,/vol0003,/vol0004,/vol0005,/vol0006</p></td>
+</tr>
+<tr class="row-odd"><td><p>データ領域</p></td>
+<td><p>グローバル・ファイルシステム（FEFS,LLIO）</p></td>
+<td><p>〃</p></td>
+</tr>
+<tr class="row-even"><td><p>シェア領域</p></td>
+<td><p>グローバル・ファイルシステム（FEFS,LLIO）</p></td>
+<td><p>〃</p></td>
+</tr>
+<tr class="row-odd"><td><p>tmpfs領域</p></td>
+<td><p>tmpfs</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-even"><td><p>2ndfs領域</p></td>
+<td><p>グローバル・ファイルシステム（FEFS）</p></td>
+<td><p>/vol0001</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>「富岳」ではシステムで利用者データのバックアップを採取しません。データの管理（バックアップ等）は利用者の自己管理となります。</p>
+<p>ファイルシステムに対して短時間に連続して数十万ファイル以上をopen,closeする操作を行った場合、実行ノードでメモリ枯渇を引き起こす場合があります。</p>
+<p>以下、1から3に示す操作は、ファイルシステム全体に高負荷を与える場合があるため、お控えください。</p>
+<ol class="arabic simple">
+<li><p>同一ディレクトリに対する1000プロセス以上からの一斉ファイル作成</p></li>
+<li><p>ホーム領域、および、データ領域にある同一ディレクトリに、十万以上のファイル作成</p></li>
+<li><p>複数の計算ノードから以下を同時に行う処理</p></li>
+</ol>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p>ファイルやディレクトリの作成や削除</p></li>
+<li><p>ファイルやディレクトリの参照</p></li>
+</ol>
+</div></blockquote>
+<p>特に 3. の操作は、ファイルシステムのスローダウンや計算ノードのダウンにつながる可能性があるため、お控えください。</p>
+<p>（例）1000 本（プロセス）以上の小規模ジョブを同一ディレクトリ上で実行し、ジョブ内で同ディレクトリに対する操作、ジョブの結果や統計情報を出力する。</p>
+<p>複数の計算ノードが同時に同じディレクトリにアクセスしないよう、以下の対応をしていただくことでジョブが実行しやすくなります。</p>
+<ul class="simple">
+<li><p>ジョブ毎に出力ディレクトリを分ける</p></li>
+<li><p>ディレクトリを階層化し、参照のみを行うディレクトリと出力を行うディレクトリを分ける</p></li>
+</ul>
+</div>
+</div></blockquote>
+<ul>
+<li><p>ディレクトリ名について</p>
+<p>ホームディレクトリ、データディレクトリ、シェアディレクトリ、tmpfsディレクトリ、2ndfsディレクトリは、次に示すシンボリックリンク名で作成しています。ジョブのログ、富岳ウェブサイト等では、実体のパス（割り当てvolumeに記載したパス）で表示するものがあります。</p>
+<ul class="simple">
+<li><p>ホームディレクトリ：<code class="file docutils literal notranslate"><span class="pre">/home/username/</span></code></p></li>
+<li><p>データディレクトリ：<code class="file docutils literal notranslate"><span class="pre">/vol0n0m/data/groupname/</span></code></p></li>
+<li><p>シェアディレクトリ：<code class="file docutils literal notranslate"><span class="pre">/vol0n0m/share/groupname/</span></code></p></li>
+<li><p>tmpfs ディレクトリ：<code class="file docutils literal notranslate"><span class="pre">/worktmp/</span></code></p></li>
+<li><p>2ndfs ディレクトリ：<code class="file docutils literal notranslate"><span class="pre">/2ndfs/groupname/</span></code></p></li>
+</ul>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><em>n</em>:volume番号(2～6)</div>
+<div class="line"><em>m</em>:MDT番号(0～7)</div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<blockquote>
+<div><div class="line-block">
+<div class="line">データディレクトリ、シェアディレクトリ、2ndfsディレクトリは、グループに対して割り当てます。グループのメンバーでご利用ください。シェアディレクトリは、ログインノードからのみ上記パスで参照できます。</div>
+<div class="line">2ndfsについては<a class="reference internal" href="#filesystempoints"><span class="std std-ref">ファイルシステム</span></a>を参照ください。</div>
+</div>
+</div></blockquote>
+<ul>
+<li><p>シェア領域(/vol0n0m/share/groupname/)の利用</p>
+<p>特定のグループやメンバー間でデータを共有できる領域です。ホーム領域やデータ領域と異なり、全ての利用者が<code class="file docutils literal notranslate"><span class="pre">/vol0n0m/share/groupname/</span></code>配下にアクセスできます。共有したいグループやメンバー毎にディレクトリを自由に作成することができます。</p>
+</li>
+<li><p>tmpfs領域(/worktmp/)の利用</p>
+<div class="line-block">
+<div class="line">ジョブ実行中に計算ノードのみから利用できる一時ファイル用領域です。</div>
+<div class="line">tmpfs領域は計算ノードのメモリ（ジョブメモリ）を消費し、提供される容量は最大20GiBです。</div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>20GiB以上のファイルを一時ファイルとして使用する場合には、<a class="reference internal" href="../LayeredStorageAndLLIO/TemporaryAreaInNode.html#temporaryareainnode"><span class="std std-ref">ノード内テンポラリ領域</span></a> のご活用等の検討をお願いします。</p>
+</div>
+</li>
+</ul>
+<nav class="contents local" id="id17">
+<ul class="simple">
+<li><p><a class="reference internal" href="#vol0n0m-share-groupname" id="id33">シェア領域(/vol0n0m/share/groupname/)の利用方法</a></p>
+<ul>
+<li><p><a class="reference internal" href="#acl" id="id34">ACL機能</a></p></li>
+<li><p><a class="reference internal" href="#id18" id="id35">ACLを利用したファイルの共有例</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#tmpfs-worktmp" id="id36">tmpfs領域(/worktmp/)の利用方法</a></p></li>
+</ul>
+</nav>
+<section id="vol0n0m-share-groupname">
+<h4><a class="toc-backref" href="#id33" role="doc-backlink"><span class="section-number">3.4.5.1. </span>シェア領域(/vol0n0m/share/groupname/)の利用方法</a><a class="headerlink" href="#vol0n0m-share-groupname" title="Link to this heading">¶</a></h4>
+<section id="acl">
+<h5><a class="toc-backref" href="#id34" role="doc-backlink"><span class="section-number">3.4.5.1.1. </span>ACL機能</a><a class="headerlink" href="#acl" title="Link to this heading">¶</a></h5>
+<p>FEFSでは、ext4などのファイルシステムと同様に、以下のACL機能が利用できます。</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>setfacl コマンドによるACLの設定</p></li>
+<li><p>getfacl コマンドによるACL情報の表示</p></li>
+</ul>
+</div></blockquote>
+<p>ACL機能を用いて柔軟なファイルアクセス制御の設定が可能です。</p>
+</section>
+<section id="id18">
+<h5><a class="toc-backref" href="#id35" role="doc-backlink"><span class="section-number">3.4.5.1.2. </span>ACLを利用したファイルの共有例</a><a class="headerlink" href="#id18" title="Link to this heading">¶</a></h5>
+<p>異なるグループとのファイル共有の例を示します。その他の設定例などは、<strong class="command">man { setfacl | getfacl }</strong>コマンドで詳細な情報を参照してください。</p>
+<blockquote>
+<div><p>異なるグループ<code class="docutils literal notranslate"><span class="pre">GroupA</span></code>と自グループからのみ参照できるディレクトリ<code class="docutils literal notranslate"><span class="pre">toGroupA</span></code>を作成します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span><span class="nb">cd</span><span class="w"> </span>/vol0n0m/share/&lt;yourgroup&gt;
+<span class="gp">[_LNlogin]$ </span>mkdir<span class="w">   </span>toGroupA
+<span class="gp">[_LNlogin]$ </span>getfacl<span class="w"> </span>toGroupA
+<span class="gp"># </span>file:<span class="w"> </span>toGroupA
+<span class="gp"># </span>owner:<span class="w"> </span>you
+<span class="gp"># </span>group:<span class="w"> </span>yourgroup
+<span class="gp"># </span>flags:<span class="w"> </span>-s-
+<span class="go">user::rwx</span>
+<span class="go">group::rwx</span>
+<span class="go">other::---</span>
+<span class="go">default:user::rwx</span>
+<span class="go">default:group::rwx</span>
+<span class="go">default:other::---</span>
+</pre></div>
+</div>
+<p><strong class="command">mkdir</strong>直後は、グループのメンバーしか参照することはできません。
+共有したい他のグループ<code class="docutils literal notranslate"><span class="pre">GroupA</span></code>に<code class="docutils literal notranslate"><span class="pre">rx</span></code>権を付与します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>setfacl<span class="w"> </span>-m<span class="w"> </span>g:GroupA:rx<span class="w">   </span>toGroupA
+</pre></div>
+</div>
+<p>作成したディレクトリ配下でファイルやディレクトリを作成した際にアクセス権限が継承されるように、default ACLを設定します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>setfacl<span class="w"> </span>-m<span class="w"> </span>d:g:GroupA:rx<span class="w"> </span>toGroupA
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">GroupA</span></code>と共有するディレクトリ<code class="docutils literal notranslate"><span class="pre">foo</span></code>とファイル<code class="docutils literal notranslate"><span class="pre">bar</span></code>を先ほど作成・設定したディレクトリ<code class="docutils literal notranslate"><span class="pre">toGroupA</span></code>配下に作成し、アクセス権限を確認すると、アクセス権限が継承されていることが確認できます。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span><span class="nb">cd</span><span class="w"> </span>toGroupA
+<span class="gp">[_LNlogin]$ </span>mkdir<span class="w">   </span>foo
+<span class="gp">[_LNlogin]$ </span>touch<span class="w">   </span>bar
+<span class="gp">[_LNlogin]$ </span>getfacl<span class="w"> </span>foo
+<span class="gp"># </span>file:<span class="w"> </span>foo
+<span class="gp"># </span>owner:<span class="w"> </span>you
+<span class="gp"># </span>group:<span class="w"> </span>yourgroup
+<span class="gp"># </span>flags:<span class="w"> </span>-s-
+<span class="go">user::rwx</span>
+<span class="go">group::rwx</span>
+<span class="go">group:GroupA:r-x</span>
+<span class="go">mask::rwx</span>
+<span class="go">other::---</span>
+<span class="go">default:user::rwx</span>
+<span class="go">default:group::rwx</span>
+<span class="go">default:group:GroupA:r-x</span>
+<span class="go">default:mask::rwx</span>
+<span class="go">default:other::---</span>
+
+<span class="gp">[_LNlogin]$ </span>getfacl<span class="w"> </span>bar
+<span class="gp"># </span>file:<span class="w"> </span>bar
+<span class="gp"># </span>owner:<span class="w"> </span>you
+<span class="gp"># </span>group:<span class="w"> </span>yourgroup
+<span class="go">user::rw-</span>
+<span class="gp">group::rwx                      #</span>effective:rw-
+<span class="gp">group:GroupA:r-x                #</span>effective:r--
+<span class="go">mask::rw-</span>
+<span class="go">other::---</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>ファイルの共有は慎重に行ってください。不要なグループや<code class="docutils literal notranslate"><span class="pre">other</span></code>にアクセス権限を付与しないでください。</p></li>
+<li><p>システム側の問題やメンテナンス等によりFEFSがACL機能を無効化した状態でマウントした場合は、ACL設定は無効となり、通常のファイルパーミッションだけでの管理となります。この場合、グループ間の共有は利用できません。</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="tmpfs-worktmp">
+<h4><a class="toc-backref" href="#id36" role="doc-backlink"><span class="section-number">3.4.5.2. </span>tmpfs領域(/worktmp/)の利用方法</a><a class="headerlink" href="#tmpfs-worktmp" title="Link to this heading">¶</a></h4>
+<p>通常のファイルシステムと同様にファイルの作成、読み書き、実行可能ファイルの起動が可能です。</p>
+<p>利用時は以下の点に留意してください。</p>
+<ul>
+<li><div class="line-block">
+<div class="line">ジョブごとに領域が割り当てられます。ジョブ実行開始～ジョブ実行終了の間だけ利用可能です。</div>
+<div class="line">同一ユーザの別ジョブや別ユーザのジョブからは参照できません。</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">ノード単位で割り当てられます。同一ノード内でのみ利用可能です。他ノードからは参照できません。</div>
+<div class="line">例えば1ノード4プロセスで実行した場合、同一ノード内の4プロセスは同じ領域を参照します。</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">提供する容量は20GiBです。</div>
+<div class="line">ただし、利用できるtmpfs領域の容量は、以下の条件によって異なります。</div>
+</div>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>利用容量上限（目安）= ジョブメモリ量の上限 - ジョブによるメモリ使用量   (1)
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>式(1)の結果が20GiB以上の場合 : 20GiB</p></li>
+<li><p>式(1)の結果が20GiB未満の場合 : 式(1)の結果</p></li>
+</ul>
+</div></blockquote>
+<div class="line-block">
+<div class="line">ジョブメモリ量の上限やジョブによるメモリ使用量(ユーザプログラムが使用するメモリ量)については<a class="reference internal" href="#estimatingtheamountofmemory"><span class="std std-ref">ユーザープログラムが利用可能なメモリ量の見積り</span></a>を参照ください。</div>
+</div>
+</li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>tmpfs領域にファイルを利用容量上限以上配置しようとした場合、書き込みエラーが発生します。</p>
+<p>また、「ジョブによるメモリ使用量」と「tmpfs領域の使用量」の合計が「ジョブメモリ量の上限」に迫る場合、OOM(Out Of Memory)が発生する可能性があります。</p>
+<p>一度ジョブを実行し、ノード単位の最大メモリ使用量を把握した上での利用を推奨します。</p>
+</div>
+</section>
+</section>
+<section id="id19">
+<h3><span class="section-number">3.4.6. </span>ファイル作成とストライプ設定<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<p>ホーム領域、データ領域に作成するファイルに、ストライプを設定することができます。ストライプ設定を行うことにより、グローバル・ファイルシステムを構成するOST（Object Storage Target）に対するアクセスを分散し、効率の良い利用が可能となります。</p>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>計算ノードから１ファイルのサイズが1GBを超える書き込みをする場合、特定のOSTへの負荷をかけないようにするため、ストライプ設定を行ってください。</p>
+</div>
+<nav class="contents local" id="id20">
+<ul class="simple">
+<li><p><a class="reference internal" href="#id21" id="id37">ストライプの設定</a></p></li>
+<li><p><a class="reference internal" href="#id22" id="id38">ストライプの確認</a></p></li>
+</ul>
+</nav>
+<section id="id21">
+<h4><a class="toc-backref" href="#id37" role="doc-backlink"><span class="section-number">3.4.6.1. </span>ストライプの設定</a><a class="headerlink" href="#id21" title="Link to this heading">¶</a></h4>
+<p>ストライプの設定は、<strong class="program">lfs setstripe</strong>コマンドを使用します。<strong class="program">lfs setstripe</strong>コマンドの書式を示します。詳細はマニュアル「FEFSユーザーズガイド」を参照してください。</p>
+<blockquote>
+<div><p>書式</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>lfs setstripe [options] &lt;dirname|filename&gt;
+</pre></div>
+</div>
+<p>オプション</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[--stripe-count | -c stripe_count]
+</pre></div>
+</div>
+<p>ストライプ数を設定します。1～48を指定します。</p>
+<dl>
+<dt>&lt;dirname&gt;</dt><dd><p>既存のディレクトリ名を指定します。ディレクトリにストライプが設定されます。設定後に、このディレクトリ配下に作成されるファイルやディレクトリにストライプの設定が継承されます。</p>
+</dd>
+<dt>&lt;filename&gt;</dt><dd><p>新規のファイル名を指定します。ストライプを設定した空ファイルを作成します。既存のファイルは指定できません。既存のファイルのストライプ設定は変更できません。</p>
+</dd>
+<dt>ストライプの設定方法</dt><dd><p>ここでは、ディレクトリを作成し、作成したディレクトリにストライプ設定する手順を示します。ファイル単位ではなく、ディレクトリにストライプ設定する利用方法を推奨します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mkdir<span class="w"> </span>&lt;dirname&gt;
+<span class="gp">[_LNlogin]$ </span>lfs<span class="w"> </span>setstripe<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><span class="w"> </span>&lt;dirname&gt;
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<div class="line-block">
+<div class="line">計算ノードから、2ndfsに対して <strong class="program">lfs</strong>コマンドを使用する場合は、コマンドをフルパス(<strong class="program">/usr/bin/lfs</strong>)で指定してください。</div>
+<div class="line">計算ノードから、第2階層ストレージのキャッシュに対して <strong class="program">lfs</strong>コマンドを使用する場合は、そのまま <strong class="program">lfs</strong>(defaut PATH)で指定してください。</div>
+</div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="id22">
+<h4><a class="toc-backref" href="#id38" role="doc-backlink"><span class="section-number">3.4.6.2. </span>ストライプの確認</a><a class="headerlink" href="#id22" title="Link to this heading">¶</a></h4>
+<p>ストライプの確認は、<strong class="program">lfs getstripe</strong>コマンドを使用します。詳細はマニュアル「FEFSユーザーズガイド」を参照してください。</p>
+<blockquote>
+<div><dl>
+<dt>ストライプの確認方法</dt><dd><p>ここでは、ディレクトリとファイルのストライプ設定を確認する手順を示します。次のようにして表示されるstripe_count、または、lmm_stripe_countを確認します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>lfs<span class="w"> </span>getstripe<span class="w"> </span>-d<span class="w"> </span>&lt;dirname&gt;
+<span class="go">&lt;dirname&gt;</span>
+<span class="go">stripe_count:   4 stripe_size:    0 stripe_offset:  -1</span>
+<span class="gp">[_LNlogin]$ </span>lfs<span class="w"> </span>getstripe<span class="w"> </span>&lt;dirname&gt;/&lt;filename&gt;
+<span class="go">&lt;dirname&gt;/&lt;filename&gt;</span>
+<span class="go">lmm_stripe_count:   4</span>
+<span class="go">lmm_stripe_size:    1048576</span>
+<span class="go">lmm_stripe_offset:  ...</span>
+<span class="go">        obdidx           objid          objid            group</span>
+<span class="go">....</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<div class="line-block">
+<div class="line">計算ノードから、2ndfsに対して <strong class="program">lfs</strong>コマンドを使用する場合は、コマンドをフルパス(<strong class="program">/usr/bin/lfs</strong>)で指定してください。</div>
+<div class="line">計算ノードから、第2階層ストレージのキャッシュに対して <strong class="program">lfs</strong>コマンドを使用する場合は、そのまま <strong class="program">lfs</strong>(defaut PATH)で指定してください。</div>
+</div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</section>
+<section id="filesystempoints">
+<span id="id23"></span><h3><span class="section-number">3.4.7. </span>ファイルシステム<a class="headerlink" href="#filesystempoints" title="Link to this heading">¶</a></h3>
+<p>ジョブ運用ソフトウェアは、「階層化ストレージ」でのジョブ実行をサポートしています。階層化ストレージとは、以下に示す第１階層ストレージと第２階層ストレージによる階層構造を持つファイルシステムです。</p>
+<figure class="align-default">
+<img alt="../_images/HierarchyFilesystem_01.png" src="../_images/HierarchyFilesystem_01.png" />
+</figure>
+<ul>
+<li><p>第１階層ストレージ</p>
+<p>第1階層ストレージは、Lightweight Layered IO-Accelerator(LLIO) 技術を利用した高速ファイルシステムです。第１階層ストレージは、LLIOと呼ぶ場合もあります。階層化ストレージでは、計算ノードから直接アクセスできるのはこの第1階層ストレージになります。</p>
+<p>第1階層ストレージには以下の3種類の領域があります。</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>ノード内テンポラリ領域</dt><dd><p>ジョブに割り当てられたそれぞれの計算ノードで利用できるローカルな領域です。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>共有テンポラリ領域</dt><dd><p>ジョブに割り当てられたノード間で共有できる領域です。同じジョブのプロセスであれば、どの計算ノードからでもアクセスできます。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>第2階層ストレージのキャッシュ</dt><dd><p>ジョブからは第2階層ストレージとして見えますが、内部的には、第2階層ストレージを直接アクセスするのではなく、第1階層ストレージ上にある第2階層ストレージのキャッシュをアクセスします。ノード内テンポラリ領域と共有テンポラリ領域はジョブごとに確保され、そのジョブだけが使用できる高速な作業用ファイルシステムです。これらの領域はジョブの開始時に確保され、ジョブが終了すると領域は削除されます。</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>第１階層ストレージについての詳細は、マニュアル「LLIOユーザーズガイド」を参照してください。</p>
+</div>
+</li>
+<li><p>第２階層ストレージ</p>
+<p>第２階層ストレージは、分散ファイルシステムの FEFS を利用し、ログインノードおよび各計算ノードで共有されます。ユーザはジョブを投入する前に、ジョブの実行に必要なジョブスクリプトなどのファイルをこのファイルシステムに配置します。計算ノード上のジョブから第２階層ストレージへのアクセスは、内部的には第１階層ストレージ上のキャッシュに対するアクセスになります。</p>
+<p>ホーム領域（/home）、データ領域（/vol0<em>n</em>0<em>m</em>/data）、シェア領域（/vol0<em>n</em>0<em>m</em>/share）、2ndfs領域（/2ndfs）は第2階層ストレージに作成されています。
+2ndfsは第1階層ストレージを経由せず直接第2階層ストレージにアクセスするための領域です。</p>
+<div class="line-block">
+<div class="line"><em>n</em>:volume番号(2～6)</div>
+<div class="line"><em>m</em>:MDT番号(0～7)</div>
+</div>
+<ul>
+<li><p>ディスク容量／ファイル数制限</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>項目</p></th>
+<th class="head"><p>ホーム領域</p></th>
+<th class="head"><p>データ領域＋シェア領域</p></th>
+<th class="head"><p>2ndfs領域</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>容量制限</p></td>
+<td><p>20GiB/ユーザ</p></td>
+<td><p>5TiB/グループ</p></td>
+<td><p>5TiB/グループ</p></td>
+</tr>
+<tr class="row-odd"><td><p>ファイル数制限</p></td>
+<td><p>200K/ユーザ</p></td>
+<td><p>1.5M/グループ</p></td>
+<td><p>1.5M/グループ</p></td>
+</tr>
+<tr class="row-even"><td><p>ブロックサイズ</p></td>
+<td><p>4KiB</p></td>
+<td><p>4KiB</p></td>
+<td><p>4KiB</p></td>
+</tr>
+<tr class="row-odd"><td><p>ストライプカウント</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>ストライプサイズ</p></td>
+<td><p>1MiB</p></td>
+<td><p>1MiB</p></td>
+<td><p>1MiB</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p>/vol0002領域は i-node を特に多く利用したい課題に優先的に利用いただくことを目的とした領域です。
+領域に適した課題に利用していただくため、利用を許可制とします。
+利用申請時に、i-node 数を特に多く利用する理由について記載をお願いいたします。
+この領域の運用方針に沿わない利用をされている課題は利用を中止し、通常の領域へ引越しの依頼をさせていただく場合があります。</p>
+<ul>
+<li><p>ディスク容量／ファイル数制限</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>項目</p></th>
+<th class="head"><p>データ領域＋シェア領域(/vol0002)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>容量制限</p></td>
+<td><p>5TiB/グループ</p></td>
+</tr>
+<tr class="row-odd"><td><p>ファイル数制限</p></td>
+<td><p>9.0M/グループ</p></td>
+</tr>
+<tr class="row-even"><td><p>ブロックサイズ</p></td>
+<td><p>4KiB</p></td>
+</tr>
+<tr class="row-odd"><td><p>ストライプカウント</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>ストライプサイズ</p></td>
+<td><p>1MiB</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p>申請については<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/application">こちら</a>をご確認ください</p>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>FEFSについての詳細は、マニュアル「FEFSユーザーズガイド」を参照してください。</p>
+</div>
+</li>
+</ul>
+<section id="io">
+<h4><span class="section-number">3.4.7.1. </span>計算ノードのクライアントキャッシュとIO性能<a class="headerlink" href="#io" title="Link to this heading">¶</a></h4>
+<p>計算ノードは、入出力で使用するクライアントキャッシュを128MiBに制限しています。このため、１レコードの長さが128MiBより大きい場合に第2階層ストレージ上のファイルに対するRead性能が劣化する場合があります。I/Oの設計を行う場合、および、他システムから移行を行う場合は、１レコードの長さを128MiB以下にすることを推奨します。</p>
+<ul>
+<li><p>C/C++利用の場合</p>
+<p>利用者プログラム内で読み込む大きさを調整します。freadを例に取ると、size*num &lt;= 128MiB になるようにします。</p>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">fread</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">num</span><span class="p">,</span><span class="w"> </span><span class="n">fp</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Fortran利用の場合</p>
+<p>Fortranが持つ入出力バッファの大きさが影響します。この入出力バッファのデフォルト値は8MiBのため、クライアントキャッシュのサイズの影響を受けません。アプリケーション実行時に入出力バッファの大きさを指定する場合(-Wl,-gオプションなどの指定)は、128MiB以下になるようにします。</p>
+</li>
+</ul>
+<p>また、gzip/gunzipなどを用いて128MiBを越えるファイルを展開した場合、キャッシュの吐き出し待ちに時間を要することがあります。第2階層ストレージ上に大量のファイルを展開する場合、大きなクライアントキャッシュを持つログインノードを利用して展開することを検討してください。</p>
+</section>
+</section>
+<section id="group">
+<span id="id25"></span><h3><span class="section-number">3.4.8. </span>グループ<a class="headerlink" href="#group" title="Link to this heading">¶</a></h3>
+<p>ジョブを実行する時にはグループIDを指定する必要があります．</p>
+<div class="line-block">
+<div class="line">各課題には課題IDが付与されていますが、グループIDは各課題の初年度採択時の課題IDです（課題IDは毎年度変わりますが、グループIDは変わりません）。</div>
+<div class="line"><strong class="command">userinfo</strong>コマンドでアカウントが属しているグループIDを確認することができます。<strong class="command">userinfo</strong>コマンドを利用して課題のグループIDを確認してください。</div>
+</div>
+<p>userinfoコマンド使用例</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>userinfo<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>groupList
+<span class="go">groupList=hp210xxx,hp220xxx,fugaku</span>
+</pre></div>
+</div>
+<p>複数のグループIDが表示され、目的の課題IDに対応するグループIDがわからない場合は、各課題の代表者に確認してください。</p>
+<p>グループリストに<code class="docutils literal notranslate"><span class="pre">'fugaku'</span></code>が含まれている場合がありますが、<code class="docutils literal notranslate"><span class="pre">'fugaku'</span></code>は全てのシングルアカウントが属するグループIDです。
+<code class="docutils literal notranslate"><span class="pre">'fugaku'</span></code>は、ジョブ実行時に指定することはできません。</p>
+<p>ジョブスクリプト例</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span><span class="nb">cd</span><span class="w"> </span>/vol0n0m/data/groupname/username
+
+<span class="gp">[_LNlogin]$ </span>vi<span class="w"> </span>jobscript
+<span class="gp">#</span>!/bin/bash
+<span class="gp">#</span>PJM<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;node=4&quot;</span>
+<span class="gp">#</span>PJM<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;rscgrp=small&quot;</span>
+<span class="gp">#</span>PJM<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;elapse=1:00:00&quot;</span>
+<span class="gp">#</span>PJM<span class="w"> </span>--mpi<span class="w"> </span><span class="s2">&quot;max-proc-per-node=4&quot;</span>
+<span class="gp">#</span>PJM<span class="w"> </span>-x<span class="w"> </span><span class="nv">PJM_LLIO_GFSCACHE</span><span class="o">=</span>/vol0005
+<span class="gp">#</span>PJM<span class="w"> </span>-g<span class="w"> </span>groupname
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">また、ジョブで利用するファイルシステム(volume)も指定する必要があります。</div>
+<div class="line"><a class="reference internal" href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html#selectavailablevolumes"><span class="std std-ref">利用ファイルシステム(volume)の選択</span></a>を参照ください。</div>
+</div>
+</section>
+<section id="id26">
+<h3><span class="section-number">3.4.9. </span>並列ジョブの種類<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h3>
+<p>「富岳」では、計算するプログラムをジョブ単位で実行します。ジョブは、必要とするノード数によって、シングルノードジョブとマルチノードジョブに分類されます。</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">マルチノードジョブ</div>
+<div class="line">複数の計算ノードを利用して実行するジョブです。ノードをまたぐプロセス並列プログラムが該当します。</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">シングルノードジョブ</div>
+<div class="line">１台の計算ノードで実行するジョブです。逐次ジョブはシングルノードジョブになります。並列ジョブは、ノード内で複数のプロセスまたはスレッドを使うものが該当します。</div>
+</div>
+</li>
+</ol>
+</section>
+<section id="id27">
+<h3><span class="section-number">3.4.10. </span>ログインノード<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">ログインノードでは、Linux標準の機能を利用してリソースの制限を設けています。</div>
+<div class="line"><strong class="command">ulimit</strong>コマンドを利用して使用可能なリソースを確認できます。</div>
+</div>
+<p><strong class="command">ulimit</strong>コマンドの実行例</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span><span class="nb">ulimit</span><span class="w"> </span>-a
+<span class="go">core file size          (blocks, -c) unlimited</span>
+<span class="go">data seg size           (kbytes, -d) unlimited</span>
+<span class="go">scheduling priority             (-e) 0</span>
+<span class="go">file size               (blocks, -f) unlimited</span>
+<span class="go">pending signals                 (-i) 377308</span>
+<span class="go">max locked memory       (kbytes, -l) unlimited</span>
+<span class="go">max memory size         (kbytes, -m) unlimited</span>
+<span class="go">open files                      (-n) 1024</span>
+<span class="go">pipe size            (512 bytes, -p) 8</span>
+<span class="go">POSIX message queues     (bytes, -q) 819200</span>
+<span class="go">real-time priority              (-r) 0</span>
+<span class="go">stack size              (kbytes, -s) 8192</span>
+<span class="go">cpu time               (seconds, -t) 604800</span>
+<span class="go">max user processes              (-u) 4096</span>
+<span class="go">virtual memory          (kbytes, -v) 41943040</span>
+<span class="go">file locks                      (-x) unlimited</span>
+</pre></div>
+</div>
+<p>1台のログインノードあたり、次を超える資源利用を行う場合は、複数のログインノードでの分散実行や<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/pps-slurm/">プリポストノード</a>、「富岳」本体の利用をご検討ください。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>資源</p></th>
+<th class="head"><p>目安</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>スレッド数</p></td>
+<td><p>8スレッド</p></td>
+</tr>
+<tr class="row-odd"><td><p>メモリ容量</p></td>
+<td><p>12GiB</p></td>
+</tr>
+</tbody>
+</table>
+<p>富岳ウェブサイトの「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/operation/20211028_01">富岳ログインノードの利用時の注意点について</a>」も参照ください。</p>
+</section>
+<section id="i-o">
+<span id="usagerulesionode"></span><h3><span class="section-number">3.4.11. </span>I/Oノード<a class="headerlink" href="#i-o" title="Link to this heading">¶</a></h3>
+<p>「富岳」は、一部の計算ノードがI/Oノードを兼ねています。</p>
+<p>I/Oノードは次の三種類があります。</p>
+<dl class="simple">
+<dt>BIO(Boot I/O node)</dt><dd><p>ノードのブートサーバになるI/Oノードです。
+16ノード（1BoB）に1ノード存在します。</p>
+</dd>
+<dt>SIO(Storage I/O node)</dt><dd><p>第1階層ストレージに対する入出力を担う I/Oノードです。
+SIOノードには、第1階層ストレージを構成するディスク装置(SSD)が接続されています。
+16ノード（1BoB）に1ノード存在します。</p>
+</dd>
+<dt>GIO(Global I/O node)</dt><dd><p>第2階層ストレージ(FEFS)に対する入出力を中継するノードです。
+192ノードに1ノード存在します。</p>
+</dd>
+</dl>
+<figure class="align-center" id="id32">
+<a class="reference internal image-reference" href="../_images/IOnode_01.png"><img alt="I/Oノードの配置概要" src="../_images/IOnode_01.png" style="width: 574.0px; height: 259.0px;" /></a>
+<figcaption>
+<p><span class="caption-text">I/Oノードの配置概要</span><a class="headerlink" href="#id32" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>I/OノードのCPU周波数は2.2GHzに固定されています。</p>
+<p>ジョブ統計情報に出力されるNODE IDからI/Oノードを識別することができます。</p>
+<p>I/Oノードの識別方法</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">BIO: NODE IDの末尾01</div>
+<div class="line">SIO: NODE IDの末尾02</div>
+<div class="line">GIO: <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/contents/0603-2020/GIO_LIST.txt">GIO_list.txt</a> のNODE ID一覧を参照</div>
+</div>
+</div></blockquote>
+<p>BIO、SIO、GIO、BoBの機能についてはマニュアル「ジョブ運用ソフトウェア　概説書」を参照ください。</p>
+<p>ログインノードにNODE IDからI/Oノードを表示する<strong class="program">idcheck</strong>コマンドを用意しています。</p>
+<ol class="arabic">
+<li><p><code class="docutils literal notranslate"><span class="pre">-h</span></code>オプションでヘルプ内容が表示されます。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>idcheck<span class="w"> </span>-h
+<span class="go">Usage: idcheck [OPTION]...</span>
+<span class="go"> -h Display help</span>
+<span class="go"> -n nodeid[,...] Search node type from node ID</span>
+<span class="go"> -f &lt;FILE&gt; This option executes the process for node IDs written in the file that is specified by filename.</span>
+<span class="go"> [Example]</span>
+<span class="go"> 0x01010001</span>
+<span class="go"> 0x01010002</span>
+<span class="go"> 0x01010003</span>
+<span class="go"> 0x01010004</span>
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-n</span></code>オプションで複数のNODEID（カンマで区切ります）を指定して確認できます。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>idcheck<span class="w"> </span>-n<span class="w"> </span>0x01010001,0x01010002,0x01010003,0x01010004
+<span class="go">0x01010001 BIO</span>
+<span class="go">0x01010002 SIO</span>
+<span class="go">0x01010003 GIO</span>
+<span class="go">0x01010004 CN</span>
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-f</span></code>オプションでファイルに記載されたNODEID群を確認できます。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>cat<span class="w"> </span>aaa
+<span class="go">0x01010001</span>
+<span class="go">0x01010002</span>
+<span class="go">0x01010003</span>
+<span class="go">0x01010004</span>
+<span class="gp">[_LNlogin]$ </span>idcheck<span class="w"> </span>-f<span class="w"> </span>aaa
+<span class="go">0x01010001 BIO</span>
+<span class="go">0x01010002 SIO</span>
+<span class="go">0x01010003 GIO</span>
+<span class="go">0x01010004 CN</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="estimatingtheamountofmemory">
+<span id="id30"></span><h3><span class="section-number">3.4.12. </span>ユーザープログラムが利用可能なメモリ量の見積り<a class="headerlink" href="#estimatingtheamountofmemory" title="Link to this heading">¶</a></h3>
+<p>「富岳」では、ジョブが1ノードで使用できるメモリ量(ジョブメモリ量)の上限がシステムによって設定されています。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>ノード種別</p></th>
+<th class="head"><p>ジョブメモリ量の上限(byte)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BIO/SIO/GIO</p></td>
+<td><p>30,739,267,584</p></td>
+</tr>
+<tr class="row-odd"><td><p>CN</p></td>
+<td><p>30,739,333,120</p></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line">このジョブメモリ量の上限を超過してジョブを実行することはできません。</div>
+<div class="line">また、計算ノードで動作しているLinux OSのメモリ断片化が進行すると、ジョブで使用するメモリ量が上限に達しない場合でもジョブが終了する場合があります。</div>
+<div class="line">安定して使用できるジョブメモリ量の上限の目安は約25GB(23.2GiB)です(メモリの断片化状況によっては、このメモリ量でも使用できない可能性があります)。</div>
+</div>
+<p>ユーザープログラムが利用可能なメモリ量は以下となります。</p>
+<p>見積式:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>AM = MJM - MPI
+
+ AM  : ユーザプログラムが利用できる1ノードあたりのメモリ量 (byte)
+ MJM : ジョブメモリ量の上限 (byte)
+ MPI : MPIライブラリのメモリ使用量 (byte)
+</pre></div>
+</div>
+<p>MPIライブラリのメモリ使用量の見積りについては、マニュアル「Development Studio MPI使用手引書」-「6.11 メモリ使用量の見積り式とチューニング」を参照ください。</p>
+</section>
+<section id="id31">
+<h3><span class="section-number">3.4.13. </span>計算資源の利用の定義<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h3>
+<figure class="align-default">
+<img alt="../_images/DefinitionOfUsedComputationalResource_01.png" src="../_images/DefinitionOfUsedComputationalResource_01.png" />
+</figure>
+<p><strong>n番目のジョブに割り当てられたノード数</strong></p>
+<div class="line-block">
+<div class="line">＝ スケジューラがジョブに割り当てたノード数</div>
+<div class="line">≠ ジョブスクリプトまたはpjsub実行時に指定したノード数</div>
+<div class="line">≠ 実際にジョブの実行中に使用したノード数</div>
+</div>
+<ul class="simple">
+<li><p>384ノード以下のジョブは、指定したノード割り当て方式で、割り当てられるノード数が変わります。</p>
+<ul>
+<li><p>torus : 12ノード単位(2*3*2)(Tofu単位)でノードが割り当てられます。
+そのため、ジョブ投入時に指定したノード数よりも多いノードがジョブに割り当てられる場合があります。</p></li>
+<li><p>mesh : 指定されたmeshを形成するのに必要なノード数が割り当てられます。
+そのため、ジョブ投入時に指定したノード数よりも多いノードがジョブに割り当てられる場合があります。</p></li>
+<li><p>noncont(デフォルト指定) : 指定されたノード数が割り当てられます。
+この場合、隣接したノードが割り当てられない場合があるので、ノード間通信が他のジョブの影響を受ける場合があります。</p></li>
+</ul>
+</li>
+<li><p>385ノード以上のジョブは48ノード単位(2*3*8)(Shelf単位)でノードが割り当てられます。
+そのため、ジョブ投入時に指定したノード数よりも多いノードがジョブに割り当てられる場合があります。
+48ノード単位(2*3*8)で構成される直方体でノードを指定すると、この無駄を少なくすることができます。
+Shelf単位でノードが割り当てられるため、ジョブは第1階層を占有することができます。</p></li>
+<li><p>ノードの空き状況によっては、指定した形状を回転させて割り当てることがあるため、ジョブを投入するごとに割り当てられるノード数が変わることがあります。
+<code class="docutils literal notranslate"><span class="pre">:strict</span></code>オプションを指定すると回転を抑止できますが、ジョブの実行開始時刻が遅くなる場合があります。
+noncontが指定されたジョブ以外は回転の影響を受けます。</p></li>
+</ul>
+<p>スケジューラがジョブに割り当てたノード数は、ジョブ統計情報の<code class="docutils literal notranslate"><span class="pre">NODE</span> <span class="pre">NUM</span> <span class="pre">(ALLOC)</span></code>や<code class="docutils literal notranslate"><span class="pre">pjstat</span> <span class="pre">-v</span> <span class="pre">--choose</span> <span class="pre">jid,nnuma</span></code>コマンドで参照することができます。</p>
+<p>[pjstatコマンド表示例]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span>-v<span class="w"> </span>--choose<span class="w"> </span>jid,nnuma
+<span class="go">JOB_ID     NODE_ALLOC</span>
+<span class="go">13132535   432:6x9x8</span>
+<span class="go">14049234   216</span>
+</pre></div>
+</div>
+<p><strong>n番目のジョブの経過時間</strong></p>
+<div class="line-block">
+<div class="line">＝ 実際にジョブの実行にかかった時間</div>
+<div class="line">＝ ステータスが「RUN」になっている時間 （再実行された場合は全ての実行時間の和）</div>
+<div class="line">≠ ジョブスクリプトまたはpjsub実行時に指定した経過時間</div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>原則資源返却は行いません</p></li>
+</ul>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3. 利用規則</a><ul>
+<li><a class="reference internal" href="#id2">3.1. 概要</a></li>
+<li><a class="reference internal" href="#id3">3.2. 利用規模／利用環境</a><ul>
+<li><a class="reference internal" href="#id4">3.2.1. 利用可能なジョブ規模</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id5">3.3. ローカルアカウント管理</a><ul>
+<li><a class="reference internal" href="#id6">3.3.1. ログイン</a></li>
+<li><a class="reference internal" href="#id7">3.3.2. クライアント証明書による認証</a></li>
+<li><a class="reference internal" href="#id8">3.3.3. プロジェクト責任者の責任範囲</a></li>
+<li><a class="reference internal" href="#id9">3.3.4. 更新処理</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#resource">3.4. リソース</a><ul>
+<li><a class="reference internal" href="#id11">3.4.1. 計算ノード</a></li>
+<li><a class="reference internal" href="#id13">3.4.2. ジョブ投入数の確認</a></li>
+<li><a class="reference internal" href="#howtospecifyresourcegroups">3.4.3. リソースグループの使用方法</a></li>
+<li><a class="reference internal" href="#id15">3.4.4. リソースグループの利用状況</a></li>
+<li><a class="reference internal" href="#diskpoints">3.4.5. ディスク</a><ul>
+<li><a class="reference internal" href="#vol0n0m-share-groupname">3.4.5.1. シェア領域(/vol0n0m/share/groupname/)の利用方法</a><ul>
+<li><a class="reference internal" href="#acl">3.4.5.1.1. ACL機能</a></li>
+<li><a class="reference internal" href="#id18">3.4.5.1.2. ACLを利用したファイルの共有例</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tmpfs-worktmp">3.4.5.2. tmpfs領域(/worktmp/)の利用方法</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id19">3.4.6. ファイル作成とストライプ設定</a><ul>
+<li><a class="reference internal" href="#id21">3.4.6.1. ストライプの設定</a></li>
+<li><a class="reference internal" href="#id22">3.4.6.2. ストライプの確認</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#filesystempoints">3.4.7. ファイルシステム</a><ul>
+<li><a class="reference internal" href="#io">3.4.7.1. 計算ノードのクライアントキャッシュとIO性能</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#group">3.4.8. グループ</a></li>
+<li><a class="reference internal" href="#id26">3.4.9. 並列ジョブの種類</a></li>
+<li><a class="reference internal" href="#id27">3.4.10. ログインノード</a></li>
+<li><a class="reference internal" href="#i-o">3.4.11. I/Oノード</a></li>
+<li><a class="reference internal" href="#estimatingtheamountofmemory">3.4.12. ユーザープログラムが利用可能なメモリ量の見積り</a></li>
+<li><a class="reference internal" href="#id31">3.4.13. 計算資源の利用の定義</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../MethodOfUse/index.html"
+                          title="前の章へ"><span class="section-number">2. </span>利用方法</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../AccessToTheSystem/index.html"
+                          title="次の章へ"><span class="section-number">4. </span>システム利用</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../AccessToTheSystem/index.html" title="4. システム利用"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="../MethodOfUse/index.html" title="2. 利用方法"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>利用規則</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

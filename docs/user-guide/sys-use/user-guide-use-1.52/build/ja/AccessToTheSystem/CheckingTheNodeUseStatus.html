@@ -1,0 +1,174 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4.5. ノード使用状況確認 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="4.6. モジュールパッケージ" href="TheEnvironmentModulesPackage.html" />
+    <link rel="prev" title="4.4. ログイン" href="LoggingInToTheFugakuComputerWithLocalAccount.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="TheEnvironmentModulesPackage.html" title="4.6. モジュールパッケージ"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="LoggingInToTheFugakuComputerWithLocalAccount.html" title="4.4. ログイン"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">4. </span>システム利用</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.5. </span>ノード使用状況確認</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">4.5. </span>ノード使用状況確認<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>全体の使用可能ノード数、空きノード数の確認には、<strong class="program">pjshowrsc</strong>コマンドを使用します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjshowrsc
+<span class="go">[ CLST: cluster1]</span>
+<span class="go">RSCUNIT           NODE</span>
+<span class="go">                  TOTAL  FREE  ALLOC</span>
+<span class="go">ResourceUnitName     14    13      1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><strong class="program">pjshowrsc</strong>コマンドを実行したユーザーが投入権限を持つグループに所属していない場合、情報は表示されません。</p>
+<p>また、グループを指定せずに<strong class="program">pjshowrsc</strong>コマンドを実行した場合は、情報が表示されないことがあります。
+その場合は、以下のように<code class="docutils literal notranslate"><span class="pre">-g</span></code>オプションで所属するグループを指定することで、そのグループの権限で使用可能な計算資源の状態を確認できます。</p>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjshowrsc<span class="w"> </span>-g<span class="w"> </span><span class="o">[</span>グループ名<span class="o">]</span>
+</pre></div>
+</div>
+<p>また、<strong class="program">pjstat</strong>に<code class="docutils literal notranslate"><span class="pre">--summary</span></code>オプションを指定するとジョブ数のサマリが表示されます。ジョブ数のサマリでは、<strong class="program">pjstat</strong>コマンドを実行したユーザ（<code class="docutils literal notranslate"><span class="pre">-A</span></code>オプション指定時は全ユーザ）が投入したジョブの数が、以下のように状態ごとに集計されて表示されます。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span>--summary
+
+<span class="go">  ACCEPT QUEUED RUNING RUNOUT   HOLD  ERROR REJECT   EXIT CANCEL  TOTAL</span>
+<span class="go">       0      0      0      0      0      0      0      0      0      0</span>
+<span class="go">s      0      0      0      0      0      0      0      0      0      0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>行頭に &quot;s&quot; がある行はサブジョブを含むジョブ数です。</p>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目名</p></th>
+<th class="head"><p>内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ACCEPT</p></td>
+<td><p>ジョブ受付待ち状態のジョブ数</p></td>
+</tr>
+<tr class="row-odd"><td><p>QUEUED</p></td>
+<td><p>ジョブ実行待ち状態のジョブ数</p></td>
+</tr>
+<tr class="row-even"><td><p>RUNING</p></td>
+<td><p>実行中のジョブ数</p></td>
+</tr>
+<tr class="row-odd"><td><p>RUNOUT</p></td>
+<td><p>ジョブの終了待ち状態のジョブ数</p></td>
+</tr>
+<tr class="row-even"><td><p>HOLD</p></td>
+<td><p>ユーザによる固定状態のジョブ数</p></td>
+</tr>
+<tr class="row-odd"><td><p>ERROR</p></td>
+<td><p>エラーによる固定状態のジョブ数</p></td>
+</tr>
+<tr class="row-even"><td><p>REJECT</p></td>
+<td><p>受付けが拒否された状態のジョブ数</p></td>
+</tr>
+<tr class="row-odd"><td><p>EXIT</p></td>
+<td><p>終了した状態のジョブ数</p></td>
+</tr>
+<tr class="row-even"><td><p>CANCEL</p></td>
+<td><p>ユーザまたは管理者によって中止された状態のジョブ数</p></td>
+</tr>
+<tr class="row-odd"><td><p>TOTAL</p></td>
+<td><p>総ジョブ数</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="LoggingInToTheFugakuComputerWithLocalAccount.html"
+                          title="前の章へ"><span class="section-number">4.4. </span>ログイン</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="TheEnvironmentModulesPackage.html"
+                          title="次の章へ"><span class="section-number">4.6. </span>モジュールパッケージ</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="TheEnvironmentModulesPackage.html" title="4.6. モジュールパッケージ"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="LoggingInToTheFugakuComputerWithLocalAccount.html" title="4.4. ログイン"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">4. </span>システム利用</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.5. </span>ノード使用状況確認</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

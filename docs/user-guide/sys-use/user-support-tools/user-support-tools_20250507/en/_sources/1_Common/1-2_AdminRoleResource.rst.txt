@@ -1,0 +1,15 @@
+Resource management / Control authority
+=======================================
+
+| 　Indicates the operations that can be performed by the operator for resources of node time product and disk capacity.
+| 
+| Resource operation authority per theme / sub-theme / group
+
+.. figure:: img/1_Common_04_1.png
+
+| Resource operation authority per user
+
+.. figure:: img/1_Common_04_2.png
+
+| 　[\*1] The system administrator can modify the execution time, number of nodes, and unit accounting factor in the partition.
+| 　[\*2] You can register, change, and delete only the resources assigned to members belonging to the management hierarchy.

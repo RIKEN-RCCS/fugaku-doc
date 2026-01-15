@@ -1,0 +1,146 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.11. Profiler &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f85107c5" />
+    
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="3.1.11.1. Overview" href="Overview.html" />
+    <link rel="prev" title="3.1.10. Debugger for Parallel Applications function" href="../ParallelExecutionDebugger/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Overview.html" title="3.1.11.1. Overview"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../ParallelExecutionDebugger/index.html" title="3.1.10. Debugger for Parallel Applications function"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.11. </span>Profiler</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="profiler">
+<h1><span class="section-number">3.1.11. </span>Profiler<a class="headerlink" href="#profiler" title="Link to this heading">¶</a></h1>
+<p>Here explaines about the profiler.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Overview.html">3.1.11.1. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AdvancedProfiler.html">3.1.11.2. Advanced Performance Profiler</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="AdvancedProfiler.html#overview">3.1.11.2.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AdvancedProfiler.html#addition-of-measurement-interval-specification-routine">3.1.11.2.2. Addition of measurement interval specification routine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AdvancedProfiler.html#compiling-linking">3.1.11.2.3. Compiling / Linking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AdvancedProfiler.html#measurement-of-profile-data">3.1.11.2.4. Measurement of profile data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AdvancedProfiler.html#profiler-option">3.1.11.2.5. Profiler option</a></li>
+<li class="toctree-l2"><a class="reference internal" href="AdvancedProfiler.html#output-profile-result">3.1.11.2.6. Output profile result</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="InstantProfiler.html">3.1.11.3. Instant Performance Profiler</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="InstantProfiler.html#overview">3.1.11.3.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InstantProfiler.html#addition-of-measurement-interval-specification-routine">3.1.11.3.2. Addition of measurement interval specification routine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InstantProfiler.html#compiling-linking">3.1.11.3.3. Compiling / Linking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InstantProfiler.html#measurement-of-profiler-data">3.1.11.3.4. Measurement of profiler data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InstantProfiler.html#profiler-option">3.1.11.3.5. Profiler option</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InstantProfiler.html#output-profile-result">3.1.11.3.6. Output profile result</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CPUPerformanceAnalysisReport.html">3.1.11.4. CPU Performance Analysis Report</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CPUPerformanceAnalysisReport.html#overview">3.1.11.4.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CPUPerformanceAnalysisReport.html#cpu-performance-analysis-report-type">3.1.11.4.2. CPU Performance Analysis Report type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CPUPerformanceAnalysisReport.html#addition-of-measurement-interval-specification-routine">3.1.11.4.3. Addition of measurement interval specification routine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CPUPerformanceAnalysisReport.html#compiling-linking">3.1.11.4.4. Compiling / Linking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CPUPerformanceAnalysisReport.html#measurement-of-profile-data">3.1.11.4.5. Measurement of profile data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CPUPerformanceAnalysisReport.html#profiler-option">3.1.11.4.6. Profiler option</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CPUPerformanceAnalysisReport.html#output-profile-result">3.1.11.4.7. Output profile result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CPUPerformanceAnalysisReport.html#create-a-cpu-performance-analysis-report">3.1.11.4.8. Create a CPU Performance Analysis Report</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ImportantPoints.html">3.1.11.5. Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ImportantPoints.html#compile-option">3.1.11.5.1. Compile option</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImportantPoints.html#avoiding-long-time-or-large-memory-use-in-large-parallel-programs">3.1.11.5.2. Avoiding long time or large memory use in large parallel programs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImportantPoints.html#cpu-frequency-of-compute-nodes-that-also-serve-as-io">3.1.11.5.3. CPU frequency of compute nodes that also serve as IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImportantPoints.html#cpu-binding">3.1.11.5.4. CPU Binding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ImportantPoints.html#cpu-performance-analysis-report-cache-miss-ratio">3.1.11.5.5. CPU Performance Analysis Report Cache Miss Ratio</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../ParallelExecutionDebugger/index.html"
+                          title="previous chapter"><span class="section-number">3.1.10. </span>Debugger for Parallel Applications function</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Overview.html"
+                          title="next chapter"><span class="section-number">3.1.11.1. </span>Overview</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Overview.html" title="3.1.11.1. Overview"
+             >next</a></li>
+        <li class="right" >
+          <a href="../ParallelExecutionDebugger/index.html" title="3.1.10. Debugger for Parallel Applications function"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.11. </span>Profiler</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

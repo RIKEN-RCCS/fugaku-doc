@@ -1,0 +1,343 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+    <title>2.1.1. ユーザ情報表示 &#8212; 利用者支援ツール 使用手引書 (利用者編)  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="2.1.2. グループ情報表示" href="2-1-2_GroupInfo.html" />
+    <link rel="prev" title="2.1. コマンド解説" href="2-1_CommandExpranation.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="2-1-2_GroupInfo.html" title="2.1.2. グループ情報表示"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="2-1_CommandExpranation.html" title="2.1. コマンド解説"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="2_UserManagement.html" ><span class="section-number">2. </span>利用者管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="2-1_CommandExpranation.html" accesskey="U"><span class="section-number">2.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.1.1. </span>ユーザ情報表示</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">2.1.1. </span>ユーザ情報表示<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[名前]</strong></div>
+<div class="line">　userinfo - ユーザ情報を表示する</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[書式]</strong></div>
+<div class="line">　userinfo  [-u  ユーザ名...]  [-u, -l以外のオプション]</div>
+<div class="line">　userinfo  -l</div>
+<div class="line">　※-u, -i, -g, -n, -y, -hの複合指定はAND検索、同一オプション内での複数指定はOR検索になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[説明]</strong></div>
+<div class="line">　userinfo コマンドは、利用者管理ノード上のディレクトリサービス(OpenLDAP)に登録されている利用者の情報を表示する。表示結果が複数行に及ぶ場合はディレクトリサービス(OpenLDAP)から取り出された順に表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　利用者は自身の利用者情報のみ表示可能である。プロジェクト責任者はグループに属するメンバの利用者情報を表示可能である。システム管理者はシステムに登録されている全メンバの利用者情報を表示可能である。ただし、利用者管理機能に記載されている管理者権限が付与されている必要がある。なお、オプション指定なしの場合はプロジェクト責任者、システム管理者であっても自身の利用者情報のみ表示可能である。</div>
+</div>
+<div class="line-block">
+<div class="line">　個人情報については、「個人情報表示」もしくは「個人情報設定」権限が付与されている管理者のみ表示が可能となる。ただし、「個人情報表示」もしくは「個人情報設定」権限が付与されていなくても、自身の個人情報は表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　ステータスの状態が「削除」以外の利用者情報が表示対象になる。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ステータス</p></th>
+<th class="head"><p>状態</p></th>
+<th class="head"><p>意味</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>有効</p></td>
+<td><p>システム利用が可能な状態である。</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>ロック</p></td>
+<td><p>利用者がログイン時のパスワード入力を規定回数以上誤ったことによりロックされている状態である。この状態は、システム利用が不可能な状態である。</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>ロック</p></td>
+<td><p>システム管理者の判断によりロックされている状態である。この状態は、システム利用が不可能な状態である。</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>削除</p></td>
+<td><p>システム管理者の判断により論理削除されている状態である。この状態は、システム利用が不可能な状態である。</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>猶予期間中</p></td>
+<td><p>システムの自動判断により猶予期間に設定されている状態である。この状態は、利用者ポータル、スーパーコンピュータ「富岳」のログインノードへのSSH接続は可能であるが、ジョブの投入は不可能な状態である。</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>有効期間外</p></td>
+<td><p>システムの自動判断により有効期間外に設定されている状態である。この状態は、利用者ポータル、ログインノードへのSSH接続、ジョブの投入が不可能な状態である。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line">　<strong>[オプション]</strong></div>
+<div class="line">　-u  ユーザ名...</div>
+<div class="line">　ユーザ名を指定する。スペースに続けて複数指定が可能で、アスタリスクを使用した前方／中間／後方一致指定ができる。全ユーザの情報を表示する場合には、-uオプションの引数に ‘*’ を指定する。</div>
+<div class="line">　完全一致指定       user</div>
+<div class="line">　前方一致指定       ‘user*’</div>
+<div class="line">　中間一致指定       ’*user*’</div>
+<div class="line">　後方一致指定       ’*user’</div>
+</div>
+<div class="line-block">
+<div class="line">　-i  ユーザID...</div>
+<div class="line">　ユーザIDを指定する。スペースに続けて複数指定が可能であるが、アスタリスクを使用した前方／中間／後方一致指定はできない。完全一致指定のみ可能である。</div>
+</div>
+<div class="line-block">
+<div class="line">　-g  グループ名...</div>
+<div class="line">　グループ名を指定する。スペースに続けて複数指定が可能で、アスタリスクを使用した前方／中間／後方一致指定ができる。</div>
+<div class="line">　完全一致指定       group</div>
+<div class="line">　前方一致指定       ’group *’</div>
+<div class="line">　中間一致指定       ’* group *’</div>
+<div class="line">　後方一致指定       ’* group’</div>
+</div>
+<div class="line-block">
+<div class="line">　-n  氏名...</div>
+<div class="line">　氏名を指定する。スペースに続けて複数指定が可能で、アスタリスクを使用した前方／中間／後方一致指定ができる。</div>
+<div class="line">　完全一致指定       “富岳　太郎”</div>
+<div class="line">　前方一致指定       “富岳*”</div>
+<div class="line">　中間一致指定       “*富岳*”</div>
+<div class="line">　後方一致指定       “*太郎”</div>
+</div>
+<div class="line-block">
+<div class="line">　-y  氏名フリガナ...</div>
+<div class="line">　氏名の振り仮名を指定する。スペースに続けて複数指定が可能で、アスタリスクを使用した前方／中間／後方一致指定ができる。</div>
+<div class="line">　完全一致指定       “フガク　タロウ”</div>
+<div class="line">　前方一致指定       “フガク*”</div>
+<div class="line">　中間一致指定       “*フガク*”</div>
+<div class="line">　後方一致指定       “*タロウ”</div>
+</div>
+<div class="line-block">
+<div class="line">　-h  HPCI-ID...</div>
+<div class="line">　HPCI-IDを指定する。スペースに続けて複数指定が可能で、アスタリスクを使用した前方／中間／後方一致指定ができる。</div>
+<div class="line">　完全一致指定       “ hpci120000”</div>
+<div class="line">　前方一致指定       “hp*”</div>
+<div class="line">　中間一致指定       “*12*”</div>
+<div class="line">　後方一致指定       “*000”</div>
+</div>
+<div class="line-block">
+<div class="line">　-l</div>
+<div class="line">　全ユーザ名の一覧を表示する。他オプションとは排他の関係にある。</div>
+</div>
+<div class="line-block">
+<div class="line">　出力形式は</div>
+<div class="line">　ユーザ名：ユーザID</div>
+<div class="line">　となる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-d</div>
+<div class="line">　ディスク容量の制限情報を表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　-p</div>
+<div class="line">　管理者権限の情報を表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　-s</div>
+<div class="line">　全項目を表示する詳細モードである。-d, -pの同時指定と等価になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-c</div>
+<div class="line">　CSV形式にて標準出力に表示する。ファイルに出力したい場合にはリダイレクトを使用する。</div>
+</div>
+<div class="line-block">
+<div class="line">　--help</div>
+<div class="line">　コマンドのヘルプ内容を表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[復帰値]</strong></div>
+<div class="line">　正常時: 0</div>
+<div class="line">　異常時: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[備考]</strong></div>
+<div class="line">　なし。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[使用例]</strong></div>
+<div class="line">　【例1】 ユーザ名fjse0100の利用者情報を任意のオプションを指定せずに表示する</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/2_UserManagement_04.png" src="../_images/2_UserManagement_04.png" />
+</figure>
+<div class="line-block">
+<div class="line">　【例2】 ユーザ名fjse0100の利用者情報にディスク容量の制限情報と管理者権限の情報も付加して表示する</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/2_UserManagement_05.png" src="../_images/2_UserManagement_05.png" />
+</figure>
+<div class="line-block">
+<div class="line">　ユーザディスク情報には、ユーザのquotaが設定されているスライス分だけ表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　【例3】 全ユーザのユーザ名、ユーザIDを一覧表示する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>userinfo<span class="w"> </span>-l
+<span class="go">fjse0100:1100</span>
+<span class="go">fjse0101:1101</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　全てのユーザ名、ユーザIDが一覧表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　【例4】 ユーザ名fjse0100, fjse0101の利用者情報をCSV形式で表示する</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/2_UserManagement_06.png" src="../_images/2_UserManagement_06.png" />
+</figure>
+<div class="line-block">
+<div class="line">　引数としてアスタリスクを使用する際には、シェルが特殊文字として解釈しないように注意する必要がある。</div>
+<div class="line">　特殊文字として解釈しないように以下を使用する。</div>
+</div>
+<ul class="simple">
+<li><p>バックスラッシュ( \ )により一文字エスケープ</p></li>
+<li><p>シングルクォーテーション( ‘ )で囲む</p></li>
+<li><p>ダブルクォーテーション( “ )で囲む</p></li>
+</ul>
+<div class="line-block">
+<div class="line">　【例5】 ユーザ名fjse0100, fjse0101の利用者情報をCSV形式でファイル出力する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>userinfo<span class="w"> </span>-u<span class="w"> </span>‘fjse010*’<span class="w"> </span>-c<span class="w"> </span>&gt;<span class="w"> </span>fjse010X.csv
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　fjse010* で表現される複数ユーザの利用者情報を、CSV形式でファイル fjse010X.csv に出力したものである。</div>
+</div>
+<div class="line-block">
+<div class="line">　【例6】 ユーザ名fjse0100のシステム利用可否状態を確認する</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/2_UserManagement_07.png" src="../_images/2_UserManagement_07.png" />
+</figure>
+<div class="line-block">
+<div class="line">　システムの利用可否状態は、 userinfo コマンドの実行結果中の 'status' 情報により確認できる。</div>
+</div>
+<div class="line-block">
+<div class="line">　【例7】 ユーザ情報変更で使用するCSV形式のファイルを作成する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>userinfo<span class="w"> </span>-u<span class="w"> </span>fjse0100<span class="w"> </span>-s<span class="w"> </span>-c<span class="w"> </span>&gt;<span class="w"> </span>fjse0100.csv
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　全項目を表示する詳細モードの-sオプションとCSV形式にて標準出力に表示する-cオプションを指定し、リダイレクション機能を使用することでファイルに保存する。-sオプションを指定しないと、ディスク容量制限、管理者権限の情報がNULLで出力されてしまう。</div>
+</div>
+<div class="line-block">
+<div class="line">　表示項目の説明を示す。</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/2_UserManagement_08_4.png" src="../_images/2_UserManagement_08_4.png" />
+</figure>
+<div class="line-block">
+<div class="line">　[*1] 表示形式：課題開始日(YYYYMMDD)-課題終了日(YYYYMMDD)</div>
+</div>
+<div class="line-block">
+<div class="line">　例）20220101-20220331</div>
+</div>
+<div class="line-block">
+<div class="line">　　所属する課題の開始日が2022年1月1日で、終了日が2022年3月31日となる。</div>
+</div>
+<div class="line-block">
+<div class="line">　[*2] アカウントエントリは利用者とプロジェクト責任者が表示可能</div>
+<div class="line">　　　個人情報エントリは利用者自身のみ表示可能</div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="2-1_CommandExpranation.html"
+                          title="前の章へ"><span class="section-number">2.1. </span>コマンド解説</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="2-1-2_GroupInfo.html"
+                          title="次の章へ"><span class="section-number">2.1.2. </span>グループ情報表示</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="2-1-2_GroupInfo.html" title="2.1.2. グループ情報表示"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="2-1_CommandExpranation.html" title="2.1. コマンド解説"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="2_UserManagement.html" ><span class="section-number">2. </span>利用者管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="2-1_CommandExpranation.html" ><span class="section-number">2.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.1.1. </span>ユーザ情報表示</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

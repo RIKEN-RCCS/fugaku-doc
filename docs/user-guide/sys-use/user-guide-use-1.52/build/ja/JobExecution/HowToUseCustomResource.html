@@ -1,0 +1,173 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.15. カスタム資源の利用 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.16. ジョブ異常終了時の確認" href="CheckingAbnormalEndOfJob.html" />
+    <link rel="prev" title="5.14. ジョブ操作の留意事項" href="NotesOnJobOperationCommands.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CheckingAbnormalEndOfJob.html" title="5.16. ジョブ異常終了時の確認"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="NotesOnJobOperationCommands.html" title="5.14. ジョブ操作の留意事項"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.15. </span>カスタム資源の利用</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">5.15. </span>カスタム資源の利用<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>カスタム資源の利用方法について説明します。</p>
+<section id="id2">
+<h2><span class="section-number">5.15.1. </span>機能概要<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>ジョブ運用ソフトウェアでは、ノード資源、CPU資源などの他に、任意の資源を定義できるカスタム資源を持っています。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">5.15.2. </span>確認方法<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>利用できるカスタム資源は、<strong class="program">pjshowrsc -v2</strong>コマンドで確認することができます。</p>
+<p>[使用例]</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjshowrsc<span class="w"> </span>-v2
+<span class="go">[ CLST: ea-compute ]</span>
+<span class="go">[ RSCUNIT: rscunit_ft01 ]</span>
+<span class="go">CUSTOM_RESOURCE</span>
+<span class="go">RSCNAME                              TOTAL      FREE     ALLOC</span>
+<span class="go">jobenv/linux                     unlimited unlimited         0</span>
+<span class="go">jobenv/mck                       unlimited unlimited         0</span>
+<span class="gp gp-VirtualEnv">(以下略)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>この使用例では、jobenv というカスタム資源名に対し、linux、mckという種別が設定されていることがわかります。</p>
+</div>
+</div></blockquote>
+</section>
+<section id="id4">
+<h2><span class="section-number">5.15.3. </span>割り当て方法<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>カスタム資源を割り当てる場合は、<strong class="program">pjsub</strong>コマンドの<code class="docutils literal notranslate"><span class="pre">-L</span></code>オプションを使用します。</p>
+<p>[オプションの書式]</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{-L | --rsc-list} CustomResourceName[=Value]
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>オプション</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CustomResourceName</p></td>
+<td><p>カスタム資源名</p></td>
+</tr>
+<tr class="row-odd"><td><p>Value</p></td>
+<td><div class="line-block">
+<div class="line">割り当てるカスタム資源の数、または、割り当てるカスタム資源の種別です。</div>
+<div class="line">&quot;=Value&quot; は省略できます</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.15. カスタム資源の利用</a><ul>
+<li><a class="reference internal" href="#id2">5.15.1. 機能概要</a></li>
+<li><a class="reference internal" href="#id3">5.15.2. 確認方法</a></li>
+<li><a class="reference internal" href="#id4">5.15.3. 割り当て方法</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="NotesOnJobOperationCommands.html"
+                          title="前の章へ"><span class="section-number">5.14. </span>ジョブ操作の留意事項</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="CheckingAbnormalEndOfJob.html"
+                          title="次の章へ"><span class="section-number">5.16. </span>ジョブ異常終了時の確認</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CheckingAbnormalEndOfJob.html" title="5.16. ジョブ異常終了時の確認"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="NotesOnJobOperationCommands.html" title="5.14. ジョブ操作の留意事項"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.15. </span>カスタム資源の利用</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

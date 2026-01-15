@@ -1,0 +1,268 @@
+﻿
+.. _SelectAvailableVolumes:
+
+利用ファイルシステム(volume)の選択
+========================================
+
+
+| ジョブ投入時、ユーザはジョブで利用するファイルシステム(以下volumeと表記)を追加で指定する必要があります。
+| ジョブは実行開始前に、ユーザが指定したファイルシステムを計算ノードでマウントし、第2階層ストレージのキャッシュ領域へのアクセスを確立します。
+
+ ジョブ投入時に指定するvolume
+   * ジョブ実行に必要なデータ領域(/vol0002-6)
+   * システムが提供しているSpack（パブリック・インスタンス）を利用する場合はSpackの領域(/vol0004)
+
+ ジョブ投入時に指定不要なvolume
+   * 2ndfs(/vol0001)
+   * ホーム領域のvolume
+
+ .. attention::
+
+   ホーム領域は利用可能な容量が20GiB程度と少ないため、ジョブの実行環境として利用しないでください。
+
+ .. seealso::
+
+   * | ユーザのデータ領域(/vol0\ *n*\ 0\ *m*/data/<\ *groupname*\ >)のパスは、シンボリックリンクとなっています。
+     | パス名の意味は以下となります。
+     |   \ *n*\ :volume番号(2～6)
+     |   \ *m*\ :MDT番号(0～7)
+   * | データ領域のvolume番号は後述する\ :ref:`VolumeSpecificationJobs`\ で、PJM_LLIO_GFSCACHE環境変数に指定する必要があります。
+   * | \ :ref:`diskpoints`\ の記載事項も参照ください。 
+
+|
+
+.. _EnvironmentVariablesandpjsubOptions:
+
+環境変数およびpjsubオプション
+--------------------------------------
+
+ジョブで利用するvolumeを指定するには、以下の環境変数およびpjsubオプションを使用します。
+
+.. list-table:: ジョブ投入時に指定できる環境変数
+  :header-rows: 1
+  :widths: 30 50
+
+  * - 環境変数名
+    - 説明
+  
+  * - PJM_LLIO_GFSCACHE	
+    - | \ ``pjsub -x``\ オプション、ジョブスクリプトで第2階層ストレージのキャッシュ領域として利用するvolumeを指定します。
+      | PJM_LLIO_GFSCACHE=パス名" で指定します。
+      | 指定可能なパス名は/vol0002,/vol0003,/vol0004,/vol0005,/vol0006です。
+      | 複数指定する場合は、":" 区切りで指定します。
+  * - PJM_LLIO_SHAREDTMP	
+    - | \ ``pjsub -x``\ オプション、ジョブスクリプトで共有テンポラリ領域のMDTとして利用するvolumeを指定します。
+      | PJM_LLIO_SHAREDTMP=パス名" で指定します。
+      | 指定可能なパス名は/vol0002,/vol0003,/vol0004,/vol0005,/vol0006です。
+      | 複数指定する場合は、":" 区切りで指定します。
+
+\
+
+
+.. list-table:: ジョブ投入時に指定できるpjsubオプション
+  :header-rows: 1
+  :widths: 30 50
+
+  * - pjsubオプション
+    - 説明
+  
+  * - --all-mount-gfscache
+    - | 全てのvolumeが環境変数(PJM_LLIO_GFSCACHE)に指定されたものみなします。以下の設定と同義です。
+      | PJM_LLIO_GFSCACHE=/vol0002:/vol0003:/vol0004:/vol0005:/vol0006
+
+  * - --no-check-gfscache
+    - | ジョブ投入時に環境変数(PJM_LLIO_GFSCACHE)の設定状況を検査しません。
+      | 環境変数(PJM_LLIO_GFSCACHE)の指定有無にかかわらず、ジョブを投入します。
+
+  * - --no-check-directory
+    - | ジョブ投入時のカレントディレクトリにグループデータ領域パスが含まれているか検査しません。
+
+
+.. attention::
+
+ * pjsubオプション\ ``--all-mount-gfscache``\ ,\ ``--no-check-gfscache``\および\ ``--no-check-directory``\は、ジョブスクリプトで指定できません。指定した場合はジョブ投入時にエラーとなりますので、コマンドラインで指定してください。
+
+
+.. seealso::
+
+ * 環境変数(PJM_LLIO_GFSCACHE、およびPJM_LLIO_SHAREDTMP)でvolumeを複数指定することが可能ですが、障害の影響を受けにくくするためには、指定するvolumeを必要最小限にしてください。
+
+|
+
+
+.. _VolumeSpecificationJobs:
+
+ジョブ投入方法
+--------------------------------------
+
+ジョブで利用するvolumeを指定してジョブ投入するには、以下のようにします。
+
+[pjsubのオプションで指定する場合]
+
+ .. code-block:: bash
+
+   login$ pjsub -x PJM_LLIO_GFSCACHE=/vol0004:/vol0005
+
+
+[ジョブスクリプト内で指定する場合]
+
+ .. code-block:: bash
+
+   #PJM -x PJM_LLIO_GFSCACHE=/vol0004:/vol0005
+
+
+[ジョブスクリプト内で指定する場合：シングルアカウント利用時]
+
+ .. code-block:: bash
+
+   #PJM -x PJM_LLIO_GFSCACHE=/vol0004:/vol0005
+   #PJM -g groupname     # シングルアカウント利用時はグループ指定
+
+|
+
+
+
+
+利用例1）データ領域のvolumeからジョブを投入する
+
+
+1. ジョブが存在するデータ領域のvolumeのパス名を確認します。
+
+  | データ領域(/vol0\ *n*\ 0\ *m*/data/<\ *groupname*\ >)のパスからvolume番号を取得してください。
+  | データ領域のパスが/vol0501/data/<\ *groupname*\ >の場合、/vol05の5の部分がvolume番号となり、PJM_LLIO_GFSCACHEに設定するパス名は「/vol0005」となります。
+
+
+
+2. ジョブスクリプトに利用するvolumeのパス名を指定します。
+
+ .. code-block:: bash
+
+   login$ cd /vol0n0m/data/groupname/username
+
+   login$ vi jobscript
+   #!/bin/bash
+   #PJM -L "node=4"
+   #PJM -L "rscgrp=small"
+   #PJM -L "elapse=1:00:00"
+   #PJM --mpi "max-proc-per-node=4"
+   #PJM -x PJM_LLIO_GFSCACHE=/vol0005     # /vol0005を設定
+   #PJM -g groupname
+
+   llio_transfer ./a.out
+   mpiexec ./a.out
+   llio_transfer --purge ./a.out
+
+
+
+3. ジョブを投入します。
+
+ .. code-block:: bash
+
+   login$ pjsub jobscript
+
+\
+
+
+ .. seealso::
+
+   * 利用するデータ領域がホーム領域と同じvolumeの場合はパス名は指定する必要はありません。
+
+|
+
+
+利用例2）システムが提供しているSpack（パブリック・インスタンス）を利用するジョブを投入する
+
+
+1. ジョブスクリプトに利用するvolumeのパス名を指定します。(Spack利用時は/vol0004を指定します。)
+
+ .. code-block:: bash
+
+   login$ cd /vol0n0m/data/groupname/username
+
+   login$ vi jobscript
+   #!/bin/bash
+   #PJM -L "node=4"
+   #PJM -L "rscgrp=small"
+   #PJM -L "elapse=1:00:00"
+   #PJM --mpi "max-proc-per-node=4"
+   #PJM -x PJM_LLIO_GFSCACHE=/vol0004     # /vol0004を設定
+   #PJM -g groupname
+
+   . /vol0004/apps/oss/spack/share/spack/setup-env.sh
+   export LD_LIBRARY_PATH=/lib64:$LD_LIBRARY_PATH
+   spack load gromacs@2021.3
+
+   ...
+
+
+
+2. ジョブを投入します。
+
+ .. code-block:: bash
+
+   login$ pjsub jobscript
+
+\
+
+
+ .. seealso::
+
+   * ホームディレクトリが存在するvolumeのパス名が/vol0004の場合は指定する必要はありません。指定がない場合でも利用することが可能です。
+
+|
+
+
+利用例3）pjsubオプション\ ``--all-mount-gfscache``\ または\ ``--no-check-gfscache``\ を指定する
+
+
+1. ジョブスクリプトの作成 (環境変数PJM_LLIO_GFSCACHEは指定しません。)
+
+ .. code-block:: bash
+
+   login$ vi jobscript
+   #!/bin/bash
+   #PJM -L "node=4"
+   #PJM -L "rscgrp=small"
+   #PJM -L "elapse=1:00:00"
+   #PJM --mpi "max-proc-per-node=4"
+   #PJM -g groupname
+
+   llio_transfer ./a.out
+   mpiexec ./a.out
+   llio_transfer --purge ./a.out
+
+
+
+
+2. ジョブ投入
+
+ .. code-block:: bash
+
+   login$ pjsub --all-mount-gfscache jobscript
+
+ もしくは
+
+ .. code-block:: bash
+
+   login$ pjsub --no-check-gfscache jobscript
+
+|
+
+
+.. attention::
+
+ ジョブ実行に必要なvolumeが環境変数に設定されていない場合、以下のエラーとなります。
+
+ * | ホームディレクトリのあるvolumeとは異なるvolumeにあるディレクトリにジョブを配置して投入した場合、ジョブ投入時にエラーとなります。
+   | The current directory is contained in vol000X, so set PJM_LLIO_GFSCACHE to vol000X.(ex. -x PJM_LLIO_GFSCACHE=/vol000X)
+
+ * | Spackを利用するジョブで環境変数に/vol0004が指定されていない場合、ジョブ投入時にエラーとなります。
+   | If you use Spack, set PJM_LLIO_GFSCACHE to vol0004.(ex. pjsub -x PJM_LLIO_GFSCACHE=/vol0004)
+   | Specify --no-check-gfscache option if you do not want to use Spack and want to submit jobs.
+
+ * | 環境変数に指定可能なvolumeを正しく指定していない場合(存在しないvolumeを指定した場合など)、ジョブ投入時にエラーとなります。
+   | [ERR.] PJM 0045 pjsub path isn't on the global file system.
+
+ * 障害の発生により、運用から切り離されたvolumeを環境変数に指定した場合、ジョブ実行時にPJM CODE=180でエラーとなります。
+
+

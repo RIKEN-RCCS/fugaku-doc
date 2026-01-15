@@ -1,0 +1,246 @@
+.. _WriteForFilesystem:
+
+About File Operations to FEFS/LLIO
+========================================
+
+- Write operation
+
+  LLIO is not the same as how FEFS is accessed.
+  Therefore, the description is divided into the number of processes to be written per file and the IO method.
+
+  +----------------------------------+------------------------------+------------------------------+---------------------------------------------------------+---------------------------------------------------------+
+  |                                  |Number of file write processes|One process                   |Multiple processes                                                                                                 |
+  +                                  +------------------------------+------------------------------+---------------------------------------------------------+---------------------------------------------------------+
+  |Area Name                         |IO method                     |MPI-IO not used               |MPI-IO used                                              |MPI-IO not used                                          |
+  +==================================+==============================+==============================+=========================================================+=========================================================+
+  |Node Temporary Area                                              | :ref:`WriteOneProc`          | :ref:`WriteMultiProcMPI` (\*)                           | :ref:`WriteMultiProcSys` (\*)                           |
+  +----------------------------------+------------------------------+------------------------------+---------------------------------------------------------+---------------------------------------------------------+
+  |Shared temporary area                                            | :ref:`WriteOneProc`          | :ref:`WriteMultiProcMPI`                                | :ref:`WriteMultiProcSys`                                |
+  +----------------------------------+------------------------------+------------------------------+---------------------------------------------------------+---------------------------------------------------------+
+  |Cache Area of Second-Layer Storage                               | :ref:`WriteOneProc`          | :ref:`WriteMultiProcMPI`                                | :ref:`WriteMultiProcSys`                                |
+  +----------------------------------+------------------------------+------------------------------+---------------------------------------------------------+---------------------------------------------------------+
+  |second-layer storage                                             | :ref:`WriteOneProc`          | :ref:`WriteMultiProcMPI`                                | :ref:`WriteMultiProcSys`                                |
+  +----------------------------------+------------------------------+------------------------------+---------------------------------------------------------+---------------------------------------------------------+
+
+  (\* : Available only when closed within a node)
+
+- File rename operation
+
+  File rename operations are described in :ref:`renameexec`.
+
+- File delete operation
+
+  File delete operations are described in :ref:`unlinkexec`.
+
+.. _WriteOneProc:
+
+When writing from one process to one file
+-------------------------------------------
+
+When one process writes to one file, both FEFS and LLIO perform write processing.
+
+.. figure:: img/WriteFileSingleProcess_01.png
+
+[Example code to write 1 MB of data from 1 process for 1 file]
+
+  .. code-block:: c
+    :linenos:
+
+    int fd;
+    fd = open("output.txt", O_WRONLY | O_CREAT, 0644);
+    write(fd, data, 1000000);
+    close(fd);
+
+  .. Attention::
+
+    Although omitted in the code example, errors such as open and write operations should always be handled.
+
+When multiple processes write to a file
+----------------------------------------------
+
+This section describes when multiple processes write to a file using MPI-IO and when using the write system call.
+
+.. figure:: img/WriteFileMultiProcess_01.png
+
+.. _WriteMultiProcMPI:
+
+How to Write Files Using MPI-IO
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Both FEFS and LLIO allow multiple processes to write to a file using MPI-IO.
+
+[Example code to write 1 MB of data from multiple processes to 1 newly created file]
+
+  .. code-block:: c
+    :linenos:
+
+    MPI_File fh;
+    MPI_File_open(MPI_COMM_WORLD, "output.txt", MPI_MODE_CREATE | MPI_MODE_WRONLY, MPI_INFO_NULL, &fh);
+    MPI_Offset offset = RANK*1000000;
+    MPI_File_write_at(fh, offset, data, 1000000, MPI_CHAR, MPI_STATUS_IGNORE);
+    MPI_File_close(&fh);
+
+  .. Attention::
+
+    Although omitted in the code example, errors such as MPI_File_open and MPI_File_write_at operations should always be handled.
+
+An example is given when the file is opened in append mode (MPI_MODE_APPEND).
+
+[Example code for writing 1 MB of data from multiple processes to 1 file opened in append mode]
+
+  .. code-block:: c
+    :linenos:
+
+    MPI_File fh;
+    MPI_File_open(MPI_COMM_WORLD, "output.txt", MPI_MODE_APPEND | MPI_MODE_WRONLY, MPI_INFO_NULL, &fh);
+    MPI_File_write(fh, data, 1000000, MPI_CHAR, MPI_STATUS_IGNORE);
+    MPI_File_close(&fh);
+
+  .. Attention::
+
+    Although omitted in the code example, errors such as MPI_File_open and MPI_File_write operations should always be handled.
+
+.. _WriteMultiProcSys:
+
+How to Write Files Without MPI-IO
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For file writing methods that do not use MPI-IO, FEFS/LLIO implements processing differently.
+
+.. _WriteMultiProcSysFEFS:
+
+* FEFS
+
+  To maintain file system consistency, FEFS does not take a lock and performs write operations.
+
+ [Example code to write 1 MB of data from multiple processes to 1 newly created file]
+
+    .. code-block:: c
+      :linenos:
+
+       int fd;
+       fd = open("output.txt", O_WRONLY | O_CREAT, 0644);
+       lseek(fd, RANK*1000000, SEEK_SET);
+       write(fd, data, 1000000);
+       close(fd);
+
+  .. Attention::
+
+    Although omitted in the code example, errors such as open and write operations should always be handled.
+
+ An example is given when the file is opened in append mode (O_APPEND).
+
+ [Example code for writing 1 MB of data from multiple processes to 1 file opened in append mode]
+
+    .. code-block:: c
+      :linenos:
+
+       int fd;
+       fd = open("output.txt", O_WRONLY | O_APPEND, 0644);
+       write(fd, data, 1000000);
+       close(fd);
+
+  .. Attention::
+
+    Although omitted in the code example, errors such as open and write operations should always be handled.
+
+.. _WriteMultiProcSysLLIO:
+
+* LLIO
+
+  With LLIO, the file system does not control consistency.
+  Therefore, lock is acquired and write processing is performed, or write processing is performed using Direct I/O.
+  The available locks for LLIO are flock(2), fcntl(2).
+
+  Here is an example code that uses fcntl(2) to obtain a lock and perform a write operation.
+
+  If you want to control the timing of writes to second-layer storage in cache area of second-layer storage, see :ref:`FefsWriteTiming`.  
+
+  [Example code for writing 1 MB of data from multiple processes for 1 file]
+
+    .. code-block:: c
+      :linenos:
+
+       int fd;
+       fd = open("output.txt", O_WRONLY | O_CREAT, 0644);
+       lseek(fd, RANK*1000000, SEEK_SET);
+       struct flock lk0 = {.l_type=F_WRLCK, .l_whence=SEEK_SET, .l_start=RANK*1000000, .l_len=1000000};
+       fcntl(fd, F_SETLK, &lk0);
+       write(fd, data, 1000000);
+       struct flock lk1 = {.l_type=F_UNLCK, .l_whence=SEEK_SET, .l_start=RANK*1000000, .l_len=1000000};
+       fcntl(fd, F_SETLK, &lk1);
+       close(fd);
+
+  .. Attention::
+
+    Although omitted in the code example, errors such as open and write operations should always be handled.
+
+  An example is given when the file is opened in append mode (O_APPEND).
+
+  [Example code for writing 1 MB of data from multiple processes to 1 file opened in append mode]
+
+    .. code-block:: c
+      :linenos:
+
+       int fd;
+       fd = open("output.txt", O_WRONLY | O_APPEND, 0644);
+       lseek(fd, RANK*1000000, SEEK_SET);
+       flock(fd, LOCK_EX)
+       write(fd, data, 1000000);
+       flock(fd, LOCK_UN);
+       close(fd);
+
+  .. Attention::
+
+    Although omitted in the code example, errors such as open and write operations should always be handled.
+
+ The following code example shows a write operation in Direct I/O.
+ For write alignment and write size, you must consider the page cache size of the compute node, 64 KiB.
+
+ [Example code for writing 1 MB of data from multiple processes for 1 file]
+
+    .. code-block:: c
+      :linenos:
+
+       int size=1000000*100
+       posix_memalign( (void **)&data, 1000000, size);
+       int fd;
+       fd = open("output.txt", O_DIRECT | O_SYNC | O_WRONLY | O_CREAT, 0644);
+       lseek(fd, RANK*1000000, SEEK_SET);
+       write(fd, data, 1000000);
+       close(fd);
+
+  .. Attention::
+
+    Although omitted in the code example, errors such as open and write operations should always be handled.
+
+.. _RenameExec:
+
+Rename File
+-------------------------------------------
+
+When renaming a file, both FEFS and LLIO perform a rename operation.
+
+However, on the cache area of second-layer storage or the shared temporary area, if file_A is deleted or renamed another name and then recreated on compute node_A, on compute node_B, open(2) for file_A may fail or may open the file which is deleted or renamed on compute node_A.
+
+This specification can be addressed as follows.
+
+*  Execute ls command on compute node_B against the parent directory of file_A before opening file_A.
+
+*  Wait 60 seconds after recreating file_A on compute node_A before opening file_A on compute node_B.
+
+.. _UnlinkExec:
+
+Unlink File
+-------------------------------------------
+
+When renaming a file, both FEFS and LLIO perform a unlink operation.
+
+However, on the cache area of second-layer storage or the shared temporary area, if file_A is deleted or renamed another name and then recreated on compute node_A, on compute node_B, open(2) for file_A may fail or may open the file which is deleted or renamed on compute node_A.
+
+This specification can be addressed as follows.
+
+*  Execute ls command on compute node_B against the parent directory of file_A before opening file_A.
+
+*  Wait 60 seconds after recreating file_A on compute node_A before opening file_A on compute node_B.
+

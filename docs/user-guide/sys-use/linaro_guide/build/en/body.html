@@ -1,0 +1,266 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>1. Introduction &#8212; Supercomputer Fugaku Users Guide - Linaro Forge -  documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Linaro Forge User Guide" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="Linaro Forge User Guide"
+             accesskey="P">previous</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">Supercomputer Fugaku Users Guide - Linaro Forge -  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. Introduction</a></li>
+<li><a class="reference internal" href="#client-install">2. Client Install</a></li>
+<li><a class="reference internal" href="#client-settings">3. Client Settings</a></li>
+<li><a class="reference internal" href="#how-to-run">4. How to run</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Linaro Forge User Guide</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="introduction">
+<h1>1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>Linaro Forge is a GUI tool for debugging and performance analysis of parallel programs written in C/C++, Fortran and Python.
+This section shows how to run the program using Linaro Forge in Supercomputer Fugaku.</p>
+<p>For more information on Linaro Forge, see e.g. <a class="reference external" href="https://www.linaroforge.com/">https://www.linaroforge.com/</a>.</p>
+</div>
+<div class="section" id="client-install">
+<h1>2. Client Install<a class="headerlink" href="#client-install" title="Permalink to this headline">¶</a></h1>
+<p>In May 2024, Linaro Forge has version 23.1.2 installed on Supercomputer Fugaku at follows.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/vol0004/apps/opt/linaro/forge/23.1.2
+</pre></div>
+</div>
+<p>Each user must install a client application to use Linaro Forge.
+The Linaro Forge client can be installed on Windows, Mac and Linux respectively.
+Download and install the client file according to your operating system.</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">OS</th>
+<th class="head">client file</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Windows</td>
+<td>linaro-forge-client-23.1.2-windows-x86_64.exe</td>
+</tr>
+<tr class="row-odd"><td>Mac</td>
+<td>linaro-forge-client-23.1.2-macos-x86_64.dmg</td>
+</tr>
+<tr class="row-even"><td>Linux</td>
+<td><p class="first">linaro-forge-23.1.2-linux-x86_64.tar</p>
+<p>linaro-forge-23.1.2-linux-aarch64.tar</p>
+<p class="last">linaro-forge-23.1.2-linux-ppc64le.tar</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">To use Linaro Forge, you need to have the right version installed.</p>
+</div>
+</div>
+<div class="section" id="client-settings">
+<h1>3. Client Settings<a class="headerlink" href="#client-settings" title="Permalink to this headline">¶</a></h1>
+<p>As there are few differences between operating systems in the subsequent configuration and execution,
+the Linux version is used to provide a summary explanation.</p>
+<p>If the client is successfully started, the screen shown below is displayed.
+Select ‘Configure’ from the ‘Remote Launch’ pull-down tab and add new connection settings with ‘Add’.</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro01.png"><img alt="_images/linaro01.png" src="_images/linaro01.png" style="width: 800px;" /></a>
+</div>
+<p>In the ‘Remote Launch’ configuration section, the ‘Host Name’, ‘Remote Installation Directory’ and ‘Private Key’ must be entered.</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro02.png"><img alt="_images/linaro02.png" src="_images/linaro02.png" style="width: 800px;" /></a>
+</div>
+<p>Each input field should be set as follows.</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option Name</th>
+<th class="head">Input detailes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Host Name</td>
+<td><a class="reference external" href="mailto:{UserID}&#37;&#52;&#48;fugaku&#46;r-ccs&#46;riken&#46;jp">{UserID}<span>&#64;</span>fugaku<span>&#46;</span>r-ccs<span>&#46;</span>riken<span>&#46;</span>jp</a></td>
+</tr>
+<tr class="row-odd"><td>Remote Installation Directory</td>
+<td><p class="first">/vol0004/apps/opt/linaro/forge/23.1.2/x86_64 (If the client is the x86_64 version)</p>
+<p class="last">/vol0004/apps/opt/linaro/forge/23.1.2/aarch64 (If the client is the aarch64 version)</p>
+</td>
+</tr>
+<tr class="row-even"><td>Private Key</td>
+<td>path of the SSH encryption key file used to connect to the login node Supercomputer Fugaku</td>
+</tr>
+</tbody>
+</table>
+<p>Once the configuration is complete, you can test the connection using the ‘Test Remote Launch’ button.
+If the connection test is successful, the display will appear as shown in the figure below.</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro03.png"><img alt="_images/linaro03.png" src="_images/linaro03.png" style="width: 800px;" /></a>
+</div>
+<p>Create a connection configuration and select the configuration created in ‘Remote Launch’ to connect to Supercomputer Fugaku.
+If the connection is successful, the licence number in the lower-left corner of the launch screen will be displayed as “18054”
+and detailed licence information can be obtained as shown in the figure below.</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro04.png"><img alt="_images/linaro04.png" src="_images/linaro04.png" style="width: 600px;" /></a>
+</div>
+<p>Once you have created the connection settings,
+you can simply select the settings you have already created to connect when you start up again.</p>
+</div>
+<div class="section" id="how-to-run">
+<h1>4. How to run<a class="headerlink" href="#how-to-run" title="Permalink to this headline">¶</a></h1>
+<p>This section shows how to run a test program in Supercomputer Fugaku using Linaro Forge.
+Connect to Supercomputer Fugaku in the client configuration described in the previous section
+and use Linaro Forge’s Reverse Connect function to connect from the job to the client.
+The job is described in the following form. In the example, Linaro DDT is started.</p>
+<p>[Linaro DDT]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#! /bin/bash -x</span>
+<span class="c1">#PJM -g {groupname}</span>
+<span class="c1">#PJM -L node=1</span>
+<span class="c1">#PJM -L elapse=00:15:00</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004</span>
+<span class="c1">#PJM --mpi max-proc-per-node=48</span>
+<span class="c1">#PJM --sparam wait-time=60</span>
+<span class="c1">#PJM -j</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
+
+<span class="c1"># LinaroForge</span>
+. /vol0004/apps/opt/linaro/setup-env.sh
+
+<span class="c1"># run</span>
+ddt --connect --mpi<span class="o">=</span><span class="s2">&quot;Generic&quot;</span> --np <span class="m">48</span> ./test_c.exe
+</pre></div>
+</div>
+<p>When the job is executed, a message requesting a response is displayed on the client screen, as shown below.</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro05.png"><img alt="_images/linaro05.png" src="_images/linaro05.png" style="width: 600px;" /></a>
+</div>
+<p>If the response is allowed, information on the running application can be obtained
+and execution is started by pressing the Run button.</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro06.png"><img alt="_images/linaro06.png" src="_images/linaro06.png" style="width: 600px;" /></a>
+</div>
+<p>Once the application is running, the Linaro Forge screen will look like the figure below.
+The application can then be debugged as a GUI debugger.</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro07.png"><img alt="_images/linaro07.png" src="_images/linaro07.png" style="width: 800px;" /></a>
+</div>
+<p>[Linaro MAP]</p>
+<p>As with Linaro DDT, it is also possible to use Linaro MAP.
+In this case, specify map instead of ddt.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#! /bin/bash -x</span>
+<span class="c1">#PJM -g {groupname}</span>
+<span class="c1">#PJM -L node=1</span>
+<span class="c1">#PJM -L elapse=00:15:00</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004</span>
+<span class="c1">#PJM --mpi max-proc-per-node=48</span>
+<span class="c1">#PJM --sparam wait-time=60</span>
+<span class="c1">#PJM -j</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
+
+<span class="c1"># LinaroForge</span>
+. /vol0004/apps/opt/linaro/setup-env.sh
+
+<span class="c1"># run</span>
+map --connect --mpi<span class="o">=</span><span class="s2">&quot;Generic&quot;</span> --np <span class="m">48</span> ./test_c.exe
+</pre></div>
+</div>
+<p>Once the application is running, the Linaro Forge screen will look like the figure below.
+The application can be analysed as a GUI performance analysis tool.
+Once the MAP has been successfully executed, a map file is generated,
+which can be re-loaded to re-analyses the job without running it.</p>
+<div class="figure">
+<a class="reference internal image-reference" href="_images/linaro08.png"><img alt="_images/linaro08.png" src="_images/linaro08.png" style="width: 800px;" /></a>
+</div>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">The maximum number of Linaro Forge processes that can be used in Supercomputer Fugaku is 512.
+This is a number shared by all users of Linaro Forge:
+if one person runs a program that uses 512 processes, the other users will wait until the licence is released.
+Currently, there is no limit on the number of processes used per person, but we ask that you use the system in moderation.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="Linaro Forge User Guide"
+             >previous</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">Supercomputer Fugaku Users Guide - Linaro Forge -  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

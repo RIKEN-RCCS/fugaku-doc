@@ -1,0 +1,207 @@
+通常ジョブ
+==========================
+
+| 特殊な処理形態を持たない一般的なバッチジョブです。
+| 通常ジョブの実行に必要な条件（計算資源など）が整った時点で、ジョブが実行されますので、実行順は保証されません。
+
+.. figure:: ./img/NormalJob_01.png
+
+
+ジョブの投入
+-------------
+
+ジョブの投入は\ :program:`pjsub`\ コマンドに、ジョブスクリプトを指定して実行します。
+
+1. :program:`pjsub`\ コマンドでジョブを投入
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjsub ./sample.sh                  # ジョブの投入
+    [INFO] PJM 0000 pjsub Job 9714 submitted.
+
+
+  .. note::
+
+    :program:`pjsub`\ コマンドによりジョブを投入すると、画面にジョブIDが出力されます。
+    
+    ジョブIDは、ジョブ状態表示（\ :program:`pjstat`\ ）や、ジョブ削除（\ :program:`pjdel`\ ）などで、ジョブを識別するために利用します。
+
+:program:`pjsub`\ コマンドを実行したときに次のようなメッセージが出た場合の対処を示します。
+
+例. 課題のグループIDの指定がなかった場合::
+
+   [_LNlogin]$ pjsub sample.sh
+   [ERR.] PJM 0071 pjsub Group not authorized to submit a job: group(59999)
+
+..
+
+   ``group(59999)``\ が表示された場合は、課題のグループIDを指定してください。
+   ジョブ実行時に\ :ref:`グループ <group>`\ の指定が必要です。
+
+例. 実行ディレクトリがホームディレクトリの場合::
+
+   [_LNlogin]$ pjsub ./sample.sh
+   The current directory is not a data area. (directory: /vol000N/groupname/username)
+   Specify --no-check-directory option if you want to submit jobs outside the data area.
+
+..
+
+   データ領域でジョブを投入してください。ホームディレクトリの使用が必要な場合は\ ``--no-check-directory``\ オプションを付けてください。
+   :ref:`SelectAvailableVolumes`\ を参照ください。
+
+例. Spackのボリューム指定がなかった場合::
+
+   [_LNlogin]$ pjsub PWscf.sh
+   If you use Spack, set PJM_LLIO_GFSCACHE to /vol0004.(ex. pjsub -x PJM_LLIO_GFSCACHE=/vol0004)
+   Specify --no-check-gfscache option if you do not want to use Spack and want to submit jobs.
+
+..
+
+   Spackを利用する場合は\ ``-x PJM_LLIO_GFSCACHE=/vol0004``\ を付けてください。
+   :ref:`SelectAvailableVolumes`\ を参照ください。
+
+
+例. 投入したジョブの要求ノード数が、計算コアのRetention状態遷移が指定可能なノード数を越えていた場合::
+
+   [_LNlogin]$ pjsub sample.sh
+   warn: specification of core retention is invalid because job size is too large.
+
+..
+
+   投入したジョブの\ ``-L node``\ オプションで要求したノード数が、計算コアのRetention指定可能なノード数を超えていた場合に表示されるメッセージです。
+   本メッセージが出力された場合、ジョブ投入時に計算コアのRetention状態を、Retention遷移しない設定\ ``-L retention_state=0``\ で上書き設定します。
+
+   計算コアのRetention状態遷移による省電力設定を優先し、ジョブの要求ノード数を減らすことが可能な場合は\ :ref:`Powermodeset`\ を参照の上、
+   ジョブの要求ノード数を計算コアのRetention指定可能なノード数以下に設定し、ジョブを投入してください。
+   
+   ジョブの要求ノード数を変更せずに、そのまま実行したい場合は、本メッセージを無視していただくか、Retention遷移しない設定\ ``-L retention_state=0``\を
+   指定してジョブを投入してください。
+
+
+ジョブ実行結果の参照
+---------------------
+
+| ジョブが終了すると、ジョブ投入時のカレントディレクトリにジョブ実行結果ファイルが出力されます。
+| :program:`mpiexec`\ コマンドを使用している場合は\ :program:`mpiexec`\ コマンドごとに標準出力ファイルと標準エラー出力ファイルが作成されます。
+
+ジョブ実行結果ファイルの出力形式は以下のとおりです。
+
+.. list-table:: 
+   :widths: 3 7
+   :header-rows: 1
+
+   * - 形式
+     - 説明
+
+   * - ジョブ名.ジョブID.out
+     - ジョブが標準出力に書き出したデータです。
+
+   * - ジョブ名.ジョブID.err
+     - ジョブが標準エラー出力に書き出したデータです。
+
+   * - ジョブ名.ジョブID.stats
+     - ジョブの統計情報が出力されたファイルです。
+       
+       ジョブ投入時に、\ ``-s``\ 、\ ``-S``\ オプションが指定された場合に出力されます。
+
+
+.. attention::
+
+  - ジョブ名は、\ :program:`pjsub`\ コマンドで指定したジョブスクリプトのファイル名になります。
+  - ジョブ名の先頭が半角数字の場合、出力ファイル名の先頭に文字 "J" が付加されます。
+  - 出力ファイル名で、ジョブ名の部分(先頭に付加される文字"J"も含む)は、63 文字までです。
+  - ジョブスクリプトではなく、標準入力からジョブを投入した場合は、ジョブ名の部分は "STDIN" となります。
+
+
+例）ジョブ実行結果ファイル名
+
+.. code-block:: console
+
+  [_LNlogin]$ pjsub -s ./sample.sh        # ジョブの投入
+  [INFO] PJM 0000 pjsub Job 9714 submitted.
+
+  [_LNlogin]$ ls -l                       # ジョブの出力結果を確認
+  sample.sh.9714.err                      # ジョブの標準エラー出力の結果ファイル
+  sample.sh.9714.out                      # ジョブの標準出力の結果ファイル
+  sample.sh.9714.stats                    # ジョブの統計情報の出力ファイル
+
+
+:program:`mpiexec`\ コマンドの標準出力ファイル／標準エラー出力ファイル出力形式は以下のとおりです。
+
+.. list-table:: 
+   :widths: 35 65
+   :header-rows: 1
+
+   * - 形式
+     - 説明
+
+   * - ジョブ名.ジョブID.out.\ *mpiexec*\ .\ *rank*
+     - \ :program:`mpiexec` コマンドが標準出力に書き出したデータです。\ *mpiexec*\ はジョブスクリプト内で何回目の\ :program:`mpiexec`\ コマンド実行かを示す数字です。
+       *rank*\ はランク番号です。
+
+   * - ジョブ名.ジョブID.err.\ *mpiexec*\ .\ *rank*
+     - \ :program:`mpiexec` コマンドが標準エラー出力に書き出したデータです。\ *mpiexec*\ はジョブスクリプト内で何回目の\ :program:`mpiexec` コマンド実行かを示す数字です。
+       *rank*\ はランク番号です。
+
+デフォルトでは標準出力/標準エラー出力への出力がない場合はファイルを作成しません。
+
+例）ジョブ実行結果ファイル名
+
+.. code-block:: console
+
+  [_LNlogin]$ pjsub -s ./job_mpi.sh       # ジョブの投入
+  [INFO] PJM 0000 pjsub Job 717011 submitted.
+
+  [_LNlogin]$ ls -l                       # ジョブの出力結果を確認
+  -rw-r--r-- 1 username group     0 Jul 10 08:45 job_mpi.sh.717011.err
+  -rw-r--r-- 1 username group  2635 Jul 10 08:45 job_mpi.sh.717011.out
+  -rw-r--r-- 1 username group    70 Jul 10 08:45 job_mpi.sh.717011.out.1.0
+  -rw-r--r-- 1 username group 11193 Jul 10 08:45 job_mpi.sh.717011.stats
+
+なお、\ :program:`mpiexec`\ コマンド使用時は\ :ref:`StdoutStderroutStdin`\ に示すように\ :program:`mpiexec`\ コマンドのオプションを利用して出力ファイルを指定する方法を推奨しています。
+
+.. note::
+
+   利用を継続していく中で、ファイル数の増加によるディスク領域資源（i-nodeなど）の制限にかかる可能性があります。
+   都度、出力されたファイル群をtar等で一つにまとめる、あるいは不要なら削除するなどのご対応により、適宜ファイル数を減らすことを推奨します。
+
+.. _JobExecutionStatisticalInformation:
+
+統計情報
+---------
+
+ジョブ投入時に、\ ``-s``  または \ ``-S``\ オプションを指定すると、ジョブの統計情報がファイルで得られます。
+
+ジョブの統計情報内容の詳細については以下を参照してください。
+
+- 「ジョブ運用ソフトウェア エンドユーザ向けガイド」
+- 「ジョブ運用ソフトウェア コマンドリファレンス」－「3.3.2 pjstatsinfo」
+- :command:`man`\ マニュアル ``pjstatsinfo(7)``
+
+[ジョブ投入時の指定例]
+
+.. code-block:: console
+
+  [_LNlogin]$ pjsub -s ./sample.sh # ジョブ投入時に -s または -S を指定
+
+[ジョブスクリプトでの指定例]
+
+.. code-block:: bash
+
+   #!/bin/bash
+   #PJM -L "node=1" 
+   #PJM -L "rscgrp=small"
+   #PJM -L "elapse=60:00"
+   #PJM -g groupname 
+   #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+   #PJM -S                # 統計情報ファイル出力の指示（-s または -S）
+   
+   ./a.out
+
+[統計情報の詳細]
+
+.. code-block:: console
+
+  [_LNlogin]$ man pjstatsinfo
+
+

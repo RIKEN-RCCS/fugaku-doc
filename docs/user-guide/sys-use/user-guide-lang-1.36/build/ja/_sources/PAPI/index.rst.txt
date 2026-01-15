@@ -1,0 +1,120 @@
+PAPIの利用
+=====================
+
+PAPIの利用について説明します。
+
+
+概要
+-----
+
+\ |post-k|\ で、PAPI(Performance Application Programming Interface)を利用したプログラムのコンパイル・リンク方法、および、留意事項を示します。
+
+PAPIに関する情報は、https://icl.utk.edu/papi/ 等を参考にしてください。
+
+
+コンパイル・リンク
+----------------------
+
+コンパイル・リンク時に指定が必要なオプションを示します。
+
+1. コンパイル時に必要となるオプション
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 2 7
+   
+    * - 言語
+      - オプション
+
+    * - Fortran
+      - ``-I/opt/FJSVxos/devkit/aarch64/rfs/usr/include``
+
+    * - C/C++
+      - \-
+
+2. リンク時に必要となるオプション
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 2 3 7
+   
+    * - 言語
+      - コンパイラモード
+      - オプション
+
+    * - Fortran
+      - \-
+      - \-Nnofjprof \-lpapi
+
+    * - C/C++
+      - tradモード
+      - \-Nnofjprof \-lpapi
+
+    * - C/C++
+      - clangモード
+      - \-ffj-no-fjprof \-lpapi
+
+ .. attention::
+
+    実行可能ファイル（a.out）作成時は、\ ``-Nnofjprof``\ （clang モードの場合は、\ ``-ffj-no-fjprof``\ ）オプションを指定して、富士通ツールライブラリをリンクしないようにしてください。
+
+各言語でのコンパイル例を次に示します。
+
+1. Forttranコンパイル例
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -o papi_sample_f -Kfast,parallel,optmsg=2 -I/opt/FJSVxos/devkit/aarch64/rfs/usr/include -Nlst=t -Nnofjprof -lpapi  papi_sample.f95
+
+2. Cコンパイル例（tradモード）
+
+ .. code-block:: console
+
+   [_LNlogin]$ fccpx -o papi_sample_c -Kfast,parallel,optmsg=2 -Nlst=t -Nnofjprof -lpapi papi_sample_c.c
+
+3. C++コンパイル例（clangモード）
+
+ .. code-block:: console
+
+   [_LNlogin]$ FCCpx -o papi_sample_cc -Nclang -Ofast -Rpass=.* -ffj-lst=t -ffj-no-fjprof -lpapi papi_sample_cc.cc
+
+
+実行方法
+-----------
+
+PAPIを利用したプログラムの実行方法を示します。
+
+[実行例]
+
+.. code-block:: bash
+
+  #!/bin/bash
+  #
+  #PJM -L "node=4"
+  #PJM -L "elapse=00:10:00"
+  #PJM --mpi "proc=16"
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -g groupname
+  #PJM -s
+  #
+  
+  export OMP_NUM_THREADS=12
+  
+  xospastop      #必須
+  mpiexec ./papi.out
+
+
+.. attention::
+ 
+ - PAPIを利用したプログラムは、:program:`xospastop`\ コマンドを実行した後に実行してください。:program:`xospastop`\ コマンドを実行しなかった場合は、PAPIの処理中にエラーが発生する場合があります。
+ - :program:`xospastop`\ コマンドを実行したジョブは、PMUカウンタ（Performance Monitoring Unit Counter）の採取を停止します。オプションやメッセージ出力はなく、終了ステータスは常に0になります。
+
+
+留意事項
+----------
+
+PAPIを利用したプログラムの留意事項は以下のとおりです。
+
+- PAPIは、サポート対象外です。
+- xospastopを実行していない場合は、正しい結果が得られません。
+

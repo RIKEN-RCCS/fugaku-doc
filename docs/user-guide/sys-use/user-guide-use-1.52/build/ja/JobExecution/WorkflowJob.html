@@ -1,0 +1,164 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.6. ワークフロージョブ &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.7. マスタ・ワーカ型ジョブ" href="MasterWorkerJob.html" />
+    <link rel="prev" title="5.5. 会話型ジョブ" href="InteractiveJob.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="MasterWorkerJob.html" title="5.7. マスタ・ワーカ型ジョブ"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="InteractiveJob.html" title="5.5. 会話型ジョブ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.6. </span>ワークフロージョブ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">5.6. </span>ワークフロージョブ<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">ワークフロージョブは、ジョブ単位での実行制御（条件分岐や繰り返し）を行う複数のジョブのまとまりです。</div>
+<div class="line">ステップジョブと同様に、あるジョブの実行結果に応じて、次に実行するジョブが決まるような場合で利用しますが、実行制御を行うシェルスクリプトの内容次第で、ステップジョブより自由度が高い制御ができます。</div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>ワークフロージョブは、正確にはジョブの種類ではなく、複数のジョブの投入をシェルスクリプトによってユーザが制御する方法です。</p>
+</div>
+<section id="id2">
+<h2><span class="section-number">5.6.1. </span>ジョブの投入<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>ワークフロージョブでは、ジョブの投入をユーザがシェルスクリプトで制御します。</p>
+<div class="line-block">
+<div class="line">例えば、特定のジョブの終了を待ってから別のジョブを投入したり、あるジョブの結果によって次に投入するジョブを選択したりということをシェルスクリプトで自動的に行う方法です。</div>
+<div class="line">ユーザはジョブ運用ソフトウェアが提供する<strong class="program">pjwait</strong>コマンドを利用して、ジョブの投入制御を行います。</div>
+</div>
+<ul class="simple">
+<li><dl class="simple">
+<dt>ジョブの終了待ち合わせ</dt><dd><p><strong class="program">pjwait</strong>コマンドを使用して、1つ以上のジョブの終了をシェルスクリプト内で待ち合わせることができます。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>ジョブの実行結果の取得</dt><dd><p><strong class="program">pjwait</strong>コマンドを使用して、ジョブ終了コード (ジョブマネージャーの処理結果)、ジョブスクリプトの終了ステータス、ジョブスクリプト終了時のシグナル番号を得ることができます。</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>以下は、ワークフロージョブのフロー図です。</p>
+<figure class="align-default">
+<img alt="../_images/SubmittingAWorkFlowJob_01.png" src="../_images/SubmittingAWorkFlowJob_01.png" />
+</figure>
+<p>このワークフロージョブをシェルスクリプトで記述すると以下のようになります。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="k">for</span><span class="w"> </span>no<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">3</span><span class="w">                       </span><span class="c1"># ジョブスクリプト job1.sh、job2.sh、job3.sh を順番に投入</span>
+<span class="k">do</span>
+<span class="w">  </span><span class="nv">JID</span><span class="o">=</span><span class="sb">`</span>pjsub<span class="w"> </span>-z<span class="w"> </span>jid<span class="w"> </span>job<span class="si">${</span><span class="nv">no</span><span class="si">}</span>.sh<span class="sb">`</span><span class="w">      </span><span class="c1"># -z オプションでジョブID を表示させ、シェル変数 JID に代入</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w">               </span><span class="c1"># ジョブ投入結果が 0 以外の場合、ワークフロージョブ終了</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="w">  </span><span class="k">fi</span>
+<span class="w">  </span><span class="nb">set</span><span class="w"> </span>--<span class="w"> </span><span class="sb">`</span>pjwait<span class="w"> </span><span class="nv">$JID</span><span class="sb">`</span><span class="w">                </span><span class="c1"># ジョブの終了を待ち合わせ、出力結果を位置パラメーターに代入 (注)</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$2</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">$3</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s2">&quot;0&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c1"># ジョブ終了コード($2)とジョブスクリプトの終了ステータス($3)の</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="w">                            </span><span class="c1"># どちらかが 0 でない場合は、ワークフロージョブを終了</span>
+<span class="w">  </span><span class="k">fi</span>
+<span class="k">done</span><span class="w">                                  </span><span class="c1"># 次のジョブの実行へ</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>ジョブの種類、ジョブIDの指定によっては、出力結果が複数行になる場合があるため、注意が必要です。</p>
+<p>出力結果については、<strong class="program">pjwait</strong>コマンドの<strong class="command">man</strong>マニュアルを参照してください。</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.6. ワークフロージョブ</a><ul>
+<li><a class="reference internal" href="#id2">5.6.1. ジョブの投入</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="InteractiveJob.html"
+                          title="前の章へ"><span class="section-number">5.5. </span>会話型ジョブ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="MasterWorkerJob.html"
+                          title="次の章へ"><span class="section-number">5.7. </span>マスタ・ワーカ型ジョブ</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="MasterWorkerJob.html" title="5.7. マスタ・ワーカ型ジョブ"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="InteractiveJob.html" title="5.5. 会話型ジョブ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.6. </span>ワークフロージョブ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

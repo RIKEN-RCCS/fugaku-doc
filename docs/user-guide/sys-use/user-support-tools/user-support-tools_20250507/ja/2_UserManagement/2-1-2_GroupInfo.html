@@ -1,0 +1,301 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+    <title>2.1.2. グループ情報表示 &#8212; 利用者支援ツール 使用手引書 (利用者編)  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="2.1.3. ログイン履歴検索" href="2-1-3_Last.html" />
+    <link rel="prev" title="2.1.1. ユーザ情報表示" href="2-1-1_UserInfo.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="2-1-3_Last.html" title="2.1.3. ログイン履歴検索"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="2-1-1_UserInfo.html" title="2.1.1. ユーザ情報表示"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="2_UserManagement.html" ><span class="section-number">2. </span>利用者管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="2-1_CommandExpranation.html" accesskey="U"><span class="section-number">2.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.1.2. </span>グループ情報表示</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">2.1.2. </span>グループ情報表示<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[名前]</strong></div>
+<div class="line">　groupinfo - グループ情報を表示する</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[書式]</strong></div>
+<div class="line">　groupinfo  [-g  グループ名...]  [-g, -l以外のオプション]</div>
+<div class="line">　groupinfo  -l</div>
+<div class="line">　※-g, -r, -p, -mの複合指定はAND検索、同一オプション内での複数指定はOR検索になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[説明]</strong></div>
+<div class="line">　groupinfo コマンドは、利用者管理ノード上のディレクトリサービス(OpenLDAP)に登録されている課題の情報を表示する。表示結果が複数行に及ぶ場合はディレクトリサービス(OpenLDAP)から取り出された順に表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　プロジェクト責任者、システム管理者はグループ情報を表示することができるが、利用者は表示することができない。</div>
+</div>
+<div class="line-block">
+<div class="line">　オプションを指定しなかった場合は、利用者のプライマリグループの課題情報のみが表示される。ただし、プロジェクト責任者、システム管理者である必要がある。</div>
+<div class="line"><br /></div>
+<div class="line">　ステータスの状態が「削除」以外の課題情報が表示対象になる。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 14.3%" />
+<col style="width: 14.3%" />
+<col style="width: 71.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ステータス</p></th>
+<th class="head"><p>状態</p></th>
+<th class="head"><p>意味</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>有効</p></td>
+<td><p>システム利用が可能な状態である。</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>削除</p></td>
+<td><p>システム管理者の判断により論理削除されている状態である。この状態は、システム利用が不可能な状態である。</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>有効期間外</p></td>
+<td><p>システムの自動判断により有効期間外に設定されている状態である。この状態は、ジョブ投入・実行が不可能な状態である。ただし、猶予期間の場合はシステムへのログインは可能である。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line">　<strong>[オプション]</strong></div>
+<div class="line">　-g  グループ名...</div>
+<div class="line">　グループ名を指定する。スペースに続けて複数指定が可能で、アスタリスクを使用した前方／中間／後方一致指定ができる。</div>
+<div class="line">　　完全一致指定      group</div>
+<div class="line">　　前方一致指定      ’group *’</div>
+<div class="line">　　中間一致指定      ’* group *’</div>
+<div class="line">　　後方一致指定      ’* group’</div>
+</div>
+<div class="line-block">
+<div class="line">　-r  プロジェクト責任者ID...</div>
+<div class="line">　プロジェクト責任者IDを指定する。スペースに続けて複数指定が可能であるが、アスタリスクを使用した前方／中間／後方一致指定はできない。完全一致指定のみ可能である。</div>
+</div>
+<div class="line-block">
+<div class="line">　-p  プロジェクト名...</div>
+<div class="line">　プロジェクト名を指定する。スペースに続けて複数指定が可能で、アスタリスクを使用した前方／中間／後方一致指定ができる。</div>
+<div class="line">　　完全一致指定      project</div>
+<div class="line">　　前方一致指定      ’project *’</div>
+<div class="line">　　中間一致指定      ’* project *’</div>
+<div class="line">　　後方一致指定      ’* project’</div>
+</div>
+<div class="line-block">
+<div class="line">　-m  グループメンバ...</div>
+<div class="line">　ユーザ名を指定する。スペースに続けて複数指定が可能で、アスタリスクを使用した前方／中間／後方一致指定ができる。</div>
+<div class="line">　　完全一致指定      user</div>
+<div class="line">　　前方一致指定      ’user*’</div>
+<div class="line">　　中間一致指定      ’*user*’</div>
+<div class="line">　　後方一致指定      ’*user’</div>
+</div>
+<div class="line-block">
+<div class="line">　-l</div>
+<div class="line">　グループ名の一覧を表示する。他オプションとは排他の関係にある。</div>
+<div class="line">　なお、当該オプション指定時はステータスの状態（「有効」、「削除」、「有効期間外」）に依存せず、すべての課題情報が表示対象になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　出力形式は</div>
+<div class="line">　グループ名：グループID</div>
+<div class="line">　となる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-d</div>
+<div class="line">　ディスク容量の制限情報を表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　-s</div>
+<div class="line">　全項目を表示する詳細モードである。-dの同時指定と等価になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-c</div>
+<div class="line">　CSV形式にて標準出力に表示する。ファイルに出力したい場合にはリダイレクトを使用する。</div>
+</div>
+<div class="line-block">
+<div class="line">　--help</div>
+<div class="line">　コマンドのヘルプ内容を表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[復帰値]</strong></div>
+<div class="line">　正常時: 0</div>
+<div class="line">　異常時: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[備考]</strong></div>
+<div class="line">　なし。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[使用例]</strong></div>
+<div class="line">　【例1】 グループ名fjseの課題情報を任意のオプションを指定せずに表示する</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/2_UserManagement_09.png" src="../_images/2_UserManagement_09.png" />
+</figure>
+<div class="line-block">
+<div class="line">　プロジェクト責任者である　fjse0012 とシステム管理者のみグループ情報が表示される。課題に属する利用者はグループ情報を確認することができない。</div>
+</div>
+<div class="line-block">
+<div class="line">　【例2】 グループ名fjseの課題情報にディスク容量の制限情報を付加して表示する</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/2_UserManagement_10.png" src="../_images/2_UserManagement_10.png" />
+</figure>
+<p>　【例3】   全グループのグループ名、グループIDを一覧表示する</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>groupinfo<span class="w"> </span>-l
+<span class="go">fjse 1000</span>
+<span class="go">fjce 2000</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　全てのグループ名、グループIDが一覧表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　【例4】 グループ名fjse0100, fjse0101の課題情報をCSV形式で表示する</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/2_UserManagement_11.png" src="../_images/2_UserManagement_11.png" />
+</figure>
+<div class="line-block">
+<div class="line">　引数としてアスタリスクを使用する際には、シェルが特殊文字として解釈しないように注意する必要がある。</div>
+<div class="line">　特殊文字として解釈しないように以下を使用する。</div>
+</div>
+<ul class="simple">
+<li><p>バックスラッシュ( )により一文字エスケープ</p></li>
+<li><p>シングルクォーテーション( ‘ )で囲む</p></li>
+<li><p>ダブルクォーテーション( “ )で囲む</p></li>
+</ul>
+<p>　【例5】   グループ名fjse0100, fjse0101の課題情報をCSV形式でファイル出力する</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>groupinfo<span class="w"> </span>-g<span class="w"> </span>‘fjse010*’<span class="w"> </span>-c<span class="w"> </span>&gt;<span class="w"> </span>fjse010X.csv
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<p>　【例6】   グループ名fjse0100のシステム利用可否状態を確認する</p>
+<figure class="align-default">
+<img alt="../_images/2_UserManagement_12.png" src="../_images/2_UserManagement_12.png" />
+</figure>
+<div class="line-block">
+<div class="line">　システムの利用可否状態は、 groupinfo コマンドの実行結果中の 'status' 情報により確認できる。</div>
+</div>
+<div class="line-block">
+<div class="line">　【例7】 グループ情報変更で使用するCSV形式のファイルを作成する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>groupinfo<span class="w"> </span>-g<span class="w"> </span>fjse0100<span class="w"> </span>-s<span class="w"> </span>-c<span class="w"> </span>&gt;<span class="w"> </span>fjse0100.csv
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　全項目を表示する詳細モードの-sオプションとCSV形式にて標準出力に表示する-cオプションを指定し、リダイレクション機能を使用することでファイルに保存する。-sオプションを指定しないと、ディスク容量制限の情報がNULLで出力されてしまう。</div>
+</div>
+<div class="line-block">
+<div class="line">　表示項目の説明を示す。</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/2_UserManagement_13.png" src="../_images/2_UserManagement_13.png" />
+</figure>
+<figure class="align-default">
+<img alt="../_images/2_UserManagement_14.png" src="../_images/2_UserManagement_14.png" />
+</figure>
+<div class="line-block">
+<div class="line">　[*1] 表示形式：利用希望開始日(YYYYMMDD)-利用希望終了日(YYYYMMDD)</div>
+</div>
+<div class="line-block">
+<div class="line">　例）20220101-20220331</div>
+</div>
+<div class="line-block">
+<div class="line">　　利用希望開始日が2022年1月1日で、利用希望終了日が2022年3月31日となる。</div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="2-1-1_UserInfo.html"
+                          title="前の章へ"><span class="section-number">2.1.1. </span>ユーザ情報表示</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="2-1-3_Last.html"
+                          title="次の章へ"><span class="section-number">2.1.3. </span>ログイン履歴検索</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="2-1-3_Last.html" title="2.1.3. ログイン履歴検索"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="2-1-1_UserInfo.html" title="2.1.1. ユーザ情報表示"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="2_UserManagement.html" ><span class="section-number">2. </span>利用者管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="2-1_CommandExpranation.html" ><span class="section-number">2.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.1.2. </span>グループ情報表示</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

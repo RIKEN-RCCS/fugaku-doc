@@ -1,0 +1,19 @@
+.. _HowToCheckTheVersion:
+
+バージョンの確認方法
+======================
+
+| 使用しているコンパイラのバージョンレベルの確認は、コンパイルコマンドに\ ``-V``\ オプションを付けて実行します。
+| 実行時に表示される値が、バージョンレベルとなります。
+
+ [確認例]
+
+ 以下の例は、コンパイラのバージョンレベルが「4.8.1」であることを示しています。
+
+ .. code-block:: console
+
+   [_LNlogin]$ module load lang
+   [_LNlogin]$ frtpx -V
+   frtpx: Fujitsu Fortran Compiler 4.8.1 tcsds-1.2.36
+   usage: frtpx [options] files.
+

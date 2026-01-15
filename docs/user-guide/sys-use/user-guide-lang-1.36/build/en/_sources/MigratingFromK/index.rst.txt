@@ -1,0 +1,563 @@
+Migration from K
+================
+
+Here explains about migration from K.
+
+
+Overview
+--------
+
+Here describes about the main difference between the language environment offered in Supercomputer K and \ |post-k|\ 's language environment.
+
+
+Language environment correspondance
+-----------------------------------
+
+On |post-k|\ , as the same as Supercomputer K, it supports for Fortran, C, C++, MPI and OpenMP.
+
+Supported language style is changed as following. Please be aware that if you are describing in the in incompatible.
+
+[Supported language style]
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 2 3 3
+
+   * - Section
+     - K
+     - Fugaku
+
+   * - Fortran
+     - ISO/IEC 1539-1:2004 (Fortran 2003)
+     - ISO/IEC 1539-1:2010 (Fortran 2008)
+
+   * - C
+     - ISO/IEC 9899:1999 (C99 standard)
+     - ISO/IEC 9899:2011 (C11 standard)
+
+   * - C++
+     - ISO/IEC 14882:2014 (C++14 standard)
+     - ISO/IEC 14882:2017 (C++14 standard)
+
+   * - MPI
+     - 2.2
+     - 3.1
+     
+   * - OpenMP
+     - 3.1
+     - 4.0
+
+ .. seealso::
+  
+  About the detail of  |post-k|\ , please refer to  \ :ref:`LanguageSpecifications`\  .
+
+
+Version check method
+--------------------
+
+Here indicates the direction of version check.
+
+When compiling, language software version supecifies ``-V`` option.
+
+In the following example, it is figured out that the version is 4.8.1.
+
+- An example of Fortran
+
+ .. code-block:: console
+
+   [_LNlogin]$ mpifrtpx -V program.f
+   frtpx: Fujitsu Fortran Compiler 4.8.1 tcsds-1.2.36
+   jwd_fortpx: Fujitsu Fortran Compiler 4.8.1 (Jun 30 2022 15:02:42)
+
+
+- An example of C/C++
+
+ .. code-block:: console
+
+   [_LNlogin]$ mpifccpx -V main.c
+   fccpx: Fujitsu C/C++ Compiler 4.8.1 tcsds-1.2.36
+   simulating gcc version 6.1
+   ccpcompx: Fujitsu C/C++ Compiler 4.8.1 (Jun 16 2022 14:47:00)
+
+
+Incompatible item
+-----------------
+
+Here indicates the main incompatible about compile option and operation.
+
+Fortran
+^^^^^^^
+
+Please see "Fortran User's Guide" about the detail of each function indicated here.
+
+1. Convert to default -Kauto, -Ktemparraystack, -Kautoobjstack option
+      There is a case that stuck use size might increase than original.
+
+#. Return value of IOSTAT specifier at execution of non-stop output statement
+      The value returned to the IOSTAT specifier when the length of a Fortran record determined by a format specification exceeds the logical record length in a non-persistent output statement has been changed.
+      "134" is returned to the IOSTAT specifier. Previously, "-2" was returned.
+      
+      For a program that processes according to the value of the IOSTAT specifier, the program needs to be changed.
+
+#. Specification change of runtime information output function
+      | Information (part of cost information, parallelization information, input / output information, hardware monitor information) that could be acquired as a runtime information output function cannot be acquired.
+      | Also it makes unable to obtain information by area specification (start_collection/stop_collection. If the range specification (start_collection / stop_collection) and its definition (fjcoll_lib) exist in the source program, an error will occur during compilation.
+      
+      If you want to obtain parallelization information, and hardware monitor information, use a CPU performance analysis tool.
+
+#. Implement of LLVM OpenMP library
+      | Parallelization function uses LLVM OpenMP library as a default.
+      | If use the original  Fujitsu OpenMP library, specify  \ ``-Nfjomplib``\  option.
+
+#. Value change on macto and named constant by support of OpenMP API version 4.0 style.
+      | When specified translation option  ``-Kopenmp`` ,  ``-D_OPENMP=201307``  is enabled.
+      | Named constant openmp_version's value will be 201307.
+      
+      If your program uses the value of the macro _OPENMP or the named constant openmp_version, modify your program to correspond to the changed value.
+
+#. Removal of translation option -K {openmp_tls | openmp_notls}
+      If specified  ``-K{openmp_tls|openmp_notls}``\  option, the following alart message is output when translation.
+      
+      .. code-block:: console
+      
+          Alart : -Kopenmp_[no]tls  option is abolished.
+
+#. -Kvppocl option abolish
+      If  ``-Kvppocl``\  option and  \ ``-Kocl``\  option is enabled, the optimization directive NOVREC was treated the same as the optimization directive NORECURRENCE. Since  \ ``-Kvppocl``\  option is abolished, it became to unable to use those equally.
+
+#. Change the options available on the compiler directive line "!optoins"
+      | The -O[1-3] options can be specified as compiler options.
+      | If you want to enable transtlation option that specified with compiler directive line "!options" , proceed the following steps.
+      
+      - !Cut out the procedure that describes the options line to another file and translate it with the options specified in the! options line
+
+#. -Nuse_rodata option abolish and style change
+      | Executing a program that assigns to a constant other than a constant argument may cause abnormal termination at runtime.
+      | Change the program to not proceed assign to constant
+      
+#. Style change of -Kswp and -Kswp_strong option
+      Once specified \ ``-Kswp``\ ,\ ``-O2``\ ,\ ``-O3``\  or  \ ``-Kfast``\  option behind  ``-Kswp_strong``  option,  \ ``-Kswp_strong``\  option is unabled and  \ ``-Kswp``\  option is enabled.
+      
+      To enable  ``-Kswp_strong``  option, specify behind of \ ``-Kswp``\ ,\ ``-O2``\ ,\ ``-O3``\ or  ``-Kfast``\ option.
+      
+#. -Kdalign option abolish
+      Compile option  \ ``-Kdalign``\  is unabled and alartted as following.
+      
+      .. code-block:: console
+      
+          Alart : Sub option dalign, specified to -K is incorrect.
+      
+      If specified  \ ``-Kdalign``\  to match common variable member align, specify  \ ``-Kalign_commons``\ .
+      
+#. Change -Kprefetch_strong to default
+      | The L1 prefetch instruction operates as a strong prefetch by default created by  ``-Kprefetch_sequential``\ , \ ``-Kprefetch_stride``\  or  \ ``-Kprefetch_indirect``\.
+      | When generating a prefetch instruction that operates as a weak prefetch, specify  \ ``-Kprefetch_nostrong``\ .
+      
+#. To enable -Kprefetch_nostrong and  -Kprefetch_nostrong_L2 ,  -Khpctag is required.
+      To enable  ``-Kprefetch_nostrong``\  and  \ ``-Kprefetch_nostrong_L2``\ ,  \ ``-Khpctag``\  is required. \ ``-Khpctag``\  is enabled as default.
+      
+#. Behavior change when an unrecognized option is specified
+      | If an unrecognized option is specified, a warning message will be output and the specification will be ignored.
+      | Previously, a warning message was output and passed to the linker.
+      | To give an option to linker, use  \ ``-Wl``\  option.
+
+#. Changes how the -NRtrap option is specified
+      To enable the -NRtrap option, it must be set at both compilation and linking.
+
+
+C language
+^^^^^^^^^^
+
+Please see "C User's Guide" about the detail of each function indicated here.
+
+1. Convert to default -Klib opiton
+      If  ``-O0``\  option is enabled, when omitted,  \ ``-Knolib``\  option is applied. Also more than  ``-O1``\  is enabled, when omitted,  \ ``-Klib``\  option is appiled.
+      
+      If this option is enabled and the user defines a function with the same name as the standard library function, the result intended by the user may not be obtained.
+      
+#. Specification change of runtime information output function
+      Information (part of cost information, parallelization information, input / output information, hardware monitor information) that could be acquired as a runtime information output function cannot be acquired. It makes unable to obtain information by area specification (start_collection/stop_collection.
+      
+      If the range specification (start_collection / stop_collection) and its definition (fjcoll_lib) exist in the source program, an error will occur during compilation.
+      If you want to obtain parallelization information, and hardware monitor information, use a CPU performance analysis tool.
+
+#. Implement of LLVM OpenMP library
+      | Parallelization function uses LLVM OpenMP library as a default.
+      | If use the original  Fujitsu OpenMP library, specify  \ ``-Nfjomplib``\  option.
+
+#. Abolish of translation option -noansi
+      If specify language style level,  use  \ ``-std``\  option.
+      
+#. Translation option -f{signed-char|unsigned-char} omit value change
+      When ``-f{signed-char|unsigned-char}``\ option is omitted,  \ ``-funsigned-char``\  option is applied abd predefined macro __SIGNED_CHARS__ is not defined.
+      
+      If there is only a declaration of char type in the source program, the sign may change, and the operation of the program may be different from before.
+      
+#. Translation option -X abolished (language specification mode is GNU compatible mode only)
+      GNU C extention style is abusolutely enabled.
+      
+#. GNU C compatible version change
+      Each macro value is as below.
+
+      .. list-table::
+        :header-rows: 1
+        :widths: 3 2
+        
+        * - Macro
+          - Value
+      
+        * - __GNUC__
+          - 6
+      
+        * - __GNUC_MINOR__
+          - 1
+      
+        * - __GNUC_PATCHLEVEL__
+          - 0
+      
+      If each macro value is used in the program, modify the program to correspond to the above values.
+      
+#. Omit value change of translation option -std 
+      If omitted ``-std``\  option,  \ ``-std=gnu11``\  is applied. To specify language style level, use  \ ``-std``\  option.
+
+#. Definition change of macro __STRICT_ANSI__, linux, unix and __STDC_VERSION__
+
+      .. list-table::
+        :header-rows: 1
+        :widths: 2 5
+        
+        * - Macro
+          - Change contents
+      
+        * - __STRICT_ANSI__
+          - Defined if  ``-ansi``\  option or  \ ``-std={c89|c99}``\  option is enabled.
+      
+        * - linux
+          - Defined if  ``-std={gnu89|gnu99}``\  option is enabled.
+
+        * - unix
+          - Defined if  ``-std={gnu89|gnu99}``\  option is enabled.
+
+        * - __STDC_VERSION__
+          - Not defined if  ``-std={c89|gnu89}``\ option is enabled. 
+
+      If each macro is used in the program, modify the program to correspond to the above definition.
+
+#. Operation change if specified translation option -Dname and -Uname 
+      If specified the same name to  ``-D``\  option and  \ ``-U``\  option, the latst specification is enabled.
+      
+#. Omit value change of traslation option -N{line|noline}
+      When omitted  ``-N{line|noline}``\  option,  \ ``-Nline``\  option is applied.
+      
+#. Removal of translation option -K {openmp_tls | openmp_notls}
+      If specified  ``-K{openmp_tls|openmp_notls}``\  option, the following alart message is output when translation.
+      
+      .. code-block:: console
+      
+          Alart : -Kopenmp_[no]tls  option is abolished.
+
+#. Style change of -Kswp and -Kswp_strong option
+      Specify  \ ``-Kswp``\ ,\ ``-O2``\ ,\ ``-O3``\  or  \ ``-Kfast``\  behind of  ``-Kswp_strong``\ option,  \ ``-Kswp_strong``\  option is unabled and  \ ``-Kswp``\  option is enabled.
+      
+      To enable  ``-Kswp_strong``\  option, specify behind of  \ ``-Kswp``\ ,\ ``-O2``\ ,\ ``-O3``\  or  \ ``-Kfast``\  option.
+
+#. -Kdalign option abolish
+      Compile option  \ ``-Kdalign``\  is unabled and alartted as following.
+      
+      .. code-block:: console
+      
+          Alart : Sub option dalign, specified to -K is incorrect.
+
+#. Specification changes for built-in functions __sync_fetch_and_nand and __sync_nand_and_fetch
+      Changed to as following.
+
+      .. list-table::
+        :header-rows: 1
+        :widths: 6 4
+        
+        * - Built-in functions
+          - Operation
+
+        * - type __sync_fetch_and_nand (type \*ptr, type value, ...)
+          - | tmp = \*ptr;
+            | \*ptr = ~(tmp & value);
+            | return tmp;
+
+        * - type __sync_nand_and_fetch (type \*ptr, type value, ...)
+          - | \*ptr = ~(\*ptr & value);
+            | return \*ptr;
+
+#. Change -Kprefetch_strong to default
+      The L1 prefetch instruction operates as a strong prefetch by default created by  ``-Kprefetch_sequential``\ , \ ``-Kprefetch_stride``\  or  \ ``-Kprefetch_indirect``\.
+      
+      When generating a prefetch instruction that operates as a weak prefetch, specify  \ ``-Kprefetch_nostrong``\ .
+
+#. To enable -Kprefetch_nostrong and -Kprefetch_nostrong_L2 , -Khpctag is required.
+      To enable  ``-Kprefetch_nostrong``\  and  \ ``-Kprefetch_nostrong_L2``\ ,  \ ``-Khpctag``\  is required. \ ``-Khpctag``\  is enabled as a default.
+      
+#. Behavior change when an unrecognized option is specified
+      | If an unrecognized option is specified, a warning message will be output and ignored.
+      | Previously, a warning message was output and passed to the linker.
+      | When passing options to the linker, use the \ ``-Wl``\  option.
+
+
+C++
+^^^
+
+Please see "C++ User's Guide" about the detail of each function indicated here.
+
+1. Convert to default -Klib opiton
+     If  ``-O0``\  option is enabled, when omitted,  \ ``-Knolib``\  option is applied.  Also more than  ``-O1``\ is enabled, when omitted,  \ ``-Klib``\  option is applied.
+      
+      If this option is enabled and the user defines a function with the same name as the standard library function, the result intended by the user may not be obtained.
+
+#. Specification change of runtime information output function
+      Information (part of cost information, parallelization information, input / output information, hardware monitor information) that could be acquired as a runtime information output function cannot be acquired. It makes unable to obtain information by area specification (start_collection/stop_collection.
+      
+      If the range specification (start_collection / stop_collection) and its definition (fjcoll_lib) exist in the source program, an error will occur during compilation.
+      If you want to obtain parallelization information, and hardware monitor information, use a CPU performance analysis tool.
+
+#. Implement of LLVM OpenMP library
+      | Parallelization function uses LLVM OpenMP library as a default.
+      | If use the original  Fujitsu OpenMP library, specify  \ ``-Nfjomplib``\  option.
+
+#. Standard template library (STL) change on C++03 style or C++11 style
+      If C++03 style or C++11 style, as STL, use libc++. At K, used STLport.
+
+#. Translation option -f{signed-char|unsigned-char} omit value change
+      When ``-f{signed-char|unsigned-char}``\ option is omitted,  \ ``-funsigned-char``\  option is applied abd predefined macro __SIGNED_CHARS__ is not defined.
+      
+      If there is only a declaration of char type in the source program, the sign may change, and the operation of the program may be different from before.
+
+#. Translation option -X abolished (language specification mode is GNU compatible mode only)
+      GNU C++ extention style is abusolutely enabled.
+
+#. GNU C++ compatible version change
+      Each macro value is as below.
+
+      .. list-table::
+        :header-rows: 1
+        :widths: 3 2
+        
+        * - Macro
+          - Value
+      
+        * - __GNUC__
+          - 6
+      
+        * - __GNUC_MINOR__
+          - 1
+      
+        * - __GNUC_PATCHLEVEL__
+          - 0
+
+        * - __GNUG__
+          - 6
+
+#. Omit value change of translation option -std 
+      If omitted  ``-std``\  option,  \ ``-std=gnu++14``\  is applied.
+
+#. Definition change of macro __STRICT_ANSI__ ,linux,unix, and __cplusplus
+
+      .. list-table::
+        :header-rows: 1
+        :widths: 3 7
+        
+        * - Macro
+          - Change contents
+      
+        * - __STRICT_ANSI__
+          - Defined if  ``-std={c++98|c++03|c++11|c++14}``\  option is enabled. 
+
+        * - linux
+          - Defined if  ``-std={gnu++98|gnu++03|gnu++11|gnu++14}``\  option is enabled.
+
+        * - unix
+          - Defined if  ``-std={gnu++98|gnu++03|gnu++11|gnu++14}``\  option is enabled. 
+
+        * - __cplusplus
+          - Value will be 199711L if  ``-std={c++98|c++03|gnu++98|gnu++03}``\  option is enabled. 
+
+
+#. Operation change if specified translation option -Dname and -Uname at the same time
+      If specified the same name to  ``-D``\  and  \ ``-U``\ , the latst specification is enabled.
+
+#. Omit value change of traslation option -N{line|noline}
+      When omitted  ``-N{line|noline}``\  option,  \ ``-Nline``\  option is applied.
+
+#. Removal of translation option -K {openmp_tls | openmp_notls}
+      If specified  ``-K{openmp_tls|openmp_notls}``\  option, the following alart message is output when translation.
+      
+      .. code-block:: console
+      
+          Alart : -Kopenmp_[no]tls  option is abolished.
+
+#. Style change of -Kswp and -Kswp_strong option
+      Specify  \ ``-Kswp``\ ,\ ``-O2``\ ,\ ``-O3``\  or  \ ``-Kfast``\  behind of  ``-Kswp_strong``\ option,  \ ``-Kswp_strong``\  option is unabled and  \ ``-Kswp``\  option is enabled.
+      
+      To enable  ``-Kswp_strong``\  option, specify behind of  \ ``-Kswp``\ ,\ ``-O2``\ ,\ ``-O3``\  or  \ ``-Kfast``\  option.
+
+#. -Kdalign option abolish
+      Compile option  \ ``-Kdalign``\  is unabled and alartted as following.
+      
+      .. code-block:: console
+      
+         Alart : Sub option dalign, specified to -K is incorrect.
+
+#. Specification changes for built-in functions __sync_fetch_and_nand and __sync_nand_and_fetch
+      Changed to as following.
+
+      .. list-table::
+        :header-rows: 1
+        :widths: 6 4
+        
+        * - Built-in functions
+          - Operation
+
+        * - type __sync_fetch_and_nand (type \*ptr, type value, ...)
+          - | tmp = \*ptr;
+            | \*ptr = ~(tmp & value);
+            | return tmp;
+
+        * - type __sync_nand_and_fetch (type \*ptr, type value, ...)
+          - | \*ptr = ~(\*ptr & value);
+            | return \*ptr;
+
+#. Change -Kprefetch_strong to default
+      The L1 prefetch instruction operates as a strong prefetch by default created by  ``-Kprefetch_sequential``\ , \ ``-Kprefetch_stride``\  or  \ ``-Kprefetch_indirect``\.
+      
+      When generating a prefetch instruction that operates as a weak prefetch, specify  \ ``-Kprefetch_nostrong``\ .
+
+#. To enable -Kprefetch_nostrong and -Kprefetch_nostrong_L2 , -Khpctag is required.
+      To enable  ``-Kprefetch_nostrong``\  and  \ ``-Kprefetch_nostrong_L2``\ ,  \ ``-Khpctag``\  is required. \ ``-Khpctag``\  is enabled as a default.
+      
+#. Behavior change when an unrecognized option is specified
+      | If an unrecognized option is specified, a warning message will be output and ignored.
+      | Previously, a warning message was output and passed to the linker.
+      | When passing options to the linker, use the \ ``-Wl``\  option.
+
+
+MPI
+^^^
+
+Please see "MPI User's Guide" about the detail of each function indicated here.
+
+1. Hasty Rendezvous communication function abolish
+      Cannot use MCA parameter pml_ob1_use_hasty_rendezvous.
+      
+#. MCA parameter dpm_ple_socket_timeout abolish
+      It is not possible to set the communication wait time between two MPI process groups that do not share a communicator such as dynamic processes.
+      
+#. Extention RDMA interface abolish
+      Revise to the program which uses uTofu interface.
+      
+#. Rank euery interface change
+      The functions have been consolidated into the following routines so that information on the node to which the child process is assigned can be obtained and the conventional routine functions can be used. For the specification, refer to "Rank Query Interface" in the manual "MPI User's Guide".
+
+      - FJMPI_TOPOLOGY_GET_COORDS
+      - FJMPI_TOPOLOGY_GET_RANKS
+
+#. C language MPI functions are not hooked by using Fortran profiling interface
+      When using the profiling interface in a Fortran program, you cannot hook using the C language interface.
+      When using the profiling interface in Fortran programs, hook using the Fortran interface.
+
+#. Change to MCA parameter orte_abort_print_stack to opal_abort_print_stack
+      The MCA parameter orte_abort_print_stack for outputting stack trace information cannot be used. Change the MCA parameter to opal_abort_print_stack.
+
+#. Change a parameter name of CA parameter dpm_ple_no_establish_connection
+      Correct the MCA parameter to mpi_no_establish_communication.
+      
+#. Change algorithm of reduction operation used in collective communication
+      The reduction operation steps is defferent when executed on K and executed on Fugaku.
+      
+      For this reason, precision errors may occur in MPI_SUM reduction operations on floating-point or complex data, and the calculation results may differ.
+
+#. MCA parameter coll_tbi_use_on_max_min omit value change
+      Change MCA parameter coll_tbi_use_on_max_min omit value from 0 to 1.
+      
+      By changing MCA parameter coll_tbi_use_on_max_min omit value from 0 to 1, the barrier communication is applied, and the calculation result may differ from the result without barrier communication.
+      
+      - If NaN is included to the value to use calculation, please be awared of following.
+           - When barrier communication is applied, the result is a comparison of values other than NaN. However, if all values are NaN, it will be one of the NaN values.
+           - If barrier communication is not applied, the result will be the result of comparing non-NaN values or one of the NaN values, depending on the execution conditions.
+
+      - If both of +0.0 and -0.0 is included to the value to use calculation, please be awared of following.
+           - When applying barrier communication, compare by considering the sign of 0. (+0.0 > -0.0)
+           - If barrier communication is not applied, the sign of 0 is not considered.
+             Which one is selected in the magnitude comparison between +0.0 and -0.0 depends on the conditions at runtime.
+
+#. MCA parameter coll_tuned_use_6d_algorithm and coll_tuned_scatterv_use_linear_sync abolish
+      If you specify an obsolete MCA parameter, that specification is ignored. For this reason, the intended algorithm may not be selected and performance may not be achieved.
+      
+      As an alternative to the elimination of these MCA parameters, use the function of algorithm selection for blocking collective communication.
+      Refer to "Tuning by Algorithm Selection" in the manual "MPI User's Guide" for details on the function of algorithm selection for blocking collective communication.
+
+#. Chaneg MCA parameter name about communication time out setting function
+      MCA parameter to specify wawiting communication time cut is opal_progress_timeout.
+      
+      MCA parameter to specify when delaying program termination by the communication timeout setting function is opal_abort_delay.
+      
+#. MCA parameter mpi_deadlock_timeout and mpi_deadlock_timeout_delay abolish
+      MCA parameter  mpi_deadlock_timeout and mpi_deadlock_timeout_delay cannot be used. If specified these MCA parameters, communication time out setting function does not work.
+
+#. Change the default value of the maximum number of processes that can communicate in high-speed communication mode
+      The default value of the maximum number of processes that can communicate in the high-speed communication mode is 256. In K, it was 1024.
+      
+      For an MPI program in which the number of inter-node communication partner processes per process exceeds 256, the communication performance may decrease.
+      If there is enough available memory when executing the MPI program, specify a value greater than 256 for the MCA parameter common_tofu_max_fastmode_procs and execute the MPI program.
+
+
+Tool
+^^^^
+
+The incompetible items about the tool is as following.
+
+1. Interactive debugger abolish
+      Cannot use interactive executable debugger using GUI.
+      
+#. Debugger engine (fdb) abolish
+      Use  \ :command:`gdb`\  for the debugger.
+      
+#. Tracer abolish
+      Cannot use a tracer.
+      
+#. Tofu PA abolish
+      Cannot use Tofu PA.
+
+#. Instant Performance Profiler information (GUI style) abolish
+      Use text style.
+      
+#. Advanced Performance Profiler information (GUI style) abolish
+      Use text style, CSV style, XML style or CPU performance analiyzing report.
+
+#. Change Advanced Performance Profiler precision PA visualization function (Excel style) to CPU performance analiyzing report
+      Already changed "Advanced Performance Profiler precision PA visualization function (Excel style)" to "CPU performance analiyzing report".
+      
+      Notes on CPU performance analiyzing report is as following.
+      
+      - Requires to proceed measurement by Advanced Performance Profiler and file output for 5 times, 11 times or 17 times.
+      - Excel style report file prepares only English index.
+      - On CPU performance analiyzing report (Excel style), output information by CMG unit. Outputs up to 12 threads of information to one Excel file. Therefore, if the number of threads in one process is less than 12, the information of another process in the same CMG unit may be displayed together.
+      - Depending on CPU change, the difference on obtainable event information occurs. Thus, the calculation target information is changed.
+      - Precision PA's following items will not be output.
+           - SIMD calculation related information
+           - Concatenation shift instruction rate
+           - Permutation instruction rate
+           - L2 throughput
+           - MINOPS
+           - Integer operation
+           - Load balance and instruction balance
+           - Rate on program execution time
+           - Number of passing in measurement section and average execution time
+
+#. Core bind when using Advanced Performance Profiler
+      When using Advanced Performance Profiler, change to make core bind specification is required. When using Advanced Performance Profiler, specify core bind.
+      
+#. start_collection function and stop_collection function abolish
+      If inputting start_collection function and stop_collection function into a source code, change to fapp_start function and fapp_stop function.
+      
+#. Operation change if specified fipp command and fapp command -H option and -I{cpupa|nocpupa} option at the same time
+      If specified  \ ``-H``\  option and  \ ``-Inocpupa``\  option by  :program:`fipp`\  command and  \ :program:`fapp`\  command at the same time, regardless of the specified order, always  ``-I{cpupa|nocpupa}``\  option is enabled. Also, if not specify  \ ``-I{cpupa|nocpupa}``\  option and specified  \ ``-H``\  option, \ ``-Icpupa``\  option is enabled.
+      
+      If you want to enable  ``-H``\  option,  do not specify  \ ``-Inocpupa``\  option.
+

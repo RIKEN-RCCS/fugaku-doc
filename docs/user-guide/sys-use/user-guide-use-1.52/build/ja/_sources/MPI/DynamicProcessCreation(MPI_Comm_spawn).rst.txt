@@ -1,0 +1,167 @@
+動的プロセス生成（MPI_COMM_SPAWN）
+====================================
+
+「富岳」における動的プロセス生成は、MPI_COMM_SPAWNルーチン、または、MPI_COMM_SPAWN_MULTIPLEルーチンが利用可能です。
+
+
+ジョブ実行方法
+---------------
+
+動的プロセス生成を行うプログラムの実行は、ジョブスクリプトで静的プロセス（ジョブ投入時に起動されるプロセス）数と動的プロセス（spawnにより起動されるプロセス）数を指定する必要があります。
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 2 5
+   
+   * - オプション
+     - 概要
+
+   * - #PJM -L "node=N"
+     - ノード数の指定。実行に必要な"静的プロセス数+動的プロセス数"の合計ノード数を指定する。
+
+   * - #PJM --mpi "shape=N"
+     - 静的プロセスの形状指定。形状（1次元、2次元、3次元）はnodeで指定した形状に合わせる。
+
+   * - #PJM --mpi "proc=N"
+     - 静的プロセス数の指定する。
+
+ジョブスクリプトの指定例を以下に示します。「:ref:`pjsubOptions(MPI-related)MPI`\ 」も合わせて参照してください。
+
+-  1次元形状で、静的プロセス数1、動的プロセス数7の場合
+
+ .. code-block:: bash
+
+  #!/bin/bash -x
+  #
+  #PJM -L "elapse=01:00:00"
+  #PJM -L "rscgrp=small"
+  #PJM -L "node=8"
+  #PJM --mpi "shape=1"
+  #PJM --mpi "proc=1"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -s
+  #
+  export PARALLEL=48
+  export OMP_NUM_THREADS=$PARALLEL
+  
+  mpiexec -n 1 ./parent.exe
+
+
+-  2次元形状で、静的プロセス数4、動的プロセス数8の場合
+
+ .. code-block:: bash
+
+  #!/bin/bash -x
+  #
+  #PJM -L "elapse=01:00:00"
+  #PJM -L "rscgrp=small"
+  #PJM -L "node=4x3"
+  #PJM --mpi "shape=2x2"
+  #PJM --mpi "proc=4"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -s
+  #
+  export PARALLEL=48
+  export OMP_NUM_THREADS=$PARALLEL
+  
+  mpiexec -n 4 ./parent.exe
+
+
+-  1次元形状で、静的プロセス48、動的プロセス48、フラットMPI（1ノード48プロセス）の場合
+
+ .. code-block:: bash
+
+  #!/bin/bash -x
+  #
+  #PJM -L "elapse=01:00:00"
+  #PJM -L "rscgrp=small"
+  #PJM -L "node=2"
+  #PJM --mpi "shape=1"
+  #PJM --mpi "proc=48"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -s
+  #
+  mpiexec -n 48 ./parent.exe
+
+
+Javaプログラムからの実行
+---------------------------------------------
+
+Javaプログラムで、MPI_COMM_SPAWNルーチン、および、MPI_COMM_SPAWN_MULTIPLEルーチンを呼び出す場合、起動するJavaクラスファイルが存在するクラスパスは、\ ``-classpath``\ オプションではなく環境変数「CLASSPATH」で設定する必要があります。
+Javaプログラムからの実行時の指定例とプログラム例を以下に示します。
+
+-  実行時の指定例
+
+ .. code-block:: bash
+
+  CLASSPATH=/home/user1/bin:$CLASSPATH
+  export CLASSPATH
+  PATH=${FJSVXTCLANGA}/bin:$PATH
+  export PATH
+  LD_LIBRARY_PATH=${FJSVXTCLANGA}/lib64:$LD_LIBRARY_PATH
+  export LD_LIBRARY_PATH
+  
+  mpiexec -n 2 java Spawn
+
+
+- Javaプログラムの例
+
+ .. code-block:: java
+
+  import mpi.*;
+
+  public class Spawn {
+    private final static String CMD_ARGV1 = "THIS IS ARGV 1"; /* 子プロセスに渡す引数1 */
+    private final static String CMD_ARGV2 = "THIS IS ARGV 2"; /* 子プロセスに渡す引数2 */
+    private final static String CMD = "Spawn"; /* Spawn対象のクラスファイル名 */
+
+    public static void main(String args[]) throws MPIException {
+      MPI.Init(args);
+      System.out.println("Start");
+      
+      String spawn_argv[] = {
+        CMD,
+        CMD_ARGV1,
+        CMD_ARGV2
+      };
+      
+      int count = 1;
+      int errcode[] = new int[1];
+      
+      Intercomm parent;
+      parent = Intercomm.getParent();
+      
+      if (!parent.isNull()) {
+        /* 子プロセスの処理 */
+        System.out.println("I am a child");
+      }else{
+        /* 親プロセスの処理 : 自分自身をSpawnする */
+        MPI.COMM_WORLD.spawn("java", spawn_argv, count, MPI.INFO_NULL, 0, errcode);
+        System.out.println("I am a parent");
+      }
+      
+      System.out.println("End");
+      MPI.Finalize();
+    }
+  }
+
+
+注意事項
+------------
+
+動的プロセス生成の機能を利用する場合は、次の点に注意してください。
+
+-  動的プロセス生成の対象はMPIプログラムのみです。MPIプログラム以外を実行する場合は異常終了する場合があります。
+-  動的プロセス生成では「\ :ref:`RankInquiryFunctionsMPI`\ 」を使用できません。
+-  MPI_COMM_SPAWNルーチン、または、MPI_COMM_SPAWN_MULTIPLEルーチンの呼び出し回数の合計は4294967295回までとなります。4294967295回を超えた場合はエラーメッセージを出力しジョブを終了します。
+-  静的プロセスをフラットMPIにした場合、動的プロセス部分もフラットMPIとしてプロセスが割り当てられます。静的プロセスをフラットMPIとし動的プロセスをハイブリッド並列とすることはできません。
+-  MPI プログラム起動時に生成するプロセスと動的に生成するプロセスは互いにノードを共有しません。
+-  フラットMPIでは、動的に生成するプロセスは静的プロセスのプロセス形状を継承します。詳しくは、マニュアル「ジョブ運用ソフトウェアエンドユーザ向けガイド 」の「生成するプロセス数の指定」を参照してください。
+-  同一プロセスが動的プロセス生成を繰り返し実行した場合、生成されたプロセス生成情報およびコミュニケータ情報がメモリに蓄積されていくため、メモリ不足を引き起こすことがあります。
+
+
+
+

@@ -1,0 +1,517 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>9. 他システムからの移行 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="prev" title="8.9. 利用ファイルシステム(volume)の選択" href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html" title="8.9. 利用ファイルシステム(volume)の選択"
+             accesskey="P">前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">9. </span>他システムからの移行</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">9. </span>他システムからの移行<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<section id="id2">
+<h2><span class="section-number">9.1. </span>概要<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>富士通製他システム（PCクラスタ、スーパーコンピュータ「京」）から、「富岳」への移行、他社コンパイラ（Intelコンパイラ、gcc）からプログラムを移行する際に、非互換となる主要なコンパイルオプションを示します。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">9.2. </span>「京」からの移行<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>「富岳」とスーパーコンピュータ「京」の主な相違点を示します。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>項目</p></th>
+<th class="head"><p>「京」</p></th>
+<th class="head"><p>「富岳」</p></th>
+<th class="head"><p>備考</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>実行可能ファイル</p></td>
+<td><p>SPARC VIIIfx 形式</p></td>
+<td><p>Armv8.2-A 形式</p></td>
+<td><p>互換性無し。リコンパイルが必要。</p></td>
+</tr>
+<tr class="row-odd"><td><p>ステージング</p></td>
+<td><p>あり</p></td>
+<td><p>なし</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ノード内推奨プロセス数</p></td>
+<td><p>1</p></td>
+<td><p>4</p></td>
+<td><p>1ノード内に4 CMG (Core Memory Group, NUMA nodeのこと)を持つため</p></td>
+</tr>
+<tr class="row-odd"><td><p>ノード内最大スレッド数</p></td>
+<td><p>8</p></td>
+<td><p>48</p></td>
+<td><p>4プロセス/ノード時は12スレッド/プロセス</p></td>
+</tr>
+<tr class="row-even"><td><p>ラージページ</p></td>
+<td><p>4MiB/32MiB/256MiB</p></td>
+<td><p>2MiB</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>エンディアン</p></td>
+<td><p>ビッグエンディアン</p></td>
+<td><p>リトルエンディアン</p></td>
+<td><p>バイナリデータの互換性無し</p></td>
+</tr>
+<tr class="row-even"><td><p>言語環境設定方法</p></td>
+<td><p>Env_baseファイルを利用</p></td>
+<td><p>Environment Modulesを利用</p></td>
+<td><p>デフォルト環境がログイン時、および、ジョブ実行時にロードされる</p></td>
+</tr>
+</tbody>
+</table>
+<p>言語環境の主な非互換は「利用手引書 言語開発環境編」の「14. 京からの移行」を参照ください。</p>
+<p>上記の相違を基に、ジョブスクリプトの変更例を以下に示します。</p>
+<p>[スーパーコンピュータ「京」のジョブスクリプト例]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM --rsc-list  &quot;node=8&quot;              # 割当ノード数 8 （1次元形状）</span>
+<span class="c1">#PJM --rsc-list  &quot;elapse=01:00:00&quot;     # 経過時間制限 1時間</span>
+<span class="c1">#PJM --stg-transfiles all</span>
+<span class="c1">#PJM --mpi &quot;use-rankdir&quot;               # ランク番号ディレクトリ使用宣言</span>
+<span class="c1">#PJM --stgin &quot;rank=* ./a.out %r:./&quot;    # 各ランクに./a.outをステージイン</span>
+<span class="c1">#PJM -s                                # 統計情報出力</span>
+<span class="c1">#</span>
+.<span class="w"> </span>/work/system/Env_base<span class="w">                </span><span class="c1"># 環境変数の設定</span>
+<span class="c1">#</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">8</span>
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>./a.out<span class="w">                   </span><span class="c1"># a.outを実行</span>
+</pre></div>
+</div>
+<p>ジョブスクリプトを次のように変更します。</p>
+<ul class="simple">
+<li><p>ステージングに関連する定義(<code class="docutils literal notranslate"><span class="pre">--stg-transfiles</span></code>、<code class="docutils literal notranslate"><span class="pre">use-rankdir</span></code>、<code class="docutils literal notranslate"><span class="pre">--stgin</span></code>、<code class="docutils literal notranslate"><span class="pre">--stgout</span></code>など)を削除します。定義が残っていた場合、何もしません。</p></li>
+<li><p>1ノード 4プロセスとするため、<code class="docutils literal notranslate"><span class="pre">max-proc-per-node=4</span></code>をここでは利用しています。</p></li>
+<li><p>プロセス数を 8 にするため、ノード数を 2 に変更します。ノード数が 8 の場合は、32プロセスで実行します。</p></li>
+<li><p>ジョブ実行時にデフォルトの言語環境が設定されるため、環境変数の設定を削除します。</p></li>
+</ul>
+<p>[「富岳」のジョブスクリプト例]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM --rsc-list  &quot;node=2&quot;              # 割当ノード数 2 （1次元形状）</span>
+<span class="c1">#PJM --rsc-list  &quot;elapse=01:00:00&quot;     # 経過時間制限 1時間</span>
+<span class="c1">#PJM --mpi max-proc-per-node=4         # 1ノード当たりに生成するMPIプロセス数の上限値。</span>
+<span class="c1">#PJM -g groupname                      # 課題のグループ指定</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N     # ジョブで使用するデータ領域のvolume</span>
+<span class="c1">#PJM -s                                # 統計情報出力</span>
+<span class="c1">#</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">12</span>
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>./a.out<span class="w">                   </span><span class="c1"># a.outを実行</span>
+</pre></div>
+</div>
+<p>ジョブ実行時は、<strong class="program">pjsub</strong>を実行したディレクトリをジョブのカレントディレクトリとして動作します。
+複数のジョブを同時に実行する場合は入出力データがジョブ間で競合しないように留意ください。</p>
+</section>
+<section id="id4">
+<h2><span class="section-number">9.3. </span>富士通製他システムからの移行<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>富士通製他システムからの移行について、コンパイルオプションおよび最適化指示子の差異について示します。</p>
+<section id="id5">
+<h3><span class="section-number">9.3.1. </span>オプション差異<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<p>他システムからの移行にあたり、代表的なオプションを示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>PCクラスタ</p></th>
+<th class="head"><p>「京」</p></th>
+<th class="head"><p>FX100</p></th>
+<th class="head"><p>「富岳」</p></th>
+<th class="head"><p>変更点</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-Kfast</p></td>
+<td><p>-Kfast</p></td>
+<td><p>-Kfast</p></td>
+<td><p>-Kfast</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-Kparallel</p></td>
+<td><p>-Kparallel</p></td>
+<td><p>-Kparallel</p></td>
+<td><p>-Kparallel</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-Kopenmp</p></td>
+<td><p>-Kopenmp</p></td>
+<td><p>-Kopenmp</p></td>
+<td><p>-Kopenmp</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>なし</p></td>
+<td><p>-KXFILL</p></td>
+<td><p>-KXFILL</p></td>
+<td><p>-Kzfill</p></td>
+<td><p>「富岳」でオプション名を変更</p></td>
+</tr>
+<tr class="row-even"><td><p>なし</p></td>
+<td><p>-Kuxsimd</p></td>
+<td><p>-Kuxsimd</p></td>
+<td><p>なし</p></td>
+<td><p>「富岳」でオプションを廃止</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kopenmp_tls</p></td>
+<td><p>-Kopenmp_tls</p></td>
+<td><p>-Kopenmp_tls</p></td>
+<td><p>なし</p></td>
+<td><p>「富岳」でオプションを廃止</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="ocl">
+<h3><span class="section-number">9.3.2. </span>最適化指示子（OCL）差異<a class="headerlink" href="#ocl" title="Link to this heading">¶</a></h3>
+<p>追加・変更された代表的なOCLを示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>PCクラスタ</p></th>
+<th class="head"><p>「京」</p></th>
+<th class="head"><p>FX100</p></th>
+<th class="head"><p>「富岳」</p></th>
+<th class="head"><p>変更点</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>なし</p></td>
+<td><p>XFILL</p></td>
+<td><p>XFILL</p></td>
+<td><p>ZFILL</p></td>
+<td><p>「富岳」で名称変更</p></td>
+</tr>
+<tr class="row-odd"><td><p>なし</p></td>
+<td><p>UXSIMD</p></td>
+<td><p>UXSIMD</p></td>
+<td><p>なし</p></td>
+<td><p>「富岳」で廃止</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="id6">
+<h2><span class="section-number">9.4. </span>他社システムからの移行<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<p>Intelコンパイラ、GNUについて、主要オプションの比較を示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目</p></th>
+<th class="head"><p>高速化のための最適化オプション誘導する</p></th>
+<th class="head"><p>自動並列</p></th>
+<th class="head"><p>OpenMP</p></th>
+<th class="head"><p>局所変数をautomatic変数にする</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>「富岳」</p></td>
+<td><p>-Kfast</p></td>
+<td><p>-Kparallel</p></td>
+<td><p>-Kopenmp</p></td>
+<td><p>-Kauto</p></td>
+</tr>
+<tr class="row-odd"><td><p>Intelコンパイラ</p></td>
+<td><p>-O3 -xHost</p></td>
+<td><p>-parallel</p></td>
+<td><p>-openmp</p></td>
+<td><p>-auto</p></td>
+</tr>
+<tr class="row-even"><td><p>GNU</p></td>
+<td><p>-O3</p></td>
+<td><p>-</p></td>
+<td><p>-fopenmp</p></td>
+<td><p>-</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<ul>
+<li><p>GCC(<strong class="program">gcc</strong>)から<strong class="program">fccpx</strong>に移行する場合</p>
+<div class="line-block">
+<div class="line">fccpxはC11仕様に加えて、GNU C拡張仕様に基づいて解釈します。</div>
+</div>
+</li>
+<li><p>Intelコンパイラ(<strong class="program">ifort</strong>)から <strong class="program">frtpx</strong>に移行する場合</p>
+<div class="line-block">
+<div class="line">Fortran固定形式を拡張するオプションを示します。</div>
+<div class="line">「富岳」：<code class="docutils literal notranslate"><span class="pre">-Fwide</span></code>(255文字まで)</div>
+<div class="line">Intelコンパイラ：<code class="docutils literal notranslate"><span class="pre">-132</span></code></div>
+</div>
+</li>
+</ul>
+</div>
+</section>
+<section id="id7">
+<h2><span class="section-number">9.5. </span>エンディアン<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<p>エンディアンについて、スーパーコンピュータ「京」との比較、および、対象のコンパイラについて説明します。</p>
+<section id="id8">
+<h3><span class="section-number">9.5.1. </span>概要<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<p>スーパーコンピューター「京」では、ビッグエンディアンが採用されていました。
+一方、「富岳」および、周辺機器では、リトルエンディアンが採用されています。</p>
+<p>ノードごとに、採用されているエンディアンを示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 27.3%" />
+<col style="width: 36.4%" />
+<col style="width: 36.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ノード種別</p></th>
+<th class="head"><p>「京」</p></th>
+<th class="head"><p>「富岳」</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>計算ノード</p></td>
+<td><p>ビッグエンディアン</p></td>
+<td><p>リトルエンディアン</p></td>
+</tr>
+<tr class="row-odd"><td><p>ログインノード</p></td>
+<td><p>リトルエンディアン</p></td>
+<td><p>リトルエンディアン</p></td>
+</tr>
+</tbody>
+</table>
+<p>スーパーコンピュータ「京」で作成したバイナリーデータを使用するためには、エンディアンを変換する必要があります。</p>
+<p>変換の方針を以下に示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 42.9%" />
+<col style="width: 57.1%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>言語</p></th>
+<th class="head"><p>変換方法</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Fortran(書式無し入出力)</p></td>
+<td><p>言語ソフトウェアの変換機能を利用</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fortran(その他)</p></td>
+<td><p>利用者による変換</p></td>
+</tr>
+<tr class="row-even"><td><p>C</p></td>
+<td><p>利用者による変換</p></td>
+</tr>
+<tr class="row-odd"><td><p>C++</p></td>
+<td><p>利用者による変換</p></td>
+</tr>
+<tr class="row-even"><td><p>MPI-IO</p></td>
+<td><p>利用者による変換</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id9">
+<h3><span class="section-number">9.5.2. </span>対象コンパイラ<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<p>対象とするコンパイラは次の通りです。
+これらのコンパイラでは、Fortranのバイナリーデータを対象にエンディアン変換の機能が提供されているものがあります。</p>
+<nav class="contents local" id="id10">
+<ul class="simple">
+<li><p><a class="reference internal" href="#id11" id="id12">富士通製コンパイラ</a></p></li>
+<li><p><a class="reference internal" href="#intel" id="id13">Intel製コンパイラ</a></p></li>
+<li><p><a class="reference internal" href="#gnu-gcc" id="id14">GNU製コンパイラ(GCC)</a></p></li>
+</ul>
+</nav>
+<section id="id11">
+<h4><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">9.5.2.1. </span>富士通製コンパイラ</a><a class="headerlink" href="#id11" title="Link to this heading">¶</a></h4>
+<p>富士通製コンパイラでは、実行時オプションと変換コマンドが提供されています。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>機能</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>実行時オプション</p></td>
+<td><p>Fortranプログラムの実行時オプションに<code class="docutils literal notranslate"><span class="pre">-Wl,-T</span></code>を付けると、Fortran入出力時にエンディアン変換が実行されます。</p></td>
+</tr>
+<tr class="row-odd"><td><p>変換コマンド</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fcvendianpx</span></code>コマンドを提供しています。
+<code class="docutils literal notranslate"><span class="pre">fcvendianpx</span> <span class="pre">inputfilename</span> <span class="pre">outputfilename</span> <span class="pre">type</span></code> のように使用します。
+<code class="docutils literal notranslate"><span class="pre">type</span></code> は、変換するデータの型(2、4、8、16のいずれかの値)を指定します。</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="intel">
+<h4><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">9.5.2.2. </span>Intel製コンパイラ</a><a class="headerlink" href="#intel" title="Link to this heading">¶</a></h4>
+<p>Intel製コンパイラでは、コンパイルオプションと実行時の環境変数が提供されています。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>機能</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>コンパイルオプション</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-convert</span> <span class="pre">big_endian</span></code> 、<code class="docutils literal notranslate"><span class="pre">-convert</span> <span class="pre">little_endian</span></code>を付加してコンパイルすることにより、書式無し数値データの形式を、ビッグエンディアン、または、リトルエンディアンにすることができます。</p></td>
+</tr>
+<tr class="row-odd"><td><p>実行時環境変数</p></td>
+<td><p>環境変数 <code class="docutils literal notranslate"><span class="pre">F_UFMTENDIAN</span> <span class="pre">=</span> <span class="pre">MODE</span> <span class="pre">(MODE</span> <span class="pre">=</span> <span class="pre">big</span> <span class="pre">|</span> <span class="pre">little)</span></code> を指定します。</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="gnu-gcc">
+<h4><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">9.5.2.3. </span>GNU製コンパイラ(GCC)</a><a class="headerlink" href="#gnu-gcc" title="Link to this heading">¶</a></h4>
+<p>gfortranでは、OPEN文の拡張による convert指定子と実行時のオプションが提供されています。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>機能</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>OPEN文の拡張子</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CONVERT='BIG_ENDIAN'</span></code>、<code class="docutils literal notranslate"><span class="pre">CONVERT='LITTLE_ENDIAN'</span></code>をOPEN文に指定します。<code class="docutils literal notranslate"><span class="pre">open(file='big.dat',form='unformatted',</span> <span class="pre">convert='big_endian')</span></code> のように指定します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>実行時のオプション</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-fconvert=big-endian</span></code>、<code class="docutils literal notranslate"><span class="pre">-fconvert=little-endian</span></code>を指定します。</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">9. 他システムからの移行</a><ul>
+<li><a class="reference internal" href="#id2">9.1. 概要</a></li>
+<li><a class="reference internal" href="#id3">9.2. 「京」からの移行</a></li>
+<li><a class="reference internal" href="#id4">9.3. 富士通製他システムからの移行</a><ul>
+<li><a class="reference internal" href="#id5">9.3.1. オプション差異</a></li>
+<li><a class="reference internal" href="#ocl">9.3.2. 最適化指示子（OCL）差異</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id6">9.4. 他社システムからの移行</a></li>
+<li><a class="reference internal" href="#id7">9.5. エンディアン</a><ul>
+<li><a class="reference internal" href="#id8">9.5.1. 概要</a></li>
+<li><a class="reference internal" href="#id9">9.5.2. 対象コンパイラ</a><ul>
+<li><a class="reference internal" href="#id11">9.5.2.1. 富士通製コンパイラ</a></li>
+<li><a class="reference internal" href="#intel">9.5.2.2. Intel製コンパイラ</a></li>
+<li><a class="reference internal" href="#gnu-gcc">9.5.2.3. GNU製コンパイラ(GCC)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html"
+                          title="前の章へ"><span class="section-number">8.9. </span>利用ファイルシステム(volume)の選択</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html" title="8.9. 利用ファイルシステム(volume)の選択"
+             >前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">9. </span>他システムからの移行</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,146 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Programming Guide (IO part) version 1.02 &#8212; Programming Guide (IO part)  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Introduction" href="Introduction/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Introduction/index.html" title="1. Introduction"
+             accesskey="N">next</a></li>
+        <li class="nav-item nav-item-0"><a href="#">Programming Guide (IO part)  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Programming Guide (IO part) version 1.02</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="programming-guide-io-part-version-version">
+<h1>Programming Guide (IO part) version 1.02<a class="headerlink" href="#programming-guide-io-part-version-version" title="Permalink to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Introduction/index.html">1. Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#the-purpose-of-this-document">1.1. The purpose of this document.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#notation-used-in-this-document">1.2. Notation used in this document</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#abbreviations-and-aliases">1.3. Abbreviations and aliases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#about-trademarks">1.4. About trademarks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Introduction/index.html#change-log">1.5. Change log</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="StorageOverview/index.html">2. Storage Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="StorageOverview/index.html#job-submission-flow">2.1. Job submission flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="StorageOverview/index.html#overview-of-fugaku-storage-configuration">2.2. Overview of Fugaku Storage Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="StorageOverview/index.html#file-system-available-in-fugaku">2.2.1. File system available in Fugaku</a></li>
+<li class="toctree-l3"><a class="reference internal" href="StorageOverview/index.html#about-layered-storage">2.2.2. About Layered Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="StorageOverview/index.html#layered-storage-decision-flow">2.2.3. Layered Storage Decision Flow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="StorageOverview/index.html#first-layer-storage">2.3. First-layer Storage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="StorageOverview/index.html#about-node-temporary-area">2.3.1. About Node Temporary Area</a></li>
+<li class="toctree-l3"><a class="reference internal" href="StorageOverview/index.html#about-shared-temporary-area">2.3.2. About Shared Temporary Area</a></li>
+<li class="toctree-l3"><a class="reference internal" href="StorageOverview/index.html#about-cache-area-of-second-layer-storage">2.3.3. About Cache Area of Second-Layer Storage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="StorageOverview/index.html#about-second-layer-storage">2.4. About Second-Layer Storage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CapacitySetting/index.html">3. Capacity Setting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CapacitySetting/index.html#first-layer-storage-capacity-settings">3.1. First-Layer Storage Capacity Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CapacitySetting/index.html#example-of-capacity-setting">3.2. Example of Capacity Setting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CapacitySetting/index.html#llio-stripe-feature">3.3. LLIO stripe feature</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SettingsForUsingTheCache/index.html">4. Settings For Using The Cache</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SettingsForUsingTheCache/index.html#what-you-can-do-with-cache-settings">4.1. What you can do with cache settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SettingsForUsingTheCache/index.html#configuring-a-second-layer-storage-cache-region">4.2. Configuring a Second-layer Storage Cache Region</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SettingsForUsingTheCache/index.html#cache-in-compute-node">4.3. Cache in Compute Node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="SettingsForUsingTheCache/index.html#cn-cache-size">4.3.1. cn-cache-size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SettingsForUsingTheCache/index.html#cn-cached-write-size">4.3.2. cn-cached-write-size</a></li>
+<li class="toctree-l3"><a class="reference internal" href="SettingsForUsingTheCache/index.html#cn-read-cache">4.3.3. cn-read-cache</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="SettingsForUsingTheCache/index.html#automatic-readahead-function">4.4. Automatic Readahead Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SettingsForUsingTheCache/index.html#asynchronous-close">4.5. Asynchronous Close</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SettingsForUsingTheCache/index.html#unwritten-file-list">4.6. Unwritten File List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SettingsForUsingTheCache/index.html#llio-performance-information">4.7. LLIO Performance Information</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ExlusionControl/index.html">5. Exclusion Control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ExlusionControl/index.html#exclusive-control-using-a-directory">5.1. Exclusive Control Using a Directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ExlusionControl/index.html#exclusive-control-using-file-locking">5.2. Exclusive Control Using File Locking</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Introduction/index.html"
+                          title="next chapter"><span class="section-number">1. </span>Introduction</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Introduction/index.html" title="1. Introduction"
+             >next</a></li>
+        <li class="nav-item nav-item-0"><a href="#">Programming Guide (IO part)  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Programming Guide (IO part) version 1.02</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

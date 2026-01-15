@@ -1,0 +1,177 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>3.1.9. Job status transition history displaying &#8212; User support tools User&#39;s Guide (for User)  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3.1.10. Displaying quotas on data area" href="3-1-10_Chkdiskspace.html" />
+    <link rel="prev" title="3.1.8. User payment information displaying (disk)" href="3-1-8_AccountD.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-10_Chkdiskspace.html" title="3.1.10. Displaying quotas on data area"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="3-1-8_AccountD.html" title="3.1.8. User payment information displaying (disk)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" accesskey="U"><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.9. </span>Job status transition history displaying</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="job-status-transition-history-displaying">
+<h1><span class="section-number">3.1.9. </span>Job status transition history displaying<a class="headerlink" href="#job-status-transition-history-displaying" title="Permalink to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[Name]</strong></div>
+<div class="line">　jobhistory -  Display the job status transition history</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Style]</strong></div>
+<div class="line">　jobhistory  -j  job ID  [-d number of days to the past]</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Description]</strong></div>
+<div class="line">　jobhistory command displays the state transition history from when the job is submitted to when it is completed in chronological order.</div>
+</div>
+<div class="line-block">
+<div class="line">　Users can check the state transition history only for their own jobs. The system administrator can display the state transition history of all members registered in the system.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Option]</strong></div>
+<div class="line">　-j  job ID</div>
+<div class="line">　Specify job ID. Cannot specify only the specific sub job.</div>
+</div>
+<div class="line-block">
+<div class="line">　-d  number of days to the past</div>
+<div class="line">　By specifying the number of days to the past, it is possible to go back to the past period and output information.</div>
+<div class="line">　In addition to the jobs that have been submitted, the information of jobs that have finished processing (EXIT, CANCEL status) is output. The number of days going back in the past is an integer from 1 to 90.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Return value]</strong></div>
+<div class="line">　Normal: 0</div>
+<div class="line">　Abnormal: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Note]</strong></div>
+<div class="line">　None.</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[Use example]</strong></div>
+<div class="line">　【Example 1】  Displays the state transition history of the currently executing job ID is 8000.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>jobhistory<span class="w"> </span>-j<span class="w"> </span><span class="m">8000</span>
+<span class="go">[&#39;2022-02-12 12:17:47&#39;][jobid=8000][stepno=0][blkno=0]ACCEPT[-]</span>
+<span class="go">[&#39;2022-02-12 12:17:47&#39;][jobid=8000][stepno=0][blkno=0]QUEUED[-]</span>
+<span class="go">[&#39;2022-02-12 12:26:22&#39;][jobid=8000][stepno=0][blkno=0]RUNNING_A[-]</span>
+<span class="go">[&#39;2022-02-12 12:26:58&#39;][jobid=8000][stepno=0][blkno=0]RUNNING_P[-]</span>
+<span class="go">[&#39;2022-02-12 12:34:18&#39;][jobid=8000][stepno=0][blkno=0]RUNNING[job_start=&#39;2022-02-12 12:34:18&#39;]</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<p>　【Example 2】    Displays the state transition history for job ID 5579 that ended 5 days ago.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>jobhistory<span class="w"> </span>-j<span class="w"> </span><span class="m">5579</span><span class="w"> </span>-d<span class="w"> </span><span class="m">5</span>
+<span class="go">[&#39;2022-02-07 17:50:28&#39;][jobid=5579][stepno=0][blkno=0]ACCEPT[-]</span>
+<span class="go">[&#39;2022-02-07 17:50:28&#39;][jobid=5579][stepno=0][blkno=0]QUEUED[-]</span>
+<span class="go">[&#39;2022-02-07 17:50:28&#39;][jobid=5579][stepno=0][blkno=0]RUNNING_A[-]</span>
+<span class="go">[&#39;2022-02-07 17:50:28&#39;][jobid=5579][stepno=0][blkno=0]RUNNING[job_start=&#39;2022-02-07 17:50:28&#39;]</span>
+<span class="go">[&#39;2022-02-07 17:50:38&#39;][jobid=5579][stepno=0][blkno=0]RUNOUT[-]</span>
+<span class="go">[&#39;2022-02-07 17:50:38&#39;][jobid=5579][stepno=0][blkno=0]EXIT[-]</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　Displays the item description according to displaying style.</div>
+</div>
+<div class="line-block">
+<div class="line">　　displaying style : [‘YYYY-MM-DD HH:MM:SS’][jobid=value][stepno=value][blkno=value]state[-]</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/3_SystemManagement_17_1.png" src="../_images/3_SystemManagement_17_1.png" />
+</figure>
+<figure class="align-default">
+<img alt="../_images/3_SystemManagement_17_2.png" src="../_images/3_SystemManagement_17_2.png" />
+</figure>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="3-1-8_AccountD.html"
+                          title="previous chapter"><span class="section-number">3.1.8. </span>User payment information displaying (disk)</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="3-1-10_Chkdiskspace.html"
+                          title="next chapter"><span class="section-number">3.1.10. </span>Displaying quotas on data area</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-10_Chkdiskspace.html" title="3.1.10. Displaying quotas on data area"
+             >next</a></li>
+        <li class="right" >
+          <a href="3-1-8_AccountD.html" title="3.1.8. User payment information displaying (disk)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">User support tools User&#39;s Guide (for User)  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>System management</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" ><span class="section-number">3.1. </span>Command explanation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.9. </span>Job status transition history displaying</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Potal Top</a>
+    </div>
+  </body>
+</html>

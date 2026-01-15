@@ -1,0 +1,251 @@
+Job list display command affected by the failure
+=================================================
+
+job_events
+----------
+
+You can use the \ :program:`job_events` command to check the following.
+
+- Jobs affected by evict in LLIO (Second-layer storage cache) and FEFS (Second-layer storage).
+
+- Jobs where power capping occurred.
+
+- Jobs where OOM (Out of memory) occurred.
+
+- Jobs affected by hardware failures.
+
+- Jobs where LLIO usage limit was exceeded.
+
+- Jobs affected by other system failures.
+
+
+ evict
+  A function of the Luster file system, and is a process to disconnect clients that are judged to be abnormal.
+  
+  This is done to keep the file system available.
+
+ Power capping
+  Keep the CPU frequency lower than in Normal mode and reduce the power consumption when the power limit is exceeded.
+
+  For details, please refer to \ :ref:`PowermodeUsage`\. Use and job exectution.
+
+ OOM (Out of memory)
+  If a job causes a compute node to run out of memory, the job will abend.
+
+ Hard failure
+  The hardware is out of order.
+
+ LLIO Usage Limit Exceeded
+  LLIO Usage Limit is exceeded.
+
+
+[Name]
+
+\ :program:`job_events`\
+
+[Style]
+
+.. code-block:: none
+
+  job_events [-g GROUP_NAME] [-c] [-h]
+  job_events [-g GROUP_NAME] --llio [-j -JOBID]
+
+[Option]
+
+.. list-table:: 
+    :widths: 2 9
+    :header-rows: 1
+
+    * - Option name
+      - Function
+
+    * - \-g GROUP_NAME
+      - | By specifying the group name after the ``-g`` option, the jobs in the specified group will be displayed.
+        | However, if you do not have reference authority, the job is not displayed.
+        | The ``-g`` option requires the group name to be specified.
+        | If the ``-g`` option is omitted, jobs belonging to all groups the user is a member of will be displayed.
+
+    * - \-c
+      - The search results are output with CSV format.
+
+    * - \--llio
+      - Display file paths that exceed the LLIO utilization limit.
+
+    * - \-j JOBID
+      - | The display target is the group specified in [GROUP_NAME]. * Available only when the ``--llio`` option is specified. 
+ 
+    * - \-h
+      - Print a help message.
+
+
+[Display examples]
+
+- Example 1. To check for jobs affected by the failure across all your groups (default behavior).
+
+ .. code-block:: console
+ 
+    [_LNlogin]$ job_events
+    JOBID           RETRY MD USER    GROUP     ST  JOB_START           JOB_END             MESSAGES
+    1111111             0 NM user01  group01   EXT 2024/04/12 13:21:50 2024/04/12 14:24:46 Filesystem I/O error
+    2222222[2]          0 BU user02  group01   EXT 2024/05/17 14:47:49 2024/05/17 14:57:51 POWER CAPPING:2024/05/17 14:50:00
+    2222222[3]          0 BU user02  group01   EXT 2024/05/17 14:47:49 2024/05/17 14:57:51 POWER CAPPING:2024/05/17 14:50:00,Filesystem I/O error
+    3333333             0 NM user03  group01   EXT 2024/06/11 14:49:04 2024/06/11 14:53:11 CN high load
+    4444444             0 NM user01  group02   EXT 2024/07/10 13:53:56 2024/07/10 13:54:18 Out Of Memory
+    5555555             0 NM user02  group02   EXT 2024/08/02 18:21:36 2024/08/02 18:37:56 POWER CAPPING:2024/08/02 18:30:00,Filesystem I/O error,Out Of Memory
+    5555555             1 NM user02  group02   EXT 2024/08/02 18:50:33 2024/08/02 19:42:12 Hardware error
+    6666666             0 NM user04  group01   EXT 2024/09/13 10:41:36 2024/09/13 14:25:02 Out Of Memory,CN high load 
+    7777777             0 NM user05  group02   EXT 2024/10/04 12:11:14 2024/10/04 13:05:01 Job scheduler hang
+    8888888             0 NM user01  group03   EXT 2024/10/18 20:07:15 2024/10/18 21:21:44 LLIO Limit Over
+
+ A message is displayed according to each situation.
+ 
+ - If an eviction occurs, "Filesystem I/O error" is displayed.
+ - If power capping occurs, "POWER CAPPING: Date and Time of Occurrence" is displayed.
+ - If an OOM occurs, "Out of Memory" is displayed.
+ - If a hardware failure occurs, "Hardware error" is displayed.
+ - If the LLIO limit is exceeded, "LLIO Limit Over" is displayed. You can check the exceeded file path using the  \ :program:`job_events --llio`\  command.
+ - If a failure other than those listed above occurs, a failure-specific message will be displayed. 
+ - If there are no affected jobs, "There are no affected jobs." is displayed.
+
+
+- Example 2. To check for jobs affected by the failure within a specific group (e.g., group01).
+
+ .. code-block:: console
+
+    [_LNlogin]$ job_events -g group01
+    JOBID           RETRY MD USER    GROUP     ST  JOB_START           JOB_END             MESSAGES
+    1111111             0 NM user01  group01   EXT 2024/04/12 13:21:50 2024/04/12 14:24:46 Filesystem I/O error
+    2222222[2]          0 BU user02  group01   EXT 2024/05/17 14:47:49 2024/05/17 14:57:51 POWER CAPPING:2024/05/17 14:50:00
+    2222222[3]          0 BU user02  group01   EXT 2024/05/17 14:47:49 2024/05/17 14:57:51 POWER CAPPING:2024/05/17 14:50:00,Filesystem I/O error
+    3333333             0 NM user03  group01   EXT 2024/06/11 14:49:04 2024/06/11 14:53:11 CN high load
+    6666666             0 NM user04  group01   EXT 2024/09/13 10:41:36 2024/09/13 14:25:02 Out Of Memory,CN high load 
+
+
+- Example 3. To display information about jobs affected by the failure in CSV format.
+
+ .. code-block:: console
+
+    [_LNlogin]$ job_events -c
+    JOBID,RETRY,MD,USER,GROUP,ST,JOB_START,JOB_END,MESSAGES
+    1111111,0,NM,user01,group01,EXT,2024/04/12 13:21:50,2024/04/12 14:24:46,"Filesystem I/O error"
+    2222222[2],0,BU,user02,group01,EXT,2024/05/17 14:47:49,2024/05/17 14:57:51,"POWER CAPPING:2024/05/17 14:50:00"
+    2222222[3],0,BU,user02,group01,EXT,2024/05/17 14:47:49,2024/05/17 14:57:51,"POWER CAPPING:2024/05/17 14:50:00,Filesystem I/O error"
+    3333333,0,NM,user03,group01,EXT,2024/06/11 14:49:04,2024/06/11 14:53:11,"CN high load"
+    4444444,0,NM,user01,group02,EXT,2024/07/10 13:53:56,2024/07/10 13:54:18,"Out Of Memory"
+    5555555,0,NM,user02,group02,EXT,2024/08/02 18:21:36,2024/08/02 18:37:56,"POWER CAPPING:2024/08/02 18:30:00,Filesystem I/O error,Out Of Memory"
+    5555555,1,NM,user02,group02,EXT,2024/08/02 18:50:33,2024/08/02 19:42:12,"Hardware error"
+    6666666,0,NM,user04,group01,EXT,2024/09/13 10:41:36,2024/09/13 14:25:02,"Out Of Memory,CN high load"
+    7777777,0,NM,user05,group02,EXT,2024/10/04 12:11:14,2024/10/04 13:05:01,"Job scheduler hang"
+    8888888,0,NM,user01,group03,EXT,2024/10/18 20:07:15,2024/10/18 21:21:44,"LLIO Limit Over"
+    
+
+- Example 4. To view the file paths that caused LLIO utilization limit excesses.
+
+ .. code-block:: console
+ 
+    [_LNlogin]$ job_events --llio
+    JOBID            FILEPATH
+    123456789_1      /vol000?/groupA/data/AAAA/BBBB/CCCC/fileA
+    123456789_1      /vol000?/groupA/data/AAAA/BBBB/CCCC/fileB
+    123456789_2      /vol000?/groupA/data/AAAA/BBBB/CCCC/fileC
+    123456800        /vol000?/groupB/data/DDDD/EEEE/FFFF/fileG
+    123456801[1]     /vol000?/groupC/data/HHHH/IIII/JJJJ/fileK
+    123456802        The path could not be found. 
+
+
+ - Displays the file paths that exceeded the LLIO usage limit.
+ - In some jobs, the file path may not be found. In such cases, "The path could not be found." is displayed.
+ - If no jobs were affected, "No jobs exceed the LLIO limit." is displayed.
+
+
+.. attention:: 
+ 
+ If a job has been affected by eviction, resubmit the job.
+ 
+ This command uses the results of the \ :program:`pjstata` command execution. So, if you executed many jobs, it may take some time to output.
+ 
+ Power capping occurences can also be checked with the .stats file or pjstat -s option.
+ 
+ If the LLIO usage limit is exceeded, please take action after referring to \ :ref:`llioconsiderpoints`\.
+
+
+
+
+.. attention:: 
+ 
+ There is a time lag between when a failure occurs and when that information is reflected by the \ :program:`job_events` command, and it varies depending on the function.
+
+ The time lag for each function is shown below.
+ 
+  .. list-table:: 
+      :widths: 5 2
+      :header-rows: 1
+    
+      * - Function
+        - Time lag
+
+      * - Jobs affected by evict
+        - | 2 hours
+
+      * - Jobs where power capping occurred
+        - | 1 day
+
+      * - Jobs where OOM (Out of memory) occurred
+        - | 2 hours
+
+      * - Jobs affected by hardware failures
+        - | 1 hours
+
+      * - Jobs where LLIO usage limit was exceeded
+        - | 20 minutes
+
+
+
+
+show_evict_node
+------------------
+
+Describes \ :program:`show_evict_node`\  command, which displays the time during which IO errors may have occurred in the file system on the login node and in the prepost environment.
+
+[Name]
+
+\ :program:`show_evict_node`\
+
+[Style]
+
+.. code-block:: none
+
+  show_evict_node  [--hostname HOSTNAME]
+                   [--start yyyy/mm/dd hh:mm:ss]
+                   [--end yyyy/mm/dd hh:mm:ss]
+
+[Option]
+
+.. list-table:: 
+    :widths: 2 9
+    :header-rows: 1
+
+    * - Option name
+      - Function
+
+    * - \--hostname HOSTNAME
+      - HOSTNAME specifies the nodes to display.
+
+    * - \--start yyyy/mm/dd hh:mm:ss
+      - Specify the start date and time to display in "yyyy/mm/dd hh:mm:ss" format.
+
+    * - \--end yyyy/mm/dd hh:mm:ss
+      - Specify the end date and time to display in "yyyy/mm/dd hh:mm:ss" format.
+
+[Display examples]
+
+ .. code-block:: console
+
+    [_LNlogin]$ show_evict_node
+    NODE    FSNAME  DATE
+    ppm02   vol0006 2021/10/14 19:22:04 - 2021/10/14 19:26:14
+    csgw1   vol0004 2021/10/14 03:00:06 - 2021/10/14 03:01:42
+    ppm02   vol0003 2021/10/16 16:08:16 - 2021/10/16 16:10:14
+    login6  vol0004 2021/10/25 12:35:28
+    login3  vol0005 2021/11/07 13:37:53 - 2021/11/07 13:38:06
+    login3  vol0001 2021/11/07 14:08:28 - 2021/11/07 14:09:05

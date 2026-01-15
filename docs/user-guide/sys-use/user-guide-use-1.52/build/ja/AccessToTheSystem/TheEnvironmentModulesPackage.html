@@ -1,0 +1,321 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4.6. モジュールパッケージ &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5. ジョブ実行" href="../JobExecution/index.html" />
+    <link rel="prev" title="4.5. ノード使用状況確認" href="CheckingTheNodeUseStatus.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../JobExecution/index.html" title="5. ジョブ実行"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="CheckingTheNodeUseStatus.html" title="4.5. ノード使用状況確認"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">4. </span>システム利用</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.6. </span>モジュールパッケージ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">4.6. </span>モジュールパッケージ<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>「富岳」では、モジュールパッケージ（Environment Modules package）を利用することができます。</p>
+<p><code class="file docutils literal notranslate"><span class="pre">modulefile</span></code>を使用することで、PATH、LD_LIBRARY_PATH などの環境変数を<strong class="program">module</strong>コマンドを利用して簡単に設定することができます。</p>
+<section id="module">
+<h2><span class="section-number">4.6.1. </span>moduleコマンド<a class="headerlink" href="#module" title="Link to this heading">¶</a></h2>
+<p>主な <strong class="program">module</strong>コマンドは以下のとおりです。</p>
+<p>その他、詳細はオンラインマニュアル（<strong class="command">man module</strong>）を参照してください。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>コマンド</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>module avail</p></td>
+<td><p>利用可能な modulefile の一覧表示</p></td>
+</tr>
+<tr class="row-odd"><td><p>module list</p></td>
+<td><p>ロード済みの modulefile の一覧表示</p></td>
+</tr>
+<tr class="row-even"><td><p>module load modulefile.</p></td>
+<td><p>modulefile をロードする</p></td>
+</tr>
+<tr class="row-odd"><td><p>module unload modulefile...</p></td>
+<td><p>modulefile をアンロードする</p></td>
+</tr>
+<tr class="row-even"><td><p>module purge</p></td>
+<td><p>全ての modulefile をアンロードする</p></td>
+</tr>
+<tr class="row-odd"><td><p>module switch [modulefile1] modulefile2</p></td>
+<td><p>modulefile を切り換える</p></td>
+</tr>
+<tr class="row-even"><td><p>module whatis [modulefile...]</p></td>
+<td><p>modulefile の whatis情報を表示する</p></td>
+</tr>
+<tr class="row-odd"><td><p>module show modulefile</p></td>
+<td><p>modulefile の 設定内容を表示する</p></td>
+</tr>
+<tr class="row-even"><td><p>module help [modulefile...]</p></td>
+<td><p>modulefile の help情報を表示する</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="id2">
+<h2><span class="section-number">4.6.2. </span>コマンドの使用例<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<nav class="contents local" id="id3">
+<ul class="simple">
+<li><p><a class="reference internal" href="#module-avail-module" id="id5">module avail（利用可能な module 一覧表示）</a></p></li>
+<li><p><a class="reference internal" href="#module-list-modulefile" id="id6">module list（ロード済みのmodulefile一覧表示）</a></p></li>
+<li><p><a class="reference internal" href="#module-load-unload-modulefile" id="id7">module load／unload（modulefileのロードとアンロード実行例）</a></p></li>
+<li><p><a class="reference internal" href="#module-purge-modulefile" id="id8">module purge（全てのmodulefileのアンロード）</a></p></li>
+<li><p><a class="reference internal" href="#module-switch-modulefile" id="id9">module switch (modulefile の切替)</a></p></li>
+<li><p><a class="reference internal" href="#module-whatis-module-whatis" id="id10">module whatis（module-whatis情報表示）</a></p></li>
+<li><p><a class="reference internal" href="#module-show-modulefile" id="id11">module show（modulefileの設定内容表示）</a></p></li>
+<li><p><a class="reference internal" href="#module-help-modulefilehelp" id="id12">module help（modulefileのhelp情報表示）</a></p></li>
+</ul>
+</nav>
+<p>提供しているmodulefileは時期により異なります。このため使用例の表示内容や指定するmodulefile名は実際と異なる場合があります。</p>
+<section id="module-avail-module">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">4.6.2.1. </span>module avail（利用可能な module 一覧表示）</a><a class="headerlink" href="#module-avail-module" title="Link to this heading">¶</a></h3>
+<p>提供されている modulefile の一覧を表示します。
+ログインノードで<strong class="program">module avail</strong>を実行した場合は、次のような形式で表示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>avail
+
+<span class="go">------------------------------- /work/Fugaku-environment/modulefiles -------------------------------</span>
+<span class="go">lang/tcsds-1.2.36  lang/tcsds-1.2.37  lang/tcsds-1.2.38(default)</span>
+</pre></div>
+</div>
+</section>
+<section id="module-list-modulefile">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">4.6.2.2. </span>module list（ロード済みのmodulefile一覧表示）</a><a class="headerlink" href="#module-list-modulefile" title="Link to this heading">¶</a></h3>
+<p>ロード済みの modulefile を表示します。この例では、言語のデフォルト環境がロードされていることを示しています。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go"> 1) lang/tcsds-1.2.38(default)</span>
+</pre></div>
+</div>
+</section>
+<section id="module-load-unload-modulefile">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">4.6.2.3. </span>module load／unload（modulefileのロードとアンロード実行例）</a><a class="headerlink" href="#module-load-unload-modulefile" title="Link to this heading">¶</a></h3>
+<p>デフォルトの言語環境をロード／アンロードする例を示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go"> 1) lang/tcsds-1.2.38(default)</span>
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>unload<span class="w"> </span>lang
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">No Modulefiles Currently Loaded.</span>
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>load<span class="w"> </span>lang
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go">1) lang/tcsds-1.2.38(default)</span>
+</pre></div>
+</div>
+</section>
+<section id="module-purge-modulefile">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">4.6.2.4. </span>module purge（全てのmodulefileのアンロード）</a><a class="headerlink" href="#module-purge-modulefile" title="Link to this heading">¶</a></h3>
+<p>ロードしている全ての modulefile で設定した内容を削除します。modulefile を何もロードしていない初期状態に戻したい場合などに利用すると便利です。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go"> 1) lang/tcsds-1.2.38(default)</span>
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>purge
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">No Modulefiles Currently Loaded.</span>
+</pre></div>
+</div>
+</section>
+<section id="module-switch-modulefile">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">4.6.2.5. </span>module switch (modulefile の切替)</a><a class="headerlink" href="#module-switch-modulefile" title="Link to this heading">¶</a></h3>
+<p>switch は、同じルート名(スラッシュより前が同じ)を持つ modulefile を切り換えます。
+同じルート名を持つ modulefile は、同時に一つしかロードできないため、続けてロードしようとすると conflict のエラーメッセージが表示されロードされません。
+switch は、このような場合に、ロードされている modulefile1 を別の modulefile2 に切り換えることができます。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go"> 1) lang/tcsds-1.2.38(default)</span>
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>switch<span class="w"> </span>lang/tcsds-1.2.37
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go">  1) lang/tcsds-1.2.37</span>
+</pre></div>
+</div>
+</section>
+<section id="module-whatis-module-whatis">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">4.6.2.6. </span>module whatis（module-whatis情報表示）</a><a class="headerlink" href="#module-whatis-module-whatis" title="Link to this heading">¶</a></h3>
+<p>modulefile の module-whatis の内容を表示します。module-whatis が定義されていない場合は表示されません。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>whatis
+<span class="go">------------------------------- /work/Fugaku-environment/modulefiles ------------------------------</span>
+<span class="go">   lang/tcsds-1.2.36: Fujitsu Compiler 4.8.1 (Fortran/C/C++/Tool)</span>
+<span class="go">   lang/tcsds-1.2.37: Fujitsu Compiler 4.9.0 (Fortran/C/C++/Tool)</span>
+<span class="go">   lang/tcsds-1.2.38: Fujitsu Compiler 4.10.0 (Fortran/C/C++/Tool)</span>
+</pre></div>
+</div>
+</section>
+<section id="module-show-modulefile">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">4.6.2.7. </span>module show（modulefileの設定内容表示）</a><a class="headerlink" href="#module-show-modulefile" title="Link to this heading">¶</a></h3>
+<p>show は modulefile の設定内容を表示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>show<span class="w"> </span>lang
+<span class="go">-------------------------------------------------------------------</span>
+<span class="go">/work/Fugaku-environment/modulefiles/lang/tcsds-1.2.38:</span>
+
+<span class="go">module-whatis   {Fujitsu Compiler 4.10.0 (Fortran/C/C++/Tool)}</span>
+<span class="go">conflict        lang</span>
+<span class="go">setenv          FJSVXTCLANGA /opt/FJSVxtclanga/tcsds-1.2.38</span>
+<span class="go">prepend-path    PATH /opt/FJSVxtclanga/tcsds-1.2.38/bin</span>
+<span class="go">prepend-path    LD_LIBRARY_PATH /opt/FJSVxtclanga/tcsds-1.2.38/lib64</span>
+<span class="go">-------------------------------------------------------------------</span>
+</pre></div>
+</div>
+</section>
+<section id="module-help-modulefilehelp">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">4.6.2.8. </span>module help（modulefileのhelp情報表示）</a><a class="headerlink" href="#module-help-modulefilehelp" title="Link to this heading">¶</a></h3>
+<p>modulefile の help の内容を表示します。help が定義されていない場合は表示されません。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span><span class="nb">help</span><span class="w"> </span>lang
+<span class="go">-------------------------------------------------------------------</span>
+<span class="go">Module Specific Help for /work/Fugaku-environment/modulefiles/lang/tcsds-1.2.38:</span>
+
+<span class="go">** Changelog **</span>
+<span class="go"> Oct. 6, 2023</span>
+<span class="go"> - New Compiler available</span>
+<span class="go">-------------------------------------------------------------------</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id4">
+<h2><span class="section-number">4.6.3. </span>言語環境の切換方法<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>言語環境を切り換えるには、<strong class="program">module</strong>コマンドを利用します。</p>
+<p>言語環境の設定ファイルは「富岳」を利用するために必要な設定を含んでいます。 「富岳」を利用する際は、必要な言語環境を設定してください。言語環境の設定、および、切り替えの操作は、<strong class="program">module load</strong>コマンド、<strong class="program">module switch</strong>コマンドを利用してください。</p>
+<p>[<strong class="program">module switch</strong>コマンドの使用例]</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go">  1) lang/tcsds-1.2.38(default)</span>
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>switch<span class="w"> </span>lang/tcsds-1.2.NN
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go">  1) lang/tcsds-1.2.NN</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>言語環境をloadした状態で、別の言語環境をloadしようとした場合は、次のようなエラーメッセージが表示されます。この場合は、上記のように <strong class="program">module switch</strong>を利用する、または、 <strong class="program">module unload</strong>を実行後に再度、 <strong class="program">module load</strong>を実行して環境を切り換えてください。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>load<span class="w"> </span>lang
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>load<span class="w"> </span>lang/tcsds-1.2.NN
+<span class="go">Loading lang/tcsds-1.2.NN</span>
+<span class="go">  ERROR: lang/tcsds-1.2.NN cannot be loaded due to a conflict.</span>
+<span class="go">    HINT: Might try &quot;module unload lang&quot; first.</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">4.6. モジュールパッケージ</a><ul>
+<li><a class="reference internal" href="#module">4.6.1. moduleコマンド</a></li>
+<li><a class="reference internal" href="#id2">4.6.2. コマンドの使用例</a><ul>
+<li><a class="reference internal" href="#module-avail-module">4.6.2.1. module avail（利用可能な module 一覧表示）</a></li>
+<li><a class="reference internal" href="#module-list-modulefile">4.6.2.2. module list（ロード済みのmodulefile一覧表示）</a></li>
+<li><a class="reference internal" href="#module-load-unload-modulefile">4.6.2.3. module load／unload（modulefileのロードとアンロード実行例）</a></li>
+<li><a class="reference internal" href="#module-purge-modulefile">4.6.2.4. module purge（全てのmodulefileのアンロード）</a></li>
+<li><a class="reference internal" href="#module-switch-modulefile">4.6.2.5. module switch (modulefile の切替)</a></li>
+<li><a class="reference internal" href="#module-whatis-module-whatis">4.6.2.6. module whatis（module-whatis情報表示）</a></li>
+<li><a class="reference internal" href="#module-show-modulefile">4.6.2.7. module show（modulefileの設定内容表示）</a></li>
+<li><a class="reference internal" href="#module-help-modulefilehelp">4.6.2.8. module help（modulefileのhelp情報表示）</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">4.6.3. 言語環境の切換方法</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="CheckingTheNodeUseStatus.html"
+                          title="前の章へ"><span class="section-number">4.5. </span>ノード使用状況確認</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../JobExecution/index.html"
+                          title="次の章へ"><span class="section-number">5. </span>ジョブ実行</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../JobExecution/index.html" title="5. ジョブ実行"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="CheckingTheNodeUseStatus.html" title="4.5. ノード使用状況確認"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">4. </span>システム利用</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.6. </span>モジュールパッケージ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,163 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6. MPI job execution &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6.1. Overview" href="Overview.html" />
+    <link rel="prev" title="5.20. Note" href="../JobExecution/JobExecConsiderpoints.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Overview.html" title="6.1. Overview"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../JobExecution/JobExecConsiderpoints.html" title="5.20. Note"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6. </span>MPI job execution</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="mpi-job-execution">
+<h1><span class="section-number">6. </span>MPI job execution<a class="headerlink" href="#mpi-job-execution" title="Link to this heading">¶</a></h1>
+<p>This section explains about MPI program execution direction.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Overview.html">6.1. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FormatOfMpiexecCommand.html">6.2. Execution command format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToExecuteABackgroundJob.html">6.3. How to execute back ground job</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="HowToExecuteABackgroundJob.html#back-ground-execution">6.3.1. Back ground execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HowToExecuteABackgroundJob.html#job-creation-example">6.3.2. Job creation example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HowToExecuteABackgroundJob.html#notes-on-back-ground-execution">6.3.3. Notes on back ground execution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="InputOutputRedirection.html">6.4. Standard output / Standard error output / Standard input</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="InputOutputRedirection.html#how-to-specify-standard-output-standard-error-output-standard-input">6.4.1. How to specify standard output / standard error output / standard input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InputOutputRedirection.html#output-list-by-option-specification">6.4.2. Output list by option specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InputOutputRedirection.html#about-standard-output-standard-error-output-when-executing-large-scale-jobs">6.4.3. About standard output / standard error output when executing large-scale jobs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpecificationsForMPIJob.html">6.5. Specification when submitting an MPI job</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpecificationsForMPIJob.html#static-process-shape-specification">6.5.1. Static process shape specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpecificationsForMPIJob.html#specify-the-maximum-number-of-static-processes">6.5.2. Specify the maximum number of static processes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="RankAssignment.html">6.6. Rank assignment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-bynode">6.6.1. Rank-map-bynode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-bynode-1-dimention">6.6.2. rank-map-bynode (1 dimention)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-bynode-2-dimentions">6.6.3. rank-map-bynode (2 dimentions)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-bynode-3-dimentions">6.6.4. rank-map-bynode (3 dimentions)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-bynode-the-multiple-process-specification-in-node-1-dimention">6.6.5. rank-map-bynode (the multiple process specification in node (1 dimention))</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-bychip">6.6.6. rank-map-bychip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-hostfile">6.6.7. rank-map-hostfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-hostfile-1-dimention">6.6.8. rank-map-hostfile (1 dimention)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-hostfile-2-dimentions">6.6.9. rank-map-hostfile (2 dimentions)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-hostfile-3-dimentions">6.6.10. rank-map-hostfile (3 dimentions)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-hostfile-the-multiple-rank-specification-in-node">6.6.11. rank-map-hostfile (the multiple rank specification in node)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-hostfile-rank-map-bychip-the-multiple-rank-specification-in-node">6.6.12. rank-map-hostfile/rank-map-bychip (the multiple rank specification in node)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#notes-on-when-using-host-map-file">6.6.13. Notes on when using host map file</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="JobShape%28torus%29.html">6.7. Job shape (Torus)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjsubOptions%28MPI-related%29.html">6.8. Job submitting command option (MPI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DynamicProcessCreation%28MPI_Comm_spawn%29.html">6.9. Dynamic process creation (MPI_COMM_SPAWN)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="DynamicProcessCreation%28MPI_Comm_spawn%29.html#how-to-execute-a-job">6.9.1. How to execute a job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DynamicProcessCreation%28MPI_Comm_spawn%29.html#the-execution-from-java-program">6.9.2. The execution from Java program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DynamicProcessCreation%28MPI_Comm_spawn%29.html#notes">6.9.3. Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="RankInquiryFunctions.html">6.10. Rank inquiry functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="RankInquiryFunctions.html#inquiry-function-of-logical-dimention-number-and-logical-form-specified-to-mpi-comm-world">6.10.1. Inquiry function of logical dimention number and logical form specified to MPI_COMM_WORLD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankInquiryFunctions.html#inquiry-function-of-logical-coordinates-of-mpi-program-by-rank-number">6.10.2. Inquiry function of logical coordinates of MPI program by rank number</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankInquiryFunctions.html#inquiry-function-of-rank-number-of-mpi-program-by-logical-coordinates">6.10.3. Inquiry function of rank number of MPI program by logical coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankInquiryFunctions.html#function-use-example">6.10.4. Function use example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MPIStatisticalInformation.html">6.11. MPI statistic information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MPIStatisticalInformation.html#whole-mode">6.11.1. Whole mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MPIStatisticalInformation.html#section-mode">6.11.2. Section mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CollectiveCommunicationAlgorithm.html">6.12. Collective Communication Algorithms(knomial, rabenseifner) in MPI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CollectiveCommunicationAlgorithm.html#how-to-specify-algorithms">6.12.1. How to Specify Algorithms</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../JobExecution/JobExecConsiderpoints.html"
+                          title="previous chapter"><span class="section-number">5.20. </span>Note</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Overview.html"
+                          title="next chapter"><span class="section-number">6.1. </span>Overview</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Overview.html" title="6.1. Overview"
+             >next</a></li>
+        <li class="right" >
+          <a href="../JobExecution/JobExecConsiderpoints.html" title="5.20. Note"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6. </span>MPI job execution</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

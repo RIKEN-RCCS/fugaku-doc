@@ -1,0 +1,913 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6.10. Rank inquiry functions &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6.11. MPI statistic information" href="MPIStatisticalInformation.html" />
+    <link rel="prev" title="6.9. Dynamic process creation (MPI_COMM_SPAWN)" href="DynamicProcessCreation%28MPI_Comm_spawn%29.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="MPIStatisticalInformation.html" title="6.11. MPI statistic information"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="DynamicProcessCreation%28MPI_Comm_spawn%29.html" title="6.9. Dynamic process creation (MPI_COMM_SPAWN)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.10. </span>Rank inquiry functions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="rank-inquiry-functions">
+<span id="rankinquiryfunctionsmpi"></span><h1><span class="section-number">6.10. </span>Rank inquiry functions<a class="headerlink" href="#rank-inquiry-functions" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">When executing the MPI program, one to three dimensional torus coordinates are set according to the shape specified in the job script. In this chapter, torus coordinates are referred to as “logical coordinates”.</div>
+<div class="line">Logical coordinates is assigned to each rank.</div>
+<div class="line">Preparing the function to ask for support of rank and logical coordinates. For the style of each function, please refer to the manual “Rank inquiry interface” in “MPI User’s Guide”.</div>
+<div class="line">Also, this function cannot be used in dynamic process creation.</div>
+</div>
+<section id="inquiry-function-of-logical-dimention-number-and-logical-form-specified-to-mpi-comm-world">
+<h2><span class="section-number">6.10.1. </span>Inquiry function of logical dimention number and logical form specified to MPI_COMM_WORLD<a class="headerlink" href="#inquiry-function-of-logical-dimention-number-and-logical-form-specified-to-mpi-comm-world" title="Link to this heading">¶</a></h2>
+<p>Depending on the number of logical dimensions, logical shapes, and processes specified during job execution,  <code class="docutils literal notranslate"><span class="pre">MPI_COMM_WORLD</span></code> is created. The function can obtain the specified number of logical dimensions and logical shape.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>MPI function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>FJMPI_TOPOLOGY_GET_DIMENSION</p></td>
+<td><p>Obtain the number of dimention assigned to  <code class="docutils literal notranslate"><span class="pre">MPI_COMM_WORLD</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>FJMPI_TOPOLOGY_GET_SHAPE</p></td>
+<td><p>Obtain the process form assigned to  <code class="docutils literal notranslate"><span class="pre">MPI_COMM_WORLD</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#fjmpi-topology-get-dimension" id="id2">FJMPI_TOPOLOGY_GET_DIMENSION</a></p></li>
+<li><p><a class="reference internal" href="#fjmpi-topology-get-shape" id="id3">FJMPI_TOPOLOGY_GET_SHAPE</a></p></li>
+</ul>
+</nav>
+<section id="fjmpi-topology-get-dimension">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">6.10.1.1. </span>FJMPI_TOPOLOGY_GET_DIMENSION</a><a class="headerlink" href="#fjmpi-topology-get-dimension" title="Link to this heading">¶</a></h3>
+<p>&lt;Style&gt;</p>
+<ul class="simple">
+<li><p>C language style</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi-ext.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">FJMPI_Topology_get_dimension</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">size</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>Fortran (USE mpi_f08_ext) style</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">USE </span><span class="n">mpi_f08_ext</span>
+<span class="n">FJMPI_Topology_get_dimension</span><span class="p">(</span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="p">)</span>
+<span class="kt">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">size</span>
+<span class="kt">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OPTIONAL</span><span class="p">,</span><span class="w"> </span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ierror</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>Fortran (USE mpi_ext) style</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">USE </span><span class="n">MPI_EXT</span>
+<span class="n">FJMPI_TOPOLOGY_GET_DIMENSION</span><span class="p">(</span><span class="n">SIZE</span><span class="p">,</span><span class="w"> </span><span class="n">IERROR</span><span class="p">)</span>
+<span class="kt">INTEGER </span><span class="n">SIZE</span><span class="p">,</span><span class="w"> </span><span class="n">IERROR</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>&lt;Explanation&gt;</dt><dd><p>Returns the number of dimensions of the process shape in which the MPI process belonging to  <code class="docutils literal notranslate"><span class="pre">MPI_COMM_WORLD</span></code> that is generated internally when the  <code class="docutils literal notranslate"><span class="pre">MPI_INIT</span></code> routine is executed is located.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 12.5%" />
+<col style="width: 12.5%" />
+<col style="width: 62.5%" />
+<col style="width: 12.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>IN/OUT</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>int <sup>*</sup></p></td>
+<td><p>size</p></td>
+<td><p>Number of dimention of process shape that  <code class="docutils literal notranslate"><span class="pre">MPI_COMM_WORLD</span></code>has</p></td>
+<td><p>OUT</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>&lt;Return value&gt;</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 11.1%" />
+<col style="width: 44.4%" />
+<col style="width: 44.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Status</p></th>
+<th class="head"><p>Return value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>When normal</p></td>
+<td><p>FJMPI_SUCCESS</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>When abnormal</p></td>
+<td><p>FJMPI_ERR_TOPOLOGY_INVALID_COMM</p></td>
+<td><p>If this routine is called from MPI process which is dynamic created</p></td>
+</tr>
+<tr class="row-even"><td><p>When abnormal</p></td>
+<td><p>FJMPI_ERR_TOPOLOGY_NODE_SHARED_JOB</p></td>
+<td><div class="line-block">
+<div class="line">When the job type is Node-sharing job</div>
+<div class="line">(For details on Node-sharing jobs, see the manual for the job operation software)</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>&lt;Notes&gt;</p>
+<ul class="simple">
+<li><p>When the situation of one of these below, operation is undefined and is not guaranteed.</p>
+<ul>
+<li><p>This routine is called before executing  <code class="docutils literal notranslate"><span class="pre">MPI_INIT</span></code> routine</p></li>
+<li><p>This routine is called after executing  <code class="docutils literal notranslate"><span class="pre">MPI_FINALIZE</span></code> routine</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="fjmpi-topology-get-shape">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">6.10.1.2. </span>FJMPI_TOPOLOGY_GET_SHAPE</a><a class="headerlink" href="#fjmpi-topology-get-shape" title="Link to this heading">¶</a></h3>
+<p>&lt;Style&gt;</p>
+<ul class="simple">
+<li><p>C language style</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi-ext.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">FJMPI_Topology_get_shape</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>Fortran (USE mpi_f08_ext) style</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">USE </span><span class="n">mpi_f08_ext</span>
+<span class="n">FJMPI_Topology_get_shape</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="p">)</span>
+<span class="kt">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span>
+<span class="kt">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OPTIONAL</span><span class="p">,</span><span class="w"> </span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ierror</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>Fortran (USE mpi_ext) style</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">USE </span><span class="n">MPI_EXT</span>
+<span class="n">FJMPI_TOPOLOGY_GET_SHAPE</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p">,</span><span class="w"> </span><span class="n">Z</span><span class="p">,</span><span class="w"> </span><span class="n">IERROR</span><span class="p">)</span>
+<span class="kt">INTEGER </span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p">,</span><span class="w"> </span><span class="n">Z</span><span class="p">,</span><span class="w"> </span><span class="n">IERROR</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl>
+<dt>&lt;Explanation&gt;</dt><dd><p>Returns the shape XYZ of the MPI parallel process given to  <code class="docutils literal notranslate"><span class="pre">MPI_COMM_WORLD</span></code> which is internally generated when the  <code class="docutils literal notranslate"><span class="pre">MPI_INIT</span></code> routine is executed.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 11.1%" />
+<col style="width: 11.1%" />
+<col style="width: 55.6%" />
+<col style="width: 22.2%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>IN/OUT</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>int <sup>*</sup></p></td>
+<td><p>x</p></td>
+<td><p>X-axis size of process shape assigned to  <code class="docutils literal notranslate"><span class="pre">MPI_COMM_WORLD</span></code></p></td>
+<td><p>OUT</p></td>
+</tr>
+<tr class="row-odd"><td><p>int <sup>*</sup></p></td>
+<td><p>y</p></td>
+<td><p>Y-axis size of process shape assigned to  <code class="docutils literal notranslate"><span class="pre">MPI_COMM_WORLD</span></code></p></td>
+<td><p>OUT</p></td>
+</tr>
+<tr class="row-even"><td><p>int <sup>*</sup></p></td>
+<td><p>z</p></td>
+<td><p>Z-axis size of process shape assigned to  <code class="docutils literal notranslate"><span class="pre">MPI_COMM_WORLD</span></code></p></td>
+<td><p>OUT</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<p>&lt;Return value&gt;</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 11.1%" />
+<col style="width: 44.4%" />
+<col style="width: 44.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Status</p></th>
+<th class="head"><p>Return value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>When normal</p></td>
+<td><p>FJMPI_SUCCESS</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>When abnormal</p></td>
+<td><p>FJMPI_ERR_TOPOLOGY_INVALID_COMM</p></td>
+<td><p>When this routine is called from a dynamically created MPI process</p></td>
+</tr>
+<tr class="row-even"><td><p>When abnormal</p></td>
+<td><p>FJMPI_ERR_TOPOLOGY_NODE_SHARED_JOB</p></td>
+<td><div class="line-block">
+<div class="line">When the job type is Node-sharing job</div>
+<div class="line">(For details on Node-sharing jobs, see the manual for the job operation software)</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>&lt;Note&gt;</p>
+<blockquote>
+<div><p>If the process shape is one-dimensional, the Y-axis and Z-axis values are 0. In the case of two dimensions, the value of the Z axis is 0.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>When the situation of one of these below, operation is undefined and is not guaranteed.</p>
+<ul>
+<li><p>This routine is called before executing  <code class="docutils literal notranslate"><span class="pre">MPI_INIT</span></code> routine</p></li>
+<li><p>This routine is called after executing  <code class="docutils literal notranslate"><span class="pre">MPI_FINALIZE</span></code> routine</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="inquiry-function-of-logical-coordinates-of-mpi-program-by-rank-number">
+<h2><span class="section-number">6.10.2. </span>Inquiry function of logical coordinates of MPI program by rank number<a class="headerlink" href="#inquiry-function-of-logical-coordinates-of-mpi-program-by-rank-number" title="Link to this heading">¶</a></h2>
+<p>Logical coordinates are assigned to each rank. The function can get the assigned logical coordinates from the rank number.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>MPI function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>FJMPI_TOPOLOGY_GET_COORDS</p></td>
+<td><p>Obtain coordinates from rank</p></td>
+</tr>
+</tbody>
+</table>
+<section id="fjmpi-topology-get-coords">
+<h3><span class="section-number">6.10.2.1. </span>FJMPI_TOPOLOGY_GET_COORDS<a class="headerlink" href="#fjmpi-topology-get-coords" title="Link to this heading">¶</a></h3>
+<p>&lt;Style&gt;</p>
+<ul class="simple">
+<li><p>C language style</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi-ext.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">FJMPI_Topology_get_coords</span><span class="p">(</span><span class="n">MPI_Comm</span><span class="w"> </span><span class="n">comm</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">view</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">maxdims</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">coords</span><span class="p">[])</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>Fortran (USE mpi_f08_ext) style</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">USE </span><span class="n">mpi_f08_ext</span>
+<span class="n">FJMPI_Topology_get_coords</span><span class="p">(</span><span class="n">comm</span><span class="p">,</span><span class="w"> </span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="n">view</span><span class="p">,</span><span class="w"> </span><span class="n">maxdims</span><span class="p">,</span><span class="w"> </span><span class="n">coords</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="p">)</span>
+<span class="k">TYPE</span><span class="p">(</span><span class="n">MPI_Comm</span><span class="p">),</span><span class="w"> </span><span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">comm</span>
+<span class="kt">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="n">view</span><span class="p">,</span><span class="w"> </span><span class="n">maxdims</span>
+<span class="kt">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">coords</span><span class="p">(</span><span class="n">maxdims</span><span class="p">)</span>
+<span class="kt">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OPTIONAL</span><span class="p">,</span><span class="w"> </span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ierror</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>Fortran (USE mpi_ext) style</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">USE </span><span class="n">MPI_EXT</span>
+<span class="n">FJMPI_TOPOLOGY_GET_COORDS</span><span class="p">(</span><span class="n">COMM</span><span class="p">,</span><span class="w"> </span><span class="n">RANK</span><span class="p">,</span><span class="w"> </span><span class="n">VIEW</span><span class="p">,</span><span class="w"> </span><span class="n">MAXDIMS</span><span class="p">,</span><span class="w"> </span><span class="n">COORDS</span><span class="p">,</span><span class="w"> </span><span class="n">IERROR</span><span class="p">)</span>
+<span class="kt">INTEGER </span><span class="n">COMM</span><span class="p">,</span><span class="w"> </span><span class="n">RANK</span><span class="p">,</span><span class="w"> </span><span class="n">VIEW</span><span class="p">,</span><span class="w"> </span><span class="n">MAXDIMS</span><span class="p">,</span><span class="w"> </span><span class="n">COORDS</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="n">IERROR</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="simple">
+<dt>&lt;Explanation&gt;</dt><dd><p>Obtain the logical or Tofu coordinates corresponding to the specified communicator and the rank of the process in that communicator.</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><dl class="simple">
+<dt>If obtain logical coordinates</dt><dd><p>Specify  <code class="docutils literal notranslate"><span class="pre">view</span> <span class="pre">=</span> <span class="pre">FJMPI_LOGICAL</span></code>,  <code class="docutils literal notranslate"><span class="pre">maxdims</span> <span class="pre">=</span> <span class="pre">1~3</span></code>. The logical X coordinate, logical Y coordinate, and logical Z coordinate values of the nodes corresponding to the specified  <code class="docutils literal notranslate"><span class="pre">comm</span></code> and  <code class="docutils literal notranslate"><span class="pre">rank</span></code> are stored in coords [0], coords [1], and coords [2], respectively.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>If obtain Tofu coordinates (actual assigned coordinates)</dt><dd><p>Specify  <code class="docutils literal notranslate"><span class="pre">view</span> <span class="pre">=</span> <span class="pre">FJMPI_TOFU_SYS</span></code>,  <code class="docutils literal notranslate"><span class="pre">maxdims</span> <span class="pre">=</span> <span class="pre">6</span></code>. The Tofu X coordinate, Y coordinate, Z coordinate, A coordinate, B coordinate, C coordinate  values of the nodes corresponding to the specified  <code class="docutils literal notranslate"><span class="pre">comm</span></code> and  <code class="docutils literal notranslate"><span class="pre">rank</span></code> are stored in coords[0], coords[1], coords[2], coords[3], coords[4], coords[5] , respectively.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>If obtain Tofu coordinates (Relative coordinates with respect to rank 0 of the argument  <code class="docutils literal notranslate"><span class="pre">comm</span></code>, if <code class="docutils literal notranslate"><span class="pre">comm</span></code>is an inter-group communicator, relative coordinates based on rank 0 of the remote group)</dt><dd><p>Specify  <code class="docutils literal notranslate"><span class="pre">view</span> <span class="pre">=</span> <span class="pre">FJMPI_TOFU_REL</span></code>, <code class="docutils literal notranslate"><span class="pre">maxdims</span> <span class="pre">=</span> <span class="pre">6</span></code>. The Tofu X coordinate, Y coordinate, Z coordinate, A coordinate, B coordinate, C coordinate (relative coordinates based on rank 0 of argument  <code class="docutils literal notranslate"><span class="pre">comm</span></code>) values of the nodes corresponding to the specified  <code class="docutils literal notranslate"><span class="pre">comm</span></code> and  <code class="docutils literal notranslate"><span class="pre">rank</span></code> are stored in coords[0], coords[1], coords[2], coords[3], coords[4], coords[5], respectively.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 11.1%" />
+<col style="width: 11.1%" />
+<col style="width: 55.6%" />
+<col style="width: 22.2%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>IN/OUT</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>MPI_Comm</p></td>
+<td><p>comm</p></td>
+<td><p>Specify communicator</p></td>
+<td><p>IN</p></td>
+</tr>
+<tr class="row-odd"><td><p>int</p></td>
+<td><p>rank</p></td>
+<td><div class="line-block">
+<div class="line">Specify the rank in communicator</div>
+<div class="line">If specififed in between group communicator to argument  <code class="docutils literal notranslate"><span class="pre">comm</span></code>, specify remote group rank</div>
+</div>
+</td>
+<td><p>IN</p></td>
+</tr>
+<tr class="row-even"><td><p>int</p></td>
+<td><p>view</p></td>
+<td><div class="line-block">
+<div class="line">Specify a macro to indicate logical coordinates or Tofu coordinates</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">FJMPI_LOGICAL</span></code>: logical coordinates</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">FJMPI_TOFU_SYS</span></code>: Tofu coordinates (Actual assigned coordinates)</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">FJMPI_TOFU_REL</span></code>: Tofu coordinates(Relative coordinates with respect to rank 0 of the argument  <code class="docutils literal notranslate"><span class="pre">comm</span></code>, if <code class="docutils literal notranslate"><span class="pre">comm</span></code>is an inter-group communicator, relative coordinates based on rank 0 of the remote group)</div>
+</div>
+</td>
+<td><p>IN</p></td>
+</tr>
+<tr class="row-odd"><td><p>int</p></td>
+<td><p>maxdims</p></td>
+<td><div class="line-block">
+<div class="line">Specify number of dimention of the coordinates to obtain</div>
+<div class="line">If  <code class="docutils literal notranslate"><span class="pre">view</span></code> is  <code class="docutils literal notranslate"><span class="pre">FJMPI_LOGICAL</span></code> : Specify 1~3</div>
+<div class="line">If  <code class="docutils literal notranslate"><span class="pre">view</span></code> is other than  <code class="docutils literal notranslate"><span class="pre">FJMPI_LOGICAL</span></code> : Specify 1~6</div>
+</div>
+</td>
+<td><p>IN</p></td>
+</tr>
+<tr class="row-even"><td><p>int[]</p></td>
+<td><p>coords</p></td>
+<td><p>Array of coordinates corresponding to communicator and rank</p></td>
+<td><p>OUT</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>&lt;Return value&gt;</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 11.1%" />
+<col style="width: 44.4%" />
+<col style="width: 44.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Status</p></th>
+<th class="head"><p>Return value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>When normal</p></td>
+<td><p>FJMPI_SUCCESS</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>When abnormal</p></td>
+<td><p>FJMPI_ERR_TOPOLOGY_NODE_SHARED_JOB</p></td>
+<td><p>When the job type is Node-sharing job (for details on Node-sharing jobs, see the manual for the job operation software)</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>&lt;Notes&gt;</p>
+<ul class="simple">
+<li><p>Number of elements in array to specify to the argument  <code class="docutils literal notranslate"><span class="pre">coords</span></code> must be larger than the argument  <code class="docutils literal notranslate"><span class="pre">maxdims</span></code>.</p></li>
+<li><p>Rank to specify to the argument  <code class="docutils literal notranslate"><span class="pre">rank</span></code> must be within the rank of the process in the communicator specified in the argument  <code class="docutils literal notranslate"><span class="pre">comm</span></code>.</p></li>
+<li><p>If specified  <code class="docutils literal notranslate"><span class="pre">FJMPI_LOGICAL</span></code> to the argument<code class="docutils literal notranslate"><span class="pre">view</span></code>, it is ok that the argument  <code class="docutils literal notranslate"><span class="pre">maxdims</span></code> value and job style is different. In that case, the coordinates of the same number of dimensions as the smaller value of the two are obtained.</p></li>
+<li><p>When the situation of one of these below, operation is undefined and is not guaranteed.</p>
+<ul>
+<li><p>This routine is called before executing  <code class="docutils literal notranslate"><span class="pre">MPI_INIT</span></code> routine</p></li>
+<li><p>This routine is called after executing  <code class="docutils literal notranslate"><span class="pre">MPI_FINALIZE</span></code> routine</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="inquiry-function-of-rank-number-of-mpi-program-by-logical-coordinates">
+<h2><span class="section-number">6.10.3. </span>Inquiry function of rank number of MPI program by logical coordinates<a class="headerlink" href="#inquiry-function-of-rank-number-of-mpi-program-by-logical-coordinates" title="Link to this heading">¶</a></h2>
+<p>The function can get the assigned rank number from the logical coordinates.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>MPI function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>FJMPI_TOPOLOGY_GET_RANKS</p></td>
+<td><p>Obtain rank from coordinates</p></td>
+</tr>
+</tbody>
+</table>
+<section id="fjmpi-topology-get-ranks">
+<h3><span class="section-number">6.10.3.1. </span>FJMPI_TOPOLOGY_GET_RANKS<a class="headerlink" href="#fjmpi-topology-get-ranks" title="Link to this heading">¶</a></h3>
+<p>&lt;Style&gt;</p>
+<ul class="simple">
+<li><p>C language style</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi-ext.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">FJMPI_Topology_get_ranks</span><span class="p">(</span><span class="n">MPI_Comm</span><span class="w"> </span><span class="n">comm</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">view</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">coords</span><span class="p">[],</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">maxppn</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">outppn</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">ranks</span><span class="p">[])</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>Fortran (USE mpi_f08_ext) style</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">USE </span><span class="n">mpi_f08_ext</span>
+<span class="n">FJMPI_Topology_get_ranks</span><span class="p">(</span><span class="n">comm</span><span class="p">,</span><span class="w"> </span><span class="n">view</span><span class="p">,</span><span class="w"> </span><span class="n">coords</span><span class="p">,</span><span class="w"> </span><span class="n">maxppn</span><span class="p">,</span><span class="w"> </span><span class="n">outppn</span><span class="p">,</span><span class="w"> </span><span class="n">ranks</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="p">)</span>
+<span class="k">TYPE</span><span class="p">(</span><span class="n">MPI_Comm</span><span class="p">),</span><span class="w"> </span><span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">comm</span>
+<span class="kt">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">INTENT</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">view</span><span class="p">,</span><span class="w"> </span><span class="n">coords</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="n">maxppn</span>
+<span class="kt">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">outppn</span><span class="p">,</span><span class="w"> </span><span class="n">ranks</span><span class="p">(</span><span class="n">maxppn</span><span class="p">)</span>
+<span class="kt">INTEGER</span><span class="p">,</span><span class="w"> </span><span class="k">OPTIONAL</span><span class="p">,</span><span class="w"> </span><span class="k">INTENT</span><span class="p">(</span><span class="n">OUT</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ierror</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>Fortran (USE mpi_ext) style</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">USE </span><span class="n">MPI_EXT</span>
+<span class="n">FJMPI_TOPOLOGY_GET_RANKS</span><span class="p">(</span><span class="n">COMM</span><span class="p">,</span><span class="w"> </span><span class="n">VIEW</span><span class="p">,</span><span class="w"> </span><span class="n">COORDS</span><span class="p">,</span><span class="w"> </span><span class="n">MAXPPN</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPPN</span><span class="p">,</span><span class="w"> </span><span class="n">RANKS</span><span class="p">,</span><span class="w"> </span><span class="n">IERROR</span><span class="p">)</span>
+<span class="kt">INTEGER </span><span class="n">COMM</span><span class="p">,</span><span class="w"> </span><span class="n">VIEW</span><span class="p">,</span><span class="w"> </span><span class="n">COORDS</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="n">MAXPPN</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPPN</span><span class="p">,</span><span class="w"> </span><span class="n">RANKS</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="n">IERROR</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="simple">
+<dt>&lt;Explanation&gt;</dt><dd><p>Obtain the rank of the process that is assigned to the specified communicator among the processes that exist at the specified logical coordinates or Tofu coordinates. For maximum, Gets the ranks of processes for the number specified in the argument  <code class="docutils literal notranslate"><span class="pre">maxppn</span></code>. The number of ranks actually obtained is stored in the argument A  <code class="docutils literal notranslate"><span class="pre">outppn</span></code>. An example of using this routine is shown below.</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><dl class="simple">
+<dt>When logical coordinates are the target and one process exists at the target coordinates</dt><dd><p>Specify the larger value from  <code class="docutils literal notranslate"><span class="pre">view</span> <span class="pre">=</span> <span class="pre">FJMPI_LOGICAL</span></code> and  <code class="docutils literal notranslate"><span class="pre">maxppn</span> <span class="pre">=</span> <span class="pre">1</span></code>. In addition, specify the values of logical X coordinate, logical Y coordinate, and logical Z coordinate in coords [0], coords [1], and coords [2], respectively. Process rank, existing in specified  <code class="docutils literal notranslate"><span class="pre">comm</span></code> and  <code class="docutils literal notranslate"><span class="pre">coords</span></code> is  stored in  <code class="docutils literal notranslate"><span class="pre">ranks[0]</span></code>. 1 is stored to  <code class="docutils literal notranslate"><span class="pre">outppn</span></code>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>When Tofu coordinates are the target and there are 4 processes at the target coordinates</dt><dd><p>Specify the larger value from  <code class="docutils literal notranslate"><span class="pre">view</span> <span class="pre">=</span> <span class="pre">FJMPI_TOFU_SYS</span></code>,  <code class="docutils literal notranslate"><span class="pre">FJMPI_TOFU_REL</span></code> or  <code class="docutils literal notranslate"><span class="pre">maxppn</span> <span class="pre">=</span> <span class="pre">4</span></code>. Also, the values of the X, Y, Z, A, B, and C coordinates of the Tofu coordinates are coords [0], coords [1], coords [2], coords [3], and coords [4], respectively. , Coords [5]. Process rank, existing in specified  <code class="docutils literal notranslate"><span class="pre">comm</span></code> and  <code class="docutils literal notranslate"><span class="pre">coords</span></code> is  stored in ranks[0], ranks[1], ranks[2], ranks[3]. 4 is stored to  <code class="docutils literal notranslate"><span class="pre">outppn</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 10.0%" />
+<col style="width: 70.0%" />
+<col style="width: 10.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>IN/OUT</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>MPI_Comm</p></td>
+<td><p>comm</p></td>
+<td><p>Specify communicator</p></td>
+<td><p>IN</p></td>
+</tr>
+<tr class="row-odd"><td><p>int</p></td>
+<td><p>view</p></td>
+<td><div class="line-block">
+<div class="line">Specify a macro to indicate logical coordinates or Tofu coordinates</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">FJMPI_LOGICAL</span></code>: logical coordinates</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">FJMPI_TOFU_SYS</span></code>:Tofu coordinates (Actual assigned coordinates)</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">FJMPI_TOFU_REL</span></code>:Tofu coordinates(Relative coordinates with respect to rank 0 of the argument  <code class="docutils literal notranslate"><span class="pre">comm</span></code>, if <code class="docutils literal notranslate"><span class="pre">comm</span></code>is an inter-group communicator, relative coordinates based on rank 0 of the remote group)</div>
+</div>
+</td>
+<td><p>IN</p></td>
+</tr>
+<tr class="row-even"><td><p>int[]</p></td>
+<td><p>coords</p></td>
+<td><p>Specify the coordinate value to which the process of the rank to get is assigned</p></td>
+<td><p>IN</p></td>
+</tr>
+<tr class="row-odd"><td><p>int</p></td>
+<td><p>maxppn</p></td>
+<td><p>Specify the maximum number of processes to get the rank</p></td>
+<td><p>IN</p></td>
+</tr>
+<tr class="row-even"><td><p>int <sup>*</sup></p></td>
+<td><p>outppn</p></td>
+<td><p>Number of processes that obtained the rank</p></td>
+<td><p>OUT</p></td>
+</tr>
+<tr class="row-odd"><td><p>int[]</p></td>
+<td><p>ranks</p></td>
+<td><div class="line-block">
+<div class="line">Array that stores the obtained rank</div>
+<div class="line">If a group communicator is specified, the rank of the remote group is stored</div>
+</div>
+</td>
+<td><p>OUT</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>&lt;Return value&gt;</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 11.1%" />
+<col style="width: 44.4%" />
+<col style="width: 44.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Status</p></th>
+<th class="head"><p>Return value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>When normal</p></td>
+<td><p>FJMPI_SUCCESS</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>When abnormal</p></td>
+<td><p>FJMPI_ERR_TOPOLOGY_NO_PROCESS</p></td>
+<td><p>When the parallel process is not located at the specified coordinates</p></td>
+</tr>
+<tr class="row-even"><td><p>When abnormal</p></td>
+<td><p>FJMPI_ERR_TOPOLOGY_NODE_SHARED_JOB</p></td>
+<td><p>When the job type is Node-sharing job (For details on Node-sharing jobs, see the manual for the job operation software)</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>&lt;Notes&gt;</p>
+<ul class="simple">
+<li><p>About the argument  <code class="docutils literal notranslate"><span class="pre">coords</span></code>, if specified  <code class="docutils literal notranslate"><span class="pre">FJMPI_LOGICAL</span></code> to the argument  <code class="docutils literal notranslate"><span class="pre">view</span></code>, the value must be set for the same number of dimensions as the job. If specified  <code class="docutils literal notranslate"><span class="pre">FJMPI_TOFU_SYS</span></code> or  <code class="docutils literal notranslate"><span class="pre">FJMPI_TOFU_REL</span></code>to the argument  <code class="docutils literal notranslate"><span class="pre">view</span></code>, you need to set values for 6 elements. If not set correctly, the operation is undefined and is not guaranteed.</p></li>
+<li><p>To obtain the actual number of processes at the coordinates specified in argument  <code class="docutils literal notranslate"><span class="pre">coords</span></code>,  execute this routine with the status of making the value of argument  <code class="docutils literal notranslate"><span class="pre">maxppn</span></code>bigger, and refer to the value of argument  <code class="docutils literal notranslate"><span class="pre">outppn</span></code>.</p></li>
+<li><p>Depending on how many processes actually exist, the value stored to the argument  <code class="docutils literal notranslate"><span class="pre">outppn</span></code> becomes smaller than the specified value to argument  <code class="docutils literal notranslate"><span class="pre">maxppn</span></code>. In this case, the value in the array specified in argument <code class="docutils literal notranslate"><span class="pre">ranks</span></code>is updated as the same number of elements of  <code class="docutils literal notranslate"><span class="pre">outppn</span></code> value.</p></li>
+<li><p>When the situation of one of these below, operation is undefined and is not guaranteed.</p>
+<ul>
+<li><p>This routine is called before executing  <code class="docutils literal notranslate"><span class="pre">MPI_INIT</span></code> routine</p></li>
+<li><p>This routine is called after executing  <code class="docutils literal notranslate"><span class="pre">MPI_FINALIZE</span></code> routine</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="function-use-example">
+<h2><span class="section-number">6.10.4. </span>Function use example<a class="headerlink" href="#function-use-example" title="Link to this heading">¶</a></h2>
+<p>As function use example, this indicates how to research logical coordinates from rank.</p>
+<p>[Sample program (C)]</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi-ext.h&gt;</span><span class="c1">              // Include header file</span>
+<span class="cp">#define LDIM 3</span>
+<span class="cp">#define TDIM 6</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">myrank</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">mydimension</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">coords</span><span class="p">[</span><span class="n">LDIM</span><span class="p">],</span><span class="w"> </span><span class="n">tcoords</span><span class="p">[</span><span class="n">TDIM</span><span class="p">];</span>
+
+<span class="w">  </span><span class="n">MPI_Init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">argv</span><span class="p">);</span>
+<span class="w">  </span><span class="n">MPI_Comm_size</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">size</span><span class="p">);</span>
+<span class="w">  </span><span class="n">MPI_Comm_rank</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">myrank</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">FJMPI_Topology_get_dimension</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mydimension</span><span class="p">);</span>
+<span class="w">  </span><span class="n">FJMPI_Topology_get_shape</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">z</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">myrank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;My Dimension= %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">mydimension</span><span class="p">);</span>
+<span class="w">     </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;My Shape: X= %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;, Y= %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">z</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;, Z= %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">);</span>
+<span class="w">     </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">     </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">       </span><span class="n">FJMPI_Topology_get_coords</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">FJMPI_LOGICAL</span><span class="p">,</span><span class="w"> </span><span class="n">mydimension</span><span class="p">,</span><span class="w"> </span><span class="n">coords</span><span class="p">);</span>
+<span class="w">       </span><span class="n">FJMPI_Topology_get_coords</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">FJMPI_TOFU_SYS</span><span class="p">,</span><span class="w"> </span><span class="n">TDIM</span><span class="p">,</span><span class="w"> </span><span class="n">tcoords</span><span class="p">);</span>
+<span class="w">       </span><span class="k">switch</span><span class="p">(</span><span class="n">mydimension</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="k">case</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;rank to x : rank= %d, (X)=( %d ) &quot;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">         </span><span class="k">case</span><span class="w"> </span><span class="mi">2</span><span class="p">:</span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;rank to xy : rank= %d, (X,Y)=( %d, %d ) &quot;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">         </span><span class="k">case</span><span class="w"> </span><span class="mi">3</span><span class="p">:</span>
+<span class="w">                </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;rank to xyz : rank= %d, (X,Y,Z)=( %d, %d, %d ) &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">coords</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">         </span><span class="k">default</span><span class="o">:</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">       </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;(x,y,z,a,b,c)=(&quot;</span><span class="p">);</span>
+<span class="w">       </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">TDIM</span><span class="mi">-1</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d,&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">tcoords</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+<span class="w">       </span><span class="p">}</span>
+<span class="w">       </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">tcoords</span><span class="p">[</span><span class="n">TDIM</span><span class="mi">-1</span><span class="p">]);</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">MPI_Finalize</span><span class="p">();</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<nav class="contents local" id="id1">
+<ul class="simple">
+<li><p><a class="reference internal" href="#execution-example-1-dimention" id="id4">Execution example (1 dimention)</a></p></li>
+<li><p><a class="reference internal" href="#execution-example-2-dimentions" id="id5">Execution example (2 dimentions)</a></p></li>
+<li><p><a class="reference internal" href="#execution-example-3-dimentions" id="id6">Execution example (3 dimentions)</a></p></li>
+</ul>
+</nav>
+<section id="execution-example-1-dimention">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">6.10.4.1. </span>Execution example (1 dimention)</a><a class="headerlink" href="#execution-example-1-dimention" title="Link to this heading">¶</a></h3>
+<p>The following shows an example of a job script and execution results when executing the sample program in a one-dimensional shape.</p>
+<p>[Job script]</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash -x</span>
+<span class="c1">#</span>
+<span class="c1">#PJM -L &quot;node=12&quot;               # Specify 1 dimention shape</span>
+<span class="c1">#PJM -L &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+</div></blockquote>
+<p>[Output result]</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>My Dimension= 1
+My Shape: X= 12
+
+rank to x : rank= 0, (X)=( 0 ) (x,y,z,a,b,c)=(18,19,19,0,1,1)
+rank to x : rank= 1, (X)=( 1 ) (x,y,z,a,b,c)=(18,19,19,0,2,1)
+rank to x : rank= 2, (X)=( 2 ) (x,y,z,a,b,c)=(18,19,19,1,1,1)
+rank to x : rank= 3, (X)=( 3 ) (x,y,z,a,b,c)=(18,19,19,1,2,1)
+rank to x : rank= 4, (X)=( 4 ) (x,y,z,a,b,c)=(19,19,19,0,1,0)
+rank to x : rank= 5, (X)=( 5 ) (x,y,z,a,b,c)=(19,19,19,0,2,1)
+rank to x : rank= 6, (X)=( 6 ) (x,y,z,a,b,c)=(19,19,19,1,0,0)
+rank to x : rank= 7, (X)=( 7 ) (x,y,z,a,b,c)=(19,19,19,1,1,0)
+rank to x : rank= 8, (X)=( 8 ) (x,y,z,a,b,c)=(19,19,19,1,2,1)
+rank to x : rank= 9, (X)=( 9 ) (x,y,z,a,b,c)=(20,19,19,0,0,0)
+rank to x : rank= 10, (X)=( 10 ) (x,y,z,a,b,c)=(20,19,19,0,1,0)
+rank to x : rank= 11, (X)=( 11 ) (x,y,z,a,b,c)=(20,19,19,1,1,0)
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="execution-example-2-dimentions">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">6.10.4.2. </span>Execution example (2 dimentions)</a><a class="headerlink" href="#execution-example-2-dimentions" title="Link to this heading">¶</a></h3>
+<p>The following shows an example of a job script and execution results when executing the sample program in a two-dimensional shape.</p>
+<p>[Job script]</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash -x</span>
+<span class="c1">#</span>
+<span class="c1">#PJM -L &quot;node=4x3&quot;              # Specify 2 dimentions shape</span>
+<span class="c1">#PJM -L &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+</div></blockquote>
+<p>[Output result]</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>My Dimension= 2
+My Shape: X= 4, Y= 3
+
+rank to xy : rank= 0, (X,Y)=( 0, 0 ) (x,y,z,a,b,c)=(14,21,19,0,0,0)
+rank to xy : rank= 1, (X,Y)=( 1, 0 ) (x,y,z,a,b,c)=(14,21,19,0,1,1)
+rank to xy : rank= 2, (X,Y)=( 2, 0 ) (x,y,z,a,b,c)=(14,21,19,1,0,0)
+rank to xy : rank= 3, (X,Y)=( 3, 0 ) (x,y,z,a,b,c)=(14,21,19,1,1,1)
+rank to xy : rank= 4, (X,Y)=( 0, 1 ) (x,y,z,a,b,c)=(14,21,19,0,0,1)
+rank to xy : rank= 5, (X,Y)=( 1, 1 ) (x,y,z,a,b,c)=(14,21,19,0,2,0)
+rank to xy : rank= 6, (X,Y)=( 2, 1 ) (x,y,z,a,b,c)=(14,21,19,1,0,1)
+rank to xy : rank= 7, (X,Y)=( 3, 1 ) (x,y,z,a,b,c)=(14,21,19,1,2,0)
+rank to xy : rank= 8, (X,Y)=( 0, 2 ) (x,y,z,a,b,c)=(14,21,19,0,1,0)
+rank to xy : rank= 9, (X,Y)=( 1, 2 ) (x,y,z,a,b,c)=(14,21,19,0,2,1)
+rank to xy : rank= 10, (X,Y)=( 2, 2 ) (x,y,z,a,b,c)=(14,21,19,1,1,0)
+rank to xy : rank= 11, (X,Y)=( 3, 2 ) (x,y,z,a,b,c)=(14,21,19,1,2,1)
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="execution-example-3-dimentions">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">6.10.4.3. </span>Execution example (3 dimentions)</a><a class="headerlink" href="#execution-example-3-dimentions" title="Link to this heading">¶</a></h3>
+<p>The following shows an example of a job script and execution results when executing the sample program in a three-dimensional shape.</p>
+<p>[Job script]</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash -x</span>
+<span class="c1">#</span>
+<span class="c1">#PJM -L &quot;node=2x3x2&quot;            # Specify 3 dimentions shape</span>
+<span class="c1">#PJM -L &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+</div></blockquote>
+<p>[Output result]</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>My Dimension= 3
+My Shape: X= 2, Y= 3, Z= 2
+
+rank to xyz : rank= 0, (X,Y,Z)=( 0, 0, 0 ) (x,y,z,a,b,c)=(16,17,18,0,0,0)
+rank to xyz : rank= 1, (X,Y,Z)=( 1, 0, 0 ) (x,y,z,a,b,c)=(16,17,18,1,1,0)
+rank to xyz : rank= 2, (X,Y,Z)=( 0, 1, 0 ) (x,y,z,a,b,c)=(16,17,18,0,1,0)
+rank to xyz : rank= 3, (X,Y,Z)=( 1, 1, 0 ) (x,y,z,a,b,c)=(17,17,18,0,0,0)
+rank to xyz : rank= 4, (X,Y,Z)=( 0, 2, 0 ) (x,y,z,a,b,c)=(16,17,18,1,0,0)
+rank to xyz : rank= 5, (X,Y,Z)=( 1, 2, 0 ) (x,y,z,a,b,c)=(17,17,18,1,0,0)
+rank to xyz : rank= 6, (X,Y,Z)=( 0, 0, 1 ) (x,y,z,a,b,c)=(16,17,18,0,0,1)
+rank to xyz : rank= 7, (X,Y,Z)=( 1, 0, 1 ) (x,y,z,a,b,c)=(16,17,18,1,2,0)
+rank to xyz : rank= 8, (X,Y,Z)=( 0, 1, 1 ) (x,y,z,a,b,c)=(16,17,18,0,2,0)
+rank to xyz : rank= 9, (X,Y,Z)=( 1, 1, 1 ) (x,y,z,a,b,c)=(17,17,18,0,1,0)
+rank to xyz : rank= 10, (X,Y,Z)=( 0, 2, 1 ) (x,y,z,a,b,c)=(16,17,18,1,0,1)
+rank to xyz : rank= 11, (X,Y,Z)=( 1, 2, 1 ) (x,y,z,a,b,c)=(17,17,18,1,1,0)
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">6.10. Rank inquiry functions</a><ul>
+<li><a class="reference internal" href="#inquiry-function-of-logical-dimention-number-and-logical-form-specified-to-mpi-comm-world">6.10.1. Inquiry function of logical dimention number and logical form specified to MPI_COMM_WORLD</a><ul>
+<li><a class="reference internal" href="#fjmpi-topology-get-dimension">6.10.1.1. FJMPI_TOPOLOGY_GET_DIMENSION</a></li>
+<li><a class="reference internal" href="#fjmpi-topology-get-shape">6.10.1.2. FJMPI_TOPOLOGY_GET_SHAPE</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inquiry-function-of-logical-coordinates-of-mpi-program-by-rank-number">6.10.2. Inquiry function of logical coordinates of MPI program by rank number</a><ul>
+<li><a class="reference internal" href="#fjmpi-topology-get-coords">6.10.2.1. FJMPI_TOPOLOGY_GET_COORDS</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inquiry-function-of-rank-number-of-mpi-program-by-logical-coordinates">6.10.3. Inquiry function of rank number of MPI program by logical coordinates</a><ul>
+<li><a class="reference internal" href="#fjmpi-topology-get-ranks">6.10.3.1. FJMPI_TOPOLOGY_GET_RANKS</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#function-use-example">6.10.4. Function use example</a><ul>
+<li><a class="reference internal" href="#execution-example-1-dimention">6.10.4.1. Execution example (1 dimention)</a></li>
+<li><a class="reference internal" href="#execution-example-2-dimentions">6.10.4.2. Execution example (2 dimentions)</a></li>
+<li><a class="reference internal" href="#execution-example-3-dimentions">6.10.4.3. Execution example (3 dimentions)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="DynamicProcessCreation%28MPI_Comm_spawn%29.html"
+                          title="previous chapter"><span class="section-number">6.9. </span>Dynamic process creation (MPI_COMM_SPAWN)</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="MPIStatisticalInformation.html"
+                          title="next chapter"><span class="section-number">6.11. </span>MPI statistic information</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="MPIStatisticalInformation.html" title="6.11. MPI statistic information"
+             >next</a></li>
+        <li class="right" >
+          <a href="DynamicProcessCreation%28MPI_Comm_spawn%29.html" title="6.9. Dynamic process creation (MPI_COMM_SPAWN)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.10. </span>Rank inquiry functions</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

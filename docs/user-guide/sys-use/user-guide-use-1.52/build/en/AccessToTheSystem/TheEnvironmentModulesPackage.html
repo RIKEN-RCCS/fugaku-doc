@@ -1,0 +1,326 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4.6. Module package &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5. Job execution" href="../JobExecution/index.html" />
+    <link rel="prev" title="4.5. Check node usage" href="CheckingTheNodeUseStatus.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../JobExecution/index.html" title="5. Job execution"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="CheckingTheNodeUseStatus.html" title="4.5. Check node usage"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">4. </span>System Use</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.6. </span>Module package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-package">
+<h1><span class="section-number">4.6. </span>Module package<a class="headerlink" href="#module-package" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">On the Fugaku, a module package (Environment Modules package) can be used.</div>
+<div class="line">For <code class="file docutils literal notranslate"><span class="pre">modulefile</span></code> is offered, for instance PATH, LD_LIBRARY_PATH’s environment variable can be set by using <strong class="program">module</strong> command.</div>
+</div>
+<section id="module-command">
+<h2><span class="section-number">4.6.1. </span>Module command<a class="headerlink" href="#module-command" title="Link to this heading">¶</a></h2>
+<p>This indicates the basic <strong class="program">module</strong> command operation. To see more detail, please refer to the online manual (<strong class="command">man module</strong>).</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>command</p></th>
+<th class="head"><p>discription</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>module avail</p></td>
+<td><p>View the list of availabe modulefile</p></td>
+</tr>
+<tr class="row-odd"><td><p>module list</p></td>
+<td><p>View the list of loaded modulefile</p></td>
+</tr>
+<tr class="row-even"><td><p>module load modulefile.</p></td>
+<td><p>Load modulefile</p></td>
+</tr>
+<tr class="row-odd"><td><p>module unload modulefile…</p></td>
+<td><p>Unload modulefile</p></td>
+</tr>
+<tr class="row-even"><td><p>module purge</p></td>
+<td><p>Unload all modulefile</p></td>
+</tr>
+<tr class="row-odd"><td><p>module switch [modulefile1] modulefile2</p></td>
+<td><p>Change modulefile</p></td>
+</tr>
+<tr class="row-even"><td><p>module whatis [modulefile…]</p></td>
+<td><p>View information of modulefile’ whatis</p></td>
+</tr>
+<tr class="row-odd"><td><p>module show modulefile</p></td>
+<td><p>Display modulefile setting contents</p></td>
+</tr>
+<tr class="row-even"><td><p>module help [modulefile…]</p></td>
+<td><p>View modulefile help information</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="example-of-command-use">
+<h2><span class="section-number">4.6.2. </span>Example of command use<a class="headerlink" href="#example-of-command-use" title="Link to this heading">¶</a></h2>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#module-avail-view-the-list-of-availabe-module" id="id1">module avail (View the list of availabe module)</a></p></li>
+<li><p><a class="reference internal" href="#module-list-view-the-list-of-loaded-modulefile" id="id2">module list (View the list of loaded modulefile)</a></p></li>
+<li><p><a class="reference internal" href="#module-load-unload-execution-example-of-modulefile-load-and-unload" id="id3">module load/unload (Execution example of modulefile load and unload)</a></p></li>
+<li><p><a class="reference internal" href="#module-purge-unload-all-modulefile" id="id4">module purge (Unload all modulefile)</a></p></li>
+<li><p><a class="reference internal" href="#module-switch-change-modulefile" id="id5">module switch (Change modulefile)</a></p></li>
+<li><p><a class="reference internal" href="#module-whatis-display-module-whatis-information" id="id6">module whatis (Display module-whatis information)</a></p></li>
+<li><p><a class="reference internal" href="#module-show-display-modulefile-setting-contents" id="id7">module show (Display modulefile setting contents)</a></p></li>
+<li><p><a class="reference internal" href="#view-modulefile-help-information" id="id8">View modulefile help information</a></p></li>
+</ul>
+</nav>
+<p>The modulefile provided may vary depending on the time period. Therefore, the display content of the usage examples and the specified modulefile name may differ from the actual ones.</p>
+<section id="module-avail-view-the-list-of-availabe-module">
+<h3><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">4.6.2.1. </span>module avail (View the list of availabe module)</a><a class="headerlink" href="#module-avail-view-the-list-of-availabe-module" title="Link to this heading">¶</a></h3>
+<p>Displays a list of provided modulefiles.
+If executed <strong class="program">module avail</strong> on login node, display as the following style.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>avail
+
+<span class="go">------------------------------- /work/Fugaku-environment/modulefiles -------------------------------</span>
+<span class="go">lang/tcsds-1.2.36  lang/tcsds-1.2.37  lang/tcsds-1.2.38(default)</span>
+</pre></div>
+</div>
+</section>
+<section id="module-list-view-the-list-of-loaded-modulefile">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">4.6.2.2. </span>module list (View the list of loaded modulefile)</a><a class="headerlink" href="#module-list-view-the-list-of-loaded-modulefile" title="Link to this heading">¶</a></h3>
+<p>Displays the loaded modulefile. This example shows that the language default environment is loaded.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go"> 1) lang/tcsds-1.2.38(default)</span>
+</pre></div>
+</div>
+</section>
+<section id="module-load-unload-execution-example-of-modulefile-load-and-unload">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">4.6.2.3. </span>module load/unload (Execution example of modulefile load and unload)</a><a class="headerlink" href="#module-load-unload-execution-example-of-modulefile-load-and-unload" title="Link to this heading">¶</a></h3>
+<p>The following shows an example of loading / unloading the default language environment.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go"> 1) lang/tcsds-1.2.38(default)</span>
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>unload<span class="w"> </span>lang
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">No Modulefiles Currently Loaded.</span>
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>load<span class="w"> </span>lang
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go">1) lang/tcsds-1.2.38(default)</span>
+</pre></div>
+</div>
+</section>
+<section id="module-purge-unload-all-modulefile">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">4.6.2.4. </span>module purge (Unload all modulefile)</a><a class="headerlink" href="#module-purge-unload-all-modulefile" title="Link to this heading">¶</a></h3>
+<p>Delete the contents set in all loaded modulefiles. This is useful when you want to return the modulefile to its initial state where nothing has been loaded.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go"> 1) lang/tcsds-1.2.38(default)</span>
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>purge
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">No Modulefiles Currently Loaded.</span>
+</pre></div>
+</div>
+</section>
+<section id="module-switch-change-modulefile">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">4.6.2.5. </span>module switch (Change modulefile)</a><a class="headerlink" href="#module-switch-change-modulefile" title="Link to this heading">¶</a></h3>
+<p>switch changes the module file having the same route name (the head of slash is the same).
+The same name module file is only able to load one of them so if try to load continuously, shows conflict error message and cannot load.
+switch can change the loaded modulefile1 to other modulefile2 in this situation.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go"> 1) lang/tcsds-1.2.38(default)</span>
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>switch<span class="w"> </span>lang/tcsds-1.2.37
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go">  1) lang/tcsds-1.2.37</span>
+</pre></div>
+</div>
+</section>
+<section id="module-whatis-display-module-whatis-information">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">4.6.2.6. </span>module whatis (Display module-whatis information)</a><a class="headerlink" href="#module-whatis-display-module-whatis-information" title="Link to this heading">¶</a></h3>
+<p>Display the contents of modulefile module-whatis. If module-whatis is not defined, this doesn’t show.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>whatis
+<span class="go">------------------------------- /work/Fugaku-environment/modulefiles ------------------------------</span>
+<span class="go">   lang/tcsds-1.2.36: Fujitsu Compiler 4.8.1 (Fortran/C/C++/Tool)</span>
+<span class="go">   lang/tcsds-1.2.37: Fujitsu Compiler 4.9.0 (Fortran/C/C++/Tool)</span>
+<span class="go">   lang/tcsds-1.2.38: Fujitsu Compiler 4.10.0 (Fortran/C/C++/Tool)</span>
+</pre></div>
+</div>
+</section>
+<section id="module-show-display-modulefile-setting-contents">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">4.6.2.7. </span>module show (Display modulefile setting contents)</a><a class="headerlink" href="#module-show-display-modulefile-setting-contents" title="Link to this heading">¶</a></h3>
+<p>show displays modulefile setting contents.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>show<span class="w"> </span>lang
+<span class="go">-------------------------------------------------------------------</span>
+<span class="go">/work/Fugaku-environment/modulefiles/lang/tcsds-1.2.38:</span>
+
+<span class="go">module-whatis   {Fujitsu Compiler 4.10.0 (Fortran/C/C++/Tool)}</span>
+<span class="go">conflict        lang</span>
+<span class="go">setenv          FJSVXTCLANGA /opt/FJSVxtclanga/tcsds-1.2.38</span>
+<span class="go">prepend-path    PATH /opt/FJSVxtclanga/tcsds-1.2.38/bin</span>
+<span class="go">prepend-path    LD_LIBRARY_PATH /opt/FJSVxtclanga/tcsds-1.2.38/lib64</span>
+<span class="go">-------------------------------------------------------------------</span>
+</pre></div>
+</div>
+</section>
+<section id="view-modulefile-help-information">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">4.6.2.8. </span>View modulefile help information</a><a class="headerlink" href="#view-modulefile-help-information" title="Link to this heading">¶</a></h3>
+<p>Displays the contents of modulefile help. This is not displayed if help is not defined.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span><span class="nb">help</span><span class="w"> </span>lang
+<span class="go">-------------------------------------------------------------------</span>
+<span class="go">Module Specific Help for /work/Fugaku-environment/modulefiles/lang/tcsds-1.2.38:</span>
+
+<span class="go">** Changelog **</span>
+<span class="go"> Oct. 6, 2023</span>
+<span class="go"> - New Compiler available</span>
+<span class="go">-------------------------------------------------------------------</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="how-to-change-language-environment">
+<h2><span class="section-number">4.6.3. </span>How to change language environment<a class="headerlink" href="#how-to-change-language-environment" title="Link to this heading">¶</a></h2>
+<p>To change language environment, use <strong class="program">module</strong> file.</p>
+<p>The language environment configuration file contains the settings necessary to use Fugaku. Please set the required language environment when using Fugaku.
+For language environment setting and switching operations, please use  <strong class="program">module load</strong> command or  <strong class="program">module switch</strong> command.</p>
+<p>[<strong class="program">module switch</strong> command use example]</p>
+<ol class="arabic">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">module</span></code> command</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go">  1) lang/tcsds-1.2.38(default)</span>
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>switch<span class="w"> </span>lang/tcsds-1.2.NN
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>list
+<span class="go">Currently Loaded Modulefiles:</span>
+<span class="go">  1) lang/tcsds-1.2.NN</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<blockquote>
+<div><p>If you try to load another language environment while the language environment is loaded, the following error message is displayed. If this shown, change environment by using <strong class="program">module switch</strong> as above or after executed  <strong class="program">module unload</strong> , execute   <strong class="program">module load</strong> again and change the environment.</p>
+</div></blockquote>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>load<span class="w"> </span>lang
+<span class="gp">[_LNlogin]$ </span>module<span class="w"> </span>load<span class="w"> </span>lang/tcsds-1.2.NN
+<span class="go">Loading lang/tcsds-1.2.NN</span>
+<span class="go">  ERROR: lang/tcsds-1.2.NN cannot be loaded due to a conflict.</span>
+<span class="go">    HINT: Might try &quot;module unload lang&quot; first.</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">4.6. Module package</a><ul>
+<li><a class="reference internal" href="#module-command">4.6.1. Module command</a></li>
+<li><a class="reference internal" href="#example-of-command-use">4.6.2. Example of command use</a><ul>
+<li><a class="reference internal" href="#module-avail-view-the-list-of-availabe-module">4.6.2.1. module avail (View the list of availabe module)</a></li>
+<li><a class="reference internal" href="#module-list-view-the-list-of-loaded-modulefile">4.6.2.2. module list (View the list of loaded modulefile)</a></li>
+<li><a class="reference internal" href="#module-load-unload-execution-example-of-modulefile-load-and-unload">4.6.2.3. module load/unload (Execution example of modulefile load and unload)</a></li>
+<li><a class="reference internal" href="#module-purge-unload-all-modulefile">4.6.2.4. module purge (Unload all modulefile)</a></li>
+<li><a class="reference internal" href="#module-switch-change-modulefile">4.6.2.5. module switch (Change modulefile)</a></li>
+<li><a class="reference internal" href="#module-whatis-display-module-whatis-information">4.6.2.6. module whatis (Display module-whatis information)</a></li>
+<li><a class="reference internal" href="#module-show-display-modulefile-setting-contents">4.6.2.7. module show (Display modulefile setting contents)</a></li>
+<li><a class="reference internal" href="#view-modulefile-help-information">4.6.2.8. View modulefile help information</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#how-to-change-language-environment">4.6.3. How to change language environment</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CheckingTheNodeUseStatus.html"
+                          title="previous chapter"><span class="section-number">4.5. </span>Check node usage</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../JobExecution/index.html"
+                          title="next chapter"><span class="section-number">5. </span>Job execution</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../JobExecution/index.html" title="5. Job execution"
+             >next</a></li>
+        <li class="right" >
+          <a href="CheckingTheNodeUseStatus.html" title="4.5. Check node usage"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">4. </span>System Use</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.6. </span>Module package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

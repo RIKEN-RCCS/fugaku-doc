@@ -1,0 +1,688 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1. Introduction &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Use direction" href="../MethodOfUse/index.html" />
+    <link rel="prev" title="Supercomputer Fugaku User Guide - Use and job execution - Version 1.52" href="../index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../MethodOfUse/index.html" title="2. Use direction"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../index.html" title="Supercomputer Fugaku User Guide - Use and job execution - Version 1.52"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>Introduction</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="introduction">
+<h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h1>
+<section id="the-purpose-of-this-document">
+<h2><span class="section-number">1.1. </span>The purpose of this document.<a class="headerlink" href="#the-purpose-of-this-document" title="Link to this heading">¶</a></h2>
+<p>This document describes about the basic use direction of the supercomputer Fugaku.</p>
+</section>
+<section id="notation-used-in-this-document">
+<h2><span class="section-number">1.2. </span>Notation used in this document<a class="headerlink" href="#notation-used-in-this-document" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>In command execution, the user terminal and login node to be operated are represented by a prompt.</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Prompt</p></th>
+<th class="head"><p>Control target</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[terminal]</p></td>
+<td><p>Means to execute the command at the user device</p></td>
+</tr>
+<tr class="row-odd"><td><p>[_LNlogin]</p></td>
+<td><p>Means to execute the command at the login node (Common)</p></td>
+</tr>
+<tr class="row-even"><td><p>[_LNIlogin]</p></td>
+<td><p>Means to execute the command at the login node (Intel)</p></td>
+</tr>
+<tr class="row-odd"><td><p>[_LNAlogin]</p></td>
+<td><p>Means to execute the command at the login node (Arm)</p></td>
+</tr>
+<tr class="row-even"><td><p>[_CNlogin]</p></td>
+<td><p>Means to execute the command at the computing node</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li><p>Home directory indicates with ~ (tilde).</p></li>
+<li><p>The language environment is described based on the latest version of functions unless otherwise specified.</p></li>
+</ul>
+</section>
+<section id="abbreviations-and-aliases">
+<h2><span class="section-number">1.3. </span>Abbreviations and aliases<a class="headerlink" href="#abbreviations-and-aliases" title="Link to this heading">¶</a></h2>
+<p>The used abbreviations in this document is as following.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Abbreviations and aliases</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Next-generation ultra-high-speed computer system</p></td>
+<td><p>Supercomputer Fugaku</p></td>
+</tr>
+<tr class="row-odd"><td><p>Computing node</p></td>
+<td><p>CN</p></td>
+</tr>
+<tr class="row-even"><td><p>BIO and computing node</p></td>
+<td><p>CN/BIO</p></td>
+</tr>
+<tr class="row-odd"><td><p>SIO and computing node</p></td>
+<td><p>CN/SIO</p></td>
+</tr>
+<tr class="row-even"><td><p>GIO and computing node</p></td>
+<td><p>CN/GIO</p></td>
+</tr>
+<tr class="row-odd"><td><p>Login node and file transfer node</p></td>
+<td><p>Login node or LN</p></td>
+</tr>
+<tr class="row-even"><td><p>Storage connected to BIO and computing node</p></td>
+<td><p>System disk</p></td>
+</tr>
+<tr class="row-odd"><td><p>Storage connected to SIO and computing node</p></td>
+<td><p>First-layer storage</p>
+<p>First tier SSD or SSD</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="about-trademarks">
+<h2><span class="section-number">1.4. </span>About trademarks<a class="headerlink" href="#about-trademarks" title="Link to this heading">¶</a></h2>
+<p>Company names and product names in the text may be trademarks or registered trademarks of the respective companies. Other trademarks and registered trademarks are generally trademarks or registered trademarks of their respective companies. Please note that trademark names (TM, (R)) are not always added to system names, product names, etc., described in this document.</p>
+</section>
+<section id="change-log">
+<h2><span class="section-number">1.5. </span>Change log<a class="headerlink" href="#change-log" title="Link to this heading">¶</a></h2>
+<p>This indicates the update history of this document.</p>
+<p><strong>Version 1.52 November 18, 2025</strong></p>
+<ul class="simple">
+<li><p>Added “6.12. Collective Communication Algorithms(knomial, rabenseifner) in MPI”.</p></li>
+</ul>
+<p><strong>Version 1.51 October 23, 2025</strong></p>
+<ul class="simple">
+<li><p>Added notes on using the pjshowrsc command to “4.5 Node Usage Check”.</p></li>
+</ul>
+<p><strong>Version 1.50 October 10, 2025</strong></p>
+<ul class="simple">
+<li><p>Added a note to “8.5.4. Job submitting option (pjsub --llio)” and default value.</p></li>
+</ul>
+<p><strong>Version 1.49 May 14, 2025</strong></p>
+<ul class="simple">
+<li><p>Added “5.20.2. Job Execution in Startup Project (trial)”.</p></li>
+</ul>
+<p><strong>Version 1.48 April 4, 2025</strong></p>
+<ul class="simple">
+<li><p>Updated description of Maximum amount of job memory in “3.4.12. Estimating the amount of memory available to user programs”.</p></li>
+<li><p>Updated example display of pjacl command in “5.1.3. Create job script”.</p></li>
+<li><p>Added “5.10.4. Mitigating Memory Fragmentation”.</p></li>
+<li><p>Added “Attention” regarding the time lag until the results of the job_events command are reflected in “5.19.1. job_events”.</p></li>
+<li><p>Updated “Setting value (Default)” in “7.1. Overview”.</p></li>
+<li><p>Updated “Setting value” in “Attention” of “7.1. Overview”.</p></li>
+<li><p>Updated “Default value” in “7.2.1. Function overview”.</p></li>
+<li><p>Updated “Use example” in “7.2.2. Use example”.</p></li>
+<li><p>Fixed link of “Programming Guide(IO part)” in “8.1. Overview”.</p></li>
+<li><p>Updated sample code for “8.2.1. When writing from one process to one file”.</p></li>
+<li><p>Updated sample code for “8.2.2. When multiple processes write to a file”.</p></li>
+</ul>
+<p><strong>Version 1.47 February 25, 2025</strong></p>
+<ul class="simple">
+<li><p>Added a sample Certificate Manager screen to “4.2.3. Installing the certificate to Chrome (Windows)”.</p></li>
+<li><p>Added a note to “4.4.3.1. Login node”.</p></li>
+<li><p>Updated “Attention” in “7.1. Overview”.</p></li>
+</ul>
+<p><strong>Version 1.46 December 27, 2024</strong></p>
+<ul class="simple">
+<li><p>Updated the description of Darshan in “8.7. I/O profiling” and “8.8. I/O optimization”.</p></li>
+</ul>
+<p><strong>Version 1.45 November 27, 2024</strong></p>
+<ul class="simple">
+<li><p>Updated “Use of tmpfs area (/worktmp/)” in “3.4.5. Disk”.</p></li>
+<li><p>Updated “3.4.5.2. Method of using tmpfs area (/worktmp/)”.</p></li>
+<li><p>Updated “5.9.2.2. Low priority jobs”</p></li>
+<li><p>Removed the description of show_affected_jobs from “5.19. Job list display command affected by the failure”.</p></li>
+<li><p>Updated “5.19.1. job_events”.</p></li>
+<li><p>Modify the sample code for “8.2.1. When writing from one process to one file”.</p></li>
+<li><p>Modify the sample code for “8.2.2. When multiple processes write to a file”.</p></li>
+</ul>
+<p><strong>Version 1.44 November 1, 2024</strong></p>
+<ul class="simple">
+<li><p>Added “Attention” in “Use of tmpfs area” of “3.4.5. Disk”.</p></li>
+<li><p>Updated “Attention” in “5.9.7. Specifying an execution start time”.</p></li>
+</ul>
+<p><strong>Version 1.43 October 17, 2024</strong></p>
+<ul class="simple">
+<li><p>Updated “Note” in “7.1. Overview”.</p></li>
+<li><p>Updated “Attention” in “7.1. Overview”.</p></li>
+<li><p>Updated “Attention” in “7.3.5. Power control point”.</p></li>
+</ul>
+<p><strong>Version 1.42 September 4, 2024</strong></p>
+<ul class="simple">
+<li><p>Added an explanation of the password when using the Mac keychain to “4.3. Accessing steps to the Fugaku website”.</p></li>
+</ul>
+<p><strong>Version 1.41 July 22, 2024</strong></p>
+<ul class="simple">
+<li><p>Updated “5.19.1. job_events”.</p></li>
+<li><p>Renamed the section from “8. Layered storage and LLIO” to “8. Layered storage”.</p></li>
+<li><p>Updated “8.1. Overview”.</p></li>
+<li><p>Renamed the section from “8.2. About Writing Files to FEFS/LLIO” to “8.2. About File Operations to FEFS/LLIO”.</p></li>
+<li><p>Updated “8.2.2. When multiple processes write to a file”.</p></li>
+<li><p>Added “8.2.3. Rename File”.</p></li>
+<li><p>Added “8.2.4. Unlink File”.</p></li>
+<li><p>Updated “8.3.2. Writing timing to second-layer storage”.</p></li>
+<li><p>Updated “8.3.4. Asynchronous close / synchronous close”.</p></li>
+<li><p>Updated “8.6. Important Notices”.</p></li>
+</ul>
+<p><strong>Version 1.40 June 7, 2024</strong></p>
+<ul class="simple">
+<li><p>Added a note to “5.10.1. Overview”.</p></li>
+<li><p>Updated “8.1. Overview”.</p></li>
+<li><p>Added “8.2. About Writing Files to FEFS/LLIO”.</p></li>
+<li><p>Updated “8.3. Cache Area of Second-Layer Storage”.</p></li>
+<li><p>Added “8.3.2. Writing timing to second-layer storage”.</p></li>
+<li><p>Updated “8.3.4. Asynchronous close / synchronous close”.</p></li>
+<li><p>Updated “8.4. Node Temporary Area”.</p></li>
+<li><p>Updated “8.5. Shared temporary area”.</p></li>
+<li><p>Updated “8.6.2. MPI-IO”.</p></li>
+</ul>
+<p><strong>Version 1.39 May 30, 2024</strong></p>
+<ul class="simple">
+<li><p>Updated “6.4.2. Output list by option specification”.</p></li>
+</ul>
+<p><strong>Version 1.38 April 4, 2024</strong></p>
+<ul class="simple">
+<li><p>Added “5.19.3. show_evict_node”.</p></li>
+<li><p>Updated “Attention” in “8.2.1. The Cache Area of Second-Layer Storage size”.</p></li>
+<li><p>Updated “Attention” in “8.2.3. Asynchronous close / synchronous close”.</p></li>
+</ul>
+<p><strong>Version 1.37 February 2, 2024</strong></p>
+<ul class="simple">
+<li><p>Updated the description of the available capacity in “3.4.5.2. Method of using tmpfs area”.</p></li>
+<li><p>Added description of Maximum amount of job memory in “3.4.12. Estimating the amount of memory available to user programs”.</p></li>
+</ul>
+<p><strong>Version 1.36 January 10, 2024</strong></p>
+<ul class="simple">
+<li><p>Reviewed the “4.6.2. Example of command use”.</p></li>
+<li><p>Rewrited “user_name” to “username” to make the notation consistent.</p></li>
+<li><p>Rewrited “&lt;username&gt;” to “username” to make the notation consistent.</p></li>
+<li><p>Rewrited “group_name” to “groupname” to make the notation consistent.</p></li>
+<li><p>Rewrited “&lt;groupname&gt;” to “groupname” to make the notation consistent.</p></li>
+</ul>
+<p><strong>Version 1.35 December 12, 2023</strong></p>
+<ul class="simple">
+<li><p>The name <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/">https://www.fugaku.r-ccs.riken.jp/en/</a> was changed from “the user portal” to “the Fugaku website”.</p></li>
+<li><p>History retention period changed to 90 days in  “5.12.6. Job status display command options”.</p></li>
+</ul>
+<p><strong>Version 1.34 October 6, 2023</strong></p>
+<ul class="simple">
+<li><p>Updated the list in “2.2. Manual” due to discrepancies between the listed manuals and the manuals published on the Fugaku website.</p></li>
+<li><p>Added description of /vol0002 in “3.4.7. File system”.</p></li>
+<li><p>Updated “Attention” in “3.4.5. Disk”.</p></li>
+<li><p>Updated “Attention” in “3.4.6. File creation and stripe setting”.</p></li>
+<li><p>Added “5.9.2.2. Low Priority Jobs”.</p></li>
+<li><p>Updated the description of “total bytes of packets sent and received” in “5.18. Obtaining TofuD TNR statistics”.</p></li>
+<li><p>Added “5.19.1. job_events”.</p></li>
+<li><p>Corrected the notation of the data area path from “/data” to “/vol0n0m/data”.</p></li>
+<li><p>Corrected the mistakenly written “/vol0m0n/group/data” to “/vol0n0m/data/group”.</p></li>
+</ul>
+<p><strong>Version 1.33 June 19, 2023</strong></p>
+<ul class="simple">
+<li><p>Added the description of --gname option in “5.1.4. The command for creating template of job script”.</p></li>
+<li><p>Added “5.1.5. Job allocation operation”.</p></li>
+<li><p>Added a note to “5.9.2.1. Running a job with a minimum execution time”.</p></li>
+<li><p>Added the description of -g option in “5.19. Job list display command affected by the failure”.</p></li>
+</ul>
+<p><strong>Version 1.32 June 2, 2023</strong></p>
+<ul class="simple">
+<li><p>Changed the description of “5.9.2. Resource Specification”.</p></li>
+<li><p>Added “5.9.2.1. Running a job with a minimum execution time”.</p></li>
+</ul>
+<p><strong>Version 1.31 April 25, 2023</strong></p>
+<ul class="simple">
+<li><p>Added a reference page for vol0002 to the second-layer storage of “3.4.7. File system”.</p></li>
+</ul>
+<p><strong>Version 1.30 April 4, 2023</strong></p>
+<ul class="simple">
+<li><p>Updated an Attention for “7.3.5. Power control point”.</p></li>
+<li><p>Updated the description of perf in “8.2.5. Option when Job submitting (pjsub --llio)”.</p></li>
+<li><p>Updated the description of perf in “8.3.3. Job submitting option (pjsub --llio)”.</p></li>
+<li><p>Updated the description of perf in “8.4.4. Job submitting option (pjsub --llio)”.</p></li>
+<li><p>Removed restrictions for “--llio perf” on “8.5. Important Notices”.</p></li>
+</ul>
+<p><strong>Version 1.29 March 22, 2023</strong></p>
+<ul class="simple">
+<li><p>Updated the puttygen screen examples in “4.4.1.2. Windows (PuTTYgen)”.</p></li>
+<li><p>Updated the PuTTY screen examples in “4.4.3.2. Login node (PuTTY)”.</p></li>
+</ul>
+<p><strong>Version 1.28 March 15, 2023</strong></p>
+<ul class="simple">
+<li><p>Added a reference page for using RSA keys to “4.4.1. Private key/Public key creation”.</p></li>
+<li><p>Fixed incorrect description ‘Post K’ in ‘9.5.1. Overview’ to ‘Fugaku’.</p></li>
+<li><p>The description of the sample scripts has been partially changed. There is no problem with the operation even in the conventional description.</p></li>
+</ul>
+<p><strong>Version 1.27 February 8, 2023</strong></p>
+<ul class="simple">
+<li><p>Changed the job script description example for “5.8.1.”.</p></li>
+<li><p>Added Darshan description to “8.6. I/O optimization” and divided it into “8.6. I/O profiling” and “8.7. I/O optimization”.</p></li>
+</ul>
+<p><strong>Version 1.26 January 5, 2023</strong></p>
+<ul class="simple">
+<li><p>Changed consolidation script for “8.6.1. Analysis of bottlenecks using LLIO performance information”.</p></li>
+</ul>
+<p><strong>Version 1.25 November 14, 2022</strong></p>
+<ul class="simple">
+<li><p>Changed volume number for “3.4.5. Disk”.</p></li>
+<li><p>Changed volume number for “3.4.7. File System”.</p></li>
+<li><p>Added new message description to “5.2.1. Submitting a Job”</p></li>
+<li><p>Updated the description of retention_state in “7.1. Overview”</p></li>
+<li><p>Updated “8.5. Important Notices”.</p></li>
+<li><p>Changed volume number for “8.7. Selecting a usage file system (volume)”.</p></li>
+<li><p>Changed volume number for “8.7.1. Environment Variables and pjsub Options”.</p></li>
+<li><p>Added environment variable “PJM_LLIO_SHAREDTMP” to “8.7.1. Environment Variables and pjsub Options”.</p></li>
+</ul>
+<p><strong>Version 1.24 October 20, 2022</strong></p>
+<ul class="simple">
+<li><p>Updated “6.4. Standard output / Standard error output / Standard input”.</p></li>
+</ul>
+<p><strong>Version 1.23 October 11, 2022</strong></p>
+<ul class="simple">
+<li><p>Addd “5.1.4. The command for creating template of job script”.</p></li>
+<li><p>Updated “5.16.3. PJM 0079 ERROR REASON list”.</p></li>
+<li><p>Updated an Attention for “8.2.4. Common file distribution function (llio_transfer)”.</p></li>
+</ul>
+<p><strong>Version 1.22 September 20, 2022</strong></p>
+<ul class="simple">
+<li><p>Added “5.9.7. Specifying an execution start time”.</p></li>
+</ul>
+<p><strong>Version 1.21 July 28, 2022</strong></p>
+<ul class="simple">
+<li><p>The description of the power knob value of the compute node that also serves as IO of “7.1. Overview” has been changed.</p></li>
+</ul>
+<p><strong>Version 1.20 July 11, 2022</strong></p>
+<ul class="simple">
+<li><p>Added links to pages related to “5.1.3. Create job script”.</p></li>
+<li><p>Added examples of messages issued by the pjsub command to “5.2.1 Submitting a job”.</p></li>
+<li><p>Renamed the section from “5.16.3. GATE CHECK ERROR REASON list” to “5.16.3. PJM 0079 ERROR REASON list”.</p></li>
+<li><p>Updated “8.5. Important Notices”.</p></li>
+</ul>
+<p><strong>Version 1.19 June 22, 2022</strong></p>
+<ul class="simple">
+<li><p>Added flow diagram to “4.1 Overview”.</p></li>
+</ul>
+<p><strong>Version 1.18 June 9, 2022</strong></p>
+<ul class="simple">
+<li><p>Indicates that we plan to ban the use of RSA in “4.4.1 Creating a Private/Public Key Pair”.</p></li>
+</ul>
+<p><strong>Version 1.17 May 26, 2022</strong></p>
+<ul class="simple">
+<li><p>Updated “3.4.8. Group”.</p></li>
+</ul>
+<p><strong>Version 1.16 May 24, 2022</strong></p>
+<ul class="simple">
+<li><p>Added a note about permissions to “4.4 Login”.</p></li>
+</ul>
+<p><strong>Version 1.15 May 16, 2022</strong></p>
+<ul class="simple">
+<li><p>Updated “3.3.4. Update process”.</p></li>
+<li><p>Updated “3.4.4. Resource group use status”.</p></li>
+<li><p>Updated the explanation of directory name “3.4.5. Disk”.</p></li>
+<li><p>Updated the display example “3.4.5.1.2. File sharing examples of using ACL”.</p></li>
+<li><p>Updated the explanation of the second-layer storage “3.4.7. File system”.</p></li>
+<li><p>Added “3.4.8. Group”.</p></li>
+<li><p>Updated “3.4.10. Login node”.</p></li>
+<li><p>Added a note about using <a class="reference external" href="mailto:Chrome&#37;&#52;&#48;Mac">Chrome<span>&#64;</span>Mac</a> in “4.3 Accessing steps to the Fugaku website”.</p></li>
+<li><p>Updated “8.5.1.3. Direct access to second-layer storage”.</p></li>
+<li><p>Updated “8.7. Selecting a usage file system (volume)”.</p></li>
+<li><p>Updated “8.7.2. Job submission method”.</p></li>
+</ul>
+<p><strong>Version 1.14 April 3, 2022</strong></p>
+<ul class="simple">
+<li><p>Updated “3.4.12. Definition of used computational resource”.</p></li>
+<li><p>Added “4.4.6. E-mail distribution of Fugaku operation information”.</p></li>
+<li><p>Updated “5.12.5.3. Performance information output”.</p></li>
+<li><p>Updated the explanation of “-H” option in “5.12.6. Job status display command options”.</p></li>
+<li><p>Updated the explanation of “-g” option in “5.19. Job list display command affected by the failure”.</p></li>
+<li><p>Updated “7.1. Overview”.</p></li>
+<li><p>Added an attention “8.2. Cache Area of Second-Layer Storage”.</p></li>
+<li><p>Updated the explanation of “--no-check-directory” option in “8.7.1. Environment Variables and pjsub Options”.</p></li>
+</ul>
+<p><strong>Version 1.13 January 14, 2022</strong></p>
+<ul class="simple">
+<li><p>Updated the attention in “3.4.5. Disk”.</p></li>
+<li><p>Added “Method of specifying the job name” in “5.3.1 .Job submission”.</p></li>
+</ul>
+<p><strong>Version 1.12 December 16, 2021</strong></p>
+<ul class="simple">
+<li><p>Updated “3.4.5. Disk”.</p></li>
+<li><p>Added an attention “8.2.2.2. Stripe setting to second-layer storage”.</p></li>
+<li><p>Updated “8.5. Important Notices”.</p></li>
+<li><p>Deleted “8.6.2. Optimizes I/O from multiple processes to the same file”.</p></li>
+<li><p>Added “8.7. Selecting a usage file system (volume)”.</p></li>
+</ul>
+<p><strong>Version 1.11 December 7, 2021</strong></p>
+<ul class="simple">
+<li><p>Updated the “[utility.sh]” example in “5.7.3. Worker process creation request to Agent prosess”.</p></li>
+<li><p>Updated the “[Master program master_pjaexe.sh]” and “[utility.sh]” example in “5.7.4. Worker process generation by pjaexe command”.</p></li>
+<li><p>Added an attention of about pjaexe to “5.7.5. Notes on job creation”.</p></li>
+<li><p>Added a cases where master worker jobs end to “5.7.6.1. Impact to job work”.</p></li>
+<li><p>Added “5.8.1. Tools to reduce search load on dynamic libraries(sort_libp)”.</p></li>
+<li><p>Fixed incorrect sample program for “6.10.4. Function use example”.</p></li>
+<li><p>Added a note about message of “file transfer error information” to “8.2.3. Asynchronous close / synchronous close”.</p></li>
+<li><p>Added “8.5.1. Notes on High Parallel Jobs (1000 or more parallel)”</p></li>
+<li><p>Added “8.6. I/O optimization”.</p></li>
+</ul>
+<p><strong>Version 1.10 September 28, 2021</strong></p>
+<ul class="simple">
+<li><p>Updated “3.4.7.1. Client cache of the compute node and IO peformance”.</p></li>
+<li><p>Improved the description of “8.2.4.3. Tool(dir_transfer) to transfer directories using llio_transfer command”.</p></li>
+<li><p>Updated “8.5. Important Notices”.</p></li>
+</ul>
+<p><strong>Version 1.09.1 September 9, 2021</strong></p>
+<ul class="simple">
+<li><p>Fixed incorrect description of retention_state on the IO node in “7. Power control function”.</p></li>
+</ul>
+<p><strong>Version 1.09 September 9, 2021</strong></p>
+<ul class="simple">
+<li><p>Added the description of the 2ndfs area to “3.4.5. Disk”</p></li>
+<li><p>Added the description of the 2ndfs area to “3.4.7. File system”</p></li>
+<li><p>Added an attention to “5.1.3. Create job script” about characters that can be used in job script filenames.</p></li>
+<li><p>Updated “5.2.2. Refer to job execution result”</p></li>
+<li><p>Added description of available characters for job name in “5.9.1. Basic option”</p></li>
+<li><p>Added “5.20.1. How to use pjrsh command” to “5.20. Note”.</p></li>
+<li><p>Updated “6.4.1. How to specify standard output / standard error output / standard input”</p></li>
+<li><p>Modified the description of retention_state in “7. Power control function” to fit the operation.</p></li>
+<li><p>Updated “8.1.1. IO time reduction and area selection”</p></li>
+<li><p>Updated Changed from “8.1.2. Reduction of access time to execution modules” to “8.1.2. Simultaneous access to common files from all processes”</p></li>
+<li><p>Updated “8.2. Cache Area of Second-Layer Storage”</p></li>
+<li><p>Updated “Attention” of “8.2.1. The Cache Area of Second-Layer Storage size”</p></li>
+<li><p>Updated “8.2.2.1. Stripe setting to second-layer storage cashe”</p></li>
+<li><p>Updated command execution example of “8.2.3. Asynchronous close / synchronous close”</p></li>
+<li><p>Updated “llio_transfer Command usage examples” of “8.2.4. Common file distribution function (llio_transfer)”</p></li>
+<li><p>Updated “8.2.5. Option when Job submitting (pjsub --llio)”</p></li>
+<li><p>Updated “8.3. Node Temporary Area”</p></li>
+<li><p>Updated “8.3.3. Job submitting option (pjsub --llio)”</p></li>
+<li><p>Updated “8.3.5.2. Unzip of archive files”</p></li>
+<li><p>Updated “8.4. Shared temporary area”</p></li>
+<li><p>Updated “8.4.1. Stripe setting for shared temporary area”</p></li>
+<li><p>Updated “Attention” of “8.4.2. Shared temporary area size”</p></li>
+<li><p>Updated “8.4.4. Job submitting option (pjsub --llio)”</p></li>
+<li><p>Updated “8.5. Important Notices”</p></li>
+</ul>
+<p><strong>Version 1.08 July 21, 2021</strong></p>
+<ul class="simple">
+<li><p>Added “5.18. Obtaining TofuD TNR statistics”.</p></li>
+<li><p>Removed “--llio perf” from “llio_transfer Command usage examples” in “8.2.4. Common file distribution function (llio_transfer)”.</p></li>
+<li><p>Added “8.2.4.2. Tips for common file distribution”.</p></li>
+<li><p>Added a note about “--llio perf” to “8.5. Important Notices”.</p></li>
+</ul>
+<p><strong>Version 1.07 June 25, 2021</strong></p>
+<ul class="simple">
+<li><p>Added a note of mpiexec  for “6.2. Execution command format”.</p></li>
+<li><p>Updated the notes on “8.2.3. Asynchronous close / synchronous close”.</p></li>
+<li><p>Added link to “8.2.3. Asynchronous close / synchronous close” in the “8.5. Important Notices”.</p></li>
+</ul>
+<p><strong>Version 1.06 June 21, 2021</strong></p>
+<ul class="simple">
+<li><p>Added description about failures where resource is refundable in “5.18. Job list display command affected by the failure”.</p></li>
+<li><p>Added “7.3.6. Note”.</p></li>
+<li><p>Added “8.2.4.1. Effects of the common file”.</p></li>
+<li><p>Added “8.5.1. MPI-IO”.</p></li>
+</ul>
+<p><strong>Version 1.05 June 11, 2021</strong></p>
+<ul class="simple">
+<li><p>Updated “3.4.12. Definition of used computational resource”.</p></li>
+<li><p>Added “5.9.6. Environment variables in MPI processes”.</p></li>
+</ul>
+<p><strong>Version 1.04 June 3, 2021</strong></p>
+<ul class="simple">
+<li><p>Deleted “3.4.2. Limit value and resource group”.</p></li>
+<li><p>Added description of node allocation method to “3.4.1. Compute node”.</p></li>
+<li><p>Updated “3.4.12. Definition of used computational resource”.</p></li>
+<li><p>Added a note to “5.5.2. Command format” that the recommended wait-time is 60 seconds or longer.</p></li>
+<li><p>Added “5.7. Master-worker type job”.</p></li>
+<li><p>Removed resource group description from “5.8.2. Resource specification” and made it a link to another page.</p></li>
+</ul>
+<p><strong>Version 1.03 May 31, 2021</strong></p>
+<ul class="simple">
+<li><p>Updated “Attention” of “3.4.6. Disk”.</p></li>
+<li><p>Updated “3.4.8.1. Client cache of the compute node and IO peformance”.</p></li>
+<li><p>Fixed the default elapsedtime for interactive job in “5.5.2. Command format” to match current settings.</p></li>
+<li><p>A fifth point was added to “8.2.3. Asynchronous close / synchronous close”.</p></li>
+<li><p>Added “8.3.5. Usage example of node temporary area”.</p></li>
+</ul>
+<p><strong>Version 1.02 May 17, 2021</strong></p>
+<ul class="simple">
+<li><p>Updated the explanation about elapsed time of job in “3.4.13. Definition of used computational resource”.</p></li>
+<li><p>Updated the explanation of “-g” option in “5.17. Job list display command affected by the failure”.</p></li>
+<li><p>Added “8.1.1. IO time reduction and area selection”.</p></li>
+<li><p>Added “8.1.2. Reduction of access time to execution modules”.</p></li>
+<li><p>Updated “8.3.2. How to use”.</p></li>
+</ul>
+<p><strong>Version 1.01 April 1, 2021</strong></p>
+<ul class="simple">
+<li><p>The host name described in “4.4.3.3. How to directly specify a login node” was changed according to the configuration change of the login node.</p></li>
+<li><p>Added the explanation according to the operation to “5.8.2. Resource specification”.</p></li>
+<li><p>Added to “7. Power control function” that the setting value of the power knob (freq) of the IO node (CN/BIO, CN/SIO, CN/GIO) is different from the compute node (CN).</p></li>
+<li><p>Added to “8.2.4. Common file distribution function (llio_transfer)” that only read-only files can be treated as common files.</p></li>
+<li><p>Updated of “8.5 Important Notices” to match the current operation.</p></li>
+</ul>
+<p><strong>Version 1.00 March 9, 2021</strong></p>
+<ul class="simple">
+<li><p>Updated step 1 of “4.2.3. Installing the certificate to Chrome (Windows)”.</p></li>
+<li><p>Updated of “4.4.2. Public key registration”.</p></li>
+<li><p>Changed the host name of login node of “4.4.3. Accessing direction” and “4.4.4. File transfer method”.</p></li>
+<li><p>Changed name of resource groups that described to example of script in “5. Job execution” .</p></li>
+<li><p>Updated attention of “8.2.4. Common file distribution function (llio_transfer)”.</p></li>
+</ul>
+<p><strong>Version 0.16 February 22, 2021</strong></p>
+<ul class="simple">
+<li><p>The host name described in “4.4.3.3. How to directly specify a login node” was changed according to the configuration change of the login node.</p></li>
+</ul>
+<p><strong>Version 0.15 February 18, 2021</strong></p>
+<ul class="simple">
+<li><p>Added “Programming Guide” to “2.2. Manual”.</p></li>
+<li><p>Fixed “3.2. Use scale/Use environment” to match the current operation.</p></li>
+<li><p>Fixed “3.4. Resource” to match the current operation.</p></li>
+<li><p>Added to “5.15.3. GATE CHECK ERROR REASON list” that there is an unused REASON.</p></li>
+</ul>
+<p><strong>Version 0.14 February 1, 2021</strong></p>
+<ul class="simple">
+<li><p>Changed the default value of elapse in “5.1.3. Create job script” and added a note about the lower limit value of elapse.</p></li>
+<li><p>The operation description when --mail-list was not specified in “5.8.1. Basic option” was incorrect, and the incorrect description was deleted.</p></li>
+<li><p>The output of maximum and minimum values was deleted from “5.11.5.1. Electric power information” due to the operation changes.</p></li>
+<li><p>Added to “8.5. Important Notices” that the same file can not be used from more than 1,152 nodes.</p></li>
+</ul>
+<p><strong>Version 0.13 January 12, 2021</strong></p>
+<ul class="simple">
+<li><p>Added idcheck command to “3.4.11. I/O node”.</p></li>
+<li><p>Added “5.17. Job list display command affected by the failure”.</p></li>
+</ul>
+<p><strong>Version 0.12 December 15, 2020</strong></p>
+<ul class="simple">
+<li><p>Added description about resource default values to “5.1.3. Create job script”.</p></li>
+<li><p>Deleted the description that resource group specification is required from “3.4.2. Limit value and resource group” and “5.8.2 Resource specification” because resource group specification is optional.</p></li>
+<li><p>The description of rscunit was deleted from the job script example, because it was no longer necessary to specify the resource unit.</p></li>
+</ul>
+<p><strong>Version 0.11 November 30, 2020</strong></p>
+<ul class="simple">
+<li><p>Added the attention that “Setting a resource group name is necessary to submit a job” in “3.4.2. Limit value and resource group” and “5.8.2. Resource specification”.</p></li>
+<li><p>Added “8. Layered storage and LLIO”.</p></li>
+</ul>
+<p><strong>Version 0.10 November 2, 2020</strong></p>
+<ul class="simple">
+<li><p>Added tmpfs area to “3.4.6. Disk”.</p></li>
+<li><p>Added a note when setting stripes on the compute node in “3.4.7. File creation and stripe setting”.</p></li>
+<li><p>Added “3.4.8.1. Record Length and Read Performance”.</p></li>
+<li><p>Deleted an incorrect description that “Make sure to specify over 12 nodes” in “5.4.2. Bulk job script”.</p></li>
+</ul>
+<p><strong>Version 0.9 September 25, 2020</strong></p>
+<ul class="simple">
+<li><p>Updated the resource group information of “3.4.2. Limit value and resource group”.</p></li>
+</ul>
+<p><strong>Version 0.8 September 7, 2020</strong></p>
+<ul class="simple">
+<li><p>Updated the resource group information of “3.4.2. Limit value and resource group”.</p></li>
+<li><p>Added the description about deference of the two setfacl command examples described in “3.4.6.2. File sharing examples of using ACL”.</p></li>
+<li><p>Added “3.4.13. Definition of used computational resource”.</p></li>
+<li><p>Added the description to delete unnecessary hold jobs by yourself in “5.11.1.4. Job status items”.</p></li>
+</ul>
+<p><strong>Version 0.7 August 6, 2020</strong></p>
+<ul class="simple">
+<li><p>Updated resource group information in “3.4.2. Limit value and resource group”</p></li>
+<li><p>Added a description of the environment variable PLE_MPI_STD_EMPTYFILE and a note if the number of files has increased in “5.2.2. Refer to job execution result”</p></li>
+<li><p>Added a description to “5.11.1.4. Job status items” that users should delete the error job by themselves</p></li>
+<li><p>Added description of the environment variable PLE_MPI_STD_EMPTYFILE to “6.4.3. About standard output / standard error output when executing largescale jobs”</p></li>
+</ul>
+<p><strong>Version 0.6 July 22, 2020</strong></p>
+<ul class="simple">
+<li><p>Fixed a description error in the pjsub command options described in “5.5.1. Job submission”.</p></li>
+</ul>
+<p><strong>Version 0.5 July 14, 2020</strong></p>
+<ul class="simple">
+<li><p>Added description of share directory for data sharing between groups to “3.4.6. Disk”</p></li>
+<li><p>Added the dercription of file name to  “5.2. 2. Refer to job execution result”, because a file for standard output/standard error output is created for each mpiexec command.</p></li>
+</ul>
+<p><strong>Version 0.4 July 1, 2020</strong></p>
+<ul class="simple">
+<li><p>Updated resource group information in “3.4.2. Limit value and resource group”</p></li>
+<li><p>Deleted the note of “3.4.2. Limit value and resource group” because the upper limit of the number of MPI processes has been released.</p></li>
+<li><p>Added “3.4.11. I/O node”. Introduced a compute node that also serves as an I/O node and described how to identify it based on NODE ID.</p></li>
+<li><p>Added “3.4.12. Estimating the amount of memory available to user programs”. The quotation formula is described.</p></li>
+<li><p>Changed the note about browser in “4.3. Accessing steps to the Fugaku website”.</p></li>
+</ul>
+<p><strong>Version 0.3 June 9, 2020</strong></p>
+<ul class="simple">
+<li><p>Updated resource group information in “3.4.2. Limit value and resource group”</p></li>
+<li><p>Corrected the interval for obtaining power information in “5.11.5.1. Electric power information”.</p></li>
+<li><p>Added an example of outputting by changing the directory for each 1000 ranks in “6.4.3. About standard output / standard error output when executing large-scale jobs”.</p></li>
+</ul>
+<p><strong>Version 0.2 May 15, 2020</strong></p>
+<ul class="simple">
+<li><p>Updated resource group information in “3.4.2. Limit value and resource group”</p></li>
+<li><p>The recommended number of stripes in “3.4.7. File creation and stripe setting” was not appropriate, so removed the discription and will guide it in future.</p></li>
+<li><p>Added description that there is no logout function in “4.3. Accessing steps to the Fugaku website”.</p></li>
+<li><p>Added description of the FQDN for each login node in “4.4.3.3. How to directly specify a login node”.</p></li>
+<li><p>Added “4.4.3.4. Arm login node”.</p></li>
+<li><p>Added information about the interval for obtaining power information in “5.11.5.1. Electric power information” and “7.3.4. Electric power measurement point”</p></li>
+<li><p>Added hybrid parallel example in “5.16. Sample Scripts”</p></li>
+<li><p>Changed the contents in “7.3.3. Use direction Power API from within the program” to the compile method of sample program.</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line">© 2020 - 2025 RIKEN Center for Computational Science</div>
+<div class="line">Unauthorized reproduction or duplication of the contents described in this manual is prohibited.</div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1. Introduction</a><ul>
+<li><a class="reference internal" href="#the-purpose-of-this-document">1.1. The purpose of this document.</a></li>
+<li><a class="reference internal" href="#notation-used-in-this-document">1.2. Notation used in this document</a></li>
+<li><a class="reference internal" href="#abbreviations-and-aliases">1.3. Abbreviations and aliases</a></li>
+<li><a class="reference internal" href="#about-trademarks">1.4. About trademarks</a></li>
+<li><a class="reference internal" href="#change-log">1.5. Change log</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../index.html"
+                          title="previous chapter">Supercomputer Fugaku User Guide - Use and job execution - Version 1.52</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../MethodOfUse/index.html"
+                          title="next chapter"><span class="section-number">2. </span>Use direction</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../MethodOfUse/index.html" title="2. Use direction"
+             >next</a></li>
+        <li class="right" >
+          <a href="../index.html" title="Supercomputer Fugaku User Guide - Use and job execution - Version 1.52"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>Introduction</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

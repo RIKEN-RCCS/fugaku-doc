@@ -1,0 +1,13 @@
+Overview
+========
+
+For \ |post-k|\  , we are preparing the following for value computing library.
+
+- SSL II
+- C-SSL II
+- BLAS
+- LAPACK
+- ScaLAPACK
+- High-speed quadruple precision basic arithmetic library
+
+

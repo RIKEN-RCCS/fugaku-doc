@@ -1,0 +1,197 @@
+.. This document is created by Akiyoshi KURODA, RIKEN R-CCS on 2021/10/15 as Ver. 0.1.0.
+
+.. _labelname: tensorflow
+
+TensorFlow on the Fugaku
+==============================================================================
+
+License
+------------------------------------------------------------------------------
+
+The patches and procedures are scheduled to be provided (Upstream) to the OSS, PyTorch will comply with the Apache License2.0 license. 
+
+
+References
+------------------------------------------------------------------------------
+
+- Github https://github.com/fujitsu/tensorflow
+- TensorFlow-2.11.0 Documents  https://github.com/fujitsu/tensorflow/wiki/TensorFlow-oneDNN-build-manual-for-FUJITSU-Software-Compiler-Package-(TensorFlow-v2.11.0)
+- TensorFlow-2.7.0  Documents  https://github.com/fujitsu/tensorflow/wiki/TensorFlow-oneDNN-build-manual-for-FUJITSU-Software-Compiler-Package-(TensorFlow-v2.7.0)
+- TensorFlow-2.2.0  Documents  https://github.com/fujitsu/tensorflow/wiki/TensorFlow-oneDNN-build-manual-for-FUJITSU-Software-Compiler-Package-(TensorFlow-v2.2.0)
+
+
+Installed version (Cf. checkout.sh, site-packages and so on.)
+------------------------------------------------------------------------------
+
+- TensorFlow ver.2.11.0
+
+  - Horovod ver.0.26.1
+
+  - oneDNN ver.2.7.0
+
+  - tensorboard ver.2.11.2
+
+  - bazel ver.5.3.0
+
+- Python ver.3.9.x more over
+
+  - numpy ver.1.22.x more over
+
+  - scipy ver.1.7.x more over
+
+  - h5py ver.3.8.0
+
+- batchedBLAS ber.1.0
+
+
+Files
+------------------------------------------------------------------------------
+
+The latest version should be built in the user environment according to the above GitHub procedure.
+On the 2nd storage, we have published the version of TensorFlow-2.2.0 or earlier.
+Sample problems are not compatible. In the following description, please refer to how to execute and how to acquire performance.
+
+.. code-block:: none
+
+  /home/apps/oss/TensorFlow-2.2.0
+    bin: binaries
+    lib,lib64: libraries
+      lib/python3.8/site-packages: TensorFlow and Python modules
+    include: include files
+    build: scripts, patches and so on.
+    example: examples of ResNet-50, OpenNMT, Bert and OpenNMT
+    docs: documents
+    old: old versions
+
+
+Build
+------------------------------------------------------------------------------
+
+If you build by yourself, please refer the directory :file:`build`. The procedure is described in the above reference. Please use it after adjusting the paths :file:`$PATH` and so on, require a timely correction. It takes about 3 hours to build and half day to execute examples. 
+The latest version is installed on the Fugaku sequentially.
+However, due to the structural change in the TensorFlow, tuning patches for the Fugaku may not work.
+For detailed restrictions on each version, please refer to the abobe wiki.
+
+.. code-block:: none
+
+  $ git clone https://github.com/fujitsu/tensorflow.git
+  $ cd tensorflow                      # From now on, we'll call this directory TENSORFLOW_TOP
+  $ git checkout -b r2.11_for_a64fx origin/r2.11_for_a64fx
+  $ cd fcc_build_script
+  $ bash 01_python_build.sh 
+  $         ...
+
+
+The versions on the 2nd strage are built without VENV published on the GitHub. As we adjusted so as not to embed absolute paths as much as possible, it is possible to copy and staging for :file:`$HOME`.
+
+
+Execution
+------------------------------------------------------------------------------
+
+This environment can be performed anywhere by setting :file:`$PATH` . Because Python module has a large number of files, MDS access high loads will take the :program:`importlib` time due to MDS access high load. You can use staging by coping common binaries by using :command:`llio_transfer` refering `8.2.4.2. Tips for common file distribution <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/LyeredStorageAndLLIO/TheSecondLayerStrage.html#tips-for-common-file-distribution>`_ of the `Users Guide <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/>`_ .
+You can also uce staging by deploying all files with :command:`tar` and expanding using :command:`llio_transfer`.
+
+You can see some examples of the Resnet-50 dry benchmark under the :file:`example` directory. In addition, examples such as OpenNMT, BERT of natural language processing and MASK R-CNN of object detection are also included, and performance tuned library can be read. 
+
+The procedure is described in the above reference. Please use it after adjusting the paths. 
+
+
+Limitations
+------------------------------------------------------------------------------
+
+Due to not be able to use the patches for the Fugaku because of the change of specifications of TensorFlow, it was difficult to maintain performance due to the update of the version.
+
+- build problems
+
+  #. \ :command:`Bazel`\  is not automatically seek the dependency. If you create a \ :command:`Bazel`\  configuration file yourself, you may need to reconstruct the configuration files by trial and error (about 100 times).
+
+The way of holding the data has been changed, and many sample problems may deteriorates to about 1/8 on the TensorFlw-2.11.0. This problems can be seen on the Intel CPU as well.
+
+- attentions for execution
+
+  #. The API change for each version is large in the TensorFlow, so the samples can not be executed as it is. It is necessary to rewrite the training codes etc. along with the version you use.
+  #. HW counter information such as fipp, fapp and PA disaled. => It takes time to support. 
+  #. If \ :command:`ulimit -h 8092`\  is not set, the number of samples that will become SEGV has increased.
+
+
+- performance problems
+
+  #. The Fujitsu compiler will be dumped the core with a new specification of \ :command:`C++17`\  "Structured and Binding". We needed to modify three codes.
+
+
+Notes
+------------------------------------------------------------------------------
+
+In order to speed up, ``DNNL_AARCH64 (oneDNN-2.1.0L1)`` developed by Fujitsu Laboratory is incorporated into the framework.
+The calculations of image recognition, natural language processing analysis, object detection, and so on are fast by this library.
+Depending on the network used, it may not work correct or fast, so please change to some other functions.
+
+Please contact your support desk (R-CCS support desk or HPCI support desk) for questions for performances and requirements of the versions and python modules, and so on, providing your network scripts. Please note that there are several months to support. 
+
+
+Future plan
+------------------------------------------------------------------------------
+
+#. support of the Mask R-CNN example (April 2021 Done)
+#. cancel of the OpenNMT restriction (April 2021 Done)
+#. addition the optional python module: TensoFlow_CC.so, OpenCV, Keras-2 (April 2021 Done)
+#. addition the optional python module: mpi4py (April 2021 Done)
+#. addition the optional python module: netcdf (April 2021 Done)
+#. support of old versions (about the second half of 2021)
+#. support HW counter of fipp, fapp and PA (about the second half of 2021)
+#. build on the Spack environment (about the second half of 2021)
+#. provide the Singularity container (about the second half of 2021)
+#. follow-up the versions of the Fujitsu language environments (as needed)
+#. follow-up the versions of the TensorFlow and oneDNN (as needed)
+#. support of the other python modules (as needed) 
+#. support on the FX700 system (about the second half of 2021)
+
+
+履歴
+------------------------------------------------------------------------------
+
+- September 08, 2020 (Tue) release of TensorFlow-2.1.0
+
+  - support of the ImagNet examples, build under the tcsds-1.2.26
+
+- February 13, 2021 (Sat) release of TensorFlow-2.2.0
+
+  - build under the tcsds-1.2.29
+
+  - support of the OpenNMT, Bert examples
+  
+  - add the python modules of the mpi4py, pandas
+
+- February 21, 2021 (Sun) build under the tcsds-1.3.30a
+
+- May 20, 2020 (Thu) support of Mask R-CNN examples using oneDNN-2.1.0L1
+
+  - build under the tcsds-1.3.31
+
+  - modify the NaN problem of OpenNMT example
+
+- October 15, 2021 (Fri) release these documents (Ver.1.0)
+
+- December 07, 2021 (Tue) update these documents (Ver.1.1) addition the usage of llio
+
+- December 23, 2021 (Wed) build under the tcsds-1.2.34
+
+  - 01_resnet: spack sample, llio sample are not compatible
+
+  - 04_Mask-R-CNN: OpenCV are not compatible
+
+- December 26, 2021 (Sun) modify of libTensorFlow_cc, 04_Mask-R-CNN
+
+  - follow up for other than vol0004 users, sample test under the general user permissions
+
+  - 01_resnet: spack sample, llio sample are not supported
+
+- January 03, 2022 (Mon) 01_resnet: spack sample, llio sample are supported
+
+- January 04, 2022 (Tue) 01_resnet: tf.profiler, cProfile sample are supported
+
+- February 28, 2022 (Mon) update Japanese documents (Ver.1.2) addition the tutorial in Japanese
+
+- July 13, 2023 (Thu) update English documents (Ver.1.3) addition the document for new version (TesorFlow-2.11.0 etc)
+
+

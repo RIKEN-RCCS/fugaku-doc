@@ -1,0 +1,159 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8. Layered storage &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="8.1. Overview" href="OverView.html" />
+    <link rel="prev" title="7. Power control function" href="../PowerControlFunction/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="OverView.html" title="8.1. Overview"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../PowerControlFunction/index.html" title="7. Power control function"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8. </span>Layered storage</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="layered-storage">
+<h1><span class="section-number">8. </span>Layered storage<a class="headerlink" href="#layered-storage" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="OverView.html">8.1. Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="OverView.html#io-time-reduction-and-area-selection">8.1.1. IO time reduction and area selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="OverView.html#simultaneous-access-to-common-files-from-all-processes">8.1.2. Simultaneous access to common files from all processes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WriteForFilesystem.html">8.2. About File Operations to FEFS/LLIO</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="WriteForFilesystem.html#when-writing-from-one-process-to-one-file">8.2.1. When writing from one process to one file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WriteForFilesystem.html#when-multiple-processes-write-to-a-file">8.2.2. When multiple processes write to a file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WriteForFilesystem.html#rename-file">8.2.3. Rename File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WriteForFilesystem.html#unlink-file">8.2.4. Unlink File</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="TheSecondLayerStrage.html">8.3. Cache Area of Second-Layer Storage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="TheSecondLayerStrage.html#the-cache-area-of-second-layer-storage-size">8.3.1. The Cache Area of Second-Layer Storage size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TheSecondLayerStrage.html#writing-timing-to-second-layer-storage">8.3.2. Writing timing to second-layer storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TheSecondLayerStrage.html#stripe">8.3.3. Stripe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TheSecondLayerStrage.html#asynchronous-close-synchronous-close">8.3.4. Asynchronous close / synchronous close</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TheSecondLayerStrage.html#common-file-distribution-function-llio-transfer">8.3.5. Common file distribution function (llio_transfer)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TheSecondLayerStrage.html#option-when-job-submitting-pjsub-llio">8.3.6. Option when Job submitting (pjsub --llio)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="TemporaryAreaInNode.html">8.4. Node Temporary Area</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="TemporaryAreaInNode.html#node-temporary-area-size">8.4.1. Node temporary area size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TemporaryAreaInNode.html#how-to-use">8.4.2. How to use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TemporaryAreaInNode.html#job-submitting-option-pjsub-llio">8.4.3. Job submitting option (pjsub --llio)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TemporaryAreaInNode.html#option-related-to-cashe-in-compute-node">8.4.4. Option related to cashe in compute node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TemporaryAreaInNode.html#usage-example-of-node-temporary-area">8.4.5. Usage example of node temporary area</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SharedTemporaryArea.html">8.5. Shared temporary area</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SharedTemporaryArea.html#stripe-setting-for-shared-temporary-area">8.5.1. Stripe setting for shared temporary area</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SharedTemporaryArea.html#shared-temporary-area-size">8.5.2. Shared temporary area size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SharedTemporaryArea.html#how-to-use">8.5.3. How to use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SharedTemporaryArea.html#job-submitting-option-pjsub-llio">8.5.4. Job submitting option (pjsub –llio)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="LLIOconsiderpoints.html">8.6. Important Notices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="LLIOconsiderpoints.html#notes-on-high-parallel-jobs-1000-or-more-parallel">8.6.1. Notes on High Parallel Jobs (1000 or more parallel)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LLIOconsiderpoints.html#mpi-io">8.6.2. MPI-IO</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="IOprofiling.html">8.7. I/O profiling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="IOprofiling.html#llio-performance-information">8.7.1. LLIO performance information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="IOprofiling.html#darshan">8.7.2. Darshan</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="IOoptimization.html">8.8. I/O optimization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="IOoptimization.html#analysis-of-bottlenecks-using-llio-performance-information">8.8.1. Analysis of bottlenecks using LLIO performance information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="IOoptimization.html#analysis-for-darshan">8.8.2. Analysis for Darshan</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SelectAvailableVolumes.html">8.9. Selecting a usage file system (volume)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SelectAvailableVolumes.html#environment-variables-and-pjsub-options">8.9.1. Environment Variables and pjsub Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SelectAvailableVolumes.html#job-submission-method">8.9.2. Job submission method</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../PowerControlFunction/index.html"
+                          title="previous chapter"><span class="section-number">7. </span>Power control function</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="OverView.html"
+                          title="next chapter"><span class="section-number">8.1. </span>Overview</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="OverView.html" title="8.1. Overview"
+             >next</a></li>
+        <li class="right" >
+          <a href="../PowerControlFunction/index.html" title="7. Power control function"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8. </span>Layered storage</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

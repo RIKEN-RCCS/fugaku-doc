@@ -1,0 +1,113 @@
+.. This document is created by Akiyoshi KURODA, RIKEN R-CCS on 2021/10/15 as Ver. 0.1.0.
+
+.. _labelname: chainer
+
+Chainer for K 富岳環境
+==============================================================================
+
+LICENSE条項
+------------------------------------------------------------------------------
+
+提供したパッチおよび手順はOSSに提供(Upstream化)予定であり、Upstream化された際はChainer分はMITライセンスに準拠します。
+
+バージョン (checkout.sh参照のこと)
+------------------------------------------------------------------------------
+
+- Chainer ver.4.5.0
+
+  - ChainerMN ver.1.3.1
+
+  - ChainerK ver.1.1.0
+
+- Python ver.3.8.2
+
+  - mpi4py ver.3.0.3
+
+
+構成
+------------------------------------------------------------------------------
+
+.. code-block:: none
+
+  /vol0001/apps/oss/ChainerK-4.5.0/
+    bin: 実行バイナリ
+    lib: ライブラリ
+      lib/python3.8/site-packages: ChainerなどPython module一式
+    include: インクルードファイル
+    build: 構築に必要なscript, patch類
+    example: MNIST, ResNet-50実行例
+
+
+構築方法 
+------------------------------------------------------------------------------
+
+\ :file:`build`\ 以下をご参照下さいませ。\ :file:`$PATH`\ などは適時修正が必要です。構築に1時間程度かかります。
+
+.. code-block:: none
+
+  ./checkout.sh
+  pjsub go.sh
+
+
+配置したものは、コンパイルオプションを調整しておりますが、Python本体の構築がタイムアウトします。一度\ ``-O3``\ で構築して、タイムアウトする箇所をコメントアウトして、上書きすることで同じ環境を構築できます。
+
+
+実行方法
+------------------------------------------------------------------------------
+
+本環境一式は、\ :file:`$PATH`\ を通すことでどこに配置しても実行できます。Python moduleはfile数が多いため、多並列では、MDSアクセス高負荷のため\ :program:`importlib`\ の時間がかかることが想定されます。\ `利用手引き書 <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/use_latest/>`_\ の，\ `8.2.4.2. 共通ファイル配布のヒント <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/use_latest/LyeredStorageAndLLIO/TheSecondLayerStrage.html#id9>`_\ を参考に，必要な共通ファイルを\ :command:`llio_transfer`\ で転送するか，\ :command:`tar`\ などで固めて\ :command:`llio_transfer`\ で転送し展開することでステージングによる利用が可能です。
+
+\ :file:`example`\ の下にMNIST,イメージ読み込み有り無しのResNet-50の実行例が、ございます。ご参照下さいませ。
+
+.. code-block:: none
+
+  pjsub go.sh
+
+
+で実行できます。$PREFIXを指定した時の実行に必要な、環境変数は以下の通りです。
+
+.. code-block:: none
+
+  TCSDS=1.2.27b                         : 言語環境の指定
+  export PREFIX=${PWD}/../..            : 本環境をインストールしてあるパスの設定
+  
+  # System Enironment
+  module switch lang/tcsds-${TCSDS}    : 最新shared object読み込みに必要
+  export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH}
+  export PATH=${PREFIX}/bin:${PATH}     : python3のパス
+
+
+実行結果を\ :file:`log`\ の中に入れています。2.2GHzのインタラクティブモードで実行した結果です。ただし、多ノードでは実行できなかったため、前バージョンの結果を置いています。
+
+
+注意
+------------------------------------------------------------------------------
+
+高速化のためにR-CCSで作製したカーネルライブラリを使用しています。現段階で画像認識などで使用される基本的な処理の高速化しかサポートしておりません。このため、使用するネットワークによっては、高速で動作しない可能性もございます。
+
+高速化の要望は、使用するネットワークスクリプトをご呈示の上、利用者アカウントのサポートデスクへ御願い致します。対応に数ヶ月を要することもございますのでご了承下さいませ。
+
+
+履歴
+------------------------------------------------------------------------------
+
+- 2020/09/12(土) tcsds-1.2.26bで構築公開
+
+- 2020/09/20(日) tcsds-1.2.26bで構築更新
+
+  - maxpooing3dにて、-∞発生時の例外処理を追加
+
+  - ChainerKライブラリのimg2colのOpenMP無効化
+
+- 2020/10/27(月) tcsds-1.2.27bで構築更新
+
+  - largepageでの実行例の追加
+
+  - fapp、fapp、PA取得時の例を追加
+
+  - 実行スクリプトの調整
+
+- 2021/10/15(金) ドキュメント公開(Ver.1.0)
+
+- 2021/12/07(火) ドキュメントアップデート(Ver.1.1) LLIO使用を推奨
+

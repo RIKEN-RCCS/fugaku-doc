@@ -1,0 +1,94 @@
+Login history search
+====================
+
+| 　**[Name]**
+| 　loginhistory - Display the login history
+
+| 　**[Style]**
+| 　loginhistory  [Option]
+| 　※-u, -n, -d, -c combined specification is AND search, and multiple specification within the same option is OR search.
+
+| 　**[Description]**
+| 　loginhistory command is used to check the login status to  \ |post-k|\  . This is used to check who accessed when and how often. When the display result reaches a plurality of lines, the connection start date and time are displayed in order from the newest.
+ 　
+| 　If not specifying option, display all stored history information.
+| 　Also, if the search result hits 0, only display the header part.
+
+| 　**[Option]**
+| 　-u  user name...
+| 　Specify user name. Multiple designations can be made following a space, but front / middle / backward matching designation using an asterisk is not possible. If a user name that does not exist in the directory service (OpenLDAP) is specified, only an exact match can be specified. An error is output for the target user and only normal data is displayed.
+| 　By specifying a specific account for the user name, the login status of the specified account can be confirmed. As a result, it can also be used to investigate whether or not the account has been used illegally.
+　
+| 　-n  number of lines
+| 　Specify the number of lines. When the number of lines is specified, the number of lines specified in the order of the connection start date and time is displayed. If no number of lines is specified, all items are displayed.
+ 　
+| 　-d  connection start date
+| 　Specify connection start date. if this is not specified, it will be displayed as all.
+| 　For specification format of connection start date,
+| 　　Period specification　　yyyymmdd:yyyymmdd
+| 　　After the specified date　yyyymmdd:
+| 　　Before the specified date　:yyyymmdd
+| 　　Specified date　　　yyyymmdd
+| 　exists.
+ 　
+| 　-c
+| 　Display on the standard output as CSV style. If you want to output to file, use redirect.
+
+| 　**[Return value]**
+| 　Normal: 0
+| 　Abnormal: 1
+
+| 　**[Note]**
+| 　None.
+
+| 　**[Use example]**
+| 　【Example 1】	Display first 5 login information of user name fjse0100.
+
+.. figure:: img/2_UserManagement_15.png
+
+| 　If logging in,  displays "still logged in" on END_DATETIME (CONNECT_TIME) header raw.
+
+| 　【Example 2】	Display user name fjse0100's login information as CSV style.
+
+.. code-block:: console
+
+   [login]$ loginhistory -u fjse0100 -c
+   USER,NODE,TERMINAL,START_DATE,START_TIME,END_DATE,END_TIME,CONNECT_TIME
+   “fjse0100”,”node01”,”term001”,”2010/01/22”,”13:35”,””,””,””
+     “fjse0100”,”node01”,”term001”,”2010/01/20”,”13:50”,”2010/01/21”,”16:35”,”1+02:45”
+   “fjse0100”,”node01”,”term001”,”2010/01/20”,”13:40”,””,””,””
+   [login]$
+
+| 　When displaying in CSV style, the date and time are divided, and items that do not have a value, such as logged in, are displayed as null characters (NULL).
+
+| 　【Example 3】	Output user name fjse0100's login information as CSV style.
+
+.. code-block:: console
+
+   [login]$ loginhistory -u fjse0100 -c > fjse0100.csv
+   [login]$
+
+| 　You can save to a file by specifying the -c option to display to standard output in CSV style and using the redirection function.
+
+| 　【Example 4】	Display all information
+
+.. code-block:: console
+
+   [login]$ loginhistory
+   USER      NODE     TERMINAL   START_DATETIME     END_DATETIME (CONNECT_TIME)
+   fjse0100  node01   term001    2022/01/22 13:35   still logged in
+   fjse0100  node01   term001    2022/01/21 10:25 - 2022/01/21 16:35 (06:10)
+   fjse0102  node02   term001    2022/01/20 14:25 - 2022/01/21 16:35 (1+02:10)
+   fjse0100  node01   term001    2022/01/20 13:50 - 2022/01/21 16:35 (1+02:45)
+   fjse0103  node03   term002    2022/01/20 13:50 - 2022/01/21 19:35 (1+05:45)
+   fjse0100  node01   term001    2022/01/20 13:40   still logged in
+   fjse0104  node01   term004    2022/01/18 13:40   still logged in
+   fjse0103  node03   term003    2022/01/18 13:00 - 2022/01/21 19:35 (3+06:35)
+   [login]$
+
+| 　By not specifying any option, all login information can be displayed.
+
+| 　Indicates an explanation of displaying item.
+
+.. figure:: img/2_UserManagement_16.png
+

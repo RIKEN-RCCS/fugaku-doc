@@ -1,0 +1,10 @@
+:orphan:
+
+fugaku
+======
+
+.. toctree::
+   :maxdepth: 3
+
+   fugaku
+   setup

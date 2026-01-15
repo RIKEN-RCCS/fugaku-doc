@@ -1,0 +1,284 @@
+--------------------------------------
+認可について
+--------------------------------------
+
+====================================== 
+OAuth 2.0認可コード
+======================================
+
+WebAPIの実行には、OAuth 2.0の認可コード付与のフローとOpenID Connectプロトコルに基づいたアクセストークンが必要です。
+
+なお、リクエストに用いるパラメータ（client_id, client_securet, redirect_uri）の作成・削除については :ref:`こちら<oidc_clients>` を参照してください。
+
+認可フローの概要は以下の通りです。
+
+
+.. figure:: ../images/auth_seq.png
+   :name: auth_seq
+
+   認可フロー概要
+
+認可処理に伴うステップは、以下の通りです。
+
+#. 認可を要求する
+
+   | ユーザを認証して、WebAPIで利用する認可コードを取得するために、認可エンドポイントURLにクエリパラメータを設定する。
+
+   .. code-block:: shell
+   
+      GET https://idp.fugaku.r-ccs.riken.jp/auth/realms/op/protocol/openid-connect/auth
+
+
+
+   クエリパラメータ
+
+   +--------------------+------------+------------------------------------------------------------------------------+
+   | 名前               | 種類       | 説明                                                                         |
+   +====================+============+==============================================================================+
+   |response_type       | String     |(必須)認可コードを取得する場合は、"code"固定。                                |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |scope               | String     |(必須)ユーザーに付与を依頼する権限を指定する。                                |
+   |                    |            |"openid"を必ず含めてください。                                                |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |client_id           | String     |(必須)クライアントID。                                                        |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |redirect_uri        | String     |(必須)コールバックURL。認証・認可の後にリダイレクトされるURL。                |
+   |                    |            |クライアントに登録されているリダイレクトURLと一致している必要があります。     |
+   +--------------------+------------+------------------------------------------------------------------------------+
+
+#. ユーザは、認可エンドポイントURLにアクセスする際にクライアント証明書の選択で、有効なクライアント証明書を選択する
+
+   .. figure:: ../images/selec_client_certificate.png
+      :name: selec_client_certificate 
+      :alt: クライアント証明書の選択ダイアログ
+      
+      クライアント証明書の選択ダイアログ
+
+#. 同意画面で、ログインユーザを確認し、 :guilabel:`Continue` ボタンを押下する
+
+   .. figure:: ../images/consent_page.png
+      :name: consent_page
+      :alt: 同意画面
+
+      同意画面
+
+
+#. アクセストークンを生成する。  
+
+   | 認可コードからをアクセストークンを生成するには、トークンエンドポイントURLにポストパラメータを設定する
+
+   .. code-block:: shell
+   
+      POST https://idp.fugaku.r-ccs.riken.jp/auth/realms/op/protocol/openid-connect/token 
+   
+
+   ポストパラメータ
+
+   +--------------------+------------+------------------------------------------------------------------------------+
+   | 名前               | 種類       | 説明                                                                         |
+   +====================+============+==============================================================================+
+   |grant_type          | String     |(必須)アクセストークンを取得する場合は、"authorization_code"固定。            |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |code                | String     |(必須)認可コード                            。                                |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |client_id           | String     |(必須)クライアントID。                                                        |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |client_secret       | String     |(必須)クライアントシークレット。                                              |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |redirect_uri        | String     |(必須)コールバックURL。認証・認可の後にリダイレクトされるURL。                |
+   |                    |            |クライアントに登録されているリダイレクトURLと一致している必要があります。     |
+   +--------------------+------------+------------------------------------------------------------------------------+
+
+
+   レスポンスパラメータ（JSON)
+   
+   +--------------------+------------+------------------------------------------------------------------------------+
+   | 名前               | 種類       | 説明                                                                         |
+   +====================+============+==============================================================================+
+   |access_token        | String     |アクセストークン。                                                            |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |expires_in          | Number     |アクセストークンの有効期限が切れるまでの秒数。                                |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |id_token            | String     |IDトークン。JSON Webトークン（JWT）であらわされる                             |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |refresh_expires_in  | Number     |リフレッシュトークンの有効期限が切れるまでの秒数。                            |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |refresh_token       | String     |リフレッシュトークン。                                                        |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |token_type          | String     |"bearer"(固定)。                                                              |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |not-before-policy   | Number     |not-beforeポリシー。                                                          |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |session_state       | String     |session state。                                                               |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |scope               | String     |ユーザーが付与する権限。                                                      |
+   +--------------------+------------+------------------------------------------------------------------------------+
+
+
+　　レスポンス例: 
+   .. code-block:: javascript
+
+      {
+         "access_token":"eyJhbGciOiJSUzI1NilSInR5cCIgOiAlSldUIiwia2lkIiA6ICJ0Ni1NNzUwelgyZFV3N3AzVVBaTTBCcVVIMkNMYWl6S2hwazAtVWVuR3I4In0.eyJqdGkiOiIwMjkxZmI5YS1kYTRhLTRlMWMtOWFmZC1lYjk3YWQyNzY2NzEiLCJleHAiOjE2MDAwMjY0NzQsIm5iZiI6MCwiaWF0IjoxNjAwMDI2MTc0LCJpc3MiOiJodHRwczovL2lkcC5mdWdha3Uuci1jY3MucmlrZW4uanAvYXV0aC9yZWFsbXMvb3AiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiZTdjNjJmOGUtOGEwYS00NjJiLTg3YTktZWZiMTRiNzAyZWRiIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoicG9ydGFsIiwiYXV0aF90aW1lIjoxNjAwMDI2MDUwLCJzZXNzaW9uX3N0YXRlIjoiY2U5NmFiNjMtOTQ0Ni00ZjNmLWJlNjQtNDQyOWIxMDc1N2ZkIiwiYWNyIjoiMSlSInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcylSInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudClSIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIG9mZmxpbmVfYWNjZXNzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiZmowMDM2IiwicHJlZmVycmVkX3VzZXJuYW1lIjoiZmowMDM2IiwiZ2l2ZW5fbmFtZSI6ImZqMDAzNiJ9.PqRt2Ndkb4CRrus1sGHKgMP7j3PZte7iYFBsK_iJIZ9wZipkWpG2DNYvUsS-uKYxLZxB_8WXyVznvI-AeI3t178RYAvSIPk6Pn0pKfibetkvtumlO04rb6zvfd9elpoYvQbSzONjgx-78C6oAoBak6LGmBnxR9XIcszYsyl8JJaGRv-USPEWVdJGz1JKvzb5p4mRgswhpCMhUlJlSsQXwPTU_6zszgMN4jRqf3Peq2M465llEJgTLYCjnSSDG2sV-ORoHuUhuvkaTjTroD6_rr5dubFreeUyq6rIQQR0sepk4rx--OLW7X5geYS3NNOXwG8_yCX2qx9IMgvqsHYcOA",
+         "expires_in":300,
+         "refresh_expires_in":0,
+         "refresh_token":"eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJkZWU4YjZllm0yMTM0LTRjZmYtYmMyNi01YjY5MzVkZDFjNGQifQ.eyJqdGkiOiJhMDYxMTdiNy0zYzlmLTQyNGUtYWM5ZC1lYjhiYzEyYlm5YTAiLCJleHAiOjAsIm5iZiI6MCwiaWF0IjoxNjAwMDI2MTc0LCJpc3lmOiJodHRwczovL2lkcC5mdWdha3Uuci1jY3MucmlrZW4uanAvYXV0aC9yZWFsbXMvb3AiLCJhdWQiOiJodHRwczovL2lkcC5mdWdha3Uuci1jY3MucmlrZW4uanAvYXV0aC9yZWFsbXMvb3AiLCJzdWIiOiJlN2M2MmY4ZS04YTBhLTQ2MlmtODdhOS1lZlmxNGI3MDJlZGIiLCJ0eXAiOiJPZmZsaW5lIiwiYXpwIjoicG9ydGFsIiwiYXV0aF90aW1lIjowLCJzZXNzaW9uX3N0YXRlIjoiY2U5NmFiNjMtOTQ0Ni00ZjNmLWJlNjQtNDQyOWIxMDc1N2ZkIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3lmLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUgb2ZmbGluZV9hY2Nlc3lmfQ.tigxazAMNx_FkD0MOsutK87tEagO6EMwmQDSHRJ7g2U",
+         "token_type":"bearer",
+         "not-before-policy":0,
+         "session_state":"ce96ab63-9446-4f3f-be64-4429b10757fd",
+         "scope":"email profile offline_access"
+      }
+   
+   | 認証済みにも関わらず、WebAPIの実行結果が、403（認証エラー）となる場合は、リフレッシュトークンを利用した再認証を実施してください。
+   | なお、リフレッシュトークンでの再認証にも失敗する場合は、認証手順の最初から実施してください。
+
+#. リフレッシュトークンからアクセストークンを生成する。  
+
+   | リフレッシュトークンからをアクセストークンを生成するには、トークンエンドポイントURLにポストパラメータを設定する
+
+   .. code-block:: shell
+   
+      POST https://idp.fugaku.r-ccs.riken.jp/auth/realms/op/protocol/openid-connect/token 
+   
+
+   ポストパラメータ
+         
+   +--------------------+------------+------------------------------------------------------------------------------+
+   | 名前               | 種類       | 説明                                                                         |
+   +====================+============+==============================================================================+
+   |grant_type          | String     |(必須)"refresh_token"固定。                                                   |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |refresh_token       | String     |(必須)リフレッシュトークン                                                    |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |client_id           | String     |(必須)クライアントID。                                                        |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |client_secret       | String     |(必須)クライアントシークレット。                                              |
+   +--------------------+------------+------------------------------------------------------------------------------+
+   |redirect_uri        | String     |(必須)コールバックURL。認証・認可の後にリダイレクトされるURL。                |
+   |                    |            |クライアントに登録されているリダイレクトURLと一致している必要があります。     |
+   +--------------------+------------+------------------------------------------------------------------------------+
+
+   レスポンスパラメータ（JSON)
+
+   アクセストークンの生成と同様。
+
+
+====================================== 
+X.509 クライアント証明書
+======================================
+
+X.509 証明書を利用することで、アクセストークンを用いずに、WebAPIを利用することができます。
+
+#. X.509証明書の形式
+
+   | cURLを利用する場合、X.509証明書の形式はPEM形式に変換する必要があります。
+   | PKCS#12形式のクライアント証明書をPEM形式に変換する手順を以下に示します。
+ 
+   .. code-block:: shell
+   
+      $ openssl pkcs12 -in  local_account_name.p12 -nodes -out local_account_name.pem
+      Enter Import Password:    # pathphrase
+
+#. X.509証明書の利用
+
+   | cURLを利用する場合、--certオプションにPEM形式に変換した証明書を指定してください。
+   | 全マシン状態の取得APIの実行例を以下に示します。
+
+   .. code-block:: shell
+
+      $ curl --cert local_account_name.pem  https://api.fugaku.r-ccs.riken.jp/status/
+      [{"status":"OK","machine":"computer"}]
+
+   .. _`oidc_clients`:
+
+=============================================== 
+Clients リクエストに用いるパラメータの作成
+===============================================
+
+   .. |clients_create_button| image:: ../images/docs_clients/Clients_list_Create_button.png 
+                              :alt: Clients list Create Button
+   .. |clients_ok_button| image:: ../images/docs_clients/Clients_OK_button.png
+                              :alt: OK Button
+   .. |clients_cancel_button| image:: ../images/docs_clients/Clients_Cancel_button.png
+                              :alt: Cancel Button
+   .. |clients_delete_button| image:: ../images/docs_clients/Clients_Delete_icon.png
+                              :alt: Delete Button
+
+
+リクエストに用いるパラメータを作成できます。
+
+#. Clientsについて
+
+   | 登録したClient情報(Client ID, Redirect URL, Secret, Created Date)を閲覧できます。
+
+   .. figure:: ../images/docs_clients/clients_list_1.png
+      :name: clients_list 
+      :alt: Clients list
+
+   * Client ID
+
+      * APIアクセスに必要なOAuth2.0認証情報です。
+      * OIDC要求のクライアント識別子として使用されます。
+      * 英数字とアンダーバーやハイフンを組み合わせた文字列を入力します。
+      * 例： ``u99999_dummy_1``
+
+   * Redirect URL
+
+      * 認証が成功した後にブラウザがリダイレクトできるURLです。
+      * 「http://example.com/*」などの単純なワイルドカードを使用できます。 /my/relative/path/* などの相対パスも指定できます。 
+      * URL入力例： ``http://localhost/*``
+
+   * Secret
+
+      * ClientIDと同様に、APIアクセスに必要なOAuth2.0認証情報です。
+      * Client作成時に自動的に生成されます。
+
+   * Created Date
+
+      * Clientを作成した日時です。
+
+   * |clients_create_button| ボタン
+
+      * clientを新しく発行するのに必要な情報を入力します。
+
+   * |clients_delete_button| ボタン
+
+      * 登録済みのclientを削除します。
+
+   * 一覧ソート
+
+      * Client IDとCreated Dateの2っはソートが可能です。 一覧のタイトル表示をクリックするソートがされます。
+
+
+#. Clientの新規作成
+
+   | clientを新規作成します。
+
+   .. figure:: ../images/docs_clients/create_client_1.png
+      :name: create_client_1 
+      :alt: Clients list Create Button position
+
+   #. |clients_create_button| ボタンをクリックすると、入力するウィンドウ（Create client.）が表示されます。 
+
+      .. figure:: ../images/docs_clients/Clients_Window_CreateClient.png
+         :name: create_client_window 
+         :alt: Create Client Window
+
+   #. Client IDと、Redirect URLを入力します。
+   #. 入力したら |clients_ok_button| ボタンを押下します。 |clients_ok_button| ボタン押下後はSecretの発行を自動で行います。
+      発行・登録しない場合は |clients_cancel_button| ボタンを押下してください。
+   #. |clients_ok_button| ボタンを押下するとClients一覧の表示が更新されて、今回追加したものが表示されます。
+
+
+#. Clientの削除
+
+   | 登録済みのclientを削除します。
+
+   .. figure:: ../images/docs_clients/Clients_list_Delete_button.png
+      :name: Clients_list_Delete_button 
+      :alt: Clients list Delete Button position
+
+   #. 一覧の右側に |clients_delete_button| ボタンが表示されています。Clientを削除するにはこの |clients_delete_button| ボタンをクリックしてください。
+   #. 削除するClientIDを表示したウィンドウ(Delete client)が表示されます。
+   #. |clients_ok_button| ボタンを押下するとを削除を行います。
+      |clients_cancel_button| ボタンを押下した場合は削除せずClientは残ります。

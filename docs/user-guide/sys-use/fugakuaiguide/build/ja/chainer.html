@@ -1,0 +1,189 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+    <title>3. Chainer for K 富岳環境 &#8212; 富岳AIフレームワーク利用ガイド  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="prev" title="2. TensorFlow 富岳環境" href="tensorflow.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="tensorflow.html" title="2. TensorFlow 富岳環境"
+             accesskey="P">前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">富岳AIフレームワーク利用ガイド  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>Chainer for K 富岳環境</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="chainer-for-k">
+<h1><span class="section-number">3. </span>Chainer for K 富岳環境<a class="headerlink" href="#chainer-for-k" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<section id="license">
+<h2><span class="section-number">3.1. </span>LICENSE条項<a class="headerlink" href="#license" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>提供したパッチおよび手順はOSSに提供(Upstream化)予定であり、Upstream化された際はChainer分はMITライセンスに準拠します。</p>
+</section>
+<section id="checkout-sh">
+<h2><span class="section-number">3.2. </span>バージョン (checkout.sh参照のこと)<a class="headerlink" href="#checkout-sh" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>Chainer ver.4.5.0</p>
+<ul>
+<li><p>ChainerMN ver.1.3.1</p></li>
+<li><p>ChainerK ver.1.1.0</p></li>
+</ul>
+</li>
+<li><p>Python ver.3.8.2</p>
+<ul>
+<li><p>mpi4py ver.3.0.3</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id1">
+<h2><span class="section-number">3.3. </span>構成<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/vol0001/apps/oss/ChainerK-4.5.0/
+  bin: 実行バイナリ
+  lib: ライブラリ
+    lib/python3.8/site-packages: ChainerなどPython module一式
+  include: インクルードファイル
+  build: 構築に必要なscript, patch類
+  example: MNIST, ResNet-50実行例
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2><span class="section-number">3.4. </span>構築方法<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><code class="file docutils literal notranslate"><span class="pre">build</span></code>以下をご参照下さいませ。<code class="file docutils literal notranslate"><span class="pre">$PATH</span></code>などは適時修正が必要です。構築に1時間程度かかります。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./checkout.sh
+pjsub go.sh
+</pre></div>
+</div>
+<p>配置したものは、コンパイルオプションを調整しておりますが、Python本体の構築がタイムアウトします。一度<code class="docutils literal notranslate"><span class="pre">-O3</span></code>で構築して、タイムアウトする箇所をコメントアウトして、上書きすることで同じ環境を構築できます。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">3.5. </span>実行方法<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>本環境一式は、<code class="file docutils literal notranslate"><span class="pre">$PATH</span></code>を通すことでどこに配置しても実行できます。Python moduleはfile数が多いため、多並列では、MDSアクセス高負荷のため<strong class="program">importlib</strong>の時間がかかることが想定されます。<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/use_latest/">利用手引き書</a>の，<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/use_latest/LyeredStorageAndLLIO/TheSecondLayerStrage.html#id9">8.2.4.2. 共通ファイル配布のヒント</a>を参考に，必要な共通ファイルを<strong class="command">llio_transfer</strong>で転送するか，<strong class="command">tar</strong>などで固めて<strong class="command">llio_transfer</strong>で転送し展開することでステージングによる利用が可能です。</p>
+<p><code class="file docutils literal notranslate"><span class="pre">example</span></code>の下にMNIST,イメージ読み込み有り無しのResNet-50の実行例が、ございます。ご参照下さいませ。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pjsub go.sh
+</pre></div>
+</div>
+<p>で実行できます。$PREFIXを指定した時の実行に必要な、環境変数は以下の通りです。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>TCSDS=1.2.27b                         : 言語環境の指定
+export PREFIX=${PWD}/../..            : 本環境をインストールしてあるパスの設定
+
+# System Enironment
+module switch lang/tcsds-${TCSDS}    : 最新shared object読み込みに必要
+export LD_LIBRARY_PATH=${PREFIX}/lib:${LD_LIBRARY_PATH}
+export PATH=${PREFIX}/bin:${PATH}     : python3のパス
+</pre></div>
+</div>
+<p>実行結果を<code class="file docutils literal notranslate"><span class="pre">log</span></code>の中に入れています。2.2GHzのインタラクティブモードで実行した結果です。ただし、多ノードでは実行できなかったため、前バージョンの結果を置いています。</p>
+</section>
+<section id="id6">
+<h2><span class="section-number">3.6. </span>注意<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>高速化のためにR-CCSで作製したカーネルライブラリを使用しています。現段階で画像認識などで使用される基本的な処理の高速化しかサポートしておりません。このため、使用するネットワークによっては、高速で動作しない可能性もございます。</p>
+<p>高速化の要望は、使用するネットワークスクリプトをご呈示の上、利用者アカウントのサポートデスクへ御願い致します。対応に数ヶ月を要することもございますのでご了承下さいませ。</p>
+</section>
+<section id="id7">
+<h2><span class="section-number">3.7. </span>履歴<a class="headerlink" href="#id7" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>2020/09/12(土) tcsds-1.2.26bで構築公開</p></li>
+<li><p>2020/09/20(日) tcsds-1.2.26bで構築更新</p>
+<ul>
+<li><p>maxpooing3dにて、-∞発生時の例外処理を追加</p></li>
+<li><p>ChainerKライブラリのimg2colのOpenMP無効化</p></li>
+</ul>
+</li>
+<li><p>2020/10/27(月) tcsds-1.2.27bで構築更新</p>
+<ul>
+<li><p>largepageでの実行例の追加</p></li>
+<li><p>fapp、fapp、PA取得時の例を追加</p></li>
+<li><p>実行スクリプトの調整</p></li>
+</ul>
+</li>
+<li><p>2021/10/15(金) ドキュメント公開(Ver.1.0)</p></li>
+<li><p>2021/12/07(火) ドキュメントアップデート(Ver.1.1) LLIO使用を推奨</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3. Chainer for K 富岳環境</a><ul>
+<li><a class="reference internal" href="#license">3.1. LICENSE条項</a></li>
+<li><a class="reference internal" href="#checkout-sh">3.2. バージョン (checkout.sh参照のこと)</a></li>
+<li><a class="reference internal" href="#id1">3.3. 構成</a></li>
+<li><a class="reference internal" href="#id2">3.4. 構築方法</a></li>
+<li><a class="reference internal" href="#id3">3.5. 実行方法</a></li>
+<li><a class="reference internal" href="#id6">3.6. 注意</a></li>
+<li><a class="reference internal" href="#id7">3.7. 履歴</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="tensorflow.html"
+                          title="前の章へ"><span class="section-number">2. </span>TensorFlow 富岳環境</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="tensorflow.html" title="2. TensorFlow 富岳環境"
+             >前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">富岳AIフレームワーク利用ガイド  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>Chainer for K 富岳環境</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, RIKEN R-CCS.
+    </div>
+  </body>
+</html>

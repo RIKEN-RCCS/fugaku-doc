@@ -1,0 +1,164 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6. MPIジョブ実行 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="6.1. 概要" href="Overview.html" />
+    <link rel="prev" title="5.20. 留意事項" href="../JobExecution/JobExecConsiderpoints.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Overview.html" title="6.1. 概要"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="../JobExecution/JobExecConsiderpoints.html" title="5.20. 留意事項"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6. </span>MPIジョブ実行</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="mpi">
+<h1><span class="section-number">6. </span>MPIジョブ実行<a class="headerlink" href="#mpi" title="Link to this heading">¶</a></h1>
+<p>本章では、MPIプログラムの実行方法を説明します。</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Overview.html">6.1. 概要</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FormatOfMpiexecCommand.html">6.2. 実行コマンドの形式</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToExecuteABackgroundJob.html">6.3. バックグラウンドジョブの実行方法</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="HowToExecuteABackgroundJob.html#id2">6.3.1. バックグラウンド実行</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HowToExecuteABackgroundJob.html#id3">6.3.2. ジョブ作成例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="HowToExecuteABackgroundJob.html#id4">6.3.3. バックグラウンド実行時の留意事項</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="InputOutputRedirection.html">6.4. 標準出力／標準エラー出力／標準入力</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="InputOutputRedirection.html#stdspecmethod">6.4.1. 標準出力／標準エラー出力／標準入力の指定方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InputOutputRedirection.html#id3">6.4.2. オプション指定による出力表</a></li>
+<li class="toctree-l2"><a class="reference internal" href="InputOutputRedirection.html#stdoutstderroutforlargejobs">6.4.3. 大規模ジョブ実行時の標準出力／標準エラー出力の指定について</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="SpecificationsForMPIJob.html">6.5. MPIジョブ投入時の指定</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SpecificationsForMPIJob.html#id1">6.5.1. 静的プロセスの形状指定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SpecificationsForMPIJob.html#id2">6.5.2. 静的プロセスの最大数指定</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="RankAssignment.html">6.6. ランク割り当て</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-bynode">6.6.1. rank-map-bynode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-bynode-1">6.6.2. rank-map-bynode（1次元）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-bynode-2">6.6.3. rank-map-bynode（2次元）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-bynode-3">6.6.4. rank-map-bynode（3次元）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#id2">6.6.5. rank-map-bynode（ノード内複数プロセス指定（1次元））</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-bychip">6.6.6. rank-map-bychip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-hostfile">6.6.7. rank-map-hostfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-hostfile-1">6.6.8. rank-map-hostfile（1次元）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-hostfile-2">6.6.9. rank-map-hostfile（2次元）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-hostfile-3">6.6.10. rank-map-hostfile（3次元）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#id3">6.6.11. rank-map-hostfile（ノード内複数ランク指定）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#rank-map-hostfile-rank-map-bychip">6.6.12. rank-map-hostfile／rank-map-bychip（ノード内複数ランク指定）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankAssignment.html#id4">6.6.13. ホストマップファイル利用時の注意事項</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="JobShape%28torus%29.html">6.7. ジョブ形状（トーラス）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjsubOptions%28MPI-related%29.html">6.8. ジョブ投入コマンドのオプション（MPI）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DynamicProcessCreation%28MPI_Comm_spawn%29.html">6.9. 動的プロセス生成（MPI_COMM_SPAWN）</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="DynamicProcessCreation%28MPI_Comm_spawn%29.html#id1">6.9.1. ジョブ実行方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DynamicProcessCreation%28MPI_Comm_spawn%29.html#java">6.9.2. Javaプログラムからの実行</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DynamicProcessCreation%28MPI_Comm_spawn%29.html#id2">6.9.3. 注意事項</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="RankInquiryFunctions.html">6.10. ランク問い合わせ関数</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="RankInquiryFunctions.html#mpi-comm-world">6.10.1. MPI_COMM_WORLD に指定した論理次元数と論理形状問い合わせ機能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankInquiryFunctions.html#mpi">6.10.2. ランク番号によるMPIプログラムの論理座標問い合わせ機能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankInquiryFunctions.html#id3">6.10.3. 論理座標によるMPIプログラムのランク番号問い合わせ機能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RankInquiryFunctions.html#id4">6.10.4. 関数使用例</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MPIStatisticalInformation.html">6.11. MPI統計情報</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MPIStatisticalInformation.html#id1">6.11.1. 全体モード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MPIStatisticalInformation.html#id2">6.11.2. 区間モード</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CollectiveCommunicationAlgorithm.html">6.12. MPIの集団通信アルゴリズム（knomial, rabenseifner）</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CollectiveCommunicationAlgorithm.html#id1">6.12.1. アルゴリズムの指定方法</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../JobExecution/JobExecConsiderpoints.html"
+                          title="前の章へ"><span class="section-number">5.20. </span>留意事項</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="Overview.html"
+                          title="次の章へ"><span class="section-number">6.1. </span>概要</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Overview.html" title="6.1. 概要"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="../JobExecution/JobExecConsiderpoints.html" title="5.20. 留意事項"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6. </span>MPIジョブ実行</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

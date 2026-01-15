@@ -1,0 +1,254 @@
+障害の影響を受けたジョブ一覧表示コマンド
+============================================
+
+job_events
+----------
+
+\ :program:`job_events` コマンドにて、以下を確認できます
+
+- LLIO（第2階層ストレージキャッシュ）とFEFS（第2階層ストレージ）にてevictの影響を受けたジョブ
+
+- パワーキャッピングが発生したジョブ
+
+- OOM（Out of memory）が発生したジョブ
+
+- ハード故障の影響を受けたジョブ
+
+- LLIO利用制限超過が発生したジョブ
+
+- その他、システム障害の影響を受けたジョブ
+
+
+ evict
+  Lustre系ファイルシステムがもつ機能で、異常と判断したクライアントを切り離す処理です。
+  
+  ファイルシステムを利用可能な状態に保つために行われます。
+
+ パワーキャッピング
+  制限電力を超えた場合にCPU周波数をNormalモードより低く抑え、消費電力を削減します。
+  
+  詳細は\ :ref:`PowermodeUsage`\ を参照ください。
+
+ OOM（Out of memory）
+  ジョブ実行時に計算ノードでメモリ不足が発生した場合です。この場合、ジョブが異常終了します。
+
+ ハード故障
+  ハード故障です。
+
+ LLIO利用制限超過
+  LLIO利用制限を超過した場合です。
+
+[名前]
+
+\ :program:`job_events`\
+
+
+[書式]
+
+.. code-block:: none
+
+  job_events [-g GROUP_NAME] [-c] [-h]
+  job_events [-g GROUP_NAME] --llio [-j JOBID]
+
+[オプション]
+
+.. list-table:: 
+    :widths: 2 9
+    :header-rows: 1
+
+    * - オプション名
+      - 機能
+
+    * - \-g GROUP_NAME
+      - | ``-g`` オプションで指定したグループのジョブが表示対象となります。ただし参照権限がない場合ジョブは表示されません。
+        | ``-g`` オプションはグループ名の指定が必須です。
+        | ``-g`` オプションがない場合は、実行者が所属する全グループのジョブが表示対象となります。
+
+    * - \-c
+      - | 検索結果をCSV形式で出力します。
+
+    * - \--llio
+      - | LLIO利用制限超過が発生したファイルパスを表示します。
+ 
+    * - \-j JOBID
+      - | 表示対象が[JOBID]に指定したジョブとなります。※ ``--llio`` オプション指定時のみ使用可能
+
+    * - \-h
+      - ヘルプを表示します。
+
+[表示例]
+
+- 例1. 自身が所属する全てのグループを対象に、障害の影響を受けたジョブを確認する場合(デフォルト)
+
+ .. code-block:: console
+  
+    [_LNlogin]$ job_events
+    JOBID           RETRY MD USER    GROUP     ST  JOB_START           JOB_END             MESSAGES
+    1111111             0 NM user01  group01   EXT 2024/04/12 13:21:50 2024/04/12 14:24:46 Filesystem I/O error
+    2222222[2]          0 BU user02  group01   EXT 2024/05/17 14:47:49 2024/05/17 14:57:51 POWER CAPPING:2024/05/17 14:50:00
+    2222222[3]          0 BU user02  group01   EXT 2024/05/17 14:47:49 2024/05/17 14:57:51 POWER CAPPING:2024/05/17 14:50:00,Filesystem I/O error
+    3333333             0 NM user03  group01   EXT 2024/06/11 14:49:04 2024/06/11 14:53:11 CN high load
+    4444444             0 NM user01  group02   EXT 2024/07/10 13:53:56 2024/07/10 13:54:18 Out Of Memory
+    5555555             0 NM user02  group02   EXT 2024/08/02 18:21:36 2024/08/02 18:37:56 POWER CAPPING:2024/08/02 18:30:00,Filesystem I/O error,Out Of Memory
+    5555555             1 NM user02  group02   EXT 2024/08/02 18:50:33 2024/08/02 19:42:12 Hardware error
+    6666666             0 NM user04  group01   EXT 2024/09/13 10:41:36 2024/09/13 14:25:02 Out Of Memory,CN high load 
+    7777777             0 NM user05  group02   EXT 2024/10/04 12:11:14 2024/10/04 13:05:01 Job scheduler hang
+    8888888             0 NM user01  group03   EXT 2024/10/18 20:07:15 2024/10/18 21:21:44 LLIO Limit Over
+
+ 各状況に応じ、メッセージが表示されます。
+ 
+ - evictの場合は "Filesystem I/O error" が表示されます。
+ - パワーキャッピングの場合は "POWER CAPPING:発生日時" が表示されます。
+ - OOMの場合は "Out Of Memory" が表示されます。
+ - ハード故障の場合は "Hardware error" が表示されます。
+ - LLIO利用制限超過が発生した場合は "LLIO Limit Over" と表示され、\ :program:`job_events --llio`\コマンドで超過したファイルパスを確認できます。
+ - 上記以外の障害の影響を受けた場合は、その障害に応じたメッセージが表示されます。
+ - 影響を受けたジョブが存在しなかった場合は、"There are no affected jobs." が表示されます。
+
+
+
+
+- 例2. 自身が所属するグループ(group01)を対象に、障害の影響を受けたジョブを確認する場合
+
+ .. code-block:: console
+ 
+    [_LNlogin]$ job_events -g group01
+    JOBID           RETRY MD USER    GROUP     ST  JOB_START           JOB_END             MESSAGES
+    1111111             0 NM user01  group01   EXT 2024/04/12 13:21:50 2024/04/12 14:24:46 Filesystem I/O error
+    2222222[2]          0 BU user02  group01   EXT 2024/05/17 14:47:49 2024/05/17 14:57:51 POWER CAPPING:2024/05/17 14:50:00
+    2222222[3]          0 BU user02  group01   EXT 2024/05/17 14:47:49 2024/05/17 14:57:51 POWER CAPPING:2024/05/17 14:50:00,Filesystem I/O error
+    3333333             0 NM user03  group01   EXT 2024/06/11 14:49:04 2024/06/11 14:53:11 CN high load
+    6666666             0 NM user04  group01   EXT 2024/09/13 10:41:36 2024/09/13 14:25:02 Out Of Memory,CN high load 
+
+
+
+- 例3. 障害の影響を受けたジョブの情報を、CSV形式で表示する場合
+
+ .. code-block:: console
+
+    [_LNlogin]$ job_events -c
+    JOBID,RETRY,MD,USER,GROUP,ST,JOB_START,JOB_END,MESSAGES
+    1111111,0,NM,user01,group01,EXT,2024/04/12 13:21:50,2024/04/12 14:24:46,"Filesystem I/O error"
+    2222222[2],0,BU,user02,group01,EXT,2024/05/17 14:47:49,2024/05/17 14:57:51,"POWER CAPPING:2024/05/17 14:50:00"
+    2222222[3],0,BU,user02,group01,EXT,2024/05/17 14:47:49,2024/05/17 14:57:51,"POWER CAPPING:2024/05/17 14:50:00,Filesystem I/O error"
+    3333333,0,NM,user03,group01,EXT,2024/06/11 14:49:04,2024/06/11 14:53:11,"CN high load"
+    4444444,0,NM,user01,group02,EXT,2024/07/10 13:53:56,2024/07/10 13:54:18,"Out Of Memory"
+    5555555,0,NM,user02,group02,EXT,2024/08/02 18:21:36,2024/08/02 18:37:56,"POWER CAPPING:2024/08/02 18:30:00,Filesystem I/O error,Out Of Memory"
+    5555555,1,NM,user02,group02,EXT,2024/08/02 18:50:33,2024/08/02 19:42:12,"Hardware error"
+    6666666,0,NM,user04,group01,EXT,2024/09/13 10:41:36,2024/09/13 14:25:02,"Out Of Memory,CN high load"
+    7777777,0,NM,user05,group02,EXT,2024/10/04 12:11:14,2024/10/04 13:05:01,"Job scheduler hang"
+    8888888,0,NM,user01,group03,EXT,2024/10/18 20:07:15,2024/10/18 21:21:44,"LLIO Limit Over"
+
+
+
+- 例4. LLIO利用制限超過が発生したファイルパスを確認する場合
+
+ .. code-block:: console
+ 
+    [_LNlogin]$ job_events --llio
+    JOBID            FILEPATH
+    123456789_1      /vol000?/groupA/data/AAAA/BBBB/CCCC/fileA
+    123456789_1      /vol000?/groupA/data/AAAA/BBBB/CCCC/fileB
+    123456789_2      /vol000?/groupA/data/AAAA/BBBB/CCCC/fileC
+    123456800        /vol000?/groupB/data/DDDD/EEEE/FFFF/fileG
+    123456801[1]     /vol000?/groupC/data/HHHH/IIII/JJJJ/fileK
+    123456802        The path could not be found. 
+
+
+ - LLIO利用制限超過が発生したファイルパスを表示します。
+ - 一部のジョブではファイルパスが確認できない場合があり、その場合は "The path could not be found." と表示されます。 
+ - 影響を受けたジョブが存在しなかった場合は "No jobs exceed the LLIO limit." が表示されます。
+
+
+.. attention:: 
+ 
+ evictの影響を受けた場合は、ジョブを再投入してください。
+ 
+ 本コマンドは \ :program:`pjstata` コマンドの実行結果を利用しています。ジョブを大量に実行していると、出力まで時間を要する場合があります。
+ 
+ パワーキャッピングは、.statsファイル や \ :program:`pjstat -s`\オプション でも発生有無を確認できます。
+ 
+ LLIO利用制限超過が発生した場合は、\ :ref:`llioconsiderpoints`\を参照の上、対処をお願いします。
+
+
+.. attention:: 
+
+ 障害が発生してから\ :program:`job_events` コマンドでその情報が反映されるまでにはタイムラグがあり、各機能によって異なります。
+ 
+ 以下に各機能のタイムラグを示します。
+
+  .. list-table:: 
+      :widths: 5 2
+      :header-rows: 1
+    
+      * - 機能
+        - タイムラグ
+
+      * - evictの影響を受けたジョブ
+        - | 2時間
+
+      * - パワーキャッピングが発生したジョブ
+        - | 1日
+
+      * - OOM（Out of memory）が発生したジョブ
+        - | 2時間
+
+      * - ハード故障の影響を受けたジョブ
+        - | 1時間
+
+      * - LLIO利用制限超過が発生したジョブ
+        - | 20分
+
+
+
+
+show_evict_node
+------------------
+
+ログインノード、およびプリポスト環境で、ファイルシステムにてIOエラーが発生した可能性のある時間を表示する\ :program:`show_evict_node`\  コマンドについて説明します。
+
+[名前]
+
+\ :program:`show_evict_node`\
+
+[書式]
+
+.. code-block:: none
+
+  show_evict_node [--hostname HOSTNAME]
+                  [--start yyyy/mm/dd hh:mm:ss]
+                  [--end  yyyy/mm/dd hh:mm:ss]
+
+
+[オプション]
+
+.. list-table:: 
+    :widths: 2 9
+    :header-rows: 1
+
+    * - オプション名
+      - 機能
+
+    * - \--hostname HOSTNAME
+      - | 表示対象とするノードを、 HOSTNAME で指定します。
+
+    * - \--start yyyy/mm/dd hh:mm:ss
+      - | 表示対象とする開始日時を、"yyyy/mm/dd hh:mm:ss"形式で指定します。
+
+    * - \--end  yyyy/mm/dd hh:mm:ss
+      - | 表示対象とする終了日時を、"yyyy/mm/dd hh:mm:ss"形式で指定します。
+
+
+[表示例]
+
+ .. code-block:: console
+
+    [_LNlogin]$ show_evict_node
+    NODE    FSNAME  DATE
+    ppm02   vol0006 2021/10/14 19:22:04 - 2021/10/14 19:26:14
+    csgw1   vol0004 2021/10/14 03:00:06 - 2021/10/14 03:01:42
+    ppm02   vol0003 2021/10/16 16:08:16 - 2021/10/16 16:10:14
+    login6  vol0004 2021/10/25 12:35:28
+    login3  vol0005 2021/11/07 13:37:53 - 2021/11/07 13:38:06
+    login3  vol0001 2021/11/07 14:08:28 - 2021/11/07 14:09:05
+

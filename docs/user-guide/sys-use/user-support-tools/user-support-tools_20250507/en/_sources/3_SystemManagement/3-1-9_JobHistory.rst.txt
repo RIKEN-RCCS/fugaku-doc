@@ -1,0 +1,64 @@
+Job status transition history displaying
+========================================
+
+| 　**[Name]**
+| 　jobhistory -  Display the job status transition history
+
+| 　**[Style]**
+| 　jobhistory  -j  job ID  [-d number of days to the past]
+
+| 　**[Description]**
+| 　jobhistory command displays the state transition history from when the job is submitted to when it is completed in chronological order.
+
+| 　Users can check the state transition history only for their own jobs. The system administrator can display the state transition history of all members registered in the system. 
+ 　
+| 　**[Option]**
+| 　-j  job ID
+| 　Specify job ID. Cannot specify only the specific sub job.
+
+| 　-d  number of days to the past
+| 　By specifying the number of days to the past, it is possible to go back to the past period and output information.
+| 　In addition to the jobs that have been submitted, the information of jobs that have finished processing (EXIT, CANCEL status) is output. The number of days going back in the past is an integer from 1 to 90.
+ 　
+| 　**[Return value]**
+| 　Normal: 0
+| 　Abnormal: 1
+
+| 　**[Note]**
+| 　None.
+
+| 　**[Use example]**
+| 　【Example 1】	Displays the state transition history of the currently executing job ID is 8000.
+
+.. code-block:: console 
+
+   [login]$ jobhistory -j 8000
+   ['2022-02-12 12:17:47'][jobid=8000][stepno=0][blkno=0]ACCEPT[-]
+   ['2022-02-12 12:17:47'][jobid=8000][stepno=0][blkno=0]QUEUED[-]
+   ['2022-02-12 12:26:22'][jobid=8000][stepno=0][blkno=0]RUNNING_A[-]
+   ['2022-02-12 12:26:58'][jobid=8000][stepno=0][blkno=0]RUNNING_P[-]
+   ['2022-02-12 12:34:18'][jobid=8000][stepno=0][blkno=0]RUNNING[job_start='2022-02-12 12:34:18']
+   [login]$
+
+　【Example 2】	Displays the state transition history for job ID 5579 that ended 5 days ago.
+
+.. code-block:: console 
+
+   [login]$ jobhistory -j 5579 -d 5
+   ['2022-02-07 17:50:28'][jobid=5579][stepno=0][blkno=0]ACCEPT[-]
+   ['2022-02-07 17:50:28'][jobid=5579][stepno=0][blkno=0]QUEUED[-]
+   ['2022-02-07 17:50:28'][jobid=5579][stepno=0][blkno=0]RUNNING_A[-]
+   ['2022-02-07 17:50:28'][jobid=5579][stepno=0][blkno=0]RUNNING[job_start='2022-02-07 17:50:28']
+   ['2022-02-07 17:50:38'][jobid=5579][stepno=0][blkno=0]RUNOUT[-]
+   ['2022-02-07 17:50:38'][jobid=5579][stepno=0][blkno=0]EXIT[-]
+   [login]$
+
+
+| 　Displays the item description according to displaying style.
+
+| 　　displaying style : ['YYYY-MM-DD HH:MM:SS'][jobid=value][stepno=value][blkno=value]state[-]
+
+.. figure:: img/3_SystemManagement_17_1.png
+
+.. figure:: img/3_SystemManagement_17_2.png
+

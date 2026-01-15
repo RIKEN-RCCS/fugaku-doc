@@ -1,0 +1,557 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4.2. クライアント証明書のインストール &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="4.3. 富岳ウェブサイトへの接続手順" href="AccessingTheUsersPortal.html" />
+    <link rel="prev" title="4.1. 概要" href="Overview.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="AccessingTheUsersPortal.html" title="4.3. 富岳ウェブサイトへの接続手順"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="4.1. 概要"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">4. </span>システム利用</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.2. </span>クライアント証明書のインストール</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="installingclientcertificate">
+<span id="id1"></span><h1><span class="section-number">4.2. </span>クライアント証明書のインストール<a class="headerlink" href="#installingclientcertificate" title="Link to this heading">¶</a></h1>
+<p>クライアント証明書は富岳ウェブサイトをアクセスする時に使用します。富岳ウェブサイトをアクセスするWebブラウザにインストールしてください。</p>
+<p>「富岳」の富岳ウェブサイトにアクセスするために必要なクライアント証明書のインストール方法を示します。
+「スタートアップガイド」を参照してクライアント証明書を既にインストールしている場合は本作業は不要です。</p>
+<p>クライアント証明書をインストールする前に次の二つを用意してください。</p>
+<ul class="simple">
+<li><p>クライアント証明書:&quot;ユーザーアカウント名.p12&quot;ファイル</p></li>
+<li><p>クライアント証明書のパスフレーズ</p></li>
+</ul>
+<dl class="simple">
+<dt>クライアント証明書</dt><dd><p>アカウント発行が完了すると申請時に記載したメールアドレス宛てにクライアント証明書が電子メールで送付されます。電子メールに添付されている&quot;ローカルアカウント名.p12&quot;ファイルを、クライアント証明書をインストールする機器（パソコンなど）に保存してください。
+&quot;ローカルアカウント名.p12&quot;ファイルには、クライアントの秘密鍵、クライアント証明書（公開鍵）、クライアント証明書発行局のルート証明書が含まれています。</p>
+</dd>
+<dt>クライアント証明書のパスフレーズ</dt><dd><p>パスフレーズは、クライアント証明書とは別に、書面またはPDFファイルで送付されます。
+パスフレーズはクライアント証明書をインストールする時に必要となります。安全な場所に保管してください。</p>
+</dd>
+</dl>
+<p>ここでは、富岳ウェブサイトの推奨Webブラウザにクライアント証明書を登録する手続きについて説明します。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>指定のWebブラウザと異なるものを利用する場合は、自身でWebブラウザの証明書管理方法を確認し、利用するWebブラウザにクライアント証明書のインストールを行ってください。</p>
+</div>
+<section id="firefox-windows">
+<h2><span class="section-number">4.2.1. </span>Firefoxへの証明書のインストール（Windows）<a class="headerlink" href="#firefox-windows" title="Link to this heading">¶</a></h2>
+<p>Microsoft WindwsでFirefoxを利用する場合のインストール手順を示します。
+Firefoxのバージョンによって画面に差異がある場合があります。
+画面が異なる場合はFirefoxの情報を確認して作業を実施してください。</p>
+<ol class="arabic simple">
+<li><p>Firefoxを起動し、<span class="guilabel">[オプション]</span>の画面を開きます。
+<span class="guilabel">[プライバシーとセキュリティ]</span>の<span class="guilabel">[証明書を表示]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_01.png"><img alt="../_images/InstallingIntoFirefox_windows_01.png" src="../_images/InstallingIntoFirefox_windows_01.png" style="width: 865.1999999999999px; height: 580.8px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>証明書マネージャが起動したら、<span class="guilabel">[あなたの証明書]</span>を選択して、<span class="guilabel">[インポート...]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_02.png"><img alt="../_images/InstallingIntoFirefox_windows_02.png" src="../_images/InstallingIntoFirefox_windows_02.png" style="width: 561.4px; height: 487.9px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>クライアント証明書:&quot;ローカルアカウント名.p12&quot;ファイルを選択し<span class="guilabel">[開く]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_03.png"><img alt="../_images/InstallingIntoFirefox_windows_03.png" src="../_images/InstallingIntoFirefox_windows_03.png" style="width: 568.4px; height: 448.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>クライアント証明書のパスフレーズを <span class="guilabel">パスワード欄</span>に入力し、<span class="guilabel">[OK]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_04.png"><img alt="../_images/InstallingIntoFirefox_windows_04.png" src="../_images/InstallingIntoFirefox_windows_04.png" style="width: 352.79999999999995px; height: 129.5px;" /></a>
+</figure>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>クライアント証明書のパスフレーズが正しくない場合エラーが表示され、次の画面に進めません。</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>クライアント証明書が登録されたことを確認してください。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_05.png"><img alt="../_images/InstallingIntoFirefox_windows_05.png" src="../_images/InstallingIntoFirefox_windows_05.png" style="width: 560.6999999999999px; height: 487.9px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p><span class="guilabel">[認証局証明書]</span>を選択し表示される一覧から「RIKEN R-CCS」を選択して<span class="guilabel">表示</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_06.png"><img alt="../_images/InstallingIntoFirefox_windows_06.png" src="../_images/InstallingIntoFirefox_windows_06.png" style="width: 564.1999999999999px; height: 486.49999999999994px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="7">
+<li><p>証明書のFingerprintsが(SHA-1): <code class="docutils literal notranslate"><span class="pre">EEED846F</span> <span class="pre">FC733A73</span> <span class="pre">328F4561</span> <span class="pre">39BDB995</span> <span class="pre">D5174BBC</span></code>であることを確認してください。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_08.png"><img alt="../_images/InstallingIntoFirefox_windows_08.png" src="../_images/InstallingIntoFirefox_windows_08.png" style="width: 1009.4px; height: 677.5999999999999px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>続けて、クライアント証明書利用時に入力するパスワードを設定します。<span class="guilabel">セキュリティデバイス...</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_09.png"><img alt="../_images/InstallingIntoFirefox_windows_09.png" src="../_images/InstallingIntoFirefox_windows_09.png" style="width: 871.5px; height: 633.5px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="9">
+<li><p>デバイスマネージャが起動したら、<span class="guilabel">Software Security Device</span>を選択し、<span class="guilabel">パスワードを変更...</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_10.png"><img alt="../_images/InstallingIntoFirefox_windows_10.png" src="../_images/InstallingIntoFirefox_windows_10.png" style="width: 889.6999999999999px; height: 485.09999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="10">
+<li><p>クライアント証明書利用時に要求される任意のパスワードを設定し、<span class="guilabel">OK</span>をクリックします</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_windows_11.png"><img alt="../_images/InstallingIntoFirefox_windows_11.png" src="../_images/InstallingIntoFirefox_windows_11.png" style="width: 265.3px; height: 207.2px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="11">
+<li><p>パスワードの登録が完了したら、デバイスマネージャを閉じます。クライアント証明書利用時のパスワードの設定作業は以上です。ここで設定したパスワードはクライアント証明書を利用するときに使用します。</p></li>
+</ol>
+</section>
+<section id="firefox-mac">
+<h2><span class="section-number">4.2.2. </span>Firefoxへの証明書のインストール（Mac）<a class="headerlink" href="#firefox-mac" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Firefoxを起動し、メニューから <span class="guilabel">[環境設定...]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_01.png"><img alt="../_images/InstallingIntoFirefox_01.png" src="../_images/InstallingIntoFirefox_01.png" style="width: 952.6999999999999px; height: 489.99999999999994px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p><span class="guilabel">プライバシーとセキュリティ</span>タブの <span class="guilabel">[証明書を表示...]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_02.png"><img alt="../_images/InstallingIntoFirefox_02.png" src="../_images/InstallingIntoFirefox_02.png" style="width: 953.4px; height: 488.59999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>証明書マネージャが起動したら、<span class="guilabel">[あなたの証明書]</span>を選択して、<span class="guilabel">[読み込む...]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_03.png"><img alt="../_images/InstallingIntoFirefox_03.png" src="../_images/InstallingIntoFirefox_03.png" style="width: 448.7px; height: 389.2px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>パソコンに保存した&quot;ローカルアカウント名.p12&quot;ファイルを選択し、<span class="guilabel">[開く]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_04.png"><img alt="../_images/InstallingIntoFirefox_04.png" src="../_images/InstallingIntoFirefox_04.png" style="width: 613.9px; height: 314.29999999999995px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>入手したクライアント証明書のパスフレーズを <span class="guilabel">パスワード欄</span>に入力し、<span class="guilabel">[OK]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_05.png"><img alt="../_images/InstallingIntoFirefox_05.png" src="../_images/InstallingIntoFirefox_05.png" style="width: 311.5px; height: 110.6px;" /></a>
+</figure>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>クライアント証明書のパスフレーズが正しくない場合エラーが表示され、次の画面に進めません。</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>クライアント証明書が登録されたことを確認し、<span class="guilabel">[OK]</span>をクリックして証明書マネージャを終了します。以上で、クライアント証明書のインストール作業は完了です。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_06.png"><img alt="../_images/InstallingIntoFirefox_06.png" src="../_images/InstallingIntoFirefox_06.png" style="width: 331.79999999999995px; height: 90.3px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="7">
+<li><p>続けて、クライアント証明書利用時に入力するパスワードを設定します。<span class="guilabel">セキュリティデバイス...</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_07.png"><img alt="../_images/InstallingIntoFirefox_07.png" src="../_images/InstallingIntoFirefox_07.png" style="width: 951.3px; height: 487.9px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>デバイスマネージャが起動したら、<span class="guilabel">Software Security Device</span>を選択し、<span class="guilabel">パスワードを変更...</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_08.png"><img alt="../_images/InstallingIntoFirefox_08.png" src="../_images/InstallingIntoFirefox_08.png" style="width: 730.0999999999999px; height: 387.79999999999995px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="9">
+<li><p>クライアント証明書利用時に要求される任意のパスワードを設定し、<span class="guilabel">OK</span>をクリックします</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_09.png"><img alt="../_images/InstallingIntoFirefox_09.png" src="../_images/InstallingIntoFirefox_09.png" style="width: 228.2px; height: 154.7px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="10">
+<li><p><span class="guilabel">OK</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_10.png"><img alt="../_images/InstallingIntoFirefox_10.png" src="../_images/InstallingIntoFirefox_10.png" style="width: 230.99999999999997px; height: 153.29999999999998px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="11">
+<li><p><span class="guilabel">OK</span>をクリックして、デバイスマネージャを閉じます。クライアント証明書利用時のパスワードの設定作業は以上です。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoFirefox_11.png"><img alt="../_images/InstallingIntoFirefox_11.png" src="../_images/InstallingIntoFirefox_11.png" style="width: 251.29999999999998px; height: 90.3px;" /></a>
+</figure>
+</div></blockquote>
+</section>
+<section id="chrome-windows">
+<h2><span class="section-number">4.2.3. </span>Chromeへの証明書のインストール（Windows）<a class="headerlink" href="#chrome-windows" title="Link to this heading">¶</a></h2>
+<p>Microsoft WindwsでChromeを利用する場合のインストール手順を示します。
+Chromeのバージョンによって画面に差異がある場合があります。
+画面が異なる場合はChromeの情報を確認して作業を実施してください。</p>
+<ol class="arabic simple">
+<li><p>Chromeを起動し、<span class="guilabel">[設定]</span>の画面を開きます。
+<span class="guilabel">[プライバシーとセキュリティ]</span>の<span class="guilabel">[セキュリティ]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_01.png"><img alt="../_images/InstallingIntoChrome_windows_01.png" src="../_images/InstallingIntoChrome_windows_01.png" style="width: 667.1999999999999px; height: 483.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p><span class="guilabel">[証明書の管理]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_02.png"><img alt="../_images/InstallingIntoChrome_windows_02.png" src="../_images/InstallingIntoChrome_windows_02.png" style="width: 667.1999999999999px; height: 483.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p><span class="guilabel">[Windowsからインポートした証明書を管理する]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_19.png"><img alt="../_images/InstallingIntoChrome_windows_19.png" src="../_images/InstallingIntoChrome_windows_19.png" style="width: 918.4px; height: 300.29999999999995px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>証明書マネージャが起動したら、<span class="guilabel">[個人]</span>を選択して、<span class="guilabel">[インポート...]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_03.png"><img alt="../_images/InstallingIntoChrome_windows_03.png" src="../_images/InstallingIntoChrome_windows_03.png" style="width: 470.4px; height: 495.59999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>証明書のインポートウイザードが開いたら<span class="guilabel">[次へ]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_04.png"><img alt="../_images/InstallingIntoChrome_windows_04.png" src="../_images/InstallingIntoChrome_windows_04.png" style="width: 498.4px; height: 528.5px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p><span class="guilabel">[参照]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_05.png"><img alt="../_images/InstallingIntoChrome_windows_05.png" src="../_images/InstallingIntoChrome_windows_05.png" style="width: 498.4px; height: 528.5px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="7">
+<li><p>ファイルの種類を<span class="guilabel">[Personal Information Exchange(*.pfx,*.p12)]</span>に変更します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_06.png"><img alt="../_images/InstallingIntoChrome_windows_06.png" src="../_images/InstallingIntoChrome_windows_06.png" style="width: 667.0999999999999px; height: 417.9px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>&quot;ユーザーアカウント名.p12&quot;ファイルを選択し、<span class="guilabel">[開く]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_07.png"><img alt="../_images/InstallingIntoChrome_windows_07.png" src="../_images/InstallingIntoChrome_windows_07.png" style="width: 667.0999999999999px; height: 419.29999999999995px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="9">
+<li><p>ファイル名を設定した後、<span class="guilabel">[次へ]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_08.png"><img alt="../_images/InstallingIntoChrome_windows_08.png" src="../_images/InstallingIntoChrome_windows_08.png" style="width: 496.99999999999994px; height: 530.6px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="10">
+<li><p>クライアント証明書のパスフレーズを<span class="guilabel">パスワード欄</span>に入力し、インポートオプションの<span class="guilabel">[秘密キーの保護を強力にする</span>にチェックを付け、<span class="guilabel">[次へ]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_09.png"><img alt="../_images/InstallingIntoChrome_windows_09.png" src="../_images/InstallingIntoChrome_windows_09.png" style="width: 498.4px; height: 530.6px;" /></a>
+</figure>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>クライアント証明書のパスフレーズが正しくない場合エラーが表示され、次の画面に進めません。</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="11">
+<li><p><span class="guilabel">証明書の種類に基づいて、自動的に証明書ストアを選択する</span>をチェックし、<span class="guilabel">[次へ]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_10.png"><img alt="../_images/InstallingIntoChrome_windows_10.png" src="../_images/InstallingIntoChrome_windows_10.png" style="width: 498.4px; height: 528.5px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="12">
+<li><p><span class="guilabel">[完了]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_11.png"><img alt="../_images/InstallingIntoChrome_windows_11.png" src="../_images/InstallingIntoChrome_windows_11.png" style="width: 498.4px; height: 528.5px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="13">
+<li><p>引き続き「新しい秘密交換キーをインポートします」画面が表示されますので、<span class="guilabel">[セキュリティレベルの設定]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_12.png"><img alt="../_images/InstallingIntoChrome_windows_12.png" src="../_images/InstallingIntoChrome_windows_12.png" style="width: 509.0px; height: 417.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="14">
+<li><p><span class="guilabel">[高]</span>をチェックし、<span class="guilabel">[次へ]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_13.png"><img alt="../_images/InstallingIntoChrome_windows_13.png" src="../_images/InstallingIntoChrome_windows_13.png" style="width: 590.0px; height: 498.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="15">
+<li><p>パスワードを設定し、<span class="guilabel">[完了]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_14.png"><img alt="../_images/InstallingIntoChrome_windows_14.png" src="../_images/InstallingIntoChrome_windows_14.png" style="width: 590.0px; height: 498.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="16">
+<li><p><span class="guilabel">[OK]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_15.png"><img alt="../_images/InstallingIntoChrome_windows_15.png" src="../_images/InstallingIntoChrome_windows_15.png" style="width: 510.0px; height: 417.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="17">
+<li><p><span class="guilabel">[OK]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_16.png"><img alt="../_images/InstallingIntoChrome_windows_16.png" src="../_images/InstallingIntoChrome_windows_16.png" style="width: 272.0px; height: 199.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="18">
+<li><p>セキュリティ警告が出た場合は、拇印が(SHA-1): <code class="docutils literal notranslate"><span class="pre">EEED846F</span> <span class="pre">FC733A73</span> <span class="pre">328F4561</span> <span class="pre">39BDB995</span> <span class="pre">D5174BBC</span></code>であることを確認したうえで、<span class="guilabel">[はい]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_17.png"><img alt="../_images/InstallingIntoChrome_windows_17.png" src="../_images/InstallingIntoChrome_windows_17.png" style="width: 550.0px; height: 503.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="19">
+<li><p>以上でクライアント証明書のインストールは完了です。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_windows_18.png"><img alt="../_images/InstallingIntoChrome_windows_18.png" src="../_images/InstallingIntoChrome_windows_18.png" style="width: 470.4px; height: 495.59999999999997px;" /></a>
+</figure>
+</div></blockquote>
+</section>
+<section id="chrome-mac">
+<h2><span class="section-number">4.2.4. </span>Chromeへの証明書のインストール（Mac）<a class="headerlink" href="#chrome-mac" title="Link to this heading">¶</a></h2>
+<p>MacでChromeを利用する場合のインストール手順を示します。
+macOSでは、クライアント証明書を「キーチェーンアクセス」で管理しています。</p>
+<ol class="arabic simple">
+<li><p>クライアント証明書:&quot;ユーザーアカウント名.p12&quot;ファイルをダブルクリックします。最初にパスワード入力画面が表示されます。
+クライアント証明書のパスフレーズを入力し、<span class="guilabel">[OK]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_01.png"><img alt="../_images/InstallingIntoChrome_01.png" src="../_images/InstallingIntoChrome_01.png" style="width: 444.0px; height: 196.0px;" /></a>
+</figure>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>クライアント証明書のパスフレーズが正しくない場合エラーが表示され、次の画面に進めません。</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>「キーチェーンアクセス」画面を開き、クライアント証明書を発行したサーバの証明書（RIKEN R-CCS）をダブルクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_02.png"><img alt="../_images/InstallingIntoChrome_02.png" src="../_images/InstallingIntoChrome_02.png" style="width: 526.1999999999999px; height: 359.4px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>「ルート認証局」の「信頼」をクリックし、「この証明書を使用するとき：」のリストから「常に信頼する」を選択して、画面を閉じます。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_03.png"><img alt="../_images/InstallingIntoChrome_03.png" src="../_images/InstallingIntoChrome_03.png" style="width: 462.6px; height: 390.6px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>信頼設定の変更を反映するため、Macの管理者ユーザ名とパスワードが要求されます。これらを入力し、<span class="guilabel">［設定をアップデート］</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_04.png"><img alt="../_images/InstallingIntoChrome_04.png" src="../_images/InstallingIntoChrome_04.png" style="width: 441.0px; height: 236.0px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>「キーチェーンアクセス」画面で、Controlキーを押しながらクライアント証明書（名前欄にローカルアカウント名が表記されたもの）をクリックし、<span class="guilabel">「新規識別プリファレンス」</span>を選択します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_05.png"><img alt="../_images/InstallingIntoChrome_05.png" src="../_images/InstallingIntoChrome_05.png" style="width: 613.9px; height: 417.2px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>「場所またはメールアドレス：」に「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/">https://www.fugaku.r-ccs.riken.jp/</a>」と入力し、<span class="guilabel">[追加]</span>をクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_06.png"><img alt="../_images/InstallingIntoChrome_06.png" src="../_images/InstallingIntoChrome_06.png" style="width: 299.59999999999997px; height: 148.39999999999998px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="7">
+<li><p>同様の手順で「<a class="reference external" href="https://api.fugaku.r-ccs.riken.jp/">https://api.fugaku.r-ccs.riken.jp/</a>」を登録します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../_images/InstallingIntoChrome_07.png"><img alt="../_images/InstallingIntoChrome_07.png" src="../_images/InstallingIntoChrome_07.png" style="width: 299.59999999999997px; height: 151.89999999999998px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>「キーチェーンアクセス」に入力した「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/">https://www.fugaku.r-ccs.riken.jp/</a>」「<a class="reference external" href="https://api.fugaku.r-ccs.riken.jp/">https://api.fugaku.r-ccs.riken.jp/</a>」の「識別プリファレンス」が追加されたことを確認し、画面を閉じます。インストール作業はこれで完了です。</p></li>
+</ol>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">4.2. クライアント証明書のインストール</a><ul>
+<li><a class="reference internal" href="#firefox-windows">4.2.1. Firefoxへの証明書のインストール（Windows）</a></li>
+<li><a class="reference internal" href="#firefox-mac">4.2.2. Firefoxへの証明書のインストール（Mac）</a></li>
+<li><a class="reference internal" href="#chrome-windows">4.2.3. Chromeへの証明書のインストール（Windows）</a></li>
+<li><a class="reference internal" href="#chrome-mac">4.2.4. Chromeへの証明書のインストール（Mac）</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="Overview.html"
+                          title="前の章へ"><span class="section-number">4.1. </span>概要</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="AccessingTheUsersPortal.html"
+                          title="次の章へ"><span class="section-number">4.3. </span>富岳ウェブサイトへの接続手順</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="AccessingTheUsersPortal.html" title="4.3. 富岳ウェブサイトへの接続手順"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="4.1. 概要"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">4. </span>システム利用</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.2. </span>クライアント証明書のインストール</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,182 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6.2. Execution command format &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6.3. How to execute back ground job" href="HowToExecuteABackgroundJob.html" />
+    <link rel="prev" title="6.1. Overview" href="Overview.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="HowToExecuteABackgroundJob.html" title="6.3. How to execute back ground job"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="6.1. Overview"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.2. </span>Execution command format</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="execution-command-format">
+<h1><span class="section-number">6.2. </span>Execution command format<a class="headerlink" href="#execution-command-format" title="Link to this heading">¶</a></h1>
+<p>MPI program execution format by <strong class="program">mpiexec</strong> command is as following.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w">  </span>opiton<span class="w"> </span>execution<span class="w"> </span>module<span class="w"> </span>execution<span class="w"> </span>module<span class="w"> </span>option
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Incompatible Points of <strong class="program">mpiexec</strong></p>
+<p>The mpiexec command has been customized for use in the Fugaku, so it is partly incompatible with the one described in MPI Users Guide. This section describes the incompatible points of <strong class="program">mpiexec</strong>.</p>
+<p>Collection of Application Information</p>
+<blockquote>
+<div><p>The following information of executed applications is collected for the sake of improvement of operation of the Fugaku:</p>
+<ul class="simple">
+<li><p>Compiler information</p></li>
+<li><p>Symbol table</p></li>
+<li><p>Shared library information</p></li>
+<li><p>MD5 hash checksum</p></li>
+<li><p>Type and strings of executable file</p></li>
+</ul>
+<p>You can inhibit information collection about your application by setting the following environment variable:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#PJM -x &quot;APPLOG=NO&quot;
+</pre></div>
+</div>
+<p>Information collection is performed only at the beginning of <strong class="program">mpiexec</strong> , so it does not affect the performance of running jobs.
+Also, it does not so much affect execution time of jobs.</p>
+</div></blockquote>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong class="program">mpiexec</strong> command option specification example</p>
+<ul class="simple">
+<li><p>When running MPI programs in 8 parallelMPI (<code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">8</span></code>)</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>-std-proc<span class="w"> </span>procfile<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">-n</span></code> option is omitted, default value is applied.</p>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>When running JAVA MPI programs in 8 parallel (<code class="docutils literal notranslate"><span class="pre">-n</span> <span class="pre">8</span></code>)</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>-std-proc<span class="w"> </span>procfile<span class="w"> </span>java<span class="w"> </span>-classpath<span class="w"> </span>./dir<span class="w"> </span>JavaTest
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Class path is specified with java command’s <code class="docutils literal notranslate"><span class="pre">-classpath</span></code> option.</p>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>If executes some MPI jobs at the same time</p></li>
+</ul>
+<blockquote>
+<div><ol class="arabic">
+<li><p>MPMD</p>
+<p>It is possible to execute programs multiply by deviding execution unit with colon “:” .
+Sum of  <code class="docutils literal notranslate"><span class="pre">-n</span></code> is set as not over  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">proc=N</span></code>.</p>
+<p>[Style]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span><span class="o">[</span>global<span class="w"> </span>options<span class="o">]</span><span class="w"> </span>-n<span class="w"> </span>N1<span class="w"> </span><span class="o">[</span><span class="nb">local</span><span class="w"> </span>options<span class="o">]</span><span class="w"> </span>Execution<span class="w"> </span>file<span class="w"> </span><span class="m">1</span><span class="w"> </span>:<span class="w"> </span>-n<span class="w"> </span>N2<span class="w"> </span><span class="o">[</span><span class="nb">local</span><span class="w"> </span>options<span class="o">]</span><span class="w"> </span>Execution<span class="w"> </span>file<span class="w"> </span><span class="m">2</span><span class="w"> </span>:<span class="w"> </span>...
+</pre></div>
+</div>
+<p>[Example]</p>
+<p>Execute MPI program executable file  <code class="file docutils literal notranslate"><span class="pre">a.out</span></code>, <code class="file docutils literal notranslate"><span class="pre">b.out</span></code>, <code class="file docutils literal notranslate"><span class="pre">c.out</span></code> as per 2, 4, 6 parallel process</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mpiexec<span class="w"> </span>-std-proc<span class="w"> </span>procfile<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span>./a.out<span class="w"> </span>:<span class="w"> </span>-n<span class="w"> </span><span class="m">4</span><span class="w"> </span>./b.out<span class="w"> </span>:<span class="w"> </span>-n<span class="w"> </span><span class="m">6</span><span class="w"> </span>./c.out
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If it’s Java program, execution by MPMD model is not guaranteed.</p>
+</div>
+</li>
+<li><p>Back ground job</p>
+<p>To sexecute some back groud jobs at the same time, specify the coordinates of the node to use by specifying  <code class="docutils literal notranslate"><span class="pre">-vcoordfile</span></code> option. Be careful not to use the same node between jobs that run at the same time. You can run up to 128 at the same time in the background.</p>
+</li>
+</ol>
+</div></blockquote>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Overview.html"
+                          title="previous chapter"><span class="section-number">6.1. </span>Overview</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="HowToExecuteABackgroundJob.html"
+                          title="next chapter"><span class="section-number">6.3. </span>How to execute back ground job</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="HowToExecuteABackgroundJob.html" title="6.3. How to execute back ground job"
+             >next</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="6.1. Overview"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.2. </span>Execution command format</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

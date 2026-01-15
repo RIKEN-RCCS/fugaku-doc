@@ -1,0 +1,256 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.13. Deleting a job &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.14. Notes on job operations" href="NotesOnJobOperationCommands.html" />
+    <link rel="prev" title="5.12. Displaying a job status" href="DisplayingJobStatus.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="NotesOnJobOperationCommands.html" title="5.14. Notes on job operations"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="DisplayingJobStatus.html" title="5.12. Displaying a job status"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.13. </span>Deleting a job</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="deleting-a-job">
+<h1><span class="section-number">5.13. </span>Deleting a job<a class="headerlink" href="#deleting-a-job" title="Link to this heading">¶</a></h1>
+<p>Able to delete the submitted job by the user with  <strong class="program">pjdel</strong> command. Also deletable the executing job.</p>
+<p>[Execution example]</p>
+<ul class="simple">
+<li><p>If execute  <strong class="program">pjdel</strong> and job deletion was accepted successfully, the message below will be displayed.</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">[INFO] PJM 0100 pjdel Accepted job jobid.</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>If execute  <strong class="program">pjdel</strong> and specify the job which does not exist, the message below will be displayed.</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">[ERR.] PJM 0112 pjdel Job &quot;Unexisting job ID&quot; does not exist.</span>
+</pre></div>
+</div>
+</div></blockquote>
+<section id="normal-job">
+<h2><span class="section-number">5.13.1. </span>Normal job<a class="headerlink" href="#normal-job" title="Link to this heading">¶</a></h2>
+<p>Indicates how to delete normal jobs.</p>
+<p>Here, the following is the normal job.</p>
+<ul class="simple">
+<li><p>Normal job</p></li>
+<li><p>Interactive job</p></li>
+<li><p>Master/Worker type job</p></li>
+</ul>
+<p>Here is the use example.</p>
+<ul>
+<li><p>Example of deleting a job.</p>
+<p>If execute by specifying job ID to  <strong class="program">pjdel</strong> command, the job is deleted.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjdel<span class="w"> </span><span class="m">12345678</span>
+<span class="go">[INFO] PJM 0100 pjdel Accepted job 12345678.</span>
+</pre></div>
+</div>
+</li>
+<li><p>Example of deleting the multiple job</p>
+<p>If execute by specifying the multiple job ID to  <strong class="program">pjdel</strong> command, the specified job is deleted.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjdel<span class="w"> </span><span class="m">12345678</span><span class="w"> </span><span class="m">12345680</span>
+<span class="go">[INFO] PJM 0100 pjdel Accepted job 12345678.</span>
+<span class="go">[INFO] PJM 0100 pjdel Accepted job 12345680.</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="step-job">
+<h2><span class="section-number">5.13.2. </span>Step job<a class="headerlink" href="#step-job" title="Link to this heading">¶</a></h2>
+<p>Indicates how to delete step jobs.</p>
+<div class="line-block">
+<div class="line">To delete a job, specify the job ID as shown in the following example.</div>
+<div class="line">Specify job ID and execute  <strong class="program">pjdel</strong> command, all sub job will be canceled.</div>
+<div class="line">If a sub job ID is specified, the specified sub job is canceled.</div>
+<div class="line"><br /></div>
+<div class="line">The usage example is as follows:</div>
+</div>
+<ul>
+<li><p>When canceling all sub jobs by specifying a job ID</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjdel<span class="w"> </span><span class="m">12345678</span>
+<span class="go">[INFO] PJM 0100 pjdel Accepted job 12345678_0.</span>
+<span class="go">[INFO] PJM 0100 pjdel Accepted job 12345678_1.</span>
+<span class="go">[INFO] PJM 0100 pjdel Accepted job 12345678_2.</span>
+</pre></div>
+</div>
+</li>
+<li><p>Canceling by specifying one sub job ID</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjdel<span class="w"> </span>12345678_3
+<span class="go">[INFO] PJM 0100 pjdel Accepted job 12345678_3.</span>
+</pre></div>
+</div>
+</li>
+<li><p>Canceling by specifying a sub job range</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjdel<span class="w"> </span>12345678_2-5
+<span class="go">[INFO] PJM 0100 pjdel Accepted job 12345678_2.</span>
+<span class="go">[INFO] PJM 0100 pjdel Accepted job 12345678_3.</span>
+<span class="go">[INFO] PJM 0100 pjdel Accepted job 12345678_4.</span>
+<span class="go">[INFO] PJM 0100 pjdel Accepted job 12345678_5.</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="bulk-job">
+<h2><span class="section-number">5.13.3. </span>Bulk job<a class="headerlink" href="#bulk-job" title="Link to this heading">¶</a></h2>
+<p>Indicates how to delete a bulk job.</p>
+<div class="line-block">
+<div class="line">To delete a job, specify the job ID as shown in the following example.</div>
+<div class="line">Specify job ID and execute  <strong class="program">pjdel</strong> command, all sub job will be canceled.</div>
+<div class="line">If a sub job ID is specified, the specified sub job is canceled.</div>
+<div class="line"><br /></div>
+<div class="line">The usage example is as follows:</div>
+</div>
+<ul>
+<li><p>When canceling all sub jobs by specifying a job ID</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjdel<span class="w"> </span><span class="m">28128</span>
+<span class="go"> [INFO] PJM 0100 pjdel Accepted job 28128.</span>
+</pre></div>
+</div>
+</li>
+<li><p>Canceling by specifying one sub job ID</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjdel<span class="w"> </span><span class="m">1362939</span><span class="o">[</span><span class="m">3</span><span class="o">]</span>
+<span class="go"> [INFO] PJM 0100 pjdel Accepted job 1362939[3].</span>
+</pre></div>
+</div>
+</li>
+<li><p>Canceling by specifying a sub job range</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjdel<span class="w"> </span><span class="m">1363254</span><span class="o">[</span><span class="m">0</span>-2<span class="o">]</span>
+<span class="go"> [INFO] PJM 0100 pjdel Accepted job 1363254[0-2].</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="job-delete-command-options">
+<h2><span class="section-number">5.13.4. </span>Job delete command options<a class="headerlink" href="#job-delete-command-options" title="Link to this heading">¶</a></h2>
+<p>Typical options of  <strong class="program">pjdel</strong> command are shown.</p>
+<p>For details, refer to “Job Operation Software End User Guide”.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option name</p></th>
+<th class="head"><p>Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>--enforce</p></td>
+<td><p>When canceling a job that is running a prolog script or epilog script, specify  <code class="docutils literal notranslate"><span class="pre">--enforce</span></code> option. Also if specify  <code class="docutils literal notranslate"><span class="pre">--enforce</span></code> option and execute  <strong class="program">pjdel</strong> command to the job which is executing job script, delete the job without running the epilog script.</p></td>
+</tr>
+<tr class="row-odd"><td><p>--llio-flush</p></td>
+<td><p>When canceling a job that is being executed, wait for flushing of unwritten files within the range of the job elapsed time limit.</p></td>
+</tr>
+<tr class="row-even"><td><p>--help</p></td>
+<td><p>Shows help.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.13. Deleting a job</a><ul>
+<li><a class="reference internal" href="#normal-job">5.13.1. Normal job</a></li>
+<li><a class="reference internal" href="#step-job">5.13.2. Step job</a></li>
+<li><a class="reference internal" href="#bulk-job">5.13.3. Bulk job</a></li>
+<li><a class="reference internal" href="#job-delete-command-options">5.13.4. Job delete command options</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="DisplayingJobStatus.html"
+                          title="previous chapter"><span class="section-number">5.12. </span>Displaying a job status</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="NotesOnJobOperationCommands.html"
+                          title="next chapter"><span class="section-number">5.14. </span>Notes on job operations</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="NotesOnJobOperationCommands.html" title="5.14. Notes on job operations"
+             >next</a></li>
+        <li class="right" >
+          <a href="DisplayingJobStatus.html" title="5.12. Displaying a job status"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.13. </span>Deleting a job</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

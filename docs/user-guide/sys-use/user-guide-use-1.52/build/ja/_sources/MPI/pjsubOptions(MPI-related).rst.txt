@@ -1,0 +1,58 @@
+.. _pjsubOptions(MPI-related)MPI:
+
+ジョブ投入コマンドのオプション（MPI） 
+======================================
+
+| MPIプログラムを実行するには、\ :program:`pjsub`\のオプションを適切に指定する必要があります。
+| 1次元の指定例を示します。
+
+
+【ジョブスクリプト】
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L "node=24"               # node数の指定(1次元指定)
+  #PJM -L  "rscgrp=small"
+  #PJM --mpi "shape=12"           # 静的プロセス形状指定
+  #PJM --mpi "proc=12"            # 最大静的プロセス数
+  #PJM -g groupname               # 課題のグループ指定
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N         # ジョブで使用するデータ領域のvolume  #
+  mpiexec  -n  12 ./a.out         # 並列プロセス数24でa.outを実行
+
+
+1. -L "node=24"
+    ``-L node``\ で要求した形状／計算ノード数が確保されます。1次元形状（24）が指定されているため、1次元で24計算ノードが確保されます。
+
+.. figure:: ./img/pjsubOptions(MPI-related)_01.png
+   :align: center
+   :scale: 80
+
+
+2. --mpi "shape=12"
+    ``--mpi shape``\ で静的プロセスを割り当てる領域を決定します。\ ``--mpi shape``\ は\ ``-L node``\ で指定した同じ次元（1次元／2次元／3次元）を指定します。\ ``--mpi shape``\ を省略した場合は、\ ``-L node``\ の値となります。
+
+.. figure:: ./img/pjsubOptions(MPI-related)_02.png
+   :align: center
+   :scale: 80
+
+
+3. --mpi rank-map-bynode／--mpi rank-map-hostfile／--mpi rank-map-bychip
+    静的プロセスのランクを割り当てます。ランクは\ ``--mpi shape``\ の範囲で割り当てられます。
+
+
+4. mpiexec
+    :program:`mpiexec`\ コマンドでMPIプログラムを実行します。\ ``-n``\ オプションで静的プロセス数を指定します。\ ``-n``\ オプションを省略した場合は、\ ``--mpi proc``\ の値となります。
+
+.. figure:: ./img/pjsubOptions(MPI-related)_03.png
+   :align: center
+   :scale: 80
+
+
+5. 動的プロセス生成
+    MPI_Comm_spawnにより動的プロセスを生成した場合、未割当（動的プロセス割当領域）にプロセスが生成される。
+
+.. figure:: ./img/pjsubOptions(MPI-related)_04.png
+   :align: center
+   :scale: 80
+

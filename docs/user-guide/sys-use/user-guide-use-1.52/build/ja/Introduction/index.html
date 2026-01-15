@@ -1,0 +1,690 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1. はじめに &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="2. 利用方法" href="../MethodOfUse/index.html" />
+    <link rel="prev" title="利用手引書 －利用およびジョブ実行編－ 1.52版" href="../index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../MethodOfUse/index.html" title="2. 利用方法"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="../index.html" title="利用手引書 －利用およびジョブ実行編－ 1.52版"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>はじめに</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">1. </span>はじめに<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<section id="id2">
+<h2><span class="section-number">1.1. </span>本資料の目的<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>本書は、スーパーコンピュータ「富岳」の基本的な利用方法を記述しています。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">1.2. </span>本書で使用する表記<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>コマンド実行において、操作対象の利用者端末、ログインノードを、プロンプトで表現しています。</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>プロンプト</p></th>
+<th class="head"><p>操作対象</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[terminal]</p></td>
+<td><p>利用者の端末でコマンドを実行することを意味します</p></td>
+</tr>
+<tr class="row-odd"><td><p>[_LNlogin]</p></td>
+<td><p>ログインノード（共通）でコマンドを実行することを意味します</p></td>
+</tr>
+<tr class="row-even"><td><p>[_LNIlogin]</p></td>
+<td><p>ログインノード（Intel）でコマンドを実行することを意味します</p></td>
+</tr>
+<tr class="row-odd"><td><p>[_LNAlogin]</p></td>
+<td><p>ログインノード（Arm）でコマンドを実行することを意味します</p></td>
+</tr>
+<tr class="row-even"><td><p>[_CNlogin]</p></td>
+<td><p>計算ノードでコマンドを実行することを意味します</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li><p>ホームディレクトリは ~（チルダ）で表現しています。</p></li>
+<li><p>言語環境について、特にことわりがない限り最新版の機能を基に記載しています。</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2><span class="section-number">1.3. </span>略称、別名について<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>本書で使用する略称は以下のとおりです。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>名称</p></th>
+<th class="head"><p>略称、別名</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>次世代超高速電子計算機システム</p></td>
+<td><p>スーパーコンピュータ「富岳」</p></td>
+</tr>
+<tr class="row-odd"><td><p>計算ノード</p></td>
+<td><p>CN</p></td>
+</tr>
+<tr class="row-even"><td><p>BIO 兼計算ノード</p></td>
+<td><p>CN/BIO</p></td>
+</tr>
+<tr class="row-odd"><td><p>SIO 兼計算ノード</p></td>
+<td><p>CN/SIO</p></td>
+</tr>
+<tr class="row-even"><td><p>GIO 兼計算ノード</p></td>
+<td><p>CN/GIO</p></td>
+</tr>
+<tr class="row-odd"><td><p>ログインノード兼ファイル転送ノード</p></td>
+<td><p>ログインノード、または、LN</p></td>
+</tr>
+<tr class="row-even"><td><p>BIO 兼計算ノードに接続されたストレージ</p></td>
+<td><p>システムディスク</p></td>
+</tr>
+<tr class="row-odd"><td><p>SIO 兼計算ノードに接続されたストレージ</p></td>
+<td><p>第１階層ストレージ</p>
+<p>第1階層SSD、または、SSD</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="id5">
+<h2><span class="section-number">1.4. </span>商標について<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>文中の社名、商品名等は各社の商標または登録商標である場合があります。その他の記載されている商標および登録商標については、一般に各社の商標または登録商標です。本資料に掲載されているシステム名、製品名などには、必ずしも商標表示（TM、（R））を付記しておりませんので、ご注意ください。</p>
+</section>
+<section id="id6">
+<h2><span class="section-number">1.5. </span>更新履歴<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<p>本書の更新箇所を示します。</p>
+<p><strong>1.52版 2025年11月18日</strong></p>
+<ul class="simple">
+<li><p>「6.12. MPIの集団通信アルゴリズム（knomial, rabenseifner）」を追加しました。</p></li>
+</ul>
+<p><strong>1.51版 2025年10月23日</strong></p>
+<ul class="simple">
+<li><p>「4.5 ノード使用状況確認」にpjshowrscコマンド使用時の注意事項を追記しました。</p></li>
+</ul>
+<p><strong>1.50版 2025年10月10日</strong></p>
+<ul class="simple">
+<li><p>「8.5.4. ジョブ投入時（pjsub --llio）のオプション」 に「注意」を追記し、デフォルト値を追記しました。</p></li>
+</ul>
+<p><strong>1.49版 2025年5月14日</strong></p>
+<ul class="simple">
+<li><p>「5.20.2. スタートアップ課題 (trial) におけるジョブ実行」 を追加しました。</p></li>
+</ul>
+<p><strong>1.48版 2025年4月4日</strong></p>
+<ul class="simple">
+<li><p>「3.4.12. ユーザープログラムが利用可能なメモリ量の見積り」 のジョブメモリ量の上限に関する記事を更新しました。</p></li>
+<li><p>「5.1.3. ジョブスクリプトの作成」のpjaclコマンドの表示例を更新しました</p></li>
+<li><p>「5.10.4. メモリ断片化の影響緩和」 を追加しました。</p></li>
+<li><p>「5.19.1. job_events」にjob_eventsコマンドの結果反映までのタイムラグに関する「注意」を追記しました。</p></li>
+<li><p>「7.1. 概要」の「設定値（デフォルト）」を更新しました。</p></li>
+<li><p>「7.1. 概要」の「注意」の「設定値」を更新しました。</p></li>
+<li><p>「7.2.1. 機能概要」の「デフォルト値」を更新しました。</p></li>
+<li><p>「7.2.2. 使用例」を更新しました。</p></li>
+<li><p>「8.1. 概要」 の&quot;プログラミングガイド-IO編-&quot;のリンクを修正しました。</p></li>
+<li><p>「8.2.1. １ファイルに対して１プロセスから書込む場合」のサンプルコードを更新しました。</p></li>
+<li><p>「8.2.2. １ファイルに対して複数プロセスから書込む場合」のサンプルコードを更新しました。</p></li>
+</ul>
+<p><strong>1.47版 2025年2月25日</strong></p>
+<ul class="simple">
+<li><p>「4.2.3. Chromeへの証明書のインストール（Windows）」に証明書マネージャーの画面例を追加しました。</p></li>
+<li><p>「4.4.3.1. ログインノード」に注釈を追加しました。</p></li>
+<li><p>「7.1. 概要」の「注意」を更新しました。</p></li>
+</ul>
+<p><strong>1.46版 2024年12月27日</strong></p>
+<ul class="simple">
+<li><p>「8.7. I/Oのプロファイリング」および「8.8. I/Oの最適化」のDarshanに関する記述を更新しました。</p></li>
+</ul>
+<p><strong>1.45版 2024年11月27日</strong></p>
+<ul class="simple">
+<li><p>「3.4.5. ディスク」の「tmpfs領域(/worktmp/)の利用」を更新しました。</p></li>
+<li><p>「3.4.5.2. tmpfs領域(/worktmp/)の利用方法」を更新しました。</p></li>
+<li><p>「5.9.2.2. 低優先度ジョブ実行」を更新しました。</p></li>
+<li><p>「5.19. 障害の影響を受けたジョブ一覧表示コマンド」からshow_affected_jobsの記述を削除しました。</p></li>
+<li><p>「5.19.1. job_events」を更新しました。</p></li>
+<li><p>「7.2. パワーモード指定（ジョブ実行時のパワーノブ操作）」の誤字を修正しました。</p></li>
+<li><p>「8.2.1. １ファイルに対して１プロセスから書込む場合」のサンプルコードの誤りを修正しました。</p></li>
+<li><p>「8.2.2. １ファイルに対して複数プロセスから書込む場合」のサンプルコードの誤りを修正しました。</p></li>
+</ul>
+<p><strong>1.44版 2024年11月1日</strong></p>
+<ul class="simple">
+<li><p>「3.4.5. ディスク」の「tmpfs領域の利用」に「注意」を追加しました。</p></li>
+<li><p>「5.9.7. 実行開始時刻の指定」の「注意」を更新しました。</p></li>
+</ul>
+<p><strong>1.43版 2024年10月17日</strong></p>
+<ul class="simple">
+<li><p>「7.1. 概要」の「注釈」を更新しました。</p></li>
+<li><p>「7.1. 概要」の「注意」を更新しました。</p></li>
+<li><p>「7.3.5. 電力制御点」の「注意」を更新しました。</p></li>
+</ul>
+<p><strong>1.42版 2024年9月4日</strong></p>
+<ul class="simple">
+<li><p>「4.3. 富岳ウェブサイトへの接続手順」にMacのキーチェーン使用時のパスワードの説明を追加しました。</p></li>
+</ul>
+<p><strong>1.41版 2024年7月22日</strong></p>
+<ul class="simple">
+<li><p>「5.19.1. job_events」を更新しました。</p></li>
+<li><p>「8.階層化ストレージとLLIO」を「8.階層化ストレージ」に変更しました。</p></li>
+<li><p>「8.1. 概要」を更新しました。</p></li>
+<li><p>「8.2. FEFS/LLIOへのファイル書込み方法について」を「8.2. FEFS/LLIOへのファイル操作について」に変更しました。</p></li>
+<li><p>「8.2.2. １ファイルに対して複数プロセスから書込む場合」を更新しました。</p></li>
+<li><p>「8.2.3. ファイル名変更」を追加しました。</p></li>
+<li><p>「8.2.4. ファイル削除」を追加しました。</p></li>
+<li><p>「8.3.2 第2階層ストレージへの書出しタイミング」を更新しました。</p></li>
+<li><p>「8.3.4. 非同期クローズ/同期クローズ」を更新しました。</p></li>
+<li><p>「8.6. 留意事項」を更新しました。</p></li>
+</ul>
+<p><strong>1.40版 2024年6月7日</strong></p>
+<ul class="simple">
+<li><p>「5.10.1. 概要」に注釈を追加しました</p></li>
+<li><p>「8.1. 概要」の記載内容を見直しました。</p></li>
+<li><p>「8.2. FEFS/LLIOへのファイル書込み方法について」を追加しました。</p></li>
+<li><p>「8.3. 第2階層ストレージのキャッシュ領域」の記載内容を見直しました。</p></li>
+<li><p>「8.3.2. 第2階層ストレージへの書出しタイミング」を追加しました。</p></li>
+<li><p>「8.3.4. 非同期クローズ/同期クローズ」の記載内容を見直しました。</p></li>
+<li><p>「8.4. ノード内テンポラリ領域」の記載内容を見直しました。</p></li>
+<li><p>「8.5. 共有テンポラリ領域」の記載内容を見直しました。</p></li>
+<li><p>「8.6.2. MPI-IO」の記載内容を見直しました。</p></li>
+</ul>
+<p><strong>1.39版 2024年5月30日</strong></p>
+<ul class="simple">
+<li><p>「6.4.2. オプション指定による出力表」を更新しました</p></li>
+</ul>
+<p><strong>1.38版 2024年4月4日</strong></p>
+<ul class="simple">
+<li><p>「5.13.4. ジョブ削除コマンドのオプション」の記述を更新しました</p></li>
+<li><p>「5.19.3. show_evict_node」を追加しました</p></li>
+<li><p>「8.2.1. 第2階層ストレージのキャッシュの容量」の「注意」を更新しました</p></li>
+<li><p>「8.2.3. 非同期クローズ/同期クローズ」の「注意」を更新しました</p></li>
+</ul>
+<p><strong>1.37版 2024年2月2日</strong></p>
+<ul class="simple">
+<li><p>「3.4.5.2. tmpfs領域の利用方法」の利用できる容量の説明を更新しました</p></li>
+<li><p>「3.4.12. ユーザープログラムが利用可能なメモリ量の見積り」にジョブメモリ量の上限の説明を追記しました</p></li>
+</ul>
+<p><strong>1.36版 2024年1月10日</strong></p>
+<ul class="simple">
+<li><p>「4.6.2. コマンドの使用例」を見直しました</p></li>
+<li><p>表記の統一のためにuser_nameをusernameに書き換えました</p></li>
+<li><p>表記の統一のために&lt;username&gt;をusernameに書き換えました</p></li>
+<li><p>表記の統一のためにgroup_nameをgroupnameに書き換えました</p></li>
+<li><p>表記の統一のために&lt;groupname&gt;をgroupnameに書き換えました</p></li>
+</ul>
+<p><strong>1.35版 2023年12月12日</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/">https://www.fugaku.r-ccs.riken.jp/</a> の呼称を「利用者ポータル」から「富岳ウェブサイト」に変更しました</p></li>
+<li><p>「5.12.6. ジョブ状態表示コマンドのオプション」のhistoryの保持期間を変更しました</p></li>
+</ul>
+<p><strong>1.34版 2023年10月6日</strong></p>
+<ul class="simple">
+<li><p>「2.2. マニュアル」に掲載した一覧と富岳ウェブサイトに公開されているマニュアルに相違があったため更新しました。</p></li>
+<li><p>「3.4.7. ファイルシステム」に/vol0002領域の説明を追加しました。</p></li>
+<li><p>「3.4.5. ディスク」の「注意」を更新しました。</p></li>
+<li><p>「3.4.6. ファイル作成とストライプ設定」の「注意」を更新しました。</p></li>
+<li><p>「5.9.2.2. 低優先度ジョブ実行」を追加しました。</p></li>
+<li><p>「5.18. TofuD TNR 統計情報の取得」の送受信パケット総バイト数の説明を更新しました。</p></li>
+<li><p>「5.19.1. job_events」を追加しました。</p></li>
+<li><p>データ領域のパスを&quot;/data&quot;と表記していた箇所を&quot;/vol0n0m/data&quot;に修正しました。</p></li>
+<li><p>&quot;/vol0m0n/group/data&quot;と誤って表記していた箇所を&quot;/vol0n0m/data/group&quot;に修正しました。</p></li>
+</ul>
+<p><strong>1.33版 2023年6月19日</strong></p>
+<ul class="simple">
+<li><p>「5.1.4. ジョブスクリプトの雛形作成コマンド」に--gnameオプションの説明を追記しました。</p></li>
+<li><p>「5.1.5. ジョブ振り分け運用」を追加しました。</p></li>
+<li><p>「5.9.2.1. 最低実行時間を指定したジョブ実行」に注意事項を追記しました。</p></li>
+<li><p>「5.19. 障害の影響を受けたジョブ一覧表示コマンド」の-gオプションの説明を追記しました。</p></li>
+</ul>
+<p><strong>1.32版 2023年6月2日</strong></p>
+<ul class="simple">
+<li><p>「5.9.2. リソース指定」の説明欄の記載を変更しました。</p></li>
+<li><p>「5.9.2.1. 最低実行時間を指定したジョブ実行」を追加しました。</p></li>
+</ul>
+<p><strong>1.31版 2023年4月25日</strong></p>
+<ul class="simple">
+<li><p>「3.4.7. ファイルシステム」の第２階層ストレージにvol0002に関する参照ページを追加しました。</p></li>
+</ul>
+<p><strong>1.30版 2023年4月4日</strong></p>
+<ul class="simple">
+<li><p>「7.3.5. 電力制御点」の注意を更新しました。</p></li>
+<li><p>「8.2.5. ジョブ投入時（pjsub --llio）のオプション」のperf説明欄を更新しました。</p></li>
+<li><p>「8.3.3. ジョブ投入時（pjsub --llio）のオプション」のperf説明欄を更新しました。</p></li>
+<li><p>「8.4.4. ジョブ投入時（pjsub --llio）のオプション」のperf説明欄を更新しました。</p></li>
+<li><p>「8.5. 留意事項」から&quot;--llio perf&quot;の制限事項を削除しました。</p></li>
+</ul>
+<p><strong>1.29版 2023年3月22日</strong></p>
+<ul class="simple">
+<li><p>「4.4.1.2. Windows (PuTTYgen)」のputtygenの画面例を更新しました。</p></li>
+<li><p>「4.4.3.2. ログインノード（PuTTY）」のPuTTYの画面例を更新しました。</p></li>
+</ul>
+<p><strong>1.28版 2023年3月15日</strong></p>
+<ul class="simple">
+<li><p>「4.4.1. 鍵ペア（秘密鍵／公開鍵）の作成」にRSA鍵使用時の参照ページを追加しました。</p></li>
+<li><p>サンプルスクリプトの記述を一部変更しました。従来の記述でも動作に不具合はありません。</p></li>
+</ul>
+<p><strong>1.27版 2023年2月8日</strong></p>
+<ul class="simple">
+<li><p>「5.8.1. 動的ライブラリの検索負荷を削減するツール（sort_libp）」のジョブスクリプト記載例を変更しました。</p></li>
+<li><p>「8.6. I/Oの最適化」にDarshanの説明を追加し、「8.6. I/Oのプロファイリング」、「8.7. I/Oの最適化」に分割しました。</p></li>
+</ul>
+<p><strong>1.26版 2023年1月5日</strong></p>
+<ul class="simple">
+<li><p>「8.6.1. LLIO性能情報を用いたボトルネックの分析」の集計スクリプトを変更しました。</p></li>
+</ul>
+<p><strong>1.25版 2022年11月14日</strong></p>
+<ul class="simple">
+<li><p>「3.4.5. ディスク」のvolume番号を変更しました。</p></li>
+<li><p>「3.4.7. ファイルシステム」のvolume番号を変更しました。</p></li>
+<li><p>「5.2.1. ジョブの投入」に新しいメッセージの説明を追加しました</p></li>
+<li><p>「7.1. 概要」のretention_stateの記載を更新しました</p></li>
+<li><p>「8.5. 留意事項」を更新しました。</p></li>
+<li><p>「8.7. 利用ファイルシステム(volume)の選択」のvolume番号を変更しました。</p></li>
+<li><p>「8.7.1. 環境変数およびpjsubオプション」のvolume番号を変更しました。</p></li>
+<li><p>「8.7.1. 環境変数およびpjsubオプション」に環境変数&quot;PJM_LLIO_SHAREDTMP&quot;の記載を追加しました。</p></li>
+</ul>
+<p><strong>1.24版 2022年10月20日</strong></p>
+<ul class="simple">
+<li><p>「6.4. 標準出力／標準エラー出力／標準入力」更新しました</p></li>
+</ul>
+<p><strong>1.23版 2022年10月11日</strong></p>
+<ul class="simple">
+<li><p>「5.1.4. ジョブスクリプトの雛形作成コマンド」を追加しました</p></li>
+<li><p>「5.16.3. PJM 0079 ERROR REASON一覧」を更新しました</p></li>
+<li><p>「8.2.4. 共通ファイル配布機能 (llio_transfer)」の注意を更新しました</p></li>
+</ul>
+<p><strong>1.22版 2022年9月20日</strong></p>
+<ul class="simple">
+<li><p>「5.9.7. 実行開始時刻の指定」を追加しました</p></li>
+</ul>
+<p><strong>1.21版 2022年7月28日</strong></p>
+<ul class="simple">
+<li><p>「7.1. 概要」のIOを兼用する計算ノードのパワーノブ値の記載を変更しました</p></li>
+</ul>
+<p><strong>1.20版 2022年7月11日</strong></p>
+<ul class="simple">
+<li><p>「5.1.3. ジョブスクリプトの作成」に関連するページのリンクを追加しました</p></li>
+<li><p>「5.2.1. ジョブの投入」にpjsubコマンドが出すメッセージの例を追加しました</p></li>
+<li><p>セクションの名前を「5.16.3. GATE CHECK ERROR REASON一覧」から「5.16.3. PJM 0079 ERROR REASON一覧」に変更しました</p></li>
+<li><p>「8.5. 留意事項」を修正しました</p></li>
+</ul>
+<p><strong>1.19版 2022年6月22日</strong></p>
+<ul class="simple">
+<li><p>「4.1 概要」に流れ図を追加しました</p></li>
+</ul>
+<p><strong>1.18版 2022年6月9日</strong></p>
+<ul class="simple">
+<li><p>「4.4.1. 鍵ペア（秘密鍵／公開鍵）の作成」にRSAの使用を禁止する予定であることを記載しました</p></li>
+</ul>
+<p><strong>1.17版 2022年5月26日</strong></p>
+<ul class="simple">
+<li><p>「3.4.8. グループ」を更新しました</p></li>
+</ul>
+<p><strong>1.16版 2022年5月24日</strong></p>
+<ul class="simple">
+<li><p>「4.4. ログイン」にパーミッションに関する注釈を追加しました</p></li>
+</ul>
+<p><strong>1.15版 2022年5月16日</strong></p>
+<ul class="simple">
+<li><p>「3.3.4. 更新処理」の説明を更新しました</p></li>
+<li><p>「3.4.4. リソースグループの利用状況」の説明を更新しました</p></li>
+<li><p>「3.4.5. ディスク」のディレクトリ名を更新しました</p></li>
+<li><p>「3.4.5.1.2. ACLを利用したファイルの共有例」の表示例を更新しました</p></li>
+<li><p>「3.4.7. ファイルシステム」の第２階層ストレージの説明を更新しました</p></li>
+<li><p>「3.4.8. グループ」を追加しました。</p></li>
+<li><p>「3.4.10. ログインノード」を更新しました</p></li>
+<li><p>「4.3 富岳ウェブサイトへの接続手順」にChrome&#64;Mac使用時の注釈を追加しました</p></li>
+<li><p>「8.5.1.3. 第2階層ストレージへの直接アクセス」の説明を更新しました</p></li>
+<li><p>「8.7. 利用ファイルシステム(volume)の選択」の説明を更新しました</p></li>
+<li><p>「8.7.2. ジョブ投入方法」の説明を更新しました</p></li>
+</ul>
+<p><strong>1.14版 2022年4月3日</strong></p>
+<ul class="simple">
+<li><p>「3.4.12. 計算資源の利用の定義」を更新しました</p></li>
+<li><p>「4.4.6. 「富岳」運用情報のメール配信」を追加しました</p></li>
+<li><p>「5.12.5.3. 性能情報の算出」を更新しました</p></li>
+<li><p>「5.12.6. ジョブ状態表示コマンドのオプション」の-Hオプションの説明を更新しました</p></li>
+<li><p>「5.19. 障害の影響を受けたジョブ一覧表示コマンド」の-gオプションの説明を更新しました</p></li>
+<li><p>「7.1. 概要」を更新しました</p></li>
+<li><p>「8.2. 第2階層ストレージのキャッシュ領域」に注意を追加しました</p></li>
+<li><p>「8.7.1. 環境変数およびpjsubオプション」の--no-check-directoryオプションの説明を更新しました</p></li>
+</ul>
+<p><strong>1.13版 2022年1月14日</strong></p>
+<ul class="simple">
+<li><p>「3.4.5. ディスク」の注意事項を修正しました</p></li>
+<li><p>「5.3.1. ジョブ投入」に&quot;[ジョブ名を指定する方法]&quot;を追加しました</p></li>
+</ul>
+<p><strong>1.12版 2021年12月16日</strong></p>
+<ul class="simple">
+<li><p>「3.4.5. ディスク」を修正しました</p></li>
+<li><p>「8.2.2.2. 第2階層ストレージに対するストライプ設定」に注釈を追加しました。</p></li>
+<li><p>「8.5. 留意事項」を修正しました</p></li>
+<li><p>「8.6.2. 複数プロセスから同一ファイルへのI/O最適化」を削除しました</p></li>
+<li><p>「8.7. 利用ファイルシステム(volume)の選択」を追加しました</p></li>
+</ul>
+<p><strong>1.11版 2021年12月7日</strong></p>
+<ul class="simple">
+<li><p>「5.7.3. Agentプロセスによるワーカプロセス生成」の&quot;[utility.sh]&quot;の例を修正しました</p></li>
+<li><p>「5.7.4. pjaexeコマンドによるワーカプロセス生成」の&quot;[マスタプログラム master_pjaexe.sh]&quot;と&quot;[utility.sh]&quot;の例を修正しました</p></li>
+<li><p>「5.7.5. ジョブ作成における注意事項」にpjaexeコマンドについて注意を追加しました</p></li>
+<li><p>「5.7.6.1. ジョブの動作への影響」にマスタ・ワーカ型ジョブが終了するケースを追加しました</p></li>
+<li><p>「5.8.1. 動的ライブラリの検索負荷を削減するツール（sort_libp）」を追加しました</p></li>
+<li><p>「6.10.4. 関数使用例」のサンプルプログラムに誤りがあったため修正しました</p></li>
+<li><p>「8.2.3. 非同期クローズ/同期クローズ」に&quot;file transfer error information&quot;メッセージの注釈を追加しました</p></li>
+<li><p>「8.5.1. 高並列ジョブ(1000並列以上)の注意点」を追加しました</p></li>
+<li><p>「8.6. I/Oの最適化」を追加しました</p></li>
+</ul>
+<p><strong>1.10版 2021年9月28日</strong></p>
+<ul class="simple">
+<li><p>「3.4.7.1. 計算ノードのクライアントキャッシュとIO性能」を修正しました</p></li>
+<li><p>「8.2.4.3. llio_transferを用いたディレクトリ単位の転送ツール（dir_transfer）」の記述を見直しました</p></li>
+<li><p>「8.5. 留意事項」を修正しました</p></li>
+</ul>
+<p><strong>1.09.1版 2021年9月9日</strong></p>
+<ul class="simple">
+<li><p>「7. 電力制御機能」のIOノードのretention_stateの記述に誤りがあったため修正した</p></li>
+</ul>
+<p><strong>1.09版 2021年9月9日</strong></p>
+<ul class="simple">
+<li><p>「3.4.5. ディスク」に2ndfs領域の説明を追加しました</p></li>
+<li><p>「3.4.7. ファイルシステム」に2ndfs領域の説明を追加しました</p></li>
+<li><p>「5.1.3. ジョブスクリプトの作成」にジョブスクリプトのファイル名に使える文字について注意を追加しました</p></li>
+<li><p>「5.2.2. ジョブ実行結果の参照」を更新しました</p></li>
+<li><p>「5.9.1. 基本オプション」にジョブ名に使える文字について説明を追加しました</p></li>
+<li><p>「5.20. 留意事項」に「5.20.1. pjrshコマンドの使用方法」を追加しました</p></li>
+<li><p>「6.4.3. 大規模ジョブ実行時の標準出力／標準エラー出力の指定について」を更新しました</p></li>
+<li><p>「7. 電力制御機能」のretention_stateの説明を運用に合わせて修正しました</p></li>
+<li><p>「8.1.1. IO時間の短縮と領域の選択」の「階層化ストレージの領域の利用検討順」を更新しました</p></li>
+<li><p>「8.1.2. 実行モジュールへのアクセス時間短縮」を「8.1.2. 全プロセスから共通ファイルへの一斉アクセス」に変更しました</p></li>
+<li><p>「8.2. 第2階層ストレージのキャッシュ領域」を更新しました</p></li>
+<li><p>「8.2.1. 第2階層ストレージのキャッシュの容量」の「注意」を更新しました</p></li>
+<li><p>「8.2.2.1. 第2階層ストレージのキャッシュに対するストライプ設定」を更新しました</p></li>
+<li><p>「8.2.3. 非同期クローズ/同期クローズ」のコマンド実行例を更新しました</p></li>
+<li><p>「8.2.4. 共通ファイル配布機能 (llio_transfer)」の「llio_transferコマンド使用例」を更新しました</p></li>
+<li><p>「8.2.5. ジョブ投入時（pjsub --llio）のオプション」を更新しました</p></li>
+<li><p>「8.3. ノード内テンポラリ領域」を更新しました</p></li>
+<li><p>「8.3.3. ジョブ投入時（pjsub --llio）のオプション」を更新しました</p></li>
+<li><p>「8.3.5.2. アーカイブファイルの展開」の実行例を更新しました</p></li>
+<li><p>「8.4. 共有テンポラリ領域」を更新しました</p></li>
+<li><p>「8.4.1. 共有テンポラリ領域に対するストライプ設定」を更新しました</p></li>
+<li><p>「8.4.2. 共有テンポラリ領域の容量」を更新しました</p></li>
+<li><p>「8.4.4. ジョブ投入時（pjsub --llio）のオプション」を更新しました</p></li>
+<li><p>「8.5. 留意事項」を更新しました</p></li>
+</ul>
+<p><strong>1.08版 2021年7月21日</strong></p>
+<ul class="simple">
+<li><p>「5.18. TofuD TNR 統計情報の取得」を追加しました</p></li>
+<li><p>「8.2.4. 共通ファイル配布機能 (llio_transfer)」の「llio_transferコマンド使用例」から--llio perfを削除しました</p></li>
+<li><p>「8.2.4.2. 共通ファイル配布のヒント」を追加しました</p></li>
+<li><p>「8.5. 留意事項」に--llio perfに関する注意を追加しました</p></li>
+</ul>
+<p><strong>1.07版 2021年6月25日</strong></p>
+<ul class="simple">
+<li><p>「6.2. 実行コマンドの形式」にmpiexecの注釈を追加しました</p></li>
+<li><p>「8.2.3. 非同期クローズ/同期クローズ」の留意事項を更新しました</p></li>
+<li><p>「8.5. 留意事項」に「8.2.3. 非同期クローズ/同期クローズ」のリンクを追加しました</p></li>
+</ul>
+<p><strong>1.06版 2021年6月21日</strong></p>
+<ul class="simple">
+<li><p>「5.18. 障害の影響を受けたジョブ一覧表示コマンド」に課金返却可能な障害について追記しました</p></li>
+<li><p>「7.3.6. 留意事項」を追加しました</p></li>
+<li><p>「8.2.4.1. 共通ファイルの効果」を追加しました</p></li>
+<li><p>「8.5.1. MPI-IO」を追加しました</p></li>
+</ul>
+<p><strong>1.05版 2021年6月11日</strong></p>
+<ul class="simple">
+<li><p>「3.4.12. 計算資源の利用の定義」を更新しました</p></li>
+<li><p>「5.9.6. MPIプロセスに設定される環境変数」を追加しました</p></li>
+</ul>
+<p><strong>1.04版 2021年6月3日</strong></p>
+<ul class="simple">
+<li><p>「3.4.2. 制限値とリソースグループ」を削除しました</p></li>
+<li><p>「3.4.1. 計算ノード」にノード割り当て方法の説明を追加しました</p></li>
+<li><p>「3.4.12. 計算資源の利用の定義」を更新しました</p></li>
+<li><p>「5.5.2. コマンド形式」のwait-time推奨値を60秒以上としました</p></li>
+<li><p>「5.7. マスタ・ワーカ型ジョブ」を追加しました</p></li>
+<li><p>「5.8.2. リソース指定」からリソースグループの説明を削除し他ページのリンクにしました</p></li>
+</ul>
+<p><strong>1.03版 2021年5月31日</strong></p>
+<ul class="simple">
+<li><p>「3.4.6. ディスク」の「注意」を更新しました</p></li>
+<li><p>「3.4.8.1. 計算ノードのクライアントキャッシュとIO性能」を更新しました</p></li>
+<li><p>「5.5.2. コマンド形式」の会話型ジョブelapseの省略値を現在の設定に合わせて修正しました</p></li>
+<li><p>「8.2.3. 非同期クローズ/同期クローズ」に5番目の留意事項を追加しました</p></li>
+<li><p>「8.3.5. ノード内テンポラリ領域の活用例」を追加しました</p></li>
+</ul>
+<p><strong>1.02版 2021年5月17日</strong></p>
+<ul class="simple">
+<li><p>「3.4.13. 計算資源の利用の定義」のジョブの時間経過についての説明を更新しました</p></li>
+<li><p>「5.17. 障害の影響を受けたジョブ一覧表示コマンド」の-gオプションの説明を更新しました</p></li>
+<li><p>「8.1.1. IO時間の短縮と領域の選択」を追加しました</p></li>
+<li><p>「8.1.2. 実行モジュールへのアクセス時間短縮」を追加しました</p></li>
+<li><p>「8.3.2. 利用方法」を更新しました</p></li>
+</ul>
+<p><strong>1.01版 2021年4月1日</strong></p>
+<ul class="simple">
+<li><p>「4.4.3.3. ログインノードを直接指定する方法」に記載しているホスト名をログインノードの構成変更に合わせて変更しました</p></li>
+<li><p>「5.8.2. リソース指定」に運用に合わせた説明を追加しました</p></li>
+<li><p>「7. 電力制御機能」にIOノード（CN/BIO、CN/SIO、CN/GIO）のパワーノブ（freq）の設定値が計算ノード（CN）と異なることを追記しました</p></li>
+<li><p>「8.2.4. 共通ファイル配布機能 (llio_transfer)」に共通ファイルとして扱えるのは読み取り専用のファイルだけであることを追記しました</p></li>
+<li><p>「8.5. 留意事項」を現在の運用にあわせて更新しました</p></li>
+</ul>
+<p><strong>1.00版 2021年3月9日</strong></p>
+<ul class="simple">
+<li><p>「4.2.3 Chrome への証明書のインストール（Windows）」の手順1を更新しました</p></li>
+<li><p>「4.4.2 公開鍵登録」の手順を更新しました</p></li>
+<li><p>「4.4.3 アクセス方法」および「4.4.4. ファイル転送方法」にあるログインノードのホスト名を変更しました</p></li>
+<li><p>「5 ジョブ実行」のジョブスクリプト例に記載しているリソースグループ名を変更しました</p></li>
+<li><p>「8.2.4 共通ファイル配布機能（llio_transfer）」の注意事項を更新しました</p></li>
+</ul>
+<p><strong>0.16版 2021年2月22日</strong></p>
+<ul class="simple">
+<li><p>「4.4.3.3. ログインノードを直接指定する方法」に記載しているホスト名をログインノードの構成変更に合わせて変更しました</p></li>
+</ul>
+<p><strong>0.15版 2021年2月18日</strong></p>
+<ul class="simple">
+<li><p>「2.2. マニュアル」に「プログラミングガイド」を追加しました</p></li>
+<li><p>「3.2. 利用規模／利用環境」を現在の運用にあわせて修正しました</p></li>
+<li><p>「3.4. リソース」を現在の運用にあわせて修正しました</p></li>
+<li><p>「5.15.3. GATE CHECK ERROR REASON一覧」に未使用のREASONがあることを追記しました</p></li>
+</ul>
+<p><strong>0.14版 2021年2月1日</strong></p>
+<ul class="simple">
+<li><p>「5.1.3. ジョブスクリプトの作成」のelapseの省略値を変更し、elapseの下限値について注意を追加しました</p></li>
+<li><p>「5.8.1. 基本オプション」の--mail-list未指定時の動作説明が誤っていたため誤った説明を削除しました</p></li>
+<li><p>運用変更に伴い「5.11.5.1. 電力の情報」から最大値最小値の出力を削除しました</p></li>
+<li><p>「8.5. 留意事項」に1,152ノード以上から同一ファイル利用ができないということを追加しました</p></li>
+</ul>
+<p><strong>0.13版 2021年1月12日</strong></p>
+<ul class="simple">
+<li><p>「3.4.11. I/Oノード」にidcheckコマンドを追加しました</p></li>
+<li><p>「5.17. 障害の影響を受けたジョブ一覧表示コマンド」を追加しました</p></li>
+</ul>
+<p><strong>0.12版 2020年12月15日</strong></p>
+<ul class="simple">
+<li><p>「5.1.3. ジョブスクリプトの作成」にリソースの省略値に関する説明を追加しました</p></li>
+<li><p>リソースグループ指定が省略可となったため「3.4.2. 制限値とリソースグループ」と「5.8.2 リソース指定」からリソースグループ指定が必須であるという記述を削除しました</p></li>
+<li><p>リソースユニットの指定が不要になったため、ジョブスクリプト例からrscunitの記述を削除しました</p></li>
+</ul>
+<p><strong>0.11版 2020年11月30日</strong></p>
+<ul class="simple">
+<li><p>「3.4.2. 制限値とリソースグループ」と「5.8.2 リソース指定」に、注意事項としてジョブ投入にはリソースグループ指定が必須であることを追加しました</p></li>
+<li><p>「8. 階層ストレージとLLIO」を追加しました</p></li>
+</ul>
+<p><strong>0.10版 2020年11月2日</strong></p>
+<ul class="simple">
+<li><p>「3.4.6. ディスク」にtmpfs領域を追加しました</p></li>
+<li><p>「3.4.7. ファイル作成とストライプ設定」に計算ノードでストライプ設定する場合の注意事項を追加しました</p></li>
+<li><p>「3.4.8.1. レコード長とRead性能」を追加しました</p></li>
+<li><p>「5.4.2. バルクジョブスクリプト」に「必ず12ノード以上を指定してください」という誤った記載があったため削除しました</p></li>
+</ul>
+<p><strong>0.9版 2020年9月25日</strong></p>
+<ul class="simple">
+<li><p>「3.4.2. 制限値とリソースグループ」のリソースグループ情報を更新しました</p></li>
+</ul>
+<p><strong>0.8版 2020年9月7日</strong></p>
+<ul class="simple">
+<li><p>「3.4.2. 制限値とリソースグループ」のリソースグループ情報を更新しました</p></li>
+<li><p>「3.4.6.2. ACLを利用したファイルの共有例」に記載した2つのsetfaclコマンド例の違いについて説明を追加しました</p></li>
+<li><p>「3.4.13. 計算資源の利用の定義」を追加しました</p></li>
+<li><p>「5.11.1.4. ジョブのステータスの項目」に不要になったHLDジョブはユーザー自身で削除するよう説明を追加しました</p></li>
+</ul>
+<p><strong>0.7版 2020年8月6日</strong></p>
+<ul class="simple">
+<li><p>「3.4.2. 制限値とリソースグループ」のリソースグループ情報を更新しました</p></li>
+<li><p>「5.2.2. ジョブ実行結果の参照」に環境変数PLE_MPI_STD_EMPTYFILEの説明とファイル数が増えた場合の注意を追加しました</p></li>
+<li><p>「5.11.1.4. ジョブのステータスの項目」にエラージョブはユーザー自身で削除するよう説明を追加しました</p></li>
+<li><p>「6.4.3. 大規模ジョブ実行時の標準出力／標準エラー出力の指定について」に環境変数PLE_MPI_STD_EMPTYFILEの説明を追加しました</p></li>
+</ul>
+<p><strong>0.6版 2020年7月22日</strong></p>
+<ul class="simple">
+<li><p>「5.5.1. ジョブの投入」に示したpjsubコマンドのオプションに記述誤りがあったため修正しました</p></li>
+</ul>
+<p><strong>0.5版 2020年7月14日</strong></p>
+<ul class="simple">
+<li><p>「3.4.6. ディスク」にグループ間のデータ共有を行うシェアディレクトリの説明を追加しました</p></li>
+<li><p>mpiexecコマンドごとに標準出力/標準エラー出力のファイルが作成されるようになったため「5.2.2. ジョブ実行結果の参照」にファイル名の説明を追加しました</p></li>
+</ul>
+<p><strong>0.4版 2020年7月1日</strong></p>
+<ul class="simple">
+<li><p>「3.4.2. 制限値とリソースグループ」のリソースグループ情報を更新しました</p></li>
+<li><p>MPIプロセス数の上限が解除されたため「3.4.2. 制限値とリソースグループ」の注意事項を削除しました</p></li>
+<li><p>「3.4.11. I/Oノード」を追加しました。I/Oノードを兼用する計算ノードの紹介と、NODE IDをもとに識別する方法を記載しました</p></li>
+<li><p>「3.4.12. ユーザープログラムが利用可能なメモリ量の見積り」を追加しました。見積式を記載しました</p></li>
+<li><p>「4.3. 富岳ウェブサイトへの接続手順」のブラウザに関する注釈を変更しました</p></li>
+</ul>
+<p><strong>0.3版 2020年6月9日</strong></p>
+<ul class="simple">
+<li><p>「3.4.2. 制限値とリソースグループ」のリソースグループ情報を更新しました</p></li>
+<li><p>「5.11.5.1. 電力の情報」の電力情報の取得間隔が誤っていたため修正しました</p></li>
+<li><p>「6.4.3. 大規模ジョブ実行時の標準出力／標準エラー出力の指定について」に1000ランクごとにディレクトリを分けて出力する指定例を追加しました</p></li>
+</ul>
+<p><strong>0.2版 2020年5月15日</strong></p>
+<ul class="simple">
+<li><p>「3.4.2. 制限値とリソースグループ」のリソースグループ情報を更新しました</p></li>
+<li><p>「3.4.7. ファイル作成とストライプ設定」に不適切なストライプ数の推奨値を記載していたため記載を削除し検討中としました</p></li>
+<li><p>「4.3. 富岳ウェブサイトへの接続手順」にログアウト機能が無いことを追記しました</p></li>
+<li><p>「4.4.3.3. ログインノードを直接指定する方法」にログインノードごとのFQDNを記載しました</p></li>
+<li><p>「4.4.3.4. Armログインノード」を追加しました</p></li>
+<li><p>「5.11.5.1. 電力の情報」および「7.3.4. 電力計測点」に電力情報の取得間隔を追記しました</p></li>
+<li><p>「5.16. サンプルスクリプト」にハイブリッド並列の例を追加しました</p></li>
+<li><p>「7.3.3. プログラム内からのPower APIの利用方法」をサンプルプログラムのコンパイル方法に変更しました</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line">©2020-2025 理化学研究所計算科学研究センター</div>
+<div class="line">本マニュアルに記載されている内容の無断転載・複製を禁じます。</div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1. はじめに</a><ul>
+<li><a class="reference internal" href="#id2">1.1. 本資料の目的</a></li>
+<li><a class="reference internal" href="#id3">1.2. 本書で使用する表記</a></li>
+<li><a class="reference internal" href="#id4">1.3. 略称、別名について</a></li>
+<li><a class="reference internal" href="#id5">1.4. 商標について</a></li>
+<li><a class="reference internal" href="#id6">1.5. 更新履歴</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../index.html"
+                          title="前の章へ">利用手引書 －利用およびジョブ実行編－ 1.52版</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../MethodOfUse/index.html"
+                          title="次の章へ"><span class="section-number">2. </span>利用方法</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../MethodOfUse/index.html" title="2. 利用方法"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="../index.html" title="利用手引書 －利用およびジョブ実行編－ 1.52版"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>はじめに</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

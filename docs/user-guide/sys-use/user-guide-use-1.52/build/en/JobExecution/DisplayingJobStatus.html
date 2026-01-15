@@ -1,0 +1,799 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.12. Displaying a job status &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.13. Deleting a job" href="DeletingAJobJobOperations.html" />
+    <link rel="prev" title="5.11. CPU core and memory binding" href="CPUcoreMemoryBinding.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DeletingAJobJobOperations.html" title="5.13. Deleting a job"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="CPUcoreMemoryBinding.html" title="5.11. CPU core and memory binding"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.12. </span>Displaying a job status</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="displaying-a-job-status">
+<h1><span class="section-number">5.12. </span>Displaying a job status<a class="headerlink" href="#displaying-a-job-status" title="Link to this heading">¶</a></h1>
+<p>This is to explain how to confirm the job execution status that the user submitted.</p>
+<p>To check the job status, use  <strong class="program">pjstat</strong> command.</p>
+<section id="normal-job">
+<h2><span class="section-number">5.12.1. </span>Normal job<a class="headerlink" href="#normal-job" title="Link to this heading">¶</a></h2>
+<p>This is to explain how to check after job submission or job execution status, etc.</p>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#display-a-job-list" id="id1">Display a job list</a></p></li>
+<li><p><a class="reference internal" href="#display-specific-jobs" id="id2">Display specific jobs</a></p></li>
+<li><p><a class="reference internal" href="#pjstat-output-item" id="id3">pjstat output item</a></p></li>
+<li><p><a class="reference internal" href="#job-status-items" id="id4">Job status items</a></p></li>
+<li><p><a class="reference internal" href="#list-of-output-messages" id="id5">List of output messages</a></p></li>
+<li><p><a class="reference internal" href="#job-count-display-by-status" id="id6">Job count display by status</a></p></li>
+</ul>
+</nav>
+<section id="display-a-job-list">
+<h3><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">5.12.1.1. </span>Display a job list</a><a class="headerlink" href="#display-a-job-list" title="Link to this heading">¶</a></h3>
+<p>To display a job status list, use  <strong class="program">pjstat</strong> command.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat
+
+<span class="go">JOB_ID  JOB_NAME  MD  ST   USER   START_DATE      ELAPSE_LIM  NODE_REQUIRE  VNODE  CORE  V_MEM</span>
+<span class="go">238     job.sh    NM  RUN  user1  11/17 09:01:41  0001:00:00  12:2x3x2      -      -     -</span>
+<span class="go">239     bulk.sh   BU  RUN  user1  11/17 09:01:42  0001:00:00  12:2x3x2      -      -     -</span>
+<span class="go">240     step.sh   ST  RUN  user1  11/17 09:01:42  -           -             -      -     -</span>
+<span class="go">241     job2.sh   NM  RUN  user1  11/17 09:01:42  0001:00:00  2             -      -     -</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>As default, only jobs that can be referenced by the user who executed the  <strong class="program">pjstat</strong> command are displayed.</p>
+</div>
+</section>
+<section id="display-specific-jobs">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">5.12.1.2. </span>Display specific jobs</a><a class="headerlink" href="#display-specific-jobs" title="Link to this heading">¶</a></h3>
+<p>Job ID and sub job ID can be specified when executing  <strong class="program">pjstat</strong>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span><span class="m">238</span>
+
+<span class="go">JOB_ID  JOB_NAME  MD  ST   USER   START_DATE      ELAPSE_LIM  NODE_REQUIRE  VNODE  CORE  V_MEM</span>
+<span class="go">238     job.sh    NM  RUN  user1  11/17 09:01:41  0001:00:00  12:2x3x2      -      -     -</span>
+
+<span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span><span class="s1">&#39;239[1]&#39;</span>
+<span class="go">JOB_ID  JOB_NAME  MD  ST   USER   START_DATE      ELAPSE_LIM  NODE_REQUIRE  -      -     -</span>
+<span class="go">239[1]  bulk.sh   BU  RUN  user1  11/17 09:01:42  0001:00:00  12:2x3x2      -      -     -</span>
+</pre></div>
+</div>
+<p>Multiple job IDs and sub job IDs can be specified when executing  <strong class="program">pjstat</strong>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span><span class="m">238</span><span class="w"> </span><span class="m">239</span>
+
+<span class="go">JOB_ID  JOB_NAME  MD  ST   USER   START_DATE      ELAPSE_LIM  NODE_REQUIRE  VNODE  CORE  V_MEM</span>
+<span class="go">238     job.sh    NM  RUN  user1  11/17 09:01:41  0001:00:00  12:2x3x2      -      -     -</span>
+<span class="go">239     bulk.sh   BU  RUN  user1  11/17 09:01:42  0001:00:00  12:2x3x2      -      -     -</span>
+</pre></div>
+</div>
+<p>Multiple job IDs and sub job IDs can be specified, and there are a method to enumerate and a method to specify a range.</p>
+<ul>
+<li><p>Enumeration</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span><span class="m">238</span><span class="w"> </span><span class="m">239</span><span class="w">                              </span><span class="c1"># Job ID</span>
+<span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span><span class="s1">&#39;239[1]&#39;</span><span class="w"> </span><span class="s1">&#39;239[2]&#39;</span><span class="w"> </span><span class="s1">&#39;239[3]&#39;</span><span class="w"> </span><span class="s1">&#39;239[4]&#39;</span><span class="w">  </span><span class="c1"># Bulk job&#39;s sub job ID</span>
+<span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span>240_0<span class="w"> </span>240_1<span class="w"> </span>240_2<span class="w"> </span>240_3<span class="w">              </span><span class="c1"># Step job&#39;s sub job ID</span>
+</pre></div>
+</div>
+</li>
+<li><p>Specify the area</p>
+<p>A range can be specified by connecting the job ID, bulk number, or step number with a hyphen.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span><span class="m">238</span>-240<span class="w">    </span><span class="c1"># Job ID 238, 239, 240</span>
+<span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span><span class="s1">&#39;239[1-5]&#39;</span><span class="w"> </span><span class="c1"># Sub job ID 239[1], 239[2], 239[3], 239[4], 239[5]</span>
+<span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span>240_0-4<span class="w">    </span><span class="c1"># Sub job ID 240_0, 240_1, 240_2, 240_3, 240_4</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>When specifying a sub job ID of a bulk job as an argument to the pjstat command, escape the parentheses ‘[]’ with single quotes so that they are not processed by the shell.</p>
+</div>
+</section>
+<section id="pjstat-output-item">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">5.12.1.3. </span>pjstat output item</a><a class="headerlink" href="#pjstat-output-item" title="Link to this heading">¶</a></h3>
+<p><strong class="program">pjstat</strong> output result item and contents are as below.</p>
+<p>The item of job information list</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item name</p></th>
+<th class="head"><p>contents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>JOB_ID</p></td>
+<td><p>Job ID</p></td>
+</tr>
+<tr class="row-odd"><td><p>JOB_NAME</p></td>
+<td><p>Job name</p></td>
+</tr>
+<tr class="row-even"><td><p>MD</p></td>
+<td><p>Job model</p>
+<ul class="simple">
+<li><p>NM is normal job or interactive job</p></li>
+<li><p>ST is step job</p></li>
+<li><p>BU is bulk job</p></li>
+<li><p>MW is master worker type job</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>ST</p></td>
+<td><div class="line-block">
+<div class="line">The current processing status of the job.</div>
+<div class="line">For details, refer to Job Status below.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>USER</p></td>
+<td><p>Executing user name</p></td>
+</tr>
+<tr class="row-odd"><td><p>START_DATE</p></td>
+<td><p>If the job is not executed, the scheduled execution start time is displayed. If it is during or after execution, the actual start time is displayed.</p>
+<ul class="simple">
+<li><p>For the scheduled execution start time of a job, the scheduled execution start time is enclosed in parentheses “()”.</p></li>
+<li><p>The scheduled start time may change during rescheduling.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>ELAPSE_LIM</p></td>
+<td><p>Displays the elapsed time limit.</p></td>
+</tr>
+<tr class="row-odd"><td><p>NODE_REQUIRE</p></td>
+<td><ul>
+<li><p>For node assignment jobs</p>
+<p>Number of nodes and node shape specified at job submission “     n:XXxYYxZZ”</p>
+<p>If it does not fit in the above format, only the node shape is output.</p>
+</li>
+<li><p>For a virtual node assignment job</p>
+<p>The number of virtual nodes specified when the job was submitted. Currently, “1” is output.</p>
+</li>
+<li><p>For step job summary information</p>
+<p>Outputs &quot;-&quot;.</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>VNODE</p></td>
+<td><p>Displays the number of virtual nodes.</p></td>
+</tr>
+<tr class="row-odd"><td><p>CORE</p></td>
+<td><p>Displays the number of CPU cores per virtual node.</p></td>
+</tr>
+<tr class="row-even"><td><p>V_MEM</p></td>
+<td><p>Displays the amount of memory per virtual node.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="job-status-items">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">5.12.1.4. </span>Job status items</a><a class="headerlink" href="#job-status-items" title="Link to this heading">¶</a></h3>
+<p>The job status (ST) item status list is shown below.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 14.3%" />
+<col style="width: 14.3%" />
+<col style="width: 71.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Display content</p></th>
+<th class="head"><p>Status</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ACC</p></td>
+<td><p>ACCEPT</p></td>
+<td><p>Job submission is accepted.</p></td>
+</tr>
+<tr class="row-odd"><td><p>CCL</p></td>
+<td><p>CANCEL</p></td>
+<td><p>The job has been canceled by an instruction from the job submitter or administrator.</p></td>
+</tr>
+<tr class="row-even"><td><p>ERR</p></td>
+<td><p>ERROR</p></td>
+<td><p>The job has been canceled due to an error detected by the job management function while maintaining the submitted status.</p>
+<ul class="simple">
+<li><p>Error jobs need to delete by the users.</p></li>
+<li><p>Error jobs that have passed a certain period of time may delete by the system.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>EXT</p></td>
+<td><p>EXIT</p></td>
+<td><p>The job has finished.</p></td>
+</tr>
+<tr class="row-even"><td><p>HLD</p></td>
+<td><p>HOLD</p></td>
+<td><p>The job execution is stopped and fixed in the submitted state.</p>
+<ul class="simple">
+<li><p>Hold jobs need to delete by the users when it is no longer needed.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>QUE</p></td>
+<td><p>QUEUED</p></td>
+<td><p>The job is accepted and waiting for the execution order.</p></td>
+</tr>
+<tr class="row-even"><td><p>RJT</p></td>
+<td><p>REJECT</p></td>
+<td><p>Job acceptance is rejected.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RNA</p></td>
+<td><p>RUNNING-A</p></td>
+<td><p>The resources necessary for job execution have been acquired.</p></td>
+</tr>
+<tr class="row-even"><td><p>RNE</p></td>
+<td><p>RUNNING-E</p></td>
+<td><p>Epilogue processing is being executed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RNO</p></td>
+<td><p>RUNOUT</p></td>
+<td><p>The job is being terminated.</p></td>
+</tr>
+<tr class="row-even"><td><p>RNP</p></td>
+<td><p>RUNNING-P</p></td>
+<td><p>Prologue processing is being executed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RSM</p></td>
+<td><p>RESUME</p></td>
+<td><p>Resume processing is in progress.</p></td>
+</tr>
+<tr class="row-even"><td><p>RUN</p></td>
+<td><p>RUNNING</p></td>
+<td><p>The job is being executed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPD</p></td>
+<td><p>SUSPENDED</p></td>
+<td><p>Suspended state.</p></td>
+</tr>
+<tr class="row-even"><td><p>SPP</p></td>
+<td><p>SUSPEND</p></td>
+<td><p>Suspend processing is in progress.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="list-of-output-messages">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">5.12.1.5. </span>List of output messages</a><a class="headerlink" href="#list-of-output-messages" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">REASON will be output if specifying <code class="docutils literal notranslate"><span class="pre">-v</span></code>option to  <strong class="program">pjstat</strong> command.</div>
+<div class="line">Reason displays a message corresponding to the result code for some processing of the job, whether or not the job is executed.</div>
+<div class="line">The meaning of the output message is as follows.</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Message</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>(none)</p></td>
+<td><p>No error</p></td>
+</tr>
+<tr class="row-odd"><td><p>ANOTHER JOB STARTED</p></td>
+<td><p>A job that was running beyond the minimum runnable time for the job has been terminated to run a subsequent job.</p></td>
+</tr>
+<tr class="row-even"><td><p>DEADLINE SCHEDULE STARTED</p></td>
+<td><p>A job that was running beyond the minimum job execution time was terminated due to the start of the deadline schedule.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ELAPSE LIMIT EXCEEDED</p></td>
+<td><p>The elapsed time limit has been exceeded.</p></td>
+</tr>
+<tr class="row-even"><td><p>FILE IO ERROR</p></td>
+<td><p>The current directory when the user’s job is submitted cannot be accessed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>GATE CHECK</p></td>
+<td><p>Canceled by the job manager exit function.</p></td>
+</tr>
+<tr class="row-even"><td><p>IMPOSSIBLE SCHED</p></td>
+<td><p>Scheduling failed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>INSUFF CPU</p></td>
+<td><p>There is a physical shortage of CPUs.</p></td>
+</tr>
+<tr class="row-even"><td><p>INSUFF MEMORY</p></td>
+<td><p>There is a physical memory shortage.</p></td>
+</tr>
+<tr class="row-odd"><td><p>INSUFF NODE</p></td>
+<td><p>The number of nodes is physically insufficient.</p></td>
+</tr>
+<tr class="row-even"><td><p>INSUFF CustomResourceName</p></td>
+<td><p>The custom resource defined by the resource name CustomResourceName is insufficient.</p></td>
+</tr>
+<tr class="row-odd"><td><p>INTERNAL ERROR</p></td>
+<td><p>Internal error.</p></td>
+</tr>
+<tr class="row-even"><td><p>INVALID HOSTFILE</p></td>
+<td><p>The host file is unmatched which specified with <code class="docutils literal notranslate"><span class="pre">rank-map-hostfile</span></code> parameter of  <strong class="program">pjsub</strong> command.</p></td>
+</tr>
+<tr class="row-odd"><td><p>LIMIT OVER MEMORY</p></td>
+<td><p>The memory limit was exceeded during job execution.</p></td>
+</tr>
+<tr class="row-even"><td><p>LOST COMM</p></td>
+<td><p>All-to-all communication of parallel processes is not guaranteed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>NO CURRENT DIR</p></td>
+<td><p>The current directory or standard input / standard output / standard error output file when the user job was submitted could not be accessed.</p></td>
+</tr>
+<tr class="row-even"><td><p>NOT EXIST CustomResourceName</p></td>
+<td><p>A custom resource with the resource name CustomResourceName is not defined.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RESUME FAIL</p></td>
+<td><p>Resume failed.</p></td>
+</tr>
+<tr class="row-even"><td><p>RSCGRP NOT EXIST</p></td>
+<td><p>Resource group does not exist.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RSCGRP STOP</p></td>
+<td><p>The resource group has stopped.</p></td>
+</tr>
+<tr class="row-even"><td><p>RSCUNIT NOT EXIST</p></td>
+<td><p>Resource unit does not exist.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RSCUNIT STOP</p></td>
+<td><p>The resource unit has stopped.</p></td>
+</tr>
+<tr class="row-even"><td><p>RUNLIMIT EXCEED</p></td>
+<td><p>The maximum number of concurrent job executions has been exceeded.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SUSPEND FAIL</p></td>
+<td><p>Suspend failed.</p></td>
+</tr>
+<tr class="row-even"><td><p>USELIMIT EXCEED</p></td>
+<td><p>Waiting for execution due to simultaneous node limit or concurrent CPU core limit.</p></td>
+</tr>
+<tr class="row-odd"><td><p>USER NOT EXIST</p></td>
+<td><p>The job execution user does not exist in the system.</p></td>
+</tr>
+<tr class="row-even"><td><p>WAIT SCHED</p></td>
+<td><p>The number of jobs subject to scheduling has been reached, so it has been excluded from scheduling.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Other character strings</p></td>
+<td><ul class="simple">
+<li><p>The specified message with <code class="docutils literal notranslate"><span class="pre">--reason</span></code>option of  <strong class="program">pjdel</strong>,<strong class="program">pjhold</strong>  or  <strong class="program">pmsuspend</strong> command.</p></li>
+<li><p>Messages set by the administrator using the job manager exit function, job scheduler exit function, or job resource management exit function</p></li>
+</ul>
+<p>If the message by <code class="docutils literal notranslate"><span class="pre">--reason</span></code> option of  <strong class="program">pjhold</strong> and  <strong class="program">pmsuspend</strong> command, viwed as the format of  “<cite>command executed user name :message</cite>“. If not specified with <code class="docutils literal notranslate"><span class="pre">--reason</span></code> option,  “<cite>command executed user name:</cite>“  is displayed.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="job-count-display-by-status">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">5.12.1.6. </span>Job count display by status</a><a class="headerlink" href="#job-count-display-by-status" title="Link to this heading">¶</a></h3>
+<p>The number of jobs and job details by status are displayed if specifying <code class="docutils literal notranslate"><span class="pre">--with-summary</span></code> to  <strong class="program">pjstat</strong> command.</p>
+<p>The information displayed and its meaning are shown below.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span>--with-summary
+
+<span class="go">   ACCEPT QUEUED RUNING RUNOUT  HOLD  ERROR REJECT  EXIT CANCEL  TOTAL</span>
+<span class="go">        n      n      n      n     n      n      n     n      n      n</span>
+<span class="go"> s      n      n      n      n     n      n      n     n      n      n</span>
+
+<span class="go"> JOB_ID JOB_NAME MD ST USER START_DATE     ELAPSE_LIM            NODE_REQUIRE VNODE CORE V_MEM</span>
+<span class="go"> XXXXXX XXXXXXXX XX XX XXXX MM/DD hh:mm:ss hhhh:mm:ss-hhhh:mm:ss nnn:XXxYYxZZ nnnnn nnnn nnnMiB</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>In the number of jobs displayed by status, the line with s at the beginning displays the number of jobs including sub jobs.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">pjstat</span> <span class="pre">--summary</span></code> is specified, only the number of jobs by status is displayed.</p>
+</div>
+<p><strong class="program">pjstat</strong> command output item (Number of jobs depending on the status)</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ACCEPT</p></td>
+<td><p>Displays the number of jobs waiting to be accepted.</p></td>
+</tr>
+<tr class="row-odd"><td><p>QUEUED</p></td>
+<td><p>Displays the number of jobs waiting to be executed.</p></td>
+</tr>
+<tr class="row-even"><td><p>RUNING</p></td>
+<td><p>Displays the number of running jobs.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RUNOUT</p></td>
+<td><p>Displays the number of jobs waiting to be completed.</p></td>
+</tr>
+<tr class="row-even"><td><p>HOLD</p></td>
+<td><p>Displays the number of jobs fixed by the user.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ERROR</p></td>
+<td><p>Displays the number of jobs that are fixed due to errors.</p></td>
+</tr>
+<tr class="row-even"><td><p>REJECT</p></td>
+<td><p>Displays the number of jobs that have been rejected.</p></td>
+</tr>
+<tr class="row-odd"><td><p>EXIT</p></td>
+<td><p>Displays the number of finished jobs.</p></td>
+</tr>
+<tr class="row-even"><td><p>CANCEL</p></td>
+<td><p>Displays the number of canceled jobs.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TOTAL</p></td>
+<td><p>The total number of displayed jobs by status is displayed.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="step-job">
+<h2><span class="section-number">5.12.2. </span>Step job<a class="headerlink" href="#step-job" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">The step job status can be displayed with  <strong class="program">pjstat</strong> command.</div>
+<div class="line">The <code class="docutils literal notranslate"><span class="pre">-E</span></code> option is required when referring to sub job information. In addition, since the sub job is executed sequentially in the order of submission, the next sub job is not scheduled until the execution of the first sub job is completed.</div>
+<div class="line">Therefore, when the status is displayed, “-” is displayed in the “START_DATE” column for the second and subsequent sub jobs.</div>
+</div>
+<ul class="simple">
+<li><p>Normal display</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat
+<span class="go">JOB_ID JOB_NAME MD ST  USER  START_DATE     ELAPSE_LIM NODE_REQUIRE VNODE CORE V_MEM</span>
+<span class="go">240    step.sh  ST RUN user1 11/17 09:01:42 -          -            -     -    -</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>Display including sub job (<code class="docutils literal notranslate"><span class="pre">-E</span></code> option added)</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span>-E
+<span class="go">JOB_ID JOB_NAME MD ST  USER  START_DATE     ELAPSE_LIM ...(omitted)...</span>
+<span class="go">240    step.sh  ST RUN user1 11/17 09:01:42 -          ...(omitted)...</span>
+<span class="go">240_0  step.sh  ST RUN user1 11/17 09:01:42 0001:00:00 ...(omitted)...</span>
+<span class="go">240_1  step.sh  ST QUE user1 -              0001:00:00 ...(omitted)...</span>
+<span class="go">240_2  step.sh  ST QUE user1 -              0001:00:00 ...(omitted)...</span>
+<span class="go">240_3  step.sh  ST QUE user1 -              0001:00:00 ...(omitted)...</span>
+<span class="go">240_4  step.sh  ST QUE user1 -              0001:00:00 ...(omitted)...</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="bulk-job">
+<h2><span class="section-number">5.12.3. </span>Bulk job<a class="headerlink" href="#bulk-job" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">Bulk job status can be displayed with  <strong class="program">pjstat</strong> command.</div>
+<div class="line">The <code class="docutils literal notranslate"><span class="pre">-E</span></code> option is required when referring to sub job information.</div>
+</div>
+<ol class="arabic simple">
+<li><p>Display example of parent job only</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat
+<span class="go">JOB_ID JOB_NAME MD ST  USER  START_DATE     ELAPSE_LIM NODE_REQUIRE VNODE CORE V_MEM</span>
+<span class="go">239    bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 12:2x3x2     -     -    -</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Display example including sub job (add <code class="docutils literal notranslate"><span class="pre">-E</span></code> option)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span>-E
+<span class="go">JOB_ID JOB_NAME MD ST  USER  START_DATE     ELAPSE_LIM ...(omitted)...</span>
+<span class="go">239    bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(omitted)...</span>
+<span class="go">239[1] bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(omitted)...</span>
+<span class="go">239[2] bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(omitted)...</span>
+<span class="go">239[3] bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(omitted)...</span>
+<span class="go">239[4] bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(omitted)...</span>
+<span class="go">239[5] bulk.sh  BU RUN user1 11/17 09:01:42 0001:00:00 ...(omitted)...</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="computer-resources">
+<h2><span class="section-number">5.12.4. </span>Computer resources<a class="headerlink" href="#computer-resources" title="Link to this heading">¶</a></h2>
+<p>The display of computer resources for each assignment can be checked using the accountj command.</p>
+<p>The display of computing resources and coefficients for each job can be confirmed using the pjstata command.</p>
+<p>About the usage of each command, please refer to “3.1. Command explanation” of “<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/support_tool/">User Support Tool User’s Guide</a>“.</p>
+</section>
+<section id="the-job-statistic-information">
+<h2><span class="section-number">5.12.5. </span>The job statistic information<a class="headerlink" href="#the-job-statistic-information" title="Link to this heading">¶</a></h2>
+<p>The job statistic information is output to stats file if put  <code class="docutils literal notranslate"><span class="pre">-s</span></code>  or   <code class="docutils literal notranslate"><span class="pre">-S</span></code>  to pjsub option and execute.</p>
+<p>The job statistic information can be checked by using   <strong class="command">pjstat</strong>  command. If use   <strong class="command">pjstat</strong>  command, the following options are used.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pjstat {-s|-S} --history [day=N] [jobid]
+</pre></div>
+</div>
+<p>Use example</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjstat<span class="w"> </span>-S<span class="w"> </span>--history<span class="w"> </span><span class="nv">day</span><span class="o">=</span><span class="m">7</span><span class="w"> </span><span class="m">22269</span>
+</pre></div>
+</div>
+<p>Please refer to the manual for pjstatsinfo (7) for the job statistics information items.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>man<span class="w"> </span>pjstatsinfo
+</pre></div>
+</div>
+<section id="electric-power-information">
+<h3><span class="section-number">5.12.5.1. </span>Electric power information<a class="headerlink" href="#electric-power-information" title="Link to this heading">¶</a></h3>
+<p>The job statistics include the following power information:</p>
+<ul class="simple">
+<li><p>Calculation cores in CMG units Average Power consumption (Recommended)</p></li>
+<li><p>L2 cache per CMG Average power consumption (Estimation)</p></li>
+<li><p>Memory per CMG Average Power (Estimation)</p></li>
+<li><p>Tofu Average power consumption (Estimation)</p></li>
+<li><p>In CPU around Average power consumption (Recommended)</p></li>
+<li><p>Light module Average power consumption (Estimation)</p></li>
+<li><p>PCI-E Average power consumption (Recommended)</p></li>
+<li><p>Node Average power consumption (Estimation)</p></li>
+<li><p>Node Average power consumption  (Actual measurement)</p></li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Understanding the interval for obtaining power-related information</p>
+<ul>
+<li><div class="line-block">
+<div class="line">The power measurements from which the power information in the job statistics is derived run every 1 minute.</div>
+<div class="line">It may not be able to measure power at the right time in the jobs that run for less than 1 minute. In that case, the discrepancy between the output value and the actual power used will be large.</div>
+</div>
+</li>
+<li><p>The power information AVG output in the job statistics is the processed value of the information measured in 1 minute increments.</p></li>
+</ul>
+</div>
+<p>On  the Fugaku  , if the power consumption exceeds the value set on the operation side during job execution, the CPU clock of the node used by the job may be forcibly reduced.
+The output of statistical information is a measure of the power consumption of the job.</p>
+<p>If you need more detailed power consumption research, use PowerAPI or Profiler.</p>
+<p>Output example for the job statistic information (Abstract)</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>AVG POWER CONSUMPTION OF CORES/CMG(0) (IDEAL) : 21.394424
+AVG POWER CONSUMPTION OF CORES/CMG(1) (IDEAL) : 21.355174
+AVG POWER CONSUMPTION OF CORES/CMG(2) (IDEAL) : 21.362863
+AVG POWER CONSUMPTION OF CORES/CMG(3) (IDEAL) : 21.363552
+ENERGY CONSUMPTION OF CORES/CMG(0) (IDEAL) : 0.012945
+ENERGY CONSUMPTION OF CORES/CMG(1) (IDEAL) : 0.012922
+ENERGY CONSUMPTION OF CORES/CMG(2) (IDEAL) : 0.012926
+ENERGY CONSUMPTION OF CORES/CMG(3) (IDEAL) : 0.012927
+AVG POWER CONSUMPTION OF L2CACHE/CMG(0) (IDEAL) : 1.349224
+AVG POWER CONSUMPTION OF L2CACHE/CMG(1) (IDEAL) : 1.337747
+AVG POWER CONSUMPTION OF L2CACHE/CMG(2) (IDEAL) : 1.323286
+AVG POWER CONSUMPTION OF L2CACHE/CMG(3) (IDEAL) : 1.323401
+</pre></div>
+</div>
+</section>
+<section id="electric-power-limitation-function-power-capping">
+<h3><span class="section-number">5.12.5.2. </span>Electric power limitation function (Power capping)<a class="headerlink" href="#electric-power-limitation-function-power-capping" title="Link to this heading">¶</a></h3>
+<p>When the power limit function is activated when the power consumption of the job exceeds the threshold, the time when the threshold is exceeded is output to ‘POWER CAPPING DATE’ of the job statistical information.</p>
+<p>Please refer to ‘POWER CAPPING DATE’ to confirm whether the power limit has been applied.</p>
+</section>
+<section id="performance-information-output">
+<h3><span class="section-number">5.12.5.3. </span>Performance information output<a class="headerlink" href="#performance-information-output" title="Link to this heading">¶</a></h3>
+<p>Job statistical information includes information (PERF COUNT) for calculating performance information.
+Thus this information is output per node,  output if put   <code class="docutils literal notranslate"><span class="pre">-S</span></code>  option.</p>
+<p>Output example (Abstract)</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>PERF COUNT 1                : 4385694044
+PERF COUNT 2                : 3968
+PERF COUNT 3                : 0
+PERF COUNT 4                : 267598
+PERF COUNT 5                : 328895
+PERF COUNT 6                : 0
+PERF COUNT 7                : 2398547
+PERF COUNT 8                : 98275
+PERF COUNT 9                : 237498
+</pre></div>
+</div>
+<p>Performance information output is calculated as following.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Performance information</p></th>
+<th class="head"><p>Output direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Number of execution cycle</p></td>
+<td><p>SUM(PERF COUNT 1)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Number of floating-point instruction operations</p></td>
+<td><p>SUM(PERF COUNT 2)+SUM(PERF COUNT 3)x4</p></td>
+</tr>
+<tr class="row-even"><td><p>Number of memory read request</p></td>
+<td><p>SUM(PERF COUNT 4) / 12</p></td>
+</tr>
+<tr class="row-odd"><td><p>Number of memory write request</p></td>
+<td><p>SUM(PERF COUNT 5) / 12</p></td>
+</tr>
+<tr class="row-even"><td><p>Number of sleep cycle</p></td>
+<td><p>SUM(PERF COUNT 6)</p></td>
+</tr>
+<tr class="row-odd"><td><p>EFFECTIVE_INST_SPEC*</p></td>
+<td><p>SUM(PERF COUNT 7)</p></td>
+</tr>
+<tr class="row-even"><td><p>SIMD_INST_RETIRED*</p></td>
+<td><p>SUM(PERF COUNT 8)</p></td>
+</tr>
+<tr class="row-odd"><td><p>SVE_INST_RETIRED*</p></td>
+<td><p>SUM(PERF COUNT 9)</p></td>
+</tr>
+</tbody>
+</table>
+<p>*reference: <a class="reference external" href="https://github.com/fujitsu/A64FX/blob/master/doc/A64FX_PMU_Events_v1.3.pdf">https://github.com/fujitsu/A64FX/blob/master/doc/A64FX_PMU_Events_v1.3.pdf</a></p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Note that the performance information calculated from the job statistics is per job, not per executed application.</p>
+<p>In the job script, if executed <strong class="command">xospastop</strong> command or executed a profiler, calculation of PERF COUNT will not be proceeded.</p>
+<p>If you need detailed performance information of the application, please use a profiler.</p>
+</div>
+</section>
+</section>
+<section id="job-status-display-command-options">
+<h2><span class="section-number">5.12.6. </span>Job status display command options<a class="headerlink" href="#job-status-display-command-options" title="Link to this heading">¶</a></h2>
+<p>Typical options of job status display command(  <strong class="program">pjstat</strong> ) are shown.</p>
+<p>For details, refer to “Job Operation Software End-user’s Guide”.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option name</p></th>
+<th class="head"><p>Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-H, --history [day=value]</p></td>
+<td><div class="line-block">
+<div class="line">This  option  displays  only the information on jobs that finished processing (in the REJECT, EXIT, or CANCEL state).</div>
+<div class="line">If neither the <code class="docutils literal notranslate"><span class="pre">-H</span></code> nor <code class="docutils literal notranslate"><span class="pre">--history</span></code> argument is specified, information on jobs that  finished in the past three days is output.</div>
+<div class="line">day=value outputs information about jobs that finished within the past number of days represented by value.</div>
+<div class="line">The value can be an integer [1-90].</div>
+<div class="line">The Fugaku holds up to 90 days of information.</div>
+<div class="line">Example: <code class="docutils literal notranslate"><span class="pre">pjstat</span> <span class="pre">-H</span> <span class="pre">day=90</span></code></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-v</p></td>
+<td><p>The job information which is not output with standard format is desplayed additionally.</p></td>
+</tr>
+<tr class="row-even"><td><p>-s</p></td>
+<td><div class="line-block">
+<div class="line">Outputs detailed information such as resource usage and resource limit values.</div>
+<div class="line">Please refer to  <a class="reference internal" href="NormalJob.html#jobexecutionstatisticalinformation"><span class="std std-ref">Statistical information</span></a> for output information.</div>
+<div class="line">If used  <code class="docutils literal notranslate"><span class="pre">-v</span></code> or  <code class="docutils literal notranslate"><span class="pre">-S</span></code> option, output error message and terminate.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-S</p></td>
+<td><div class="line-block">
+<div class="line">In addition to the information output by the  <code class="docutils literal notranslate"><span class="pre">-s</span></code>  option, the node unit information set for the job is also output.</div>
+<div class="line">Please refer to  <a class="reference internal" href="NormalJob.html#jobexecutionstatisticalinformation"><span class="std std-ref">Statistical information</span></a> for output information.</div>
+<div class="line">If used  <code class="docutils literal notranslate"><span class="pre">-v</span></code> or  <code class="docutils literal notranslate"><span class="pre">-s</span></code> option, output error message and terminate.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-E, --expand</p></td>
+<td><p>When sub jobs exist, the list of sub jobs is also output.</p></td>
+</tr>
+<tr class="row-odd"><td><p>--limit</p></td>
+<td><p>Displays the limit value and current usage for user job submission.</p></td>
+</tr>
+<tr class="row-even"><td><p>--help</p></td>
+<td><p>Shows help.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.12. Displaying a job status</a><ul>
+<li><a class="reference internal" href="#normal-job">5.12.1. Normal job</a><ul>
+<li><a class="reference internal" href="#display-a-job-list">5.12.1.1. Display a job list</a></li>
+<li><a class="reference internal" href="#display-specific-jobs">5.12.1.2. Display specific jobs</a></li>
+<li><a class="reference internal" href="#pjstat-output-item">5.12.1.3. pjstat output item</a></li>
+<li><a class="reference internal" href="#job-status-items">5.12.1.4. Job status items</a></li>
+<li><a class="reference internal" href="#list-of-output-messages">5.12.1.5. List of output messages</a></li>
+<li><a class="reference internal" href="#job-count-display-by-status">5.12.1.6. Job count display by status</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#step-job">5.12.2. Step job</a></li>
+<li><a class="reference internal" href="#bulk-job">5.12.3. Bulk job</a></li>
+<li><a class="reference internal" href="#computer-resources">5.12.4. Computer resources</a></li>
+<li><a class="reference internal" href="#the-job-statistic-information">5.12.5. The job statistic information</a><ul>
+<li><a class="reference internal" href="#electric-power-information">5.12.5.1. Electric power information</a></li>
+<li><a class="reference internal" href="#electric-power-limitation-function-power-capping">5.12.5.2. Electric power limitation function (Power capping)</a></li>
+<li><a class="reference internal" href="#performance-information-output">5.12.5.3. Performance information output</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#job-status-display-command-options">5.12.6. Job status display command options</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CPUcoreMemoryBinding.html"
+                          title="previous chapter"><span class="section-number">5.11. </span>CPU core and memory binding</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="DeletingAJobJobOperations.html"
+                          title="next chapter"><span class="section-number">5.13. </span>Deleting a job</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DeletingAJobJobOperations.html" title="5.13. Deleting a job"
+             >next</a></li>
+        <li class="right" >
+          <a href="CPUcoreMemoryBinding.html" title="5.11. CPU core and memory binding"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.12. </span>Displaying a job status</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

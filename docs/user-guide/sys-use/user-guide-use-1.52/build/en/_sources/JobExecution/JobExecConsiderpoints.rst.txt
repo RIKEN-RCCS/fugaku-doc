@@ -1,0 +1,96 @@
+.. _JobExecConsiderpoints:
+
+Note
+=========
+
+How to use pjrsh command 
+----------------------------
+
+Please note the following when using the pjrsh command.
+
+- The number of jobs on the entire system and the number of concurrent pjrsh command executions in a single job are limited.
+
+  - One pjrsh command can run concurrently per job. (Only from the job master node)
+    
+    For example, if specifying  pjrsh commands in the background as below, they run sequentially one by one.
+    
+    .. code-block:: bash
+
+      pjrsh "(1)" "command1" &
+      pjrsh "(2)" "command2" &
+      pjrsh "(3)" "command3" &
+      pjrsh "(4)" "command4" &
+    
+  - Up to 30 jobs using the pjrsh command can run concurrently on the entire system.
+  
+    If the number of jobs using the pjrsh command (the number of jobs with custom resource described below) exceeds 30 on the entire system, jobs submitted by pjsub command are accepted but wait in QUE.
+    They transition to the RUN state when there are fewer than 30 jobs in the RUN state.
+
+- Jobs using the pjrsh command require custom resource "``exepjrsh=1``" to be specified when submitting jobs.
+
+  For jobs to execute the pjrsh command, specify "``exepjrsh=1``" as follows.
+
+  .. code-block:: console
+  
+     [_LNlogin]$ pjsub -L exepjrsh=1 jobscript.sh
+
+If the above cautions are not satisfied, the following will occur.
+
+- When custom resource "exepjrsh" is not specified, or when the pjrsh command is executed on nodes other than the job master node.
+
+  The pjrsh command returns "Permission denied" and cannot be executed.
+
+  .. code-block:: none
+  
+     /bin/bash: /usr/bin/pjrsh: Permission denied
+
+- When a number other than 1 is specified for the custom resource "``exepjrsh``".
+
+  An error is returned when running the pjsub command.
+
+  .. code-block:: none
+
+     [ERR.] PJM 0057 pjsub exepjrsh=2 is greater than the upper limit (1).
+
+Job Execution in Startup Project (trial)
+-----------------------------------------
+
+Startup projects are the default project for account issuance (group ID: trial, Project ID: rs2xzzzz) that individuals automatically participate in when a Fugaku Account is issued via processes such as completing identity vetting by eKYC and agreeing to the pledge after obtaining an account for using FAAS.
+
+Job Execution in Startup Project (trial)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When executing jobs in the Startup Project (trial), please follow these steps:
+
+- Specify ``-g trial`` when submitting a job.
+
+- Please execute from the home directory, with the ``--no-check-directory`` option specified.
+
+- The available resource groups for submission are as follows: 
+
+  * spot-small
+
+  * spot-int
+
+  * spot-large	
+
+  * spot-middle
+
+Interactive Job
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you wish to log in to the compute node in real-time and execute commands directly, please refer to the following command for execution:
+
+  .. code-block:: none
+    
+     [_LNlogin]$ pjsub --interact -g trial -L rscgrp=spot-int,node=1,elapse=01:00:00 --sparam "wait-time=600" --no-check-directory
+
+Batch Job
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you are creating a job script and submitting a job, please refer to the following command for execution:
+
+  .. code-block:: none
+
+     [_LNlogin]$ pjsub -g trial -L rscgrp=spot-small,node=1,elapse=01:00:00 --no-check-directory jobscript.sh
+

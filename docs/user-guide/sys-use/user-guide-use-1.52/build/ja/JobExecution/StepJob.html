@@ -1,0 +1,434 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.3. ステップジョブ &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.4. バルクジョブ" href="BulkJob.html" />
+    <link rel="prev" title="5.2. 通常ジョブ" href="NormalJob.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="BulkJob.html" title="5.4. バルクジョブ"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="NormalJob.html" title="5.2. 通常ジョブ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.3. </span>ステップジョブ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">5.3. </span>ステップジョブ<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>ステップジョブは、ジョブに実行順序関係や依存関係を持たせるバッチジョブです。</p>
+<ul class="simple">
+<li><p>ステップジョブを構成する複数のジョブをサブジョブと呼びます。</p></li>
+<li><p>サブジョブを投入順に、１サブジョブずつ実行します。</p></li>
+<li><p>先に実行したサブジョブの終了コードを基に、次のサブジョブを実行するかどうかを制御することができます。</p></li>
+<li><p>サブジョブは会話型ジョブとの組み合わせはできません。</p></li>
+<li><p>サブジョブに対する資源割り当ては、サブジョブごとに通常ジョブと同様に行われます。各サブジョブごとに異なる資源（計算ノード数、メモリー量等）を指定することができます。</p></li>
+</ul>
+<p>ステップジョブの動作イメージを次に示します。</p>
+<blockquote>
+<div><figure class="align-default">
+<a class="reference internal image-reference" href="../_images/07020000_1.png"><img alt="../_images/07020000_1.png" src="../_images/07020000_1.png" style="width: 580.3px; height: 291.9px;" /></a>
+</figure>
+</div></blockquote>
+<section id="id2">
+<h2><span class="section-number">5.3.1. </span>ジョブ投入<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">ステップジョブは、<strong class="program">pjsub</strong>に<code class="docutils literal notranslate"><span class="pre">--step</span></code>オプションを指定して投入します。</div>
+<div class="line">その後、サブジョブを１つずつ指定して投入します。</div>
+</div>
+<p>[ジョブIDを指定する方法]</p>
+<p>ステップジョブのジョブIDを指定してサブジョブを投入します。
+この場合、1番目のサブジョブと2番目以降のサブジョブでは、投入時のオプションに違いがあります。</p>
+<ol class="arabic simple">
+<li><p>ステップジョブの開始（<code class="docutils literal notranslate"><span class="pre">--step</span></code>を指定）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span><span class="o">[</span>--sparam<span class="w"> </span><span class="s2">&quot;sn=stepno&quot;</span><span class="o">]</span><span class="w"> </span>スクリプトファイル
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>2つ目以降のサブジョブの実行（<code class="docutils literal notranslate"><span class="pre">--step</span></code>、<code class="docutils literal notranslate"><span class="pre">--sparam</span>&#160; <span class="pre">&quot;jid=jobid&quot;</span></code>を指定）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w">  </span><span class="s2">&quot;jid=jobid [,sn=stepno]&quot;</span><span class="w"> </span>スクリプトファイル
+</pre></div>
+</div>
+</div></blockquote>
+<p>例）ステップジョブで、２つのサブジョブを投入する場合</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>sub_job0.sh
+<span class="go">[INFO.] PJM 0000 pjsub Job 64856_0 submitted.</span>
+<span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jid=64856&quot;</span><span class="w"> </span>sub_job1.sh
+<span class="go">[INFO.] PJM 0000 pjsub Job 64856_1 submitted.</span>
+<span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jid=64856&quot;</span><span class="w"> </span>sub_job2.sh
+<span class="go">[INFO.] PJM 0000 pjsub Job 64856_2 submitted.</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">jid</span></code>の指定があるものを、２つ目以降のサブジョブとして処理します。<code class="docutils literal notranslate"><span class="pre">jid</span></code>の指定がない場合は、新しいステップジョブの開始として処理されますので、ご注意ください。</p></li>
+<li><p>２つ目以降のサブジョブは、先に投入したサブジョブが一つでも残っていれば投入可能です。<code class="docutils literal notranslate"><span class="pre">jid</span></code>で指定したステップジョブが既に終了している場合は、次のようなメッセージが表示され、ジョブの投入はできません。</p></li>
+</ul>
+<blockquote>
+<div><div class="line-block">
+<div class="line">$ pjsub --step --sparam &quot;jid=64856&quot; sub_job3.sh</div>
+<div class="line">[ERR.] PJM 0012 pjsub Job 64856 does not exist.</div>
+</div>
+</div></blockquote>
+</div>
+</div></blockquote>
+<p>[ジョブ名を指定する方法]</p>
+<p>各サブジョブのジョブ名を同じにし、ジョブ名を指定してサブジョブを投入します。
+この方法では、1番目と2番目以降のサブジョブの投入方法は基本的に同じにできます。</p>
+<ol class="arabic simple">
+<li><p>ステップジョブの開始（<code class="docutils literal notranslate"><span class="pre">--step</span></code>、<code class="docutils literal notranslate"><span class="pre">--sparam</span> <span class="pre">&quot;jnam=&quot;</span></code>を指定）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jnam=jobname[,sn=stepno]&quot;</span><span class="w"> </span>スクリプトファイル
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>2つ目以降のサブジョブの実行（<code class="docutils literal notranslate"><span class="pre">--step</span></code>、<code class="docutils literal notranslate"><span class="pre">--sparam</span> <span class="pre">&quot;jnam=&quot;</span></code>を指定）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w">  </span><span class="s2">&quot;jnam=jobname[,sn=stepno]&quot;</span><span class="w"> </span>スクリプトファイル
+</pre></div>
+</div>
+</div></blockquote>
+<p>例）ステップジョブで、２つのサブジョブを投入する場合</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jnam=mystepjob&quot;</span><span class="w"> </span>sub_job0.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 11716781_0 submitted.</span>
+<span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jnam=mystepjob&quot;</span><span class="w"> </span>sub_job1.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 11716781_1 submitted.</span>
+<span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jnam=mystepjob&quot;</span><span class="w"> </span>sub_job2.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 11716781_2 submitted.</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>該当するジョブ名のステップジョブが存在しない場合は、新規ステップジョブが生成されます。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--sparam</span> <span class="pre">&quot;jnam=&quot;</span></code>オプションを指定した場合、<code class="docutils literal notranslate"><span class="pre">-N</span></code>または<code class="docutils literal notranslate"><span class="pre">--name</span></code>オプションの有無に関係なく、<code class="docutils literal notranslate"><span class="pre">--sparam</span> <span class="pre">&quot;jnam=&quot;</span></code>オプションで指定したジョブ名がサブジョブに設定されます。</p></li>
+<li><p>同じジョブ名の異なるステップジョブが複数存在する場合があります。このとき、<code class="docutils literal notranslate"><span class="pre">--sparam</span> <span class="pre">&quot;jnam=&quot;</span></code>オプションでジョブ名を指定してサブジョブを投入すると、最後に生成されたステップジョブを指定したものとみなされます。</p></li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+<section id="id3">
+<h2><span class="section-number">5.3.2. </span>ステップジョブオプション<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>ステップジョブのオプションは以下のとおりです。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>オプション</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>--step</p></td>
+<td><div class="line-block">
+<div class="line">必須オプションです。</div>
+<div class="line">ステップジョブであることを示します。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>--sparam &quot;jid=jobid&quot;</p></td>
+<td><div class="line-block">
+<div class="line">２つ目以降のサブジョブを投入するときに指定します。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">jobid</span></code>の部分に、既存のステップジョブのジョブIDを指定します。</div>
+<div class="line">jidを省略した場合は、新規ステップジョブとして投入されます。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">--sparam &quot;jnam=jobname&quot;</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">各サブジョブのジョブ名を同一名にして、ステップジョブを投入する場合に使用します。</div>
+<div class="line">引数<code class="docutils literal notranslate"><span class="pre">jid</span></code>と引数<code class="docutils literal notranslate"><span class="pre">jnam</span></code>が同時に指定された場合、エラー（指定されたオプションの組合せが不正）となります。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>--sparam &quot;sn=stepno&quot;</p></td>
+<td><div class="line-block">
+<div class="line">サブジョブのステップ番号を指定します。</div>
+<div class="line">指定したステップ番号が投入したサブジョブのステップ番号となります。</div>
+<div class="line">ステップ番号は、投入済みの最大ステップ番号より大きい値を指定します。</div>
+<div class="line">ステップ番号は、0～65535まで指定できます。</div>
+<div class="line">本指定を省略した場合は、最初のサブジョブには0を設定し、２本目以降のサブジョブには投入済みのサブジョブの最大ステップ番号+1が設定されます。</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id">
+<h2><span class="section-number">5.3.3. </span>サブジョブID<a class="headerlink" href="#id" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">ステップジョブのサブジョブには、ジョブIDとステップ番号を組み合わせた「サブジョブID」が付けられます。</div>
+<div class="line">ステップ番号は、1ジョブ（サブジョブを合わせた１つのステップジョブ）内での通し番号 (0 から 65535) が設定されます。</div>
+</div>
+<p>[ステップジョブのサブジョブIDの例]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ジョブID</p></th>
+<th class="head"><p>ステップ番号</p></th>
+<th class="head"><p>サブジョブID</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>12345</p></td>
+<td><p>1</p></td>
+<td><p>12345_1</p></td>
+</tr>
+<tr class="row-odd"><td><p>12345</p></td>
+<td><p>2</p></td>
+<td><p>12345_2</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>ジョブIDが「12345」、ステップ番号が「1」である場合のサブジョブIDは「12345_1」になります。</p>
+</div>
+</section>
+<section id="id4">
+<h2><span class="section-number">5.3.4. </span>ジョブ実行結果の参照<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">ジョブが終了すると、サブジョブ投入時のカレントディレクトリにジョブ実行結果がファイル出力されます。</div>
+<div class="line">サブジョブごとに投入時のディレクトリを変えた場合は、それぞれのディレクトリに出力されます。</div>
+<div class="line">ジョブ実行結果のファイル名は以下のとおりです。</div>
+</div>
+<p>[サブジョブごとに出力されるファイル]</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 44.4%" />
+<col style="width: 55.6%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>形式</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ジョブ名.サブジョブID.out</p></td>
+<td><p>サブジョブが標準出力に書き出したデータです。</p></td>
+</tr>
+<tr class="row-odd"><td><p>ジョブ名.サブジョブID.err</p></td>
+<td><p>サブジョブが標準エラー出力に書き出したデータです。</p></td>
+</tr>
+<tr class="row-even"><td><p>ジョブ名.サブジョブID.stats</p></td>
+<td><p>サブジョブの統計情報が出力されたファイルです。</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>[ステップジョブごとに出力されるファイル]</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 44.4%" />
+<col style="width: 55.6%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>形式</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1つめのジョブ名.ジョブID.stats</p></td>
+<td><p>ステップジョブの統計情報が出力されたファイルです。</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>ジョブ名は、<strong class="program">pjsub</strong>コマンドで指定したジョブスクリプトのファイル名になります。</p></li>
+<li><p>ジョブ名の先頭が半角数字の場合、出力ファイル名の先頭に文字 &quot;J&quot; が付加されます。</p></li>
+<li><p>出力ファイル名で、ジョブ名の部分(先頭に付加される文字&quot;J&quot;も含む)は、63 文字までです。</p></li>
+<li><p>ジョブスクリプトではなく、標準入力からジョブを投入した場合は、ジョブ名の部分は &quot;STDIN&quot; となります。</p></li>
+<li><p>ステップジョブに対し、標準出力や標準エラー出力を同じファイル名に指定した場合、各サブジョブの出力が混在します。</p></li>
+</ul>
+</div>
+<p>例）ステップジョブの実行結果ファイル名</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sub_job1.sh.70990.stats      # ステップジョブの統計情報ファイル
+sub_job1.sh.70990_0.err      # サブジョブ0の標準エラー出力の結果ファイル
+sub_job1.sh.70990_0.stats    # サブジョブ0の統計情報の出力ファイル
+sub_job1.sh.70990_0.out      # サブジョブ0の標準出力の結果ファイル
+sub_job2.sh.70990_1.err      # サブジョブ1の標準エラー出力の結果ファイル
+sub_job2.sh.70990_1.stats    # サブジョブ1の統計情報の出力ファイル
+sub_job2.sh.70990_1.out      # サブジョブ1の標準出力の結果ファイル
+sub_job3.sh.70990_2.err      # サブジョブ2の標準エラー出力の結果ファイル
+sub_job3.sh.70990_2.stats    # サブジョブ2の統計情報の出力ファイル
+sub_job3.sh.70990_2.out      # サブジョブ2の標準出力の結果ファイル
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>これらのファイルは、出力先の指定がない場合、<strong class="program">pjsub</strong>を実行した時のカレントディレクトリに出力されます。サブジョブごとに<strong class="program">pjsub</strong>した際のカレントディレクトリが異なる場合は、異なるディレクトリに出力されますので注意ください。</p>
+</div>
+</section>
+<section id="id5">
+<h2><span class="section-number">5.3.5. </span>依存関係のあるジョブ投入例<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>ステップジョブを利用して、先に実行されるジョブの復帰値を参照して後続のジョブを実行するか否かを制御することができます。</p>
+<p>2番目以降のサブジョブ投入時は、先行するサブジョブの結果に応じてどういう動作をするか、<code class="docutils literal notranslate"><span class="pre">--sparam</span> <span class="pre">sd=</span></code>オプションで指定します。
+これをステップジョブの「依存関係式」と呼びます。依存関係式については、マニュアル「ジョブ運用ソフトウェア エンドユーザ向けガイド」の「2.3.4.2 ステップジョブの投入方法」を参照してください。</p>
+<p>[依存関係式の書式]</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>--sparam &quot;sd=form[:[deletetype][:stepno[:stepno[...]]]]&quot;
+</pre></div>
+</div>
+</div></blockquote>
+<p>以下に例を示します。</p>
+<ol class="arabic simple">
+<li><p>復帰値の設定</p></li>
+</ol>
+<blockquote>
+<div><p>ステップジョブが参照する復帰値は、ジョブスクリプトの復帰値になります。スクリプトの復帰値を指定するようにジョブスクリプトを記述ください。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mpiexec<span class="w"> </span>./sample_mpi
+<span class="nb">exit</span><span class="w"> </span><span class="nv">$?</span><span class="w">   </span><span class="c1">#復帰値</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><code class="file docutils literal notranslate"><span class="pre">./sample_mpi</span></code>の復帰値を<strong class="command">exit</strong>を使ってスクリプトの復帰値に設定する。</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>ジョブの投入例</p></li>
+</ol>
+<blockquote>
+<div><p>この例は、<code class="file docutils literal notranslate"><span class="pre">sub_job2.sh</span></code>の復帰値が0でない場合に、<code class="file docutils literal notranslate"><span class="pre">sub_job3.sh</span></code>を実行しないようにするものです。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>sub_job1.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 71080_0 submitted.</span>
+<span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jid=71080&quot;</span><span class="w"> </span>sub_job2.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 71080_1 submitted.</span>
+<span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--step<span class="w"> </span>--sparam<span class="w"> </span><span class="s2">&quot;jid=71080,sd=ec!=0:one:1&quot;</span><span class="w"> </span>sub_job3.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 71080_2 submitted.</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>上記例の &quot;sd=&quot; の後に指定している値について</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">ec</span></code> ：依存するサブジョブのジョブスクリプトの終了ステータス</p>
+<p><code class="docutils literal notranslate"><span class="pre">one</span></code>：このサブジョブだけ削除し、このサブジョブの結果に依存する後続のサブジョブは削除されません。</p>
+<p><code class="docutils literal notranslate"><span class="pre">1</span></code>  ：サブジョブNo.1の終了ステータスを参照します。</p>
+</div></blockquote>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.3. ステップジョブ</a><ul>
+<li><a class="reference internal" href="#id2">5.3.1. ジョブ投入</a></li>
+<li><a class="reference internal" href="#id3">5.3.2. ステップジョブオプション</a></li>
+<li><a class="reference internal" href="#id">5.3.3. サブジョブID</a></li>
+<li><a class="reference internal" href="#id4">5.3.4. ジョブ実行結果の参照</a></li>
+<li><a class="reference internal" href="#id5">5.3.5. 依存関係のあるジョブ投入例</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="NormalJob.html"
+                          title="前の章へ"><span class="section-number">5.2. </span>通常ジョブ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="BulkJob.html"
+                          title="次の章へ"><span class="section-number">5.4. </span>バルクジョブ</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="BulkJob.html" title="5.4. バルクジョブ"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="NormalJob.html" title="5.2. 通常ジョブ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.3. </span>ステップジョブ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

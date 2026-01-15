@@ -1,0 +1,487 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>2. 認可について &#8212; WebAPI User Guide  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="3. WebAPI仕様" href="api-reference.html" />
+    <link rel="prev" title="1. 概要" href="Overview.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="api-reference.html" title="3. WebAPI仕様"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="1. 概要"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">WebAPI User Guide  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>認可について</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">2. </span>認可について<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
+<section id="oauth-2-0">
+<h2><span class="section-number">2.1. </span>OAuth 2.0認可コード<a class="headerlink" href="#oauth-2-0" title="この見出しへのパーマリンク">¶</a></h2>
+<p>WebAPIの実行には、OAuth 2.0の認可コード付与のフローとOpenID Connectプロトコルに基づいたアクセストークンが必要です。</p>
+<p>なお、リクエストに用いるパラメータ（client_id, client_securet, redirect_uri）の作成・削除については <a class="reference internal" href="#oidc-clients"><span class="std std-ref">こちら</span></a> を参照してください。</p>
+<p>認可フローの概要は以下の通りです。</p>
+<figure class="align-default" id="auth-seq">
+<img alt="../_images/auth_seq.png" src="../_images/auth_seq.png" />
+<figcaption>
+<p><span class="caption-number">図 2.1 </span><span class="caption-text">認可フロー概要</span><a class="headerlink" href="#auth-seq" title="この画像へのパーマリンク">¶</a></p>
+</figcaption>
+</figure>
+<p>認可処理に伴うステップは、以下の通りです。</p>
+<ol class="arabic">
+<li><p>認可を要求する</p>
+<div class="line-block">
+<div class="line">ユーザを認証して、WebAPIで利用する認可コードを取得するために、認可エンドポイントURLにクエリパラメータを設定する。</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>GET https://idp.fugaku.r-ccs.riken.jp/auth/realms/op/protocol/openid-connect/auth
+</pre></div>
+</div>
+<p>クエリパラメータ</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 11%" />
+<col style="width: 71%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>名前</p></th>
+<th class="head"><p>種類</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>response_type</p></td>
+<td><p>String</p></td>
+<td><p>(必須)認可コードを取得する場合は、&quot;code&quot;固定。</p></td>
+</tr>
+<tr class="row-odd"><td><p>scope</p></td>
+<td><p>String</p></td>
+<td><p>(必須)ユーザーに付与を依頼する権限を指定する。
+&quot;openid&quot;を必ず含めてください。</p></td>
+</tr>
+<tr class="row-even"><td><p>client_id</p></td>
+<td><p>String</p></td>
+<td><p>(必須)クライアントID。</p></td>
+</tr>
+<tr class="row-odd"><td><p>redirect_uri</p></td>
+<td><p>String</p></td>
+<td><p>(必須)コールバックURL。認証・認可の後にリダイレクトされるURL。
+クライアントに登録されているリダイレクトURLと一致している必要があります。</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>ユーザは、認可エンドポイントURLにアクセスする際にクライアント証明書の選択で、有効なクライアント証明書を選択する</p>
+<figure class="align-default" id="selec-client-certificate">
+<img alt="クライアント証明書の選択ダイアログ" src="../_images/selec_client_certificate.png" />
+<figcaption>
+<p><span class="caption-number">図 2.2 </span><span class="caption-text">クライアント証明書の選択ダイアログ</span><a class="headerlink" href="#selec-client-certificate" title="この画像へのパーマリンク">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>同意画面で、ログインユーザを確認し、 <span class="guilabel">Continue</span> ボタンを押下する</p>
+<figure class="align-default" id="consent-page">
+<img alt="同意画面" src="../_images/consent_page.png" />
+<figcaption>
+<p><span class="caption-number">図 2.3 </span><span class="caption-text">同意画面</span><a class="headerlink" href="#consent-page" title="この画像へのパーマリンク">¶</a></p>
+</figcaption>
+</figure>
+</li>
+<li><p>アクセストークンを生成する。</p>
+<div class="line-block">
+<div class="line">認可コードからをアクセストークンを生成するには、トークンエンドポイントURLにポストパラメータを設定する</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>POST https://idp.fugaku.r-ccs.riken.jp/auth/realms/op/protocol/openid-connect/token
+</pre></div>
+</div>
+<p>ポストパラメータ</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 11%" />
+<col style="width: 71%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>名前</p></th>
+<th class="head"><p>種類</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>grant_type</p></td>
+<td><p>String</p></td>
+<td><p>(必須)アクセストークンを取得する場合は、&quot;authorization_code&quot;固定。</p></td>
+</tr>
+<tr class="row-odd"><td><p>code</p></td>
+<td><p>String</p></td>
+<td><p>(必須)認可コード                            。</p></td>
+</tr>
+<tr class="row-even"><td><p>client_id</p></td>
+<td><p>String</p></td>
+<td><p>(必須)クライアントID。</p></td>
+</tr>
+<tr class="row-odd"><td><p>client_secret</p></td>
+<td><p>String</p></td>
+<td><p>(必須)クライアントシークレット。</p></td>
+</tr>
+<tr class="row-even"><td><p>redirect_uri</p></td>
+<td><p>String</p></td>
+<td><p>(必須)コールバックURL。認証・認可の後にリダイレクトされるURL。
+クライアントに登録されているリダイレクトURLと一致している必要があります。</p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンスパラメータ（JSON)</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 11%" />
+<col style="width: 71%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>名前</p></th>
+<th class="head"><p>種類</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>access_token</p></td>
+<td><p>String</p></td>
+<td><p>アクセストークン。</p></td>
+</tr>
+<tr class="row-odd"><td><p>expires_in</p></td>
+<td><p>Number</p></td>
+<td><p>アクセストークンの有効期限が切れるまでの秒数。</p></td>
+</tr>
+<tr class="row-even"><td><p>id_token</p></td>
+<td><p>String</p></td>
+<td><p>IDトークン。JSON Webトークン（JWT）であらわされる</p></td>
+</tr>
+<tr class="row-odd"><td><p>refresh_expires_in</p></td>
+<td><p>Number</p></td>
+<td><p>リフレッシュトークンの有効期限が切れるまでの秒数。</p></td>
+</tr>
+<tr class="row-even"><td><p>refresh_token</p></td>
+<td><p>String</p></td>
+<td><p>リフレッシュトークン。</p></td>
+</tr>
+<tr class="row-odd"><td><p>token_type</p></td>
+<td><p>String</p></td>
+<td><p>&quot;bearer&quot;(固定)。</p></td>
+</tr>
+<tr class="row-even"><td><p>not-before-policy</p></td>
+<td><p>Number</p></td>
+<td><p>not-beforeポリシー。</p></td>
+</tr>
+<tr class="row-odd"><td><p>session_state</p></td>
+<td><p>String</p></td>
+<td><p>session state。</p></td>
+</tr>
+<tr class="row-even"><td><p>scope</p></td>
+<td><p>String</p></td>
+<td><p>ユーザーが付与する権限。</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<dl>
+<dt>　　レスポンス例:</dt><dd><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="s2">&quot;access_token&quot;</span><span class="o">:</span><span class="s2">&quot;eyJhbGciOiJSUzI1NilSInR5cCIgOiAlSldUIiwia2lkIiA6ICJ0Ni1NNzUwelgyZFV3N3AzVVBaTTBCcVVIMkNMYWl6S2hwazAtVWVuR3I4In0.eyJqdGkiOiIwMjkxZmI5YS1kYTRhLTRlMWMtOWFmZC1lYjk3YWQyNzY2NzEiLCJleHAiOjE2MDAwMjY0NzQsIm5iZiI6MCwiaWF0IjoxNjAwMDI2MTc0LCJpc3MiOiJodHRwczovL2lkcC5mdWdha3Uuci1jY3MucmlrZW4uanAvYXV0aC9yZWFsbXMvb3AiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiZTdjNjJmOGUtOGEwYS00NjJiLTg3YTktZWZiMTRiNzAyZWRiIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoicG9ydGFsIiwiYXV0aF90aW1lIjoxNjAwMDI2MDUwLCJzZXNzaW9uX3N0YXRlIjoiY2U5NmFiNjMtOTQ0Ni00ZjNmLWJlNjQtNDQyOWIxMDc1N2ZkIiwiYWNyIjoiMSlSInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcylSInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudClSIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIG9mZmxpbmVfYWNjZXNzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiZmowMDM2IiwicHJlZmVycmVkX3VzZXJuYW1lIjoiZmowMDM2IiwiZ2l2ZW5fbmFtZSI6ImZqMDAzNiJ9.PqRt2Ndkb4CRrus1sGHKgMP7j3PZte7iYFBsK_iJIZ9wZipkWpG2DNYvUsS-uKYxLZxB_8WXyVznvI-AeI3t178RYAvSIPk6Pn0pKfibetkvtumlO04rb6zvfd9elpoYvQbSzONjgx-78C6oAoBak6LGmBnxR9XIcszYsyl8JJaGRv-USPEWVdJGz1JKvzb5p4mRgswhpCMhUlJlSsQXwPTU_6zszgMN4jRqf3Peq2M465llEJgTLYCjnSSDG2sV-ORoHuUhuvkaTjTroD6_rr5dubFreeUyq6rIQQR0sepk4rx--OLW7X5geYS3NNOXwG8_yCX2qx9IMgvqsHYcOA&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="s2">&quot;expires_in&quot;</span><span class="o">:</span><span class="mf">300</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="s2">&quot;refresh_expires_in&quot;</span><span class="o">:</span><span class="mf">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="s2">&quot;refresh_token&quot;</span><span class="o">:</span><span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJkZWU4YjZllm0yMTM0LTRjZmYtYmMyNi01YjY5MzVkZDFjNGQifQ.eyJqdGkiOiJhMDYxMTdiNy0zYzlmLTQyNGUtYWM5ZC1lYjhiYzEyYlm5YTAiLCJleHAiOjAsIm5iZiI6MCwiaWF0IjoxNjAwMDI2MTc0LCJpc3lmOiJodHRwczovL2lkcC5mdWdha3Uuci1jY3MucmlrZW4uanAvYXV0aC9yZWFsbXMvb3AiLCJhdWQiOiJodHRwczovL2lkcC5mdWdha3Uuci1jY3MucmlrZW4uanAvYXV0aC9yZWFsbXMvb3AiLCJzdWIiOiJlN2M2MmY4ZS04YTBhLTQ2MlmtODdhOS1lZlmxNGI3MDJlZGIiLCJ0eXAiOiJPZmZsaW5lIiwiYXpwIjoicG9ydGFsIiwiYXV0aF90aW1lIjowLCJzZXNzaW9uX3N0YXRlIjoiY2U5NmFiNjMtOTQ0Ni00ZjNmLWJlNjQtNDQyOWIxMDc1N2ZkIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3lmLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUgb2ZmbGluZV9hY2Nlc3lmfQ.tigxazAMNx_FkD0MOsutK87tEagO6EMwmQDSHRJ7g2U&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="s2">&quot;token_type&quot;</span><span class="o">:</span><span class="s2">&quot;bearer&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="s2">&quot;not-before-policy&quot;</span><span class="o">:</span><span class="mf">0</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="s2">&quot;session_state&quot;</span><span class="o">:</span><span class="s2">&quot;ce96ab63-9446-4f3f-be64-4429b10757fd&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">   </span><span class="s2">&quot;scope&quot;</span><span class="o">:</span><span class="s2">&quot;email profile offline_access&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">認証済みにも関わらず、WebAPIの実行結果が、403（認証エラー）となる場合は、リフレッシュトークンを利用した再認証を実施してください。</div>
+<div class="line">なお、リフレッシュトークンでの再認証にも失敗する場合は、認証手順の最初から実施してください。</div>
+</div>
+</dd>
+</dl>
+<ol class="arabic">
+<li><p>リフレッシュトークンからアクセストークンを生成する。</p>
+<div class="line-block">
+<div class="line">リフレッシュトークンからをアクセストークンを生成するには、トークンエンドポイントURLにポストパラメータを設定する</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>POST https://idp.fugaku.r-ccs.riken.jp/auth/realms/op/protocol/openid-connect/token
+</pre></div>
+</div>
+<p>ポストパラメータ</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 11%" />
+<col style="width: 71%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>名前</p></th>
+<th class="head"><p>種類</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>grant_type</p></td>
+<td><p>String</p></td>
+<td><p>(必須)&quot;refresh_token&quot;固定。</p></td>
+</tr>
+<tr class="row-odd"><td><p>refresh_token</p></td>
+<td><p>String</p></td>
+<td><p>(必須)リフレッシュトークン</p></td>
+</tr>
+<tr class="row-even"><td><p>client_id</p></td>
+<td><p>String</p></td>
+<td><p>(必須)クライアントID。</p></td>
+</tr>
+<tr class="row-odd"><td><p>client_secret</p></td>
+<td><p>String</p></td>
+<td><p>(必須)クライアントシークレット。</p></td>
+</tr>
+<tr class="row-even"><td><p>redirect_uri</p></td>
+<td><p>String</p></td>
+<td><p>(必須)コールバックURL。認証・認可の後にリダイレクトされるURL。
+クライアントに登録されているリダイレクトURLと一致している必要があります。</p></td>
+</tr>
+</tbody>
+</table>
+<p>レスポンスパラメータ（JSON)</p>
+<p>アクセストークンの生成と同様。</p>
+</li>
+</ol>
+</section>
+<section id="x-509">
+<h2><span class="section-number">2.2. </span>X.509 クライアント証明書<a class="headerlink" href="#x-509" title="この見出しへのパーマリンク">¶</a></h2>
+<p>X.509 証明書を利用することで、アクセストークンを用いずに、WebAPIを利用することができます。</p>
+<ol class="arabic">
+<li><p>X.509証明書の形式</p>
+<div class="line-block">
+<div class="line">cURLを利用する場合、X.509証明書の形式はPEM形式に変換する必要があります。</div>
+<div class="line">PKCS#12形式のクライアント証明書をPEM形式に変換する手順を以下に示します。</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ openssl pkcs12 -in  local_account_name.p12 -nodes -out local_account_name.pem
+Enter Import Password:    <span class="c1"># pathphrase</span>
+</pre></div>
+</div>
+</li>
+<li><p>X.509証明書の利用</p>
+<div class="line-block">
+<div class="line">cURLを利用する場合、--certオプションにPEM形式に変換した証明書を指定してください。</div>
+<div class="line">全マシン状態の取得APIの実行例を以下に示します。</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ curl --cert local_account_name.pem  https://api.fugaku.r-ccs.riken.jp/status/
+<span class="o">[{</span><span class="s2">&quot;status&quot;</span>:<span class="s2">&quot;OK&quot;</span>,<span class="s2">&quot;machine&quot;</span>:<span class="s2">&quot;computer&quot;</span><span class="o">}]</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="clients">
+<span id="oidc-clients"></span><h2><span class="section-number">2.3. </span>Clients リクエストに用いるパラメータの作成<a class="headerlink" href="#clients" title="この見出しへのパーマリンク">¶</a></h2>
+<blockquote>
+<div></div></blockquote>
+<p>リクエストに用いるパラメータを作成できます。</p>
+<ol class="arabic">
+<li><p>Clientsについて</p>
+<div class="line-block">
+<div class="line">登録したClient情報(Client ID, Redirect URL, Secret, Created Date)を閲覧できます。</div>
+</div>
+<figure class="align-default" id="clients-list">
+<img alt="Clients list" src="../_images/clients_list_1.png" />
+</figure>
+<ul>
+<li><p>Client ID</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>APIアクセスに必要なOAuth2.0認証情報です。</p></li>
+<li><p>OIDC要求のクライアント識別子として使用されます。</p></li>
+<li><p>英数字とアンダーバーやハイフンを組み合わせた文字列を入力します。</p></li>
+<li><p>例： <code class="docutils literal notranslate"><span class="pre">u99999_dummy_1</span></code></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Redirect URL</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>認証が成功した後にブラウザがリダイレクトできるURLです。</p></li>
+<li><p>「<a class="reference external" href="http://example.com/">http://example.com/</a><em>」などの単純なワイルドカードを使用できます。 /my/relative/path/</em> などの相対パスも指定できます。</p></li>
+<li><p>URL入力例： <code class="docutils literal notranslate"><span class="pre">http://localhost/*</span></code></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Secret</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>ClientIDと同様に、APIアクセスに必要なOAuth2.0認証情報です。</p></li>
+<li><p>Client作成時に自動的に生成されます。</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Created Date</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Clientを作成した日時です。</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><img alt="Clients list Create Button" src="../_images/Clients_list_Create_button.png" /> ボタン</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>clientを新しく発行するのに必要な情報を入力します。</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><img alt="Delete Button" src="../_images/Clients_Delete_icon.png" /> ボタン</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>登録済みのclientを削除します。</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>一覧ソート</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Client IDとCreated Dateの2っはソートが可能です。 一覧のタイトル表示をクリックするソートがされます。</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</li>
+<li><p>Clientの新規作成</p>
+<div class="line-block">
+<div class="line">clientを新規作成します。</div>
+</div>
+<figure class="align-default" id="create-client-1">
+<img alt="Clients list Create Button position" src="../_images/create_client_1.png" />
+</figure>
+<ol class="arabic">
+<li><p><img alt="Clients list Create Button" src="../_images/Clients_list_Create_button.png" /> ボタンをクリックすると、入力するウィンドウ（Create client.）が表示されます。</p>
+<figure class="align-default" id="create-client-window">
+<img alt="Create Client Window" src="../_images/Clients_Window_CreateClient.png" />
+</figure>
+</li>
+<li><p>Client IDと、Redirect URLを入力します。</p></li>
+<li><p>入力したら <img alt="OK Button" src="../_images/Clients_OK_button.png" /> ボタンを押下します。 <img alt="OK Button" src="../_images/Clients_OK_button.png" /> ボタン押下後はSecretの発行を自動で行います。
+発行・登録しない場合は <img alt="Cancel Button" src="../_images/Clients_Cancel_button.png" /> ボタンを押下してください。</p></li>
+<li><p><img alt="OK Button" src="../_images/Clients_OK_button.png" /> ボタンを押下するとClients一覧の表示が更新されて、今回追加したものが表示されます。</p></li>
+</ol>
+</li>
+<li><p>Clientの削除</p>
+<div class="line-block">
+<div class="line">登録済みのclientを削除します。</div>
+</div>
+<figure class="align-default" id="clients-list-delete-button">
+<img alt="Clients list Delete Button position" src="../_images/Clients_list_Delete_button.png" />
+</figure>
+<ol class="arabic simple">
+<li><p>一覧の右側に <img alt="Delete Button" src="../_images/Clients_Delete_icon.png" /> ボタンが表示されています。Clientを削除するにはこの <img alt="Delete Button" src="../_images/Clients_Delete_icon.png" /> ボタンをクリックしてください。</p></li>
+<li><p>削除するClientIDを表示したウィンドウ(Delete client)が表示されます。</p></li>
+<li><p><img alt="OK Button" src="../_images/Clients_OK_button.png" /> ボタンを押下するとを削除を行います。
+<img alt="Cancel Button" src="../_images/Clients_Cancel_button.png" /> ボタンを押下した場合は削除せずClientは残ります。</p></li>
+</ol>
+</li>
+</ol>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">2. 認可について</a><ul>
+<li><a class="reference internal" href="#oauth-2-0">2.1. OAuth 2.0認可コード</a></li>
+<li><a class="reference internal" href="#x-509">2.2. X.509 クライアント証明書</a></li>
+<li><a class="reference internal" href="#clients">2.3. Clients リクエストに用いるパラメータの作成</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="Overview.html"
+                          title="前の章へ"><span class="section-number">1. </span>概要</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="api-reference.html"
+                          title="次の章へ"><span class="section-number">3. </span>WebAPI仕様</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="api-reference.html" title="3. WebAPI仕様"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="1. 概要"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">WebAPI User Guide  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>認可について</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN R-CCS.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,288 @@
+.. highlight:: none
+
+.. _CompilerforLN:
+
+Compilers that generate binaries for login nodes
+=================================================
+
+.. contents::
+   :local:
+
+
+Intel oneAPI
+-------------
+
+Login node (Intel) can use Intel oneAPI Base & HPC Toolkit.
+
+Environment setting
+^^^^^^^^^^^^^^^^^^^
+
+To use Intel oneAPI compiler, it is needed to set the required path. 
+
+Please Use a shell script or modulefile to set the required paths.
+
+1. To use a shell script for setting paths
+
+   Do the following:.
+
+   .. code-block:: console
+
+      [_LNIlogin]$ source /opt/intel/oneapi/setvars.sh intel64
+      
+      :: initializing oneAPI environment ...
+         bash: BASH_VERSION = 4.4.20(1)-release
+         args: Using "$@" for setvars.sh arguments: intel64
+      :: advisor -- latest
+      :: ccl -- latest
+      :: clck -- latest
+      :: compiler -- latest
+      :: dal -- latest
+      :: debugger -- latest
+      :: dev-utilities -- latest
+      :: dnnl -- latest
+      :: dpcpp-ct -- latest
+      :: dpl -- latest
+      :: inspector -- latest
+      :: ipp -- latest
+      :: ippcp -- latest
+      :: ipp -- latest
+      :: itac -- latest
+      :: mkl -- latest
+      :: mpi -- latest
+      :: tbb -- latest
+      :: vpl -- latest
+      :: vtune -- latest
+      :: oneAPI environment initialized ::
+
+
+2. To use modulefile for setting paths
+
+   If you use a modulefile, you must load the modulefile that corresponds to the feature you want to use.
+   If you are using 2024.1.0 or later, set ``MODULES_AUTO_HANDLING=1`` beforehand.
+   
+   For example, to make use of MKL, load ``mkl/latest`` and ``compiler/latest``.
+   
+   .. code-block:: console
+
+      [_LNIlogin]$ export MODULES_AUTO_HANDLING=1
+      [_LNIlogin]$ module load mkl/latest
+      Loading mkl/latest
+        Loading requirement: tbb/latest compiler-rt/latest
+      [_LNIlogin]$ module load compiler/latest
+      Loading compiler/latest
+        Loading requirement: oclfpga/latest
+
+   Check the supplied modulefile with the ``module avail`` command.
+
+To compile
+^^^^^^^^^^
+
+Compile command is as following.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Compiler type
+     - Command name
+   
+   * - DPC++/C++ Compiler
+     - icx, icpx, dpcpp
+
+   * - Fortran Compiler
+     - ifx
+
+- Sequential (Example of Intel Fortran)
+
+  .. code-block:: console
+
+     [_LNIlogin]$ ifx -O3 source file name
+
+- OpenMP (Example of Intel Fortran)
+
+  .. code-block:: console
+
+     [_LNIlogin]$ ifx -O3 -qopenmp source file name
+
+- Example of Intel oneAPI DPC++ compiler (`oneAPI Example Compilation <https://software.intel.com/content/www/us/en/develop/documentation/oneapi-programming-guide/top/programming-interface/example-compilation.html>`_)
+
+  .. code-block:: console
+
+     [_LNIlogin]$ dpcpp -I${MKLROOT}/include -c axpy.cpp -o axpy.o
+     [_LNIlogin]$ dpcpp axpy.o -fsycl-device-code-split=per_kernel \
+     "${MKLROOT}/lib/intel64"/libmkl_sycl.a -Wl,-export-dynamic -Wl,--start-group \
+     "${MKLROOT}/lib/intel64"/libmkl_intel_ilp64.a \
+     "${MKLROOT}/lib/intel64"/libmkl_sequential.a \
+     "${MKLROOT}/lib/intel64"/libmkl_core.a -Wl,--end-group -lsycl -lOpenCL \
+     -lpthread -lm -ldl -o axpy.out
+
+About Intel oneAPI compiler
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+| For more information about the Intel oneAPI compiler, refer to the Intel home page.
+| https://www.intel.com/content/www/us/en/developer/tools/oneapi/overview.html
+
+| For information on the DPC++ (Data Parallel C++) compiler, see:
+| https://www.intel.com/content/www/us/en/developer/tools/oneapi/dpc-compiler.html
+
+| For information on the Intel Fortran compiler classic, see:
+| https://www.intel.com/content/www/us/en/developer/tools/oneapi/fortran-compiler.html
+
+
+Arm Compiler for Linux
+-----------------------------
+
+Users can use Arm Compiler for Linux on the Arm login node.
+
+Environment setting
+^^^^^^^^^^^^^^^^^^^
+
+To use Arm compiler, it is needed to set the required path. 
+
+Please check the modulefile with the ``module avail`` command and set the environment appropriately.
+
+
+.. code-block:: console
+
+   [_LNAlogin]$ module avail
+
+   --------------------------------------- /opt/arm/modulefiles ---------------------------------------
+   arm22/22.0.2    arm23/23.10     binutils/11.2.0 binutils/9.2.0  gnu/13.2.0
+   arm23/23.04     arm24/24.04     binutils/12.2.0 gnu/11.2.0      gnu10/10.2.0
+   arm23/23.04.1   binutils/10.2.0 binutils/13.2.0 gnu/12.2.0      gnu9/9.2.0
+
+
+   [_LNAlogin]$ module load arm24/24.04
+
+- Modulefile name contains 'gcc' is used, GCC compiler (included in Arm Compiler for Linux) will be used.
+
+When generating executable file for login node(Arm), you can expedite the optimization by specifying ``-mcpu=thunderx2t99`` option.
+
+To compile
+^^^^^^^^^^
+
+Compile command is as follows.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Language
+     - Command name
+   
+   * - Fortran
+     - armflang
+
+   * - C
+     - armclang
+
+   * - C++
+     - armclang++
+
+- Sequential (Example of C)
+
+.. code-block:: console
+
+   [_LNAlogin]$ armclang -Ofast <source file name>
+
+- OpenMP (Example of C)
+
+.. code-block:: console
+
+   [_LNAlogin]$ armclang -Ofast -fopenmp <source file name>
+
+For the compiler options that can be specified, please see the man command or Reference Guide.
+
+Please refer to man command or reference guide for specifiable compiler options in the Arm compiler.
+
+Arm Fortran Compiler Developer and Reference Guide
+  https://developer.arm.com/documentation/101380/2404/?lang=en
+
+Arm C/C++ Compiler Developer and Reference Guide
+  https://developer.arm.com/documentation/101458/2404/?lang=en
+
+Arm Compiler for Linux
+   https://developer.arm.com/Tools%20and%20Software/Arm%20Compiler%20for%20Linux
+
+Arm Performance Libraries
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A licensed version of Arm Performance Libraries (ArmPL) is available as part of Arm Compiler for Linux. 
+ArmPL includes the following libraries,
+
+
+- BLAS : Basic Linear Algebra Subprograms (including XBLAS, the extended precision BLAS).
+- LAPACK 3.11.0 : a comprehensive package of higher level linear algebra routines.
+- FFT functions : a set of Fast Fourier Transform routines for real and complex data using the FFTW interface.
+- Sparse linear algebra.
+- libamath : a subset of libm, which is a set of optimized mathematical functions.
+
+
+Please refer to the reference guide for ArmPL instruction.
+
+Arm Performance Libraries Reference guide
+   https://developer.arm.com/Tools%20and%20Software/Arm%20Performance%20Libraries
+
+
+LLVM (Arm loign node)
+----------------------
+
+Shows how to use the C/C++ compiler based on LLVM.
+LLVM is available on Arm login nodes.
+
+
+Environment setting
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use environment of LLVM cross compiler is set using modulefile.
+
+Set the use environment by executing the following before executing compile.
+
+.. code-block:: console
+
+   [_LNAlogin]$ module load LLVM-cross-LN
+
+The usable environment is as following.
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3 2 2 8
+
+   * - Software name
+     - Language
+     - Version
+     - Command
+
+   * - Clang
+     - C
+     - 10.0.0
+     - clang
+
+   * - Clang++
+     - C++
+     - 10.0.0
+     - clang++
+
+
+To compile
+^^^^^^^^^^^^^^^^
+
+Here is an example of compiling a Fortran program using LLVM.
+
+[Sequential execution]
+
+ .. code-block:: console
+
+    [_LNAlogin]$ clang -O3  source_file_name
+
+
+[OpenMP]
+
+ .. code-block:: console
+
+    [_LNAlogin]$ clang -O3 -fopenmp source_file_name
+
+
+
+.. seealso::
+    
+    The above example is the same for C++ (clang++).
+

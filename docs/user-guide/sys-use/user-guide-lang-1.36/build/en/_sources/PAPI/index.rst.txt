@@ -1,0 +1,120 @@
+Use of PAPI
+===========
+
+Here describes about the use of PAPI.
+
+Overview
+--------
+
+This section shows how to compile and link the program and notes, using PAPI(Performance Application Programming Interface), on \ |post-k|\ .
+
+Please refer to https://icl.utk.edu/papi/ for more information about PAPI.
+
+
+Compiling link
+--------------
+
+Indicates options that must be specified when compiling and linking.
+
+1. Options required during compilation
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 2 7
+   
+    * - Language
+      - Option
+
+    * - Fortran
+      - ``-I/opt/FJSVxos/devkit/aarch64/rfs/usr/include``
+
+    * - C/C++
+      - \-
+
+2. Options required during linking
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 2 3 7
+   
+    * - Language
+      - Compiler mode
+      - Option
+
+    * - Fortran
+      - \-
+      - \-Nnofjprof \-lpapi
+
+    * - C/C++
+      - \trad mode
+      - \-Nnofjprof \-lpapi
+
+    * - C/C++
+      - \clang mode
+      - \-ffj-no-fjprof \-lpapi
+
+
+ .. attention::
+
+    When creating the executable file (a.out), specify  \ ``-Nnofjprof``\  option (If clang mode,  \ ``-ffj-no-fjprof``\) and do not link the Fujitsu tool library.
+
+The following are examples of compilation in each language.
+
+1. Forttran compiling example
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -o papi_sample_f -Kfast,parallel,optmsg=2 -I/opt/FJSVxos/devkit/aarch64/rfs/usr/include -Nlst=t -Nnofjprof -lpapi  papi_sample.f95
+
+2. C compiling example (trad mode)
+
+ .. code-block:: console
+
+   [_LNlogin]$ fccpx -o papi_sample_c -Kfast,parallel,optmsg=2 -Nlst=t -Nnofjprof -lpapi papi_sample_c.c
+
+3. C++ compiling example (clang mode)
+
+ .. code-block:: console
+
+   [_LNlogin]$ FCCpx -o papi_sample_cc -Nclang -Ofast -mllvm -polly -mllvm -polly-parallel -Rpass=.* -ffj-lst=t -ffj-no-fjprof -lpapi papi_sample_cc.cc
+
+
+How to execute
+--------------
+
+This indicates the program execution example of using PAPI.
+
+[Execution example]
+
+.. code-block:: bash
+
+  #!/bin/bash -x
+  #
+  #PJM -L "node=12"
+  #PJM -L "elapse=00:10:00"
+  #PJM --mpi "proc=16"
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -g groupname
+  #PJM -s
+  #
+  
+  export OMP_NUM_THREADS=12
+  
+  xospastop      #Required
+  mpiexec ./papi.out
+
+.. attention::
+
+  - For the program used PAPI, please proceed once executed  \ :program:`xospastop`\  command. if not proceeded  \ :program:`xospastop`\  command, an error may occur during PAPI processing.
+  
+  - Also the job proceeded  \ :program:`xospastop`\  command, stops collection of PMU counter (Performance Monitoring Unit Counter). There is no option or message output, and the exit status is always 0.
+
+
+Notes
+-----
+
+Please note the following points about programs using PAPI.
+
+- PAPI is not supported
+- If you do not run xospastop, you will not get the correct results.
+

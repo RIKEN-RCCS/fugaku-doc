@@ -1,0 +1,459 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>1. 概要 &#8212; 富岳VPN 接続設定手順  ドキュメント</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+   
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="prev" title="富岳VPN 接続設定手順" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="富岳VPN 接続設定手順"
+             accesskey="P">前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">富岳VPN 接続設定手順  ドキュメント</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. 概要</a></li>
+<li><a class="reference internal" href="#id2">2. クライアント証明書のインストール</a><ul>
+<li><a class="reference internal" href="#windowsos">2.1. 証明書のインストール（WindowsOS）</a></li>
+<li><a class="reference internal" href="#macos">2.2. 証明書のインストール（MacOS）</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#vpn">3. VPN接続手順</a><ul>
+<li><a class="reference internal" href="#vpn-windowsos">3.1. VPN接続手順（WindowsOS）</a><ul>
+<li><a class="reference internal" href="#id3">3.1.1. VPN接続ツールのダウンロード</a></li>
+<li><a class="reference internal" href="#id4">3.1.2. VPN接続ツールのインストール</a></li>
+<li><a class="reference internal" href="#id5">3.1.3. VPN新規設定手順</a></li>
+<li><a class="reference internal" href="#id6">3.1.4. VPN接続手順</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#vpn-macos">3.2. VPN接続手順（MacOS）</a><ul>
+<li><a class="reference internal" href="#id7">3.2.1. VPN接続ツールのダウンロード</a></li>
+<li><a class="reference internal" href="#id9">3.2.2. VPN接続ツールのインストール</a></li>
+<li><a class="reference internal" href="#id10">3.2.3. VPN新規設定手順</a></li>
+<li><a class="reference internal" href="#id11">3.2.4. VPN接続手順</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id12">4. 計算ノードおよびプレポストノードのホスト名</a></li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="index.html"
+                        title="前の章へ">富岳VPN 接続設定手順</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>1. 概要<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>富岳と利用者間とでVPN接続を行うことで、利用者が計算ノードに直接アクセスできるサービスです。</p>
+</div>
+<div class="section" id="id2">
+<h1>2. クライアント証明書のインストール<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>クライアント証明書はVPNでアクセスする時に使用します。
+VPNでアクセスするOSにインストールしてください。</p>
+<p>スーパーコンピュータ「富岳」にVPNでアクセスするために必要なクライアント証明書の
+インストール方法を示します。</p>
+<p>クライアント証明書をインストールする前に次の二つを用意してください。</p>
+<ul class="simple">
+<li><p>クライアント証明書：&quot;ユーザーアカウント名.p12&quot;ファイル</p></li>
+<li><p>クライアント証明書のパスフレーズ</p></li>
+</ul>
+<p><strong>クライアント証明書</strong>
+　アカウント発行が完了すると申請時に記載したメールアドレス宛てにクライアント証明書が
+電子メールで送付されます。電子メールに添付されている&quot;ローカルアカウント名.p12&quot;ファイルを、
+クライアント証明書をインストールする機器（パソコンなど）に保存してください。
+&quot;ローカルアカウント名.p12&quot;ファイルには、クライアントの秘密鍵、クライアント証明書（公開鍵）、
+クライアント証明書発行局のルート証明書が含まれています。</p>
+<p><strong>クライアント証明書のパスフレーズ</strong>
+　パスフレーズは、クライアント証明書とは別に、書面または PDFファイルで送付されます。
+パスフレーズはクライアント証明書をインストールする時に必要となります。安全な場所に保管してください。</p>
+<p>ここでは、利用者のOSにクライアント証明書をインストールする手続きについて説明します。</p>
+<div class="section" id="windowsos">
+<h2>2.1. 証明書のインストール（WindowsOS）<a class="headerlink" href="#windowsos" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ol class="arabic simple">
+<li><p>クライアント証明書ファイル（拡張子「<strong>.p12</strong>」）を端末の任意の場所に保存し、ファイルをダブルクリックで実行します。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/211.png"><img alt="_images/211.png" src="_images/211.png" style="width: 100px;" /></a>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>証明書のインポートウィザードの開始画面で、保存場所に「 <strong>現在のユーザー</strong> 」を選択し、［ <strong>次へ</strong> ］をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/212.png"><img alt="_images/212.png" src="_images/212.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>インポートする証明書ファイルの指定画面で、そのまま［ <strong>次へ</strong> ］をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/213.png"><img alt="_images/213.png" src="_images/213.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>クライアント証明書の <strong>パスフレーズ</strong> を入力して［ <strong>次へ</strong> ］をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/214.png"><img alt="_images/214.png" src="_images/214.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>「 <strong>証明書の種類に基づいて、自動的に証明書ストアを選択する</strong> 」を選択し、そのまま［ <strong>次へ</strong> ］をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/215.png"><img alt="_images/215.png" src="_images/215.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>［ <strong>完了</strong> ］をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/216.png"><img alt="_images/216.png" src="_images/216.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>セキュリティ警告が表示された場合は、発行者（下図の赤字部分）が「 <strong>RIKEN R-CCS</strong> 」であることを確認して［ <strong>はい</strong> ］をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/217.png"><img alt="_images/217.png" src="_images/217.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="8">
+<li><p>［ <strong>OK</strong> ］をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/218.png"><img alt="_images/218.png" src="_images/218.png" style="width: 200px;" /></a>
+</div>
+<p>以上で、クライアント証明書のインストールは完了です。</p>
+</div>
+<div class="section" id="macos">
+<h2>2.2. 証明書のインストール（MacOS）<a class="headerlink" href="#macos" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<ol class="arabic simple">
+<li><p>クライアント証明書ファイル（拡張子「<strong>.p12</strong>」）を端末の任意の場所に保存し、ファイルをダブルクリックで実行します。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/221.png"><img alt="_images/221.png" src="_images/221.png" style="width: 100px;" /></a>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>証明書の追加ダイアログが表示された場合は、キーチェーンを「 <strong>ログイン</strong> 」に設定し、［ <strong>追加</strong> ］をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/222.png"><img alt="_images/222.png" src="_images/222.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>パスワード入力ダイアログが表示されるため、クライアント証明書の <strong>パスフレーズ</strong> を入力して［ <strong>OK</strong> ］をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/223.png"><img alt="_images/223.png" src="_images/223.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>キーチェーンアクセス画面で、キーチェーンを「 <strong>ログイン</strong> 」、分類を「 <strong>証明書</strong> 」に設定し、［ <strong>RIKEN R-CCS</strong> ］をダブルクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/224.png"><img alt="_images/224.png" src="_images/224.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>「この証明書を使用するとき：」を「 <strong>常に信頼</strong> 」に変更してウィンドウを閉じます。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/225.png"><img alt="_images/225.png" src="_images/225.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>パスワード入力ダイアログが表示された場合は、 <strong>端末のパスワード</strong> を入力し、［ <strong>設定をアップデート</strong> ］をクリックします。アップデート後、「RIKEN R-CCS」の左下に <strong>青いプラスアイコン</strong> が表示されていることを確認してください。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/226.png"><img alt="_images/226.png" src="_images/226.png" style="width: 1000px;" /></a>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>クライアント証明書の開閉用三角ボタンをクリックし、 <strong>秘密鍵（鍵マーク）</strong> をダブルクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/227.png"><img alt="_images/227.png" src="_images/227.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="8">
+<li><p>「名前」を <strong>クライアント証明書と同じ名称</strong> に変更し、［ <strong>変更内容を保存</strong> ］をクリックし、ウィンドウを閉じます。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/228.png"><img alt="_images/228.png" src="_images/228.png" style="width: 400px;" /></a>
+</div>
+<p>以上で、クライアント証明書のインストールは完了です。</p>
+</div>
+</div>
+<div class="section" id="vpn">
+<h1>3. VPN接続手順<a class="headerlink" href="#vpn" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="vpn-windowsos">
+<h2>3.1. VPN接続手順（WindowsOS）<a class="headerlink" href="#vpn-windowsos" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="id3">
+<h3>3.1.1. VPN接続ツールのダウンロード<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ol class="arabic simple">
+<li><p>WEBブラウザで <a class="reference external" href="https://www.fortinet.com/support/product-downloads">https://www.fortinet.com/support/product-downloads</a> にアクセスします。</p></li>
+</ol>
+<div class="line-block">
+<div class="line">2. 「 <strong>FortiClient VPN</strong> 」から、OSの種類（ <strong>Windows</strong> ）を選択して「DOWNLOAD」をクリックします。</div>
+<div class="line">　　※「FortiClient」ではなく、「 <strong>FortiClient VPN</strong> 」をダウンロードしてください。</div>
+</div>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3111.png"><img alt="_images/3111.png" src="_images/3111.png" style="width: 600px;" /></a>
+</div>
+<p>　以上で、VPN接続ツールのダウンロードは終了です。</p>
+</div>
+<div class="section" id="id4">
+<h3>3.1.2. VPN接続ツールのインストール<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ol class="arabic simple">
+<li><p>VPN接続ツールのインスーラを端末の任意の場所に保存し、ファイルをダブルクリックで実行します。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3121.png"><img alt="_images/3121.png" src="_images/3121.png" style="width: 100px;" /></a>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>VPN接続ツール セットアップウィザードの画面が開くため、「 <strong>はい、同意します</strong> 」にチェックを入れ、[ <strong>次へ</strong> ］をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3122.png"><img alt="_images/3122.png" src="_images/3122.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>インストール先フォルダー画面で、そのまま［ <strong>次へ</strong> ］をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3123.png"><img alt="_images/3123.png" src="_images/3123.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>［ <strong>インストール</strong> ］をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3124.png"><img alt="_images/3124.png" src="_images/3124.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>［ <strong>完了</strong> ］をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3125.png"><img alt="_images/3125.png" src="_images/3125.png" style="width: 400px;" /></a>
+</div>
+<p>以上で、VPN接続ツールのインストールは完了です。</p>
+</div>
+<div class="section" id="id5">
+<h3>3.1.3. VPN新規設定手順<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ol class="arabic simple">
+<li><p>VPN接続ツールを起動します。</p></li>
+<li><p>表示された画面の中央にある[ <strong>VPN設定</strong> ]をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3132.png"><img alt="_images/3132.png" src="_images/3132.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>「新規 VPN 接続」画面が表示されたら、[ <strong>SSL-VPN</strong> ]を選択します。その後、「接続名」に[ <strong>任意の文字列</strong> ]、「リモートGW」に[ <strong>vpn.fugaku.r-ccs.riken.jp</strong> ]を入力します。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3133.png"><img alt="_images/3133.png" src="_images/3133.png" style="width: 600px;" /></a>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>「クライアント証明書」欄のプルダウンで[ <strong>インストール済みのクライアント証明書</strong> ]を選択し、「認証」欄で[ <strong>無効</strong> ]にチェックを入れて[保存]をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3134.png"><img alt="_images/3134.png" src="_images/3134.png" style="width: 600px;" /></a>
+</div>
+<p>以上で、VPN新規設定手順は完了です。</p>
+</div>
+<div class="section" id="id6">
+<h3>3.1.4. VPN接続手順<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ol class="arabic simple">
+<li><p>[VPN新規設定手順]手順3で設定した[ <strong>接続名</strong> ]を選択します。</p></li>
+</ol>
+<p>（富岳のクライアント証明書が選択されていることを確認してください。）</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3141.png"><img alt="_images/3141.png" src="_images/3141.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>[接続]をクリックします。</p></li>
+<li><p>下記の画面が表示されたら接続は成功です。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3143.png"><img alt="_images/3143.png" src="_images/3143.png" style="width: 400px;" /></a>
+</div>
+</div>
+</div>
+<div class="section" id="vpn-macos">
+<h2>3.2. VPN接続手順（MacOS）<a class="headerlink" href="#vpn-macos" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="id7">
+<h3>3.2.1. VPN接続ツールのダウンロード<a class="headerlink" href="#id7" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ol class="arabic simple">
+<li><p>WEBブラウザで <a class="reference external" href="https://www.fortinet.com/support/product-downloads">https://www.fortinet.com/support/product-downloads</a> にアクセスします。</p></li>
+</ol>
+<div class="line-block">
+<div class="line">2. 「 <strong>FortiClient VPN</strong> 」から、OSの種類（ <strong>MacOS</strong> ）を選択して「DOWNLOAD」をクリックします。</div>
+<div class="line">　　※「FortiClient」ではなく、「 <strong>FortiClient VPN</strong> 」をダウンロードしてください。</div>
+</div>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3211.png"><img alt="_images/3211.png" src="_images/3211.png" style="width: 600px;" /></a>
+</div>
+</div>
+<div class="section" id="id9">
+<h3>3.2.2. VPN接続ツールのインストール<a class="headerlink" href="#id9" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ol class="arabic simple">
+<li><p>VPN接続ツールのインスーラを端末の任意の場所に保存し、ファイルをダブルクリックで実行します。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3221.png"><img alt="_images/3221.png" src="_images/3221.png" style="width: 100px;" /></a>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>警告が表示された場合は［ <strong>開く</strong> ］をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3222.png"><img alt="_images/3222.png" src="_images/3222.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>インストーラの画面が開いたら、「 <strong>Install.mpkg</strong> 」をダブルクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3223.png"><img alt="_images/3223.png" src="_images/3223.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>「はじめに」の画面で「 <strong>続ける</strong> 」をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3224.png"><img alt="_images/3224.png" src="_images/3224.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>使用許諾契約画面で「 <strong>続ける</strong> 」をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3225.png"><img alt="_images/3225.png" src="_images/3225.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>使用許諾契約の同意画面で「 <strong>同意する</strong> 」をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3226.png"><img alt="_images/3226.png" src="_images/3226.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="7">
+<li><p>「インストールの準備」画面で、「 <strong>インストール</strong> 」をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3227.png"><img alt="_images/3227.png" src="_images/3227.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="8">
+<li><p>パスワード入力ダイアログが表示された場合は、[ <strong>端末のパスワード</strong> ]を入力し、「 <strong>ソフトウェアをインストール</strong> 」をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3228.png"><img alt="_images/3228.png" src="_images/3228.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="9">
+<li><p>「インストールが完了しました」の画面で「閉じる」をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3229.png"><img alt="_images/3229.png" src="_images/3229.png" style="width: 400px;" /></a>
+</div>
+<p>以上で、VPN接続ツールのインストールは完了です。</p>
+</div>
+<div class="section" id="id10">
+<h3>3.2.3. VPN新規設定手順<a class="headerlink" href="#id10" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ol class="arabic simple">
+<li><p>メニューの「移動」より「アプリケーション」を選択し、「 <strong>VPN接続ツール</strong> 」を起動します。</p></li>
+<li><p>表示された画面の中央にある[ <strong>VPN設定</strong> ]をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3232.png"><img alt="_images/3232.png" src="_images/3232.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>「新規 VPN 接続」画面が表示されたら、[ <strong>SSL-VPN</strong> ]を選択します。その後、「接続名」に[ <strong>任意の文字列</strong> ]、「リモートGW」に[ <strong>vpn.fugaku.r-ccs.riken.jp</strong> ]を入力します。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3233.png"><img alt="_images/3233.png" src="_images/3233.png" style="width: 600px;" /></a>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>続いて、「クライアント証明書」欄のプルダウンより、[ <strong>インストールしたクライアント証明書</strong> ]を選択します。選択後、[認証]欄に[ <strong>無効</strong> ]という選択肢が表示されるため、選択して[保存]をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3234.png"><img alt="_images/3234.png" src="_images/3234.png" style="width: 600px;" /></a>
+</div>
+<p>以上で、VPN新規設定手順は完了です。</p>
+</div>
+<div class="section" id="id11">
+<h3>3.2.4. VPN接続手順<a class="headerlink" href="#id11" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ol class="arabic simple">
+<li><p>メニューの「移動」より「アプリケーション」を選択し、「 <strong>VPN接続ツール</strong> 」を起動します。</p></li>
+<li><p>「VPN名称」のプルダウンをクリックし、[ <strong>接続先</strong> ]を選択して、「 <strong>接続</strong> 」をクリックします。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3242.png"><img alt="_images/3242.png" src="_images/3242.png" style="width: 400px;" /></a>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>下記の画面が表示されたら接続は成功です。</p></li>
+</ol>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/3243.png"><img alt="_images/3243.png" src="_images/3243.png" style="width: 400px;" /></a>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id12">
+<h1>4. 計算ノードおよびプレポストノードのホスト名<a class="headerlink" href="#id12" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>VPN接続時には以下のホスト名で各ノードにアクセスできます。</p>
+<ul class="simple">
+<li><p>計算ノード</p></li>
+</ul>
+<p>計算ノードのホスト名に、cn.fugaku.r-ccs.riken.jp を付加してください。</p>
+<p>例 d22-6008c.cn.fugaku.r-ccs.riken.jp</p>
+<ul class="simple">
+<li><p>プリポストノード</p></li>
+</ul>
+<p>プリポストノードのホスト名に、pp.fugaku.r-ccs.riken.jp を付加して下さい。</p>
+<p>例 pps06.pp.fugaku.r-ccs.riken.jp</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="富岳VPN 接続設定手順"
+             >前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">富岳VPN 接続設定手順  ドキュメント</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN R-CCS.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Potal Top</a>
+    </div>
+  </body>
+</html>

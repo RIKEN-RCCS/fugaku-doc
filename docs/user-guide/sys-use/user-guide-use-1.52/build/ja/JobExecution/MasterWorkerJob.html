@@ -1,0 +1,965 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.7. マスタ・ワーカ型ジョブ &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.8. 環境設定" href="EnvironmentSettings.html" />
+    <link rel="prev" title="5.6. ワークフロージョブ" href="WorkflowJob.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="EnvironmentSettings.html" title="5.8. 環境設定"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="WorkflowJob.html" title="5.6. ワークフロージョブ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.7. </span>マスタ・ワーカ型ジョブ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">5.7. </span>マスタ・ワーカ型ジョブ<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>マスタ・ワーカ型ジョブとは、以下の特徴を持つジョブモデルの1つです。</p>
+<ul>
+<li><div class="line-block">
+<div class="line">ジョブスクリプトプロセス、マスタプロセス、および、ワーカプロセスから構成されます。</div>
+<div class="line">マスタプロセスとワーカプロセスが協調することで、計算タスク（並列プログラムの処理単位）を実行します。</div>
+</div>
+</li>
+<li><p>マスタプロセスは、計算タスク全体を統括し、ワーカプロセスの生成や管理、計算結果を取りまとめます。</p></li>
+<li><p>ワーカプロセスは、マスタプロセスから依頼された計算タスクを実行し、結果をマスタプロセスに返します。</p></li>
+<li><p>マスタ・ワーカ型ジョブに割り当てられた計算ノードのダウンや、プロセスの異常終了が発生しても、ジョブスクリプトプロセスが動作している限り、マスタ・ワーカ型ジョブは継続します。</p></li>
+</ul>
+<p>この特徴を利用して、計算ノードダウンやワーカプロセスの異常終了に対し、ワーカプロセスを別のノードで再実行する仕組みをユーザが作ることで計算タスクを継続できます。</p>
+<figure class="align-default">
+<img alt="../_images/MasterWorkerJob_01.png" src="../_images/MasterWorkerJob_01.png" />
+</figure>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<ul class="simple">
+<li><p>ジョブスクリプトプロセスが動作するノードを「ジョブマスタノード」、それ以外のノードを「ジョブスレーブノード」と呼びます。マスタプロセスは、ジョブスレーブノードで動作するワーカプロセスを管理するのが目的であるため、ジョブマスタノードで動作させる必要があります。</p></li>
+<li><p>複数プロセスを生成するという点で「バルクジョブ」は類似していますが、バルクジョブは同一のジョブスクリプトを複数のサブジョブとして投入する方式であり、それぞれのサブジョブは独立して動作します。また、バルクジョブでは、サブジョブの数はジョブ投入時に指定され、実行中に変化しません。 一方、マスタ・ワーカ型ジョブでは、マスタプロセスと各ワーカプロセスが、1つのジョブとして、プロセス間通信を行いながら動作します。また、ワーカプロセスはマスタプロセスによって動的に生成するため、ジョブの実行中に数が変化します。</p></li>
+<li><p>マスタ・ワーカ型ジョブの詳細は、マニュアル「ジョブ運用ソフトウェア エンドユーザ向けガイド マスタ・ワーカ型ジョブ編」を参照してください。</p></li>
+</ul>
+</div>
+<p>ワーカプロセスの生成方法の観点で、以下の3つの方式をサポートします。</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><a class="reference internal" href="#mswkdynamicprocessgeneration"><span class="std std-ref">ワーカプロセスの動的生成</span></a></div>
+<div class="line">この方式は、マスタプロセス、ワーカプロセスが共にMPIプログラムの場合に利用します。</div>
+<div class="line">ワーカプロセスを生成するノードの選択はジョブ運用ソフトウェアが行います。</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><a class="reference internal" href="#mswkagentprocess"><span class="std std-ref">Agentプロセスによるワーカプロセス生成</span></a></div>
+<div class="line">この方式は、ワーカプロセスがMPIプログラムでない場合に利用します。</div>
+<div class="line">ワーカプロセスの生成やそれを生成するノードの選択はユーザーが制御・管理します。</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line"><a class="reference internal" href="#mswkpjaexecommand"><span class="std std-ref">pjaexe コマンドによるワーカプロセス生成</span></a></div>
+<div class="line">この方式は、ワーカプロセスがMPIプログラムでない場合に利用します。</div>
+<div class="line">ワーカプロセスを生成するノードの選択もユーザーが制御・管理します。ただし、ワーカプロセスの生成は、ジョブ運用ソフトウェアが提供する<strong class="command">pjaexe</strong>コマンドを利用します。</div>
+</div>
+</li>
+</ul>
+<section id="id2">
+<h2><span class="section-number">5.7.1. </span>ジョブの投入<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>ジョブの投入は<strong class="program">pjsub</strong>コマンドに<code class="docutils literal notranslate"><span class="pre">--mswk</span></code>オプションとジョブスクリプトを指定します。</p>
+<blockquote>
+<div><p>[書式]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--mswk<span class="w"> </span>ジョブスクリプト
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>マスタ・ワーカ型ジョブはノードの割り当て方法にtorusを使用する必要があります。
+torus指定ができる全てのリソースグループでマスタ・ワーカ型ジョブを実行できます。</p></li>
+<li><p>資源の指定（<code class="docutils literal notranslate"><span class="pre">-L</span></code>）やノード形状などは、必要に応じて<strong class="program">pjsub</strong>コマンドの引数、または、ジョブスクリプト内に記述してください。</p></li>
+<li><p><strong class="program">pjsub</strong>コマンドの<code class="docutils literal notranslate"><span class="pre">--mswk</span></code>オプションは、<code class="docutils literal notranslate"><span class="pre">--step</span></code>オプション、<code class="docutils literal notranslate"><span class="pre">--bulk</span></code>オプション、<code class="docutils literal notranslate"><span class="pre">--interact</span></code> オプションと同時には指定できません。</p></li>
+<li><p>マスタ・ワーカ型ジョブでは、ワーカプロセスを生成するノードはジョブ運用ソフトウェアの並列実行環境が決定、または、ユーザがプロセス生成時に指定します。このため、<strong class="program">pjsub</strong>コマンドの<code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">rank-map-hostfile</span></code>オプションの指定は意味がありません。このオプションを指定しても無視されます。</p></li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+<section id="mswkdynamicprocessgeneration">
+<span id="id3"></span><h2><span class="section-number">5.7.2. </span>ワーカプロセスの動的生成<a class="headerlink" href="#mswkdynamicprocessgeneration" title="Link to this heading">¶</a></h2>
+<p>マスタプロセスからワーカプロセスを動的に生成する方式では、ワーカプロセスの生成や通信はMPIの仕組みを利用します。
+ユーザは以下の機能を実装する必要があります。</p>
+<ol class="loweralpha simple">
+<li><p>マスタプログラム（マスタプロセス）</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>ワーカプロセスの生成</p></li>
+<li><p>ワーカプロセスへの演算実行依頼</p></li>
+<li><p>ワーカプロセスの生存確認</p></li>
+</ol>
+</div></blockquote>
+<ol class="loweralpha simple" start="2">
+<li><p>ワーカプログラム（ワーカプロセス）</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>マスタプロセスからの演算実行依頼受信と演算結果の送信</p></li>
+<li><p>マスタプロセスへの演算終了通知の送信</p></li>
+</ol>
+</div></blockquote>
+<p>マスタ・ワーカ型ジョブで実行するMPIプログラムでは、一部のMPI関数やMPIサブルーチンをマスタ・ワーカ型ジョブ向けのものに置き換える必要があります。
+これはジョブ運用ソフトウェアの内部でマスタ・ワーカ型ジョブ固有の処理をする必要があるためです。</p>
+<p>以下に、これらのMPI関数名およびMPIサブルーチン名を示します。</p>
+<table class="docutils align-default" id="id9">
+<caption><span class="caption-text">マスタ・ワーカ型ジョブ用のMPI関数（C言語）</span><a class="headerlink" href="#id9" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>通常ジョブでのMPI関数名</p></th>
+<th class="head"><p>マスタ・ワーカ型ジョブ用MPI関数名</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>MPI_Comm_connect()</p></td>
+<td><p>FJMPI_Mswk_connect()</p></td>
+</tr>
+<tr class="row-odd"><td><p>MPI_Comm_disconnect()</p></td>
+<td><p>FJMPI_Mswk_disconnect()</p></td>
+</tr>
+<tr class="row-even"><td><p>MPI_Comm_accept()</p></td>
+<td><p>FJMPI_Mswk_accept()</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>上記のマスタ・ワーカ型ジョブ用MPI関数は、ヘッダファイル<code class="file docutils literal notranslate"><span class="pre">mpi-ext.h</span></code>で宣言されています。</p>
+</div>
+<table class="docutils align-default" id="id10">
+<caption><span class="caption-text">マスタ・ワーカ型ジョブ用のMPIサブルーチン（Fortran言語）</span><a class="headerlink" href="#id10" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>通常ジョブでのMPIサブルーチン名</p></th>
+<th class="head"><p>マスタ・ワーカ型ジョブ用MPIサブルーチン名</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>MPI_COMM_CONNECT()</p></td>
+<td><p>FJMPI_MSWK_CONNECT()</p></td>
+</tr>
+<tr class="row-odd"><td><p>MPI_COMM_DISCONNECT()</p></td>
+<td><p>FJMPI_MSWK_DISCONNECT()</p></td>
+</tr>
+<tr class="row-even"><td><p>MPI_COMM_ACCEPT()</p></td>
+<td><p>FJMPI_MSWK_ACCEPT()</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>上記のマスタ・ワーカ型ジョブ用MPIサブルーチンは、モジュール<strong class="program">mpi_f08_ext</strong>と<strong class="program">mpi_ext</strong>で宣言されています。
+モジュール<strong class="program">mpi_f08_ext</strong>と<strong class="program">mpi_ext</strong>は、それぞれMPIのモジュール<strong class="program">mpi_f08</strong>と<strong class="program">mpi</strong>に対応しますので、どちらかをUSE文で引用できます。</p>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>マスタ・ワーカ型ジョブを使用する場合は、言語環境'4.5.0 tcsds-1.2.31'版以降を使用してください。</p>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">ここでは、以下の図の構成のプログラムの例を示します。</div>
+<div class="line">MPIプログラムの作成に関する詳細は「MPI使用手引書」等を参照してください。</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/MasterWorkerDynamic_01.png" src="../_images/MasterWorkerDynamic_01.png" />
+</figure>
+<p>[マスタプログラム master_spawn.c]</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi-ext.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">world_size</span><span class="p">,</span><span class="w"> </span><span class="n">universe_size</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">universe_size_p</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">flag</span><span class="p">;</span>
+<span class="w">  </span><span class="n">MPI_Status</span><span class="w"> </span><span class="n">status</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">MPI_Comm</span><span class="w"> </span><span class="n">worker_comm</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">master_port</span><span class="p">[</span><span class="n">MPI_MAX_PORT_NAME</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">worker_port</span><span class="p">[</span><span class="n">MPI_MAX_PORT_NAME</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// 各コミュニケーターのルートランク</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">self_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="c1">// SELF (MPI_COMM_SELF)</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">master_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="c1">// MASTER (MPI_COMM_WORLD)</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">worker_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="c1">// WORKER (worker_comm)</span>
+
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">tag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Hello&quot;</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 初期化処理</span>
+<span class="w">  </span><span class="n">MPI_Init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">argv</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// world_size, universe_size を取得する。</span>
+<span class="w">  </span><span class="n">MPI_Comm_size</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">world_size</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">world_size</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// マスタプロセスが複数個存在する場合</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Error! world_size=%d (expected 1)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">world_size</span><span class="p">);</span>
+<span class="w">    </span><span class="n">MPI_Abort</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">MPI_Comm_get_attr</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_UNIVERSE_SIZE</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">universe_size_p</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">flag</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">flag</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// universe_size の取得に失敗した場合</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Error! cannot get universe_size&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">MPI_Abort</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">universe_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">universe_size_p</span><span class="p">;</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;universe_size=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">universe_size</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">universe_size</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// universe_size が 1 の場合</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Error! universe_size=%d (expected &gt; 1)&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">universe_size</span><span class="p">);</span>
+<span class="w">    </span><span class="n">MPI_Abort</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// ワーカプロセスとの通信用ポートをオープンする。</span>
+<span class="w">  </span><span class="n">MPI_Open_port</span><span class="p">(</span><span class="n">MPI_INFO_NULL</span><span class="p">,</span><span class="w"> </span><span class="n">master_port</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;master_port=%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">master_port</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// ワーカプロセスを生成する。</span>
+<span class="w">  </span><span class="n">MPI_Comm_spawn</span><span class="p">(</span><span class="s">&quot;./worker_spawn.out&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_ARGV_NULL</span><span class="p">,</span><span class="w"> </span><span class="n">universe_size</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="n">MPI_INFO_NULL</span><span class="p">,</span><span class="w"> </span><span class="n">self_root</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_SELF</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">worker_comm</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_ERRCODES_IGNORE</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// ワーカプロセスへポート名を送信する。</span>
+<span class="w">  </span><span class="n">MPI_Send</span><span class="p">(</span><span class="n">master_port</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_MAX_PORT_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_CHAR</span><span class="p">,</span><span class="w"> </span><span class="n">worker_root</span><span class="p">,</span><span class="w"> </span><span class="n">tag</span><span class="p">,</span><span class="w"> </span><span class="n">worker_comm</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// ワーカプロセスとの接続を切断する。</span>
+<span class="w">  </span><span class="n">FJMPI_Mswk_disconnect</span><span class="p">(</span><span class="o">&amp;</span><span class="n">worker_comm</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// ワーカプロセスからのデータを受信する。(ワーカプロセスのポート名が送信されてくる)</span>
+<span class="w">  </span><span class="n">FJMPI_Mswk_accept</span><span class="p">(</span><span class="n">master_port</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_INFO_NULL</span><span class="p">,</span><span class="w"> </span><span class="n">self_root</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_SELF</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">worker_comm</span><span class="p">);</span>
+<span class="w">  </span><span class="n">MPI_Recv</span><span class="p">(</span><span class="n">worker_port</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_MAX_PORT_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_CHAR</span><span class="p">,</span><span class="w"> </span><span class="n">worker_root</span><span class="p">,</span><span class="w"> </span><span class="n">tag</span><span class="p">,</span><span class="w"> </span><span class="n">worker_comm</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">status</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;worker_port=%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">worker_port</span><span class="p">);</span>
+<span class="w">  </span><span class="n">FJMPI_Mswk_disconnect</span><span class="p">(</span><span class="o">&amp;</span><span class="n">worker_comm</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// ワーカプロセスへデータを送信する。</span>
+<span class="w">  </span><span class="n">FJMPI_Mswk_connect</span><span class="p">(</span><span class="n">worker_port</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_INFO_NULL</span><span class="p">,</span><span class="w"> </span><span class="n">self_root</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_SELF</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">worker_comm</span><span class="p">);</span>
+<span class="w">  </span><span class="n">MPI_Send</span><span class="p">(</span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_CHAR</span><span class="p">,</span><span class="w"> </span><span class="n">worker_root</span><span class="p">,</span><span class="w"> </span><span class="n">tag</span><span class="p">,</span><span class="w"> </span><span class="n">worker_comm</span><span class="p">);</span>
+<span class="w">  </span><span class="n">FJMPI_Mswk_disconnect</span><span class="p">(</span><span class="o">&amp;</span><span class="n">worker_comm</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// 終了処理</span>
+<span class="w">  </span><span class="n">MPI_Close_port</span><span class="p">(</span><span class="n">master_port</span><span class="p">);</span>
+<span class="w">  </span><span class="n">MPI_Finalize</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>[ワーカプログラム worker_spawn.c]</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi-ext.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">rank</span><span class="p">;</span>
+<span class="w">  </span><span class="n">MPI_Status</span><span class="w"> </span><span class="n">status</span><span class="p">;</span>
+<span class="w">  </span><span class="n">MPI_Comm</span><span class="w"> </span><span class="n">master_comm</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">master_port</span><span class="p">[</span><span class="n">MPI_MAX_PORT_NAME</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">worker_port</span><span class="p">[</span><span class="n">MPI_MAX_PORT_NAME</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 各コミュニケーターのルートランク</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">self_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="c1">// SELF (MPI_COMM_SELF)</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">master_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="c1">// MASTER (master_comm)</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">worker_root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="c1">// WORKER (MPI_COMM_WORLD)</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">tag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">message</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 初期化処理</span>
+<span class="w">  </span><span class="n">MPI_Init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">argv</span><span class="p">);</span>
+<span class="w">  </span><span class="n">MPI_Comm_get_parent</span><span class="p">(</span><span class="o">&amp;</span><span class="n">master_comm</span><span class="p">);</span>
+<span class="w">  </span><span class="n">MPI_Comm_rank</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rank</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello! rank=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">rank</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">worker_root</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">MPI_Open_port</span><span class="p">(</span><span class="n">MPI_INFO_NULL</span><span class="p">,</span><span class="w"> </span><span class="n">worker_port</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;worker_port=%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">worker_port</span><span class="p">);</span><span class="w"> </span><span class="n">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">worker_root</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="c1">// マスタプロセスからのデータを受信する。</span>
+<span class="w">    </span><span class="n">MPI_Recv</span><span class="p">(</span><span class="n">master_port</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_MAX_PORT_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_CHAR</span><span class="p">,</span><span class="w"> </span><span class="n">master_root</span><span class="p">,</span><span class="w"> </span><span class="n">tag</span><span class="p">,</span><span class="w"> </span><span class="n">master_comm</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">status</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;master_port=%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">master_port</span><span class="p">);</span><span class="w"> </span><span class="n">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// マスタプロセスとの通信を切断する。</span>
+<span class="w">  </span><span class="n">FJMPI_Mswk_disconnect</span><span class="p">(</span><span class="o">&amp;</span><span class="n">master_comm</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// マスタプロセスへポート名を送信する。</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">worker_root</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">FJMPI_Mswk_connect</span><span class="p">(</span><span class="n">master_port</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_INFO_NULL</span><span class="p">,</span><span class="w"> </span><span class="n">self_root</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_SELF</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">master_comm</span><span class="p">);</span>
+<span class="w">    </span><span class="n">MPI_Send</span><span class="p">(</span><span class="n">worker_port</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_MAX_PORT_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_CHAR</span><span class="p">,</span><span class="w"> </span><span class="n">master_root</span><span class="p">,</span><span class="w"> </span><span class="n">tag</span><span class="p">,</span><span class="w"> </span><span class="n">master_comm</span><span class="p">);</span>
+<span class="w">    </span><span class="n">FJMPI_Mswk_disconnect</span><span class="p">(</span><span class="o">&amp;</span><span class="n">master_comm</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// マスタプロセスからのデータを受信する。</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">worker_root</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">FJMPI_Mswk_accept</span><span class="p">(</span><span class="n">worker_port</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_INFO_NULL</span><span class="p">,</span><span class="w"> </span><span class="n">self_root</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_SELF</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">master_comm</span><span class="p">);</span>
+<span class="w">    </span><span class="n">MPI_Recv</span><span class="p">(</span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_MAX_PORT_NAME</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_CHAR</span><span class="p">,</span><span class="w"> </span><span class="n">master_root</span><span class="p">,</span><span class="w"> </span><span class="n">tag</span><span class="p">,</span><span class="w"> </span><span class="n">master_comm</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">status</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;message=%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+<span class="w">    </span><span class="n">FJMPI_Mswk_disconnect</span><span class="p">(</span><span class="o">&amp;</span><span class="n">master_comm</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// 終了処理</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">worker_root</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">MPI_Close_port</span><span class="p">(</span><span class="n">worker_port</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">MPI_Finalize</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>ワーカプロセスを動的に生成する方式では、MPIプログラムの開始時に生成されるマスタプロセスがジョブマスタノードだけで起動するように、<strong class="program">pjsub</strong>コマンドの<code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">&quot;shape=1&quot;</span> <span class="pre">--mpi</span> <span class="pre">&quot;proc=1&quot;</span></code>オプションを指定する必要があります。</p>
+<p>以下の例では、ジョブに対して385ノードを割り当て、MPIプログラム起動時に生成されるマスタプロセスに1ノードを割り当てます。
+残りの384ノードが、ワーカプロセスを動的に生成するためのノードになります。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w"> </span>-o<span class="w"> </span>worker_spawn.out<span class="w"> </span>woker-spawn.c
+<span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w"> </span>-o<span class="w"> </span>master-spawn.out<span class="w"> </span>master-spawn.c
+<span class="gp">[_LNlogin]$ </span>cat<span class="w"> </span>job_dynamic.sh
+<span class="gp">#</span>!/bin/bash<span class="w"> </span>-x
+<span class="gp">#</span>PJM<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;node=385&quot;</span>
+<span class="gp">#</span>PJM<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;rscgrp=large&quot;</span>
+<span class="gp">#</span>PJM<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;elapse=10:00&quot;</span>
+<span class="gp">#</span>PJM<span class="w"> </span>--mpi<span class="w"> </span><span class="s2">&quot;shape=1&quot;</span>
+<span class="gp">#</span>PJM<span class="w"> </span>--mpi<span class="w"> </span><span class="s2">&quot;proc=1&quot;</span>
+<span class="gp">#</span>PJM<span class="w"> </span>-g<span class="w"> </span>groupname
+<span class="gp">#</span>PJM<span class="w"> </span>-x<span class="w"> </span><span class="nv">PJM_LLIO_GFSCACHE</span><span class="o">=</span>/vol000N
+<span class="gp">#</span>PJM<span class="w"> </span>-s
+
+<span class="go">export PLE_MPI_STD_EMPTYFILE=off</span>
+<span class="go">mpiexec -stdout-proc ./output.%j/%/1000r/stdout -stderr-proc ./output.%j/%/1000r/stderr ./master-spawn.out</span>
+<span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--mswk<span class="w"> </span>job_dynamic.sh
+</pre></div>
+</div>
+</section>
+<section id="agent">
+<span id="mswkagentprocess"></span><h2><span class="section-number">5.7.3. </span>Agentプロセスによるワーカプロセス生成<a class="headerlink" href="#agent" title="Link to this heading">¶</a></h2>
+<p>Agentプロセスからワーカプロセスを生成する方式（以降、Agentプロセス方式）は、ワーカプロセスが非MPIプログラムの場合に利用します。
+Agentプロセス方式では、各ノードでAgentプロセスが1つだけ生成されるようにするため、ジョブに割り当てるノード数と<strong class="program">mpiexec</strong>コマンドで生成するプロセス数を同じにしてください。</p>
+<p>この方式では、ユーザはジョブに対し、以下の機能を実装する必要があります。</p>
+<ol class="loweralpha simple">
+<li><p>ジョブスクリプト</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>マスタプロセスとなるマスタプログラムの実行</p></li>
+<li><p>Agentプロセスの生成</p></li>
+<li><p>マスタプロセスの終了待ち合わせ</p></li>
+</ol>
+</div></blockquote>
+<ol class="loweralpha simple" start="2">
+<li><p>マスタプログラム（マスタプロセス）</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Agentプロセスの生存確認</p></li>
+<li><p>Agentプロセスへのワーカプロセス生成依頼</p></li>
+</ol>
+</div></blockquote>
+<ol class="loweralpha simple" start="3">
+<li><p>Agentプログラム（Agentプロセス）</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>マスタプロセスとの通信確立</p></li>
+<li><p>ワーカプロセスの生成</p></li>
+<li><p>ワーカプロセスの処理結果のマスタプロセスへの送信</p></li>
+</ol>
+</div></blockquote>
+<p>ここでは、以下の図の構成のプログラムの例を示します。</p>
+<figure class="align-default">
+<img alt="../_images/MasterWorkerAgent_01.png" src="../_images/MasterWorkerAgent_01.png" />
+</figure>
+<p>[ジョブスクリプト job_agent.sh]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#PJM -L &quot;node=385&quot;</span>
+<span class="c1">#PJM -L &quot;rscgrp=large&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=10:00&quot;</span>
+<span class="c1">#PJM --mpi &quot;proc=385&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+
+.<span class="w"> </span>utility.sh
+
+<span class="c1"># マスタプロセスを生成する。</span>
+./master_agent.out<span class="w"> </span>port_num.txt<span class="w"> </span><span class="p">&amp;</span>
+<span class="nv">MASTER_PID</span><span class="o">=</span><span class="nv">$!</span>
+<span class="nv">PORT_NUM</span><span class="o">=</span><span class="k">$(</span>cat<span class="w"> </span>port_num.txt<span class="k">)</span>
+
+<span class="c1"># ジョブマスタノード(このノード)のIPアドレスを取得する。</span>
+<span class="nv">IP_ADDR</span><span class="o">=</span><span class="k">$(</span>print_ipaddr<span class="w"> </span><span class="s2">&quot;tofu1&quot;</span><span class="k">)</span>
+
+<span class="c1"># mpiexec コマンドで Agent プロセスを生成する。</span>
+mpiexec<span class="w"> </span>start_agent.sh<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">IP_ADDR</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PORT_NUM</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="nb">wait</span><span class="w"> </span><span class="si">${</span><span class="nv">MASTER_PID</span><span class="si">}</span>
+</pre></div>
+</div>
+<p>[マスタプログラム master_agent.c]</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/types.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/socket.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">port_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">sockfd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">socket</span><span class="p">(...);</span><span class="w"> </span><span class="c1">// ソケットを作成する。</span>
+<span class="w">  </span><span class="n">bind</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span><span class="w">        </span><span class="c1">// ソケットを特定のポートにバインドする。</span>
+<span class="w">  </span><span class="n">listen</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span><span class="w">      </span><span class="c1">// ワーカプロセスからの接続を待つ。</span>
+
+<span class="w">  </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="n">port_file</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;w&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">port_number</span><span class="p">);</span><span class="w"> </span><span class="c1">// ポート番号をファイルに書き出す。</span>
+<span class="w">  </span><span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">accept</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span><span class="w">    </span><span class="c1">// ワーカプロセスからの接続を受け付ける。</span>
+<span class="w">    </span><span class="p">...</span><span class="w">                     </span><span class="c1">// ワーカプロセスに対し、処理を要求する。</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>[Agent プロセス起動スクリプト start_agent.sh]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+./agent.out<span class="w"> </span><span class="nv">$@</span>
+</pre></div>
+</div>
+<p>[Agent プログラム agent.c]</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="c1">// コマンドライン引数で与えられたジョブマスタノードのIPアドレスとポート番号を代入する。</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">ip_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">port_num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">my_ip_addr</span><span class="p">;</span>
+<span class="w">  </span><span class="n">get_ipaddr</span><span class="p">(</span><span class="s">&quot;tofu1&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">my_ip_addr</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// 自ノードがジョブマスタノードの場合 (ジョブマスタノードと同一IPアドレスを持つ場合)、</span>
+<span class="w">  </span><span class="c1">// Agent プロセスを終了させる。</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">my_ip_addr</span><span class="p">,</span><span class="w"> </span><span class="n">ip_addr</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// ジョブマスタノードに接続する。(ソケット接続などを用いる)</span>
+<span class="w">  </span><span class="n">connect_to</span><span class="p">(</span><span class="n">ip_addr</span><span class="p">,</span><span class="w"> </span><span class="n">port_num</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// ジョブマスタノードからの要求に応じて処理する。</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>[get_ipaddr()関数]</p>
+<p>get_ipaddr()関数は、自ノードのIPアドレスを文字列として返す関数です。</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/types.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/socket.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/ioctl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;netinet/in.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;net/if.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;arpa/inet.h&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">get_ipaddr</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">device_name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">ip_addr</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">;</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">ifreq</span><span class="w"> </span><span class="n">ifr</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span><span class="w"> </span><span class="n">SOCK_DGRAM</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="n">ifr</span><span class="p">.</span><span class="n">ifr_addr</span><span class="p">.</span><span class="n">sa_family</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AF_INET</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">strncpy</span><span class="p">(</span><span class="n">ifr</span><span class="p">.</span><span class="n">ifr_name</span><span class="p">,</span><span class="w"> </span><span class="n">device_name</span><span class="p">,</span><span class="w"> </span><span class="n">IFNAMSIZ</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ioctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">SIOCGIFADDR</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ifr</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rc</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="o">*</span><span class="n">ip_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">inet_ntoa</span><span class="p">(((</span><span class="k">struct</span><span class="w"> </span><span class="nc">sockaddr_in</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">ifr</span><span class="p">.</span><span class="n">ifr_addr</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">sin_addr</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">rc</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>[utility.sh]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 指定したネットワークインターフェースのIPアドレスを出力する。</span>
+<span class="c1"># Usage: print_ipaddr &lt;interface&gt;</span>
+print_ipaddr<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">INTERFACE</span><span class="o">=</span><span class="nv">$1</span>
+<span class="w">  </span><span class="nv">LANG</span><span class="o">=</span>C<span class="w"> </span>ip<span class="w"> </span>addr<span class="w"> </span>show<span class="w"> </span>dev<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">INTERFACE</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">&#39;/.*inet \([0-9.]*\).*/{s//\1/;p}&#39;</span>
+<span class="o">}</span>
+
+<span class="c1"># 指定したコマンドをタイムアウト付きで実行する。</span>
+<span class="c1"># Usage: timeout &lt;timeout_sec&gt; &lt;command&gt; &lt;arg1&gt; &lt;arg2&gt; ...</span>
+timeout<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">TIMEOUT</span><span class="o">=</span><span class="nv">$1</span>
+<span class="w">  </span><span class="nb">shift</span><span class="w"> </span><span class="m">1</span>
+
+<span class="w">  </span><span class="c1"># コマンド実行およびプロセスID を記録する。</span>
+<span class="w">  </span><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">PID</span><span class="o">=</span><span class="nv">$!</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="si">${</span><span class="nv">PID</span><span class="si">}</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span>true<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+
+<span class="w">    </span><span class="c1"># コマンドプロセスの生存をチェックする。</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span>!<span class="w"> </span>ps<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PID</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">      </span><span class="c1"># プロセスが終了したため、ループを抜ける。</span>
+<span class="w">      </span><span class="k">break</span>
+<span class="w">    </span><span class="k">fi</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">TIMEOUT</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>-le<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">      </span><span class="c1"># タイムアウトした場合、プロセスを異常終了させる。</span>
+<span class="w">      </span><span class="nb">kill</span><span class="w"> </span>-KILL<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PID</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">      </span><span class="k">break</span>
+<span class="w">    </span><span class="k">fi</span>
+
+<span class="w">    </span><span class="c1"># 1秒間スリープした後、ループの先頭に戻る。</span>
+<span class="w">    </span>sleep<span class="w"> </span><span class="m">1</span>
+<span class="w">    </span><span class="nv">TIMEOUT</span><span class="o">=</span><span class="k">$((</span><span class="nv">TIMEOUT</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="k">))</span>
+
+<span class="w">  </span><span class="k">done</span>
+
+<span class="w">  </span><span class="c1"># プロセスの終了コードを返す。</span>
+<span class="w">  </span><span class="nb">wait</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PID</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nv">$?</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</section>
+<section id="pjaexe">
+<span id="mswkpjaexecommand"></span><h2><span class="section-number">5.7.4. </span>pjaexeコマンドによるワーカプロセス生成<a class="headerlink" href="#pjaexe" title="Link to this heading">¶</a></h2>
+<p>ワーカプロセスの生成は、Agentプロセスによるワーカプロセス生成以外に、ジョブ運用ソフトウェアが提供する<strong class="program">pjaexe</strong>コマンドを利用する方式もあります。この方式は、非MPIプログラムの場合に利用します。</p>
+<p>この方式では、ユーザは以下の機能を実装する必要があります。</p>
+<ol class="loweralpha simple">
+<li><p>ジョブスクリプト</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><strong class="program">pjaexe</strong>コマンドによるワーカプロセスの起動</p></li>
+</ol>
+</div></blockquote>
+<ol class="loweralpha simple" start="2">
+<li><p>マスタプログラム (マスタプロセス)</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>ワーカプロセスの生存確認 (ワーカプロセスからのコネクションの有無で判断)</p></li>
+<li><p>ワーカプロセスへのタスク実行依頼</p></li>
+</ol>
+</div></blockquote>
+<ol class="loweralpha simple" start="3">
+<li><p>ワーカプログラム (ワーカプロセス)</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>マスタプロセスとの接続確立</p></li>
+<li><p>マスタプロセスへの計算結果の送信</p></li>
+</ol>
+</div></blockquote>
+<p>ここでは、以下の図の構成のプログラムの例を示します。</p>
+<figure class="align-default">
+<img alt="../_images/MasterWorkerPjaexe_01.png" src="../_images/MasterWorkerPjaexe_01.png" />
+</figure>
+<p>[ジョブスクリプト job_pjaexe.sh]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#PJM -L &quot;node=385&quot;</span>
+<span class="c1">#PJM -L &quot;rscgrp=large&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=10:00&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1"># マスタプロセスを実行</span>
+./master_pjaexe.sh
+</pre></div>
+</div>
+<p>[マスタプログラム master_pjaexe.sh]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+.<span class="w"> </span>utility.sh
+
+<span class="c1"># ジョブマスタノード(このノード)のIPアドレスを取得する。</span>
+<span class="nv">IP_ADDR</span><span class="o">=</span><span class="k">$(</span>print_ipaddr<span class="w"> </span><span class="s2">&quot;tofu1&quot;</span><span class="k">)</span>
+
+<span class="c1"># ワーカプロセスからの接続を受け付けられるようにソケットを初期化する。</span>
+<span class="nv">PORT_NUM</span><span class="o">=</span>port番号
+...
+<span class="c1"># すべてのジョブスレーブノードでワーカプロセス worker.out を起動する。</span>
+<span class="k">for</span><span class="w"> </span>X<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">11</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span>Y<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">7</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="nv">VCOORD</span><span class="o">=</span><span class="s2">&quot;(</span><span class="si">${</span><span class="nv">X</span><span class="si">}</span><span class="s2">,</span><span class="si">${</span><span class="nv">Y</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+<span class="w">    </span><span class="c1"># 60 秒以内に pjaexe コマンドが復帰しない場合は、タイムアウトとする。</span>
+<span class="w">    </span>timeout<span class="w"> </span><span class="m">60</span><span class="w"> </span>pjaexe<span class="w"> </span>--vcoord<span class="w"> </span><span class="se">\&quot;</span><span class="si">${</span><span class="nv">VCOORD</span><span class="si">}</span><span class="se">\&quot;</span><span class="w"> </span>./worker.out<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">IP_ADDR</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PORT_NUM</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nv">RC</span><span class="o">=</span><span class="nv">$?</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">RC</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">      </span><span class="c1"># ユーザの指定ミスの場合、マスタプロセスを異常終了させる。</span>
+<span class="w">      </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="w">    </span><span class="k">fi</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">RC</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">      </span><span class="c1"># pjaexe コマンドが異常終了した場合、ノード故障したと判断し、故障ノードリストに追加する。</span>
+<span class="w">      </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">VCOORD</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>broken_node_list.txt
+<span class="w">    </span><span class="k">fi</span>
+<span class="w">  </span><span class="k">done</span>
+<span class="k">done</span>
+
+<span class="c1"># ワーカプロセス worker.out との通信や計算結果の取りまとめ処理</span>
+...&lt;省略&gt;<span class="w"> </span>...
+<span class="c1"># マスタプロセスの終了</span>
+<span class="nb">exit</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>通常、マスタプロセスとなるプログラムは C 言語や Fortran 言語などのプログラミング言語で記述しますが、ここでは処理論理を説明するために、マスタプログラムをシェルスクリプトで実装した例を示しています。シェルスクリプトでは実装が難しい処理(ソケットの初期化処理やワーカプロセスとの通信処理)は省略しています。これらの処理については一般的なプロセス間通信の手段を参考にしてください。</p>
+</div>
+<p>[utility.sh]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 指定したネットワークインターフェースのIPアドレスを出力する。</span>
+<span class="c1"># Usage: print_ipaddr &lt;interface&gt;</span>
+print_ipaddr<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">INTERFACE</span><span class="o">=</span><span class="nv">$1</span>
+<span class="w">  </span><span class="nv">LANG</span><span class="o">=</span>C<span class="w"> </span>ip<span class="w"> </span>addr<span class="w"> </span>show<span class="w"> </span>dev<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">INTERFACE</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">&#39;/.*inet \([0-9.]*\).*/{s//\1/;p}&#39;</span>
+<span class="o">}</span>
+
+<span class="c1"># 指定したコマンドをタイムアウト付きで実行する。</span>
+<span class="c1"># Usage: timeout &lt;timeout_sec&gt; &lt;command&gt; &lt;arg1&gt; &lt;arg2&gt; ...</span>
+timeout<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">TIMEOUT</span><span class="o">=</span><span class="nv">$1</span>
+<span class="w">  </span><span class="nb">shift</span><span class="w"> </span><span class="m">1</span>
+
+<span class="w">  </span><span class="c1"># コマンド実行およびプロセスID を記録する。</span>
+<span class="w">  </span><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">PID</span><span class="o">=</span><span class="nv">$!</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="si">${</span><span class="nv">PID</span><span class="si">}</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span>true<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+
+<span class="w">    </span><span class="c1"># コマンドプロセスの生存をチェックする。</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span>!<span class="w"> </span>ps<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PID</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">      </span><span class="c1"># プロセスが終了したため、ループを抜ける。</span>
+<span class="w">      </span><span class="k">break</span>
+<span class="w">    </span><span class="k">fi</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">TIMEOUT</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>-le<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">      </span><span class="c1"># タイムアウトした場合、プロセスを異常終了させる。</span>
+<span class="w">      </span><span class="nb">kill</span><span class="w"> </span>-KILL<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PID</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">      </span><span class="k">break</span>
+<span class="w">    </span><span class="k">fi</span>
+
+<span class="w">    </span><span class="c1"># 1秒間スリープした後、ループの先頭に戻る。</span>
+<span class="w">    </span>sleep<span class="w"> </span><span class="m">1</span>
+<span class="w">    </span><span class="nv">TIMEOUT</span><span class="o">=</span><span class="k">$((</span><span class="nv">TIMEOUT</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="k">))</span>
+
+<span class="w">  </span><span class="k">done</span>
+
+<span class="w">  </span><span class="c1"># プロセスの終了コードを返す。</span>
+<span class="w">  </span><span class="nb">wait</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">PID</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nv">$?</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h2><span class="section-number">5.7.5. </span>ジョブ作成における注意事項<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<ul>
+<li><p>1ジョブで同時に実行可能なpjaexeコマンドの個数は128個までです。</p>
+<ul>
+<li><p>128を越えて実行しようとした場合は次のメッセージを出力してpjaexeコマンドが異常終了します。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ERR.] PLE 0050 plexec cannot be executed any further.
+</pre></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">pjaexeコマンドは--vcoordfileオプションを利用することで1回の実行で複数のノードにプロセスを同時生成できるため、pjaexeコマンドの実行回数削減に利用してください。</div>
+<div class="line">[vcoordfile]</div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(0)
+(1)
+(2)
+(3)
+(4)
+</pre></div>
+</div>
+<p>[コマンドライン]</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pjaexe --vcoordfile vcoordfile ./worker.out &quot;${IP_ADDR}&quot; &quot;${PORT_NUM}&quot;
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><div class="line-block">
+<div class="line">ワーカプロセスの生成や異常の検出、およびその対処はジョブ作成者が考える必要があります。</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">ワーカプロセスを動的に生成する方式では、ワーカプロセスが実行されているノードがダウンした場合、そのノード上のワーカプロセスと同じ MPI_COMM_WORLD に属するすべてのワーカプロセスは動作ができなくなります。これらのワーカプロセスは、ユーザが終了させるか、またはジョブが終了するまで残ります。</div>
+<div class="line">また、これらのワーカプロセスが動作していたノードは<strong class="command">mpiexec</strong>コマンドが終了するまでは、ワーカプロセスの再生成先として選択されません。ただし、<strong class="command">mpiexec</strong>コマンドを再実行すると、ダウンしたノードが再びワーカプロセスの生成先として選択される可能性があることに注意してください。</div>
+</div>
+</li>
+<li><p>マスタ・ワーカ型ジョブ内で、MPI通信関数を利用する場合は、以下に注意してください。</p>
+<ul>
+<li><p>MPI規格によると、MPI通信処理に失敗した場合、デフォルトでは、通信関数の呼び出し元プロセスも異常終了します。（例えば、処理中に通信先プロセスが異常終了した場合や通信先ノードがダウンした場合）</p></li>
+<li><p>この通信処理は、ユーザが明示的に MPI_Send()、MPI_Recv()、MPI_Bcast() などの MPI通信関数を呼び出した場合だけではなく、MPIライブラリの内部処理で実行される場合もあります。このような場合、プログラムにとっては、マスタプロセスが通信とは関係ない処理を実行している最中に、突然、異常終了してしまうように見えます。</p></li>
+<li><p>マスタ・ワーカ型ジョブで MPI通信関数を用いる場合は、ワーカプロセスの異常終了に伴ってマスタプロセスが異常終了しないように、以下に示す対処をしてください。これにより、マスタプロセスが異常終了する確率が低くなります。</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">MPI_Comm_spawn() 関数の呼び出し後、FJMPI_Mswk_disconnect() 関数を呼び出します。</div>
+<div class="line">MPI_Comm_spawn() 関数によって動的にプロセスを生成した場合、生成されたプロセスと MPI_Comm_spawn() 関数の呼び出し元プロセスの間は、通信が接続した状態になります。</div>
+<div class="line">MPIの内部通信処理は、この通信が接続状態で発生し、切断された状態だと発生しません。このため、MPI_Comm_spawn() 呼び出し後に、FJMPI_Mswk_disconnect() を呼び出す必要があります。</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">MPI通信関数の呼び出し前に FJMPI_Mswk_connect() または FJMPI_Mswk_accept() を呼び出し、MPI通信関数呼び出し後に FJMPI_Mswk_disconnect() を呼び出します。</div>
+<div class="line">接続先プロセスが異常終了していた場合、FJMPI_Mswk_connect() 関数、FJMPI_Mswk_accept() 関数、およびFJMPI_Mswk_disconnect() 関数は、異常復帰するだけで、呼び出し元プロセスが異常終了することはありません。</div>
+<div class="line">このため、以下の例のように MPI通信関数を呼び出す前に毎回 FJMPI_Mswk_connect() 関数を呼び出す必要があります。これにより、ワーカプロセスの異常がマスタプロセスに及ぼす影響を低減できます。</div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//[例] マスタプロセスからワーカプロセスに接続する場合
+
+// マスタプロセス
+FJMPI_Mswk_connect(worker_port, …, &amp;worker_comm);
+MPI_Send(…, worker_comm, …);
+FJMPI_Mswk_disconnect(&amp;worker_comm);
+
+// ワーカプロセス
+FJMPI_Mswk_accept(worker_port, …, &amp;master_comm);
+MPI_Recv(…, master_comm, …);
+FJMPI_Mswk_disconnect(&amp;master_comm);
+</pre></div>
+</div>
+<p>上記手順に従わなかった場合、ワーカプロセスの異常終了後、またはワーカプロセスが動作しているノードのダウン後、任意のタイミングでマスタプロセスが異常終了する可能性があります。マスタプロセスが異常終了すると、<strong class="command">mpiexec</strong>コマンドも異常終了します。ただし、ジョブスクリプトは実行を継続します。</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id5">
+<h2><span class="section-number">5.7.6. </span>システム異常時の影響<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>マスタ・ワーカ型ジョブの実行中にノードダウンなどシステムに起因する異常が起こった場合の影響について説明します。</p>
+<section id="id6">
+<h3><span class="section-number">5.7.6.1. </span>ジョブの動作への影響<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>異常の内容によって、マスタ・ワーカ型ジョブは終了する場合と継続する場合があります。</p>
+<ul>
+<li><p>マスタ・ワーカ型ジョブが終了するケース</p>
+<p>以下の場合は、ほかのジョブモデルと同様に、マスタ・ワーカ型ジョブは終了し、再度キューイングされます。</p>
+<ul class="simple">
+<li><p>ジョブマスタノードがダウンした場合</p></li>
+<li><p>マスタ・ワーカ型ジョブに割り当てた計算ノードで ICC または Port 故障が発生した場合</p></li>
+<li><p>管理者（クラスタ管理者）がマスタ・ワーカ型ジョブに割り当てたノードを運用から切り離す際に、ジョブを即時に終了させるように指定した場合</p></li>
+<li><p>共有テンポラリ領域や第2層ストレージのキャッシュ領域を使用するジョブに割り当てられたBIO/SIO/GIOがダウンした場合</p></li>
+</ul>
+</li>
+<li><div class="line-block">
+<div class="line">マスタ・ワーカ型ジョブが継続するケース</div>
+</div>
+<p>以下の場合は、マスタ・ワーカ型ジョブは継続します。ただし、これらに起因してワーカプロセスが異常になった場合は、ほかのノードでワーカプロセスを実行するなどの対処を、ユーザプログラム内で考慮する必要があります。</p>
+<ul class="simple">
+<li><p>ジョブスレーブノードのジョブ運用ソフトウェアのサービス異常</p></li>
+<li><p>ジョブスレーブノードのダウン</p></li>
+<li><p>ジョブスレーブノードのハードウェア（CPU またはメモリ）の異常</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>ジョブの終了原因がユーザ側にある場合（例：CPU時間などの資源制限値超過）、ジョブが再キューイングされるかどうかは、ほかのジョブモデルと同様に、ジョブ投入時の指定やジョブACL機能の設定によります。</p>
+</div>
+</section>
+<section id="id7">
+<h3><span class="section-number">5.7.6.2. </span>ジョブ統計情報への影響<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>マスタ・ワーカ型ジョブの実行中にノードダウンが発生した場合、<strong class="program">pjsub -s/-S</strong> や、<strong class="program">pjstat -v</strong>で出力されるジョブ統計情報は以下のようになります。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">PC、PJM CODE</div>
+<div class="line">（ジョブ終了コード）</div>
+</div>
+</td>
+<td><p>ジョブマスタノードのダウンや、「富岳」の故障（ICC 異常）によってマスタ・ワーカ型ジョブが異常終了した場合、ジョブ統計情報のジョブ終了コードは通常ジョブの場合と同様になります。ジョブスレーブノードだけのダウンのように、マスタ・ワーカ型ジョブの継続に影響がない異常の場合は、マスタ・ワーカ型ジョブは最後まで実行されます。正常に終了した場合は、ジョブ終了コードは 0 になります。</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">REASON</div>
+<div class="line">（終了原因）</div>
+</div>
+</td>
+<td><p>前項のジョブ終了コードと同様ですが、ジョブが正常終了した場合は &quot;-&quot; になります。</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">name（REQUIRE）</div>
+<div class="line">（要求資源量）</div>
+</div>
+</td>
+<td><p>&quot;NODE NUM (REQUIRE)&quot; などの &quot;(REQUIRE)&quot; が付く項目は、ノードのダウンに関係なく、ジョブ投入時にユーザが指定した値になります。</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">name（ALLOC）</div>
+<div class="line">（割り当て資源量）</div>
+</div>
+</td>
+<td><p>&quot;NODE NUM (ALLOC)&quot; などの &quot;(ALLOC)&quot; が付く項目は、ノードのダウンに関係なく、ジョブ投入時に決定した値になります。</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">name（USE)）</div>
+<div class="line">（使用資源量)）</div>
+</div>
+</td>
+<td><p>&quot;NODE NUM (USE)&quot; などの &quot;(USE)&quot; が付く項目は、故障したノードの分は除外された値になります。</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="id8">
+<h3><span class="section-number">5.7.6.3. </span>コマンドの表示への影響<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<p>ジョブ運用ソフトウェアが提供する<strong class="program">pjshowrsc</strong>コマンドは、計算機資源としてのノード数を表示できます。</p>
+<p>マスタ・ワーカ型ジョブに割り当てられたノードがジョブ実行中にダウンした場合、ダウンしたノードは利用可能資源から除外されます。</p>
+<ul class="simple">
+<li><p>引数なしの場合</p></li>
+</ul>
+<blockquote>
+<div><p>TOTAL と ALLOC の値が、ダウンしたノードの数だけ減ります。</p>
+<p>[ジョブスレーブノードがダウンする前]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjshowrsc
+<span class="go">[ CLST: fugaku-comp ]</span>
+<span class="go">RSCUNIT          NODE</span>
+<span class="go">                 TOTAL   FREE  ALLOC</span>
+<span class="go">rscunit_ft01    158976  94269  64707</span>
+</pre></div>
+</div>
+<p>[ジョブスレーブノードのうち、1ノードがダウンした後]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjshowrsc
+<span class="go">[ CLST: fugaku-comp ]</span>
+<span class="go">RSCUNIT          NODE</span>
+<span class="go">                 TOTAL   FREE  ALLOC</span>
+<span class="go">rscunit_ft01    158975  94269  64706</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-l</span></code>オプションを指定した場合</p></li>
+</ul>
+<blockquote>
+<div><p>各資源の TOTAL と ALLOC の値が、ダウンしたノードの分だけ減ります。</p>
+<p>[ジョブスレーブノードがダウンする前]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjshowrsc<span class="w"> </span>-l
+<span class="go">[ CLST: fugaku-comp ]</span>
+<span class="go">[ RSCUNIT: rscunit_ft01 ]</span>
+<span class="go">     RSC    TOTAL    FREE   ALLOC</span>
+<span class="go">    node   158976   75231   83745</span>
+<span class="go">     cpu  7630848 3611088 4019760</span>
+<span class="go">     mem    4.4Pi   4.4Pi   672Gi</span>
+</pre></div>
+</div>
+<p>[ジョブスレーブノードのうち、1ノードがダウンした後]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjshowrsc<span class="w"> </span>-l
+<span class="go">[ CLST: fugaku-comp ]</span>
+<span class="go">[ RSCUNIT: rscunit_ft01 ]</span>
+<span class="go">     RSC    TOTAL    FREE   ALLOC</span>
+<span class="go">    node   158975   75231   83744</span>
+<span class="go">     cpu  7630800 3611088 4019712</span>
+<span class="go">     mem    4.4Pi   4.4Pi   672Gi</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.7. マスタ・ワーカ型ジョブ</a><ul>
+<li><a class="reference internal" href="#id2">5.7.1. ジョブの投入</a></li>
+<li><a class="reference internal" href="#mswkdynamicprocessgeneration">5.7.2. ワーカプロセスの動的生成</a></li>
+<li><a class="reference internal" href="#agent">5.7.3. Agentプロセスによるワーカプロセス生成</a></li>
+<li><a class="reference internal" href="#pjaexe">5.7.4. pjaexeコマンドによるワーカプロセス生成</a></li>
+<li><a class="reference internal" href="#id4">5.7.5. ジョブ作成における注意事項</a></li>
+<li><a class="reference internal" href="#id5">5.7.6. システム異常時の影響</a><ul>
+<li><a class="reference internal" href="#id6">5.7.6.1. ジョブの動作への影響</a></li>
+<li><a class="reference internal" href="#id7">5.7.6.2. ジョブ統計情報への影響</a></li>
+<li><a class="reference internal" href="#id8">5.7.6.3. コマンドの表示への影響</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="WorkflowJob.html"
+                          title="前の章へ"><span class="section-number">5.6. </span>ワークフロージョブ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="EnvironmentSettings.html"
+                          title="次の章へ"><span class="section-number">5.8. </span>環境設定</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="EnvironmentSettings.html" title="5.8. 環境設定"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="WorkflowJob.html" title="5.6. ワークフロージョブ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.7. </span>マスタ・ワーカ型ジョブ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

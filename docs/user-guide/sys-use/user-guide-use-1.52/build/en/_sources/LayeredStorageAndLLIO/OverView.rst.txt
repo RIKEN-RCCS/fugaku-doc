@@ -1,0 +1,108 @@
+Overview
+========
+
+the Fugaku storage conposed of first-layer storage for high-speed access and second-layer storage for data storage.
+There are two ways to do IO: through tiered storage or directly to second-layer storage.
+
+See also "`Programming Guide(IO part) <https://www.fugaku.r-ccs.riken.jp/doc_root/en/programming_guides/IO_part_Programming_Guide/>`_" for more information on file systems.
+
+By using LLIO (Lightweight Layered IO-Accelerator) from job (compute node), IO to the first-layer storage and the second-layer storage becomes possible.
+
+The first-layer storage and the second-layer storage are collectively called "tiered storage."
+LLIO and FEFS have different file access methods.
+For details about the different access methods, see \ :ref:`WriteForFilesystem`\ .
+Also refer to \ :ref:`llioconsiderpoints`\ when using LLIO.
+
+.. figure:: img/OverView_03.png
+
+LLIO provides three areas for the first-layer storage:
+
+- :ref:`TheSecondLayerStorageCacheArea`
+- :ref:`TemporaryAreaInNode`
+- :ref:`SharedTemporaryArea`
+
+Pleae refer to manual "LLIO User's Guide" and "Job Operation Software End User Guide " for the LLIO.
+
+
+
+IO time reduction and area selection
+------------------------------------------
+
+Leverage tiered storage as one way to reduce IO time.
+Tiered storage provides high IO throughput by handling IO across multiple servers.
+There are three ways to achieve high IO throughput: "Node Temporary Area","Shared temporary area", and "Cache Area of Second-Layer Storage". IO performance is scaled in the order in which the items in the following table are considered.
+Each area can be selected according to the purpose of the application.
+Approximately 87GiB of Tier 1 storage space is allocated per compute node during job execution.
+The allocated 87GiB can be divided into "Node Temporary Area", "Shared temporary area", and "Cache Area of Second-Layer Storage" for use.
+
+
+   .. list-table:: Recommended Order of Layered Storage Area Use
+     :header-rows: 1         
+     :widths: 10 42 25 25 20 
+   
+     * - Order of Consideration
+       - Area Name
+       - Range of References
+       - Access Path
+       - Maximum Size
+
+     * - 1
+       - :ref:`TemporaryAreaInNode`
+       - In the compute node
+       - $PJM_LOCALTMP
+       - 87GiB
+
+     * - 2
+       - :ref:`SharedTemporaryArea`
+       - In the job
+       - $PJM_SHAREDTMP
+       - 87GiB * #nodes
+
+     * - 3
+       - :ref:`TheSecondLayerStorageCacheArea`
+       - All compute nodes
+       - /vol000x/
+       - 87GiB * #nodes
+
+     * - 4
+       - second-layer storage
+       - All compute nodes
+       - /2ndfs/
+       - ―
+
+   .. list-table:: Example of Applying LLIO
+     :header-rows: 1         
+     :widths: 30 58 
+   
+     * - Area name
+       - Example of Applying LLIO
+
+     * - :ref:`TemporaryAreaInNode`
+       - Create and reference intermediate and temporary files independently for each rank and node
+  
+     * - :ref:`SharedTemporaryArea`
+       - Reference files between ranks and nodes, manipulate large files
+
+     * - :ref:`TheSecondLayerStorageCacheArea`
+       - Output of the saved files such as stdout or stderr
+
+
+Cache area of the second-layer storage is useful when the cache can be leveraged, such as when multiple reads occur. Second-layer storage may be useful if there is only one read and cache is not utilized.
+
+For small jobs with less than one rack, it may be advantageous to use the second-layer storage rather than the cache area of the second-layer storage, depending on the allocation shape.
+
+Please check the usage requirement of each area and  :ref:`llioconsiderpoints`  when using.
+
+.. _SimultaneousAccessToLLIO:
+
+Simultaneous access to common files from all processes
+------------------------------------------------------------
+
+It is recommended to use :ref:`llio_transfer` when there is a file which is accessed from all processes simultaneously, such as an executable module or open source software (OSS) provided by "Fugaku".
+
+If access is concentrated, the load is high and I/O may slow down.
+
+Distributing a common read-only file to each SIO assigned to a job balances the load of access to the same file and speeds file I/O.
+
+Please refer also to  :ref:`Attention about common file <llio_transfer_attention>`  when using.
+   

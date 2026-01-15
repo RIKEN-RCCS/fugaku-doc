@@ -1,0 +1,501 @@
+Login
+=====
+
+| The pre/post environment cannot be directly accessed via the Internet. Access to the servers is allowed only via the Fugaku login nodes. Therefore, users need to log in to one of the login nodes as a first step.
+
+| If you have never seen the "`Supercomputer Fugaku Users Guide - Use and job execution - <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/>`_", we recommend you to see the document before getting started in the following section.
+
+
+File Transfer
+=============
+
+| The home directory (/home) in the pre/post environment is the same as the one in the Fugaku main system. Therefore, the users can transfer files via the login nodes with the ``scp`` command. Besides, the storage capacity and the maximum number of files are limited in the same way as in the Fugaku main system.
+
+| Also, see the "`Supercomputer Fugaku Users Guide - Use and job execution - <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/>`_" and "`Fugaku High Speed Transfer Users Guide <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/high_speed_io_guide/>`_" if you need more detailed information about file transfer.
+
+
+Compile
+=======
+
+GCC
+---
+
+The following are examples of using GCC.
+
+* Large Memory Nodes
+
+.. code-block:: console
+ 
+   [Login]$ srun -p mem1 -n 1 --mem 22G --time=5 --pty bash -i
+   [MEM]$ gcc -o a.out sample.c
+
+* GPU Nodes
+
+.. code-block:: console
+ 
+   [Login]$ srun -p gpu1 -n 1 --mem 2574 --time=5 --pty bash -i
+   [GPU]$ gcc -o a.out sample.c
+
+.. note:: 
+
+   A program compiled on the login nodes by GCC can be executed on the pre/post environemnt.
+
+Intel Compiler
+--------------
+
+Pre/Post-Pocessing Nodes
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+When using the Intel compiler on the pre/post environment, enter a compute node in the pre/post environment with interactive job mode and set the environment variables.
+
+The following are examples of using the Intel compiler.
+
+* Large memory nodes
+
+.. code-block:: console
+ 
+   [Login]$ srun -p mem1 -n 1 --mem 22G --time=5 --pty bash -i
+   [MEM]$ . /opt/intel/oneapi/setvars.sh intel64
+   [MEM]$ icc -o a.out sample.c
+
+* GPU nodes
+
+.. code-block:: console
+ 
+   [Login]$ srun -p gpu1 -n 1 --mem 2574 --time=5 --pty bash -i
+   [GPU]$ . /opt/intel/oneapi/setvars.sh intel64
+   [GPU]$ icc -o a.out sample.c
+
+.. note:: 
+   
+   A program compiled on the login nodes by the Intel compiler can be executed on the pre/post environment.
+
+
+| See the following URL if you need more detailed information about the Intel compiler.
+| "`Supercomputer Fugaku Users Guide - Language and development environment - <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/lang_latest/CompileforLN/index.html>`_"
+
+
+NVIDIA CUDA Compiler
+--------------------
+
+Log in to a GPU node with interactive job and set the environment variables.
+
+The following are examples of using the CUDA compiler.
+
+.. code-block:: console
+
+   [Login]$ srun -p gpu1 -n 1 --mem 2574 --time=5 --pty bash -i
+   [GPU]$ export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+   [GPU]$ export LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+   [GPU]$ nvcc -o a.out sample.cu
+
+.. attention:: 
+
+   The NVIDIA CUDA compiler is only available in the GPU nodes.
+
+   To run the compiled a.out, you need to allocate GPU resources by SLURM options. (For details, please see the sections on :ref:`batchjob` and subsequent topics.)
+
+| See the following URL if you need more detailed information about NVIDIA CUDA Compiler.
+| https://developer.nvidia.com/cuda-toolkit-archive
+
+
+Fujitsu Compiler (cross compiler)
+---------------------------------
+
+| The Fujitsu compiler (cross compiler) is available in the pre/post environment. We recommend the users to use the pre/post environment if compiling programs on the login nodes is failed due to lack of memory.
+| A program compiled by the Fujitsu compiler cannot be executed on the pre/post environemnt.
+
+| See the manual `Supercomputer Fugaku Users Guide - Language and development environment - <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/lang_latest/CompileforCN/FujitsuCompiler/index.html>`_\  if you need more detailed information about the Fujitsu compiler.
+
+The following are examples of using the Fujitsu compiler.
+
+.. code-block:: console
+
+   [Login]$ srun -p gpu1 -n 1 --mem 2574 --time=5 --pty bash -i
+   [GPU]$ frtpx -o a.out sample.f90
+
+
+Job Submission
+==============
+
+| There are two ways to execute jobs: batch-job and interactive-job submissions.
+
+| The batch job is a method of submitting jobs using job scripts and is suitable for long-running jobs. On the other hand, interactive jobs can execute commands conversationally and can be used for debugging before submitting batch jobs.
+
+| Job scheduling in the pre/post environment determines the execution order of jobs using the "FairShare" function.
+| FairShare is a mechanism that adjusts job priorities based on past resource usage by jobs.
+| Users with less resource usage history will have higher priority, and their jobs will be prioritized for execution.
+| Conversely, users with extensive usage history will have lower priority, and their jobs will be postponed.
+
+
+
+Job Queue (Partition)
+---------------------
+
+| To submit jobs to the pre/post environment, the users need to specify a job queue.
+| See the sections on batch jobs or interactive jobs for how to specify the queues.
+
+The table below shows the job queues currently available. [#A1]_
+
+.. list-table::
+   :header-rows: 1
+
+   * - Queue (PartitionName)
+     - Node (Nodes)
+     - Default elapsed time [h] (DefaultTime)
+     - Maximum elapsed time [h] (MaxTime)
+     - Default #CPUs per job (cpus-per-task)
+     - Maximum #CPUs per job (MaxTRESPerJob=cpu)
+     - Default memory per job (DefMemPerNode)
+     - Maximum memory per job (MaxMemPerNode)
+     - Maximum #jobs per user (MaxJobPerUser)
+     - Maximum #nodes per job (MaxNodes)
+
+   * - gpu1
+     - | pps[01-06] 
+     - | 0.5
+     - | 3
+     - | 1
+     - | 72
+     - | 2574M
+     - | 185344M
+       | (181G)
+     - | 5
+     - | 1
+
+   * - gpu2
+     - | pps[07-08]
+     - | 0.5
+     - | 24
+     - | 1
+     - | 36
+     - | 2574M
+     - | 92672M
+       | (90G)
+     - | 1
+     - | 1
+
+   * - mem1
+     - | ppm01
+     - | 0.5
+     - | 3
+     - | 1
+     - | 224
+     - | 22863M
+     - | 5121496M [#A2]_
+       | (5001G)
+     - | 5
+     - | 1
+
+   * - mem2
+     - | ppm[02-03]
+     - | 0.5
+     - | 24
+     - | 1
+     - | 56
+     - | 22863M
+     - | 1536000M
+       | (1500G)
+     - | 1
+     - | 1
+
+   * - ondemand-reserved [#A3]_
+     - | wheel[1-2]
+     - | 0.5
+     - | 720
+     - | 1
+     - | 8
+     - | 4096M
+     - | 32768M
+       | (32G)
+     - | 50
+     - | 1
+
+.. note::
+
+   * "gpu1" and "mem1" are prepared as a queue for short-time jobs and "gpu2" and "mem2" for long-time jobs. 
+   * When a job is submitted without specifying the amount of resources, default values are applied. Please specify the number of CPUs required, amount of memory, and elapsed time in the job script or by Slurm command options.
+
+.. [#A1] Hyper-Threading (HT) is enabled. (#CPUs = #physical_cores × 2)
+
+.. [#A2] The maximum allowed memory size is set smaller than the installed memory size because a portion of the memory is used for the scratch directory.
+
+.. [#A3] “ondemand-reserved” is a hidden queue which is set mainly for use from Open OnDemand. It is to run non-compute-intensive jobs such as workflow tools or interactive tools, and the resources are oversubscribed to accept many jobs. Running jobs on this queue may be terminated by operational needs without a prior notification.
+
+
+.. _batchjob:
+
+Batch Job
+---------
+
+
+Basically, to submit a job to the pre/post environment, the users need to make a job script and use SLURM commands on the login node.
+
+
+Sequential Job
+^^^^^^^^^^^^^^
+
+The following are examples for sequential jobs.
+
+* Large memory node (1cpu)
+
+.. code-block:: bash
+   
+   #!/bin/bash	
+   #SBATCH -p mem1      # Specifying a queue
+   #SBATCH -n 1         # Specifying the number of CPUs
+   #SBATCH --mem 22G    # Specifying memory usage [GB]
+   ./a.out
+
+* Large memory node (1node)
+
+.. code-block:: bash
+   
+   #!/bin/bash	
+   #SBATCH -p mem1      # Specifying a queue
+   #SBATCH -n 224       # Specifying the number of CPUs
+   #SBATCH --mem 5001G  # Specifying memory usage [GB]
+   ./a.out
+
+* GPU node (1cpu)
+
+.. code-block:: bash
+   
+   #!/bin/bash	
+   #SBATCH -p gpu1      # Specifying a queue
+   #SBATCH -n 1         # Specifying the number of nodes
+   #SBATCH --mem 2574   # Specifying memory usage [MB]
+   ./a.out
+
+* GPU node (1node)
+
+.. code-block:: bash
+   
+   #!/bin/bash	
+   #SBATCH -p gpu1      # Specifying a queue
+   #SBATCH -n 72        # Specifying the number of CPUs
+   #SBATCH --mem 181G   # Specifying memory usage [GB]
+   ./a.out
+
+
+OpenMP
+^^^^^^
+
+The following are examples of using OpenMP.
+
+* Intel Compiler + OpenMP
+
+.. code-block:: bash
+
+   #!/bin/bash	
+   #SBATCH -p gpu1               # Specifying a queue
+   #SBATCH --cpus-per-task=72    # Specifying the number of CPUs to use for each task
+   export OMP_NUM_THREADS=72	
+   export KMP_AFFINITY=granularity=fine,compact	
+   . /opt/intel/oneapi/setvars.sh intel64	
+   ./a.out	
+
+* GCC + OpenMP
+
+.. code-block:: bash
+
+   #!/bin/bash	
+   #SBATCH -p mem1                # Specifying a queue
+   #SBATCH --cpus-per-task=224    # Specifying the number of CPUs to use for each task
+   export OMP_NUM_THREADS=224	
+   ./a.out	
+
+
+MPI
+^^^
+
+The following are examples of using MPI.
+
+* Intel Compiler + Intel MPI
+
+.. code-block:: bash
+
+   #!/bin/bash	
+   #SBATCH -p mem1                 # Specifying a queue
+   #SBATCH --cpus-per-task=224	  # Specifying the number of CPUs to use for each task
+   #SBATCH -t 00:10:00	           # Specifying elapsed time limits
+   . /opt/intel/oneapi/setvars.sh intel64	
+   mpiexec -n 224 ./a.out	
+
+
+* GCC + OpenMPI
+
+.. code-block:: bash
+
+   #!/bin/bash	
+   #SBATCH -p gpu1                  # Specifying a queue
+   #SBATCH -n 72                    # Specifying the number of tasks 
+   #SBATCH -t 00:10:00              # Specifying elapsed time limits
+   . /vol0004/apps/oss/spack/share/spack/setup-env.sh
+   spack load openmpi@3.1.6%gcc@8.5.0
+   mpiexec --use-hwthread-cpus -n 72 --mca btl_openib_if_include mlx5_0 ./a.out	
+
+..   #!/bin/bash	
+..   #SBATCH -p gpu1                  # Specifying a queue
+..   #SBATCH -n 72                    # Specifying the number of tasks 
+..   #SBATCH -t 00:10:00              # Specifying elapsed time limits
+..   export PATH=/usr/mpi/gcc/openmpi/bin:${PATH}	
+..   export LD_LIBRARY_PATH=/usr/mpi/gcc/openmpi/lib64:${LD_LIBRARY_PATH}	
+..   mpiexec --use-hwthread-cpus -n 72 --mca btl_openib_if_include mlx5_0 ./a.out	
+
+
+.. attention:: 
+
+   When using GCC + Open MPI, the option **\--use-hwthread-cpus** is required if you want to use more than half of the maximum number of cores for each node.
+
+
+GPU
+^^^
+
+The following are examples of using GPU.
+
+.. code-block:: bash
+   
+   #!/bin/bash
+   #SBATCH -p gpu1                 # Specify a queue
+   #SBATCH --gpus-per-node=1       # Specify the number of GPUs to use
+   ./a.out
+
+To use 2GPUs simultaneously, specify the option ``--gpus-per-node=2``.
+
+.. code-block:: bash
+
+   #!/bin/bash
+   #SBATCH -p gpu1                 # Specify a queue
+   #SBATCH --gpus-per-node=2       # Specify the number of CPUs per node
+   ./a.out
+
+
+Interactive Job
+---------------
+
+| The interactive job can execute jobs with specifying required resources directly by a Slurm command via a login node.
+| If resources are available, the command prompt will transition to a compute node of the pre/post environment, and then commands can be executed conversationally.
+
+The following are examples of interactive jobs.
+
+* Large memory node (1cpu)
+
+.. code-block:: console
+ 
+   [Login]$ srun -p mem1 -n 1 --mem 22G --time=5 --pty bash -i
+
+* Large memory node (1node)
+
+.. code-block:: console
+ 
+   [Login]$ srun -p mem1 -n 224 --mem 5001G --time=5 --pty bash -i
+
+* GPU node (1cpu without GPUs)
+
+.. code-block:: console
+ 
+   [Login]$ srun -p gpu1 -n 1 --mem 2574 --time=5 --pty bash -i
+
+* GPU node (1node without GPUs)
+
+.. code-block:: console
+ 
+   [Login]$ srun -p gpu1 -n 72 --mem 181G --time=5 --pty bash -i
+
+* GPU node (1cpu with a GPU)
+
+.. code-block:: console
+ 
+   [Login]$ srun -p gpu1 -n 1 --mem 2574 --time=5 --gpus-per-node=1 --pty bash -i
+
+   [GPU]$ nvidia-smi
+   +---------------------------------------------------------------------------------------+
+   | NVIDIA-SMI 535.216.01             Driver Version: 535.216.01   CUDA Version: 12.2     |
+   |-----------------------------------------+----------------------+----------------------+
+   | GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+   | Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+   |                                         |                      |               MIG M. |
+   |=========================================+======================+======================|
+   |   0  Tesla V100-PCIE-32GB           Off | 00000000:18:00.0 Off |                    0 |
+   | N/A   41C    P0              37W / 250W |      0MiB / 32768MiB |      1%      Default |
+   |                                         |                      |                  N/A |
+   +-----------------------------------------+----------------------+----------------------+
+
+   +---------------------------------------------------------------------------------------+
+   | Processes:                                                                            |
+   |  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+   |        ID   ID                                                             Usage      |
+   |=======================================================================================|
+   |  No running processes found                                                           |
+   +---------------------------------------------------------------------------------------+
+
+* GPU node (1node with 2GPUs)
+
+.. code-block:: console
+ 
+   [Login]$ srun -p gpu1 -n 72 --mem 181G --time=5 --gpus-per-node=2 --pty bash -i
+
+   [GPU]$ nvidia-smi
+   +---------------------------------------------------------------------------------------+
+   | NVIDIA-SMI 535.216.01             Driver Version: 535.216.01   CUDA Version: 12.2     |
+   |-----------------------------------------+----------------------+----------------------+
+   | GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+   | Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+   |                                         |                      |               MIG M. |
+   |=========================================+======================+======================|
+   |   0  Tesla V100-PCIE-32GB           Off | 00000000:18:00.0 Off |                    0 |
+   | N/A   39C    P0              39W / 250W |      0MiB / 32768MiB |      0%      Default |
+   |                                         |                      |                  N/A |
+   +-----------------------------------------+----------------------+----------------------+
+   |   1  Tesla V100-PCIE-32GB           Off | 00000000:AF:00.0 Off |                    0 |
+   | N/A   38C    P0              38W / 250W |      0MiB / 32768MiB |      1%      Default |
+   |                                         |                      |                  N/A |
+   +-----------------------------------------+----------------------+----------------------+
+
+   +---------------------------------------------------------------------------------------+
+   | Processes:                                                                            |
+   |  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+   |        ID   ID                                                             Usage      |
+   |=======================================================================================|
+   |  No running processes found                                                           |
+   +---------------------------------------------------------------------------------------+
+
+
+Scratch Directory (available in the large memory nodes)
+--------------------------------------------------------
+
+| When a job is submitted to a queue (mem1 or mem2) of the large memory nodes, a work directory is created for each job under **/worktmp**. 
+| The directory is a memory-based file system that can be used for temporary scratch purposes.
+| The working directory created for each job can only be accessed by the user who submitted the job.
+| The scratch directory is created only on large memory nodes, not on GPU nodes.
+
+.. attention::
+
+   * A scratch directory (**/worktmp/${SLURM_JOBID}**) is available for each job.
+   * The scratch directory is shared among other jobs/users, with a maximum of 1TB.
+   * If the maximum capacity has already been used by other jobs/users, a write access will be failed.
+   * After the job is finished, the directory (/worktmp/${SLURM_JOBID}) is automatically deleted.
+
+The following is an example of using scratch area.
+
+.. code-block:: bash
+
+   #!/bin/bash
+   #SBATCH -p mem1
+   #SBATCH -n 1
+   export TMPDIR=/worktmp/${SLURM_JOBID}
+   dd if=/dev/zero of=${TMPDIR}/foo.dat bs=100M count=1
+
+
+Misc
+----
+
+To use the X Window System in the pre/post environment, use interactive mode by the ``srun`` command with the ``--x11`` option.
+
+
+.. code-block:: console
+
+   [Login]$ srun --x11 -p gpu1 -n 1 --time=5 --pty bash -i
+
+

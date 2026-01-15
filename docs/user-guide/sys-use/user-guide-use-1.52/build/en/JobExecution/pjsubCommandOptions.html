@@ -1,0 +1,749 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.9. Job execution command options &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.10. Large page space allocation" href="AllocationOfLargePageArea.html" />
+    <link rel="prev" title="5.8. Environment setting" href="EnvironmentSettings.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="AllocationOfLargePageArea.html" title="5.10. Large page space allocation"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="EnvironmentSettings.html" title="5.8. Environment setting"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.9. </span>Job execution command options</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="job-execution-command-options">
+<h1><span class="section-number">5.9. </span>Job execution command options<a class="headerlink" href="#job-execution-command-options" title="Link to this heading">¶</a></h1>
+<p>This is a list of <strong class="program">pjsub</strong> options.</p>
+<section id="basic-option">
+<h2><span class="section-number">5.9.1. </span>Basic option<a class="headerlink" href="#basic-option" title="Link to this heading">¶</a></h2>
+<p>This is to indicate <strong class="program">pjsub</strong> command’s basic option, such as job execution group, environment variable passing, etc.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option name</p></th>
+<th class="head"><p>Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-L “<cite>resource=value[,…]</cite>”</p></td>
+<td><div class="line-block">
+<div class="line">Specifies options related to job resources.</div>
+<div class="line">Indicates on “<a class="reference internal" href="#jobexecutionresourcespecifications"><span class="std std-ref">Resource specification</span></a>”  for details.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>--mpi “<cite>parameter[,…]</cite>”</p></td>
+<td><div class="line-block">
+<div class="line">Specify various parameters for the MPI job.</div>
+<div class="line">Indicates on “<a class="reference internal" href="#jobexecutionmpioptions"><span class="std std-ref">MPI option</span></a>”  for details.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>--gname “<cite>gname</cite>”</p></td>
+<td><div class="line-block">
+<div class="line">Specify the name of the group to which the job process belongs when executing the job.</div>
+<div class="line">You can specify either a group name (<code class="docutils literal notranslate"><span class="pre">gname</span></code>) or a group ID (<code class="docutils literal notranslate"><span class="pre">gid</span></code>).</div>
+<div class="line">If the specified group does not exist in the job management node, job submission will result in an error.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>--help</p></td>
+<td><p>Display help.</p></td>
+</tr>
+<tr class="row-even"><td><p>-j</p></td>
+<td><p>Standard error output is output to standard output.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-m  “<cite>mailoption[,…]</cite>”</p></td>
+<td><div class="line-block">
+<div class="line">Specify whether to send email notifications for job status and other information.</div>
+<div class="line">See <code class="docutils literal notranslate"><span class="pre">man</span> <span class="pre">pjsub</span></code> for <cite>mailoption</cite>.</div>
+<div class="line">When using this option, be sure to specify an email address using <code class="docutils literal notranslate"><span class="pre">--mail-list</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>--mail-list  “<cite>mailaddress[,…]</cite>”</p></td>
+<td><div class="line-block">
+<div class="line">Specify the mail destination. When specifying multiple items, separate them with commas (“,”). The string size you specify is limited to 255 characters.</div>
+<div class="line">Please note that if you enter the wrong e-mail address, it will not reach the recipient and there will be no error notification.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>--name  “<cite>name</cite>”</p></td>
+<td><div class="line-block">
+<div class="line">Specifies the name of the job. You can specify up to 63 bytes for the job name.</div>
+<div class="line">If this option is not specified, the script file name specified on the command line is set as the job name.</div>
+<div class="line">If the script file name is not specified, “STDIN” is set as the job name.</div>
+<div class="line">The first character of the job name is only one-byte alphabet. <code class="docutils literal notranslate"><span class="pre">name</span></code> cannot be a string containing “/”.</div>
+<div class="line">The job and script file names can contain the following characters.</div>
+</div>
+<ul class="simple">
+<li><p>Any single byte alphanumeric characters, single byte hyphen(-), single byte underscore(_) and single byte dot(.) can be used.</p></li>
+<li><p>Other characters are not supported.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>--restart</p></td>
+<td><div class="line-block">
+<div class="line">When this option is specified, attempts to run the job again if the job execution is interrupted due to a job execution environment shutdown or an error.</div>
+<div class="line">If this option is not specified (Default Value), the job does not rerun.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-X</p></td>
+<td><p>Transfer all environment variables to the compute node.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>To assist the operation of the Fugaku, Fugaku specific <a class="reference internal" href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html#environmentvariablesandpjsuboptions"><span class="std std-ref">Environment Variables and pjsub Options</span></a> are provided.
+You may also want to use these options.</p>
+</div>
+</section>
+<section id="resource-specification">
+<span id="jobexecutionresourcespecifications"></span><h2><span class="section-number">5.9.2. </span>Resource specification<a class="headerlink" href="#resource-specification" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">Indicates an option that specifies the resources used by the job.</div>
+<div class="line">Specify the upper limit value of the resource requested by the job in the format of  <code class="docutils literal notranslate"><span class="pre">resource</span> <span class="pre">=</span> <span class="pre">value</span></code> after <code class="docutils literal notranslate"><span class="pre">-L</span></code>.</div>
+<div class="line">When specifying multiple <code class="docutils literal notranslate"><span class="pre">resource</span></code>, separate them with commas.</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.8%" />
+<col style="width: 69.2%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item name</p></th>
+<th class="head"><p>Contents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-L “node=nodeshape”</p></td>
+<td><p>Specify the number of nodes and the shape to be assigned to the job.</p>
+<ul class="simple">
+<li><p>If 1 dimention: <code class="docutils literal notranslate"><span class="pre">node=N1</span></code></p></li>
+<li><p>If 2 dimentions: <code class="docutils literal notranslate"><span class="pre">node=N1xN2</span></code></p></li>
+<li><p>If 3 dimentions: <code class="docutils literal notranslate"><span class="pre">node=N1xN2xN3</span></code></p></li>
+</ul>
+<p>Following the node shape specification, the node allocation method can be specified.</p>
+<ul>
+<li><p>If 1 dimention ：node=N1[:torus|:mesh|:noncont]</p></li>
+<li><p>If 2 dimentions：node=N1xN2[:torus|:mesh|:noncont]</p></li>
+<li><p>If 3 dimentions：node=N1xN2xN3[:torus|:mesh|:noncont]</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>:torus</dt><dd><p>Torus mode that allocates computer resources to jobs in units of Tofu (12 nodes)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>:mesh</dt><dd><p>Mesh mode that allocates computer resources to jobs in units of node</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>:noncont</dt><dd><p>Non-contiguous mode that allocates computer resources to jobs in units of node</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>The available number of nodes, shape and allocation method are set for each resource group.
+Refer to <a class="reference internal" href="../UsageRules/index.html#resource"><span class="std std-ref">Resource</span></a>.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-L “elapse=elapsetimelimit”</p></td>
+<td><div class="line-block">
+<div class="line">Set the elapsed time limit for each job. The maximum value is set for each <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/resource_group_config">Resource group</a>.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">elapsetimelimit</span></code> is specified in the format “[[time:] minute:] second”.</div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">&quot;elapse=30&quot;</span></code> (If 30 seconds)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">&quot;elapse=2:30&quot;</span></code> (If 2 minutes 30 seconds)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">&quot;elapse=1:00:00&quot;</span></code> (If 1 hour)</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-L “elapse=min_limit-max_limit”</div>
+<div class="line">-L “elapse=min_limit-”</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Specifying an elapsed time limit value as a range.</div>
+<div class="line">The values that can be specified for min_limit and max_limit differ for each <a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/resource_group_config">Resource group</a>.</div>
+<div class="line">(How to check min_limit, max_limit is described later.)</div>
+<div class="line">After the elapsed time reaches min_limit, job execution can continue only until the elapsed time reaches max_limit.</div>
+<div class="line">However, even when the elapsed time is less than max_limit, the job is forcibly terminated in the following situation.</div>
+</div>
+<ul class="simple">
+<li><p>When the node is needed for a subsequent job.</p></li>
+<li><p>When the node enters a period reserved by deadline scheduling.</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<ul class="simple">
+<li><p>-L “elapse=2:30-5:00” (2 mins 30 sec-5 mins)</p></li>
+<li><p>-L “elapse=1:00:00-1:30:00” (1hour - 1hour and 30mins)</p></li>
+<li><p>-L “elapse=2:00:00-24:00:00” (2hours - 24 hours)</p></li>
+<li><p>-L “elapse=2:00:00-” (Maximum value of the resource group used when max_limit is omitted)</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-L “rscgrp=rscgname”</p></td>
+<td><p>Specify the resource group name <code class="docutils literal notranslate"><span class="pre">rscgname</span></code> to submit the job.</p></td>
+</tr>
+</tbody>
+</table>
+<section id="jobs-specifying-the-minimum-elapsed-time-limit-value">
+<span id="jobexecutionwithminimumexecutiontimespecified"></span><h3><span class="section-number">5.9.2.1. </span>Jobs specifying the minimum elapsed time limit value<a class="headerlink" href="#jobs-specifying-the-minimum-elapsed-time-limit-value" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">You can use the following formats to specify the elapsed time limit value for the job on Fugaku except some resource groups.</div>
+<div class="line">On normal job execution, jobs will terminate to reach the elapsed time limit.</div>
+<div class="line">But by specifying the minimum elapsed time limit value (min_limit), your job can run after the minimum elapsed time limit unless other jobs will not be scheduled on nodes used by your job. the compute resource used by your job after the minimum elapsed time limit will no longer be charged</div>
+<div class="line"><br /></div>
+<div class="line">The job scheduling time is decided based on the minimum elapsed time limit, so short specified elapsed time will make short waiting time to be executed.</div>
+</div>
+<div class="line-block">
+<div class="line">After the elapsed time reaches min_limit, job execution can continue to run until the elapsed time reaches max_limit, and used compute resource over min_limit will be no charge.</div>
+<div class="line-block">
+<div class="line">- max_limit can be specified for up to “the max. amount of elapse time limit + 72H”</div>
+<div class="line">- If max_limit is not specified (e.g., elapse=30:00-), “the max. amount of elapse time limit + 72H” is applied to max_limit.</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line">However, even when the elapsed time is less than max_limit, the job is forcibly terminated when other job is allocated on nodes used by your job. So you need to be prepared for the job termination using check-point restart or something like.</div>
+</div>
+<div class="line-block">
+<div class="line">- We recommend using VeloC as a check-point restart.</div>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/VeloC_Guide/">VeloC User Guide</a></div>
+<div class="line"><a class="reference external" href="https://veloc.readthedocs.io/en/latest/toc.html">VeloC Webpage</a></div>
+</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/min_limit_en.png" src="../_images/min_limit_en.png" />
+</figure>
+<div class="line-block">
+<div class="line">ref: Job Operation Software End-user’s Guide - 2.3.2.3 Specifying the elapsed time limit value for a job</div>
+</div>
+<div class="line-block">
+<div class="line">The following example shows how to determine the min _ limit, max _ limit configured for each resource group.</div>
+</div>
+<div class="line-block">
+<div class="line">Batch Job Example</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjacl<span class="w"> </span>-u<span class="w"> </span><span class="nv">$USER</span><span class="w"> </span>-g<span class="w"> </span><span class="nv">$GROUP</span><span class="w"> </span>--rg<span class="w"> </span>small
+<span class="gp gp-VirtualEnv">(Omitted)</span>
+<span class="go">pjsub option parameters</span>
+<span class="go">    (-L/--rsc-list)                         lower            upper            default</span>
+<span class="go">        (elapse=)                           00:01:00         72:00:00         00:01:00</span>
+<span class="go">        (adaptive elapsed time min)         00:01:00         72:00:00         00:01:00  # minLimit for batch jobs</span>
+<span class="go">        (adaptive elapsed time max)         00:01:01         144:00:00        144:00:00 # maxLimit for batch jobs</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">Conversational Job Example</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pjacl<span class="w"> </span>-u<span class="w"> </span><span class="nv">$USER</span><span class="w"> </span>-g<span class="w"> </span><span class="nv">$GROUP</span><span class="w"> </span>--rg<span class="w"> </span>int
+<span class="gp gp-VirtualEnv">(Omitted)</span>
+<span class="go">pjsub option parameters</span>
+<span class="gp gp-VirtualEnv">(Omitted)</span>
+<span class="go">    (--interact -L)                         lower            upper            default</span>
+<span class="go">        (elapse=)                           00:00:10         06:00:00         00:00:10</span>
+<span class="go">        (adaptive elapsed time min)         00:00:10         06:00:00         00:00:10 # minLimit for conversational jobs</span>
+<span class="go">        (adaptive elapsed time max)         2                48:00:00         02:00:00 # maxLimit for conversational jobs</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>Jobs with a range of elapsed times are excluded from parameter changes by the <strong class="program">pjalter</strong> command.
+You cannot change the parameters (Elapsed time limit, resource group, resource unit, and in-user priority) after you have submitted them.</p></li>
+<li><p>Jobs with an age specification in the range are not covered by <a class="reference internal" href="Overview.html#joballocationoperation"><span class="std std-ref">Job allocation operation</span></a>.
+A range can be specified for direct input to the destination resource group.</p></li>
+</ul>
+</div>
+</section>
+<section id="low-priority-jobs">
+<h3><span class="section-number">5.9.2.2. </span>Low priority jobs<a class="headerlink" href="#low-priority-jobs" title="Link to this heading">¶</a></h3>
+<p>You can run a job at a low priority without consuming resources allocated in Fugaku.</p>
+<div class="line-block">
+<div class="line">Target Project: Projects other than paid projects</div>
+<div class="line">You can submit a job only if the project used for job submission is the target project. If the input condition is not satisfied, an error occurs.</div>
+</div>
+<p>Following resource groups are for low priority jobs.</p>
+<ul class="simple">
+<li><p>spot-large</p></li>
+<li><p>spot-small</p></li>
+<li><p>spot-int</p></li>
+<li><p>spot-middle</p></li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>Fee-based Access Projects are not eligible for low priority jobs.</p></li>
+<li><p>Low priority jobs are executed when compute nodes are free.</p></li>
+<li><p>If there are some normal priority jobs, the low-priority job will wait until the node becomes available, regardless of the submission time.</p></li>
+<li><p>The configuration of low priority job’s resource groups the same as the normal resource group (the XXX part of spot-XXX), except for the priority.</p></li>
+</ul>
+</div>
+<div class="line-block">
+<div class="line">For low-priority jobs, the job execution time limit is limited to 4 hours.</div>
+<div class="line">However, if no successor jobs are scheduled on the node where the low-priority job is running, the job can continue to run for up to 12 hours (spot-int is 6 hours).</div>
+<div class="line">If you want to execute a job that exceeds the maximum execution time, specify the elapsed time as a range, referring to “<a class="reference internal" href="#jobexecutionresourcespecifications"><span class="std std-ref">5.9.2 Resource specification</span></a>“ and “<a class="reference internal" href="#jobexecutionwithminimumexecutiontimespecified"><span class="std std-ref">5.9.2.1 Jobs specifying the minimum elapsed time limit value</span></a>“.</div>
+<div class="line">However, the specified time range must have a lower limit of 4 hours or less and an upper limit of 12 hours or less.</div>
+</div>
+<p>Example: How to submit a job that has an age of 4 hours and continues to run for up to 12 hours if no subsequent jobs are assigned</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;elapse=4:00:00-12:00:00&quot;</span><span class="w"> </span>job.sh
+</pre></div>
+</div>
+<p>If you specify a job elapse of 4 hours or less, you do not need to specify an elapse range. In this case, the job ends after the specified time has elapsed.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="s2">&quot;elapse=4:00:00&quot;</span><span class="w"> </span>job.sh
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul>
+<li><p>An error occurs if you specify a value greater than 4 hours for the lower limit. And an error occurs if you specify a value greater than 12 hours for the upper limit.</p>
+<blockquote>
+<div><p>The following example generates an error:</p>
+<div class="line-block">
+<div class="line">-L “elapse=6:00:00-12:00:00” (The lower limit of the specified time exceeds 4 hours.)</div>
+<div class="line">-L “elapse=4:00:00-24:00:00” (The upper limit of the specified time exceeds 12 hours.)</div>
+</div>
+</div></blockquote>
+</li>
+<li><p>If you submit a job with an incorrect execution time, the following error message is output. Correct the job execution time specification, and then re-submit the job.</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">[ERR.] PJM 0057 pjsub elapse=18000 is greater than the upper limit (14400).</div>
+</div>
+</div></blockquote>
+</li>
+<li><div class="line-block">
+<div class="line">Jobs that run longer than the running time limit are killed when subsequent jobs are scheduled.</div>
+<div class="line">If a low-priority job ends prematurely because a subsequent job is scheduled, the job transitions to the CCL state, and ANOTHER JOB STARTED appears in the REASON column of the job statistics. You can use the pjstat command to check.</div>
+</div>
+</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="mpi-option">
+<span id="jobexecutionmpioptions"></span><h2><span class="section-number">5.9.3. </span>MPI option<a class="headerlink" href="#mpi-option" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">Set parameters related to MPI operation.</div>
+<div class="line">Set as settings related to MPI used in jobs <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">&quot;parameter[,parameter...]&quot;</span></code> option.</div>
+<div class="line">When specifying multiple  <code class="docutils literal notranslate"><span class="pre">parameter</span></code>, separate them with commas.</div>
+<div class="line">Please refer to “ <a class="reference internal" href="../MPI/SpecificationsForMPIJob.html#specificationsformpijobmpi"><span class="std std-ref">Specification when submitting an MPI job</span></a> “ for the detail about option concerning to MPI.</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item name</p></th>
+<th class="head"><p>Contents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>--mpi “shape= <cite>shape</cite> “</p></td>
+<td><div class="line-block">
+<div class="line">Specifies the shape of the process to be started statically.</div>
+<div class="line">To  <code class="docutils literal notranslate"><span class="pre">shape</span></code>,  <code class="docutils literal notranslate"><span class="pre">shape=N1</span></code>,<code class="docutils literal notranslate"><span class="pre">shape=N1xN2</span></code> or  <code class="docutils literal notranslate"><span class="pre">shape=N1xN2xN3</span></code> can be specified.</div>
+<div class="line">You must specify the same number of dimensions which is specified in  <code class="docutils literal notranslate"><span class="pre">node</span></code> of  <code class="docutils literal notranslate"><span class="pre">-L(--rsc-list)</span></code> option.</div>
+<div class="line">If omitted, the same value as specified in <code class="docutils literal notranslate"><span class="pre">node</span></code> is used.</div>
+<div class="line">If the <code class="docutils literal notranslate"><span class="pre">vnode</span></code> option is specified, only 1 can be specified.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>--mpi “proc= <cite>num</cite> “</p></td>
+<td><div class="line-block">
+<div class="line">Specify the maximum number of processes to start statically in <code class="docutils literal notranslate"><span class="pre">num</span></code>.</div>
+<div class="line">If omitted, it is the product of the values specified by <code class="docutils literal notranslate"><span class="pre">shape</span></code>.</div>
+<div class="line">If the product of the value specified by <code class="docutils literal notranslate"><span class="pre">shape</span></code> x a value greater than the number of CPU cores in the node is specified, job acceptance is rejected.</div>
+<div class="line">IF specified <code class="docutils literal notranslate"><span class="pre">vnode</span></code> option, Job reception is also rejected if a value greater than the number of cores specified in the <code class="docutils literal notranslate"><span class="pre">vnode</span></code> option is specified.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>--mpi “max-proc-per-node= <cite>mppnnum</cite> “</p></td>
+<td><div class="line-block">
+<div class="line">Specify the maximum number of process that the program creates at the 1 node.</div>
+<div class="line">If omitted, the maximum number of process at the 1 node will be the value obtained by converting the value specified in  <code class="docutils literal notranslate"><span class="pre">proc</span></code>   to the number of processes created in one node.</div>
+<div class="line">If a value larger than the number of CPU cores in one node is specified or If the value converted from the value specified in  <code class="docutils literal notranslate"><span class="pre">proc</span></code>  to the number of processes created in one node exceeds <code class="docutils literal notranslate"><span class="pre">mppnnum</span></code> , the job acceptance is rejected. If specified  <code class="docutils literal notranslate"><span class="pre">vnode</span></code> option, the job acceptance is rejected.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="job-statistical-information">
+<h2><span class="section-number">5.9.4. </span>Job statistical information<a class="headerlink" href="#job-statistical-information" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">When ending job execution, it can output the job statistical information.</div>
+<div class="line">To output the job statistical information, specify <code class="docutils literal notranslate"><span class="pre">-s</span></code>, or <code class="docutils literal notranslate"><span class="pre">-S</span></code> to  <strong class="program">pjsub</strong> command, and submit a job.</div>
+<div class="line">Job statistics are useful for investigating when a job ends abnormally.</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option name</p></th>
+<th class="head"><p>Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-s</div>
+<div class="line">(Small letter)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Outputs the statistical information of the submitted job to a file.</div>
+<div class="line">Cannot use with <code class="docutils literal notranslate"><span class="pre">-S</span></code> option.</div>
+<div class="line">If you want to output to the specified file, specify <code class="docutils literal notranslate"><span class="pre">--spath</span></code> option.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-S</div>
+<div class="line">(Large letter)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">In addition to the information output by the <code class="docutils literal notranslate"><span class="pre">-s</span></code> option, the information for each submitted job node is output.</div>
+<div class="line">Cannot use with <code class="docutils literal notranslate"><span class="pre">-s</span></code> ption.</div>
+<div class="line">If you want to output to the specified file, specify <code class="docutils literal notranslate"><span class="pre">--spath</span></code> option.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>--spath pathname</p></td>
+<td><div class="line-block">
+<div class="line">Outputs job statistics to the file specified by <code class="docutils literal notranslate"><span class="pre">pathname</span></code>.</div>
+<div class="line">Need to specify <code class="docutils literal notranslate"><span class="pre">-s</span></code>or <code class="docutils literal notranslate"><span class="pre">-S</span></code>option at the same time.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="environment-variables-in-job-scripts">
+<h2><span class="section-number">5.9.5. </span>Environment variables in job scripts<a class="headerlink" href="#environment-variables-in-job-scripts" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">The following are typical environment variables that can be used in job scripts.</div>
+<div class="line">For details, please refer to “2.1.2 Environment variables in jobs” of “Job Operation Software End-user’s Guide”.</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Environment variables name</p></th>
+<th class="head"><p>contents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PJM_BULKNUM</p></td>
+<td><p>Buld number (set only bulk job)</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_COMMENT</p></td>
+<td><p>Specified comment in <code class="docutils literal notranslate"><span class="pre">--comment</span></code> of <strong class="program">pjsub</strong> option is entered.</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_ENVIRONMENT</p></td>
+<td><p>Contains the job type. BATCH or INTERACT.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_JOBDIR</p></td>
+<td><p>Current directory path when job script execution starts</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_JOBID</p></td>
+<td><p>Job ID is entered.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_JOBNAME</p></td>
+<td><p>Job name is entered.</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_LOCALTMP</p></td>
+<td><p>The path of the temporary area in the node on the first-layer storage is entered.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_SUBJOBID</p></td>
+<td><p>Sub job ID is entered.</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_STEPNUM</p></td>
+<td><p>Step job step number is entered.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_LLIO_SHAREDTMP_SIZE</p></td>
+<td><p>Contains the size (bytes) of the shared temporary area on the first-layer storage.</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_LLIO_LOCALTMP_SIZE</p></td>
+<td><p>Contains the size (bytes) of the temporary area in the node on the first-layer storage.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_LLIO_AUTO_READAHEAD</p></td>
+<td><p>Whether to automatically pre-read when a job tries to read a continuous area on the first-layer storage or second-layer storage multiple times in succession</p>
+<ul class="simple">
+<li><p>on: read in ahead</p></li>
+<li><p>off: doesnt read in ahead</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>PJM_LLIO_ASYNC_CLOSE</p></td>
+<td><p>Whether to close files on the first-layer storage and second-layer storage asynchronously</p>
+<ul class="simple">
+<li><p>on: Asynchronous close</p></li>
+<li><p>off: Synchronous close</p></li>
+</ul>
+<p>If on (asynchronous close) is set, writing completion is not guaranteed when the file is closed. When off (synchronous close) is set, writing is guaranteed when the file is closed.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>PJM_LLIO_CN_CACHE_SIZE</p></td>
+<td><p>Contains the size (bytes) of the cache in the compute node on the first-layer storage.</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_LLIO_CN_CACHED_WRITE_SIZE</p></td>
+<td><p>Contains the threshold (bytes) for whether to cache when writing to the first-layer storage.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_LLIO_CN_READ_CACHE</p></td>
+<td><p>Whether to cache the file read from the first-layer storage or the second-layer storage in the cache in the compute node.</p>
+<ul class="simple">
+<li><p>on: Proceed cash.</p></li>
+<li><p>off: Dont proceed cash.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>PJM_LLIO_SIO_READ_CACHE</p></td>
+<td><p>Whether to cache the file read from the second-layer storage to the compute node in the first-layer storage.</p>
+<ul class="simple">
+<li><p>on: Proceed cash.</p></li>
+<li><p>off: Dont proceed cash.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>PJM_LLIO_STRIPE_COUNT</p></td>
+<td><p>Contains the number of stripes per file when files are distributed to the first-layer storage.</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_LLIO_STRIPE_SIZE</p></td>
+<td><p>Contains the stripe size (bytes) for distributing files in the first-layer storage.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_LLIO_UNCOMPLETED_FILEINFO_PATH</p></td>
+<td><p>Contains the output path of unwritten file information.</p>
+<p>This is the path of the file that outputs a list of file names when a file that has not been written to the second-layer storage remains in the cache when the job ends.</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>PJM_O_HOME</p></td>
+<td><p>Contains the user environment variable <code class="docutils literal notranslate"><span class="pre">HOME</span></code>, issued <strong class="program">pjsub</strong> command.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_O_LANG</p></td>
+<td><p>Contains the user environment variable <code class="docutils literal notranslate"><span class="pre">LANG</span></code>, issued <strong class="program">pjsub</strong> command.</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_O_LOGNAME</p></td>
+<td><p>Contains the user environment variable <code class="docutils literal notranslate"><span class="pre">LOGNAME</span></code>, issued <strong class="program">pjsub</strong> command.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_O_PATH</p></td>
+<td><p>Contains the user environment variable <code class="docutils literal notranslate"><span class="pre">PATH</span></code>, issued <strong class="program">pjsub</strong> command.</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_O_SHELL</p></td>
+<td><p>Contains the user environment variable <code class="docutils literal notranslate"><span class="pre">SHELL</span></code>, issued <strong class="program">pjsub</strong> command.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PJM_O_HOST</p></td>
+<td><p>Contains the user environment variable <code class="docutils literal notranslate"><span class="pre">HOST</span></code>, issued <strong class="program">pjsub</strong> command.</p></td>
+</tr>
+<tr class="row-even"><td><p>PJM_O_WORKDIR</p></td>
+<td><p>Contains the user current directory, issued <strong class="program">pjsub</strong> command.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>Even if an environment variable with the same name as that shown in the table above is specified in the <code class="docutils literal notranslate"><span class="pre">-x</span></code> option of the  <strong class="program">pjsub</strong> command, the value is ignored and becomes the value shown in the table above.</p></li>
+<li><p>Environment variables set on the shell that executes the  <strong class="program">pjsub</strong> command are not inherited in the job unless otherwise specified. To take over the environment variables in job, specify <code class="docutils literal notranslate"><span class="pre">-X</span></code> option of  <strong class="program">pjsub</strong> command. However, the environment variable with the same name as the environment variable shown in the above table is ignored even if the <code class="docutils literal notranslate"><span class="pre">-X</span></code> option of the  <strong class="program">pjsub</strong> command is specified, and becomes the value shown in the table above.</p></li>
+</ul>
+</div>
+</section>
+<section id="environment-variables-in-mpi-processes">
+<h2><span class="section-number">5.9.6. </span>Environment variables in MPI processes<a class="headerlink" href="#environment-variables-in-mpi-processes" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">The Job Operation Software sets the following environment variable in MPI processes.</div>
+<div class="line">For details, please refer to “2.3.6.10 Environment variable in MPI processes” of “Job Operation Software End-user’s Guide”.</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Environment variables name</p></th>
+<th class="head"><p>contents</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PMIX_RANK</p></td>
+<td><p>The rank number of the MPI process is set in decimal.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PLE_RANK_ON_NODE</p></td>
+<td><div class="line-block">
+<div class="line">The identification number of the MPI process in the compute node is set in decimal.</div>
+<div class="line">An identification number is a unique number assigned within an MPI process belonging to the same MPI_COMM_WORLD on the same compute node, starting with 0.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="specifying-an-execution-start-time">
+<h2><span class="section-number">5.9.7. </span>Specifying an execution start time<a class="headerlink" href="#specifying-an-execution-start-time" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">Normally, the jobs submitted by users are executed as soon as possible, with the execution order determined according to resource availability and priority. However, users can specify execution start times.</div>
+<div class="line">To specify an execution start time, use the <code class="docutils literal notranslate"><span class="pre">--at</span></code> option of the <strong class="program">pjsub</strong> command in the following format.</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Format</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>--at YYYYMMDD[hhmm]</p></td>
+<td><div class="line-block">
+<div class="line">YYYY is the year, MM is the month, and DD is the day.</div>
+<div class="line">hh is the hour, and mm is the minute. If hhmm is omitted, 00:00 is assumed specified.</div>
+<div class="line">The specification in seconds is not available.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line">The following example shows the submission of a job with the execution start time specified.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>--at<span class="w"> </span><span class="m">202208011511</span><span class="w"> </span>job.sh<span class="w"> </span><span class="c1"># Execution of job.sh starts at 15:11 on August 1, 2022.</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>Specifying the execution start time (<code class="docutils literal notranslate"><span class="pre">--at</span></code> option) is available only for paid users.</p></li>
+<li><p>A job with the execution start time specified is never executed before the specified time even when there are free resources. Furthermore, it may be executed later than the specified time, depending on the availability of resources.</p></li>
+<li><p>An interactive job cannot have a specified execution start time. If one is specified, it is ignored.</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.9. Job execution command options</a><ul>
+<li><a class="reference internal" href="#basic-option">5.9.1. Basic option</a></li>
+<li><a class="reference internal" href="#resource-specification">5.9.2. Resource specification</a><ul>
+<li><a class="reference internal" href="#jobs-specifying-the-minimum-elapsed-time-limit-value">5.9.2.1. Jobs specifying the minimum elapsed time limit value</a></li>
+<li><a class="reference internal" href="#low-priority-jobs">5.9.2.2. Low priority jobs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mpi-option">5.9.3. MPI option</a></li>
+<li><a class="reference internal" href="#job-statistical-information">5.9.4. Job statistical information</a></li>
+<li><a class="reference internal" href="#environment-variables-in-job-scripts">5.9.5. Environment variables in job scripts</a></li>
+<li><a class="reference internal" href="#environment-variables-in-mpi-processes">5.9.6. Environment variables in MPI processes</a></li>
+<li><a class="reference internal" href="#specifying-an-execution-start-time">5.9.7. Specifying an execution start time</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="EnvironmentSettings.html"
+                          title="previous chapter"><span class="section-number">5.8. </span>Environment setting</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="AllocationOfLargePageArea.html"
+                          title="next chapter"><span class="section-number">5.10. </span>Large page space allocation</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="AllocationOfLargePageArea.html" title="5.10. Large page space allocation"
+             >next</a></li>
+        <li class="right" >
+          <a href="EnvironmentSettings.html" title="5.8. Environment setting"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.9. </span>Job execution command options</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

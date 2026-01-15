@@ -1,0 +1,1795 @@
+swagger: "2.0"
+info:
+  version: "1.0"
+  title: Fugaku WebAPI
+  description: |
+    #### Fugaku WebAPI
+    We describe the Web API of the supercomputer Fugaku.
+    Authentication by OpenID Connect is required to execute WebAPI.
+
+host: api.fugaku.r-ccs.riken.jp
+basePath: /
+
+consumes: [application/json]
+produces: [application/json]
+schemes: [https]
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+
+paths:
+  /command/{machine}:
+    post:
+      tags:
+        - command
+      summary: "execute specified command"
+      description: |
+        execute specified command  
+        example  
+        curl https://api.fugaku.r-ccs.riken.jp/command/computer/ -H "Authorization: Bearer $accessToken" -X POST -d '{"command": "mkdir -p ~/job-script; ls -ld ~/job-script"}'
+      security:
+        - Bearer: []
+      parameters:
+        - name: machine
+          description: |
+            machine name
+            One of the machine names obtained by getting the status of all machines (/ status /). Normally, specify "computer".
+          required: true
+          in: path
+          type: string
+        - in: body
+          name: command
+          description: |
+            command to execute
+          schema:
+            type: object
+            required:
+              - command
+            properties:
+              command:
+                type: string
+                example: mkdir -p ~/job-script; ls -ld ~/job-script
+      responses:
+        "200":
+          description: |
+            Command execution complete
+          schema:
+            $ref: "#/definitions/job_status"
+          examples:
+            application/json:
+              {
+                "status": "OK",
+                "output": "drwxr-xr-x 2 fj0036 fjuser 4096 Aug  7 11:11 /home/fjuser/fj0036/job-script\n\n",
+                "error": "",
+              }
+        "403":
+          description: authentication error
+        "422":
+          description: required parameter error
+          examples:
+            application/json:
+              {
+                "detail":
+                  [
+                    {
+                      "loc": ["body"],
+                      "msg": "field required",
+                      "type": "value_error.missing",
+                    },
+                  ],
+              }
+        "500":
+          description: |
+            internal server error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+
+  /status/:
+    get:
+      tags:
+        - status
+      operationId: api.status.status_api.machine_status_all
+      summary: "get all machine state"
+      description: |
+        get all machine state 
+        Outputs the status of all machines managed by the server.  
+        example  
+        curl https://api.fugaku.r-ccs.riken.jp/status -H "Authorization: Bearer $accessToken" -X GET
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: |
+            all machine status
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/machine_status"
+            example:
+              - { "status": "OK", "machine": "computer" }
+        "403":
+          description: authentication error
+
+        "500":
+          description: |
+            internal server error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+
+  /status/{machine}:
+    get:
+      tags:
+        - status
+      operationId: api.status.status_api.machine_status
+      summary: "get specified machine status"
+      security:
+        - Bearer: []
+      description: |
+        get specified machine status  
+        Output the status of the specified machine.  
+        example  
+        curl -ik https://api.fugaku.r-ccs.riken.jp/api/status/computer/ -H "Authorization: Bearer $accessToken" -X GET
+      parameters:
+        - name: machine
+          type: string
+          description: |
+            machine name
+            One of the machine names obtained by getting the status of all machines (/ status /). Normally, specify "computer".
+          in: path
+          required: true
+      responses:
+        "200":
+          description: |
+            specific machine status
+          examples:
+            application/json: { "status": "OK", "machine": "computer" }
+
+          schema:
+            $ref: "#/definitions/machine_status"
+        "403":
+          description: authentication error
+        "500":
+          description: |
+            internal server error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+
+  /file/{machine}/{file_path}:
+    post:
+      tags:
+        - file
+      operationId: api.file.file_api.upload
+      consumes: [application/x-www-form-urlencoded]
+      summary: "file upload"
+      description: |
+        new file upload  
+        Upload a file to the specified machine name and file path.  
+        example  
+        curl https://api.fugaku.r-ccs.riken.jp/file/computer/home/hpcadmin/xxxxfile -H "Authorization: Bearer $accessToken" -X POST -d @xxxxfile
+      security:
+        - Bearer: []
+      parameters:
+        - name: machine
+          description: |
+            machine name
+            One of the machine names obtained by getting the status of all machines (/ status /). Normally, specify "computer".
+          required: true
+          in: path
+          type: string
+        - name: file_path
+          description: |
+            upload file path   
+            Specify a file name.
+          required: true
+          in: path
+          type: string
+        - name: file
+          in: formData
+          type: file
+          description: |
+            upload target file  
+            (When you specify an existing file name, a 409 Error will occur.)
+          required: true
+      responses:
+        "200":
+          description: |
+            file upload complete
+          examples:
+            application/json: { "status": "OK", "output": "0", "error": "" }
+
+        "403":
+          description: authentication error
+        "409":
+          description: |
+            conflict error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+          examples:
+            application/json:
+              {
+                "err_msg": "Already file exists.",
+                "status": "NG",
+                "err_id": "E002011",
+                "error": "Conflict Error",
+              }
+        "422":
+          description: required parameter error
+          examples:
+            application/json:
+              {
+                "detail":
+                  [
+                    {
+                      "loc": ["body"],
+                      "msg": "field required",
+                      "type": "value_error.missing",
+                    },
+                  ],
+              }
+        "500":
+          description: |
+            internal server error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+
+    get:
+      tags:
+        - file
+      operationId: api.file.file_api.download
+      summary: "file download"
+      description: |
+        file download  
+        Download the file with the specified machine name and file path.  
+        example  
+        curl https://api.fugaku.r-ccs.riken.jp/file/computer/home/hpcadmin/xxxxfile -H "Authorization: Bearer $accessToken"
+      security:
+        - Bearer: []
+      parameters:
+        - name: machine
+          description: |
+            machine name
+            One of the machine names obtained by getting the status of all machines (/ status /). Normally, specify "computer".
+          required: true
+          in: path
+          type: string
+        - name: file_path
+          description: |
+            download file path
+            specify a file name or folder.
+          required: true
+          in: path
+          type: string
+        - name: view
+          description: |
+            File information acquisition availability   
+            When read is not specified in the parameter, download the file specified in file_path.   
+            When read is specified in the parameter, output the file list of the specified directory.
+          required: false
+          in: query
+          type: string
+      responses:
+        "200":
+          description: |
+            file download complete
+
+            | example |
+            | ------- |
+            | When read is not specified: File data (binary format) |
+            | When read is specified: {"status": "OK", "output":-rw-rw-r-- 1 f00156 f00156   119 2019-05-16 16:24 test.sh\n, "error":""}|
+          examples:
+            application/json:
+              {
+                "status": "OK",
+                "output": -rw-rw-r-- 1 f00156 f00156   119 2019-05-16 16:24 test.sh\n,
+                "error": "",
+              }
+        "400":
+          description: |
+            parameter error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+          examples:
+            application/json:
+              {
+                "err_msg": "File Download Error",
+                "status": "NG",
+                "err_id": "E002002",
+                "error": "IO Error",
+              }
+        "403":
+          description: authentication error
+
+        "500":
+          description: |
+            internal server error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+
+    put:
+      tags:
+        - file
+      operationId: api.file.file_api.modify
+      summary: "file create/change"
+      description: |
+        file create/change  
+        Upload (update) a file to the specified machine name and file path.  
+        example  
+        curl https://api.fugaku.r-ccs.riken.jp/file/computer/home/hpcadmin/xxxxfile -H "Authorization: Bearer $accessToken" -X PUT -d @xxxxfile
+      security:
+        - Bearer: []
+      parameters:
+        - name: machine
+          description: |
+            machine name
+            One of the machine names obtained by getting the status of all machines (/ status /). Normally, specify "computer".
+          required: true
+          in: path
+          type: string
+        - name: file_path
+          description: |
+            file path
+            Specify a file name or folder.
+          required: true
+          in: path
+          type: string
+        - name: file
+          in: formData
+          type: file
+          description: |
+            change target file 
+            (When an existing file name is specified, it will be overwritten and saved.)
+          required: true
+      responses:
+        "200":
+          description: |
+            file create/change
+          examples:
+            application/json: { "status": "OK", "output": "0", "error": "" }
+        "400":
+          description: |
+            parameter error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+          examples:
+            application/json:
+              {
+                "err_msg": "The file does not have permission.",
+                "status": "NG",
+                "err_id": "E002011",
+                "error": "IO Error",
+              }
+        "403":
+          description: authentication error
+        "422":
+          description: required parameter error
+          examples:
+            application/json:
+              {
+                "detail":
+                  [
+                    {
+                      "loc": ["body"],
+                      "msg": "field required",
+                      "type": "value_error.missing",
+                    },
+                  ],
+              }
+
+        "500":
+          description: |
+            internal server error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+
+  /queue/{machine}:
+    get:
+      tags:
+        - queue
+      operationId: api.queue.queue_api.job_list
+      summary: "get list of executing jobs"
+      description: |
+        get list of executing jobs API  
+        On the target machine, get the list of executing jobs from the job scheduler.  
+        When specify the job ID, get the list of sub job of job ID.  
+        example  
+        curl https://api.fugaku.r-ccs.riken.jp/queue/computer/ -H "Authorization: Bearer $accessToken" -X GET
+      security:
+        - Bearer: []
+      parameters:
+        - name: machine
+          description: |
+            machine name
+            One of the machine names obtained by getting the status of all machines (/ status /). Normally, specify "computer".
+          required: true
+          in: path
+          type: string
+        - name: index
+          description: |
+            index of first record
+            If paging is required, specify it with limit.
+          in: query
+          type: integer
+        - name: limit
+          description: |
+            Maximum number of records
+            If the number of cases that meet the conditions exceeds the limit, the oldest case sorted by job submission time is returned first.
+          in: query
+          type: integer
+        - name: status
+          description: |
+            Current processing status of the job.
+            nly the jobs in the specified processing status are returned.
+          in: query
+          type: string
+        - name: jobid
+          description: |
+            job ID 
+            specify the job ID, If you want to get a list of sub-jobs.
+          in: query
+          type: string
+      responses:
+        "200":
+          description: |
+            job list acquisition process result
+
+          schema:
+            type: object
+            required:
+              - status
+              - error
+              - output
+            properties:
+              status:
+                type: string
+                description: |
+                  status
+                example: "OK"
+              error:
+                type: string
+                description: |
+                  error description
+                example: ""
+              output:
+                type: array
+                items:
+                  $ref: "#/definitions/jobresult_response"
+                example:
+                  - {
+                      "jid": "1394270",
+                      "jobid": 1394270,
+                      "subjobid": "",
+                      "bulkno": None,
+                      "stepno": None,
+                      "name": "st-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "QUE",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": 0,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "0",
+                      "accept_time": "2020-09-14T06:46:29+09:00",
+                      "subjob_num": None,
+                      "exit_subjob_num": None,
+                      "subjob_depend": "",
+                    }
+
+        "403":
+          description: authentication error
+
+        "500":
+          description: |
+            internal server error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+
+    post:
+      tags:
+        - queue
+      operationId: api.queue.queue_api.sub_job
+      summary: "job submission"
+      description: |
+        job submission API  
+        Execute a job submission command to the job scheduler from the specified machine.  
+        For the parameter, specify either jobfile or jobscript.  
+        (If both are specified, the jobfile parameter has priority)  
+
+        | parameter  | operation examples                                               |
+        | ---------- | ---------------------------------------------------------------- |
+        | jobfile    | /home/user01/test.sh<br>(specify file script)                    |
+        | jobscript  | /home/user01/a.out < stdin.dat<br>(specify script command)       |
+
+        example  
+        curl https://api.fugaku.r-ccs.riken.jp/queue/computer/ -H "Authorization: Bearer $accessToken" -X POST -d '{"jobfile": "/home/hpcadmin/aaa.sh", "qopt": "jid=100"}'
+
+      security:
+        - Bearer: []
+      parameters:
+        - name: machine
+          description: |
+            machine name
+            One of the machine names obtained by getting the status of all machines (/ status /). Normally, specify "computer".
+          required: true
+          in: path
+          type: string
+        - name: jobfile
+          description: |
+            path of job script file
+            When the job name is not set, the name will be the job script file name.
+            The file name is an alphanumeric symbol up to 63 characters according to the job name limitation. And the beginning is English.
+            The symbols are the following four types (".", "-", "_", "@").
+          in: formData
+          type: string
+        - name: jobscript
+          description: |
+            job script
+            When job name is not specified, name will be "STDIN".
+          in: formData
+          type: string
+        - name: qopt
+          description: |
+            options passed to the job submission command
+            For the options that can be specified, refer to the job scheduler reference.
+          in: formData
+          type: string
+      responses:
+        "200":
+          description: |
+            job submission process completed
+            Job ID is output to output
+
+          schema:
+            $ref: "#/definitions/submit_response"
+          examples:
+            application/json:
+              {
+                "status": "OK",
+                "output": "[INFO] PJM 0000 pjsub Job 1394270 submitted.",
+                "error": "",
+              }
+        "400":
+          description: |
+            parameter error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+          examples:
+            application/json:
+              {
+                "err_msg": "There are not enough parameters.",
+                "status": "NG",
+                "err_id": "",
+                "error": "job_operation",
+              }
+        "403":
+          description: authentication error
+        "422":
+          description: required parameter error
+          examples:
+            application/json:
+              {
+                "detail":
+                  [
+                    {
+                      "loc": ["body"],
+                      "msg": "field required",
+                      "type": "value_error.missing",
+                    },
+                  ],
+              }
+
+        "500":
+          description: |
+            internal server error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+
+  /queue/{machine}/sacct:
+    get:
+      tags:
+        - queue
+      operationId: api.queue.queue_api.job_list_sacct
+      summary: "get completed job list"
+      description: |
+        On the target machine, get a list of jobs completed within 24 hours from the job scheduler.  
+        When the job ID is specified, the sub job list of the job ID is acquired.  
+
+        example  
+        curl https://api.fugaku.r-ccs.riken.jp/queue/computer/sacct -H "Authorization: Bearer $accessToken"
+      security:
+        - Bearer: []
+      parameters:
+        - name: machine
+          description: |
+            machine name
+            One of the machine names obtained by getting the status of all machines (/ status /). Normally, specify "computer".
+          required: true
+          in: path
+          type: string
+        - name: index
+          description: |
+            index of first record
+            When paging, specify it together with the limit.
+          in: query
+          type: integer
+        - name: limit
+          description: |
+            Maximum number of records
+            If the number of records that meets the condition exceeds the limit, return from the old one sorted by the accept time of the job.
+          in: query
+          type: integer
+        - name: status
+          description: |
+            job status
+            Filter to jobs with the specified status.
+          in: query
+          type: string
+        - name: jobid
+          description: |
+            job ID 
+            specify the job ID, If you want to get a list of sub-jobs.
+          in: query
+          type: string
+      responses:
+        "200":
+          description: |
+            complete of completed job list acquisition process
+
+          schema:
+            type: object
+            required:
+              - status
+              - error
+              - output
+            properties:
+              status:
+                type: string
+                description: |
+                  status
+                example: "OK"
+              error:
+                type: string
+                description: |
+                  error description
+                example: ""
+              output:
+                type: array
+                items:
+                  $ref: "#/definitions/jobresult_response"
+                example:
+                  - {
+                      "jid": "1394270",
+                      "jobid": 1394270,
+                      "subjobid": "",
+                      "bulkno": None,
+                      "stepno": None,
+                      "name": "st-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "CCL",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": None,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "1",
+                      "accept_time": "2020-09-14T06:46:29+09:00",
+                      "subjob_num": None,
+                      "exit_subjob_num": None,
+                      "subjob_depend": "",
+                    }
+                  - {
+                      "jid": "1394292",
+                      "jobid": 1394292,
+                      "subjobid": "",
+                      "bulkno": None,
+                      "stepno": None,
+                      "name": "st-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "CCL",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": None,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "1",
+                      "accept_time": "2020-09-14T07:00:04+09:00",
+                      "subjob_num": None,
+                      "exit_subjob_num": None,
+                      "subjob_depend": "",
+                    }
+                  - {
+                      "jid": "1394506",
+                      "jobid": 1394506,
+                      "subjobid": "",
+                      "bulkno": None,
+                      "stepno": None,
+                      "name": "st-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "CCL",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": None,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "1",
+                      "accept_time": "2020-09-14T09:09:05+09:00",
+                      "subjob_num": None,
+                      "exit_subjob_num": None,
+                      "subjob_depend": "",
+                    }
+        "403":
+          description: authentication error
+
+        "500":
+          description: |
+            internal server error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+
+  /queue/{machine}/{jobid}:
+    get:
+      tags:
+        - queue
+      operationId: api.queue.queue_api.job_detail
+      summary: "get detailed job information"
+      description: |
+        get detailed job information API   
+        Get detailed information of the job corresponding to the specified job ID or sub job ID.  
+
+        example  
+        curl https://api.fugaku.r-ccs.riken.jp/queue/computer/{jobid}  -H "Authorization: Bearer $accessToken" -X GET
+      security:
+        - Bearer: []
+      parameters:
+        - name: machine
+          description: |
+            machine name
+            One of the machine names obtained by getting the status of all machines (/ status /). Normally, specify "computer".
+          required: true
+          in: path
+          type: string
+        - name: jobid
+          description: |
+            job ID
+            Specify the job ID to get detailed information.
+          required: true
+          in: path
+          type: string
+      responses:
+        "200":
+          description: |
+            job information acquisition process completed
+
+          schema:
+            type: object
+            required:
+              - status
+              - error
+              - output
+            properties:
+              status:
+                type: string
+                description: |
+                  status
+                example: "OK"
+              error:
+                type: string
+                description: |
+                  error description
+              output:
+                type: array
+                items:
+                  $ref: "#/definitions/jobresult_response"
+                example:
+                  - {
+                      "jid": "1394531",
+                      "jobid": 1394531,
+                      "subjobid": "",
+                      "bulkno": None,
+                      "stepno": None,
+                      "name": "st122-b-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "QUE",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": None,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "",
+                      "accept_time": "2020-09-14T09:17:07+09:00",
+                      "subjob_num": 11,
+                      "exit_subjob_num": 0,
+                      "subjob_depend": "",
+                    }
+                  - {
+                      "jid": "1394531[0]",
+                      "jobid": 1394531,
+                      "subjobid": "1394531[0]",
+                      "bulkno": 0,
+                      "stepno": None,
+                      "name": "st122-b-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "QUE",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": 0,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "0",
+                      "accept_time": "2020-09-14T09:17:07+09:00",
+                      "subjob_num": None,
+                      "exit_subjob_num": None,
+                      "subjob_depend": "",
+                    }
+                  - {
+                      "jid": "1394531[1]",
+                      "jobid": 1394531,
+                      "subjobid": "1394531[1]",
+                      "bulkno": 1,
+                      "stepno": None,
+                      "name": "st122-b-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "QUE",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": 0,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "0",
+                      "accept_time": "2020-09-14T09:17:07+09:00",
+                      "subjob_num": None,
+                      "exit_subjob_num": None,
+                      "subjob_depend": "",
+                    }
+                  - {
+                      "jid": "1394531[2]",
+                      "jobid": 1394531,
+                      "subjobid": "1394531[2]",
+                      "bulkno": 2,
+                      "stepno": None,
+                      "name": "st122-b-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "QUE",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": 0,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "0",
+                      "accept_time": "2020-09-14T09:17:07+09:00",
+                      "subjob_num": None,
+                      "exit_subjob_num": None,
+                      "subjob_depend": "",
+                    }
+                  - {
+                      "jid": "1394531[3]",
+                      "jobid": 1394531,
+                      "subjobid": "1394531[3]",
+                      "bulkno": 3,
+                      "stepno": None,
+                      "name": "st122-b-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "QUE",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": 0,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "0",
+                      "accept_time": "2020-09-14T09:17:07+09:00",
+                      "subjob_num": None,
+                      "exit_subjob_num": None,
+                      "subjob_depend": "",
+                    }
+                  - {
+                      "jid": "1394531[4]",
+                      "jobid": 1394531,
+                      "subjobid": "1394531[4]",
+                      "bulkno": 4,
+                      "stepno": None,
+                      "name": "st122-b-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "QUE",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": 0,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "0",
+                      "accept_time": "2020-09-14T09:17:07+09:00",
+                      "subjob_num": None,
+                      "exit_subjob_num": None,
+                      "subjob_depend": "",
+                    }
+                  - {
+                      "jid": "1394531[5]",
+                      "jobid": 1394531,
+                      "subjobid": "1394531[5]",
+                      "bulkno": 5,
+                      "stepno": None,
+                      "name": "st122-b-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "QUE",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": 0,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "0",
+                      "accept_time": "2020-09-14T09:17:07+09:00",
+                      "subjob_num": None,
+                      "exit_subjob_num": None,
+                      "subjob_depend": "",
+                    }
+                  - {
+                      "jid": "1394531[6]",
+                      "jobid": 1394531,
+                      "subjobid": "1394531[6]",
+                      "bulkno": 6,
+                      "stepno": None,
+                      "name": "st122-b-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "QUE",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": 0,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "0",
+                      "accept_time": "2020-09-14T09:17:07+09:00",
+                      "subjob_num": None,
+                      "exit_subjob_num": None,
+                      "subjob_depend": "",
+                    }
+                  - {
+                      "jid": "1394531[7]",
+                      "jobid": 1394531,
+                      "subjobid": "1394531[7]",
+                      "bulkno": 7,
+                      "stepno": None,
+                      "name": "st122-b-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "QUE",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": 0,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "0",
+                      "accept_time": "2020-09-14T09:17:07+09:00",
+                      "subjob_num": None,
+                      "exit_subjob_num": None,
+                      "subjob_depend": "",
+                    }
+                  - {
+                      "jid": "1394531[8]",
+                      "jobid": 1394531,
+                      "subjobid": "1394531[8]",
+                      "bulkno": 8,
+                      "stepno": None,
+                      "name": "st122-b-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "QUE",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": 0,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "0",
+                      "accept_time": "2020-09-14T09:17:07+09:00",
+                      "subjob_num": None,
+                      "exit_subjob_num": None,
+                      "subjob_depend": "",
+                    }
+                  - {
+                      "jid": "1394531[9]",
+                      "jobid": 1394531,
+                      "subjobid": "1394531[9]",
+                      "bulkno": 9,
+                      "stepno": None,
+                      "name": "st122-b-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "QUE",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": 0,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "0",
+                      "accept_time": "2020-09-14T09:17:07+09:00",
+                      "subjob_num": None,
+                      "exit_subjob_num": None,
+                      "subjob_depend": "",
+                    }
+                  - {
+                      "jid": "1394531[10]",
+                      "jobid": 1394531,
+                      "subjobid": "1394531[10]",
+                      "bulkno": 10,
+                      "stepno": None,
+                      "name": "st122-b-job.sh",
+                      "user": "fj0036",
+                      "timeuse": None,
+                      "status": "QUE",
+                      "queue": "rscunit_ft01",
+                      "rsc_grp": "small",
+                      "group": "fjuser",
+                      "elapse": 0,
+                      "elapse_limit": 3600,
+                      "node_num": None,
+                      "cpu_num": None,
+                      "start_time": "",
+                      "end_time": "",
+                      "job_type": "BATCH",
+                      "end_code": "",
+                      "pjm_code": "0",
+                      "accept_time": "2020-09-14T09:17:07+09:00",
+                      "subjob_num": None,
+                      "exit_subjob_num": None,
+                      "subjob_depend": "",
+                    }
+        "403":
+          description: authentication error
+
+        "500":
+          description: |
+            internal server error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+
+    delete:
+      tags:
+        - queue
+      operationId: api.queue.queue_api.cancel_job
+      summary: "job cancel"
+      description: |
+        cancel the job corresponding to the specified job ID.  
+        By using "- (hyphen)", the range of job ID can be specified. You can specify the range of the sub job ID as well. 
+
+        Example: When specifying a range of job ID 1 to 100 
+
+        1-100 
+
+        Example: When specifying the range of step numbers 1 to 10 of the step job (job ID=100)
+
+        100_1-10  
+
+        Example: When specifying the range of bulk numbers 1 to 10 of the bulk job (job ID=101)
+
+        101[1-10] 
+
+        When range is specified, an error will not occur even if the following jobs are included in the range, the job will be ignored, and processing will continue.
+
+        Job that do not exist, job that the user does not have permission, job that cannot be specified
+
+        If successful, returns all specified job IDs with or without cancellation.
+
+        example  
+        curl https://api.fugaku.r-ccs.riken.jp/queue/computer/{jobid}  -H "Authorization: Bearer $accessToken"  -X delete
+      security:
+        - Bearer: []
+      parameters:
+        - name: machine
+          description: |
+            machine name
+            One of the machine names obtained by getting the status of all machines (/ status /). Normally, specify "computer".
+          required: true
+          in: path
+          type: string
+        - name: jobid
+          description: |
+            job ID
+            Specify the job ID to cancel.
+          required: true
+          in: path
+          type: string
+      responses:
+        "200":
+          description: |
+            job cancel process completed
+
+          schema:
+            $ref: "#/definitions/jobcancel_response"
+          examples:
+            application/json:
+              {
+                "status": "OK",
+                "output": "[INFO] PJM 0100 pjdel Accepted job 1394270.",
+                "error": "",
+              }
+        "500":
+          description: |
+            internal server error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+
+  /queue/{machine}/jobscript:
+    put:
+      tags:
+        - queue
+      operationId: api.queue.queue_api.create_job_script
+      summary: "job execution script generate/change"
+      description: |
+        job execution script generate/change API  
+        Create the job execution script on the target machine. If a file with the same name exists, it will be overwritten.
+        When creating the bulk job or step job, specify JTYPE of COMMON_DATA.
+
+        example  
+        curl https://api.fugaku.r-ccs.riken.jp/queue/computer/jobscript -H "Authorization: Bearer $accessToken" -X PUT -d '{"script":{"APP_DATA":{"ProgramGroupList":{"ProgramGroup":[{"ProgramList":{"Program":[{"Type":"mpi","FileName":"a.sh","ThreadMode":"parallel","Threads":"100"}]},"GroupType":"serialgroup"}]}},"COMMON_DATA":{}}}'
+      security:
+        - Bearer: []
+      parameters:
+        - name: machine
+          description: |
+            machine name
+            One of the machine names obtained by getting the status of all machines (/ status /). Normally, specify "computer".
+          required: true
+          in: path
+          type: string
+        - name: body
+          in: body
+          required: true
+          description: definition of the job execution script
+          schema:
+            type: object
+            properties:
+              filename:
+                type: string
+              script:
+                $ref: "#/definitions/script"
+      responses:
+        "200":
+          description: |
+            Job execution script generation complete
+
+          schema:
+            $ref: "#/definitions/jobscript_response"
+          examples:
+            application/json: { "status": "OK", "output": "0", "error": "" }
+        "400":
+          description: |
+            パラメータエラー
+          schema:
+            $ref: "#/definitions/ErrorObject"
+          examples:
+            {
+              "err_msg": "filename is not specified",
+              "status": "NG",
+              "err_id": "E003005",
+              "error": "Validation Error",
+            }
+        "403":
+          description: authentication error
+        "422":
+          description: required parameter error
+          examples:
+            application/json:
+              {
+                "detail":
+                  [
+                    {
+                      "loc": ["body"],
+                      "msg": "field required",
+                      "type": "value_error.missing",
+                    },
+                  ],
+              }
+
+        "500":
+          description: |
+            internal server error
+          schema:
+            $ref: "#/definitions/ErrorObject"
+
+definitions:
+  machine_status:
+    type: object
+    required:
+      - status
+      - machine
+    properties:
+      status:
+        type: string
+        enum: ["OK", "NG"]
+        description: |
+          status
+      machine:
+        type: string
+        description: |
+          machine name
+  job_status:
+    type: object
+    required:
+      - status
+      - error
+      - output
+    properties:
+      status:
+        type: string
+        description: |
+          status
+      error:
+        type: string
+        description: |
+          error ID
+      output:
+        type: string
+        description: |
+          command output result
+  jobresult_response:
+    type: object
+    required:
+      - jobid
+      - name
+      - user
+      - timeuse
+      - status
+      - queue
+      - rsc_grp
+    properties:
+      jid:
+        type: string
+        description: JID
+      jobid:
+        type: string
+        description: |
+          job ID
+      subjobid:
+        type: string
+        description: sub job ID
+      bulkno:
+        type: string
+        description: bulk number
+      stepno:
+        type: string
+        description: step number
+      name:
+        type: integer
+        format: string
+        description: |
+          name
+      user:
+        type: string
+        description: |
+          username
+      timeuse:
+        type: string
+        description: |
+          Utilization time
+      status:
+        type: string
+        description: |
+          job status
+          ACC　:　Checking whether the job satisfies the acceptance conditions (items restricted with the job ACL function)
+          RJT　:　Job acceptance rejected
+          QUE　:　Waiting for a turn to execute the job, which has been accepted
+          RNA　:　Reserving the resources required for job execution
+          RNP　:　Executing the prologue process
+          RUN　:　Executing the job
+          RNE　:　Executing the epilogue process
+          RNO　:　Job end processing is in progress
+          EXT　:　Job end
+          CCL　:　Job stopped by an instruction from the job submitter or the administrator
+          HLD　:　Keeping the state of the submitted job from changing, when job execution has stopped
+          ERR　:　Job stopped because of an error detected by the job operation management function
+      queue:
+        type: string
+        description: |
+          queue
+      rsc_grp:
+        type: string
+        description: |
+          resource group name
+      group:
+        type: string
+        description: |
+          user group name
+      elapse:
+        type: string
+        description: |
+          elapsed time
+      elapse_limit:
+        type: string
+        description: |
+          elapsed time limitation
+      node_num:
+        type: integer
+        format: int32
+        description: |
+          node shape/node number
+      cpu_num:
+        type: integer
+        format: int32
+        description: |
+          used CPU number
+      start_time:
+        type: string
+        description: |
+          start time（yyyy-MM-ddTHH:mm:ss+09:00）
+      end_time:
+        type: string
+        description: |
+          end time（yyyy-MM-ddTHH:mm:ss+09:00）
+      job_type:
+        type: string
+        description: |
+          job type
+      end_code:
+        type: string
+        description: |
+          end code
+      pjm_code:
+        type: string
+        description: |
+          PJM code
+      accept_time:
+        type: string
+        description: |
+          accept time（yyyy-MM-ddTHH:mm:ss+09:00）
+      subjob_num:
+        type: string
+        description: |
+          sub job number
+      exit_subjob_num:
+        type: string
+        description: completed sub job number
+      subjob_depend:
+        type: string
+        description: |
+          sub job dependency judgment expression
+
+  submit_response:
+    type: object
+    required:
+      - status
+      - error
+      - output
+    properties:
+      status:
+        type: string
+        description: |
+          status
+      error:
+        type: string
+        description: |
+          error description
+      output:
+        type: string
+        description: |
+          job ID
+
+  jobcancel_response:
+    type: object
+    required:
+      - status
+      - error
+      - output
+    properties:
+      status:
+        type: string
+        description: |
+          status
+      error:
+        type: string
+        description: |
+          error description
+      output:
+        type: string
+        description: |
+          job cancellation output result (jobid)
+
+  jobscript_response:
+    type: object
+    required:
+      - status
+      - error
+      - output
+    properties:
+      status:
+        type: string
+        description: |
+          status
+      error:
+        type: string
+        description: |
+          error description
+      output:
+        type: string
+        description: |
+          job execution script generation result
+
+  script:
+    type: object
+    properties:
+      APP_DATA:
+        $ref: "#/definitions/APP_DATA"
+      COMMON_DATA:
+        $ref: "#/definitions/COMMON_DATA"
+
+  APP_DATA:
+    type: object
+    properties:
+      ProgramGroupList:
+        $ref: "#/definitions/ProgramGroupList"
+
+  ProgramGroupList:
+    type: object
+    properties:
+      ProgramGroup:
+        $ref: "#/definitions/ProgramGroup"
+
+  ProgramGroup:
+    type: object
+    properties:
+      GroupType:
+        type: string
+        example: "parallelgroup"
+      ProgramList:
+        $ref: "#/definitions/ProgramList"
+
+  ProgramList:
+    type: object
+    properties:
+      Program:
+        $ref: "#/definitions/Program"
+
+  Program:
+    type: object
+    required:
+      - FileName
+    properties:
+      Threads:
+        type: integer
+        example: 2
+        description: |
+          program execution thread number
+      FileInfoList:
+        $ref: "#/definitions/FileInfoList"
+        description: |
+          file information list object
+      StdInRank:
+        type: string
+        description: |
+          rank number of the file staging node for the standard input file. 
+      StdOutRank:
+        type: string
+        description: |
+          rank number of the file staging node for the standard output file.
+      Type:
+        type: string
+        example: "mpi"
+        description: |
+          When executing as a standalone program: "serial"
+          When executing as a MPI parallel program: "mpi"
+      ThreadMode:
+        type: string
+        example: "parallel"
+        description: |
+          For automatic parallel: "parallel"  
+          For OpenMP: "omp"  
+          For 1 thread process: not specified
+      StdInFileName:
+        type: string
+        description: |
+          standard input file name
+      StdOutFileName:
+        type: string
+        description: |
+          standard output file name
+      FileName:
+        type: string
+        description: |
+          execution program name
+      Argument:
+        type: string
+        description: |
+          Execution program arguments
+      Procs:
+        type: string
+        description: thread number per process.  
+          Enabled only when the execution program is thread parallel.
+      StdOutCollect:
+        type: integer
+        description: |
+          When not distinguishing files staged out from each rank: 1  
+          When not specified, the rank number is added to the end of the staged out file name.
+
+  FileInfoList:
+    type: array
+    items:
+      $ref: "#/definitions/FileInfo"
+
+  FileInfo:
+    type: object
+    properties:
+      UnitNo:
+        type: string
+        example: "01"
+        description: |
+          Specify the device number corresponding to the file input/output by the executing program.  
+         Enabled only when the execution program is Fortran.
+      FileName:
+        type: string
+        example: "file01.dat"
+        description: |
+          File input/output by the execution program.
+      Collect:
+        type: integer
+        description: |
+          When not distinguishing files staged out from each rank: 1  
+          When not specified, the rank number is added to the end of the staged out file name.
+      Rank:
+        type: string
+        description: |
+          Specify the rank number for staging.
+      StageIn:
+        type: integer
+        example: 1
+        description: |
+          When staging in the file: 1
+      StageOut:
+        type: integer
+        example: 1
+        description: |
+          When staging out the file: 1
+      IsDirectory:
+        type: integer
+        description: |
+          When file staging the directory: 1
+
+  COMMON_DATA:
+    type: object
+    properties:
+      JNAME:
+        type: string
+        example: "JOBNAME"
+        description: |
+          name 
+          Up to 63 single-byte alphanumeric characters can be specified.
+          The first character is only half-width alphabetic characters.
+          There are four types of symbols, "-_@.".
+      JTYPE:
+        type: string
+        example: "B"
+        description: |
+          job type identifier  
+          For normal job: not specified  
+          For bulk job: "B"  
+          For step job: "S"
+      NODES:
+        type: integer
+        example: 10
+        description: |
+          The number of MPI processes to start statically, when the executing program is an MPI parallel program.
+      USE_RANL_DIR:
+        type: boolean
+        description: |
+          When using the rank number directory: true
+      QUEUE:
+        type: string
+        example: "small"
+        description: |
+          Specify the group name of the resource that submits the job.
+      SYSTEM:
+        type: string
+        example: "share"
+        description: Specify the unit name of the resource that submits the job.
+      NODE:
+        type: string
+        example: "5x2x2"
+        description: |
+          Specify the node shape assigned to the job.  
+          Specify in one of X, XxY, XxYxZ format.
+      SUBJOB_START:
+        type: string
+        example: "0"
+        description: |
+          Bulk job start number. 
+          Enabled only when "B" is specified for the job type identifier.
+      SUBJOB_END:
+        type: string
+        example: "10"
+        description: |
+          Bulk job end number.
+          Enabled only when "B" is specified for the job type identifier.
+      SUBJOBS_NODE:
+        type: integer
+        example: 1
+        description: |
+          Bulk job node number
+          Enabled only when "B" is specified for the job type identifier.
+      DEPEND_JID:
+        type: string
+        example: "400"
+        description: |
+          Dependent job ID specification.  
+          Enabled only when "S" is specified for the job type identifier.
+      SNUM:
+        type: string
+        example: "401"
+        description: |
+          Own sub job number
+          Enabled only when "S" is specified for the job type identifier.
+      STEP_CONDITION:
+        type: string
+        example: "0"
+        description: |
+          Dependency equation
+          Enabled only when "S" is specified for the job type identifier.
+      STEP_CODE:
+        type: string
+        example: "0"
+        description: |
+          Dependent sub job ID
+          Enabled only when "S" is specified for the job type identifier.
+      JGRP:
+        type: string
+        example: "accounting"
+        description: |
+          Job accounting group specification.
+      ELAPSE:
+        type: string
+        example: "0001:00:00"
+        description: |
+          Maximum job execution time setting.  
+          The following 3 patterns can be specified. 
+          ①"HHHH:MM:SS"  
+          ②"HHHH:MM"  
+          ③"HHHH"
+      QUOTA_TYPE:
+        type: string
+        example: "job"
+        description: |
+          Quota type specification.
+      QUOTA:
+        type: string
+        example: "10"
+        description: |
+          Maximum value (in GB) of disk usage used by the job.
+      USE_RANK_DIR:
+        type: string
+        example: "true"
+        description: |
+          Specification existence flag of user rank directory.
+      QOPT:
+        type: string
+        example: "--interact"
+        description: |
+          Queue option specification.
+
+  ErrorObject:
+    type: object
+    required:
+      - err_msg
+      - status
+      - err_id
+      - error
+    properties:
+      err_msg:
+        type: string
+        description: |
+          error details
+      status:
+        type: string
+        description: |
+          status(NG)
+      err_id:
+        type: string
+        description: |
+          error ID
+      error:
+        type: string
+        description: |
+          error types
+tags:
+  - name: queue
+    description: |
+      For the job scheduler and job related commands, please refer to the next-generation ultra-high speed computer system function specifications (job management software version reference).

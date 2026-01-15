@@ -1,0 +1,235 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>1. はじめに &#8212; プログラミングガイド IO編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="2. ストレージの概要" href="../StorageOverview/index.html" />
+    <link rel="prev" title="プログラミングガイド －IO編－ 1.02版" href="../index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../StorageOverview/index.html" title="2. ストレージの概要"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="../index.html" title="プログラミングガイド －IO編－ 1.02版"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">プログラミングガイド IO編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>はじめに</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">1. </span>はじめに<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
+<section id="id2">
+<h2><span class="section-number">1.1. </span>本資料の目的<a class="headerlink" href="#id2" title="この見出しへのパーマリンク">¶</a></h2>
+<p>本書は、スーパーコンピュータ「富岳」を使用するにあたりIOの使用方法について記載します。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">1.2. </span>本書で使用する表記<a class="headerlink" href="#id3" title="この見出しへのパーマリンク">¶</a></h2>
+<ul class="simple">
+<li><p>コマンド実行において、操作対象の利用者端末、ログインノードを、プロンプトで表現しています。</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>プロンプト</p></th>
+<th class="head"><p>操作対象</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[terminal]</p></td>
+<td><p>利用者の端末でコマンドを実行することを意味します</p></td>
+</tr>
+<tr class="row-odd"><td><p>[_LNlogin]</p></td>
+<td><p>ログインノード（共通）でコマンドを実行することを意味します</p></td>
+</tr>
+<tr class="row-even"><td><p>[_LNIlogin]</p></td>
+<td><p>ログインノード（Intel）でコマンドを実行することを意味します</p></td>
+</tr>
+<tr class="row-odd"><td><p>[_LNAlogin]</p></td>
+<td><p>ログインノード（Arm）でコマンドを実行することを意味します</p></td>
+</tr>
+<tr class="row-even"><td><p>[_CNlogin]</p></td>
+<td><p>計算ノードでコマンドを実行することを意味します</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li><p>ホームディレクトリは ~（チルダ）で表現しています。</p></li>
+<li><p>言語環境について、特にことわりがない限り最新版の機能を基に記載しています。</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2><span class="section-number">1.3. </span>略称、別名について<a class="headerlink" href="#id4" title="この見出しへのパーマリンク">¶</a></h2>
+<p>本書で使用する略称は以下のとおりです。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>名称</p></th>
+<th class="head"><p>略称、別名</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>次世代超高速電子計算機システム</p></td>
+<td><p>スーパーコンピュータ「富岳」</p></td>
+</tr>
+<tr class="row-odd"><td><p>計算ノード</p></td>
+<td><p>CN</p></td>
+</tr>
+<tr class="row-even"><td><p>BIO 兼計算ノード</p></td>
+<td><p>CN/BIO</p></td>
+</tr>
+<tr class="row-odd"><td><p>SIO 兼計算ノード</p></td>
+<td><p>CN/SIO</p></td>
+</tr>
+<tr class="row-even"><td><p>GIO 兼計算ノード</p></td>
+<td><p>CN/GIO</p></td>
+</tr>
+<tr class="row-odd"><td><p>ログインノード兼ファイル転送ノード</p></td>
+<td><p>ログインノード、または、LN</p></td>
+</tr>
+<tr class="row-even"><td><p>BIO 兼計算ノードに接続されたストレージ</p></td>
+<td><p>システムディスク</p></td>
+</tr>
+<tr class="row-odd"><td><p>SIO 兼計算ノードに接続されたストレージ</p></td>
+<td><p>第１階層ストレージ</p>
+<p>第1階層SSD、または、SSD</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="id5">
+<h2><span class="section-number">1.4. </span>商標について<a class="headerlink" href="#id5" title="この見出しへのパーマリンク">¶</a></h2>
+<p>文中の社名、商品名等は各社の商標または登録商標である場合があります。その他の記載されている商標および登録商標については、一般に各社の商標または登録商標です。本資料に掲載されているシステム名、製品名などには、必ずしも商標表示（TM、（R））を付記しておりませんので、ご注意ください。</p>
+</section>
+<section id="id6">
+<h2><span class="section-number">1.5. </span>更新履歴<a class="headerlink" href="#id6" title="この見出しへのパーマリンク">¶</a></h2>
+<p>本書の更新箇所を示します。</p>
+<p><strong>1.02版 2024年12月26日</strong></p>
+<ul class="simple">
+<li><p>「2.3.1. ノード内テンポラリ領域とは」内のサンプルコードを修正</p></li>
+<li><p>「2.3.2. 共有テンポラリ領域とは」内のサンプルコードを修正</p></li>
+<li><p>「2.3.3. 第2階層ストレージキャッシュ領域とは」内のサンプルコードを修正</p></li>
+</ul>
+<p><strong>1.01版 2024年11月29日</strong></p>
+<ul class="simple">
+<li><p>記載フォーマットを変更しました。</p></li>
+</ul>
+<p><strong>1.00版 2024年7月12日</strong></p>
+<ul class="simple">
+<li><p>新規作成</p></li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+<div class="line">©2024 理化学研究所計算科学研究センター</div>
+<div class="line">本マニュアルに記載されている内容の無断転載・複製を禁じます。</div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1. はじめに</a><ul>
+<li><a class="reference internal" href="#id2">1.1. 本資料の目的</a></li>
+<li><a class="reference internal" href="#id3">1.2. 本書で使用する表記</a></li>
+<li><a class="reference internal" href="#id4">1.3. 略称、別名について</a></li>
+<li><a class="reference internal" href="#id5">1.4. 商標について</a></li>
+<li><a class="reference internal" href="#id6">1.5. 更新履歴</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../index.html"
+                          title="前の章へ">プログラミングガイド －IO編－ 1.02版</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../StorageOverview/index.html"
+                          title="次の章へ"><span class="section-number">2. </span>ストレージの概要</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../StorageOverview/index.html" title="2. ストレージの概要"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="../index.html" title="プログラミングガイド －IO編－ 1.02版"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">プログラミングガイド IO編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>はじめに</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

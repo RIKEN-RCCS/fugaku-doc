@@ -1,0 +1,146 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.11.1. Overview &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f85107c5" />
+    
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="3.1.11.2. Advanced Performance Profiler" href="AdvancedProfiler.html" />
+    <link rel="prev" title="3.1.11. Profiler" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="AdvancedProfiler.html" title="3.1.11.2. Advanced Performance Profiler"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="index.html" title="3.1.11. Profiler"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><span class="section-number">3.1.11. </span>Profiler</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.11.1. </span>Overview</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="overview">
+<h1><span class="section-number">3.1.11.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h1>
+<p>The profiler is a tool that measures performance useful for tuning to improve program execution performance, and outputs that information.
+On  Supercomputer Fugaku,  it is composed of 3 functions: “Instant Performance Profiler”, “Advanced Performance Profiler”, “CPU Performance Analysis Report”.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 16.7%" />
+<col style="width: 33.3%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function category</p></th>
+<th class="head"><p>Measurement command</p></th>
+<th class="head"><p>Interval specification function</p></th>
+<th class="head"><p>Post-processing command</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Instant Performance Profiler</p></td>
+<td><p>fipp -C</p></td>
+<td><p>fipp_start/fipp_stop</p></td>
+<td><p>fipppx -A</p></td>
+</tr>
+<tr class="row-odd"><td><p>Advanced Performance Profiler</p></td>
+<td><p>fapp -C</p></td>
+<td><p>fapp_start/fapp_stop</p></td>
+<td><p>fapppx -A</p></td>
+</tr>
+<tr class="row-even"><td><p>CPU Performance Analysis Report</p></td>
+<td><p>fapp -C</p></td>
+<td><p>fapp_start/fapp_stop</p></td>
+<td><p>fapppx -A -tcsv</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The measurement command is executed on the compute node.</p>
+<p>Post-processing commands are executed on the login node.</p>
+</div>
+</div></blockquote>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter"><span class="section-number">3.1.11. </span>Profiler</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="AdvancedProfiler.html"
+                          title="next chapter"><span class="section-number">3.1.11.2. </span>Advanced Performance Profiler</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="AdvancedProfiler.html" title="3.1.11.2. Advanced Performance Profiler"
+             >next</a></li>
+        <li class="right" >
+          <a href="index.html" title="3.1.11. Profiler"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><span class="section-number">3.1.11. </span>Profiler</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.11.1. </span>Overview</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,379 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+    <title>1. 概要 &#8212; VeloC利用ガイド  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="prev" title="VeloC 利用ガイド" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="VeloC 利用ガイド"
+             accesskey="P">前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">VeloC利用ガイド  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>概要</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">1. </span>概要<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>VeloC (Very Low Overhead Checkpointing System) は、大型計算向けマルチレベルチェックポイント/リスタートツールです <a class="footnote-reference brackets" href="#veloc" id="id2">1</a>。
+プログラム内に VeloC API を適切に実装することにより、高速なチェックポイント・リスタートを行うことが可能になります。
+ここではスーパーコンピュータ「富岳」で、VeloCを利用したC/C++およびFortranプログラムのコンパイル・リンク方法を示します。</p>
+<p>VeloCに関する詳細な情報は、<a class="reference external" href="https://veloc.readthedocs.io/">https://veloc.readthedocs.io/</a> 等を参考にしてください。</p>
+</section>
+<section id="id3">
+<h1><span class="section-number">2. </span>実装例<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<section id="c-c">
+<h2><span class="section-number">2.1. </span>C/C++での実装<a class="headerlink" href="#c-c" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>VeloCのテストプログラムを参考にVeloCの導入で重要な部分について解説します。
+VeloCのテストプログラムはGitHub上に公開されています（ <a class="reference external" href="https://github.com/ECP-VeloC/VELOC/tree/main/test">https://github.com/ECP-VeloC/VELOC/tree/main/test</a> ）。
+ここでは、&quot;heatdis_mem.c&quot; を参考にVeloCの実装方法を説明します。
+まず、VeloC APIをプログラムから呼び足すため、VeloCのヘッダーファイルをインクルードします。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">6</span> <span class="c1">#include &quot;include/veloc.h&quot;</span>
+</pre></div>
+</div>
+<p>次に、VeloCの初期化として &quot;VELOC_Init&quot; を導入します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">91</span>     <span class="k">if</span> <span class="o">(</span>VELOC_Init<span class="o">(</span>MPI_COMM_WORLD, argv<span class="o">[</span><span class="m">2</span><span class="o">])</span> !<span class="o">=</span> VELOC_SUCCESS<span class="o">)</span> <span class="o">{</span>
+<span class="m">92</span>       printf<span class="o">(</span><span class="s2">&quot;Error initializing VELOC! Aborting...\n&quot;</span><span class="o">)</span><span class="p">;</span>
+<span class="m">93</span>       exit<span class="o">(</span><span class="m">2</span><span class="o">)</span><span class="p">;</span>
+<span class="m">94</span>     <span class="o">}</span>
+</pre></div>
+</div>
+<p>ここで、&quot;VELOC_Init&quot; の &quot;MPI_COMM_WORLD&quot; はMPIコミュニケータ、argv[2]はVeloCの設定ファイル名で、&quot;heatdis_mem.c&quot;では標準入力より与えています。
+この設定ファイルについての詳細は、後述の &quot;VeloCの設定&quot; を参照してください。</p>
+<p>VeloCでチェックする変数や配列の登録は、&quot;VELOC_Mem_protect&quot; より次の様に行います。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">110</span>     VELOC_Mem_protect<span class="o">(</span><span class="m">0</span>, <span class="p">&amp;</span>i, <span class="m">1</span>, sizeof<span class="o">(</span>int<span class="o">))</span><span class="p">;</span>
+<span class="m">111</span>     VELOC_Mem_protect<span class="o">(</span><span class="m">1</span>, h, M * nbLines, sizeof<span class="o">(</span>double<span class="o">))</span><span class="p">;</span>
+<span class="m">112</span>     VELOC_Mem_protect<span class="o">(</span><span class="m">2</span>, g, M * nbLines, sizeof<span class="o">(</span>double<span class="o">))</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>VELOC_Mem_protectの第1引数はメモリ領域を識別するためのID、第2引数は変数や配列のポインタ、第3引数は要素数、第4引数は要素のサイズです。</p>
+<p>VeloCにおけるリスタートは次の様に実装されます。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">115</span>     int <span class="nv">v</span> <span class="o">=</span> VELOC_Restart_test<span class="o">(</span><span class="s2">&quot;heatdis&quot;</span>, <span class="m">0</span><span class="o">)</span><span class="p">;</span>
+<span class="m">116</span>     <span class="k">if</span> <span class="o">(</span>v &gt; <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+<span class="m">117</span>       printf<span class="o">(</span><span class="s2">&quot;Previous checkpoint found at iteration %d, initiating restart...\n&quot;</span>, v<span class="o">)</span><span class="p">;</span>
+<span class="m">118</span>       // v can be any version, independent of what VELOC_Restart_test is returning
+<span class="m">119</span>       assert<span class="o">(</span>VELOC_Restart<span class="o">(</span><span class="s2">&quot;heatdis&quot;</span>, v<span class="o">)</span> <span class="o">==</span> VELOC_SUCCESS<span class="o">)</span><span class="p">;</span>
+<span class="m">120</span>     <span class="o">}</span> <span class="k">else</span>
+</pre></div>
+</div>
+<p>まず、&quot;VELOC_Restart_test&quot; よりリスタートの可否を判定しています。
+ここで第1引数の &quot;heatdis&quot; はチェックポイントのラベルです。第2引数はリスタートに用いるチェックポイントのバージョンを指定します。
+0は最新バージョンの指定に対応しています。この関数の戻り値はチェックポイントのバージョンです。
+次に、登録していた変数や配列を元に戻すために &quot;VELOC_Restart&quot; を呼び出しています。
+ここで、&quot;heatdis&quot; はチェックポイントのラベル、&quot;v&quot; はチェックポイントのバージョンです。</p>
+<p>チェックポイントを生成するために、適当なタイミングで &quot;VELOC_Checkpoint&quot; を呼び出しています。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">122</span>     <span class="k">while</span><span class="o">(</span>i &lt; ITER_TIMES<span class="o">)</span> <span class="o">{</span>
+<span class="m">123</span>         <span class="nv">localerror</span> <span class="o">=</span> doWork<span class="o">(</span>nbProcs, rank, M, nbLines, g, h<span class="o">)</span><span class="p">;</span>
+<span class="m">124</span>         <span class="k">if</span> <span class="o">(((</span>i % ITER_OUT<span class="o">)</span> <span class="o">==</span> <span class="m">0</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nv">rank</span> <span class="o">==</span> <span class="m">0</span><span class="o">))</span>
+<span class="m">125</span>           printf<span class="o">(</span><span class="s2">&quot;Step : %d, error = %f\n&quot;</span>, i, globalerror<span class="o">)</span><span class="p">;</span>
+<span class="m">126</span>         <span class="k">if</span> <span class="o">((</span>i % REDUCE<span class="o">)</span> <span class="o">==</span> <span class="m">0</span><span class="o">)</span>
+<span class="m">127</span>           MPI_Allreduce<span class="o">(</span><span class="p">&amp;</span>localerror, <span class="p">&amp;</span>globalerror, <span class="m">1</span>, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD<span class="o">)</span><span class="p">;</span>
+<span class="m">128</span>         <span class="k">if</span> <span class="o">(</span>globalerror &lt; PRECISION<span class="o">)</span>
+<span class="m">129</span>           break<span class="p">;</span>
+<span class="m">130</span>         i++<span class="p">;</span>
+<span class="m">131</span>         <span class="k">if</span> <span class="o">(</span>i % <span class="nv">CKPT_FREQ</span> <span class="o">==</span> <span class="m">0</span><span class="o">)</span>
+<span class="m">132</span>           assert<span class="o">(</span>VELOC_Checkpoint<span class="o">(</span><span class="s2">&quot;heatdis&quot;</span>, i<span class="o">)</span> <span class="o">==</span> VELOC_SUCCESS<span class="o">)</span><span class="p">;</span>
+<span class="m">133</span>     <span class="o">}</span>
+</pre></div>
+</div>
+<p>ここで、&quot;VELOC_Checkpoint&quot; の &quot;heatdis&quot; はチェックポイントのラベル、iはチェックポイントのバージョンです。</p>
+<p>最後に、&quot;VELOC_Finalize&quot; を呼び出してVeloCの終了処理を行なっています。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">139</span>     VELOC_Finalize<span class="o">(</span><span class="m">1</span><span class="o">)</span><span class="p">;</span> // <span class="nb">wait</span> <span class="k">for</span> checkpoints to finish
+</pre></div>
+</div>
+</section>
+<section id="fortran">
+<h2><span class="section-number">2.2. </span>Fortranでの実装<a class="headerlink" href="#fortran" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>サンプルソースコードが、<a class="reference external" href="https://github.com/ECP-VeloC/VELOC/blob/fortran/test/fheatdis.f90">https://github.com/ECP-VeloC/VELOC/blob/fortran/test/fheatdis.f90</a> で公開されています。
+このサンプルソースコードに基づいて、VeloCの実装の重要な点について示します。</p>
+<p>VeloCに関する変数・関数を利用するため、VeloCモジュールをロードします。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">5</span>   use VELOC
+</pre></div>
+</div>
+<p>VeloCの初期化関数を呼びます。comm はMPIコミュニケータ、fheatdis.cfg は設定ファイル名です。
+設定ファイルの内容については、実行方法で説明します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">29</span>   call VELOC_Init<span class="o">(</span>comm, <span class="s1">&#39;fheatdis.cfg&#39;</span>, err<span class="o">)</span> !see with argc argv
+</pre></div>
+</div>
+<p>VELOC_Mem_protect関数を用いて、チェックする変数・配列を登録します。
+配列はそのまま登録できますが、変数はポインタにしておく必要があります。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">46</span>   <span class="nv">ptriter</span> <span class="o">=</span>&gt; i
+<span class="m">47</span>   call VELOC_Mem_protect<span class="o">(</span><span class="m">0</span>, ptriter, err<span class="o">)</span>
+<span class="m">48</span>   call VELOC_Mem_protect<span class="o">(</span><span class="m">1</span>, h, err<span class="o">)</span>
+<span class="m">49</span>   call VELOC_Mem_protect<span class="o">(</span><span class="m">2</span>, g, err<span class="o">)</span>
+</pre></div>
+</div>
+<p>VELOC_Restart_test関数を用いて、restartか否かを判定します。
+restartの場合、VELOC_Recover_mem関数を用いて登録しておいた変数・配列を元の状態に復帰させます。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">56</span>   call VELOC_Restart_test<span class="o">(</span><span class="s2">&quot;fheatdis&quot;</span>, <span class="m">0</span>, restart_iter<span class="o">)</span>
+<span class="m">57</span>   print <span class="s1">&#39;(&quot;test restart&quot;, I5)&#39;</span>, restart_iter
+<span class="m">58</span>   <span class="k">if</span> <span class="o">(</span>restart_iter &gt; <span class="m">0</span><span class="o">)</span> <span class="k">then</span>
+<span class="m">59</span>       print <span class="s1">&#39;(&quot;Previous checkpoint found at iteration &quot;,I5,&quot; initiating restart...&quot;)&#39;</span>, restart_iter
+<span class="m">60</span>       call VELOC_Restart_begin<span class="o">(</span><span class="s2">&quot;fheatdis&quot;</span>, restart_iter, err<span class="o">)</span>
+<span class="m">61</span>       call VELOC_Recover_mem<span class="o">(</span>err<span class="o">)</span>
+<span class="m">62</span>       call VELOC_Restart_end<span class="o">(</span>restart_success, err<span class="o">)</span>
+<span class="m">63</span>   <span class="k">else</span>
+<span class="m">64</span>       <span class="nv">i</span> <span class="o">=</span> <span class="m">1</span>
+<span class="m">65</span>   endif
+</pre></div>
+</div>
+<p>メインループの中で、適当なタイミングでVELOC_Checkpoint関数を呼び、チェックポイントを生成します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">80</span>     <span class="k">if</span> <span class="o">(</span>mod<span class="o">(</span>i, CKPT_FREQ<span class="o">)</span> <span class="o">==</span> <span class="m">0</span><span class="o">)</span> <span class="k">then</span>
+<span class="m">81</span>         call VELOC_Checkpoint_wait<span class="o">(</span>err<span class="o">)</span>
+<span class="m">82</span>         call VELOC_Checkpoint_begin<span class="o">(</span><span class="s2">&quot;fheatdis&quot;</span>, i, err<span class="o">)</span>
+<span class="m">83</span>         call VELOC_Checkpoint_mem<span class="o">(</span>err<span class="o">)</span>
+<span class="m">84</span>
+<span class="m">85</span>         call VELOC_Checkpoint_end<span class="o">(</span>ckpt_success, err<span class="o">)</span>
+<span class="m">86</span>
+<span class="m">87</span>         <span class="k">if</span> <span class="o">(</span>err /<span class="o">=</span> VELOC_SCES <span class="o">)</span> <span class="k">then</span>
+<span class="m">88</span>           print <span class="s1">&#39;(&quot;Error during checkpoint: &quot;, I5)&#39;</span>, err
+<span class="m">89</span>           <span class="nb">exit</span>
+<span class="m">90</span>         endif
+<span class="m">91</span>     endif
+</pre></div>
+</div>
+<p>VELOC_Finalize関数を用いて、終了処理を行います。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="m">102</span>   call VELOC_Finalize<span class="o">(</span><span class="m">0</span>, err<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id4">
+<h1><span class="section-number">3. </span>コンパイル・リンク<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>コンパイル・リンク時に指定が必要なオプションを示します。</p>
+<ol class="arabic simple">
+<li><p>コンパイル時に必要となるオプション</p></li>
+</ol>
+<blockquote>
+<div><table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 78%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>言語</p></th>
+<th class="head"><p>オプション</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>C/C++</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-I/vol0004/apps/oss/veloc</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Fortran</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-I/vol0004/apps/oss/veloc/include</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>リンク時に必要となるオプション</p></li>
+</ol>
+<blockquote>
+<div><table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 78%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>言語</p></th>
+<th class="head"><p>オプション</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>C/C++</p></td>
+<td><p>-L/vol0004/apps/oss/veloc/lib64 -lveloc-client -lveloc-modules -ler -laxl -lkvtree -lshuffile -lredset -lrankstr</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fortran</p></td>
+<td><p>-L/vol0004/apps/oss/veloc/lib64 -lveloc-client -lveloc-modules -ler -laxl -lkvtree -lshuffile -lredset -lrankstr -lvelocf</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>コンパイル例を次に示します。</p>
+<ol class="arabic simple">
+<li><p>C/C++コンパイル例</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx -o heatdis_mem -Kfast,parallel,optmsg<span class="o">=</span><span class="m">2</span> heatdis_mem.c -I/vol0004/apps/oss/veloc -L/vol0004/apps/oss/veloc/lib64 -lveloc-client -lveloc-modules -ler -laxl -lkvtree -lshuffile -lredset -lrankstr
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Fortranコンパイル例</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifrtpx -o fheatdis -Kfast,parallel,optmsg<span class="o">=</span><span class="m">2</span> fheatdis.f90 -I/vol0004/apps/oss/veloc/include -L/vol0004/apps/oss/veloc/lib64 -lveloc-client -lveloc-modules -ler -laxl -lkvtree -lshuffile -lredset -lrankstr -lvelocf
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="id5">
+<h1><span class="section-number">4. </span>実行方法<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>ここではVeloCを利用したテストプログラムによる富岳での実行方法を示します。</p>
+<p>[前準備 (C/C++, Fortran共通)]</p>
+<p>VeloC用の設定ファイルを記述します。C/C++ではheatdis.cfgを、Fortranでは fheatdis.cfg を指定していますが、内容は同じです。
+また、ファイル名は自由に設定可能です。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">scratch</span> <span class="o">=</span> tmp/scratch
+<span class="nv">persistent</span> <span class="o">=</span> tmp/persistent
+<span class="nv">meta</span> <span class="o">=</span> tmp/meta
+<span class="nv">max_versions</span> <span class="o">=</span> <span class="m">2</span>
+<span class="nv">scratch_versions</span> <span class="o">=</span> <span class="m">1</span>
+<span class="nv">mode</span> <span class="o">=</span> async
+<span class="nv">chksum</span> <span class="o">=</span> <span class="nb">true</span>
+</pre></div>
+</div>
+<p>これらの設定は次の通りです：</p>
+<ul class="simple">
+<li><p>scratch = &lt;path&gt; (一時的なチェックポイントデータのパス)</p></li>
+<li><p>persistent = &lt;path&gt; (永続的なチェックポイントデータのパス)</p></li>
+<li><p>meta = &lt;path&gt; (チェックポイントデータのチェックサム情報を保存するパス)</p></li>
+<li><p>max_versions = &lt;int&gt; (persistentに残す過去のチェックポイントの数, default: 0 – 全て保存)</p></li>
+<li><p>scratch_versions = &lt;int&gt; (scratchに残す過去のチェックポイントの数, default: 0 – 全て保存)</p></li>
+<li><p>mode = async (VeloCの動作モード)</p></li>
+<li><p>chksum = &lt;boolean&gt; (チェックポイントデータの確認の可否, default: false)</p></li>
+</ul>
+<p>設定ファイルに設定の無いものについてはデフォルトの値が採用されます。この他の設定については、公式HPのUser Guideを参照してください。</p>
+<p>ジョブを実行する前に、データを書き込むディレクトリを生成しておきます。</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>rm -rf tmp/scratch tmp/persistent tmp/meta
+<span class="gp">[_LNlogin]$ </span>mkdir -p tmp/scratch tmp/persistent tmp/meta
+</pre></div>
+</div>
+</div></blockquote>
+<p>ジョブは以下のような形で記述します。</p>
+<p>[C/C++実行例]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#! /bin/bash -x</span>
+<span class="c1">#PJM -L node=1</span>
+<span class="c1">#PJM -L elapse=00:10:00</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+<span class="nb">export</span> <span class="nv">PARALLEL</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
+
+<span class="nv">BINDIR</span><span class="o">=</span>/vol0004/apps/oss/veloc/bin
+<span class="nv">LIBDIR</span><span class="o">=</span>/vol0004/apps/oss/veloc/lib64
+<span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LIBDIR</span>:<span class="nv">$LD_LIBRARY_PATH</span>
+<span class="nb">export</span> <span class="nv">VELOC_BIN</span><span class="o">=</span><span class="nv">$BINDIR</span>
+
+mpiexec ./heatdis_mem <span class="m">1</span> heatdis.cfg
+</pre></div>
+</div>
+<p>[Fortran実行例]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#! /bin/bash -x</span>
+<span class="c1">#PJM -L node=4</span>
+<span class="c1">#PJM -L elapse=00:10:00</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol0004</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+<span class="nb">export</span> <span class="nv">PARALLEL</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
+
+<span class="nv">BINDIR</span><span class="o">=</span>/vol0004/apps/oss/veloc/bin
+<span class="nv">LIBDIR</span><span class="o">=</span>/vol0004/apps/oss/veloc/lib64
+<span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LIBDIR</span>:<span class="nv">$LD_LIBRARY_PATH</span>
+<span class="nb">export</span> <span class="nv">VELOC_BIN</span><span class="o">=</span><span class="nv">$BINDIR</span>
+
+mpiexec ./fheatdis
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>Checkpoint/restart用のデータを書き込むディレクトリが生成されていないと、正常にデータが書き出されないことがあります。</p></li>
+</ul>
+</div>
+<p class="rubric">Footnote</p>
+<dl class="footnote brackets">
+<dt class="label" id="veloc"><span class="brackets"><a class="fn-backref" href="#id2">1</a></span></dt>
+<dd><p>Nicolae, B., Moody, A., Gonsiorowski, E., Mohror, K. and Cappello, F. 2019. VeloC: Towards High Performance Adaptive Asynchronous Checkpointing at Large Scale. IPDPS 19: The 2019 IEEE International Parallel and Distributed Processing Symposium, pp. 911-920, Rio de Janeiro, Brazil, (2019).</p>
+</dd>
+</dl>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1. 概要</a></li>
+<li><a class="reference internal" href="#id3">2. 実装例</a><ul>
+<li><a class="reference internal" href="#c-c">2.1. C/C++での実装</a></li>
+<li><a class="reference internal" href="#fortran">2.2. Fortranでの実装</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">3. コンパイル・リンク</a></li>
+<li><a class="reference internal" href="#id5">4. 実行方法</a></li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="index.html"
+                          title="前の章へ">VeloC 利用ガイド</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="VeloC 利用ガイド"
+             >前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">VeloC利用ガイド  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>概要</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Potal Top</a>
+    </div>
+  </body>
+</html>

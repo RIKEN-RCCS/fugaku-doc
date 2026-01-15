@@ -1,0 +1,310 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.17. Sample Scripts &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.18. Obtaining TofuD TNR statistics" href="TofuStatistics.html" />
+    <link rel="prev" title="5.16. Checking when a job ends abnormally" href="CheckingAbnormalEndOfJob.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="TofuStatistics.html" title="5.18. Obtaining TofuD TNR statistics"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="CheckingAbnormalEndOfJob.html" title="5.16. Checking when a job ends abnormally"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.17. </span>Sample Scripts</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="sample-scripts">
+<h1><span class="section-number">5.17. </span>Sample Scripts<a class="headerlink" href="#sample-scripts" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">Here is a sample job script.</div>
+<div class="line">Specify job options in <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">PJM</span></code> at the beginning of the line.</div>
+</div>
+<p>The Fugaku also needs information about the <a class="reference internal" href="../UsageRules/index.html#group"><span class="std std-ref">group</span></a> and the <a class="reference internal" href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html#selectavailablevolumes"><span class="std std-ref">volume names</span></a> that job uses.</p>
+<section id="normal-job-sequential-program">
+<h2><span class="section-number">5.17.1. </span>Normal job (sequential program)<a class="headerlink" href="#normal-job-sequential-program" title="Link to this heading">¶</a></h2>
+<p>The following is an example of a job script that executes a sequential program.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=1&quot;                          # Assign node 1 node</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;                    # Specify resource group</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;                 # Elapsed time limit 1 hour</span>
+<span class="c1">#PJM -g groupname                          # group name</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N         # volume names that job uses</span>
+<span class="c1">#PJM -s                                    # Statistical information output</span>
+<span class="c1">#</span>
+./a.out<span class="w">                                    </span><span class="c1"># Execute a.out</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>The sequential program ( <code class="file docutils literal notranslate"><span class="pre">a.out</span></code>)  specifies 1 node  ( <code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">&quot;node=1&quot;</span></code>) as an assign node.</p></li>
+<li><p>Execute  <code class="file docutils literal notranslate"><span class="pre">./a.out</span></code>.</p></li>
+</ol>
+</section>
+<section id="normal-job-mpi-1d-shape">
+<h2><span class="section-number">5.17.2. </span>Normal job (MPI / 1D shape)<a class="headerlink" href="#normal-job-mpi-1d-shape" title="Link to this heading">¶</a></h2>
+<p>Here is an example of a job script that inputs an MPI program in a one-dimensional shape.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=8&quot;                          # Number of assign node 8 (1 dimention format)</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;                    # Specify resource group</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;                 # Elapsed time limit 1 hour</span>
+<span class="c1">#PJM --mpi &quot;shape=8&quot;</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;           # Maximum number of MPI processes created per node</span>
+<span class="c1">#PJM -g groupname                          # group name</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N         # volume names that job uses</span>
+<span class="c1">#PJM -s                                    # Statistical information output</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out<span class="w">                            </span><span class="c1"># Execute a.out</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Specify the number of nodes to request with  <code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code>.</p></li>
+<li><p>Specifies the shape of the process to be started statically with  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>.</p></li>
+<li><p>With  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">max-proc-per-node</span></code>, specify the upper limit of the number of MPI process created at 1 node.</p></li>
+<li><p>Execute MPI program with  <strong class="program">mpiexec</strong></p></li>
+</ol>
+</section>
+<section id="normal-job-mpi-2d-shape">
+<h2><span class="section-number">5.17.3. </span>Normal job (MPI / 2D shape)<a class="headerlink" href="#normal-job-mpi-2d-shape" title="Link to this heading">¶</a></h2>
+<p>Here is an example of a job script that submits an MPI program in a 2D shape.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=2x2&quot;                        # Assign node format 2x2node (2 dimention format)</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;                    # Specify resource group</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;                 # Elapsed time limit 1 hour</span>
+<span class="c1">#PJM --mpi &quot;shape=2x2&quot;                     # Process format 2x2</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;           # Maximum number of MPI processes created per node</span>
+<span class="c1">#PJM -g groupname                          # group name</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N         # volume names that job uses</span>
+<span class="c1">#PJM -s                                    # Statistical information output</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out<span class="w">                            </span><span class="c1"># Execute a.out</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Specifies the requested node shape with  <code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code>.</p></li>
+<li><p>Specifies the shape of the process to be started statically with  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>.</p></li>
+<li><p>With  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">max-proc-per-node</span></code>, specify the upper limit of the number of MPI process created at 1 node.</p></li>
+<li><p>Execute MPI program with  <strong class="program">mpiexec</strong>.</p></li>
+</ol>
+</section>
+<section id="normal-job-mpi-3d-shape">
+<h2><span class="section-number">5.17.4. </span>Normal job (MPI / 3D shape)<a class="headerlink" href="#normal-job-mpi-3d-shape" title="Link to this heading">¶</a></h2>
+<p>Here is an example of a job script that submits an MPI program in a 3D shape.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=2x2x2&quot;                      # Assign node format 2x2x2 node (3 dimention format)</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;                    # Specify resource group</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;                 # Elapsed time limit 1 hour</span>
+<span class="c1">#PJM --mpi &quot;shape=2x2x2&quot;                   # Process format 2x2x2</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;           # Maximum number of MPI processes created per node</span>
+<span class="c1">#PJM -g groupname                          # group name</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N         # volume names that job uses</span>
+<span class="c1">#PJM -s                                    # Statistical information output</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out<span class="w">                            </span><span class="c1"># Execute a.out</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Specifies the requested node shape with  <code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code></p></li>
+<li><p>Specifies the shape of the process to be started statically with  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>.</p></li>
+<li><p>With  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">max-proc-per-node</span></code>, specify the upper limit of the number of MPI process created at 1 node.</p></li>
+<li><p>Execute MPI program with  <strong class="program">mpiexec</strong>.</p></li>
+</ol>
+</section>
+<section id="normal-job-thread-parallel-automatic-parallel">
+<h2><span class="section-number">5.17.5. </span>Normal job (thread parallel (automatic parallel))<a class="headerlink" href="#normal-job-thread-parallel-automatic-parallel" title="Link to this heading">¶</a></h2>
+<p>The following is an example of a job script that executes a thread parallel (automatic parallel) program.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=1&quot;                          # Assign node 1 node</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;                    # Specify resource group</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;                 # Elapsed time limit 1 hour</span>
+<span class="c1">#PJM -g groupname                          # group name</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N         # volume names that job uses</span>
+<span class="c1">#PJM -s                                    # Statistical information output</span>
+<span class="c1">#</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">PARALLEL</span><span class="o">=</span><span class="m">8</span><span class="w">                          </span><span class="c1"># Specify the number of thread</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="si">${</span><span class="nv">PARALLEL</span><span class="si">}</span><span class="w">         </span><span class="c1"># Specify the number of thread</span>
+
+./a.out<span class="w">                                    </span><span class="c1"># Execute a program a.out</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Specify the number of nodes to request with  <code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code>.</p></li>
+<li><p>Specify the number of threads in the environment variable PARALLEL and OMP_NUM_THREADS. If omitted, it runs with 48 threads.</p></li>
+<li><p>Execute  <code class="file docutils literal notranslate"><span class="pre">./a.out</span></code>.</p></li>
+</ol>
+</section>
+<section id="normal-job-thread-parallel-openmp">
+<h2><span class="section-number">5.17.6. </span>Normal job (thread parallel (OpenMP))<a class="headerlink" href="#normal-job-thread-parallel-openmp" title="Link to this heading">¶</a></h2>
+<p>The following is an example of a job script that executes a thread parallel (OpenMP) program.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=1&quot;                          # Assign node 1 node</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;                    # Specify resource group</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;                 # Elapsed time limit 1 hour</span>
+<span class="c1">#PJM -g groupname                          # group name</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N         # volume names that job uses</span>
+<span class="c1">#PJM -s                                    # Statistical information output</span>
+<span class="c1">#</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">PARALLEL</span><span class="o">=</span><span class="m">8</span><span class="w">                          </span><span class="c1"># Specify the number of thread</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="si">${</span><span class="nv">PARALLEL</span><span class="si">}</span><span class="w">         </span><span class="c1"># Specify the number of thread</span>
+
+./a.out<span class="w">                                    </span><span class="c1"># Execute a program a.out</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Specify the required number of nodes / node shape with  <code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code>.</p></li>
+<li><p>Specify the number of threads in the environment variable PARALLEL and OMP_NUM_THREADS. If omitted, it will run with 48 threads.</p></li>
+<li><p>Execute  <code class="file docutils literal notranslate"><span class="pre">a.out</span></code>.</p></li>
+</ol>
+</section>
+<section id="normal-job-flat-mpi-1d-shape">
+<h2><span class="section-number">5.17.7. </span>Normal job (Flat MPI / 1D shape)<a class="headerlink" href="#normal-job-flat-mpi-1d-shape" title="Link to this heading">¶</a></h2>
+<p>Here is an example of a job script that inputs an MPI program in a one-dimensional shape by Flat MPI.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=8&quot;                          # Number of assign node 8 (1 dimention format)</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;                    # Specify resource group</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;                 # Elapsed time limit 1 hour</span>
+<span class="c1">#PJM --mpi &quot;shape=8&quot;</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=48&quot;          # Maximum number of MPI processes created per node</span>
+<span class="c1">#PJM -g groupname                          # group name</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N         # volume names that job uses</span>
+<span class="c1">#PJM -s                                    # Statistical information output</span>
+<span class="c1">#</span>
+
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">384</span><span class="w"> </span>./a.out<span class="w">                            </span><span class="c1"># Execute a.out</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Specify the number of nodes to request with  <code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code>.</p></li>
+<li><p>Specifies the shape of the process to be started statically with  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>.</p></li>
+<li><p>With  <code class="docutils literal notranslate"><span class="pre">max-proc-per-node=48</span></code>, specify the upper limit of the number of MPI process created at 1 node.</p></li>
+<li><p>Execute MPI program with  <strong class="program">mpiexec</strong>.</p></li>
+</ol>
+</section>
+<section id="normal-job-hybrid-parallel">
+<h2><span class="section-number">5.17.8. </span>Normal job (hybrid parallel)<a class="headerlink" href="#normal-job-hybrid-parallel" title="Link to this heading">¶</a></h2>
+<p>Using both thread parallel and process parallel is called hybrid parallel.</p>
+<p>The following is an example of a job script using MPI parallel and thread parallel together.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=2x3x2&quot;                      # Assign node 12 node (3 dimention format)</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;                    # Specify resource group</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;                 # Elapsed time limit 1 hour</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot;           # Maximum number of MPI processes created per node</span>
+<span class="c1">#PJM -g groupname                          # group name</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N         # volume names that job uses</span>
+<span class="c1">#PJM -s                                    # Statistical information output</span>
+<span class="c1">#</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">PARALLEL</span><span class="o">=</span><span class="m">12</span><span class="w">                         </span><span class="c1"># Specify the number of thread</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="si">${</span><span class="nv">PARALLEL</span><span class="si">}</span><span class="w">         </span><span class="c1"># Specify the number of thread</span>
+
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">48</span><span class="w"> </span>./a.out<span class="w">                      </span><span class="c1"># Execute a program a.out</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Specify the requested number of nodes with <code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code>.</p></li>
+<li><p>Specify the maximum number of MPI processes created per node with <code class="docutils literal notranslate"><span class="pre">max-proc-per-node=4</span></code>.</p></li>
+<li><p>Specify the number of threads in the environment variable <code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code>.</p></li>
+<li><p>Execute MPI program with <strong class="program">mpiexec</strong>.</p></li>
+</ol>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.17. Sample Scripts</a><ul>
+<li><a class="reference internal" href="#normal-job-sequential-program">5.17.1. Normal job (sequential program)</a></li>
+<li><a class="reference internal" href="#normal-job-mpi-1d-shape">5.17.2. Normal job (MPI / 1D shape)</a></li>
+<li><a class="reference internal" href="#normal-job-mpi-2d-shape">5.17.3. Normal job (MPI / 2D shape)</a></li>
+<li><a class="reference internal" href="#normal-job-mpi-3d-shape">5.17.4. Normal job (MPI / 3D shape)</a></li>
+<li><a class="reference internal" href="#normal-job-thread-parallel-automatic-parallel">5.17.5. Normal job (thread parallel (automatic parallel))</a></li>
+<li><a class="reference internal" href="#normal-job-thread-parallel-openmp">5.17.6. Normal job (thread parallel (OpenMP))</a></li>
+<li><a class="reference internal" href="#normal-job-flat-mpi-1d-shape">5.17.7. Normal job (Flat MPI / 1D shape)</a></li>
+<li><a class="reference internal" href="#normal-job-hybrid-parallel">5.17.8. Normal job (hybrid parallel)</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CheckingAbnormalEndOfJob.html"
+                          title="previous chapter"><span class="section-number">5.16. </span>Checking when a job ends abnormally</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="TofuStatistics.html"
+                          title="next chapter"><span class="section-number">5.18. </span>Obtaining TofuD TNR statistics</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="TofuStatistics.html" title="5.18. Obtaining TofuD TNR statistics"
+             >next</a></li>
+        <li class="right" >
+          <a href="CheckingAbnormalEndOfJob.html" title="5.16. Checking when a job ends abnormally"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.17. </span>Sample Scripts</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

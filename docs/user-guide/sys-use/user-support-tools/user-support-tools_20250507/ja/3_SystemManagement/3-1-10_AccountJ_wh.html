@@ -1,0 +1,264 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>ユーザ課金情報表示（2022年度下期の電力課金） &#8212; 利用者支援ツール 使用手引書 (利用者編)  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ユーザ課金情報表示（2022年度下期の電力課金）</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1>ユーザ課金情報表示（2022年度下期の電力課金）<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[名前]</strong></div>
+<div class="line">　accountj_wh - 利用者のジョブに関する電力課金情報を表示する</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[書式]</strong></div>
+<div class="line">　accountj_wh  [-s]  [-g グループ名]</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[説明]</strong></div>
+<div class="line">　accountj_wh コマンドは、利用したジョブに関する電力課金情報を表示する。電力課金情報は所属するグループ毎に表示する。</div>
+<div class="line">　課題に割り当てられたリソースは参考値であり、消費可能な電力上限ではないため、ジョブの投入可否の判断を目的にしてはいない。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[オプション]</strong></div>
+<div class="line">　-g  グループ名</div>
+<div class="line">　グループ名を指定する。スペースに続けての複数指定、アスタリスクを使用した前方／中間／後方一致指定はできない。単一、完全一致指定のみ可能である。</div>
+<div class="line">　未指定時は所属する全グループのジョブ課金情報を表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　-s</div>
+<div class="line">　消費電力の表示単位がデフォルトのメガワットアワー[MWh]からワットアワー[Wh]になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　--help</div>
+<div class="line">　コマンドのヘルプ内容を表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[復帰値]</strong></div>
+<div class="line">　正常時: 0</div>
+<div class="line">　異常時: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[備考]</strong></div>
+<div class="line">　なし。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[表示内容]</strong></div>
+<div class="line">　課金情報はサブテーマ、グループ等の管理単位ごとに表示する。</div>
+<div class="line">　表示の区切りでは、その下に表示する管理単位が何であるかを示す。</div>
+<div class="line">　管理単位毎の項目については以下の通り。</div>
+<div class="line">　SUBTHEME：サブテーマ単位での割当資源量や資源消費を表示</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 28.6%" />
+<col style="width: 71.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目名</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SUBTHEME</p></td>
+<td><p>サブテーマ名</p></td>
+</tr>
+<tr class="row-odd"><td><p>PARENT</p></td>
+<td><p>親階層名</p></td>
+</tr>
+<tr class="row-even"><td><p>LIMIT</p></td>
+<td><p>割当資源量</p></td>
+</tr>
+<tr class="row-odd"><td><p>USAGE</p></td>
+<td><p>使用済資源量</p></td>
+</tr>
+<tr class="row-even"><td><p>RUNNING</p></td>
+<td><p>投入中・実行中資源量</p></td>
+</tr>
+<tr class="row-odd"><td><p>AVAILABLE</p></td>
+<td><p>使用可能資源量</p></td>
+</tr>
+<tr class="row-even"><td><p>USAGE_RATE</p></td>
+<td><p>使用済資源量の割合（USAGE / LIMIT）</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">　GROUP：グループ単位での割当資源量や資源消費を表示</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 28.6%" />
+<col style="width: 71.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目名</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GROUP</p></td>
+<td><p>グループ名</p></td>
+</tr>
+<tr class="row-odd"><td><p>PARENT</p></td>
+<td><p>親階層名</p></td>
+</tr>
+<tr class="row-even"><td><p>LIMIT</p></td>
+<td><p>割当資源量</p></td>
+</tr>
+<tr class="row-odd"><td><p>USAGE</p></td>
+<td><p>使用済資源量</p></td>
+</tr>
+<tr class="row-even"><td><p>RUNNING</p></td>
+<td><p>投入中・実行中資源量</p></td>
+</tr>
+<tr class="row-odd"><td><p>AVAILABLE</p></td>
+<td><p>使用可能資源量</p></td>
+</tr>
+<tr class="row-even"><td><p>USAGE_RATE</p></td>
+<td><p>使用済資源量の割合（USAGE / LIMIT）</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">　<strong>[使用例]</strong></div>
+<div class="line">　【例1】自分自身が所属するグループの電力課金情報を表示する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountj_wh
+<span class="go">COLLECTDATE : 2021-03-09 10:30:00   unit[MWh]</span>
+<span class="go">*-----[ SUBTHEME ]--------------------------------------------------------------------------------------------------*</span>
+<span class="go">SUBTHEME              PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE</span>
+<span class="go">group001             Y20HP00              100                10                 0                90           10.000%</span>
+<span class="go">*-----[ GROUP ]-----------------------------------------------------------------------------------------------------*</span>
+<span class="go">GROUP                 PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE</span>
+<span class="go">group001            group001        unlimited                10                 0               ---               ---</span>
+
+<span class="go">*-----[ SUBTHEME ]--------------------------------------------------------------------------------------------------*</span>
+<span class="go">SUBTHEME              PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE</span>
+<span class="go">group002             Y20HP01               50                 0                 0                50            0.000%</span>
+<span class="go">*-----[ GROUP ]-----------------------------------------------------------------------------------------------------*</span>
+<span class="go">GROUP                 PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE</span>
+<span class="go">group002            group002        unlimited                 0                 0               ---               ---</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　実行したユーザが所属するすべてのグループとその上位のサブテーマ層の資源割当情報が表示される。</div>
+<div class="line">　課題で使用可能な資源の上限値はサブテーマ層に設定されるため、[SUBTHEME]に資源の上限値と消費状況が表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">【例2】自分自身が所属する任意のグループの電力課金情報を表示する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountj_wh -g group001
+<span class="go">COLLECTDATE : 2021-03-09 10:30:00   unit[MWh]</span>
+<span class="go">*-----[ SUBTHEME ]--------------------------------------------------------------------------------------------------*</span>
+<span class="go">SUBTHEME              PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE</span>
+<span class="go">group001             Y20HP00              100                10                 0                90           10.000%</span>
+<span class="go">*-----[ GROUP ]-----------------------------------------------------------------------------------------------------*</span>
+<span class="go">GROUP                 PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE</span>
+<span class="go">group001            group001        unlimited                10                 0               ---               ---</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　指定したグループの電力課金情報が表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　【例3】表示単位をメガワットアワー[MWh]からワットアワー[Wh]に変更して表示する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>accountj_wh -s
+<span class="go">COLLECTDATE : 2021-03-09 10:30:00   unit[Wh]</span>
+<span class="go">*-----[ SUBTHEME ]--------------------------------------------------------------------------------------------------*</span>
+<span class="go">SUBTHEME              PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE</span>
+<span class="go">group001             Y20HP00      100,000,000        10,000,000                 0        90,000,000           10.000%</span>
+<span class="go">*-----[ GROUP ]-----------------------------------------------------------------------------------------------------*</span>
+<span class="go">GROUP                 PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE</span>
+<span class="go">group001            group001        unlimited        10,000,000                 0               ---               ---</span>
+
+<span class="go">*-----[ SUBTHEME ]--------------------------------------------------------------------------------------------------*</span>
+<span class="go">SUBTHEME              PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE</span>
+<span class="go">group002             Y20HP01       50,000,000                 0                 0        50,000,000            0.000%</span>
+<span class="go">*-----[ GROUP ]-----------------------------------------------------------------------------------------------------*</span>
+<span class="go">GROUP                 PARENT            LIMIT             USAGE           RUNNING         AVAILABLE        USAGE_RATE</span>
+<span class="go">group002            group002        unlimited                 0                 0               ---               ---</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　-sオプションを使用することで、表示単位をワットアワー[Wh]に変更することができる。なお、単位の切り替えは1K (1,000)で計算される。単位切り替えによる端数は制限値(LIMIT)が小数点以下切り捨て、使用量(USAGE)が小数点以下切り上げて表示される。使用可能残量(AVAILABLE)は、制限値(LIMIT)から使用量(USAGE)と投入中ジョブ使用予定量（RUNNING）を差し引いた値としている。</div>
+<div class="line">　投入中ジョブ使用予定量（RUNNING）は実行中ジョブのほか、実行待ちジョブの資源量も含む。</div>
+<div class="line">　使用率(USAGE_RATE)は小数点以下第2位で四捨五入としている。</div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ユーザ課金情報表示（2022年度下期の電力課金）</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

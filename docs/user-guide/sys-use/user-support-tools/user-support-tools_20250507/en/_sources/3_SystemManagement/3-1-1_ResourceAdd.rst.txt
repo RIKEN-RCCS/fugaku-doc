@@ -1,0 +1,131 @@
+Assign resource registration
+============================
+
+| 　**[Name]**
+| 　resourceadd - Set the computing resource limit value
+
+| 　**[Style]**
+| 　resourceadd  -g  group name [-u  user name] [-rscgrp  resource group name] [-resource  resource value]
+| 　resourceadd  -f  file name
+ 　
+| 　**[Description]**
+| 　resourceadd command further sets a limit value for each resource group or user for the computing resource assigned to the sub-theme. By setting, the budget limit (upper limit) for resource groups and users can be set. There are two types of registration formats: a single format that distributes computing resources to a single issue and a CSV format that is set for multiple issues at once.
+| 　This command is used for the condition to set the calculation resource frame for the first time, use the resourcemod command when changing the value that has already been set, or when setting the calculation resource frame in a condition that already has a job submission record. 
+| 　To check whether the calculation resource frame has already been set or whether the job has been submitted, use the accountj command and check the status of the target condition.
+| 　When the target information line exists, it will be the target of this command.
+| 　　【Example】$ accountj -g group01 -E
+| 　　Use the above accountj command to check the status after setting the resourcemod command.
+
+.. figure:: img/3_SystemManagement_02.png
+
+| 　The computing resource allocation frame is a computing resource frame allocated by a registration organization in accordance with an application from a user at the time of assignment selection. Users cannot go beyond this limit to submit and execute jobs at  \ |post-k|\  .
+
+| 　The theme manager, sub-theme manager, and project manager can set assignment assignment resources for a hierarchy below the group (resource group and user hierarchy in the above diagram). However, only the system administrator can set the resource frame for a single resource group.
+| 　Also, the general user cannot use the command.
+
+| 　**[Option]**
+| 　-g  group name
+| 　Specify group name.
+
+| 　-resource  Resource value
+| 　Specify the computing resource limit (number of nodes x elapsed time limit value) that is the upper limit. Specify a positive integer value. The unit of the numerical value is node seconds [node · s]. If 0 (zero) is specified, use is prohibited.
+ 　
+| 　-u  user name
+| 　Specify user name.
+ 　
+| 　-rscgrp  resource group name
+| 　Specify resource group name which wants to limit the use of computing resource.
+ 　
+| 　【File layout】
+| 　Required column　○: Required, △: Required or not is depending on resource type
+
+   .. list-table:: 
+     :header-rows: 1
+     :widths: 5 20 20 5 30
+   
+     * - No
+       - Item name
+       - Category
+       - Required
+       - Note
+   
+     * - 1
+       - RTYPE
+       - Alphabetic characters
+       - ○
+       - | Resource type
+         | User: USER
+         | Resource group: RSCG
+         | User-resource group: USER_RSCG
+   
+     * - 2
+       - GROUP
+       - Single-byte alphanumeric symbol
+       - ○
+       - Group name
+   
+     * - 3
+       - USER
+       - Single-byte alphanumeric characters
+       - △
+       - | User name
+         | NULL when resource group is specified
+   
+     * - 4
+       - RSCGRP
+       - Single-byte alphanumeric characters
+       - △
+       - | Resource group name
+         | NULL when user is specified
+   
+     * - 5
+       - LIMIT
+       - Number
+       - ○
+       - | Computing resource frame
+         | (Node number x run time limit value)
+         | ※Specify a positive integer value. The unit of the numerical value is node seconds [node · s]. If 0 (zero) is specified, use is prohibited.
+
+　【File setting example】
+
+.. code-block:: none 
+
+   RTYPE,GROUP,USER,RSCGRP,LIMIT　...header
+   USER,group01,user1,,100　...Assign to the user
+   RSCG,group01,,rg1,100　...Assign to the resource group
+   USER_RSCG,group01,user1,rg1,100　...Assign to the user and resource group combination
+
+| 　&#45;-help
+| 　Display command help contents.
+
+| 　**[Return value]**
+| 　Normal: 0
+| 　Abnormal: 1
+
+| 　**[Note]**
+| 　None.
+
+| 　**[Use example]**
+| 　【Example 1】	Set the limit value to the user
+
+.. code-block:: console 
+
+   [login]$ resourceadd -g group01 -u user1 -resource 100
+   Registered 1 resource information.
+   [login]$
+
+　【Example 2】	Set the limit value to the user and resource group conbination
+
+.. code-block:: console 
+
+   [login]$ resourceadd -g group01 -u user1 –rscgrp rg1 -resource 100
+   Registered 1 resource information.
+   [login]$
+
+　【Example 3】	Set the limit value to multiple condition for bulk
+
+.. code-block:: console 
+
+   [login]$ resourceadd -f resourceadd.csv
+   Registered 4 resource information.
+   [login]$

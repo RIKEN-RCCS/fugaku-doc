@@ -1,0 +1,734 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>3. ログイン &#8212; プリポスト環境 利用手引書  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="7. SLURMコマンド" href="slurm.html" />
+    <link rel="prev" title="2. システム構成" href="system.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="slurm.html" title="7. SLURMコマンド"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="system.html" title="2. システム構成"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">プリポスト環境 利用手引書  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>ログイン</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">3. </span>ログイン<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
+<div class="line-block">
+<div class="line">プリポスト環境はインターネットから直接接続することはできないため、プリポスト環境を利用するには、まず初めにログインノードにログインする必要があります。</div>
+<div class="line">ログインノードへのログイン方法は「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/use_latest/">利用手引書 －利用およびジョブ実行編－</a>」をご参照ください。</div>
+</div>
+</section>
+<section id="id3">
+<h1><span class="section-number">4. </span>ファイル転送<a class="headerlink" href="#id3" title="この見出しへのパーマリンク">¶</a></h1>
+<div class="line-block">
+<div class="line">ユーザホーム領域は富岳本体システムと共通化されているため、ログインノードへ<code class="docutils literal notranslate"><span class="pre">scp</span></code>コマンド等を用いてファイル転送することで、プリポスト環境で参照・使用することができます。</div>
+<div class="line">ユーザホーム領域のストレージ容量・ファイル数の制限は、富岳本体システムの場合と同様の制限を受けます。</div>
+<div class="line">ファイル転送の詳細は「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/use_latest/">利用手引書 －利用およびジョブ実行編－</a>」もしくは 「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/high_speed_io_guide/">利用手引書 －高速転送ガイド－</a>」を参照してください。</div>
+</div>
+</section>
+<section id="id6">
+<h1><span class="section-number">5. </span>コンパイル<a class="headerlink" href="#id6" title="この見出しへのパーマリンク">¶</a></h1>
+<section id="gcc">
+<h2><span class="section-number">5.1. </span>GCC<a class="headerlink" href="#gcc" title="この見出しへのパーマリンク">¶</a></h2>
+<p>GCCを用いたコンパイル例です。</p>
+<ul class="simple">
+<li><p>大容量メモリノード</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p mem1 -n <span class="m">1</span> --mem 22G --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+<span class="gp">[MEM]$ </span>gcc -o a.out sample.c
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPUノード</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">1</span> --mem <span class="m">2574</span> --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+<span class="gp">[GPU]$ </span>gcc -o a.out sample.c
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>ログインノード上でGCCを使用してコンパイルされたプログラムも、プリポスト環境で実行可能です。</p>
+</div>
+</section>
+<section id="intel">
+<h2><span class="section-number">5.2. </span>Intelコンパイラ<a class="headerlink" href="#intel" title="この見出しへのパーマリンク">¶</a></h2>
+<p>計算ノードでIntelコンパイラを使用する場合、インタラクティブジョブでジョブを投入し、環境変数を設定してください。</p>
+<p>Intelコンパイラを用いたコンパイル例です。</p>
+<ul class="simple">
+<li><p>大容量メモリノード</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p mem1 -n <span class="m">1</span> --mem 22G --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+<span class="gp">[MEM]$ </span>. /opt/intel/oneapi/setvars.sh intel64
+<span class="gp">[MEM]$ </span>icc -o a.out sample.c
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPUノード</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">1</span> --mem <span class="m">2574</span> --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+<span class="gp">[GPU]$ </span>. /opt/intel/oneapi/setvars.sh intel64
+<span class="gp">[GPU]$ </span>icc -o a.out sample.c
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>ログインノードでIntelコンパイラを使用してコンパイルされたプログラムも、プリポスト環境で実行可能です。</p>
+</div>
+<div class="line-block">
+<div class="line">Intelコンパイラに関する詳細は、「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/lang_latest/CompileforLN/index.html">利用手引書 －言語開発環境編－</a>」をご確認ください。</div>
+<div class="line"><br /></div>
+</div>
+</section>
+<section id="nvidia-cuda-compiler">
+<h2><span class="section-number">5.3. </span>NVIDIA CUDA Compiler<a class="headerlink" href="#nvidia-cuda-compiler" title="この見出しへのパーマリンク">¶</a></h2>
+<p>インタラクティブジョブでGPUノードにログインし、環境変数を設定してください。</p>
+<p>CUDA Compilerを用いたコンパイル例です。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">1</span> --mem <span class="m">2574</span> --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+<span class="gp">[GPU]$ </span><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/usr/local/cuda/bin<span class="si">${</span><span class="nv">PATH</span><span class="p">:+:</span><span class="si">${</span><span class="nv">PATH</span><span class="si">}}</span>
+<span class="gp">[GPU]$ </span><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/usr/local/cuda/lib64<span class="si">${</span><span class="nv">LD_LIBRARY_PATH</span><span class="p">:+:</span><span class="si">${</span><span class="nv">LD_LIBRARY_PATH</span><span class="si">}}</span>
+<span class="gp">[GPU]$ </span>nvcc -o a.out sample.cu
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>NVIDIA CUDAコンパイラは、GPUノードでのみ利用可能です。</p>
+<p>コンパイルされた a.out を実行するには、SLURMオプションによってGPU本体のリソース確保が必要です。（詳細は<a class="reference internal" href="#batchjob"><span class="std std-ref">バッチジョブ</span></a>以降を参照）</p>
+</div>
+<div class="line-block">
+<div class="line">NVIDIA CUDAコンパイラに関する情報は、NVIDIA社ホームページを参照ください。</div>
+<div class="line"><a class="reference external" href="https://developer.nvidia.com/cuda-toolkit-archive">https://developer.nvidia.com/cuda-toolkit-archive</a></div>
+</div>
+</section>
+<section id="id8">
+<h2><span class="section-number">5.4. </span>富士通コンパイラ（クロスコンパイラ）<a class="headerlink" href="#id8" title="この見出しへのパーマリンク">¶</a></h2>
+<div class="line-block">
+<div class="line">プリポスト環境のインタラクティブジョブにおいて、富士通コンパイラ（クロスコンパイラ）を使用することができます。</div>
+<div class="line">ログインノードでコンパイルする際に、メモリ不足等でコンパイルができない場合等にご利用ください。</div>
+<div class="line">なお、コンパイルしたモジュールをプリポスト環境で実行することはできません。</div>
+<div class="line">詳細は「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/lang_latest/CompileforCN/FujitsuCompiler/index.html">利用手引書 －言語開発環境編－</a>」を参照してください。</div>
+</div>
+<p>富士通コンパイラを用いたコンパイル例です。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">1</span> --mem <span class="m">2574</span> --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+<span class="gp">[GPU]$ </span>frtpx -o a.out sample.f90
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id10">
+<h1><span class="section-number">6. </span>ジョブの実行方法<a class="headerlink" href="#id10" title="この見出しへのパーマリンク">¶</a></h1>
+<div class="line-block">
+<div class="line">ジョブ実行には、バッチジョブとインタラクティブジョブによる2種類の方法があります。</div>
+<div class="line">バッチジョブは、あらかじめジョブスクリプトを作成しジョブを投入する方法で、長時間実行する場合などに適しています。</div>
+<div class="line">一方、インタラクティブジョブでは、ユーザがコマンド実行を会話的に行うことができるため、バッチジョブ投入前のデバッグ等に使用することができます。</div>
+</div>
+<div class="line-block">
+<div class="line">プリポスト環境のジョブスケジューリングは、「フェアシェア」機能を使用してジョブの実行順序を決定します。</div>
+<div class="line">フェアシェアは、過去のジョブによるリソース使用実績に基づいてジョブの優先度を調整する仕組みです。</div>
+<div class="line">リソース使用実績が少ないユーザほど優先度が高くなり、ジョブの実行開始が優先されます。</div>
+<div class="line">逆に、使用実績が多いユーザは優先度が低くなり、ジョブの実行開始が後回しになります。</div>
+</div>
+<section id="id11">
+<h2><span class="section-number">6.1. </span>ジョブキュー（パーティション）<a class="headerlink" href="#id11" title="この見出しへのパーマリンク">¶</a></h2>
+<div class="line-block">
+<div class="line">プリポスト環境でジョブを実行するには、ジョブキューを指定する必要があります。</div>
+<div class="line">指定の方法は、バッチジョブもしくはインタラクティブジョブの投入方法のセクションをご確認ください。</div>
+</div>
+<p>現在、提供されているジョブキューの一覧を以下に示します。<a class="footnote-reference brackets" href="#a1" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>キュー名 (PartitionName)</p></th>
+<th class="head"><p>ノード名 (Nodes)</p></th>
+<th class="head"><p>デフォルト経過時間 [h] (DefaultTime)</p></th>
+<th class="head"><p>最大経過時間 [h] (MaxTime)</p></th>
+<th class="head"><p>ジョブあたりデフォルトCPU数 (cpus-per-task)</p></th>
+<th class="head"><p>ジョブあたり最大CPU数 (MaxTRESPerJob=cpu)</p></th>
+<th class="head"><p>ジョブあたりデフォルトメモリ量 (DefMemPerNode)</p></th>
+<th class="head"><p>ジョブあたり最大メモリ量 (MaxMemPerNode)</p></th>
+<th class="head"><p>ユーザあたりの最大ジョブ実行数 (MaxJobPerUser)</p></th>
+<th class="head"><p>ジョブあたりの最大ノード数 (MaxNodes)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>gpu1</p></td>
+<td><div class="line-block">
+<div class="line">pps[01-06]</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">0.5</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">3</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">72</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">2574M</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">185344M</div>
+<div class="line">(181G)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">5</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>gpu2</p></td>
+<td><div class="line-block">
+<div class="line">pps[07-08]</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">0.5</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">24</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">36</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">2574M</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">92672M</div>
+<div class="line">(90G)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>mem1</p></td>
+<td><div class="line-block">
+<div class="line">ppm01</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">0.5</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">3</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">224</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">22863M</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">5121496M <a class="footnote-reference brackets" href="#a2" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></div>
+<div class="line">(5001G)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">5</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>mem2</p></td>
+<td><div class="line-block">
+<div class="line">ppm[02-03]</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">0.5</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">24</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">56</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">22863M</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1536000M</div>
+<div class="line">(1500G)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>ondemand-reserved <a class="footnote-reference brackets" href="#a3" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
+<td><div class="line-block">
+<div class="line">wheel[1-2]</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">0.5</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">720</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">8</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">4096M</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">32768M</div>
+<div class="line">(32G)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">50</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">1</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<ul class="simple">
+<li><p>gpu1, mem1は短時間用ジョブ、gpu2, mem2は長時間用ジョブのキューとして用意されています。</p></li>
+<li><p>リソース量を指定せずにジョブ投入した場合に、デフォルト値が適用されます。ジョブ投入時に要求CPU数、メモリ量、経過時間をジョブスクリプトもしくはSlurmのコマンドオプションで指定することをお願い致します。</p></li>
+</ul>
+</div>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="a1" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id12">1</a><span class="fn-bracket">]</span></span>
+<p>Hyper-Threading (HT)は有効になっています。(#CPUs = #physical_cores × 2)</p>
+</aside>
+<aside class="footnote brackets" id="a2" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id13">2</a><span class="fn-bracket">]</span></span>
+<p>スクラッチ領域にメモリの一部分が使用されているため、搭載メモリ量より小さく設定されています。</p>
+</aside>
+<aside class="footnote brackets" id="a3" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id14">3</a><span class="fn-bracket">]</span></span>
+<p>ondemand-reservedキューは主にOpen OnDemandからの利用を想定しておりhidden属性が設定されています。このキューはワークフローや開発環境といった資源を消費しない長時間ジョブのために用意されています (WHEELやVSCodeなど)。そのため、資源をオーバーサブスクライブする一方で長時間の実行を許可しています。このキューについては、運用の都合により事前連絡なしでジョブを強制終了することがあります。</p>
+</aside>
+</aside>
+</section>
+<section id="batchjob">
+<span id="id15"></span><h2><span class="section-number">6.2. </span>バッチジョブ<a class="headerlink" href="#batchjob" title="この見出しへのパーマリンク">¶</a></h2>
+<p>プリポスト環境へバッチジョブとしてジョブを投入するには、ジョブスクリプトを作成し、ログインノード上でSlurmコマンドを実行します。</p>
+<section id="id16">
+<h3><span class="section-number">6.2.1. </span>逐次ジョブ<a class="headerlink" href="#id16" title="この見出しへのパーマリンク">¶</a></h3>
+<p>逐次ジョブのジョブスクリプト例です。</p>
+<ul class="simple">
+<li><p>大容量メモリノード (1cpu)</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p mem1      # キューの指定</span>
+<span class="c1">#SBATCH -n 1         # CPU数の指定</span>
+<span class="c1">#SBATCH --mem 22G    # メモリ量の指定 [GB]</span>
+./a.out
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>大容量メモリノード (1node)</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p mem1      # キューの指定</span>
+<span class="c1">#SBATCH -n 224       # CPU数の指定</span>
+<span class="c1">#SBATCH --mem 5001G  # メモリ量の指定 [GB]</span>
+./a.out
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPUノード (1cpu)</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p gpu1      # キューの指定</span>
+<span class="c1">#SBATCH -n 1         # CPU数の指定</span>
+<span class="c1">#SBATCH --mem 2574   # メモリ量の指定 [MB]</span>
+./a.out
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPUノード (1node)</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p gpu1      # キューの指定</span>
+<span class="c1">#SBATCH -n 72        # CPU数の指定</span>
+<span class="c1">#SBATCH --mem 181G   # メモリ量の指定 [GB]</span>
+./a.out
+</pre></div>
+</div>
+</section>
+<section id="openmp">
+<h3><span class="section-number">6.2.2. </span>OpenMP<a class="headerlink" href="#openmp" title="この見出しへのパーマリンク">¶</a></h3>
+<p>OpenMPを用いたジョブスクリプト例です。</p>
+<ul class="simple">
+<li><p>Intelコンパイラ＋OpenMP</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p gpu1               # キューの指定</span>
+<span class="c1">#SBATCH --cpus-per-task=72    # タスクごとに使用するCPU数を指定</span>
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">72</span>
+<span class="nb">export</span> <span class="nv">KMP_AFFINITY</span><span class="o">=</span><span class="nv">granularity</span><span class="o">=</span>fine,compact
+. /opt/intel/oneapi/setvars.sh intel64
+./a.out
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GCC + OpenMP</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p mem1              # キューの指定</span>
+<span class="c1">#SBATCH --cpus-per-task=224  # タスクごとに使用するコア数を指定</span>
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">224</span>
+./a.out
+</pre></div>
+</div>
+</section>
+<section id="mpi">
+<h3><span class="section-number">6.2.3. </span>MPI<a class="headerlink" href="#mpi" title="この見出しへのパーマリンク">¶</a></h3>
+<p>MPIを用いたジョブスクリプト例です。</p>
+<ul class="simple">
+<li><p>Intelコンパイラ + Intel MPI</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p mem1               # キューの指定</span>
+<span class="c1">#SBATCH --cpus-per-task=224   # タスクごとに使用するコア数の指定</span>
+<span class="c1">#SBATCH -t 00:10:00           # ジョブ実行時間の制限を指定</span>
+. /opt/intel/oneapi/setvars.sh intel64
+mpiexec -n <span class="m">224</span> ./a.out
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GCC + OpenMPI</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p gpu1                # キューの指定</span>
+<span class="c1">#SBATCH -n 72                  # タスク数の指定</span>
+<span class="c1">#SBATCH -t 00:10:00            # ジョブ実行時間の制限を指定</span>
+. /vol0004/apps/oss/spack/share/spack/setup-env.sh
+spack load openmpi@3.1.6%gcc@8.5.0
+mpiexec --use-hwthread-cpus -n <span class="m">72</span> --mca btl_openib_if_include mlx5_0 ./a.out
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>GCC＋Open MPIを使用する際、各ノードに対する最大コア数の半分以上を利用する場合は、<strong>--use-hwthread-cpus</strong>オプションが必要です。</p></li>
+</ul>
+</div>
+</section>
+<section id="gpu">
+<h3><span class="section-number">6.2.4. </span>GPU<a class="headerlink" href="#gpu" title="この見出しへのパーマリンク">¶</a></h3>
+<p>GPUを用いたジョブスクリプト例です。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p gpu1                # キューの指定</span>
+<span class="c1">#SBATCH --gpus-per-node=1      # 利用するGPU数の指定</span>
+./a.out
+</pre></div>
+</div>
+<p>GPUを2台使用する場合は、<code class="docutils literal notranslate"><span class="pre">--gpus-per-node=2</span></code>を指定してください。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p gpu1                # キューの指定</span>
+<span class="c1">#SBATCH --gpus-per-node=2      # GPUを2台使用する場合の指定</span>
+./a.out
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id17">
+<h2><span class="section-number">6.3. </span>インタラクティブジョブ<a class="headerlink" href="#id17" title="この見出しへのパーマリンク">¶</a></h2>
+<div class="line-block">
+<div class="line">インタラクティブジョブでは、必要となるリソースをSlurmコマンドのオプションとして、ログインノード上で直接指定し、実行します。</div>
+<div class="line">リソースが確保できればインタラクティブジョブに遷移します。その後は、会話的にコマンドが実行できます。</div>
+</div>
+<p>インタラクティブジョブのジョブ投入コマンドの例です。</p>
+<ul class="simple">
+<li><p>大容量メモリノード (1cpu)</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p mem1 -n <span class="m">1</span> --mem 22G --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>大容量メモリノード (1node)</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p mem1 -n <span class="m">224</span> --mem 5001G --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPUノード (1cpu, GPUなし)</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">1</span> --mem <span class="m">2574</span> --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPUノード (1node, GPUなし)</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">72</span> --mem 181G --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPUノード (1cpu, 1GPU)</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">1</span> --mem <span class="m">2574</span> --time<span class="o">=</span><span class="m">5</span> --gpus-per-node<span class="o">=</span><span class="m">1</span> --pty bash -i
+
+<span class="gp">[GPU]$ </span>nvidia-smi
+<span class="go">+---------------------------------------------------------------------------------------+</span>
+<span class="go">| NVIDIA-SMI 535.216.01             Driver Version: 535.216.01   CUDA Version: 12.2     |</span>
+<span class="go">|-----------------------------------------+----------------------+----------------------+</span>
+<span class="go">| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |</span>
+<span class="go">| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |</span>
+<span class="go">|                                         |                      |               MIG M. |</span>
+<span class="go">|=========================================+======================+======================|</span>
+<span class="go">|   0  Tesla V100-PCIE-32GB           Off | 00000000:18:00.0 Off |                    0 |</span>
+<span class="go">| N/A   41C    P0              37W / 250W |      0MiB / 32768MiB |      1%      Default |</span>
+<span class="go">|                                         |                      |                  N/A |</span>
+<span class="go">+-----------------------------------------+----------------------+----------------------+</span>
+
+<span class="go">+---------------------------------------------------------------------------------------+</span>
+<span class="go">| Processes:                                                                            |</span>
+<span class="go">|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |</span>
+<span class="go">|        ID   ID                                                             Usage      |</span>
+<span class="go">|=======================================================================================|</span>
+<span class="go">|  No running processes found                                                           |</span>
+<span class="go">+---------------------------------------------------------------------------------------+</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>GPUノード (1node, 2GPU)</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun -p gpu1 -n <span class="m">72</span> --mem 181G --time<span class="o">=</span><span class="m">5</span> --gpus-per-node<span class="o">=</span><span class="m">2</span> --pty bash -i
+
+<span class="gp">[GPU]$ </span>nvidia-smi
+<span class="go">+---------------------------------------------------------------------------------------+</span>
+<span class="go">| NVIDIA-SMI 535.216.01             Driver Version: 535.216.01   CUDA Version: 12.2     |</span>
+<span class="go">|-----------------------------------------+----------------------+----------------------+</span>
+<span class="go">| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |</span>
+<span class="go">| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |</span>
+<span class="go">|                                         |                      |               MIG M. |</span>
+<span class="go">|=========================================+======================+======================|</span>
+<span class="go">|   0  Tesla V100-PCIE-32GB           Off | 00000000:18:00.0 Off |                    0 |</span>
+<span class="go">| N/A   39C    P0              39W / 250W |      0MiB / 32768MiB |      0%      Default |</span>
+<span class="go">|                                         |                      |                  N/A |</span>
+<span class="go">+-----------------------------------------+----------------------+----------------------+</span>
+<span class="go">|   1  Tesla V100-PCIE-32GB           Off | 00000000:AF:00.0 Off |                    0 |</span>
+<span class="go">| N/A   38C    P0              38W / 250W |      0MiB / 32768MiB |      1%      Default |</span>
+<span class="go">|                                         |                      |                  N/A |</span>
+<span class="go">+-----------------------------------------+----------------------+----------------------+</span>
+
+<span class="go">+---------------------------------------------------------------------------------------+</span>
+<span class="go">| Processes:                                                                            |</span>
+<span class="go">|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |</span>
+<span class="go">|        ID   ID                                                             Usage      |</span>
+<span class="go">|=======================================================================================|</span>
+<span class="go">|  No running processes found                                                           |</span>
+<span class="go">+---------------------------------------------------------------------------------------+</span>
+</pre></div>
+</div>
+</section>
+<section id="id18">
+<h2><span class="section-number">6.4. </span>スクラッチ領域（大容量メモリノードで使用可）<a class="headerlink" href="#id18" title="この見出しへのパーマリンク">¶</a></h2>
+<div class="line-block">
+<div class="line">大容量メモリノードのキュー (mem1, mem2) にジョブを投入した場合、<strong>/worktmp</strong> 配下にジョブ毎の作業用ディレクトリが作成されます。</div>
+<div class="line">メモリを使用した高速なファイルシステムであり、一時的なスクラッチ領域として使用することができます。</div>
+<div class="line">ジョブ毎に作成された作業用ディレクトリは、そのジョブを投入したユーザのみアクセスすることができます。</div>
+<div class="line">なお、スクラッチ領域が作成されるのは、大容量メモリノードのみで、GPUノードにはありません。</div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>ジョブが使用できる領域は、/worktmp/${SLURM_JOBID} となります。</p></li>
+<li><p>スクラッチ領域は、ジョブおよびユーザ間で共有されており、最大で1TBとなっています。</p></li>
+<li><p>スクラッチ領域が、他ジョブ（もしくはユーザ）の使用によって最大容量に達していた場合は、書き込みに失敗します。</p></li>
+<li><p>ジョブ終了後、当該ディレクトリ (/worktmp/${SLURM_JOBID}) は自動的に削除されます。</p></li>
+</ul>
+</div>
+<p>ジョブスクリプトの例です。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -p mem1</span>
+<span class="c1">#SBATCH -n 1</span>
+<span class="nb">export</span> <span class="nv">TMPDIR</span><span class="o">=</span>/worktmp/<span class="si">${</span><span class="nv">SLURM_JOBID</span><span class="si">}</span>
+dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span><span class="si">${</span><span class="nv">TMPDIR</span><span class="si">}</span>/foo.dat <span class="nv">bs</span><span class="o">=</span>100M <span class="nv">count</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+</section>
+<section id="id19">
+<h2><span class="section-number">6.5. </span>その他<a class="headerlink" href="#id19" title="この見出しへのパーマリンク">¶</a></h2>
+<p>プリポスト環境上でX Window Systemを利用する場合、<code class="docutils literal notranslate"><span class="pre">srun</span></code>コマンドに<code class="docutils literal notranslate"><span class="pre">--x11</span></code>オプションを付与し、インタラクティブジョブでジョブ投入してください。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun --x11 -p gpu1 -n <span class="m">1</span> --time<span class="o">=</span><span class="m">5</span> --pty bash -i
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3. ログイン</a></li>
+<li><a class="reference internal" href="#id3">4. ファイル転送</a></li>
+<li><a class="reference internal" href="#id6">5. コンパイル</a><ul>
+<li><a class="reference internal" href="#gcc">5.1. GCC</a></li>
+<li><a class="reference internal" href="#intel">5.2. Intelコンパイラ</a></li>
+<li><a class="reference internal" href="#nvidia-cuda-compiler">5.3. NVIDIA CUDA Compiler</a></li>
+<li><a class="reference internal" href="#id8">5.4. 富士通コンパイラ（クロスコンパイラ）</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id10">6. ジョブの実行方法</a><ul>
+<li><a class="reference internal" href="#id11">6.1. ジョブキュー（パーティション）</a></li>
+<li><a class="reference internal" href="#batchjob">6.2. バッチジョブ</a><ul>
+<li><a class="reference internal" href="#id16">6.2.1. 逐次ジョブ</a></li>
+<li><a class="reference internal" href="#openmp">6.2.2. OpenMP</a></li>
+<li><a class="reference internal" href="#mpi">6.2.3. MPI</a></li>
+<li><a class="reference internal" href="#gpu">6.2.4. GPU</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id17">6.3. インタラクティブジョブ</a></li>
+<li><a class="reference internal" href="#id18">6.4. スクラッチ領域（大容量メモリノードで使用可）</a></li>
+<li><a class="reference internal" href="#id19">6.5. その他</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="system.html"
+                          title="前の章へ"><span class="section-number">2. </span>システム構成</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="slurm.html"
+                          title="次の章へ"><span class="section-number">7. </span>SLURMコマンド</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="slurm.html" title="7. SLURMコマンド"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="system.html" title="2. システム構成"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">プリポスト環境 利用手引書  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>ログイン</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

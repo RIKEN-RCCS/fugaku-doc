@@ -1,0 +1,241 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.7.11.4. Hybrid parallel &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f85107c5" />
+    
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="3.1.8. C language" href="../C/index.html" />
+    <link rel="prev" title="3.1.7.11.3. OpenMP" href="FortranSampleProgram%28OpenMP%29.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../C/index.html" title="3.1.8. C language"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="FortranSampleProgram%28OpenMP%29.html" title="3.1.7.11.3. OpenMP"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><span class="section-number">3.1.7. </span>Fortran</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.7.11.4. </span>Hybrid parallel</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="hybrid-parallel">
+<h1><span class="section-number">3.1.7.11.4. </span>Hybrid parallel<a class="headerlink" href="#hybrid-parallel" title="Link to this heading">¶</a></h1>
+<p>The following is an example of compiling a multi-node job (hybrid parallel) Fortran program.</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">Prepare source program.</div>
+<div class="line">Prepare sample program as  <code class="file docutils literal notranslate"><span class="pre">/home/system/sample/Fortran/mpi/sample_hybrid.f</span></code>.</div>
+<div class="line"><a class="reference download internal" download="" href="../../../_downloads/7bf2fb554b919253f3c549434f9aa685/sample_hybrid.f"><code class="xref download docutils literal notranslate"><span class="pre">(Download</span> <span class="pre">sample</span> <span class="pre">codde)</span></code></a></div>
+</div>
+</li>
+</ol>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w">      </span><span class="k">PROGRAM </span><span class="n">sample_mpi</span>
+<span class="linenos"> 2</span><span class="w">      </span><span class="k">INCLUDE</span><span class="w"> </span><span class="s1">&#39;mpif.h&#39;</span>
+<span class="linenos"> 3</span><span class="w">      </span><span class="kt">INTEGER</span><span class="p">,</span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="nb">RANGE</span><span class="o">=</span><span class="mi">9000</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="w">      </span><span class="kt">INTEGER</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span>
+<span class="linenos"> 6</span><span class="w">      </span><span class="kt">INTEGER</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="k">data</span><span class="p">,</span><span class="w"> </span><span class="k">result</span>
+<span class="linenos"> 7</span><span class="k">      </span><span class="kt">REAL</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span><span class="w"> </span><span class="k">DIMENSION</span><span class="p">(</span><span class="nb">RANGE</span><span class="p">,</span><span class="w"> </span><span class="nb">RANGE</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="w">      </span><span class="k">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="linenos">10</span><span class="w">      </span><span class="n">c</span><span class="p">(:,:)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0d0</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="w">      </span><span class="k">CALL </span><span class="n">MPI_INIT</span><span class="p">(</span><span class="w"> </span><span class="n">ierror</span><span class="w"> </span><span class="p">)</span>
+<span class="linenos">13</span><span class="w">      </span><span class="k">CALL </span><span class="n">MPI_COMM_RANK</span><span class="p">(</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="w"> </span><span class="p">)</span>
+<span class="linenos">14</span><span class="w">      </span><span class="k">CALL </span><span class="n">MPI_COMM_SIZE</span><span class="p">(</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="w"> </span><span class="p">)</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="w">      </span><span class="k">IF</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">rank</span><span class="w"> </span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span>
+<span class="linenos">17</span><span class="k">         WRITE</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;MPI communication start. size=&#39;</span><span class="p">,</span><span class="n">size</span>
+<span class="linenos">18</span><span class="w">      </span><span class="k">ENDIF</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="k">      DO </span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="nb">RANGE</span>
+<span class="linenos">21</span><span class="nb">        </span><span class="k">DO </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nb">RANGE</span>
+<span class="linenos">22</span><span class="nb">          </span><span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="o">*</span><span class="mf">0.5</span>
+<span class="linenos">23</span><span class="w">          </span><span class="n">b</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="o">/</span><span class="p">(</span><span class="n">rank</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">24</span><span class="w">          </span><span class="n">c</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="o">+</span><span class="n">b</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
+<span class="linenos">25</span><span class="w">        </span><span class="k">ENDDO</span>
+<span class="linenos">26</span><span class="k">      ENDDO</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span><span class="k">      data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">rank</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">29</span><span class="w">      </span><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="linenos">30</span><span class="w">      </span><span class="k">CALL </span><span class="n">MPI_REDUCE</span><span class="p">(</span><span class="w"> </span><span class="k">data</span><span class="p">,</span><span class="w"> </span><span class="k">result</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_INTEGER</span><span class="p">,</span>
+<span class="linenos">31</span><span class="w">     </span><span class="p">&amp;</span><span class="n">MPI_SUM</span><span class="p">,</span><span class="w"> </span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="w"> </span><span class="p">)</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="w">      </span><span class="k">IF</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="w"> </span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span>
+<span class="linenos">34</span><span class="k">         WRITE</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;MPI communication end&#39;</span>
+<span class="linenos">35</span><span class="w">         </span><span class="k">WRITE</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;result(&#39;</span><span class="p">,</span><span class="k">result</span><span class="p">,</span><span class="s1">&#39;)&#39;</span>
+<span class="linenos">36</span><span class="w">      </span><span class="k">ENDIF</span>
+<span class="linenos">37</span>
+<span class="linenos">38</span><span class="k">      CALL </span><span class="n">MPI_FINALIZE</span><span class="p">(</span><span class="w"> </span><span class="n">ierror</span><span class="w"> </span><span class="p">)</span>
+<span class="linenos">39</span><span class="w">      </span><span class="k">STOP</span>
+<span class="linenos">40</span><span class="k">      END PROGRAM </span><span class="n">sample_mpi</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Compile sample program.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifrtpx<span class="w"> </span>-V<span class="w"> </span>-Kfast,parallel,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>-Nlst<span class="o">=</span>t<span class="w"> </span>-o<span class="w"> </span>sample_mpi<span class="w"> </span>sample_hybrid.f
+<span class="go">frtpx: Fujitsu Fortran Compiler 4.1.0 tcsds-1.2.24</span>
+<span class="go">jwd_fortpx: Fujitsu Fortran Compiler 4.1.0 (Feb 26 2020 07:41:18)</span>
+<span class="go">Fortran diagnostic messages: program name(sample_mpi)</span>
+<span class="go">  jwd5003p-i  &quot;sample_hybrid.f&quot;, line 10: Array description is parallelized.</span>
+<span class="go">  jwd6003s-i  &quot;sample_hybrid.f&quot;, line 10: SIMD conversion is applied to array description.</span>
+<span class="go">  jwd8663o-i  &quot;sample_hybrid.f&quot;, line 10: This loop is not software pipelined because the software pipelining does not improve the performance.</span>
+<span class="go">  jwd8202o-i  &quot;sample_hybrid.f&quot;, line 10: Loop unrolled 4 times.</span>
+<span class="go">  jwd5001p-i  &quot;sample_hybrid.f&quot;, line 20: DO loop with DO variable &#39;j&#39; is parallelized.</span>
+<span class="go">  jwd6001s-i  &quot;sample_hybrid.f&quot;, line 21: SIMD conversion is applied to DO loop with DO variable &#39;i&#39;.</span>
+<span class="go">  jwd8204o-i  &quot;sample_hybrid.f&quot;, line 21: This loop is software pipelined.</span>
+<span class="go">  jwd8205o-i  &quot;sample_hybrid.f&quot;, line 21: The software-pipelined loop is chosen at run time when the iteration count is greater than or equal to 128.</span>
+<span class="go">GNU assembler version 2.30 (aarch64-linux-gnu) using BFD version version 2.30-49.el7</span>
+<span class="go">GNU ld version 2.30-49.el7</span>
+<span class="go">  Supported emulations:</span>
+<span class="go">   aarch64linux</span>
+<span class="go">   aarch64elf</span>
+<span class="go">   aarch64elf32</span>
+<span class="go">   aarch64elf32b</span>
+<span class="go">   aarch64elfb</span>
+<span class="go">   armelf</span>
+<span class="go">   armelfb</span>
+<span class="go">   aarch64linuxb</span>
+<span class="go">   aarch64linux32</span>
+<span class="go">   aarch64linux32b</span>
+<span class="go">   armelfb_linux_eabi</span>
+<span class="go">   armelf_linux_eabi</span>
+<span class="go">   i386pep</span>
+<span class="go">   i386pe</span>
+<span class="go">flistpx: Fujitsu Listing Processor 4.1.0 (Jan  9 2020 14:46:36)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="3">
+<li><div class="line-block">
+<div class="line">Prepare job script.</div>
+<div class="line">Job script sample is prepared as  <code class="file docutils literal notranslate"><span class="pre">/home/system/sample/Fortran/mpi/job_mpi.sh</span></code>.</div>
+<div class="line"><a class="reference download internal" download="" href="../../../_downloads/056f5aae4360ecc3448971fac85f6765/job_mpi.sh"><code class="xref download docutils literal notranslate"><span class="pre">(Download</span> <span class="pre">sample</span> <span class="pre">code)</span></code></a></div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L &quot;node=2&quot;</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=10:00&quot;</span>
+<span class="c1">#PJM --mpi max-proc-per-node=4</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -s</span>
+
+<span class="c1"># execute job</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">12</span>
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>./sample_mpi
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Submit a job with  <strong class="program">pjsub</strong> command.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>job_mpi.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 122 submitted.</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="5">
+<li><div class="line-block">
+<div class="line">Check execution result.</div>
+<div class="line">The standard output is output as  <code class="file docutils literal notranslate"><span class="pre">Job</span> <span class="pre">name.Job</span> <span class="pre">ID.out</span></code></div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>cat<span class="w"> </span>job_mpi.sh.122.out
+<span class="go">MPI communication start. size= 8</span>
+<span class="go"> MPI communication end</span>
+<span class="go"> result( 4 )</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="FortranSampleProgram%28OpenMP%29.html"
+                          title="previous chapter"><span class="section-number">3.1.7.11.3. </span>OpenMP</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../C/index.html"
+                          title="next chapter"><span class="section-number">3.1.8. </span>C language</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../C/index.html" title="3.1.8. C language"
+             >next</a></li>
+        <li class="right" >
+          <a href="FortranSampleProgram%28OpenMP%29.html" title="3.1.7.11.3. OpenMP"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><span class="section-number">3.1.7. </span>Fortran</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.7.11.4. </span>Hybrid parallel</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

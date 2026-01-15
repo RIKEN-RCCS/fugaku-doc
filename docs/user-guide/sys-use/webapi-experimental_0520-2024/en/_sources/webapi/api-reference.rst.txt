@@ -1,0 +1,15 @@
+--------------------------------------
+WebAPI仕様
+--------------------------------------
+
+.. only:: not lang_en
+
+  :download:`Swagger WebAPI仕様書 <client-api.yml>`
+
+  .. openapi:: ./api.yml
+
+.. only:: lang_en
+
+  :download:`Swagger WebAP specification  <client-api_en.yml>`
+
+  .. openapi:: ./api_en.yml

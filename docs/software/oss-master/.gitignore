@@ -1,0 +1,9 @@
+.vscode/
+*~
+*.tar.gz
+*.zip
+.DS_Store
+PortalContents/
+*.js
+*.pickle
+*.doctree

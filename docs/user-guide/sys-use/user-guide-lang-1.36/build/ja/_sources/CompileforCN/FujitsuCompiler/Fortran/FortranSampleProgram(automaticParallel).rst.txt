@@ -1,0 +1,140 @@
+自動並列
+=========================
+
+シングルノードジョブ（自動並列）のFortranプログラムをコンパイルする例を示します。
+
+1. | ソースプログラムを用意します。
+   | サンプルプログラムは「Fortranサンプルプログラム（逐次）」の例と同じです。
+   | :download:`（サンプルコードのダウンロード） <./src/sample.f>`
+
+.. code-block:: fortran
+   :linenos:
+
+         parameter(n=5888)
+         real*8 a(n+1,n),b(n+1,n),c(n+1,n)
+         real*8 t0,t1,second
+   !
+   !  print message
+   !
+         write(6,500)
+         write(6,510) n,n
+    500  format(" *** matrix multiply *** ")
+    510  format(' (NPROW,NPCOL) : (',I6,',',I6,')')
+   
+   !
+   !  initialize matrix
+   !
+         do j=1,n
+           do i=1,n
+             a(i,j)=0.1d0
+             b(j,i)=0.3d0
+             c(i,j)=0.0d0
+           end do
+         end do
+   !
+   !  do matrix multiply
+   !
+         t0 = second()
+         do j=1,n
+           do i=1,n
+             do k=1,n
+               c(i,j) = c(i,j) + a(i,k) * b(k,j)
+             end do
+           end do
+         end do
+         t1 = second()
+   !
+   !  print result
+   !
+         write(6,520) c(1,1)
+         write(6,530) t1-t0
+     520 format(" c(1,1)=",g10.4)
+     530 format(" time :",f10.2," sec")
+         end
+   !----
+         function second()
+         real*8 second,t
+         call gettod(t)
+         second=t*1.e-6
+         end
+
+2. サンプルプログラムをコンパイルします。
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -V -Kfast,parallel,optmsg=2 -Nlst=t -o sample_parallel sample.f
+  frtpx: Fujitsu Fortran Compiler 4.1.0 tcsds-1.2.24
+  jwd_fortpx: Fujitsu Fortran Compiler 4.1.0 (Feb 26 2020 07:41:18)
+  Fortran diagnostic messages: program name(main)
+    jwd5001p-i  "sample.f", line 15: DO loop with DO variable 'j' is parallelized.
+    jwd8320o-i  "sample.f", line 15: Loop blocking is performed with size 48.
+    jwd8320o-i  "sample.f", line 16: Loop blocking is performed with size 48.
+    jwd6001s-i  "sample.f", line 16: SIMD conversion is applied to DO loop with DO variable 'i'.
+    jwd8663o-i  "sample.f", line 16: This loop is not software pipelined because the software pipelining does not improve the performance.
+    jwd8202o-i  "sample.f", line 16: Loop unrolled 2 times.
+    jwd8220o-i  "sample.f", line 26: Optimizations is performed in this program unit with possibility of side effects. See informational messages below to determine which such optimizations have been performed.
+    jwd8331o-i  "sample.f", line 26: This DO loop was changed to the library call(matmul).
+  GNU assembler version 2.30 (aarch64-linux-gnu) using BFD version version 2.30-49.el7
+  GNU ld version 2.30-49.el7
+    Supported emulations:
+     aarch64linux
+     aarch64elf
+     aarch64elf32
+     aarch64elf32b
+     aarch64elfb
+     armelf
+     armelfb
+     aarch64linuxb
+     aarch64linux32
+     aarch64linux32b
+     armelfb_linux_eabi
+     armelf_linux_eabi
+     i386pep
+     i386pe
+  flistpx: Fujitsu Listing Processor 4.1.0 (Jan  9 2020 14:46:36)
+
+
+ .. note::
+
+  - ``-Nlst=t``\ を指定することで、自動並列化情報、最適化情報、統計情報が出力されます。ファイル名は、ソースプログラムの拡張子が lstとして出力されます。
+  - ``-Koptmsg=2``\ を指定することで、自動並列、SIMD化、ループアンローリングなどの最適化機能について、メッセージが出力されます。上記例では、jwd5001p-i , jwd6001s-i などが該当します。
+  - jwd5001p-i は、DOループが並列化されたことを意味します。自動並列化されたDOループとDO変数が表示されます。
+  - jwd6001s-i は、DOループがSIMD化されたことを意味します。SIMD化されたDOループとDO変数が表示されます。
+
+3. | ジョブスクリプトを用意します。
+   | ジョブスクリプトのサンプルは\ :file:`/home/system/sample/Fortran/parallel/job_para.sh`\ として用意しています。
+   | :download:`（サンプルコードのダウンロード） <./src/job_para.sh>`
+
+ .. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L "node=1"
+  #PJM -L "rscgrp=small"
+  #PJM -L "elapse=10:00"
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #PJM -g groupname
+  #PJM -s
+
+  # execute job
+  export OMP_NUM_THREADS=12
+  ./sample_parallel
+
+
+4. :program:`pjsub`\ コマンドでジョブを投入します。
+
+ .. code-block:: console
+
+  [_LNlogin]$ pjsub job_para.sh
+  [INFO] PJM 0000 pjsub Job 112 submitted.
+
+5. | 実行結果を確認します。
+   | 標準出力は\ :file:`ジョブ名.ジョブID.out`\ として出力されます。
+
+ .. code-block:: console
+
+  [_LNlogin]$ cat job_para.sh.112.out
+  *** matrix multiply ***
+  (NPROW,NPCOL) : (  5888,  5888)
+  c(1,1)= 176.6
+  time :     94.23 sec
+

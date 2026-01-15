@@ -1,0 +1,198 @@
+.. This document is created by Akiyoshi KURODA, RIKEN R-CCS on 2021/10/15 as Ver. 0.1.0.
+
+.. _labelname: pytorch
+
+PyTorch on the Fugaku
+==============================================================================
+
+License
+------------------------------------------------------------------------------
+
+The patches and procedures are scheduled to be provided (Upstream) to the OSS, PyTorch will comply with the fix BSD license. 
+
+
+References
+------------------------------------------------------------------------------
+
+- Github https://github.com/fujitsu/pytorch
+- PyTorch-1.13.1 Documents https://github.com/fujitsu/pytorch/wiki/PyTorch-DNNL_aarch64-build-manual-for-FUJITSU-Software-Compiler-Package-(PyTorch-v1.13.1)
+- PyTorch-1.10.1 Documents https://github.com/fujitsu/pytorch/wiki/PyTorch-DNNL_aarch64-build-manual-for-FUJITSU-Software-Compiler-Package-(PyTorch-v1.10.1)
+- PyTorch-1.7.0  Documents https://github.com/fujitsu/pytorch/wiki/PyTorch-DNNL_aarch64-build-manual-for-FUJITSU-Software-Compiler-Package-(PyTorch-v1.7.0)
+
+
+Installed version (Cf. checkout.sh, site-packages and so on.)
+------------------------------------------------------------------------------
+
+- PyTorch ver.1.13.1
+
+  - Horovod ver.0.26.1
+
+  - oneDNN ver.2.7.0
+
+- Python ver.3.9.x more over
+
+  - numpy ver.1.22.x more over
+
+  - scipy ver.1.7.x more over
+
+
+Files
+------------------------------------------------------------------------------
+
+The latest version should be built in the user environment according to the above GitHub procedure.
+On the 2nd storage, we have published the version of Pytorch-1.7.0 or earlier.
+Sample problems are not compatible. In the following description, please refer to how to execute and how to acquire performance.
+
+.. code-block:: none
+
+  /home/apps/oss/PyTorch-1.7.0/
+    bin: binaries
+    lib, lib64: libraries
+      lib/python3.8/site-packages: PyTorch and Python modules
+    include: include files
+    build: scripts, patches and so on.
+    example: examples of ResNet-50, OpenNMT, Bert and OpenNMT
+    docs: documents
+    old: old versions
+
+The latest version is installed on the Fugaku sequentially.
+However, due to the structural change in the Pytorch, tuning patches for the Fugaku may not work.
+For detailed restrictions on each version, please refer to the abobe wiki.
+
+
+Build
+------------------------------------------------------------------------------
+
+If you build by yourself, please refer the directory :file:`build`. The procedure is described in the above reference. Please use it after adjusting the paths :file:`$PATH` and so on, require a timely correction. It takes about 3 hours to build. 
+
+.. code-block:: none
+
+  $ git clone https://github.com/fujitsu/pytorch.git
+  $ cd pytorch                     # From now on, we'll call this directory PYTORCH_TOP
+  $ git checkout -b r1.13_for_a64fx origin/r1.13_for_a64fx
+  $ cd scripts/fujitsu
+  $ bash 1_python.sh download
+  $        ...
+
+The versions on the 2nd strage are built without VENV published on the GitHub. As we adjusted so as not to embed absolute paths as much as possible, it is possible to copy and staging for :file:`$HOME`.
+
+
+Execution
+------------------------------------------------------------------------------
+
+This environment can be performed anywhere by setting :file:`$PATH`. Because Python module has a large number of files, MDS access high loads will take the :program:`importlib` time due to MDS access high load. You can use staging by coping common binaries by using :command:`llio_transfer` refering `8.2.4.2. Tips for common file distribution <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/LyeredStorageAndLLIO/TheSecondLayerStrage.html#tips-for-common-file-distribution>`_ of the `Users Guide <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/use_latest/>`_ .
+You can also uce staging by deploying all files with :command:`tar` and expanding using :command:`llio_transfer`.
+
+You can see some examples of MPI intra node, training / inference, tracer, fipp, fapp and PA under the :file:`example` directory as the Resnet-50 dry benchmark. In addition, examples such as OpenNMT, BERT of natural language processing and MASK R-CNN of object detection are also included, and performance tuned library can be read. 
+
+The procedure is described in the above reference. Please use it after adjusting the paths. 
+
+Limitations
+------------------------------------------------------------------------------
+
+Due to not be able to use the patches for the Fugaku because of the change of specifications of Pytorch, it was difficult to maintain performance due to the update of the version.
+
+- build problems
+
+  #. SVE version bugs of the \ :command:`softmax`\/\ :command:`tanh`\  function (the provided version has been corresponded by setting the initial value).
+  #. If it is not built with \ :command:`-Kast`\, it will be slow due to the handling of non-normalized numbers. We recommend to build with \ :command:`-Kfast`\  on the Fugaku.
+
+- attentions for execution
+
+  #. If \ :command:`ulimit -h 8092`\  is not set, the number of samples that will become SEGV has increased.
+  #. SEGV occurs in SSL2 in a test related to the inner product of the single-precision complex number \ :command:`cdotc_()`\  and \ :command:`cdotu_()`\.
+
+- performance problems
+
+  #. Many patches for Fugaku have not been applied due to abstractions such as automatic code generation such as \ :command:`add`\.
+  #. The performance deteriorated by the level down the function \ :command:`eltwise`\  and \ :command:`pooling_v2`\  of the oneDNN library ver2.6. The performance of \ :command:`eltwise`\  has recovered in ver.2.7.
+  #. There is no patches for the Fugaku because the backword calculation path has changed. We patched provisional, since the old path remains in the codes, but there is no guarantee that it will execute at high performance in future versions.
+
+
+Notes
+------------------------------------------------------------------------------
+
+In order to speed up, ``oneDNN-2.7.0`` developed by Fujitsu Laboratory is incorporated into the framework.
+The calculations of image recognition, natural language processing analysis, object detection, and so on are fast by this library.
+Depending on the network used, it may not work correct or fast, so please change to some other functions.
+
+Please contact your support desk (R-CCS support desk or HPCI support desk) for questions for performances and requirements of the versions and python modules, and so on, providing your network scripts. Please note that there are several months to support. 
+
+
+Future plan
+------------------------------------------------------------------------------
+
+#. cancel of the OpenNMT restriction (April 2021 Done) 
+#. support of the Mask R-CNN example (April 2021 Done)
+#. addition the optional python module: netcdf (April 2021 Done)
+#. build on the Spack environment (about the second half of 2021)
+#. provide the Singularity container (about the second half of 2021)
+#. follow-up the versions of the Fujitsu language environments (as needed)
+#. follow-up the versions of the PyTorch and oneDNN (as needed)
+#. support of old versions (about the second half of 2021)
+#. support of the other python modules (as needed) 
+#. support on the FX700 system (about the second half of 2021)
+
+
+History
+------------------------------------------------------------------------------
+
+- July 05, 2020 (Sun) build and release under the tcsds-1.2.25-02
+
+- August 20, 2020 (Thu) build under the tcsds-1.2.26
+
+  - bug fix of engine.cpp
+
+- September 08, 2020 (Tue) build under the tcsds-1.2.26
+
+  - change the build options
+
+- September 08, 2020 (Tue) build under the tcsds-1.2.26b
+
+- October 27, 2020 (Mon) build under the tcsds-1.2.27b
+
+  - add the examples of largepage
+
+  - add the examples of fapp, fapp and PA
+
+  - modify the scripts
+
+- February 18, 2021 (Thu) release of PyTorch-1.6.0 and PyTorch-1.7.0
+
+  - build under the tcsds-1.2.29
+
+  - add the python modules of mpi4py and pandas
+
+- February 21, 2021 (Sun) build under the tcsds-1.3.30a
+
+  - add the examples of the trace, fipp, fapp and PA
+
+- May 20, 2020 (Thu) support of Mask R-CNN examples using oneDNN-2.1.0L1
+
+  - release PyTorch-1.7.0 build under the tcsds-1.3.31
+
+  - fix the problem OpenNMT example
+
+- October 15, 2021 (Fri) release these documents (Ver.1.0)
+
+- December 07, 2021 (Tue) update these documents (Ver.1.1) addition the usage of llio
+
+- December 09, 2021 (Thu) PyTorch-1.7.0 build under the tcsds-1.3.33
+
+  - addition the oneDNN libraries, llio and spack examples
+
+- December 20, 2021 (Mon) PyTorch-1.7.0 build under the tcsds-1.3.34 (spack examples are not supported)
+
+- December 26, 2021 (Sun) follow up for other than vol0004 users
+
+  - Examples are not supported under the general user environment
+
+  - 01_resnet: spack and llio examples are not supported
+
+- December 30, 2021 (Thu) 01_resnet: spack and llio examples are supported
+
+  - User build examples may be failed, because of the file copy to \ :file:`/vol0004/app`\
+
+- February 28, 2022 (Mon) update Japanese documents (Ver.1.2) addition the tutorial in Japanese
+
+- July 13, 2023 (Thu) update English documents (Ver.1.3) addition the document for new version (PyTorch-1.13.1 etc.)

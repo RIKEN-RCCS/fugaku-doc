@@ -1,0 +1,154 @@
+=============
+Use direction
+=============
+
+This indicates the use direction of  the Fugaku.
+
+Overview
+========
+
+
+| To start the use of the Fugaku, it is required to proceed the following steps describe in "Start up guide".
+
+- :ref:`Installation of client certification <InstallingClientCertificate>`
+- :ref:`Registration of SSH public key <AccessToTheSystemLogin>`
+
+
+The following shows a series of flows from program creation and compilation to job execution.
+
+..
+  .. figure:: ./img/OverviewOfUsage_01.png
+     :scale: 80
+     :align: center
+..
+
+1. Login to the login node
+
+  .. code-block:: console
+  
+   [terminal] $ ssh username@login.fugaku.r-ccs.riken.jp
+
+2. Create a program
+ 
+  .. code-block:: console
+  
+   [_LNlogin] $ emacs sample.f08
+
+
+3. Compiling
+ 
+  .. code-block:: console
+  
+   [_LNlogin] $ frtpx -Kfast,parallel -o sample sample.f08
+
+4. Create a job script
+ 
+  .. code-block:: console
+  
+   [_LNlogin] $ emacs sample.sh
+
+5. Job execution
+ 
+  .. code-block:: console
+  
+   [_LNlogin] $ pjsub sample.sh
+
+6. Display a job status
+ 
+  .. code-block:: console
+  
+   [_LNlogin] $ pjstat
+
+7. Confirm a result
+
+  .. code-block:: console
+  
+   [_LNlogin] $ less ./sample.sh.jobid.out
+   [_LNlogin] $ less ./sample.sh.jobid.err
+   [_LNlogin] $ less ./sample.sh.jobid.stats
+
+Manual
+======
+
+| The following manuals are offered in the Fugaku website.
+| Please refer to "Resource" -> "`User's Guide <https://www.fugaku.r-ccs.riken.jp/en/docs/guides_r01>`_" or "`Manuals <https://www.fugaku.r-ccs.riken.jp/en/docs/manuals_r01>`_" from the menu of the Fugaku website.
+| If you want to use more detailed functions, please refer to the related manual.
+
+| The operation software-related manuals and file system-related manuals have sections describing the specifications specific to each model.
+| About the Fugaku, please refer to the points described as "FX server" or "FX".
+| 
+| For manual about language, there is the point describes as "/Product install path/".
+| "/Product install path/" depends on the version.
+| Setting "/Product install path/" to an environment variable FJSVXTCLANGA with language setting modulefile.
+
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 4,9
+
+   * - Type
+     - Manual name
+
+   * - Manual related to the operation software
+     - | Job Operation Software End-user's Guide
+       | Job Operation Software End-user's Guide for HPC Extensions
+       | Job Operation Software End-user's Guide for Master-Worker Job
+       | Job Operation Software API user's Guide for Command API
+       | Job Operation Software API user's Guide for Power API
+       | Job Operation Software Command Reference
+
+   * - File system related manual
+     - | LLIO User's Guide
+       | FEFS User's Guide
+
+   * - Language related manual
+     - | Fortran Language Reference
+       | Fortran User's Guide
+       | Fortran User's Guide Additional Volume COARRAY
+       | Fortran Compiler Messages
+       | C User's Guide
+       | C++ User's Guide
+       | C/C++ Compiler Optimization Messages
+       | Fortran/C/C++ Runtime Messages
+       | MPI User's Guide
+       | MPI User Guide Additional Volume Java Interface
+       | uTofu User's Guide
+       | Integrated development environment User's Guide
+       | Profiler User's Guide
+       | Debugger for Parallel Applications User's Guide
+       | Math library user manual
+       | Fujitsu SSL II User's Guide
+       | FUJITSU SSL II Extended Capabilities User's Guide
+       | FUJITSU SSL II Extended Capabilities User's Guide II
+       | FUJITSU SSL II Thread-Parallel Capabilities User's Guide
+       | FUJITSU C-SSL II User's Guide
+       | FUJITSU C-SSL II Thread-Parallel Capabilities User's Guide
+       | FUJITSU SSL II/MPI User's Guide
+       | BLAS LAPACK ScaLAPACK User's Guide
+       | Fast Basic Operations Library for Quadruple Precision User's Guide
+
+   * - Programming Guide
+     - | Programming Guide (Programming common part)
+       | Programming Guide (Fortran)
+       | Programming Guide (Tuning)
+       | Programming Guide (Processors)
+       | Programming Guide (IO)
+       | CPU performance tuning based on the type of application
+
+   * - Other
+     - | Fugaku Spack User Guide
+       | Fugaku Visualization User Guide
+       | Fugaku High Speed Transfer User Guide
+       | The Use of Fugaku VPN Service
+       | AI framework on the Fugaku User Guide
+       | How to use Singularity on FUGAKU
+       | Fugaku Open OnDemand Guide
+       | Fugaku S3 File Access Service User Guide
+       | VeloC User Guide
+       | User support tools User's Guide
+       | Pre/Post Environment User Guide
+       | WebAPI User Guide experimental
+       | WebAPI SDK User Guide experimental
+       | Quantum Computing Software User Guide
+       | Performance analysis tool TAU (Tuning and Analysis Utilities) User Guide
+       | HPC Debugging and Profiling Suite "Linaro Forge" User Guide

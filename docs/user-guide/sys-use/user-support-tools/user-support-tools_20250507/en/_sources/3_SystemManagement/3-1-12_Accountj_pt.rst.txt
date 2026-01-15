@@ -1,0 +1,193 @@
+Displaying Fugaku Points
+========================================
+
+| 　**[Name]**
+| 　accountj_pt - Display Fugaku Points
+
+| 　**[Style]**
+| 　accountj_pt [-g group name] [-c]
+| 　accountj_pt [-a] [-b generation number] [-c]
+
+| 　**[Description]**
+| 　Displays Fugaku Points that are awarded based on the amount of electricity saved through energy conservation.
+| 　You can execute a priority, up to the amount of computational resources corresponding to Fugaku Points you have earned.
+| 　Fee-based Access Projects are ineligible for point distribution.  
+
+| 　**[How to calculate Fugaku points]**
+- 　Calculate points based on power reduced when you execute jobs.
+- 　The Standard Power Consumption per Node Time Product  = distributed power/distributed computing resources
+- 　point = (Node Time Product of Executed Jobs * Standard Power Consumption per Node Time Product - Power Consumption of Executed Jobs) / Standard Power Consumption per Node Time Productur
+- 　For jobs that consume a lot of electricity, the Fugaku point may be negative.
+
+
+| 　**[Priority job execution]**
+- 　Priority job executions are carried out on working days excluding March and September and are valid only durring the designated project period.
+- 　Set up a dedicated f-pt resource group that can execute jobs preferentially, up to the amount of computing resources allocated to the group.
+- 　No node-time product is added to the f-pt resource group. It cannot be executed when the amount of computing resources for the project is exhausted.
+- 　You can use the accountj command to check the limits and usage of allocated resources obtained by points.
+- 　For jobs in QUEUED status in the f-pt resource group, the job is automatically canceled if AVAILABLE becomes negative beyond the LIMIT value.
+- 　If the allocated priority use calculation resources are not fully used, no transfer will be made to the next fiscal year.
+
+| 　**[Option]**
+| 　-g group name
+| 　Specify group name. Multiple designations following a space and forward / middle / backward coincidence designation using asterisks are not allowed. Only single or exact match specification is possible.
+| 　When not specified, job accounting information for all groups to which the user belongs is displayed.
+
+| 　-c
+| 　Outputs the search results in CSV format. 
+
+| 　-a
+| 　Points are aggregated for all groups. Groups that do not belong are masked with asterisks, and only points can be checked.
+
+| 　-b
+| 　Can be specified only when the -a option is specified. Specify the number of past generations to be displayed.
+| 　If this option is not specified, the latest information is displayed.
+| 　The totaled for fiscal year 2023 and earlier are not available.
+
+| 　&#45;-help
+| 　Display command help contents.
+
+| 　**[Return value]**
+| 　Noprmal: 0
+| 　Abnormal: 1
+
+
+| 　Indicates the explanation of displaying item.
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 40 100
+  
+    * - Item name
+      - Description
+  
+    * - SUBTHEME
+      - Displays the name of the sub-theme
+
+    * - SUBTHEME
+      - Displays the name of the group
+
+    * - PARENT
+      - Name of the parent hierarchy
+  
+    * - PERIOD
+      - Indicates the period in which resources are managed for each period
+
+    * - USAGE(N)
+      - Amount of used resources [Node Second]
+
+    * - LIMIT(N)
+      - Amount of allocated resources [Node Second]
+
+    * - USAGE(E)
+      - Amount of power consumption [watt-hour (Wh)]
+
+    * - LIMIT(E)
+      - Amount of assigned power [Wh]
+
+    * - POINT
+      - Fugaku Points(Truncation after decimal point)[\*1]
+
+| 　[\*1]The decimal point is displayed as 0, but the resource is allocated.
+
+| 　**[Note]**
+| 　None.
+
+| 　**[Use example]**
+| 　【Example 1】Display the information that the group they are belonging to.
+
+.. code-block:: console 
+
+   [login2]$ accountj_pt 
+  COLLECTDATE : 2024-02-08 17:18:26  unit[Node Second,Wh]
+  *--------------------------------[ SUBTHEME ]------------------------------------------------------------------*
+  SUBTHEME                     PARENT               LIMIT(N)          USAGE(N)          LIMIT(E)          USAGE(E)
+  group001                    Y23FM01          2,231,676,000     1,160,135,414        67,849,149     5,001,217,071
+  *--------------------------------[ SUBTHEME_PERIOD ]-----------------------------------------------------------*
+  SUBTHEME                          PERIOD          LIMIT(N)          USAGE(N)          LIMIT(E)          USAGE(E)
+  group001      20230401-20230930        1     1,115,838,000        85,942,585        33,924,574         2,388,876
+  group001      20231001-20240331        2     1,115,838,000        44,297,414        33,924,574         1,217,071
+  *--------------------------------[ f-pt RESOURCE GROUP ]------------------------------------------------------*
+  GROUP                  POINT               LIMIT(N)                   USAGE(N)                      AVAILABLE(N)
+  group001               1,299                   200                        100                                100
+ *--------------------------------[ SUBTHEME ]------------------------------------------------------------------*
+  SUBTHEME                     PARENT               LIMIT(N)          USAGE(N)          LIMIT(E)          USAGE(E)
+  group002                    Y23FM02              3,600,000             9,704           109,450               250
+  *--------------------------------[ f-pt RESOURCE GROUP ]------------------------------------------------------*
+  GROUP                  POINT               LIMIT(N)                   USAGE(N)                      AVAILABLE(N) 
+  group002                 600                    100                         50                                50
+
+
+| 　【Example 2】Display the information for the group to which you belong.(Period managed groups)
+
+.. code-block:: console 
+
+   [login]$ accountj_pt -g group001
+  COLLECTDATE : 2024-02-08 17:18:26  unit[Node Second,Wh]
+  *--------------------------------[ SUBTHEME ]------------------------------------------------------------------*
+  SUBTHEME                     PARENT               LIMIT(N)          USAGE(N)          LIMIT(E)          USAGE(E)
+  group001                    Y23FM01          2,231,676,000     1,160,135,414        67,849,149     5,001,217,071
+  *--------------------------------[ SUBTHEME_PERIOD ]-----------------------------------------------------------*
+  SUBTHEME                          PERIOD          LIMIT(N)          USAGE(N)          LIMIT(E)          USAGE(E)
+  group001      20230401-20230930        1     1,115,838,000        85,942,585        33,924,574         2,388,876
+  group001      20231001-20240331        2     1,115,838,000        44,297,414        33,924,574         1,217,071
+  *--------------------------------[ f-pt RESOURCE GROUP ]------------------------------------------------------*
+  GROUP                 POINT               LIMIT(N)                  USAGE(N)                        AVAILABLE(N)             
+  group001              1,299                   200                        100                                 100
+
+
+| 　【Example 3】Display the information for the group to which you belong.(One year projects)
+
+.. code-block:: console 
+
+   [login]$ accountj_pt -g group002
+  COLLECTDATE : 2024-02-08 17:18:26  unit[Node Second,Wh]
+  *--------------------------------[ SUBTHEME ]------------------------------------------------------------------*
+  SUBTHEME                     PARENT               LIMIT(N)          USAGE(N)          LIMIT(E)          USAGE(E)
+  group002                     Y23FM01         2,231,676,000     1,160,135,414        67,849,149     5,001,217,071
+  *--------------------------------[ f-pt RESOURCE GROUP ]------------------------------------------------------*
+  GROUP                 POINT               LIMIT(N)                  USAGE(N)                        AVAILABLE(N)             
+  group002              1,299                   200                        100                                 100
+
+
+| 　【Example 4】Display the information for the group to which you belong.(Fee-based Access Projects)
+
+.. code-block:: console 
+
+  [login]$ accountj_pt -g group003
+  COLLECTDATE : 2024-02-08 17:18:26  unit[Node Second,Wh]
+  *--------------------------------[ SUBTHEME ]------------------------------------------------------------------*
+  SUBTHEME                     PARENT               LIMIT(N)          USAGE(N)          LIMIT(E)          USAGE(E)
+  group003                     Y23FM01         2,231,676,000     1,160,135,414        67,849,149     5,001,217,071
+
+| 　[f-pt RESOURCE GROUP] is not displayed because Fee-based Access Projects are not subject to Fugaku points.
+
+
+
+| 　【Example 5】Fugaku points earned by each project will be totaled.
+
+.. code-block:: console 
+
+   [login]$ accountj_pt -a
+  COLLECTDATE : 2024/03/07 14:36:50 unit[Node Second,Wh]  
+  *----------[ GROUP_POINT ]-----------------*
+  P   GROUP      SUBTHEME                POINT
+  *   ********   ********                1,772
+  *   ********   ********                1,631
+  *   ********   ********                1,546
+  *   ********   ********                1,483
+  *   ********   ********                1,424
+  A   group001   group001                1,299
+  *   ********   ********                1,097
+  B   group003   group003                1,015
+  *   ********   ********                    0
+  *   ********   ********                    0
+  *   ********   ********                    0
+  *   ********   ********                    0
+  Z   group003   group003                    0
+  *   ********   ********                    0
+
+| 　Column P in the first column indicates A for period A, B for period B, and Z for One year projects.
+| 　-b option to aggregate past generation points.
+| 　The totaled for fiscal year 2023 and earlier are not available.
+

@@ -1,0 +1,826 @@
+CPU Performance Analysis Report
+===============================
+
+The CPU Performance Analysis Report aggregates a large amount of CPU performance analysis information measured by multiple executions and visualizes it using tables and accompanying graphs.
+
+
+Overview
+--------
+
+The CPU Performance Analysis Report is designed to fit on a single A3 size when printing, and the following three reports are prepared depending on the type and granularity of information to be displayed.
+
+- Unit report
+- Brief Report
+- Standard Report
+- Detail Report
+
+The procedure for creating a CPU Performance Analysis Report is as follows.
+
+.. figure:: ./img/CPUPerformanceAnalysisReport_01.png
+
+.. seealso::
+
+  Use a Advanced Performance Profiler to measure CPU performance analysis information.
+
+
+CPU Performance Analysis Report type
+------------------------------------
+
+The CPU Performance Analysis Report provides a unit report, a Brief Report, a Standard Report, and a Detail Report depending on the type and granularity of information to be displayed.
+The CPU Performance Analysis Report file is in Microsoft Excel file format (.xlsm).
+
+Each report overview is as following.
+
+
+.. list-table::
+   :header-rows: 1
+   :widths: 2 8
+
+   * - Report type
+     - Description
+
+   * - Unit report
+     - | This is the CPU performance analysis report that requires the least number of measurements to create.
+       | Outputs rough information about execution time, computing performance, memory throughput, and number of instructions.
+       | When using a single report, perform measurement using the detailed profiler once.
+
+   * - Brief Report
+     - | This is a CPU Performance Analysis Report that requires the least number of measurements.
+       | If you want to use the CPU Performance Analysis Report easily, we recommend the Brief Report. The amount of information is less than that of the Standard Report, but the number of measurements required to create the report can be reduced compared to the Standard Report.
+       | When using a Brief Report, perform measurement with the Advanced Performance Profiler five times.
+
+   * - Standard Report
+     - | This is a standard CPU Performance Analysis Report. Standard Reports are recommended for normal use.
+       | When using a Standard Report, perform measurement with the Advanced Performance Profiler 11 times.
+
+   * - Detail Report
+     - | This is the most detailed CPU Performance Analysis Report.
+       | If there is a shortage of information in the Standard Report, a Detail Report is recommended. Although the number of times of measurement for creating a report is the highest, all information of the CPU Performance Analysis Report is displayed.
+       | When displaying a Detail Report, perform measurement with the Advanced Performance Profiler 17 times.
+
+.. seealso::
+
+  The input file used for each report is the same. Therefore, for example, if you want to change to a Detail Report after creating a Standard Report, additional measurement is only required for the difference of 6 times.
+
+
+A list of information that can be referenced in each CPU Performance Analysis Report is shown below.
+
+
+.. list-table::
+   :header-rows: 1
+   :widths: 3 1 1 1 1 7
+
+   * - Table title
+     - Unit
+     - Brief
+     - Standard
+     - Detail
+     - Table overview
+
+   * - Information
+     - all
+     - all
+     - all
+     - all
+     - Displays measurement environment information and user-specified information.
+
+   * - Statistics
+     - some
+     - all
+     - all
+     - all
+     - | [Unit]
+       |  Displays information related to the CPU operation status, such as memory throughput, number of instructions, and number of operations.
+       | [Brief, Standard, Detail]
+       |  In addition to the content of a single report, the ratio of active elements in floating-point calculations is displayed.
+
+   * - Cycle Accounting
+     - \-
+     - some
+     - all
+     - all
+     - Display program execution time detail.
+       
+       [Brief]
+        The program execution time is classified into nine types and displayed.
+       [Standard / Detail]
+        The program execution time is classified into 20 types and displayed.
+
+   * - Busy
+     - \-
+     - some
+     - all
+     - all
+     - Displays information about the program's memory cache and arithmetic pipeline busy rate.
+       
+       [Brief]
+        Displays the busy rate of the primary cache, secondary cache, memory, floating point pipeline, etc., and the occurrence rate of SFI (Store Fetch Interlock).
+
+       [Standard]
+        In addition to the contents of the Brief Report, the busy rate of the integer calculation pipeline, the calculation pipeline for address calculation, and the calculation pipeline for predicate calculation is displayed.
+      
+       [Detail]
+        In adition to the contents of the Standard Report, displays the ratio of active elements in the L1 pipeline.
+
+   * - Cache
+     - \-
+     - some
+     - all
+     - all
+     - Display information about cash miss.
+
+       [Brief]
+        For Brief Reports, the number of cache misses in the primary data cache and secondary cache, and the ratio to the number of load / store instructions are displayed.
+
+       [Standard / Detail]
+        For Standard Reports or Detail Reports, add a breakdown of the number of cache misses in addition to the contents of the Brief Report.
+
+   * - Instruction
+     - \-
+     - some
+     - some
+     - all
+     - Display information about instruction mix.
+
+       [Brief]
+        Information on instruction mix is classified into 9 types and displayed.
+
+       [Standard]
+        Information on instruction mix is classified into 25 types and displayed.
+
+       [Detail]
+        Information on instruction mix is classified into 26 types and displayed.
+
+   * - FLOPS
+     - \-
+     - some
+     - all
+     - all
+     - Displays information about floating point operations.
+
+       [Brief]
+        Displays the floating-point performance including the active element ratio and active element ratio.
+
+       [Standard / Detail]
+        In addition to the contents of the Brief Report, the ratio of each precision floating point number is displayed.
+
+   * - Extra
+     - \-
+     - \-
+     - \-
+     - all
+     - Multiple information such as the number of Fill instructions, the number of Spill instructions, and the breakdown of gather instructions are displayed.
+
+   * - Hardware Prefetch Rate (\%) (\/HardwarePrefetch)
+     - \-
+     - \-
+     - \-
+     - all
+     - Display hardware application fetch detail.
+
+   * - Data Transfer CMGs
+     - \-
+     - \-
+     - \-
+     - all
+     - Displays throughput information between all CMGs, memory, Tofu, and PCI for the CMG specified by the user.
+
+   * - Power Consumption (W)
+     - \-
+     - \-
+     - all
+     - all
+     - Displays the power consumption of the core, L2 cache, and memory.
+
+
+.. note::
+
+  The abbreviations and explanations of headings and symbols in the table are as follows.
+
+  - Unit : Unit Report
+  - Brief : Brief Report
+  - Standard : Standard Report
+  - Detail : Detail Report
+  - all : All information will be output
+  - some : Some information will be output
+  - \- : Information won't be output
+
+
+Addition of measurement interval specification routine
+------------------------------------------------------
+
+| Adds measurement interval specification routines / functions necessary for specifying the interval for measuring profile data to the source code.
+| The measurement interval specification function can be used as a Fortran language subroutine or C/C++ function.
+| When using C/C++ functions, you must declare the function prototype or include the header file of the profiler subroutine.
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 5 10 15 15 20
+
+   * - Language type
+     - Header file
+     - Subroutine / Function name
+     - Argument
+     - Function
+
+   * - Fortran
+     - None
+     - | fapp_start
+       | fapp_stop
+     - \(name, number, level)
+     - | Start measuring information
+       | End measuring information
+
+   * - C/C++
+     - fj_tool/fapp.h
+     - | void fapp_start
+       | void fapp_stop
+     - \(const char \*name, int number, int level)
+     - | Start measuring information
+       | End measuring information
+
+
+  
+ [Argument details]
+ 
+ .. list-table::
+   :header-rows: 1
+   :widths: 2 8
+
+   * - Argument
+     - Description
+
+   * - name
+     - Group name (basic character scalar). A group name consists of letters, numbers, and underscores. Other characters cannot be used.
+
+   * - number
+     - Detail number (4-byte integer type)
+
+   * - level
+     - Priority level (4 byte integer type and integer greater than or equal to 0)
+  
+ .. note::
+   The group name and detail number are used to distinguish them as measurement range names. If the priority level is higher than :program:`fapp` command's ``-L`` option, do not proceed measurement.
+
+ .. attention::
+ 
+   - When calling subroutines / functions with the same measurement section name multiple times, be sure to call them in the order fapp_start and fapp_stop. If fapp_start is called again before calling fapp_stop, or if fapp_stop is called before calling fapp_start, a warning message is output and the call is ignored.
+   - If the measurement section names are different, there is no problem if fapp_start or fapp_stop continues.
+   - If the process ends without calling fapp_stop, the profile data for that section is not measured.
+   - If the measurement for the same measurement section name is performed multiple times, all the measurement results are added.
+   - Specify the same value for the argument level for fapp_start and fapp_stop. If you specify a different value, depending on specification of :program:`fapp` command's  ``-L``  option , unintended results may occur.
+   - If specify "all" to argument ``name`` and 0 to ``number``,it covers the entire program.
+   - In the case of an MPI program, call a subroutine / function with the same measurement section name in all processes to be measured. Profile data for processes that have not been called is not counted.
+
+
+An example of using the measurement interval specification routine is shown below.
+
+- Fortran example
+
+  1. Sample specification example
+
+    .. code-block:: fortran
+   
+     program main
+     ...
+     call fapp_start("foo",1,0)         ! Start measurement of measurement section name "foo1"
+     do i=1,10000
+       ...
+       call fapp_start("bar",1,0)       ! Start measurement of measurement section name "foo1"
+       do j=1,10000
+        ...
+       end do
+       call fapp_stop("bar",1,0)        ! End measurement of measurement section name "bar1"
+     end do
+     call fapp_stop("foo",1,0)          ! End measurement of measurement section name "foo1"
+     end program main
+
+  2. Example of measuring all processes (measurement starts before calling the mpi_init subroutine)
+
+    .. code-block:: fortran
+
+     call fapp_start("foo",1,0)         ! Start measurring
+     call mpi_init(err)
+     ...
+     call mpi_finalize(err)
+     call fapp_stop("foo",1,0)          ! End measurring
+
+
+  3. Example of measuring all processes (measurement starts immediately after calling the mpi_init subroutine)
+
+    .. code-block:: fortran
+
+     call mpi_init(err)
+     call fapp_start("foo",1,0)         ! Start measurring
+     ...
+     call fapp_stop("foo",1,0)          ! End measurring
+     call mpi_finalize(err)
+
+  4. Example of measuring only process 0
+
+    .. code-block:: fortran
+
+     call mpi_init(err)
+     call mpi_comm_rank(mpi_comm_world,rank,err)
+     if(rank==0) then
+       call fapp_start("foo",1,0)       ! Only process 0, start measurring
+     end if
+       ...
+     if(rank==0) then
+       call fapp_stop("foo",1,0)        ! Only process 0, end measurring
+     end if
+     call mpi_finalize(err)
+
+- C/C++ example
+
+  1. Sample specification example
+
+    .. code-block:: C
+
+     #include "fj_tool/fapp.h"          // Include header file
+     ...
+     int main(void)
+     {
+       int i,j;
+       fapp_start("foo",1,0);           // Start measuring the measurement section name "foo1"
+       for(i=0;i<10000;i++){
+         ...
+         fapp_start("bar",1,0);         // Start measuring the measurement section name "bar1"
+         for(j=0;j<10000;j++){
+            ...
+         }
+         fapp_stop("bar",1,0);          // End measuring the measurement section name "bar1"
+       }
+       return 0;
+       fapp_stop("foo",1,0);            // End measuring the measurement section name "foo1"
+     }
+
+  2. Example of measuring all processes (start measurement before calling the MPI_Init function)
+
+    .. code-block:: C
+     
+     fapp_start("foo",1,0);             // Start measurring
+     MPI_Init(&argc, &argv);
+     ...
+     MPI_Finalize();
+     fapp_stop("foo",1,0);              // End measurring
+
+  3. Example of measuring all processes (measurement starts immediately after calling the MPI_Init function)
+
+    .. code-block:: C
+     
+     MPI_Init(&argc, &argv);
+     fapp_start("foo",1,0);             // Start measurring
+     ...
+     fapp_stop("foo",1,0);              // End measurring
+     MPI_Finalize();
+
+  4. Example of measuring only process 0
+
+    .. code-block:: C
+     
+     MPI_Init(&argc, &argv);
+     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+     if(rank==0){
+       fapp_start("foo",1,0);           // Only process 0, start measurring
+     }
+     ...
+     if(rank==0){
+       fapp_stop("foo",1,0);            // Only process 0, end measurring
+     }
+     MPI_Finalize();
+
+
+Compiling / Linking
+-------------------
+
+The CPU Performance Analysis Report output function compiles and links in the same way as the Advanced Performance Profiler translation procedure.
+
+| The tool library required to use the Instant Performance Profiler function is linked by default when compiling / linking.
+| Therefore, there is no need to specify special options as in the following example.
+| Compile / link is done at the login node or the compute node.
+
+
+- Compile / link example (MPI program)
+
+ .. code-block:: console
+
+   [_LNlogin]$ mpifrtpx  -Kfast,parallel  "Source file name"
+
+- Compile / link example (sequential / thread parallel program)
+
+ .. code-block:: console
+
+   [_LNlogin]$ $ frtpx  -Kfast,parallel  "Source file name"
+
+ .. attention::
+
+   When split compilation is performed, the optimization options specified at compile time should also be specified at link time so that the library of the appropriate profiler is linked.
+
+   For programs using OpenMP, specify ``-Kopenmp`` option when linking.
+
+About Fortran translation options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+| The following are the translation options for the profiler used when translating Fortran programs.
+| This option is enabled when linking.
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 4 6
+
+   * - Option
+     - Description
+
+   * - \-Nfjprof
+     - | Combine tool library.
+       | When omitted, ``-Nfjprof`` is enabled.
+
+   * - \-Nnofjprof
+     - | Do not combine tool library.
+       | Cannot use profiler.
+
+
+About C/C++ translation options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+| For the C/C++ language, there are two types of compilation modes: trad mode and clang mode.
+| The translation options for the profiler used when translating programs in each mode are listed below.
+| This option is enabled when linking.
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 1 2 4
+
+   * - Mode
+     - Option
+     - Description
+
+   * - trad
+     - \-Nfjprof
+     - | Combine tool library.
+       | When omitted  \ ``-Nfjprof``\  is enabled.
+
+   * - trad
+     - \-Nnofjprof
+     - | Do not combine tool library.
+       | Cannot use profiler.
+
+   * - clang
+     - \-ffj-fjprof
+     - | Combine tool library.
+       | When omitted  \ ``-ffj-fjprof``\  is enabled.
+   * - clang
+     - \-ffj-no-fjprof
+     - | Do not combine tool library.
+       | Cannot use profiler.
+
+
+.. _CPUPerformanceAnalysisReportUsageProcedure:
+
+Measurement of profile data
+---------------------------
+
+| Measure by using a Advanced Performance Profiler's :program:`fapp` command. When measuring profile data for CPU Performance Analysis Report, specify ``-Hevent`` option to :program:`fapp` command is required.
+| This operation is performed on the compute node.
+
+The following shows an execution example for each report.
+
+- Unit report
+
+  To create a unit report, please proceed one measurement with specifying \ ``-Hevent=pa1``\ .
+
+ .. code-block:: console
+
+  # A measurement example when unit report creation
+  $ fapp -C -d ./rep1 -Hevent=pa1 ./a.out
+
+
+- Brief Report
+
+  To create a Brief Report, perform 5 measurements specifying from ``-Hevent=pa1`` to  ``-Hevent=pa5``.
+
+ .. code-block:: console
+
+  # Measurement example when creating a Brief Report
+  $ fapp -C -Hevent=pa1 -d ./rep1 ./a.out
+  $ fapp -C -Hevent=pa2 -d ./rep2 ./a.out
+  $ fapp -C -Hevent=pa3 -d ./rep3 ./a.out
+  $ fapp -C -Hevent=pa4 -d ./rep4 ./a.out
+  $ fapp -C -Hevent=pa5 -d ./rep5 ./a.out
+
+- Standard Report
+
+  To create a Standard Report, perform 11 measurements specifying from ``-Hevent=pa1`` to  ``-Hevent=pa11``.
+
+ .. code-block:: console
+
+  # Measurement example when creating a Standard Report
+  $ fapp -C -Hevent=pa1  -d ./rep1  ./a.out
+  $ fapp -C -Hevent=pa2  -d ./rep2  ./a.out
+  $ fapp -C -Hevent=pa3  -d ./rep3  ./a.out
+  $ fapp -C -Hevent=pa4  -d ./rep4  ./a.out
+  $ fapp -C -Hevent=pa5  -d ./rep5  ./a.out
+  $ fapp -C -Hevent=pa6  -d ./rep6  ./a.out
+  $ fapp -C -Hevent=pa7  -d ./rep7  ./a.out
+  $ fapp -C -Hevent=pa8  -d ./rep8  ./a.out
+  $ fapp -C -Hevent=pa9  -d ./rep9  ./a.out
+  $ fapp -C -Hevent=pa10 -d ./rep10 ./a.out
+  $ fapp -C -Hevent=pa11 -d ./rep11 ./a.out
+
+- Detail Report
+
+  To create a Detail Report, perform 17 measurements specifying from ``-Hevent=pa1`` to ``-Hevent=pa17``.
+
+ .. code-block:: console
+
+  # Measurement example when creating a Detail Report
+  $ fapp -C -Hevent=pa1  -d ./rep1  ./a.out
+  $ fapp -C -Hevent=pa2  -d ./rep2  ./a.out
+  $ fapp -C -Hevent=pa3  -d ./rep3  ./a.out
+  $ fapp -C -Hevent=pa4  -d ./rep4  ./a.out
+  $ fapp -C -Hevent=pa5  -d ./rep5  ./a.out
+  $ fapp -C -Hevent=pa6  -d ./rep6  ./a.out
+  $ fapp -C -Hevent=pa7  -d ./rep7  ./a.out
+  $ fapp -C -Hevent=pa8  -d ./rep8  ./a.out
+  $ fapp -C -Hevent=pa9  -d ./rep9  ./a.out
+  $ fapp -C -Hevent=pa10 -d ./rep10 ./a.out
+  $ fapp -C -Hevent=pa11 -d ./rep11 ./a.out
+  $ fapp -C -Hevent=pa12 -d ./rep12 ./a.out
+  $ fapp -C -Hevent=pa13 -d ./rep13 ./a.out
+  $ fapp -C -Hevent=pa14 -d ./rep14 ./a.out
+  $ fapp -C -Hevent=pa15 -d ./rep15 ./a.out
+  $ fapp -C -Hevent=pa16 -d ./rep16 ./a.out
+  $ fapp -C -Hevent=pa17 -d ./rep17 ./a.out
+
+
+.. attention::
+
+  - Do not specify ``-Inocpupa`` option to :program:`fapp` command. If specified ``-Inocpupa``, ``-Hevent option`` is unabled.
+  - ``-Hevent`` option, only one of it can be specified in one measurement. If specified multiple, the last specified ``-Hevent`` option is enabled.
+
+  - The order of measurement is random. For example, after specified ``-Hevent=pa2`` and measured, and specify ``-Hevent=pa1`` and measure, no matter on it.
+  - The name of the CSV format file output by ":ref:`CPUPerformanceAnalysisReportOutputProfileResults`"is determined by the measured -Hevent option. Therefore, it is recommended to name the directory that stores the measured profile data so that the specified argument can be determined.
+
+
+Profiler option
+---------------
+
+Here describes about  :program:`fapp` command option.
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 3 7
+
+   * - Option
+     - Description
+
+   * - | -C
+       | (Required option)
+     - Specifies measurement of profile data. If this option is omitted, an error message is output and the execution of the program ends.
+
+   * - | \-d  *profile_data*
+       | (Required option)
+     - | Specify the directory for storing profile data. If this option is omitted, an error message is output and the execution of the program ends.
+       | In ``profile_data``, specify the directory name for storing the profile data as a relative or absolute path. The specified directory must be new or empty.
+       | When analyzing a program that moves the current directory during execution, ``profile_data`` is specified as an absolute path.
+       | The Profiler creates a subdirectory for every 1000 files under ``profile_data``. Therefore, even for large jobs, you only need to specify ``profile_data``.
+
+   * - \-H\ *item*
+     - | Specify the measurement of CPU performance analysis information.
+       | If ``-Inocpupa`` option is specified, a warning message is output and this option is disabled.
+       | *item*:{event=\ *event* | event_raw=\ *event_raw* } [,method={fast | normal},mode={all | user}]
+
+       event=\ *event*
+        Measures information used for CPU Performance Analysis Reports. Specify one of the following for \ *event* \.
+        
+        { pa1 | pa2 | pa3 | pa4 | pa5 | pa6 | pa7 | pa8 | pa9 | pa10 | pa11 | pa12 | pa13 | pa14 | pa15 | pa16 | pa17 | statistics}
+       
+       event_raw=\ *event_raw*
+        CPU performance analysis information is measured by specifying the event number of PMU event information. *event_raw* specifies the event number corresponding to the CPU in decimal or hexadecimal notation. Up to 8 *event_raw* can be specified by separating them with a comma (,).
+
+       method=fast
+        Specify the measurement method for CPU performance analysis information. When this suboption is specified, high-precision CPU performance analysis information is measured by a method that directly measures hardware information.
+
+       method=normal
+        Specify the measurement method for CPU performance analysis information. When this suboption is specified, CPU performance analysis information is measured by the method of measuring via the OS. When omitted, it will be ``method=normal``.
+
+       mode=all
+        Specify the measurement mode for CPU performance analysis information. When this suboption is specified, performance is measured in kernel mode and user mode.
+
+       mode=user
+        Specify the measurement mode for CPU performance analysis information. When this suboption is specified, performance measurement is performed in user mode.
+
+
+   * - | \-I\ *item*
+       | (Hyphen + capital letter I)
+     - | Specify the items to be measured by the Advanced Performance Profiler. If specify with multiple  \ *item*\, devide with comma.
+       | *item* :{{``cpupa`` | ``nocpupa``} | {``mpi`` | ``nompi``}}
+       
+       | Operation when this option is omitted depends on the item to be measured.
+       | For CPU performance characteristics measurement, if ``-H`` option is specified, ``-Icpupa`` is enabled, if ``-H`` option is not specified, ``-Inocpupa`` is enabled.
+       | For MPI Cost information measurement, if target is MPI program, ``mpi`` is enabled, if target is unti MPI program, ``nompi`` is enabled.
+       
+       cpupa:
+        Measures the CPU performance characteristics.
+       nocpupa:
+        Do not measures the CPU performance characteristics.
+       mpi:
+        Measures MPI Cost information.
+       nompi:
+        Does not measures MPI Cost information.
+
+   * - \-L *level*
+     - | Specify the start level of the measurement target.
+       | For level, specify an integer value in the range of 0 to 2,147,483,647. This option has meaning for the third argument level of the measurement section specification routine. "level"> = "Only the section of the third argument level" of the measurement section specification routine is enabled as a measurement target.
+       | When this option is omitted, ``-L 0`` is enabled.
+
+   * - \exec-file [ exec_option ... ]
+     - Specify the executable file and options for profile data measurement. For MPI programs, specify from   :program:`mpiexec`.
+
+
+.. _CPUPerformanceAnalysisReportOutputProfileResults:
+
+Output profile result
+---------------------
+
+| Outputs CSV format file used for CPU Performance Analysis Report by using a Advanced Performance Profiler  ``fapppx`` command. When outputting a CSV format file that is input to the CPU Performance Analysis Report, specify ``-tcsv`` option to ``fapppx`` command.
+
+
+| The following shows an execution example for each report.
+| Also please refer to ":ref:`AdvancedProfilerOutputProfileResults`" and ":ref:`CPUPerformanceAnalysisReportUsageProcedure`" for input profile data.
+
+- Unit report
+
+  To create a unit report, please output ``pa1.csv``'s one CSV format file by using ``-Hevent=pa1`` profile data.
+
+ .. code-block:: console
+
+  # If output the profile data stored in "rep1" directory
+  # for CPU performance analysis report as CSV format 
+
+  $ fapppx -A -d ./rep1 -Icpupa -tcsv -o pa1.csv
+
+
+- Brief Report
+
+  If create Brief Report, use profile data from ``-Hevent=pa1`` to  ``-Hevent=pa5``, output 5 CSV format file from :file:`pa1.csv` ~ :file:`pa5.csv`.
+
+ .. code-block:: console
+
+   # Example of outputting the profile data stored in the "rep1" to
+   #  "rep5" directories in CSV format for CPU Performance Analysis Reports
+
+   $ fapppx -A -d ./rep1 -Icpupa -tcsv -o pa1.csv
+   $ fapppx -A -d ./rep2 -Icpupa -tcsv -o pa2.csv
+   $ fapppx -A -d ./rep3 -Icpupa -tcsv -o pa3.csv
+   $ fapppx -A -d ./rep4 -Icpupa -tcsv -o pa4.csv
+   $ fapppx -A -d ./rep5 -Icpupa -tcsv -o pa5.csv
+
+- Standard Report
+
+  If create Standard Report, use profile data from ``-Hevent=pa1`` to  ``-Hevent=pa11``, output 11 CSV format file from :file:`pa1.csv` ~  :file:`pa11.csv`.
+
+ .. code-block:: console
+
+   # Example of outputting the profile data stored in the "rep1" to
+   #  "rep11" directories in CSV format for CPU Performance Analysis Reports
+
+   $ fapppx -A -d ./rep1  -Icpupa -tcsv -o pa1.csv
+   $ fapppx -A -d ./rep2  -Icpupa -tcsv -o pa2.csv
+   $ fapppx -A -d ./rep3  -Icpupa -tcsv -o pa3.csv
+   $ fapppx -A -d ./rep4  -Icpupa -tcsv -o pa4.csv
+   $ fapppx -A -d ./rep5  -Icpupa -tcsv -o pa5.csv
+   $ fapppx -A -d ./rep6  -Icpupa -tcsv -o pa6.csv
+   $ fapppx -A -d ./rep7  -Icpupa -tcsv -o pa7.csv
+   $ fapppx -A -d ./rep8  -Icpupa -tcsv -o pa8.csv
+   $ fapppx -A -d ./rep9  -Icpupa -tcsv -o pa9.csv
+   $ fapppx -A -d ./rep10 -Icpupa -tcsv -o pa10.csv
+   $ fapppx -A -d ./rep11 -Icpupa -tcsv -o pa11.csv
+
+
+- Detail Report
+
+  If create Detail Report, use profile data from ``-Hevent=pa1`` to  ``-Hevent=pa17``, output 17 CSV format file from :file:`pa1.csv` ~  :file:`pa17.csv`.
+
+ .. code-block:: console
+
+   # Example of outputting the profile data stored in the "rep1" to
+   #  "rep17" directories in CSV format for CPU Performance Analysis Reports
+
+   $ fapppx -A -d ./rep1  -Icpupa -tcsv -o pa1.csv
+   $ fapppx -A -d ./rep2  -Icpupa -tcsv -o pa2.csv
+   $ fapppx -A -d ./rep3  -Icpupa -tcsv -o pa3.csv
+   $ fapppx -A -d ./rep4  -Icpupa -tcsv -o pa4.csv
+   $ fapppx -A -d ./rep5  -Icpupa -tcsv -o pa5.csv
+   $ fapppx -A -d ./rep6  -Icpupa -tcsv -o pa6.csv
+   $ fapppx -A -d ./rep7  -Icpupa -tcsv -o pa7.csv
+   $ fapppx -A -d ./rep8  -Icpupa -tcsv -o pa8.csv
+   $ fapppx -A -d ./rep9  -Icpupa -tcsv -o pa9.csv
+   $ fapppx -A -d ./rep10 -Icpupa -tcsv -o pa10.csv
+   $ fapppx -A -d ./rep11 -Icpupa -tcsv -o pa11.csv
+   $ fapppx -A -d ./rep12 -Icpupa -tcsv -o pa12.csv
+   $ fapppx -A -d ./rep13 -Icpupa -tcsv -o pa13.csv
+   $ fapppx -A -d ./rep14 -Icpupa -tcsv -o pa14.csv
+   $ fapppx -A -d ./rep15 -Icpupa -tcsv -o pa15.csv
+   $ fapppx -A -d ./rep16 -Icpupa -tcsv -o pa16.csv
+   $ fapppx -A -d ./rep17 -Icpupa -tcsv -o pa17.csv
+
+
+.. attention::
+
+   - If specified ``-Inocpupa`` option to :program:`fapppx` command, information required for the CPU Performance Analysis Report is not output.
+   - The output is out of order. For example, it is safe to output pa1.csv after outputting pa2.csv.
+
+.. attention::
+
+   When there are many measurement sections and many processes, the csv file may exceed the maximum number of rows (1048576 rows) that Excel can handle. 
+   If the maximum number of lines is exceeded, Excel will not be able to read it, and the message ``The file format is not supported`` will be output and the CPU Performance Analysis Report will not be created.
+
+   In such cases, please reduce the output to the csv file.
+   
+   The followings are examples of workaround. 
+   
+   1. Reduce the measurement section of fapp_start/fapp_stop
+        The measurement section will be reduced by fixing the program.
+
+   #. Use the level argument of fapp_start(name,number,level)/fapp_stop(name,number,level)
+        It involves program fix, the description of fapp_start/fapp_stop remains the same, the measurement section is divided into levels with the argument level, by using the option ``-L`` of :program:`fapp`, you can suppress the output of the section of unnecessary level.
+
+   #. Output suppression of MPI information by fapppx -A -Icpupa,nompi
+        It is enabled when MPI information is not needed.
+
+   #. Specifying the output process by fapppx -A -p option
+        It is enabled when the process to be collected is known.
+        
+        fapppx -A -p<n>,limit=<m>
+        
+        n specifies the process to output. Separate multiple processes with commas. For example, you can specify like ``-p3,5,limit=10``.
+        m specifies the number of processes to output. Outputs the top m cost process including the process specified by n.
+
+
+Create a CPU Performance Analysis Report
+----------------------------------------
+
+Use the following procedure to import the CSV format file output using the ``fapppx`` command of the Advanced Performance Profiler into the CPU Performance Analysis Report.
+
+
+1. Store the CSV file output in the profile result output and the CPU Performance Analysis Report file (cpu_pa_report.xlsm) in the same directory.
+
+ .. seealso::
+   The CPU Performance Analysis Report file is stored in the following location.
+   
+   :file:`$FJSVXTCLANGA/misc/cpupa/cpu_pa_report.xlsm`
+
+2. Copy the directory prepared in step 1 to an environment where Microsoft Excel can be executed.
+3. Start the CPU Performance Analysis Report file (cpu_pa_report.xlsm).
+
+ .. seealso::
+   The CPU Performance Analysis Report uses the macro function of Microsoft Execl. If the macro is disabled due to security settings, enable the macro manually.
+
+4. A dialog for selecting the content to be output to the CPU Performance Analysis Report is displayed. Enter the required information.
+
+ a. If multiple process data exists in the CSV file, the process number input screen is displayed. Enter the process number you want to see. If there is only one process, the process number input screen is not displayed.
+
+   .. figure:: ./img/CPUPerformanceAnalysisReportCreateReport_01.png
+
+ b. If the specified process is executed by multiple CMGs, enter the CMG number you want to refer to on the CMG number entry screen. If there is only one CMG, the CMG number entry screen is not displayed.
+
+   .. figure:: ./img/CPUPerformanceAnalysisReportCreateReport_02.png
+
+ c. If there are multiple measurement sections specified in the measurement section specification routine in the specified process, select the measurement section name you want to refer to on the measurement section selection screen. If there is only one measurement section, the measurement section selection screen is not displayed.
+
+   .. figure:: ./img/CPUPerformanceAnalysisReportCreateReport_03.png
+
+5. Start reading the CSV format file. The files to be read are only the files named pa1.csv to pa17.csv in the same directory as the CPU Performance Analysis Report file. If successful, the following message is displayed for each report created.
+
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 5 5
+
+   * - Message
+     - Message contentes
+
+   * - CPU Performance Analysis Report (Brief Report) created.
+     - CPU Performance Analysis Report (Brief Report) is created.
+
+   * - CPU Performance Analysis Report (Standard Report) created.
+     - CPU Performance Analysis Report (Standard Report) is created.
+
+   * - CPU Performance Analysis Report (Detail Report) created.
+     - CPU Performance Analysis Report (Detail Report) is created.
+
+
+.. seealso::
+
+  - For an overview and details of the output results of the created CPU Performance Analysis Report, see "Profiler User's Guide" - "4.2 CPU Performance Analysis Report Output Result".
+  - 'Floating-point operation peak ratio (%)' in Statistics section shows the ratio of the performance of cpu frequency 2.2 GHz  (peak performance on Fugaku).
+  - The type of CPU performance analysis report to be created is determined by the existence of CSV format files in the directory. The priorities are as follows:
+  
+    1. If pa1.csv to pa17.csv files are all existing, create a detail report.
+    #. If pa1.csv to pa11.csv files are all existing, create a standard report.
+    #. If pa1.csv to pa5.csv files are all existing, create a brief report.
+    #. If pa1.csvfiles is existing, create a unit report.
+
+

@@ -1,0 +1,18 @@
+コマンド解説
+==============
+
+.. toctree::
+   :maxdepth: 1
+ 
+   3-1-1_ResourceAdd
+   3-1-2_ResourceMod
+   3-1-3_ResourceDel
+   3-1-4_ResourceInfo
+   3-1-5_Pjstat
+   3-1-6_Pjstata
+   3-1-7_AccountJ
+   3-1-8_AccountD
+   3-1-9_JobHistory
+   3-1-10_Chkdiskspace
+   3-1-11_Chgdisklimit
+   3-1-12_AccountD_volume

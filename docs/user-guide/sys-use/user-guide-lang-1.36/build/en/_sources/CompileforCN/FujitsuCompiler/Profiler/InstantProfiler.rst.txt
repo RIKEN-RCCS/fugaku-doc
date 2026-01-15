@@ -1,0 +1,557 @@
+Instant Performance Profiler
+============================
+
+The Instant Performance Profiler measures and outputs statistical information for the entire program through sampling analysis.
+
+
+Overview
+--------
+
+Instant Performance Profiler is composed of 2 commands: :program:`fipp` command that measures profile data and :program:`fipppx` command that outputs profile result from measured data. The statistical information that can be output by the Instant Performance Profiler is as follows.
+
+- Statistical time information
+- CPU performance characteristics
+- Cost information
+- Call graph information
+- Source code information
+
+The flow of using the Advanced Performance Profiler is as follows.
+
+.. figure:: ./img/InstantProfiler_01.png
+
+
+Addition of measurement interval specification routine
+------------------------------------------------------
+
+| To measure profile data in a specified section, add a measurement section specification routine / function to the source code.
+| The measurement interval specification function can be used as a Fortran language subroutine or C/C++ function.
+| When using C/C++ functions, you must declare the function prototype or include the header file of the profiler subroutine.
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 1 2 3 1 3
+
+   * - Language type
+     - Header file
+     - Sub routine / function name
+     - Argument
+     - Function
+
+   * - Fortran
+     - None
+     - | fipp_start
+       | fipp_stop
+     - None
+     - | Start measuring Cost information
+       | End measuring Cost information
+
+   * - C/C++
+     - fj_tool/fipp.h
+     - | void fipp_start
+       | void fipp_stop
+     - None
+     - | Start measuring Cost information
+       | End measuring Cost information
+
+ .. attention::
+ 
+   - To collect measurement data using these subroutines / functions, specify ``-Sregion`` option to ``fipp`` command. 
+   - When calling these subroutines / functions multiple times, be sure to call them in the order fipp_start and flipp_stop. If fipp_start is called again before calling fipp_stop, or if fipp_stop is called before calling fipp_start, a warning message is printed and the call is ignored. Also, if the process ends without calling fipp_stop, profile data for that section is not measured.
+   - When these subroutines / functions are called multiple times, the results of all specified measurement intervals are added together.
+   - For MPI programs, call these subroutines / functions in all processes that you want to measure. It does not measure profile data for processes that have not been called.
+
+
+
+An example of using the measurement interval specification routine is shown below.
+
+- Fortran example
+
+  1. Sample specification example
+
+    .. code-block:: fortran
+   
+     program main
+     ...
+     do i=1,10000
+       ...
+       call fipp_start   ! Start measurring
+       do j=1,10000
+       ...
+       end do
+       call fipp_stop    ! End measurring
+     end do
+     end program main
+
+  2. Example of measuring all processes (measurement starts before calling the mpi_init subroutine)
+
+    .. code-block:: fortran
+
+     call fipp_start     ! Start measurring
+     call mpi_init(err)
+     ...
+     call mpi_finalize(err)
+     call fipp_stop      ! End measurring
+
+  3. Example of measuring all processes (measurement starts immediately after calling the mpi_init subroutine)
+
+    .. code-block:: fortran
+
+     call mpi_init(err)
+     call fipp_start     ! Start measurring
+     ...
+     call fipp_stop      ! End measurring
+     call mpi_finalize(err)
+
+  4. Example of measuring only process 0
+
+    .. code-block:: fortran
+
+     call mpi_init(err)
+     call mpi_comm_rank(mpi_comm_world,rank,err)
+     if(rank==0) then
+       call fipp_start   ! Only process 0, start measurring
+     end if
+       ...
+     if(rank==0) then
+       call fipp_stop    ! Only process 0, end measurring
+     end if
+     call mpi_finalize(err)
+
+- C/C++ example
+
+  1. Sample specification example
+
+    .. code-block:: C
+
+     #include "fj_tool/fipp.h" // Include header file
+     ...
+     int main(void)
+     {
+       int i,j;
+       for(i=0;i<10000;i++){
+         ...
+         fipp_start();   // Start measurring
+         for(j=0;j<10000;j++){
+            ...
+         }
+         fipp_stop();    // End measurring
+       }
+       return 0;
+     }
+
+  2. Example of measuring all processes (start measurement before calling the MPI_Init function)
+
+    .. code-block:: C
+     
+     fipp_start();       // Start measurring
+     MPI_Init(&argc, &argv);
+     ...
+     MPI_Finalize();
+     fipp_stop();        // End measurring
+
+  3. Example of measuring all processes (measurement starts immediately after calling the MPI_Init function)
+
+    .. code-block:: C
+     
+     MPI_Init(&argc, &argv);
+     fipp_start();       // Start measurring
+     ...
+     fipp_stop();        // End measurring
+     MPI_Finalize();
+
+  4. Example of measuring only process 0
+
+    .. code-block:: C
+     
+     MPI_Init(&argc, &argv);
+     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+     if(rank==0){
+       fipp_start();     // Only process 0, start measurring
+     }
+     ...
+     if(rank==0){
+       fipp_stop();      // Only process 0, end measurring
+     }
+     MPI_Finalize();
+
+
+Compiling / Linking
+-------------------
+
+| The tool library required to use the Instant Performance Profiler function is linked by default when compiling / linking.
+| Therefore, there is no need to specify special options as in the following example.
+| Compile / link is done at the login node or the compute node.
+
+
+- Compile / link example (MPI program)
+
+ .. code-block:: console
+
+   [_LNlogin]$ mpifrtpx  -Kfast,parallel  "Source file name"
+
+- Compile / link example (sequential / thread parallel program)
+
+ .. code-block:: console
+
+   [_LNlogin]$ frtpx  -Kfast,parallel  "Source file name"
+
+ .. attention::
+
+   When split compilation is performed, the optimization options specified at compile time should also be specified at link time so that the library of the appropriate profiler is linked.
+   For example, in the case of a program that uses OpenMP, specify ``-Kopenmp`` option when linking.
+
+About Fortran translation options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+| The following are the translation options for the profiler used when translating Fortran programs.
+| This option is enabled when linking.
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 2 8
+
+   * - Option
+     - Description
+
+   * - \-Nfjprof
+     - Combine tool library.
+       When omitted, ``-Nfjprof`` is enabled.
+
+   * - \-Nnofjprof
+     - Do not combine tool library.
+       Cannot use profiler.
+
+
+About C/C++ translation options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+| For the C/C++ language, there are two types of compilation modes: trad mode and clang mode.
+| The following are the translation-time options for the profiler used to translate the program for each mode.
+| This option is enabled when linking.
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 1 2 7
+
+   * - Mode
+     - Option
+     - Description
+
+   * - trad
+     - \-Nfjprof
+     - Combine tool library. When omitted, ``-Nfjprof`` is enabled.
+
+   * - trad
+     - \-Nnofjprof
+     - Do not combine tool library. Cannot use profiler.
+
+   * - clang
+     - \-ffj-fjprof
+     - Combine tool library. When omitted, ``-ffj-fjprof`` is enabled.
+   * - clang
+     - \-ffj-no-fjprof
+     - Do not combine tool library. Cannot use profiler.
+
+
+Measurement of profiler data
+----------------------------
+
+| Profiler data is measured by using :program:`fipp` command.
+| This operation is performed on the compute node.
+
+This indicates execution example of :program:`fipp` command.
+
+ [Condition]
+
+ - ``fipp`` command is added to the point where the execution module (:file:`a.out`) is specified.
+ - Gather the data to the directory (:file:`profiling_data`) where specified with ``-d`` option.
+
+
+ [MPI program]
+
+ .. code-block:: bash
+
+    #!/bin/sh
+    #
+    #PJM -L "node=2x2x2"
+    #PJM -L "elapse=01:00:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -s
+    #
+    fipp -C -d profiling_data -Icall,mpi mpiexec ./a.out
+
+
+ [Sequential / Thread parallel program]
+
+ .. code-block:: bash
+
+    #!/bin/sh
+    #
+    #PJM -L "node=1"
+    #PJM -L "elapse=01:00:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -s
+    #
+    
+    fipp -C -d profiling_data -Icall,cpupa ./a.out
+
+
+ .. attention::
+
+   If proceed the following to the profiler data that is measured by :program:`fipp` command, we do not guarantee the work result.
+  
+  - Edit profile data
+  - Add, delete, and rename profile data
+
+
+Profiler option
+---------------
+
+We describe :program:`fipp` command option.
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 3 7
+
+   * - Option
+     - Description
+
+   * - | -C
+       | (Required option)
+     - Specifies measurement of profile data. If this option is omitted, an error message is output and the execution of the program ends.
+
+   * - | \-d  *profile_data*
+       | (Required option)
+     - | Specify the directory for storing profile data. If this option is omitted, an error message is output and the execution of the program ends.
+       | In ``profile_data``, specify the directory name for storing the profile data as a relative or absolute path. The specified directory must be new or empty.
+       | When analyzing a program that moves the current directory during execution, ``profile_data`` is specified as an absolute path.
+       | The Profiler creates a subdirectory for every 1000 files under ``profile_data``. Therefore, even for large jobs, you only need to specify ``profile_data``.
+
+   * - \exec-file [ exec_option ... ]
+     - Specify the executable file and options for profile data measurement. If MPI program, specify from  \ :program:`mpiexec`\ .
+
+   * - \-H[mode={all|user}]
+     - Specify the measurement details of the CPU operation status. Specify one of those:  \ ``all``\  or  \ ``user``\  to sub option  \ ``mode=``\ . When omitted this option or sub option  \ ``mode={all|user}``\ ,  \ ``mode=all``\  is enabled.
+
+       mode=all
+        Performs measurement in kernel mode and user mode.
+
+       mode=user
+        Performs information measurement in user mode.
+
+
+   * - | \-I\ *item*
+       | (Hyphen + capital letter I)
+     - | Indicates the Instant Performance Profiler items to collect. If specify the multiple  \ *item*\, devide with comma.
+       | *item* :{{``call`` | ``nocall``} | {``cpupa`` | ``nocpupa``} | {``mpi`` | ``nompi``}}
+       
+       call:
+        Gather Call graph information.
+       nocall:
+        Do not gather Call graph information. When omitted,  \ ``nocall``\  is enabled.
+       cpupa:
+        Measures the CPU performance characteristics. When omitted,  \ ``cpupa``\   is enabled.
+       nocpupa:
+        Do not measure the CPU performance characteristics.
+       mpi:
+        Measures the MPI Cost information. When omitted when the target is an MPI program  \ ``mpi``\   is enabled.
+       nompi:
+        Do not measures the MPI Cost information.When omitted when the target is an MPI program  \ ``nompi``\   is enabled.
+
+   * - \-i *interval*
+     - Specify the sampling interval for measuring profile data. *interval* specifies the sampling interval as an integer (in milliseconds). When this option is omitted,  \ ``-i 100``\  option will be enabled. Specify an integer value in the range of 10 to 3,600,000 to  \ ``interval``\.
+
+   * - \-L{shared | noshared}
+     - Specify how to measure the generated shared library that the translation option  \ ``-Nline``\  or  \ ``-ffj-line``\ is specified.
+       
+       shared
+        The following information in the shared library with line information is measured.
+        
+        - Starting line number of the procedure
+        - End line number of the procedure
+        - Loop cost distribution information
+        - Line cost distribution information
+       noshared
+        The above information in the shared library with line information is not measured. When omitted,  \ ``noshared``\  is enabled.
+
+   * - \-l *limit*
+     - | Specify the number of procedure information measurements.
+       | For the procedure information of more than the output number, add up and measure as  \ ``__other__``\ .
+       | When omitted this option,  \ ``-l 0``\  option is enabled. Specify an integer value in the range of 0 to 2,147,483,647 to  \ ``limit``\ . If specified 0 to  \ ``limit``\ , measure the entire.
+
+   * - \-m *memsize*
+     - | Specify the work memory size to be used for measurement as an integer value (KB).
+       | A working memory area is allocated for each thread.
+       | When omitted this option,  \ ``-m 3000``\  option is enabled. Specify an integer value in the range 1 to 2,147,483 to  \ ``memsize``\.
+
+   * - \-P{userfunc | nouserfunc}
+     - This option specifies how to appropriate the procedure cost. It applies to a mix of an object for which the compiler option ``-Nline`` or ``-ffj-line`` is specified (object with line information) and an object for which the compiler option ``-Nnoline`` or ``-ffj-no-line`` is specified (object without line information). The standard library and a shared library when ``-Lnoshared`` is specified are handled as objects without line information.
+       
+       userfunc
+        If a cost is appropriated to a procedure of the object without line information, the procedure that called the procedure of the object without line information is traced back from call graph information. If a procedure of the object with line information exists, the cost is appropriated to the procedure. If no procedures of the object with line information exist, the cost is not appropriated. When specifying the ``-Puserfunc`` option, you must specify the ``-Icall`` option at the same time. If you do not specify the ``-Icall`` option, an error message is output and the collecting command is terminated.
+       nouserfunc
+        If a cost is appropriated to a procedure of the object without line information, the cost is appropriated to the procedure. However, the procedure start and end lines are not output.
+
+   * - \-S{all | region}
+     - Specify the measurement interval for profile data.
+       
+       all
+        Measure the entire program. When omitted,  \ ``all``\   is enabled.
+       region
+        Measures the section specified by the measurement section specification routine. A measurement interval specification routine must be inserted in the source code.
+
+   * - -W{spawn|nospawn}
+     - Specify the measurement method for dynamically generated processes. When omitted and specified, if it is MPI program, \ ``-Wspawn``\ is enabled and if it is not MPI program, \ ``-Wnospawn``\  is enabled.
+       
+       spawn
+        Measure dynamically generated process statistics 
+       
+       nospawn
+        Does not measure dynamically generated process statistics 
+
+
+Output profile result
+---------------------
+
+| By using  \ :program:`fipppx`\  command, outputs the measured profile data results with  \ :program:`fipp`\  command.
+| Perform this operation on the login node.
+
+An execution example is shown below of  \ :program:`fipppx`\  command.
+
+- If it's login node
+   Use  :program:`fipppx`\  command.
+- If it's computing node
+   Use  :program:`fipp`\  command.
+
+[Command execution example]
+
+.. code-block:: console
+
+ [_LNlogin]$ fipppx -A -pall -Ibalance,call -d profiling_data
+
+
+In this example, output of all process information is specified ( \ ``-p all``\ ). As a result of high parallel execution, if all processes are targeted for output, the output may be enormous. If you know in advance what process to focus on, you can also output by specifying the process number like  \ ``-p0,1``\  (Process 0 and 1) .
+
+
+fipppx command option
+~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 3 7
+
+   * - Option
+     - Function / measurement value (unit)
+
+   * - | \-A
+       | (Required option)
+     - Specify output processing of profile results.
+
+   * - | \-d  *profile_data*
+       | (Required option)
+     - Specify the directory where the profile data is stored in *profile_data* as a relative or absolute path.
+
+   * - \-f *func_name*
+     - | Specify the name of the procedure used by the program in *func_name*, output information about \ *func_name*.
+       | However if does not measure information about the process of \ *func_name* by  \ :program:`fipp`\  command, or *func_name*  process cost is 0, information will not be output even specified  \ ``ffunc_name``\ .
+
+   * - | \-I\ *item*
+       | (Hyphen + capital letter I)
+     - | Specify the items to be output as profile results.
+       | If specify the multiple  \ *item*\ , devide with comma.
+       | item:{{``balance`` | ``nobalance}|``} | {``call`` | ``nocall}|``} | {``cpupa`` | ``nocpupa}|``} | {``mpi`` | ``nompi``} | {``src[:path ]`` | ``nosrc}}``}}
+       
+       balance:
+        Output cost balance information to Cost information.
+       nobalance:
+        Do not output cost balance information to Cost information. When omitted,  \ ``-nobalance``\   is enabled.
+       call:
+        Output Call graph information.
+       nocall:
+        Do not output Call graph information.When omitted,  \ ``-nocall``\   is enabled.
+       cpupa:
+        Output the CPU performance characteristics. When omitted  \ ``-cpupa``\   is enabled.
+       nocpupa:
+        Do not output the CPU performance characteristics. 
+       mpi:
+        Output MPI Cost information. When omitted when the target is an MPI program  \ ``-mpi``\   is enabled.
+       nompi:
+        Do not output MPI Cost information. If omitted if the target is a non-MPI program  \ ``-nompi``\   is enabled.
+       src[:path ]:
+        Outputs Source code information and cost per line. For per line cost, it does not include the cost output with  \ ``-Impi``\  option. Specify the directory path where the source code exists to  \ ``path``\. If  \ ``path``\  is specified multiply, devide with colon (:) and specify.
+       nosrc:
+        Do not output Source code information. When omitted,  \ ``nosrc``\   is enabled.
+ 
+  
+   * - | \-l *limit*
+       | (Lowercase l)
+     - | Specify the number of procedure information items to be output.
+       | When this option is omitted,  \ ``-l 10``\  option is enabled.
+       | Specify an integer value in the range of 0 to 2,147,483,647. to *limit*. If specified 0 to *limit*, the entire will be output.
+ 
+ 
+ 
+   * - \-o *outfile*
+     - | Specify the output destination of the profile result. For *outfile*, specify the output file name as a relative or absolute path, or specify "stdout".
+       | When this option is omitted,  \ ``-ostdout``\  option is enabled.
+ 
+   * - \-p\ *p_no*
+     - | Specify the process to be output to the profile result.
+       | To *p_no* , specify one of these :  \ ``N``\ , \ ``input=n``\ , \ ``limit=m``\ , \ ``all``\ .
+       | When this option is omitted,  \ ``-pinput=0``\ , \ ``limit=16``\  option is enabled.  To  \ ``-p``\  option, as  comma (,) as devision, *p_no* can specified multiply.
+       | For example, it can be like this :  \ ``-p3,5,limit=10``\ .
+ 
+ 
+       N ... :
+         The information of the process number specified in N is output at the beginning. If the information of the process number specified in N does not exist, ignore the specification. If multiple Ns are specified, they are output in the specified order.
+
+       input=n:
+         Reads the number of n process information in descending order of cost. If 0 is specified for n or a value exceeding the number of processes is specified, information for all processes is read. When this sub option is omitted,  \ ``input=0``\  is enabled. Sub option  \ ``input=n``\  and sub option  \ ``limit=m``\  can be specified at the same time.
+
+       limit=m:
+        Outputs the number of m process information in descending order of cost. The information of the process that was not output is included in the denominator when calculating the ratio. If m is specified as 0 or a value exceeding the number of input processes, information for all processes is output. When this sub option is omitted,  \ ``limit=16``\  is enabled. 
+
+       all:
+        Read all process number information and output in order of highest cost. It is the same of when specified  \ ``-pinput=0,limit=0``\  option. Neither sub option  \ ``input=n``\  and  \ ``limit=m``\  is not specified, this is enabled.
+ 
+   * - \-T\ *t_no*
+     - | Specify the thread to output profile data.
+       | To *t_no* , specifiy one of these:  \ ``N``\, \ ``limit=n``\, \ ``all``\. To  \ ``-T``\  option, as  comma (,) as devision,  \ ``t_no``\  can specified multiply.
+       | For example, it canbe :  \ ``-T3,5,limit=10``\ .
+ 
+       N[,N] ... :
+        The information of the thread number specified in N is output at the head. If the information of the thread specified in N does not exist, ignore the specification. If multiple Ns are specified, they are output in the specified order.
+       limit=n:
+        The number of N thread information is output in descending order of cost. If n is specified as 0 or a value exceeding the total number of threads, information on all threads is output.
+       all:
+        Outputs information about all threads. It is the same as when specifying  \ ``-Tlimit=0``\  option. When omitted,  \ ``-Tall``\  option is enabled.
+ 
+ 
+   * - \-t{text|xml}
+     - Specify the output format of the profile result.
+       
+       text:
+        Outputs profile results in TEXT format. When omitted,  \ ``-ttext``\  is enabled.
+       
+       xml:
+        Outputs profile results in XML format.
+
+
+
+Profile result
+~~~~~~~~~~~~~~
+
+| The profile result consists of the following statistical information.
+| Each information can be limited to output with  \ ``-I``\  option of  \ :program:`fipppx`\  command.
+| For details of each item, please refer to "Profiler User's Guide"-"2.2.2 Detail of Profile Result".
+
+- Profile data measurement environment information
+- Statistical time information
+- CPU performance characteristics
+- Cost information (procedure cost distribution information, loop cost distribution information, line cost distribution information)
+- Call graph information
+- Source code information
+
+

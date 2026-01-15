@@ -1,0 +1,485 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6.6. ランク割り当て &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="6.7. ジョブ形状（トーラス）" href="JobShape%28torus%29.html" />
+    <link rel="prev" title="6.5. MPIジョブ投入時の指定" href="SpecificationsForMPIJob.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="JobShape%28torus%29.html" title="6.7. ジョブ形状（トーラス）"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="SpecificationsForMPIJob.html" title="6.5. MPIジョブ投入時の指定"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">6. </span>MPIジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.6. </span>ランク割り当て</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">6.6. </span>ランク割り当て<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">MPIでは、プロセス識別のために、プロセス番号に相当する「ランク」と呼ぶ番号を割り当てます。</div>
+<div class="line">ランクの割り当てルールは、<strong class="program">pjsub</strong>コマンドの<code class="docutils literal notranslate"><span class="pre">--mpi</span></code>オプションにより指定することができます。</div>
+</div>
+<section id="rank-map-bynode">
+<h2><span class="section-number">6.6.1. </span>rank-map-bynode<a class="headerlink" href="#rank-map-bynode" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">rank-map-bynode</span></code>は、計算ノードに1プロセスを生成すると、次の計算ノードに移動し、ラウンドロビンで自動的に割り付けます。座標の原点をランク0とし、<code class="docutils literal notranslate"><span class="pre">rank-map-bynode</span></code>の先頭文字の軸方向にランクを並べ、上限まで達した時点で、次の文字に移動します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>オプション</p></th>
+<th class="head"><p>内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>rank-map-bynode[=rankmap]</p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">rankmap</span></code>には、<code class="docutils literal notranslate"><span class="pre">XY|YX|XYZ|XZY|YXZ|YZX|ZXY|ZYX</span></code>を指定してください。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">rankmap</span></code>は <code class="docutils literal notranslate"><span class="pre">shape</span></code>で指定した次元数と同じものを指定してください。</div>
+<div class="line">1次元の場合、<code class="docutils literal notranslate"><span class="pre">rankmap</span></code>の指定はできません。</div>
+<div class="line">2次元の場合は文字 <code class="docutils literal notranslate"><span class="pre">XY</span></code>、3次元の場合は文字 <code class="docutils literal notranslate"><span class="pre">XYZ</span></code>の組み合わせで指定してください。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">rankmap</span></code>のデフォルトは、以下のとおりです。</div>
+</div>
+<ul class="simple">
+<li><p>1次元ジョブの場合は、1次元座標がランク番号になります。</p></li>
+<li><p>2次元ジョブの場合は、[<code class="docutils literal notranslate"><span class="pre">XY</span></code>]と同じです。</p></li>
+<li><p>3次元ジョブの場合は、[<code class="docutils literal notranslate"><span class="pre">XYZ</span></code>]と同じです。</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="rank-map-bynode-1">
+<h2><span class="section-number">6.6.2. </span>rank-map-bynode（1次元）<a class="headerlink" href="#rank-map-bynode-1" title="Link to this heading">¶</a></h2>
+<p>1次元の指定例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=8&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-bynode&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_01.png"><img alt="../_images/RankAssignment_01.png" src="../_images/RankAssignment_01.png" style="width: 649.6px; height: 132.8px;" /></a>
+</figure>
+</section>
+<section id="rank-map-bynode-2">
+<h2><span class="section-number">6.6.3. </span>rank-map-bynode（2次元）<a class="headerlink" href="#rank-map-bynode-2" title="Link to this heading">¶</a></h2>
+<p>2次元の指定例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=3x3&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-bynode=XY&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_02.png"><img alt="../_images/RankAssignment_02.png" src="../_images/RankAssignment_02.png" style="width: 656.0px; height: 303.2px;" /></a>
+</figure>
+</section>
+<section id="rank-map-bynode-3">
+<h2><span class="section-number">6.6.4. </span>rank-map-bynode（3次元）<a class="headerlink" href="#rank-map-bynode-3" title="Link to this heading">¶</a></h2>
+<p>3次元の指定例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=3x3x2&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-bynode=XYZ&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_03.png"><img alt="../_images/RankAssignment_03.png" src="../_images/RankAssignment_03.png" style="width: 800.0px; height: 1096.0px;" /></a>
+</figure>
+</section>
+<section id="id2">
+<h2><span class="section-number">6.6.5. </span>rank-map-bynode（ノード内複数プロセス指定（1次元））<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>ノード内に複数のプロセスを指定する場合の例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=8&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;proc=16&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-bynode&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_04.png"><img alt="../_images/RankAssignment_04.png" src="../_images/RankAssignment_04.png" style="width: 575.2px; height: 133.6px;" /></a>
+</figure>
+</section>
+<section id="rank-map-bychip">
+<h2><span class="section-number">6.6.6. </span>rank-map-bychip<a class="headerlink" href="#rank-map-bychip" title="Link to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">rank-map-bychip</span></code>は、計算ノードにnプロセスを生成すると、次の計算ノードに移動し、ラウンドロビンで自動的に割り付けます。座標の原点をランク0とし、<code class="docutils literal notranslate"><span class="pre">rank-map-bychip</span></code>の先頭文字の軸方向にランクを並べ、上限まで達した時点で、次の文字に移動します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>オプション</p></th>
+<th class="head"><p>内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>rank-map-bychip[:rankmap]</p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">rankmap</span></code>には、<code class="docutils literal notranslate"><span class="pre">XY|YX|XYZ|XZY|YXZ|YZX|ZXY|ZYX</span></code>を指定してください。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">rankmap</span></code>は <code class="docutils literal notranslate"><span class="pre">shape</span></code>で指定した次元数と同じものを指定してください。</div>
+<div class="line">1次元の場合、<code class="docutils literal notranslate"><span class="pre">rankmap</span></code>の指定はできません。</div>
+<div class="line">2次元の場合は文字 <code class="docutils literal notranslate"><span class="pre">XY</span></code>、3次元の場合は文字 <code class="docutils literal notranslate"><span class="pre">XYZ</span></code>の組み合わせで指定してください。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">rankmap</span></code>のデフォルトは、以下のとおりです。</div>
+</div>
+<ul class="simple">
+<li><p>1次元ジョブの場合は、1次元座標がランク番号になります。</p></li>
+<li><p>2次元ジョブの場合は、[<code class="docutils literal notranslate"><span class="pre">XY</span></code>]と同じです。</p></li>
+<li><p>3次元ジョブの場合は、[<code class="docutils literal notranslate"><span class="pre">XYZ</span></code>]と同じです。</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">rank-map-bychip</span></code>の指定例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=3x3&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;proc=18&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-bychip:XY&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_05.png"><img alt="../_images/RankAssignment_05.png" src="../_images/RankAssignment_05.png" style="width: 345.6px; height: 241.60000000000002px;" /></a>
+</figure>
+</section>
+<section id="rank-map-hostfile">
+<h2><span class="section-number">6.6.7. </span>rank-map-hostfile<a class="headerlink" href="#rank-map-hostfile" title="Link to this heading">¶</a></h2>
+<p>ランクマップファイルに指定された座標を基に、ランクを割り当てます。</p>
+<p><code class="docutils literal notranslate"><span class="pre">rank-map-hostfile</span></code>の指定例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=2x2x2&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-hostfile=filename&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">filename</span></code>は、<strong class="program">pjsub</strong>コマンドを実行するカレントディレクトリに配置します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">filename</span></code>内のランク指定は、ノード形状に合わせて、1次元、2次元または3次元座標で指定します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">filename</span></code>には、1行に1座標を記述し、括弧で囲んで指定します。</p></li>
+</ol>
+</section>
+<section id="rank-map-hostfile-1">
+<h2><span class="section-number">6.6.8. </span>rank-map-hostfile（1次元）<a class="headerlink" href="#rank-map-hostfile-1" title="Link to this heading">¶</a></h2>
+<p>1次元座標を指定する場合、(X)と指定します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=8&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-hostfile=filename&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<p>ホストマップファイル（1次元指定例）</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(0)      &lt;-- ランク0
+(1)      &lt;-- ランク1
+(2)      &lt;-- ランク2
+(3)      &lt;-- ランク3
+(7)      &lt;-- ランク4
+(6)      &lt;-- ランク5
+(5)      &lt;-- ランク6
+(4)      &lt;-- ランク7
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_06.png"><img alt="../_images/RankAssignment_06.png" src="../_images/RankAssignment_06.png" style="width: 613.6px; height: 113.60000000000001px;" /></a>
+</figure>
+</section>
+<section id="rank-map-hostfile-2">
+<h2><span class="section-number">6.6.9. </span>rank-map-hostfile（2次元）<a class="headerlink" href="#rank-map-hostfile-2" title="Link to this heading">¶</a></h2>
+<p>2次元座標を指定する場合、(X,Y)と指定します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=4x2&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-hostfile=filename&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<p>ホストマップファイル（2次元指定例）</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(0,0)      &lt;-- ランク0
+(1,0)      &lt;-- ランク1
+(2,0)      &lt;-- ランク2
+(3,0)      &lt;-- ランク3
+(3,1)      &lt;-- ランク4
+(2,1)      &lt;-- ランク5
+(1,1)      &lt;-- ランク6
+(0,1)      &lt;-- ランク7
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_07.png"><img alt="../_images/RankAssignment_07.png" src="../_images/RankAssignment_07.png" style="width: 396.0px; height: 152.0px;" /></a>
+</figure>
+</section>
+<section id="rank-map-hostfile-3">
+<h2><span class="section-number">6.6.10. </span>rank-map-hostfile（3次元）<a class="headerlink" href="#rank-map-hostfile-3" title="Link to this heading">¶</a></h2>
+<p>3次元座標を指定する場合、(X,Y,Z)と指定します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=2x2x2&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-hostfile=filename&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<p>ホストマップファイル（3次元指定例）</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(0,0,0)      &lt;-- ランク0
+(1,0,0)      &lt;-- ランク1
+(0,1,0)      &lt;-- ランク2
+(1,1,0)      &lt;-- ランク3
+(0,0,1)      &lt;-- ランク4
+(0,1,1)      &lt;-- ランク5
+(1,0,1)      &lt;-- ランク6
+(1,1,1)      &lt;-- ランク7
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_08.png"><img alt="../_images/RankAssignment_08.png" src="../_images/RankAssignment_08.png" style="width: 395.20000000000005px; height: 192.0px;" /></a>
+</figure>
+</section>
+<section id="id3">
+<h2><span class="section-number">6.6.11. </span>rank-map-hostfile（ノード内複数ランク指定）<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>ホストマップファイル（<code class="docutils literal notranslate"><span class="pre">rank-map-hostfile</span></code>）にて、ノード内に複数プロセスを割り当てる例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=2x2&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;proc=8&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-hostfile=filename&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-bynode&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<p>ホストマップファイル（2次元指定例）</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(0,0)      &lt;-- ランク0
+(0,0)      &lt;-- ランク1
+(1,0)      &lt;-- ランク2
+(1,0)      &lt;-- ランク3
+(0,1)      &lt;-- ランク4
+(0,1)      &lt;-- ランク5
+(1,1)      &lt;-- ランク6
+(1,1)      &lt;-- ランク7
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_09.png"><img alt="../_images/RankAssignment_09.png" src="../_images/RankAssignment_09.png" style="width: 316.8px; height: 167.20000000000002px;" /></a>
+</figure>
+</section>
+<section id="rank-map-hostfile-rank-map-bychip">
+<h2><span class="section-number">6.6.12. </span>rank-map-hostfile／rank-map-bychip（ノード内複数ランク指定）<a class="headerlink" href="#rank-map-hostfile-rank-map-bychip" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">rank-map-hostfile</span></code>と<code class="docutils literal notranslate"><span class="pre">rank-map-bychip</span></code>を同時に指定することができます。</div>
+<div class="line">ホストマップファイルで指定される座標（1行）に、ジョブスクリプトで指定した<code class="docutils literal notranslate"><span class="pre">proc=</span></code>と<code class="docutils literal notranslate"><span class="pre">shape=</span></code>の数を元に、<code class="docutils literal notranslate"><span class="pre">proc/shape</span></code>のプロセス数(小数点以下切り上げ)を割り当てます。<code class="docutils literal notranslate"><span class="pre">shape</span></code>が指定されない場合、代わりに<code class="docutils literal notranslate"><span class="pre">node=</span></code>で指定した数を使用します。</div>
+<div class="line">次の例では、<code class="docutils literal notranslate"><span class="pre">proc/node=8/4=2</span></code>となります。</div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L  &quot;node=2x2&quot;</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L  &quot;elapse=1:00:00&quot;</span>
+<span class="c1">#PJM --mpi  &quot;proc=8&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-hostfile=filename&quot;</span>
+<span class="c1">#PJM --mpi  &quot;rank-map-bychip&quot;</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<p>ホストマップファイル（2次元指定例）</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>(0,0)      &lt;-- ランク0,1
+(0,1)      &lt;-- ランク2,3
+(1,1)      &lt;-- ランク4,5
+(1,0)      &lt;-- ランク6,7
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/RankAssignment_10.png"><img alt="../_images/RankAssignment_10.png" src="../_images/RankAssignment_10.png" style="width: 292.0px; height: 171.20000000000002px;" /></a>
+</figure>
+</section>
+<section id="id4">
+<h2><span class="section-number">6.6.13. </span>ホストマップファイル利用時の注意事項<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>ホストマップファイルについて注意事項を示します。</p>
+<ul>
+<li><p>ファイル内の空行は、無視します。</p></li>
+<li><p>ファイル内に記述する座標は、ノードの形状を表す<code class="docutils literal notranslate"><span class="pre">shape</span></code>パラメーターで指定した範囲内の値である必要があります。</p>
+<ul class="simple">
+<li><p>例）<code class="docutils literal notranslate"><span class="pre">shape=2x3</span></code>が指定された場合、記述できる座標は (0,0)、(0,1)、(0,2)、(1,0)、(1,1)、(1,2) です。</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rank-map-hostfile</span></code>と<code class="docutils literal notranslate"><span class="pre">rank-map-bychip</span></code>パラメーターを共に指定する場合、ファイル内の記述は以下にしたがう必要があります。</p>
+<ul class="simple">
+<li><p>ファイル内に記述する座標の個数は、<code class="docutils literal notranslate"><span class="pre">shape</span></code>パラメーターで指定された形状が示すノード数と同じにします。</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p>例）<code class="docutils literal notranslate"><span class="pre">shape=3x2</span></code>の場合、ノード数は6つのため、ファイル内には6つの座標を記述します。</p></li>
+<li><p>記述した座標の数が<code class="docutils literal notranslate"><span class="pre">shape</span></code>パラメーターで指定した形状が示すノード数よりも少ない場合、<strong class="program">pjsub</strong>コマンドはジョブの受付けを拒否します。</p></li>
+<li><p>記述した座標の数が<code class="docutils literal notranslate"><span class="pre">shape</span></code>パラメーターで指定した形状が示すノード数よりも多い場合、残りの座標は無視されます。</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>ファイル内に複数の同じ座標は記述できません。同じ座標を記述した場合、<strong class="program">pjsub</strong>コマンドがエラーになります。</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rank-map-hostfile</span></code>と<code class="docutils literal notranslate"><span class="pre">rank-map-bynode</span></code>パラメーターを共に指定する場合、ファイル内の記述は以下にしたがう必要があります。</p>
+<ul class="simple">
+<li><p>ファイル内に記述した座標の個数が<code class="docutils literal notranslate"><span class="pre">shape</span></code>パラメーターで指定したプロセス数よりも少ない場合、最後の座標のノードまで割り当てたら最初の座標のノードに戻って割り当てます。
+座標の数が<code class="docutils literal notranslate"><span class="pre">shape</span></code>パラメーターで指定したプロセス数よりも多い場合、残りの座標は無視されます。</p></li>
+<li><p>ファイル内には、同じ座標は計算ノードあたりのCPUコア数以下であれば記述できます。</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">6.6. ランク割り当て</a><ul>
+<li><a class="reference internal" href="#rank-map-bynode">6.6.1. rank-map-bynode</a></li>
+<li><a class="reference internal" href="#rank-map-bynode-1">6.6.2. rank-map-bynode（1次元）</a></li>
+<li><a class="reference internal" href="#rank-map-bynode-2">6.6.3. rank-map-bynode（2次元）</a></li>
+<li><a class="reference internal" href="#rank-map-bynode-3">6.6.4. rank-map-bynode（3次元）</a></li>
+<li><a class="reference internal" href="#id2">6.6.5. rank-map-bynode（ノード内複数プロセス指定（1次元））</a></li>
+<li><a class="reference internal" href="#rank-map-bychip">6.6.6. rank-map-bychip</a></li>
+<li><a class="reference internal" href="#rank-map-hostfile">6.6.7. rank-map-hostfile</a></li>
+<li><a class="reference internal" href="#rank-map-hostfile-1">6.6.8. rank-map-hostfile（1次元）</a></li>
+<li><a class="reference internal" href="#rank-map-hostfile-2">6.6.9. rank-map-hostfile（2次元）</a></li>
+<li><a class="reference internal" href="#rank-map-hostfile-3">6.6.10. rank-map-hostfile（3次元）</a></li>
+<li><a class="reference internal" href="#id3">6.6.11. rank-map-hostfile（ノード内複数ランク指定）</a></li>
+<li><a class="reference internal" href="#rank-map-hostfile-rank-map-bychip">6.6.12. rank-map-hostfile／rank-map-bychip（ノード内複数ランク指定）</a></li>
+<li><a class="reference internal" href="#id4">6.6.13. ホストマップファイル利用時の注意事項</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="SpecificationsForMPIJob.html"
+                          title="前の章へ"><span class="section-number">6.5. </span>MPIジョブ投入時の指定</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="JobShape%28torus%29.html"
+                          title="次の章へ"><span class="section-number">6.7. </span>ジョブ形状（トーラス）</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="JobShape%28torus%29.html" title="6.7. ジョブ形状（トーラス）"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="SpecificationsForMPIJob.html" title="6.5. MPIジョブ投入時の指定"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">6. </span>MPIジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.6. </span>ランク割り当て</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

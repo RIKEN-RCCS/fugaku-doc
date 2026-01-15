@@ -1,0 +1,204 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6.5. MPIジョブ投入時の指定 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="6.6. ランク割り当て" href="RankAssignment.html" />
+    <link rel="prev" title="6.4. 標準出力／標準エラー出力／標準入力" href="InputOutputRedirection.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="RankAssignment.html" title="6.6. ランク割り当て"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="InputOutputRedirection.html" title="6.4. 標準出力／標準エラー出力／標準入力"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">6. </span>MPIジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.5. </span>MPIジョブ投入時の指定</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="mpi">
+<span id="specificationsformpijobmpi"></span><h1><span class="section-number">6.5. </span>MPIジョブ投入時の指定<a class="headerlink" href="#mpi" title="Link to this heading">¶</a></h1>
+<p>MPIジョブ投入時には、<strong class="program">pjsub</strong>コマンドの<code class="docutils literal notranslate"><span class="pre">--mpi</span></code>オプションを利用して、静的に起動するプロセス形状、起動する静的プロセスの最大値、ランク割付ルールを指定することができます。</p>
+<ol class="arabic simple">
+<li><p>静的に起動するプロセス形状</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">--mpi</span> <span class="pre">shape</span></code></p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>起動する静的プロセスの最大数</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">--mpi</span> <span class="pre">proc</span></code></p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>生成するプロセスのランクの割付けルール</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">--mpi</span> <span class="pre">rank-map-bynode</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">--mpi</span> <span class="pre">rank-map-hostfile</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">--mpi</span> <span class="pre">rank-map-bychip</span></code></p></li>
+</ul>
+</div></blockquote>
+<section id="id1">
+<h2><span class="section-number">6.5.1. </span>静的プロセスの形状指定<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<p><strong class="program">pjsub</strong>コマンド（<code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>）を使用することで、静的に起動するプロセスの形状を指定できます。</p>
+<div class="line-block">
+<div class="line">プロセスの形状は、1次元、2次元、3次元の形状で<code class="docutils literal notranslate"><span class="pre">-L</span></code>の<code class="docutils literal notranslate"><span class="pre">node</span></code>パラメータで指定するノード形状と同じ次元数を指定する必要があります。<code class="docutils literal notranslate"><span class="pre">--mpi</span></code>オプションの<code class="docutils literal notranslate"><span class="pre">shape</span></code>パラメタが省略された場合は、<code class="docutils literal notranslate"><span class="pre">-L</span></code>オプションの<code class="docutils literal notranslate"><span class="pre">node</span></code>パラメタの値が使用されます。</div>
+<div class="line">動的プロセスは、<code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>で指定された範囲外で生成されます。</div>
+</div>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">shape</span></code>パラメタ指定例</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 42.9%" />
+<col style="width: 57.1%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>[1次元形状]</p></td>
+<td><p>--mpi &quot;shape=X&quot;</p></td>
+</tr>
+<tr class="row-even"><td><p>[2次元形状]</p></td>
+<td><p>--mpi &quot;shape=XxY&quot;</p></td>
+</tr>
+<tr class="row-odd"><td><p>[3次元形状]</p></td>
+<td><p>--mpi &quot;shape=XxYxZ&quot;</p></td>
+</tr>
+</tbody>
+</table>
+<p>MPIプログラム（<code class="file docutils literal notranslate"><span class="pre">a.out</span></code>）に対し、3次元のプロセス形状（X軸4、Y軸3、Z軸2）を指定する例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L &quot;node=4x3x2&quot;               # node数の指定（3次元指定）</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;             # リソースグループの指定</span>
+<span class="c1">#PJM --mpi &quot;shape=4x3x2&quot;           # 静的プロセス形状</span>
+<span class="c1">#PJM -g groupname                  # 課題のグループ指定</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N # ジョブで使用するデータ領域のvolume</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">24</span><span class="w"> </span>./a.out<span class="w">              </span><span class="c1"># 並列プロセス数24でa.outを実行</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="id2">
+<h2><span class="section-number">6.5.2. </span>静的プロセスの最大数指定<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>プログラム起動時に生成する最大のプロセス数は、<code class="docutils literal notranslate"><span class="pre">pjsub</span> <span class="pre">--mpi</span> <span class="pre">proc</span></code>で指定します。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">proc</span></code>で指定可能なプロセス数は、&quot;<code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>で指定した値×48&quot; 以下となります。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">proc</span></code>に、&quot;<code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>で指定した値の積×48&quot;より大きい値を指定した場合、ジョブの受付が拒否されます。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">proc</span></code>を省略した場合、<code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>で指定した値の積 (形状から求まるノード数)が使用されます。<code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>も省略した場合は、<code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code>で指定したノード数を採用します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">vnode</span></code>指定時に、<code class="docutils literal notranslate"><span class="pre">vnode</span></code>で指定した core 数以上の値を <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">proc</span></code>に指定した場合、ジョブの受付が拒否されます。</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh -x</span>
+<span class="c1">#PJM -L  &quot;node=4&quot;            # 割当ノード 4ノード （1次元形状）</span>
+<span class="c1">#PJM -L  &quot;rscgrp=small&quot;      # リソースグループの指定</span>
+<span class="c1">#PJM -L  &quot;elapse=01:00:00&quot;   # 経過時間制限 1時間</span>
+<span class="c1">#PJM --mpi &quot;shape=4&quot;         # 静的プロセス形状</span>
+<span class="c1">#PJM --mpi &quot;proc=4&quot;          # 静的プロセスの最大数4</span>
+<span class="c1">#PJM -g groupname            # 課題のグループ指定</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N # ジョブで使用するデータ領域のvolume</span>
+<span class="c1">#PJM -s                      # 統計情報出力</span>
+<span class="c1">#</span>
+mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">4</span><span class="w"> </span>./a.out<span class="w">         </span><span class="c1"># a.outを実行</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">6.5. MPIジョブ投入時の指定</a><ul>
+<li><a class="reference internal" href="#id1">6.5.1. 静的プロセスの形状指定</a></li>
+<li><a class="reference internal" href="#id2">6.5.2. 静的プロセスの最大数指定</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="InputOutputRedirection.html"
+                          title="前の章へ"><span class="section-number">6.4. </span>標準出力／標準エラー出力／標準入力</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="RankAssignment.html"
+                          title="次の章へ"><span class="section-number">6.6. </span>ランク割り当て</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="RankAssignment.html" title="6.6. ランク割り当て"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="InputOutputRedirection.html" title="6.4. 標準出力／標準エラー出力／標準入力"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">6. </span>MPIジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.5. </span>MPIジョブ投入時の指定</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

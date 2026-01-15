@@ -1,0 +1,135 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Pre/Post Environment Users Guide - Version 1.17 &#8212; Pre/Post Environment Users Guide  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Pre/Post Environment" href="intro.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="intro.html" title="1. Pre/Post Environment"
+             accesskey="N">next</a></li>
+        <li class="nav-item nav-item-0"><a href="#">Pre/Post Environment Users Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Pre/Post Environment Users Guide - Version 1.17</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="pre-post-environment-users-guide-version-version">
+<h1>Pre/Post Environment Users Guide - Version 1.17<a class="headerlink" href="#pre-post-environment-users-guide-version-version" title="Permalink to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Index:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Pre/Post Environment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#notations">1.1. Notations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#revision-history">1.2. Revision History</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="system.html">2. System Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="system.html#overview">2.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.html#compute-nodes">2.2. Compute Nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.html#management-nodes">2.3. Management Nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.html#software">2.4. Software</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">3. Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html#file-transfer">4. File Transfer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html#compile">5. Compile</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#gcc">5.1. GCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#intel-compiler">5.2. Intel Compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#nvidia-cuda-compiler">5.3. NVIDIA CUDA Compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#fujitsu-compiler-cross-compiler">5.4. Fujitsu Compiler (cross compiler)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html#job-submission">6. Job Submission</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#job-queue-partition">6.1. Job Queue (Partition)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#batch-job">6.2. Batch Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#interactive-job">6.3. Interactive Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#scratch-directory-available-in-the-large-memory-nodes">6.4. Scratch Directory (available in the large memory nodes)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#misc">6.5. Misc</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="slurm.html">7. SLURM Commands</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="slurm.html#submit-a-batch-job-sbatch">7.1. Submit a batch job (sbatch)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slurm.html#submit-a-job-srun">7.2. Submit a job (srun)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slurm.html#cancel-a-job-scancel">7.3. Cancel a job (scancel)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slurm.html#display-job-information-sstat">7.4. Display job information (sstat)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slurm.html#display-job-accounting-information-sacct">7.5. Display job accounting information (sacct)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slurm.html#display-the-status-of-job-queue-squeue">7.6. Display the status of Job queue (squeue)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slurm.html#display-the-status-of-compute-node-sinfo">7.7. Display the status of compute node (sinfo)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slurm.html#transfer-files-to-the-node-to-which-a-job-is-assigned-sbcast">7.8. Transfer files to the node to which a job is assigned (sbcast)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="intro.html"
+                          title="next chapter"><span class="section-number">1. </span>Pre/Post Environment</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="intro.html" title="1. Pre/Post Environment"
+             >next</a></li>
+        <li class="nav-item nav-item-0"><a href="#">Pre/Post Environment Users Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Pre/Post Environment Users Guide - Version 1.17</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

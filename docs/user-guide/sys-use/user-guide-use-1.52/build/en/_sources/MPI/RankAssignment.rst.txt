@@ -1,0 +1,399 @@
+Rank assignment
+===============
+
+| For MPI, to identify process, the number called "Rank" is assigned which is the similar to process number.
+| The rule of rank assignment, it can be specified from  \ :program:`pjsub`\  command's  \ ``--mpi``\  option.
+
+
+Rank-map-bynode
+---------------
+
+When one process is created on a compute node,  \ ``rank-map-bynode``\  moves to the next compute node and automatically allocates it in a round-robin fashion. The origin of the coordinates is rank 0, the rank is arranged in the axis direction of the first character of  \ ``rank-map-bynode``\, and when the upper limit is reached, the character moves to the next character. 
+
+.. list-table::
+ :widths: 4,8
+ :header-rows: 1
+
+
+ * - Option
+   - Description
+
+ * - rank-map-bynode[=rankmap]
+   - | To  \ ``rankmap``\, specify  \ ``XY|YX|XYZ|XZY|YXZ|YZX|ZXY|ZYX``\.
+     | To  \ ``rankmap``\, specify the same number of dimention specified in  \  ``shape``\.
+     | If 1 dimention, cannot specify  \ ``rankmap``\.
+     | If 2 dimentions, specify letter  \ ``XY``\ , 3 dimentions, specify letter  \ ``XYZ``\  combinations.
+     | ``rankmap``\  default is as following.
+
+     - If 1 dimention job, one-dimensional coordinates become rank numbers.
+     - If 2 dimentions job, it is the same as [\ ``XY``\ ] in case of dimentional job.
+     - If 3 dimentions job, it is the same as [\ ``XYZ``\ ] in case of dimentional job.
+
+
+rank-map-bynode (1 dimention)
+-----------------------------
+
+This indicates 1 dimention specification example.
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=8"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "rank-map-bynode"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+.. figure:: ./img/RankAssignment_01.png
+   :align: center
+   :scale: 80
+
+
+rank-map-bynode (2 dimentions)
+------------------------------
+
+This indicates 2 dimentions specification example.
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=3x3"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "rank-map-bynode=XY"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+.. figure:: ./img/RankAssignment_02.png
+   :align: center
+   :scale: 80
+
+
+rank-map-bynode (3 dimentions)
+------------------------------
+
+This indicates 3 dimentions specification example.
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=3x3x2"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "rank-map-bynode=XYZ"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+.. figure:: ./img/RankAssignment_03.png
+   :align: center
+   :scale: 80
+
+
+rank-map-bynode (the multiple process specification in node (1 dimention))
+--------------------------------------------------------------------------
+
+This indicates the example of specifying multiple process in node.
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=8"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "proc=16"
+  #PJM --mpi  "rank-map-bynode"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+.. figure:: ./img/RankAssignment_04.png
+   :align: center
+   :scale: 80
+
+
+rank-map-bychip
+---------------
+
+When an n process is created on a compute node, \ ``rank-map-bychip``\  moves to the next compute node and is automatically allocated in a round-robin fashion.  The origin of the coordinates is rank 0, the rank is arranged in the axis direction of the first character of  \ ``rank-map-bychip``\ , and when the upper limit is reached, the character moves to the next character.
+
+.. list-table::
+ :widths: 4,8
+ :header-rows: 1
+
+
+ * - Option
+   - Description
+
+ * - rank-map-bynode[=rankmap]
+   - | To  \ ``rankmap``\, specify  \ ``XY|YX|XYZ|XZY|YXZ|YZX|ZXY|ZYX``\.
+     | To  \ ``rankmap``\, specify the same number of dimention specified in  \  ``shape``\.
+     | If 1 dimention, cannot specify  \ ``rankmap``\.
+     | If 2 dimentions, specify letter  \ ``XY``\ , 3 dimentions, specify letter  \ ``XYZ``\  combinations.
+     | ``rankmap``\  default is as following.
+
+     - If 1 dimention job, one-dimensional coordinates become rank numbers.
+     - If 2 dimentions job, it is the same as [\ ``XY``\ ] in case of dimentional job.
+     - If 3 dimentions job, it is the same as [\ ``XYZ``\ ] in case of dimentional job.
+
+
+
+This indicates  \ ``rank-map-bychip``\  specification example.
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=3x3"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "proc=18"
+  #PJM --mpi  "rank-map-bychip:XY"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+
+.. figure:: ./img/RankAssignment_05.png
+   :align: center
+   :scale: 80
+
+
+rank-map-hostfile
+-----------------
+
+Assign a rank based on the coordinates specified in the rank map file.
+
+This indicates  \ ``rank-map-hostfile``\  specification example.
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=2x2x2"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "rank-map-hostfile=filename"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+
+1. Set  \ ``filename``\  in  current directory where executes  \ :program:`pjsub`\ command.
+2. For rank specification in  \ ``filename``\, specify one-, two-, or three-dimensional coordinates according to the node shape.
+3. To ``filename``\, write one coordinate per line and specify it in parentheses.
+
+
+rank-map-hostfile (1 dimention)
+-------------------------------
+
+To specify one-dimensional coordinates, specify (X).
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=8"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "rank-map-hostfile=filename"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+
+Host map file (1 dimention specification example)
+
+.. code-block:: none
+
+  (0)      <-- Rank 0
+  (1)      <-- Rank 1
+  (2)      <-- Rank 2
+  (3)      <-- Rank 3
+  (7)      <-- Rank 4
+  (6)      <-- Rank 5
+  (5)      <-- Rank 6
+  (4)      <-- Rank 7
+
+.. figure:: ./img/RankAssignment_06.png
+   :align: center
+   :scale: 80
+
+
+rank-map-hostfile (2 dimentions)
+--------------------------------
+
+To specify two-dimensional coordinates, specify (X,Y).
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=4x2"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "rank-map-hostfile=filename"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+Host map file (2 dimentions specification example)
+
+.. code-block:: none
+
+  (0,0)      <-- Rank 0
+  (1,0)      <-- Rank 1
+  (2,0)      <-- Rank 2
+  (3,0)      <-- Rank 3
+  (3,1)      <-- Rank 4
+  (2,1)      <-- Rank 5
+  (1,1)      <-- Rank 6
+  (0,1)      <-- Rank 7
+
+.. figure:: ./img/RankAssignment_07.png
+   :align: center
+   :scale: 80
+
+
+rank-map-hostfile (3 dimentions)
+--------------------------------
+
+To specify two-dimensional coordinates, specify (X,Y,Z).
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=2x2x2"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "rank-map-hostfile=filename"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+Host map file (3 dimentions specification example)
+
+.. code-block:: none
+
+  (0,0,0)      <-- Rank 0
+  (1,0,0)      <-- Rank 1
+  (0,1,0)      <-- Rank 2
+  (1,1,0)      <-- Rank 3
+  (0,0,1)      <-- Rank 4
+  (0,1,1)      <-- Rank 5
+  (1,0,1)      <-- Rank 6
+  (1,1,1)      <-- Rank 7
+
+.. figure:: ./img/RankAssignment_08.png
+   :align: center
+   :scale: 80
+
+
+rank-map-hostfile (the multiple rank specification in node)
+-----------------------------------------------------------
+
+At host map file (\ ``rank-map-hostfile``\), the following is an example of assigning multiple processes in a node.
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=2x2"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "proc=8"
+  #PJM --mpi  "rank-map-hostfile=filename"
+  #PJM --mpi  "rank-map-bynode"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+Host map file (2 dimentions specification example)
+
+.. code-block:: none
+
+  (0,0)      <-- Rank 0
+  (0,0)      <-- Rank 1
+  (1,0)      <-- Rank 2
+  (1,0)      <-- Rank 3
+  (0,1)      <-- Rank 4
+  (0,1)      <-- Rank 5
+  (1,1)      <-- Rank 6
+  (1,1)      <-- Rank 7
+
+.. figure:: ./img/RankAssignment_09.png
+   :align: center
+   :scale: 80
+
+
+rank-map-hostfile/rank-map-bychip (the multiple rank specification in node)
+----------------------------------------------------------------------------
+
+| Specifying  \ ``rank-map-hostfile``\  and  \ ``rank-map-bychip``\  is available.
+| At the coordinates (one line) specified in the host map file, assign  \ ``proc/shape``\  process number (rounded up after the decimal point) based on the number of  \ ``proc=``\  and  \ ``shape=``\ specified in a job script. If  \ ``shape``\  is not specified,  alternatively use the number specified by  \ ``node=``\.
+| In next example, it will be  \ ``proc/node=8/4=2``\.
+
+.. code-block:: bash
+
+  #!/bin/sh
+  #PJM -L  "node=2x2"
+  #PJM -L  "rscgrp=small"
+  #PJM -L  "elapse=1:00:00"
+  #PJM --mpi  "proc=8"
+  #PJM --mpi  "rank-map-hostfile=filename"
+  #PJM --mpi  "rank-map-bychip"
+  #PJM -g groupname
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+  #
+  mpiexec ./a.out
+
+Host map file (2 dimentions specification example)
+
+.. code-block:: none
+
+  (0,0)      <-- Rank 0,1
+  (0,1)      <-- Rank 2,3
+  (1,1)      <-- Rank 4,5
+  (1,0)      <-- Rank 6,7
+
+.. figure:: ./img/RankAssignment_10.png
+   :align: center
+   :scale: 80
+
+
+Notes on when using host map file
+---------------------------------
+
+Here is the notes about host map file.
+
+- Empty line in the file is ignored.
+- The coordinates described in the file must be within the range specified by the  \ ``shape``\  parameter that represents the shape of the node.
+
+  - Example) If  \ ``shape=2x3``\  is specified, the coordinates that can be described are (0,0), (0,1), (0,2), (1,0), (1,1), (1,2) .
+
+- If specify  \ ``rank-map-hostfile``\  and  \ ``rank-map-bychip``\  parameter at the same time, the description in the file must follow:
+
+  - The number of coordinates described in the file should be the same as the number of nodes indicated by the shape specified by the  \ ``shape``\  parameter.
+
+   - Example) If it's  \ ``shape=3x2``\ since there are six nodes, describe six coordinates in the file.
+   - Described coordinates number is fewer than the number of node that indicates the shape specified by the \ ``shape``\  parameter,  \ :program:`pjsub`\  command rejects job acceptance.
+   - Described coordinates number is larger than the number of node that indicates the shape specified by the \ ``shape``\  parameter, the rest coordinates are ignored.
+
+  - Multiple same coordinates cannot be described in the file. If you describe the same coordinates,  \ :program:`pjsub`\  command will be error.
+
+- If specify  \ ``rank-map-hostfile``\  and  \ ``rank-map-bynode``\  parameter at the same time, the description in the file must follow:
+
+  - Number of coordinates described in the file is fewer than the number of process that specified with  \ ``shape``\  parameter, after assigning to the last coordinate node, return to the first coordinate node and assign.
+    If the number of coordinates is greater than the number of processes specified by the  \ ``shape``\  parameter, the remaining coordinates will be ignored.
+
+  - In the file, the same coordinates can be described as long as they are less than the number of CPU cores per computation node.
+
+

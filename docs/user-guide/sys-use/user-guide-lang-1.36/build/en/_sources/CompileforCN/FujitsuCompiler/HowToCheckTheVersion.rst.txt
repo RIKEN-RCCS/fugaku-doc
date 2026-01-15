@@ -1,0 +1,19 @@
+.. _HowToCheckTheVersion:
+
+How to check the version
+========================
+
+| To confirm version level of using compiler, execute by putting  \ ``-V``\  option to compile command.
+| The value that is displayed when executing is the version level.
+
+ [Confirmation example]
+
+ The following example indicates that the compiler version level is "4.8.1".
+
+ .. code-block:: console
+
+   [_LNlogin]$ module load lang
+   [_LNlogin]$ frtpx -V
+   frtpx: Fujitsu Fortran Compiler 4.8.1 tcsds-1.2.36
+   usage: frtpx [options] files.
+

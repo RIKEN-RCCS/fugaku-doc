@@ -1,0 +1,797 @@
+
+
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+
+    <title>3. WebAPI specification &#8212; WebAPI User Guide  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="2. Authentication" href="authorization.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="authorization.html" title="2. Authentication"
+             accesskey="P">previous</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">WebAPI User Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>WebAPI specification</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="webapi">
+<h1><span class="section-number">3. </span>WebAPI specification<a class="headerlink" href="#webapi" title="Permalink to this heading">¶</a></h1>
+<p><a class="reference download internal" download="" href="../_downloads/9a4fca2abc3a7d6eedf42397f6971000/client-api_en.yml"><code class="xref download docutils literal notranslate"><span class="pre">Swagger</span> <span class="pre">WebAPI</span> <span class="pre">specification</span></code></a></p>
+<dl class="http post">
+<dt class="sig sig-object http" id="post--command-machine">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/command/{machine}</span></span><a class="headerlink" href="#post--command-machine" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>execute specified command</strong></p>
+<div class="line-block">
+<div class="line">execute specified command</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/command/computer/ -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X POST -d <span class="s1">&#39;{&quot;command&quot;: &quot;mkdir -p ~/job-script; ls -ld ~/job-script&quot;}&#39;</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">machine name</div>
+<div class="line">specify the machine name obtained by getting the status of all machines (/status/).Normally, specify “computer”.</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>command</strong> (<em>string</em>) – (required)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Command execution complete</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – authentication error</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.2">422 Unprocessable Entity</a></span> – required parameter error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – internal server error</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>error</strong> (<em>string</em>) – error ID  (required)</p></li>
+<li><p><strong>output</strong> (<em>string</em>) – command output result  (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) – status  (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--status-">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/status/</span></span><a class="headerlink" href="#get--status-" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>get all machine state</strong></p>
+<div class="line-block">
+<div class="line">get all machine state</div>
+<div class="line">Outputs the status of all machines managed by the server.</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/status -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X GET
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – all machine status</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – authentication error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – internal server error</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>[].machine</strong> (<em>string</em>) – machine name  (required)</p></li>
+<li><p><strong>[].status</strong> (<em>string</em>) – status  (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--status-machine">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/status/{machine}</span></span><a class="headerlink" href="#get--status-machine" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>get specified machine status</strong></p>
+<div class="line-block">
+<div class="line">get specified machine status</div>
+<div class="line">Output the status of the specified machine.</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl -ik https://api.fugaku.r-ccs.riken.jp/api/status/computer/ -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X GET
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) – machine name specify the machine name obtained by getting the status of all machines (/status/).Normally, specify “computer”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – specific machine status</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – authentication error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – internal server error</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) – machine name  (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) – status  (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--file-machine-file_path">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/file/{machine}/{file_path}</span></span><a class="headerlink" href="#post--file-machine-file_path" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>file upload</strong></p>
+<div class="line-block">
+<div class="line">new file upload</div>
+<div class="line">Upload a file to the specified machine name and file path.</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/file/computer/home/hpcadmin/xxxxfile -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X POST -d @xxxxfile
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">machine name</div>
+<div class="line">specify the machine name obtained by getting the status of all machines (/status/).Normally, specify “computer”.</div>
+</div>
+</p></li>
+<li><p><strong>file_path</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">upload file path</div>
+<div class="line">Specify a file name.</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – file upload complete</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – authentication error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.10">409 Conflict</a></span> – conflict error</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.2">422 Unprocessable Entity</a></span> – required parameter error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – internal server error</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--file-machine-file_path">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/file/{machine}/{file_path}</span></span><a class="headerlink" href="#get--file-machine-file_path" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>file download</strong></p>
+<div class="line-block">
+<div class="line">file download</div>
+<div class="line">Download the file with the specified machine name and file path.</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/file/computer/home/hpcadmin/xxxxfile -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">machine name</div>
+<div class="line">specify the machine name obtained by getting the status of all machines (/status/).Normally, specify “computer”.</div>
+</div>
+</p></li>
+<li><p><strong>file_path</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">download file path</div>
+<div class="line">specify a file name or folder.</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>view</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">File information acquisition availability</div>
+<div class="line">When read is not specified in the parameter, download the file specified in file_path.</div>
+<div class="line">When read is specified in the parameter, output the file list of the specified directory.</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – <div class="line-block">
+<div class="line">file download complete</div>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>example</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>When read is not specified: File data (binary format)</p></td>
+</tr>
+<tr class="row-odd"><td><p>When read is specified: {“status”: “OK”, “output”:-rw-rw-r– 1 f00156 f00156   119 2019-05-16 16:24 test.shn, “error”:””}</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – parameter error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – authentication error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – internal server error</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--file-machine-file_path">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/file/{machine}/{file_path}</span></span><a class="headerlink" href="#put--file-machine-file_path" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>file create/change</strong></p>
+<div class="line-block">
+<div class="line">file upload/change</div>
+<div class="line">Upload (update) a file to the specified machine name and file path.</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/file/computer/home/hpcadmin/xxxxfile -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X PUT -d @xxxxfile
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">machine name</div>
+<div class="line">specify the machine name obtained by getting the status of all machines (/status/).Normally, specify “computer”.</div>
+</div>
+</p></li>
+<li><p><strong>file_path</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">file path</div>
+<div class="line">Specify a file name.</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – file create/change complete</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – parameter error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – authentication error</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.2">422 Unprocessable Entity</a></span> – required parameter error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – internal server error</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--queue-machine">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/queue/{machine}</span></span><a class="headerlink" href="#get--queue-machine" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>get list of executing jobs</strong></p>
+<div class="line-block">
+<div class="line">get list of executing jobs API</div>
+<div class="line">On the target machine, get the list of executing jobs from the job scheduler.</div>
+<div class="line">When specify the job ID, get the list of sub job of job ID.</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/queue/computer/ -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X GET
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">machine name</div>
+<div class="line">specify the machine name obtained by getting the status of all machines (/status/).Normally, specify “computer”.</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>index</strong> (<em>integer</em>) – <div class="line-block">
+<div class="line">index of first record</div>
+<div class="line">When paging, specify it together with the limit.</div>
+</div>
+</p></li>
+<li><p><strong>limit</strong> (<em>integer</em>) – <div class="line-block">
+<div class="line">Maximum number of records</div>
+<div class="line">If the number of records that meets the condition exceeds the limit, return from the old one sorted by the accept time of the job.</div>
+</div>
+</p></li>
+<li><p><strong>status</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">job execution status</div>
+<div class="line">Filter to jobs with the specified processing status.</div>
+</div>
+</p></li>
+<li><p><strong>jobid</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">job ID</div>
+<div class="line">specify the job ID, If you want to get a list of sub-jobs.</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – job list acquisition process result</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – authentication error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – internal server error</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>error</strong> (<em>string</em>) – error description  (required)</p></li>
+<li><p><strong>output[].accept_time</strong> (<em>string</em>) – accept time（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].bulkno</strong> (<em>string</em>) – bulk number</p></li>
+<li><p><strong>output[].cpu_num</strong> (<em>integer</em>) – used CPU number</p></li>
+<li><p><strong>output[].elapse</strong> (<em>string</em>) – elapsed time</p></li>
+<li><p><strong>output[].elapse_limit</strong> (<em>string</em>) – elapsed time limitation</p></li>
+<li><p><strong>output[].end_code</strong> (<em>string</em>) – end code</p></li>
+<li><p><strong>output[].end_time</strong> (<em>string</em>) – end time（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].exit_subjob_num</strong> (<em>string</em>) – completed sub job number</p></li>
+<li><p><strong>output[].group</strong> (<em>string</em>) – user group name</p></li>
+<li><p><strong>output[].jid</strong> (<em>string</em>) – JID</p></li>
+<li><p><strong>output[].job_type</strong> (<em>string</em>) – job type</p></li>
+<li><p><strong>output[].jobid</strong> (<em>string</em>) – job ID  (required)</p></li>
+<li><p><strong>output[].name</strong> (<em>integer</em>) – name  (required)</p></li>
+<li><p><strong>output[].node_num</strong> (<em>integer</em>) – node shape/node number</p></li>
+<li><p><strong>output[].pjm_code</strong> (<em>string</em>) – PJM code</p></li>
+<li><p><strong>output[].queue</strong> (<em>string</em>) – queue  (required)</p></li>
+<li><p><strong>output[].rsc_grp</strong> (<em>string</em>) – resource group name  (required)</p></li>
+<li><p><strong>output[].start_time</strong> (<em>string</em>) – start time（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].status</strong> (<em>string</em>) – job status ACC　:　Checking whether the job satisfies the acceptance conditions (items restricted with the job ACL function) RJT　:　Job acceptance rejected QUE　:　Waiting for a turn to execute the job, which has been accepted RNA　:　Reserving the resources required for job execution RNP　:　Executing the prologue process RUN　:　Executing the job RNE　:　Executing the epilogue process RNO　:　Job end processing is in progress EXT　:　Job end CCL　:　Job stopped by an instruction from the job submitter or the administrator HLD　:　Keeping the state of the submitted job from changing, when job execution has stopped ERR　:　Job stopped because of an error detected by the job operation management function  (required)</p></li>
+<li><p><strong>output[].stepno</strong> (<em>string</em>) – step number</p></li>
+<li><p><strong>output[].subjob_depend</strong> (<em>string</em>) – sub job dependency judgment expression</p></li>
+<li><p><strong>output[].subjob_num</strong> (<em>string</em>) – sub job number</p></li>
+<li><p><strong>output[].subjobid</strong> (<em>string</em>) – sub job ID</p></li>
+<li><p><strong>output[].timeuse</strong> (<em>string</em>) – total cpu time  (required)</p></li>
+<li><p><strong>output[].user</strong> (<em>string</em>) – username  (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) – status  (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http post">
+<dt class="sig sig-object http" id="post--queue-machine">
+<span class="sig-name descname"><span class="pre">POST</span> </span><span class="sig-name descname"><span class="pre">/queue/{machine}</span></span><a class="headerlink" href="#post--queue-machine" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>job submission</strong></p>
+<div class="line-block">
+<div class="line">job submission API</div>
+<div class="line">Execute a job submission command to the job scheduler from the specified machine.</div>
+<div class="line">For the parameter, specify either jobfile or jobscript.</div>
+<div class="line">(If both are specified, the jobfile parameter has priority)</div>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>parameter</p></th>
+<th class="head"><p>operation examples</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>jobfile</p></td>
+<td><p>/home/user01/test.sh&lt;br&gt;(specify file script)</p></td>
+</tr>
+<tr class="row-odd"><td><p>jobscript</p></td>
+<td><p>/home/user01/a.out &lt; stdin.dat&lt;br&gt;(specify script command)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/queue/computer/ -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X POST -d <span class="s1">&#39;{&quot;jobfile&quot;: &quot;/home/hpcadmin/aaa.sh&quot;, &quot;qopt&quot;: &quot;jid=100&quot;}&#39;</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">machine name</div>
+<div class="line">specify the machine name obtained by getting the status of all machines (/status/).Normally, specify “computer”.</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – <div class="line-block">
+<div class="line">job submission process completed</div>
+<div class="line">Job ID is output to output</div>
+</div>
+</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – parameter error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – authentication error</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.2">422 Unprocessable Entity</a></span> – required parameter error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – internal server error</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>error</strong> (<em>string</em>) – error description  (required)</p></li>
+<li><p><strong>output</strong> (<em>string</em>) – job ID  (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) – status  (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--queue-machine-sacct">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/queue/{machine}/sacct</span></span><a class="headerlink" href="#get--queue-machine-sacct" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>get completed job list</strong></p>
+<div class="line-block">
+<div class="line">On the target machine, get a list of jobs completed within 24 hours from the job scheduler.</div>
+<div class="line">When specify the job ID, get the list of sub job of job ID.</div>
+<div class="line"><br /></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/queue/computer/sacct -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">machine name</div>
+<div class="line">specify the machine name obtained by getting the status of all machines (/status/).Normally, specify “computer”.</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Query Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>index</strong> (<em>integer</em>) – <div class="line-block">
+<div class="line">index of first record</div>
+<div class="line">When paging, specify it together with the limit.</div>
+</div>
+</p></li>
+<li><p><strong>limit</strong> (<em>integer</em>) – <div class="line-block">
+<div class="line">Maximum number of records</div>
+<div class="line">If the number of records that meets the condition exceeds the limit, return from the old one sorted by the accept time of the job.</div>
+</div>
+</p></li>
+<li><p><strong>status</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">job execution status</div>
+<div class="line">Filter to jobs with the specified processing status.</div>
+</div>
+</p></li>
+<li><p><strong>jobid</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">job ID</div>
+<div class="line">specify the job ID, If you want to get a list of sub-jobs.</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – complete of completed job list acquisition process</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – authentication error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – internal server error</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>error</strong> (<em>string</em>) – error description  (required)</p></li>
+<li><p><strong>output[].accept_time</strong> (<em>string</em>) – accept time（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].bulkno</strong> (<em>string</em>) – bulk number</p></li>
+<li><p><strong>output[].cpu_num</strong> (<em>integer</em>) – used CPU number</p></li>
+<li><p><strong>output[].elapse</strong> (<em>string</em>) – elapsed time</p></li>
+<li><p><strong>output[].elapse_limit</strong> (<em>string</em>) – elapsed time limitation</p></li>
+<li><p><strong>output[].end_code</strong> (<em>string</em>) – end code</p></li>
+<li><p><strong>output[].end_time</strong> (<em>string</em>) – end time（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].exit_subjob_num</strong> (<em>string</em>) – completed sub job number</p></li>
+<li><p><strong>output[].group</strong> (<em>string</em>) – user group name</p></li>
+<li><p><strong>output[].jid</strong> (<em>string</em>) – JID</p></li>
+<li><p><strong>output[].job_type</strong> (<em>string</em>) – job type</p></li>
+<li><p><strong>output[].jobid</strong> (<em>string</em>) – job ID  (required)</p></li>
+<li><p><strong>output[].name</strong> (<em>integer</em>) – name  (required)</p></li>
+<li><p><strong>output[].node_num</strong> (<em>integer</em>) – node shape/node number</p></li>
+<li><p><strong>output[].pjm_code</strong> (<em>string</em>) – PJM code</p></li>
+<li><p><strong>output[].queue</strong> (<em>string</em>) – queue  (required)</p></li>
+<li><p><strong>output[].rsc_grp</strong> (<em>string</em>) – resource group name  (required)</p></li>
+<li><p><strong>output[].start_time</strong> (<em>string</em>) – start time（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].status</strong> (<em>string</em>) – job status ACC　:　Checking whether the job satisfies the acceptance conditions (items restricted with the job ACL function) RJT　:　Job acceptance rejected QUE　:　Waiting for a turn to execute the job, which has been accepted RNA　:　Reserving the resources required for job execution RNP　:　Executing the prologue process RUN　:　Executing the job RNE　:　Executing the epilogue process RNO　:　Job end processing is in progress EXT　:　Job end CCL　:　Job stopped by an instruction from the job submitter or the administrator HLD　:　Keeping the state of the submitted job from changing, when job execution has stopped ERR　:　Job stopped because of an error detected by the job operation management function  (required)</p></li>
+<li><p><strong>output[].stepno</strong> (<em>string</em>) – step number</p></li>
+<li><p><strong>output[].subjob_depend</strong> (<em>string</em>) – sub job dependency judgment expression</p></li>
+<li><p><strong>output[].subjob_num</strong> (<em>string</em>) – sub job number</p></li>
+<li><p><strong>output[].subjobid</strong> (<em>string</em>) – sub job ID</p></li>
+<li><p><strong>output[].timeuse</strong> (<em>string</em>) – total cpu time  (required)</p></li>
+<li><p><strong>output[].user</strong> (<em>string</em>) – username  (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) – status  (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http get">
+<dt class="sig sig-object http" id="get--queue-machine-jobid">
+<span class="sig-name descname"><span class="pre">GET</span> </span><span class="sig-name descname"><span class="pre">/queue/{machine}/{jobid}</span></span><a class="headerlink" href="#get--queue-machine-jobid" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>get detailed job information</strong></p>
+<div class="line-block">
+<div class="line">get detailed job information API</div>
+<div class="line">指定したジョブIDまたはサブジョブIDに該当するジョブの詳細情報を取得する。  </div>
+<div class="line"><br /></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/queue/computer/<span class="o">{</span>jobid<span class="o">}</span>  -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X GET
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">machine name</div>
+<div class="line">specify the machine name obtained by getting the status of all machines (/status/).Normally, specify “computer”.</div>
+</div>
+</p></li>
+<li><p><strong>jobid</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">job ID</div>
+<div class="line">specify the job ID for which you want to get detailed job information.</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – job information acquisition process completed</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – authentication error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – internal server error</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>error</strong> (<em>string</em>) – error description  (required)</p></li>
+<li><p><strong>output[].accept_time</strong> (<em>string</em>) – accept time（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].bulkno</strong> (<em>string</em>) – bulk number</p></li>
+<li><p><strong>output[].cpu_num</strong> (<em>integer</em>) – used CPU number</p></li>
+<li><p><strong>output[].elapse</strong> (<em>string</em>) – elapsed time</p></li>
+<li><p><strong>output[].elapse_limit</strong> (<em>string</em>) – elapsed time limitation</p></li>
+<li><p><strong>output[].end_code</strong> (<em>string</em>) – end code</p></li>
+<li><p><strong>output[].end_time</strong> (<em>string</em>) – end time（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].exit_subjob_num</strong> (<em>string</em>) – completed sub job number</p></li>
+<li><p><strong>output[].group</strong> (<em>string</em>) – user group name</p></li>
+<li><p><strong>output[].jid</strong> (<em>string</em>) – JID</p></li>
+<li><p><strong>output[].job_type</strong> (<em>string</em>) – job type</p></li>
+<li><p><strong>output[].jobid</strong> (<em>string</em>) – job ID  (required)</p></li>
+<li><p><strong>output[].name</strong> (<em>integer</em>) – name  (required)</p></li>
+<li><p><strong>output[].node_num</strong> (<em>integer</em>) – node shape/node number</p></li>
+<li><p><strong>output[].pjm_code</strong> (<em>string</em>) – PJM code</p></li>
+<li><p><strong>output[].queue</strong> (<em>string</em>) – queue  (required)</p></li>
+<li><p><strong>output[].rsc_grp</strong> (<em>string</em>) – resource group name  (required)</p></li>
+<li><p><strong>output[].start_time</strong> (<em>string</em>) – start time（yyyy-MM-ddTHH:mm:ss+09:00）</p></li>
+<li><p><strong>output[].status</strong> (<em>string</em>) – job status ACC　:　Checking whether the job satisfies the acceptance conditions (items restricted with the job ACL function) RJT　:　Job acceptance rejected QUE　:　Waiting for a turn to execute the job, which has been accepted RNA　:　Reserving the resources required for job execution RNP　:　Executing the prologue process RUN　:　Executing the job RNE　:　Executing the epilogue process RNO　:　Job end processing is in progress EXT　:　Job end CCL　:　Job stopped by an instruction from the job submitter or the administrator HLD　:　Keeping the state of the submitted job from changing, when job execution has stopped ERR　:　Job stopped because of an error detected by the job operation management function  (required)</p></li>
+<li><p><strong>output[].stepno</strong> (<em>string</em>) – step number</p></li>
+<li><p><strong>output[].subjob_depend</strong> (<em>string</em>) – sub job dependency judgment expression</p></li>
+<li><p><strong>output[].subjob_num</strong> (<em>string</em>) – sub job number</p></li>
+<li><p><strong>output[].subjobid</strong> (<em>string</em>) – sub job ID</p></li>
+<li><p><strong>output[].timeuse</strong> (<em>string</em>) – total cpu time  (required)</p></li>
+<li><p><strong>output[].user</strong> (<em>string</em>) – username  (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) – status  (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http delete">
+<dt class="sig sig-object http" id="delete--queue-machine-jobid">
+<span class="sig-name descname"><span class="pre">DELETE</span> </span><span class="sig-name descname"><span class="pre">/queue/{machine}/{jobid}</span></span><a class="headerlink" href="#delete--queue-machine-jobid" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>job cancel</strong></p>
+<div class="line-block">
+<div class="line">cancel the job corresponding to the specified job ID.</div>
+<div class="line">By using “- (hyphen)”, the range of job ID can be specified. You can specify the range of the sub job ID as well.</div>
+<div class="line"><br /></div>
+<div class="line">Example: When specifying a range of job ID 1 to 100</div>
+<div class="line"><br /></div>
+<div class="line">1-100 </div>
+<div class="line"><br /></div>
+<div class="line">Example: When specifying the range of step numbers 1 to 10 of the step job (job ID=100)</div>
+<div class="line"><br /></div>
+<div class="line">100_1-10  </div>
+<div class="line"><br /></div>
+<div class="line">Example: When specifying the range of bulk numbers 1 to 10 of the bulk job (job ID=101)</div>
+<div class="line"><br /></div>
+<div class="line">101[1-10] </div>
+<div class="line"><br /></div>
+<div class="line">When range is specified, an error will not occur even if the following jobs are included in the range, the job will be ignored, and processing will continue.</div>
+<div class="line"><br /></div>
+<div class="line">Job that do not exist, job that the user does not have permission, job that cannot be specified</div>
+<div class="line"><br /></div>
+<div class="line">If successful, returns all job IDs specified, with or without cancel ignoring.</div>
+<div class="line"><br /></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/queue/computer/<span class="o">{</span>jobid<span class="o">}</span>  -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span>  -X delete
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">machine name</div>
+<div class="line">specify the machine name obtained by getting the status of all machines (/status/).Normally, specify “computer”.</div>
+</div>
+</p></li>
+<li><p><strong>jobid</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">job ID</div>
+<div class="line">Specifies the job ID of the job to be deleted.</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Status Codes<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – job cancel process completed</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – internal server error</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>error</strong> (<em>string</em>) – error description  (required)</p></li>
+<li><p><strong>output</strong> (<em>string</em>) – job cancellation output result (jobid)  (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) – status  (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="http put">
+<dt class="sig sig-object http" id="put--queue-machine-jobscript">
+<span class="sig-name descname"><span class="pre">PUT</span> </span><span class="sig-name descname"><span class="pre">/queue/{machine}/jobscript</span></span><a class="headerlink" href="#put--queue-machine-jobscript" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>job execution script generate/change</strong></p>
+<div class="line-block">
+<div class="line">job execution script generate/change API</div>
+<div class="line">Create the job execution script on the target machine. If a file with the same name exists, it will be overwritten.</div>
+<div class="line">When creating the bulk job or step job, specify JTYPE of COMMON_DATA.</div>
+<div class="line"><br /></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>example<span class="o">)</span>
+curl https://api.fugaku.r-ccs.riken.jp/queue/computer/jobscript -H <span class="s2">&quot;Authorization: Bearer </span><span class="nv">$accessToken</span><span class="s2">&quot;</span> -X PUT -d <span class="s1">&#39;{&quot;script&quot;:{&quot;APP_DATA&quot;:{&quot;ProgramGroupList&quot;:{&quot;ProgramGroup&quot;:[{&quot;ProgramList&quot;:{&quot;Program&quot;:[{&quot;Type&quot;:&quot;mpi&quot;,&quot;FileName&quot;:&quot;a.sh&quot;,&quot;ThreadMode&quot;:&quot;parallel&quot;,&quot;Threads&quot;:&quot;100&quot;}]},&quot;GroupType&quot;:&quot;serialgroup&quot;}]}},&quot;COMMON_DATA&quot;:{}}}&#39;</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>machine</strong> (<em>string</em>) – <div class="line-block">
+<div class="line">machine name</div>
+<div class="line">specify the machine name obtained by getting the status of all machines (/status/).Normally, specify “computer”.</div>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Request JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>filename</strong> (<em>string</em>) – </p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.GroupType</strong> (<em>string</em>) – </p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.Argument</strong> (<em>string</em>) – Execution program arguments</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileInfoList[].Collect</strong> (<em>integer</em>) – When not distinguishing files staged out from each rank: 1 When not specified, the rank number is added to the end of the staged out file name.</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileInfoList[].FileName</strong> (<em>string</em>) – File input/output by the execution program.</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileInfoList[].IsDirectory</strong> (<em>integer</em>) – When file staging the directory: 1</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileInfoList[].Rank</strong> (<em>string</em>) – Specify the rank number for staging.</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileInfoList[].StageIn</strong> (<em>integer</em>) – When staging in the file: 1</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileInfoList[].StageOut</strong> (<em>integer</em>) – When staging out the file: 1</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileInfoList[].UnitNo</strong> (<em>string</em>) – Specify the device number corresponding to the file input/output by the executing program. Enabled only when the execution program is Fortran.</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.FileName</strong> (<em>string</em>) – execution program name  (required)</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.Procs</strong> (<em>string</em>) – thread number per process. Enabled only when the execution program is thread parallel.</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.StdInFileName</strong> (<em>string</em>) – standard input file name</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.StdInRank</strong> (<em>string</em>) – rank number of the file staging node for the standard input file.</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.StdOutCollect</strong> (<em>integer</em>) – <a href="#id1"><span class="problematic" id="id2">*</span></a>When not distinguishing files staged out from each rank：1 <a href="#id3"><span class="problematic" id="id4">*</span></a>When not specified, the rank number is added to the end of the staged out file name.</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.StdOutFileName</strong> (<em>string</em>) – standard output file name</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.StdOutRank</strong> (<em>string</em>) – rank number of the file staging node for the standard output file.</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.ThreadMode</strong> (<em>string</em>) – ・For automatic parallel：”parallel” ・For OpenMP:：”omp” ・For 1 thread process：not specified</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.Threads</strong> (<em>integer</em>) – program execution thread number</p></li>
+<li><p><strong>script.APP_DATA.ProgramGroupList.ProgramGroup.ProgramList.Program.Type</strong> (<em>string</em>) – ・ When executing as a standalone program：”serial” ・When executing as a MPI parallel program：”mpi”</p></li>
+<li><p><strong>script.COMMON_DATA.DEPEND_JID</strong> (<em>string</em>) – Dependent job ID specification. Enabled only when “S” is specified for the job type identifier.</p></li>
+<li><p><strong>script.COMMON_DATA.ELAPSE</strong> (<em>string</em>) – Maximum job execution time setting. The following 3 patterns can be</p></li>
+<li><p><strong>script.COMMON_DATA.JGRP</strong> (<em>string</em>) – Job accounting group specification.</p></li>
+<li><p><strong>script.COMMON_DATA.JNAME</strong> (<em>string</em>) – name Up to 63 single-byte alphanumeric characters can be specified. The first character is only half-width alphabetic characters. There are four types of symbols, “-_&#64;.”.</p></li>
+<li><p><strong>script.COMMON_DATA.JTYPE</strong> (<em>string</em>) – job type identifier For normal job: not specified For bulk job: “B” For step job: “S”</p></li>
+<li><p><strong>script.COMMON_DATA.NODE</strong> (<em>string</em>) – Specify the node shape assigned to the job. Specify in one of X, XxY, XxYxZ format.</p></li>
+<li><p><strong>script.COMMON_DATA.NODES</strong> (<em>integer</em>) – The number of MPI processes to start statically, when the executing program is an MPI parallel program.</p></li>
+<li><p><strong>script.COMMON_DATA.QOPT</strong> (<em>string</em>) – Queue option specification.</p></li>
+<li><p><strong>script.COMMON_DATA.QUEUE</strong> (<em>string</em>) – Specify the group name of the resource that submits the job.</p></li>
+<li><p><strong>script.COMMON_DATA.QUOTA</strong> (<em>string</em>) – Maximum value (in GB) of disk usage used by the job.</p></li>
+<li><p><strong>script.COMMON_DATA.QUOTA_TYPE</strong> (<em>string</em>) – Quota type specification.</p></li>
+<li><p><strong>script.COMMON_DATA.SNUM</strong> (<em>string</em>) – Own sub job number Enabled only when “S” is specified for the job type identifier.</p></li>
+<li><p><strong>script.COMMON_DATA.STEP_CODE</strong> (<em>string</em>) – Dependent sub job ID Enabled only when “S” is specified for the job type identifier.</p></li>
+<li><p><strong>script.COMMON_DATA.STEP_CONDITION</strong> (<em>string</em>) – Dependency equation Enabled only when “S” is specified for the job type identifier.</p></li>
+<li><p><strong>script.COMMON_DATA.SUBJOBS_NODE</strong> (<em>integer</em>) – Bulk job node number Enabled only when “B” is specified for the job type identifier.</p></li>
+<li><p><strong>script.COMMON_DATA.SUBJOB_END</strong> (<em>string</em>) – Bulk job end number. Enabled only when “B” is specified for the job type identifier.</p></li>
+<li><p><strong>script.COMMON_DATA.SUBJOB_START</strong> (<em>string</em>) – Bulk job start number. Enabled only when “B” is specified for the job type identifier.</p></li>
+<li><p><strong>script.COMMON_DATA.SYSTEM</strong> (<em>string</em>) – Specify the unit name of the resource that submits the job.</p></li>
+<li><p><strong>script.COMMON_DATA.USE_RANK_DIR</strong> (<em>string</em>) – Specification existence flag of user rank directory.</p></li>
+<li><p><strong>script.COMMON_DATA.USE_RANL_DIR</strong> (<em>boolean</em>) – When using the rank number directory: true</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Status Codes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.2.1">200 OK</a></span> – Job execution script generation complete</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.1">400 Bad Request</a></span> – parameter error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.4">403 Forbidden</a></span> – authentication error</p></li>
+<li><p><span><a class="reference external" href="https://www.rfc-editor.org/rfc/rfc4918#section-11.2">422 Unprocessable Entity</a></span> – required parameter error</p></li>
+<li><p><span><a class="reference external" href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.5.1">500 Internal Server Error</a></span> – internal server error</p></li>
+</ul>
+</dd>
+<dt class="field-even">Response JSON Object<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>error</strong> (<em>string</em>) – error description  (required)</p></li>
+<li><p><strong>output</strong> (<em>string</em>) – job execution script generation result  (required)</p></li>
+<li><p><strong>status</strong> (<em>string</em>) – status  (required)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="authorization.html"
+                          title="previous chapter"><span class="section-number">2. </span>Authentication</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="authorization.html" title="2. Authentication"
+             >previous</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">WebAPI User Guide  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3. </span>WebAPI specification</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, RIKEN R-CCS.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

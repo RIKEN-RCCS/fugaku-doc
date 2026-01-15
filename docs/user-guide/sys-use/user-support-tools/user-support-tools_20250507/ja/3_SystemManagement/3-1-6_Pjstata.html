@@ -1,0 +1,483 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>3.1.6. ジョブ実行実績検索 &#8212; 利用者支援ツール 使用手引書 (利用者編)  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="3.1.7. ユーザ課金情報表示（ジョブ）" href="3-1-7_AccountJ.html" />
+    <link rel="prev" title="3.1.5. ジョブ実行履歴検索" href="3-1-5_Pjstat.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-7_AccountJ.html" title="3.1.7. ユーザ課金情報表示（ジョブ）"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="3-1-5_Pjstat.html" title="3.1.5. ジョブ実行履歴検索"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>システム管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" accesskey="U"><span class="section-number">3.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.6. </span>ジョブ実行実績検索</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">3.1.6. </span>ジョブ実行実績検索<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[名前]</strong></div>
+<div class="line">　pjstata - ジョブの実行実績を表示する</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[書式]</strong></div>
+<div class="line">　pjstata  [オプション]</div>
+<div class="line">　※-j, -n, -d, -u, -g, -a, -e, -s, -t, -bの複合指定はAND検索になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[説明]</strong></div>
+<div class="line">　pjstata コマンドは、ジョブの実行実績（課金実績）を表示する。表示結果が複数行に及ぶ場合はジョブ投入時刻、ジョブID、ステップ番号、世代番号を複合キーとして昇順に表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　終了したジョブの課金情報を表示することができる。課金情報はノード時間積に課金係数の割引率が適用されたものになる。ジョブごとの課金実績を確認する目的で使用する。</div>
+</div>
+<div class="line-block">
+<div class="line">　利用者およびプロジェクト責任者はグループに属するメンバのジョブ情報を表示可能である。システム管理者はシステムに登録されている全メンバのジョブ情報を表示可能である。ただし、 システム管理機能　に記載されている管理者権限が付与されている必要がある。なお、オプション指定でジョブID、ユーザ名、グループ名が指定されていない場合はプロジェクト責任者、システム管理者であっても自身のジョブ情報のみ表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　世代数のオプション &quot;-b&quot; がなければ、今年度のジョブが表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[オプション]</strong></div>
+<div class="line">　-j  ジョブID</div>
+<div class="line">　ジョブIDを指定する。</div>
+</div>
+<div class="line-block">
+<div class="line">　-n  行数</div>
+<div class="line">　行数を指定する。行数を指定した場合は、ジョブ投入時刻、ジョブID、ステップ番号、世代番号を複合キーとして昇順に指定された行数分が表示される。行数を指定しなければ全件表示になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-d  ジョブ開始時刻の日付</div>
+<div class="line">　ジョブ開始時刻の日付を指定する。ジョブ開始時刻の日付を指定しなければ全件表示になる。</div>
+<div class="line">　世代数のオプション &quot;-b&quot; が指定されずに当該オプションを指定した場合、すべての世代に対してのジョブが表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　ジョブ開始時刻の日付の指定形式には以下のパターンがある。</div>
+<div class="line">　　範囲指定　　yyyymmdd:yyyymmdd</div>
+<div class="line">　　指定日以降　yyyymmdd:</div>
+<div class="line">　　指定日以前　:yyyymmdd</div>
+<div class="line">　　指定日　　　yyyymmdd</div>
+</div>
+<div class="line-block">
+<div class="line">　-u  ユーザ名</div>
+<div class="line">　ユーザ名を指定する。スペースに続けての複数指定、アスタリスクを使用した前方／中間／後方一致指定はできない。単一、完全一致指定のみ可能である。</div>
+</div>
+<div class="line-block">
+<div class="line">　-g  グループ名</div>
+<div class="line">　グループ名を指定する。スペースに続けての複数指定、アスタリスクを使用した前方／中間／後方一致指定はできない。単一、完全一致指定のみ可能である。</div>
+</div>
+<div class="line-block">
+<div class="line">　-a</div>
+<div class="line">　すべてのユーザのジョブ情報を表示する。-aオプション指定時は、-u, -gオプションは無効になる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-e  ノードID</div>
+<div class="line">　特定のノードだけを表示対象としたい場合に、ノードIDを指定する。ノードIDにはブートIOノードまたは計算ノードを指定できる。指定する際には、16進数で記述する。</div>
+</div>
+<div class="line-block">
+<div class="line">　-s yyyymmddhh24miss: yyyymmddhh24miss[:stat]</div>
+<div class="line">　ジョブ開始時刻とジョブ終了時刻の日時を年月日時分秒で範囲指定かつジョブの状態を指定する。これにより、指定期間内に実行中だったジョブの一覧を取得できる。さらに、ジョブの状態で絞り込んで表示することができる。</div>
+<div class="line">　世代数のオプション &quot;-b&quot; が指定されずに当該オプションを指定した場合、すべての世代に対してのジョブが表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　ジョブ開始時刻とジョブ終了時刻の日時の指定形式には以下のパターンがある。</div>
+<div class="line">　　範囲指定　　ジョブ開始時刻：ジョブ終了時刻</div>
+<div class="line">　　（例）yyyymmddhh24miss:yyyymmddhh24miss</div>
+<div class="line">　　指定日　　　ジョブ開始時刻：</div>
+<div class="line">　　（例）yyyymmddhh24miss:</div>
+<div class="line">　　指定日　　　：ジョブ終了時刻</div>
+<div class="line">　　（例）:yyyymmddhh24miss</div>
+</div>
+<div class="line-block">
+<div class="line">　ジョブの状態の指定形式には</div>
+<div class="line">　　指定状態　stat</div>
+<div class="line">　　未指定</div>
+<div class="line">　が存在する。</div>
+<div class="line">　未指定時は、EXT と CCL が選択されたものと見なされる。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>指定形式</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>EXT</p></td>
+<td><p>ジョブ終了処理完了状態</p></td>
+</tr>
+<tr class="row-odd"><td><p>CCL</p></td>
+<td><p>ジョブ実行中止による終了状態</p></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line">　ジョブ開始時刻とジョブ終了時刻の日時の指定形式とジョブの状態の指定形式を : （コロン）で連結することで -s オプションの指定形式となる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-c</div>
+<div class="line">　検索結果をCSV形式で標準出力する。リダイレクション機能を使用することでファイルに保存することもできる。</div>
+</div>
+<div class="line-block">
+<div class="line">　-b  世代数</div>
+<div class="line">　表示対象としたい過去の世代数を指定する。当該オプションを指定しない場合は、今年度のジョブ情報が表示対象になる。</div>
+<div class="line">　情報の表示権限についてはコマンド実行時点の権限に従います。</div>
+</div>
+<div class="line-block">
+<div class="line">　-t ジョブ終了時刻の日付</div>
+<div class="line">　ジョブ終了時刻の日付を指定する。ジョブ終了時刻の日付を指定しなければ全件表示になる。</div>
+<div class="line">　ジョブ終了時刻に値がない場合、ジョブ投入受付の日付を基に表示する。</div>
+<div class="line">　世代数のオプション &quot;-b&quot; が指定されずに当該オプションを指定した場合、すべての世代に対してのジョブが表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　ジョブ終了時刻の日付の指定形式には以下のパターンがある。</div>
+<div class="line">　　範囲指定　　yyyymmdd:yyyymmdd</div>
+<div class="line">　　指定日以降　yyyymmdd:</div>
+<div class="line">　　指定日以前　:yyyymmdd</div>
+<div class="line">　　指定日　　　yyyymmdd</div>
+</div>
+<div class="line-block">
+<div class="line">　--help</div>
+<div class="line">　コマンドのヘルプ内容を表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[復帰値]</strong></div>
+<div class="line">　正常時: 0</div>
+<div class="line">　異常時: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[備考]</strong></div>
+<div class="line">　なし。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[使用例]</strong></div>
+</div>
+<p>　【例1】   自分自身(fjse0001)の投入したジョブ情報を表示する</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>pjstata
+<span class="go">JOBID   SNO BLKNO GENNO JOB_NAME  MD JTYPE USER     GROUP      ST   RSC_UNT  RSC_GRP EC  PC  ERR_CD</span>
+<span class="go">367430            0     g11F2DB.s NM BT    fjse0001  fjse      EXT  unit1    small   0   0   0</span>
+<span class="go">369249            0     parmer8K1 NM BT    fjse0001  fjse      EXT  unit1    small   0   0   0</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">JOB_START       JOB_END         ELAPSE_TIM  NODE_NUM  RATE  ACCT_RSC     POINT    PERIOD_NUM  RETRY</span>
+<span class="go">04/26 14:44:47  04/26 14:50:02  0000:05:14  1280      100%  401920       10.12    -           0</span>
+<span class="go">04/27 13:18:41  04/27 13:20:05  0000:01:24  2         100%  168          -5.11    -           0</span>
+</pre></div>
+</div>
+<p>　【例2】   自分自身(fjse0001)の投入したジョブの開始時刻の日付で絞り込む</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>pjstata<span class="w"> </span>-d<span class="w"> </span><span class="m">20210427</span>:
+<span class="go">JOBID   SNO BLKNO GENNO JOB_NAME  MD JTYPE USER     GROUP      ST   RSC_UNT  RSC_GRP EC  PC  ERR_CD</span>
+<span class="go">369249            0     parmer8K1 NM BT    fjse0001  fjse      EXT  unit1    small   0   0   0</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">JOB_START       JOB_END         ELAPSE_TIM  NODE_NUM  RATE  ACCT_RSC   POINT     PERIOD_NUM  RETRY</span>
+<span class="go">04/27 13:18:41  04/27 13:20:05  0000:01:24  2         100%  168        -5.11     -           0</span>
+</pre></div>
+</div>
+<p>　【例3】   指定期間内に実行中だったジョブの一覧を取得する</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>pjstata<span class="w"> </span>-s<span class="w"> </span><span class="m">2021042600000</span>:20210427235959
+<span class="go">JOBID   SNO BLKNO GENNO JOB_NAME  MD JTYPE USER     GROUP      ST   RSC_UNT  RSC_GRP EC  PC  ERR_CD</span>
+<span class="go">367430            0     g11F2DB.s NM BT    fjse0001  fjse      EXT  unit1    small   0   0   0</span>
+<span class="go">369249            0     parmer8K1 NM BT    fjse0001  fjse      EXT  unit1    small   0   0   0</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">JOB_START       JOB_END         ELAPSE_TIM  NODE_NUM  RATE  ACCT_RSC    POINT     PERIOD_NUM  RETRY</span>
+<span class="go">04/26 14:44:47  04/26 14:50:02  0000:05:14  1280      100%  401920      10.12     -           0</span>
+<span class="go">04/27 13:18:41  04/27 13:20:05  0000:01:24  2         100%  168         -5.11     -           0</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　終了ジョブを対象として、2021年04月26日00時00分00秒から2021年04月27日23時59分59秒までの指定期間内に実行中だったジョブの一覧を取得することができる。</div>
+</div>
+<div class="line-block">
+<div class="line">　【例4】 システム管理者がすべてのジョブ情報を表示する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>pjstata<span class="w"> </span>-a
+<span class="go">JOBID   SNO BLKNO GENNO JOB_NAME  MD JTYPE USER     GROUP      ST   RSC_UNT  RSC_GRP EC  PC  ERR_CD</span>
+<span class="go">367393            0     STDIN     NM IN    user0516  group059  EXT  unit1    small   0   11  0</span>
+<span class="go">367430            0     g11F2DB.s NM BT    fjse0001  fjse      EXT  unit1    small   0   0   0</span>
+<span class="go">367452            0     job_tmp.s NM BT    user0043  group009  EXT  unit1    small   1   0   0</span>
+<span class="go">367537            0     k_pjsub_3 NM BT    user0125  group084  EXT  unit1    small   0   0   0</span>
+<span class="go">367541            0     sub.sh    NM BT    user0515  group058  EXT  unit1    small   1   0   0</span>
+<span class="go">369249            0     parmer8K1 NM BT    fjse0001  fjse      EXT  unit1    small   0   0   0</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">JOB_START       JOB_END         ELAPSE_TIM  NODE_NUM  RATE  ACCT_RSC    POINT    PERIOD_NUM  RETRY</span>
+<span class="go">04/26 13:56:39  04/26 14:26:40  0000:30:01  72        100%  129672      10.12    -           0</span>
+<span class="go">04/26 14:44:47  04/26 14:50:02  0000:05:14  1280      100%  401920      -5.11    -           0</span>
+<span class="go">04/26 14:14:34  04/26 14:14:34  0000:00:00  1         100%  0            0.00    -           0</span>
+<span class="go">04/26 14:50:51  04/26 14:51:50  0000:00:58  3072      100%  178176       0.00    -           0</span>
+<span class="go">04/26 14:49:51  04/26 14:52:49  0000:02:58  1         100%  178          0.00    -           0</span>
+<span class="go">04/27 13:18:41  04/27 13:20:05  0000:01:24  2         100%  168          0.00    -           0</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　表示項目の説明を示す。</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 12.5%" />
+<col style="width: 25.0%" />
+<col style="width: 62.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>No.</p></th>
+<th class="head"><p>項目名</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>JOBID</p></td>
+<td><p>ジョブID</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>SNO</p></td>
+<td><p>ステップ番号</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>BLKNO</p></td>
+<td><p>バルク番号</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>GENNO</p></td>
+<td><p>世代番号</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>JOB_NAME</p></td>
+<td><p>ジョブ名</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>MD</p></td>
+<td><p>ジョブモデル</p>
+<p>NM：通常ジョブ</p>
+<p>ST：ステップジョブ</p>
+<p>BU：バルクジョブ</p>
+<p>MW：マスタワーカジョブ</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>JTYPE</p></td>
+<td><p>ジョブタイプ</p>
+<p>BATCH　：バッチジョブ</p>
+<p>INTRACT：会話型ジョブ</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>USER</p></td>
+<td><p>ユーザ名</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>GROUP</p></td>
+<td><p>グループ名</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>ST</p></td>
+<td><p>ジョブの処理状態</p>
+<p>EXT：ジョブ終了処理完了</p>
+<p>CCL：ジョブ実行中止による終了</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>RSC_UNT</p></td>
+<td><p>投入リソースユニット名</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>RSC_GRP</p></td>
+<td><p>投入リソースグループ名</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>EC</p></td>
+<td><p>ユーザスクリプトの終了コード</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>PC</p></td>
+<td><p>PJMコード</p></td>
+</tr>
+<tr class="row-even"><td><p>15</p></td>
+<td><p>ERR_CD</p></td>
+<td><p>エラーコード</p></td>
+</tr>
+<tr class="row-odd"><td><p>16</p></td>
+<td><p>JOB_START</p></td>
+<td><p>ジョブ開始時刻</p></td>
+</tr>
+<tr class="row-even"><td><p>17</p></td>
+<td><p>JOB_END</p></td>
+<td><p>ジョブ終了時刻</p></td>
+</tr>
+<tr class="row-odd"><td><p>18</p></td>
+<td><p>ELAPSE_TIM</p></td>
+<td><p>ジョブ実行実時間</p></td>
+</tr>
+<tr class="row-even"><td><p>19</p></td>
+<td><p>NODE_NUM</p></td>
+<td><p>割当ノード数</p></td>
+</tr>
+<tr class="row-odd"><td><p>20</p></td>
+<td><p>RATE</p></td>
+<td><p>課金単価係数</p></td>
+</tr>
+<tr class="row-even"><td><p>21</p></td>
+<td><p>ACCT_RSC</p></td>
+<td><p>計算リソース値</p></td>
+</tr>
+<tr class="row-odd"><td><p>22</p></td>
+<td><p>ERATE</p></td>
+<td><p>電力課金単価</p></td>
+</tr>
+<tr class="row-even"><td><p>23</p></td>
+<td><p>ACCT_ECON [*1]</p></td>
+<td><p>電力課金</p></td>
+</tr>
+<tr class="row-odd"><td><p>24</p></td>
+<td><p>POINT</p></td>
+<td><p>ジョブの実行によって獲得したポイント</p>
+<p>小数点２桁目で四捨五入して表示</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>25</p></td>
+<td><p>PERIOD_NUM</p></td>
+<td><p>課金対象期 [*2]</p>
+<p>実行したジョブが何期に課金されたかを表す。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>26</p></td>
+<td><p>RETRY</p></td>
+<td><p>リトライ回数</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">　[*1] ACCT_ECONはpjstatjコマンドのECON2の値が基である。</div>
+<div class="line">　[*2] 期毎管理の対象かは課題が所属するサブテーマに依存する。</div>
+</div>
+<p>accountjコマンドをオプション無しで実行し、表示情報に&quot;[ SUBTHEME_PERIOD ]&quot;が表示された場合は期毎管理の対象である。</p>
+<div class="line-block">
+<div class="line">　次に、ジョブが各期の何期に課金されたかを確認する場合である。</div>
+</div>
+<div class="line-block">
+<div class="line">　例）ジョブID369249について、何期に課金されたかを確認する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">login$ pjstata -j 369249</span>
+<span class="go">JOBID  SNO BLKNO GENNO  JOB_NAME  MD JTYPE USER     GROUP  ...  ACCT_ECON  POINT   PERIOD_NUM RETRY</span>
+<span class="go">369249           0      permer8K1 NM BT    fjse0001  fjse  ...  0.011446   10.12   2          0</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　この場合、PERIOD_NUMが「2」であることから、第2期（2022年度上期）に課金されたと判断できる。</div>
+<div class="line">　PERIOD_NUMは、課金実施時期に相当する値が表示され、全体の資源量を期毎に配分していない課題であれば （ハイフン）が表示される。</div>
+</div>
+<div class="line-block">
+<div class="line">　例）当期のジョブをCSV形式で出力する</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">login$ pjstata -j 969249</span>
+<span class="go">JOBID  SNO BLKNO GENNO  JOB_NAME  MD JTYPE USER     GROUP  ...  ACCT_ECON  POINT   PERIOD_NUM RETRY</span>
+<span class="go">369249           0      sample    NM BT    fjse0001  fjse  ...  0.011446   10.12   2          0</span>
+
+<span class="go">login$ pjstata -j 969249 -c</span>
+<span class="go">JOBID,SNO,BLKNO,GENNO,JOB_NAME,MD,JTYPE,USER,GROUP,          ...  ACCT_ECON,POINT,PERIOD_NUM,RETRY</span>
+<span class="go">&quot;369249&quot;,&quot;&quot;,&quot;&quot;,&quot;0&quot;,&quot;permer8K1&quot;,&quot;NM&quot;,&quot;BT&quot;,&quot;fjse0001&quot;,&quot;fjse&quot;,  ...  &quot;0.011446&quot;,&quot;10.12&quot;,&quot;2&quot;          0</span>
+</pre></div>
+</div>
+<p>　-cオプションを使用することで、検索結果をCSV形式にて標準出力できる。CSV形式で出力した場合、（ハイフン）は「空文字(NULL)」になる。</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="3-1-5_Pjstat.html"
+                          title="前の章へ"><span class="section-number">3.1.5. </span>ジョブ実行履歴検索</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="3-1-7_AccountJ.html"
+                          title="次の章へ"><span class="section-number">3.1.7. </span>ユーザ課金情報表示（ジョブ）</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-7_AccountJ.html" title="3.1.7. ユーザ課金情報表示（ジョブ）"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="3-1-5_Pjstat.html" title="3.1.5. ジョブ実行履歴検索"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>システム管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" ><span class="section-number">3.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.6. </span>ジョブ実行実績検索</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,160 @@
+Resource assign information displaying
+======================================
+
+| 　**[Name]**
+| 　resourceinfo - Display the assign resource linking information
+
+| 　**[Style]**
+| 　resourceinfo  [Option] 
+| 　※-g, -u, -rscunit, -rscgrp combined specification is AND search, multiple specification within the same option is OR search.
+
+| 　**[Description]**
+| 　resourceinfo command displays information related to the computational resources assigned to the assignment.
+
+| 　The project manager, the higher-level theme manager of the target group, and the sub-theme manager can display resource allocation information of members belonging to the group.
+| 　The system administrator can display the allocated resource information of all members registered in the system. However it is required to be authorized the administrator authorith described in  System management function .
+| 　If no option is specified, only the resource information of the project manager, system administrator, theme manager, and sub-theme manager is displayed.
+
+| 　【Resource assign setting example】
+
+.. figure:: img/3_SystemManagement_05.png
+
+　【Output result】
+
+   .. list-table:: 
+     :header-rows: 1
+     :widths: 5 20 20 30
+   
+     * - No
+       - Item name
+       - Category
+       - Note
+   
+     * - 1
+       - RTYPE
+       - Alphabetic characters
+       - | Resource type
+         | User: USER
+         | Resource group: RSCG
+         | User-resource group: :USER_RSCG
+   
+     * - 2
+       - GROUP
+       - Single-byte alphanumeric symbol
+       - Group name
+   
+     * - 3
+       - USER
+       - Single-byte alphanumeric characters
+       - | User name
+         | NULL when specified group and job type
+   
+     * - 4
+       - RSCUNT
+       - Single-byte alphanumeric characters
+       - | Resource unit name
+         | NULL when specified group and user
+   
+     * - 5
+       - RSCGRP
+       - Single-byte alphanumeric characters
+       - | Resource unit name
+         | NULL when specified group and user
+   
+     * - 6
+       - LIMIT
+       - Number
+       - | Computing resource frame
+         | 　(Node x run time limit value)
+         | ※In the assignment, the upper limit value of the computing resources that can be submitted to the job is displayed.
+
+| 　【Resource assign information display example】
+
+.. code-block:: none 
+
+   "RTYPE","GROUP","USER","RSCUNT","RSCGRP","LIMIT"     ...header line
+   "RSCG","grp01","","common","small",100            ...Assign to the resource group
+   "USER","grp01","user1","common","",""            ...Assign to the user
+   "USER_RSCG","grp01","user1","common","small",""  ...Assign to the user and resource group combination
+
+| 　**[Option]**
+| 　-g  group name...
+| 　Specify group name. Multiple designations can be made following a space, but front / middle / backward matching designation using an asterisk is not possible. Only exact match specification is possible.
+
+| 　-u  user name...
+| 　Specify user name. Multiple designations can be made following a space, but front / middle / backward matching designation using an asterisk is not possible. Only exact match specification is possible.
+ 　
+| 　-rscunit  resource unit name...
+| 　Specify recourse unit name that you want to confirm the computing resource use. Multiple designations can be made following a space, but front / middle / backward matching designation using an asterisk is not possible. Only exact match specification is possible.
+ 　
+| 　-rscgrp  resource group name...
+| 　Specify recourse group name that you want to confirm the computing resource use. Multiple designations can be made following a space, but front / middle / backward matching designation using an asterisk is not possible. Only exact match specification is possible.
+
+| 　&#45;-help
+| 　Display command help contents.
+ 　
+| 　**[Return value]**
+| 　Normal: 0
+| 　Abnormal: 1
+
+| 　**[Note]**
+| 　None.
+
+| 　**[Use example]**
+| 　【Example 1】	Login with the user user1 and display without specifying option.
+
+.. code-block:: console 
+
+   [login]$ resourceinfo
+   RTYPE,GROUP,USER,RSCUNT,RSCGRP,LIMIT
+   “USER”,”group01”,”user1”,”ru1”,”rg1”,”60”
+
+| 　If no option is specified, even the project manager and system administrator can only display their own resource information.
+| 　
+| 　【Example 2】	Login with the user user1 and display with specifying option.
+
+.. code-block:: console 
+
+   [login]$ resourceinfo -g group01
+   RTYPE,GROUP,USER,RSCUNT,RSCGRP,LIMIT
+   “RSCG”,”group01”,””,”ru1”,”rg1”,”80”
+   “RSCG_USER”,”group01”,”user1”,”ru1”,”rg1”,”60”
+   “RSCG_USER”,”group01”,”user2”,”ru1”,”rg1”,”40”
+   “USER”,”group01”,”user1”,”ru1”,””,”60”
+   “USER_RSCG”,”group01”,”user1”,”ru1”,”rg1”,”60”
+   “USER”,”group01”,”user2”,”ru1”,””,”40”
+   “USER_RSCG”,”group01”,”user2”,”ru1”,”rg1”,”40”
+
+| 　If the option is specified and the person in charge of the project is a project manager or system administrator, the project manager displays the allocated resource information of members belonging to the group, and the system administrator displays the allocated resource information of all members registered in the system. It can be displayed.
+
+| 　【Example 3】	Login with the user user2 and display with specifying option.
+
+.. code-block:: console 
+
+   [login]$ resourceinfo -g group01
+   RTYPE,GROUP,USER,RSCUNT,RSCGRP,LIMIT
+
+
+| 　Whether specifying option or not, the user cannot display even it is thier assign resource information.
+ 　
+| 　【Example 4】	Login with the user user1 and display specific user assign resource.
+
+.. code-block:: console 
+
+   [login]$ resourceinfo -g group01 -u user2 -rscunit ru1 -rscgrp rg1
+   RTYPE,GROUP,USER,RSCUNT,RSCGRP,LIMIT
+   ”USER”,“group01”,”user2”,”ru1”,”rg1”,”40”
+
+| 　The project manager of the assignment group 01 can display the resource allocation information of the members belonging to the group. -G, -u, -rscunit, -rscgrp combined specification is AND search, multiple specification within the same option is OR search.
+ 　
+| 　【例5】	Login with the user user1 and display the multiple user assign resource.
+
+.. code-block:: console 
+
+   [login]$ resourceinfo -g group01 -u user1 user2 -rscunit ru1 -rscgrp rg1
+   RTYPE,GROUP,USER,RSCUNT,RSCGRP,LIMIT
+   ”USER”,“group01”,”user1”,”ru1”,”rg1”,”60”
+   ”USER”,“group01”,”user2”,”ru1”,”rg1”,”40”
+
+　The project manager of the assignment group 01 can display the resource allocation information of the members belonging to the group. -G, -u, -rscunit, -rscgrp combined specification is AND search, multiple specification within the same option is OR search.
+

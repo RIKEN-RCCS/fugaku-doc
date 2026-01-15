@@ -1,0 +1,162 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6.8. Job submitting command option (MPI) &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6.9. Dynamic process creation (MPI_COMM_SPAWN)" href="DynamicProcessCreation%28MPI_Comm_spawn%29.html" />
+    <link rel="prev" title="6.7. Job shape (Torus)" href="JobShape%28torus%29.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DynamicProcessCreation%28MPI_Comm_spawn%29.html" title="6.9. Dynamic process creation (MPI_COMM_SPAWN)"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="JobShape%28torus%29.html" title="6.7. Job shape (Torus)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.8. </span>Job submitting command option (MPI)</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="job-submitting-command-option-mpi">
+<span id="pjsuboptions-mpi-related-mpi"></span><h1><span class="section-number">6.8. </span>Job submitting command option (MPI)<a class="headerlink" href="#job-submitting-command-option-mpi" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">To execute MPI program, it is required to specify  <strong class="program">pjsub</strong> option appropriately.</div>
+<div class="line">This indicates 1 dimention specification example.</div>
+</div>
+<p>[Job script]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L &quot;node=24&quot;               # Specify number of node (1 dimention specification)</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM --mpi &quot;shape=12&quot;           # Static process shape specification</span>
+<span class="c1">#PJM --mpi &quot;proc=12&quot;            # Maximum number of static processes</span>
+<span class="c1">#PJM -g groupname               # group name</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N # volume names that job uses</span>
+<span class="c1">#</span>
+mpiexec<span class="w">  </span>-n<span class="w">  </span><span class="m">12</span><span class="w"> </span>./a.out<span class="w">         </span><span class="c1"># Execute a.out by parallel process number 24</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt>-L “node=24”</dt><dd><p>Shape / number of compute node is kept desired with  <code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code>. Since one-dimensional shape (24) is specified, 24 computing nodes are secured in one dimension.</p>
+</dd>
+</dl>
+</li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/pjsubOptions(MPI-related)_01.png"><img alt="../_images/pjsubOptions%28MPI-related%29_01.png" src="../_images/pjsubOptions%28MPI-related%29_01.png" style="width: 662.4000000000001px; height: 180.0px;" /></a>
+</figure>
+<ol class="arabic simple" start="2">
+<li><dl class="simple">
+<dt>–mpi “shape=12”</dt><dd><p>Determine the area to which you want to allocate static processes by  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>. <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code> specifies the same dimention (1 dimention / 2 dimentions / 3 dimentions) specified in  <code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code>. If omitted  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code>, it will be  <code class="docutils literal notranslate"><span class="pre">-L</span> <span class="pre">node</span></code> value.</p>
+</dd>
+</dl>
+</li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/pjsubOptions(MPI-related)_02.png"><img alt="../_images/pjsubOptions%28MPI-related%29_02.png" src="../_images/pjsubOptions%28MPI-related%29_02.png" style="width: 568.8000000000001px; height: 207.20000000000002px;" /></a>
+</figure>
+<ol class="arabic simple" start="3">
+<li><dl class="simple">
+<dt>–mpi rank-map-bynode/–mpi rank-map-hostfile/–mpi rank-map-bychip</dt><dd><p>Assign a rank for the static process. Ranks are assigned in the  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">shape</span></code> range.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>mpiexec</dt><dd><p>Execute MPI program with  <strong class="program">mpiexec</strong> command. Specify the number of static processes with  <code class="docutils literal notranslate"><span class="pre">-n</span></code> option. If omitted  <code class="docutils literal notranslate"><span class="pre">-n</span></code> option, it will be  <code class="docutils literal notranslate"><span class="pre">--mpi</span> <span class="pre">proc</span></code> value.</p>
+</dd>
+</dl>
+</li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/pjsubOptions(MPI-related)_03.png"><img alt="../_images/pjsubOptions%28MPI-related%29_03.png" src="../_images/pjsubOptions%28MPI-related%29_03.png" style="width: 569.6px; height: 190.4px;" /></a>
+</figure>
+<ol class="arabic simple" start="5">
+<li><dl class="simple">
+<dt>Dynamic process creation</dt><dd><p>When a dynamic process is created by MPI_Comm_spawn, a process is created in an unassigned (dynamic process assignment area).</p>
+</dd>
+</dl>
+</li>
+</ol>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/pjsubOptions(MPI-related)_04.png"><img alt="../_images/pjsubOptions%28MPI-related%29_04.png" src="../_images/pjsubOptions%28MPI-related%29_04.png" style="width: 563.2px; height: 174.4px;" /></a>
+</figure>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="JobShape%28torus%29.html"
+                          title="previous chapter"><span class="section-number">6.7. </span>Job shape (Torus)</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="DynamicProcessCreation%28MPI_Comm_spawn%29.html"
+                          title="next chapter"><span class="section-number">6.9. </span>Dynamic process creation (MPI_COMM_SPAWN)</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="DynamicProcessCreation%28MPI_Comm_spawn%29.html" title="6.9. Dynamic process creation (MPI_COMM_SPAWN)"
+             >next</a></li>
+        <li class="right" >
+          <a href="JobShape%28torus%29.html" title="6.7. Job shape (Torus)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">6. </span>MPI job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.8. </span>Job submitting command option (MPI)</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,120 @@
+
+====================================
+braket
+====================================
+Overview
+====================================
+braket is a tool for simulations of quantum gates on (classical) computers. 
+This document will explain the use of braket with examples of its use on Fugaku.
+
+The supported version of braket on Fugaku is v1.6.0.
+
+For more information about Qulacs, refer to https://github.com/naoki-yoshioka/braket.
+
+|
+
+How to use braket
+====================================
+braket is available through Spack, a software package management system for high performance computing.
+
+|
+
+Preparation of Spack environment
+-------------------------------------
+The Spack environment on Fugaku can be constructed based on `Fugaku Spack User Guide <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/FugakuSpackGuide/>`_.
+
+This document explains how to use Qulacs assuming the use of public instances of Spack.
+
+|
+
+Loading braket
+-------------------
+If you use braket, load it with the following command. ::
+
+$ spack load braket %fj
+
+
+|
+
+Unloading braket
+---------------------
+If you do not use braket, unload it with the following command. ::
+
+$ spack unload braket %fj
+
+
+|
+
+Example of Usage
+====================================
+This section shows an example of running braket in a batch job on Fugaku.
+
+|
+
+Input data
+---------------
+You can obtain the input data of this exanple with the following commands.  ::
+
+$ wget https://github.com/naoki-yoshioka/braket/archive/refs/tags/v1.6.0.tar.gz
+$ tar xvf v1.6.0.tar.gz
+
+|
+
+Creating batch job script
+------------------------------
+The following batch job script (run.sh) is an example for running Qulacs on Fugaku.
+
+※ For single account users, the execution group id (check with the id command) must be specified in run.sh.
+
+（Example: #PJM -g hp*****） ::
+
+
+ $ cat run.sh
+ #!/bin/sh
+ #PJM -g hp*****
+ #PJM -L "node=1"
+ #PJM -L "rscgrp=small"
+ #PJM -L "elapse=00:20:00"
+ #PJM --mpi "max-proc-per-node=12"
+ #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+ #PJM -S
+ 
+ export PATH=/opt/FJSVxtclanga/tcsds-1.2.36/bin:$PATH
+ export LD_LIBRARY_PATH=/opt/FJSVxtclanga/tcsds-1.2.36/lib64:$LD_LIBRARY_PATH
+ . /vol0004/apps/oss/spack/share/spack/setup-env.sh
+ spack load braket %fj
+
+ mpiexec -np 4 bra --mode simple --file qcx/hadamards08.qcx 1> stdout 2> stderr
+
+|
+
+Execution of batch job
+---------------------------
+Please submit the batch job script (run.sh) by the following command. ::
+
+$ pjsub run.sh
+
+
+|
+
+Confirmation of result
+---------------------------
+In the stdout file created under output.job-id, the <Qx>, <Qy>, and <Qz> values in the Expectation values of spins field consistent with the follows, braket is working without problems. ::
+
+ Operations finished: 0.002061 (0.002061)
+ Expectation values of spins:
+   <Qx>     <Qy>     <Qz>
+  -0.000    0.500    0.500
+  -0.000    0.500    0.500
+  -0.000    0.500    0.500
+  -0.000    0.500    0.500
+  -0.000    0.500    0.500
+  -0.000    0.500    0.500
+  -0.000    0.500    0.500
+  -0.000    0.500    0.500
+ Expectation values finished: 0.002574 (0.000512)
+
+.. toctree::
+   :maxdepth: 2	
+   :caption: Contents..
+

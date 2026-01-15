@@ -1,0 +1,147 @@
+ジョブの削除
+===============
+
+利用者が投入したジョブは、\ :program:`pjdel`\ コマンドで削除することができます。また、実行中のジョブも終了させることができます。
+
+ [実行例]
+
+- :program:`pjdel`\ を実行し、ジョブの削除が正常に受付けられた場合、以下のメッセージが表示されます。
+
+ .. code-block:: console
+
+   [INFO] PJM 0100 pjdel Accepted job jobid.
+
+-  :program:`pjdel`\ の実行時、存在しないジョブを指定した場合、以下のメッセージが表示されます。
+
+ .. code-block:: console
+
+   [ERR.] PJM 0112 pjdel Job "存在しないジョブID" does not exist.
+
+
+通常ジョブ
+-----------
+
+通常ジョブの削除方法を示します。
+
+ここでは、以下を通常ジョブとします。
+
+- 通常ジョブ
+- 会話型ジョブ
+- マスタ・ワーカ型ジョブ
+
+使用例を以下に示します。
+
+- １つのジョブを削除する例
+
+  :program:`pjdel`\ コマンドにジョブIDを指定して実行するとジョブが削除されます。
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 12345678
+    [INFO] PJM 0100 pjdel Accepted job 12345678.
+
+
+- 複数のジョブを削除する例
+
+  :program:`pjdel`\ コマンドに複数のジョブIDを指定して実行すると、指定したジョブが削除されます。
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 12345678 12345680
+    [INFO] PJM 0100 pjdel Accepted job 12345678.
+    [INFO] PJM 0100 pjdel Accepted job 12345680.
+
+ステップジョブ
+---------------
+
+ステップジョブの削除方法を示します。
+
+| ジョブの削除は、次の例のようにジョブIDを指定して削除します。
+| ジョブIDを指定して、\ :program:`pjdel`\ コマンドを実行すると全てのサブジョブをキャンセルします。
+| サブジョブIDを指定すると指定したサブジョブをキャンセルします。
+
+使用例を以下に示します。
+
+- ジョブIDを指定して全てのサブジョブをキャンセルする場合
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 12345678
+    [INFO] PJM 0100 pjdel Accepted job 12345678_0.
+    [INFO] PJM 0100 pjdel Accepted job 12345678_1.
+    [INFO] PJM 0100 pjdel Accepted job 12345678_2.
+
+
+- 一つのサブジョブIDを指定してキャンセルする場合
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 12345678_3
+    [INFO] PJM 0100 pjdel Accepted job 12345678_3.
+
+- サブジョブの範囲指定をしてキャンセルする場合
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 12345678_2-5
+    [INFO] PJM 0100 pjdel Accepted job 12345678_2.
+    [INFO] PJM 0100 pjdel Accepted job 12345678_3.
+    [INFO] PJM 0100 pjdel Accepted job 12345678_4.
+    [INFO] PJM 0100 pjdel Accepted job 12345678_5.
+
+バルクジョブ
+-------------
+
+バルクジョブの削除方法を示します。
+
+| ジョブの削除は、次の例のようにジョブIDを指定して削除します。
+| ジョブIDを指定して、\ :program:`pjdel`\ コマンドを実行すると全てのサブジョブをキャンセルします。
+| サブジョブIDを指定すると指定したサブジョブをキャンセルします。
+
+使用例を次に示します。
+
+- ジョブIDを指定して全てのサブジョブをキャンセルする場合
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 28128
+     [INFO] PJM 0100 pjdel Accepted job 28128.
+
+- 一つのサブジョブIDを指定してキャンセルする場合
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 1362939[3]
+     [INFO] PJM 0100 pjdel Accepted job 1362939[3].
+
+- サブジョブの範囲指定をしてキャンセルする場合
+
+  .. code-block:: console
+
+    [_LNlogin]$ pjdel 1363254[0-2]
+     [INFO] PJM 0100 pjdel Accepted job 1363254[0-2].
+
+
+ジョブ削除コマンドのオプション
+-------------------------------
+
+:program:`pjdel`\ コマンドの代表的なオプションを示します。
+
+詳細は「ジョブ運用ソフトウェア - エンドユーザ向けガイド」を参照してください。
+
+ .. list-table:: 
+   :widths: 2 8
+   :header-rows: 1
+
+   * - オプション名
+     - 機能
+
+   * - \--enforce
+     - プロローグスクリプト、または、エピローグスクリプトを実行中のジョブをキャンセルする場合に、\ ``--enforce``\ オプションを指定します。また、ジョブスクリプトを実行中のジョブに\ ``--enforce``\ オプションを指定して\ :program:`pjdel`\ コマンドを実行した場合は、エピローグスクリプトを実行せずにジョブを削除します。
+
+   * - \--llio-flush
+     - 実行中のジョブをキャンセルする場合に、ジョブの経過時間制限値の範囲内で未書出しファイルのフラッシュの待ち合わせを実施します。
+
+   * - --help
+     - ヘルプを表示します。
+

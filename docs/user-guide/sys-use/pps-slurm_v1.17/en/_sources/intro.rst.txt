@@ -1,0 +1,43 @@
+Pre/Post Environment
+====================
+
+**Fugaku Pre/Post Environment** is one of the peripheral servers of the Fugaku system. The environment is designed to handle various pre/post-processing tasks (e.g., visualization, data conversion, and so on) to make input/output data, which are generated before/after performing users' calculations (e.g., parallel computation) on the Fugaku main system.
+
+The main features of this environment are as follows.
+
+- The pre/post environment consists of common IA servers that can allow the use of a large number of open-source software without porting.
+
+- The home directory (/home) in the pre/post environment is the same as the one in the Fugaku main system. Nobody needs to transfer files between the pre/post environment and the Fugaku main system.
+
+- The environment consists of **GPU** and **large memory nodes** and can perform various pre/post-processing workloads that are difficult to run on the login nodes due to the lack of resources.
+
+- In the environment, SLURM Workload Manager has been installed as a job scheduler. Users can submit both types (**batch and interactive**) of jobs via the **login nodes** by SLURM commands.
+
+Notations
+---------
+
+| This manual will show use cases (e.g., example commands) that walk across multiple peripheral servers of the Fugaku system. Therefore, the following notations will be used in the code blocks to clarify where the command is executed.
+
+.. csv-table::
+   :header: "Commnad Prompt", "Target System"
+   :widths: 2, 6
+
+    "[Login]$", "Execution on a login node"
+    "[PP]$", "Execution on a compute node of the pre/post environment"
+    "[GPU]$", "Execution on a GPU node of the pre/post environment"
+    "[MEM]$", "Execution on a large memory node of the pre/post environment"
+
+.. attention:: 
+
+    This documentation expresses "computation nodes" as GPU/large memory nodes of the pre/post environment unless otherwise noted.
+
+Revision History
+----------------
+
+See :doc:`history` in more detail about the updated history of this manual.
+
+
+.. code-block:: text
+
+    Copyright(c) 2025 RIKEN R-CCS
+    Unauthorized copying and reproduction of the content of this User Guide is prohibited.

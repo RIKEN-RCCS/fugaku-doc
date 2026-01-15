@@ -1,0 +1,178 @@
+
+
+<!doctype html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>3.1.9. ジョブ状態遷移履歴表示 &#8212; 利用者支援ツール 使用手引書 (利用者編)  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="3.1.10. データ領域割当情報表示" href="3-1-10_Chkdiskspace.html" />
+    <link rel="prev" title="3.1.8. ユーザ課金情報表示（ディスク）" href="3-1-8_AccountD.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-10_Chkdiskspace.html" title="3.1.10. データ領域割当情報表示"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="3-1-8_AccountD.html" title="3.1.8. ユーザ課金情報表示（ディスク）"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>システム管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" accesskey="U"><span class="section-number">3.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.9. </span>ジョブ状態遷移履歴表示</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">3.1.9. </span>ジョブ状態遷移履歴表示<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
+<div class="line-block">
+<div class="line">　<strong>[名前]</strong></div>
+<div class="line">　jobhistory - ジョブの状態遷移履歴を表示する</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[書式]</strong></div>
+<div class="line">　jobhistory  -j  ジョブID  [-d 過去に遡る日数]</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[説明]</strong></div>
+<div class="line">　jobhistory コマンドは、ジョブを投入してから終了するまでの状態遷移履歴を時系列に表示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　利用者は自分自身のジョブに関してのみ、状態遷移履歴を確認することができる。システム管理者はシステムに登録されている全メンバの状態遷移履歴を表示可能である。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[オプション]</strong></div>
+<div class="line">　-j  ジョブID</div>
+<div class="line">　ジョブIDを指定する。特定のサブジョブのみを指定することはできない。</div>
+</div>
+<div class="line-block">
+<div class="line">　-d  過去に遡る日数</div>
+<div class="line">　過去に遡る日数を指定することで、指定された日数だけ過去に遡り情報を出力できる。</div>
+<div class="line">　投入されているジョブに加えて、処理が終了したジョブ (EXIT、CANCEL 状態) の情報を出力する。過去に遡る日数は 1 から 90 の整数である。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[復帰値]</strong></div>
+<div class="line">　正常時: 0</div>
+<div class="line">　異常時: 1</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[備考]</strong></div>
+<div class="line">　なし。</div>
+</div>
+<div class="line-block">
+<div class="line">　<strong>[使用例]</strong></div>
+<div class="line">　【例1】 現在実行中のジョブID が 8000 の状態遷移履歴を表示する。</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>jobhistory<span class="w"> </span>-j<span class="w"> </span><span class="m">8000</span>
+<span class="go">[&#39;2022-02-12 12:17:47&#39;][jobid=8000][stepno=0][blkno=0]ACCEPT[-]</span>
+<span class="go">[&#39;2022-02-12 12:17:47&#39;][jobid=8000][stepno=0][blkno=0]QUEUED[-]</span>
+<span class="go">[&#39;2022-02-12 12:26:22&#39;][jobid=8000][stepno=0][blkno=0]RUNNING_A[-]</span>
+<span class="go">[&#39;2022-02-12 12:26:58&#39;][jobid=8000][stepno=0][blkno=0]RUNNING_P[-]</span>
+<span class="go">[&#39;2022-02-12 12:34:18&#39;][jobid=8000][stepno=0][blkno=0]RUNNING[job_start=&#39;2022-02-12 12:34:18&#39;]</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<p>　【例2】   5日前に終了したジョブID が 5579 の状態遷移履歴を表示する。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[login]$ </span>jobhistory<span class="w"> </span>-j<span class="w"> </span><span class="m">5579</span><span class="w"> </span>-d<span class="w"> </span><span class="m">5</span>
+<span class="go">[&#39;2022-02-07 17:50:28&#39;][jobid=5579][stepno=0][blkno=0]ACCEPT[-]</span>
+<span class="go">[&#39;2022-02-07 17:50:28&#39;][jobid=5579][stepno=0][blkno=0]QUEUED[-]</span>
+<span class="go">[&#39;2022-02-07 17:50:28&#39;][jobid=5579][stepno=0][blkno=0]RUNNING_A[-]</span>
+<span class="go">[&#39;2022-02-07 17:50:28&#39;][jobid=5579][stepno=0][blkno=0]RUNNING[job_start=&#39;2022-02-07 17:50:28&#39;]</span>
+<span class="go">[&#39;2022-02-07 17:50:38&#39;][jobid=5579][stepno=0][blkno=0]RUNOUT[-]</span>
+<span class="go">[&#39;2022-02-07 17:50:38&#39;][jobid=5579][stepno=0][blkno=0]EXIT[-]</span>
+<span class="gp">[login]$</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">　表示形式をもとに項目の説明を示する。</div>
+</div>
+<div class="line-block">
+<div class="line">　　表示形式：['YYYY-MM-DD HH:MM:SS'][jobid=value][stepno=value][blkno=value]state[-]</div>
+</div>
+<figure class="align-default">
+<img alt="../_images/3_SystemManagement_17_1.png" src="../_images/3_SystemManagement_17_1.png" />
+</figure>
+<figure class="align-default">
+<img alt="../_images/3_SystemManagement_17_2.png" src="../_images/3_SystemManagement_17_2.png" />
+</figure>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="3-1-8_AccountD.html"
+                          title="前の章へ"><span class="section-number">3.1.8. </span>ユーザ課金情報表示（ディスク）</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="3-1-10_Chkdiskspace.html"
+                          title="次の章へ"><span class="section-number">3.1.10. </span>データ領域割当情報表示</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="3-1-10_Chkdiskspace.html" title="3.1.10. データ領域割当情報表示"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="3-1-8_AccountD.html" title="3.1.8. ユーザ課金情報表示（ディスク）"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用者支援ツール 使用手引書 (利用者編)  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="3_SystemManagement.html" ><span class="section-number">3. </span>システム管理</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="3-1_CommandExpranation.html" ><span class="section-number">3.1. </span>コマンド解説</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.9. </span>ジョブ状態遷移履歴表示</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

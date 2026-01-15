@@ -1,0 +1,519 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.1. 概要 &#8212; 利用手引書 利用およびジョブ実行編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.2. 通常ジョブ" href="NormalJob.html" />
+    <link rel="prev" title="5. ジョブ実行" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="NormalJob.html" title="5.2. 通常ジョブ"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="index.html" title="5. ジョブ実行"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.1. </span>概要</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">5.1. </span>概要<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>ジョブの概要について説明します。</p>
+<section id="id2">
+<h2><span class="section-number">5.1.1. </span>ジョブとは<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>ジョブ運用ソフトウェアを導入したシステムでは、ユーザはプログラムを直接実行せず、ジョブ運用ソフトウェアのジョブ運用管理機能に実行を依頼します。ジョブ運用管理機能は実行依頼を受けたプログラムに対し、必要な計算機資源を確保し、プログラムを実行します。</p>
+<div class="line-block">
+<div class="line">このプログラムを処理する単位がジョブです。</div>
+<div class="line">ジョブは、プログラム、データ、および、ジョブスクリプトから構成されます。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>構成要素</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ジョブスクリプト</p></td>
+<td><p>プログラムの実行方法を記述したシェルスクリプトです。</p>
+<p>ジョブ運用ソフトウェアはこのジョブスクリプトに基づいてジョブを実行します。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>プログラム</p></td>
+<td><p>ユーザが用意する実行可能なプログラムです。</p></td>
+</tr>
+<tr class="row-even"><td><p>データ</p></td>
+<td><p>プログラムの入力および出力です。</p>
+<p>例えば、プログラムへの入力パラメーターが格納されたデータファイルや処理結果が格納される出力ファイル、プログラムの表示結果です。</p>
+</td>
+</tr>
+</tbody>
+</table>
+<figure class="align-default">
+<img alt="../_images/WhatAreJobs_01.png" src="../_images/WhatAreJobs_01.png" />
+</figure>
+<p>ジョブの実行は以下のような流れになります。</p>
+<ol class="arabic simple">
+<li><p>ユーザがジョブ実行に必要なファイルを用意し、ログインノード上に配置します。</p></li>
+<li><p>ユーザはジョブ運用管理機能に対し、ジョブの実行を依頼（ジョブの投入）します。ジョブは<strong class="program">pjsub</strong>コマンドにジョブスクリプトを指定して投入します。</p></li>
+<li><p>ジョブ運用管理機能は、ジョブに計算機資源を割り当て、ジョブスクリプトを実行します。</p></li>
+<li><p>ジョブスクリプトの内容にしたがって、プログラムが実行され、実行結果を出力します。</p></li>
+<li><p>ユーザは、ジョブの実行結果をログインノード上で確認します。</p></li>
+</ol>
+<blockquote>
+<div><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>ジョブ投入時にメール通知を指示した場合、ユーザにジョブスクリプトの終了をメールで通知することができます。</p>
+</div>
+</div></blockquote>
+</section>
+<section id="id3">
+<h2><span class="section-number">5.1.2. </span>ジョブの種類<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>ジョブは、必要とする計算機資源やプログラムの種類などによって、いくつかに分類されます。
+ジョブ運用ソフトウェアでは、ジョブを以下のように分類しています。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>分類</p></th>
+<th class="head"><p>ジョブの種類</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ジョブの構造による分類（ジョブモデル）</p></td>
+<td><p>通常ジョブ</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>バルクジョブ</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>ステップジョブ</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>ワークフロージョブ</p></td>
+</tr>
+<tr class="row-even"><td><p>ジョブの実行形態による分類（ジョブタイプ）</p></td>
+<td><p>バッチジョブ</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>会話型ジョブ</p></td>
+</tr>
+<tr class="row-even"><td><p>並列度による分類</p></td>
+<td><p>逐次ジョブ</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>並列ジョブ</p></td>
+</tr>
+<tr class="row-even"><td><p>必要とする計算機資源（ノード資源）による分類</p></td>
+<td><p>シングルノードジョブ</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>マルチノードジョブ</p></td>
+</tr>
+<tr class="row-even"><td><p>ノード資源の割り当て方による分類</p></td>
+<td><p>ノード割り当てジョブ（ノード専有ジョブ）</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>仮想ノード割り当てジョブ（ノード専有ジョブ、ノード共有ジョブ）</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id4">
+<h2><span class="section-number">5.1.3. </span>ジョブスクリプトの作成<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>ジョブスクリプトの実体はシェルスクリプトです。
+以下に、ジョブスクリプトの記述例を示します。</p>
+<p>ジョブスクリプト作成に関する詳細はマニュアル「ジョブ運用ソフトウェア エンドユーザ向けガイド」-「2.1 ジョブの作成方法」を参照ください。</p>
+<p>課題の<a class="reference internal" href="../UsageRules/index.html#group"><span class="std std-ref">グループID</span></a>を指定してください。</p>
+<p><a class="reference internal" href="../LayeredStorageAndLLIO/SelectAvailableVolumes.html#selectavailablevolumes"><span class="std std-ref">利用ファイルシステム</span></a>を指定してください。</p>
+<p>ジョブスクリプトのファイル名はジョブ名で使用可能な文字を使用します。<a class="reference internal" href="#jobscriptattention"><span class="std std-ref">注意</span></a>を参照ください。</p>
+<ul class="simple">
+<li><p>一般的なジョブスクリプトの例</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#PJM -L &quot;node=1&quot;               # ノード数</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;         # リソースグループの指定</span>
+<span class="c1">#PJM -L &quot;elapse=60:00&quot;         # ジョブの経過時間制限値</span>
+<span class="c1">#PJM -g groupname              # 課題のグループ指定</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N # ジョブで使用するデータ領域のvolume</span>
+<span class="c1">#PJM -S                        # 統計情報ファイル出力の指示</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">12</span><span class="w">      </span><span class="c1"># 環境変数の設定</span>
+
+<span class="c1"># execute job</span>
+./a.out<span class="w">                        </span><span class="c1"># プログラムを実行</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>MPIジョブを実行する例</p></li>
+</ul>
+<blockquote>
+<div><p>MPIジョブの場合は、プロセス数も指定します。1つのノードは、4つのCMG（Core MemoryGroup）で構成されています。このため、1ノードに対して4プロセスでの実行を推奨しています。以下は、ノード数に4、1ノードのプロセス数に4を指定し、16プロセスで実行する例を示しています。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#PJM -L &quot;node=4&quot;               # 4ノード</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;         # リソースグループの指定</span>
+<span class="c1">#PJM -L &quot;elapse=00:10:00&quot;      # ジョブの経過時間制限値</span>
+<span class="c1">#PJM -g groupname              # 課題のグループ指定</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N # ジョブで使用するデータ領域のvolume</span>
+<span class="c1">#PJM --mpi &quot;max-proc-per-node=4&quot; # 1ノードあたりに生成するMPIプロセス数の上限値</span>
+<span class="c1">#PJM -s</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">PLE_MPI_STD_EMPTYFILE</span><span class="o">=</span>off<span class="w"> </span><span class="c1"># 標準出力/標準エラー出力への出力がない場合はファイルを作成しない</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">12</span>
+
+<span class="c1"># execute job</span>
+mpiexec<span class="w"> </span>./a.out<span class="w">                  </span><span class="c1"># 利用可能な最大プロセス数(この例では16)で実行</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../MPI/InputOutputRedirection.html#stdoutstderroutforlargejobs"><span class="std std-ref">大規模ジョブ実行時の標準出力／標準エラー出力の指定について</span></a>も参照ください。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>MPIジョブを実行する際、利用するプロセス数を指定する場合は、以下のように<code class="docutils literal notranslate"><span class="pre">-n</span></code>オプションを指定します。</p>
+<p>mpiexec -n 16 ./a.out</p>
+</div>
+</div></blockquote>
+<p><strong class="program">pjsub</strong>コマンドまたはジョブスクリプトで<code class="docutils literal notranslate"><span class="pre">-L</span></code>に指定するリソースは省略値（default）を持つものがあります。
+<a class="reference internal" href="#defaultofjobresource"><span class="std std-ref">主なリソースの省略値</span></a>を次に示します。</p>
+<blockquote>
+<div><span id="defaultofjobresource"></span><table class="docutils align-default" id="id8">
+<caption><span class="caption-text">主なリソースの省略値</span><a class="headerlink" href="#id8" title="Link to this table">¶</a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>リソース名</p></th>
+<th class="head"><p>省略値</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>rscgrp</p></td>
+<td><div class="line-block">
+<div class="line">small（バッチジョブ）</div>
+<div class="line">int（会話型ジョブ）</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>node</p></td>
+<td><p>リソースグループごとに異なる</p></td>
+</tr>
+<tr class="row-even"><td><p>elapse</p></td>
+<td><div class="line-block">
+<div class="line">1分（バッチジョブ）</div>
+<div class="line">10秒（会話型ジョブ）</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>elapseの下限値を省略値と同じに設定しています。
+このためelapseに省略値より小さい値を指定しないでください。</p>
+<p>elapseに省略値より小さい値を指定した場合は<strong class="program">pjsub</strong>コマンド実行時にエラーとなります。</p>
+</div>
+<p>nodeの省略値は<strong class="program">pjacl</strong>コマンドを次の書式で実行すると実行したアカウントに定義されている情報が表示されます。:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>書式: pjacl --rg &lt;リソースグループ名&gt;
+</pre></div>
+</div>
+<p><strong class="program">pjacl</strong>コマンドの使用例を示します。<code class="docutils literal notranslate"><span class="pre">(node=)</span></code>のdefault欄からnodeの省略値が確認できます。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjacl<span class="w"> </span>--rg<span class="w"> </span>small
+<span class="gp">#</span>
+<span class="gp"># </span>JOBACL<span class="w"> </span>information
+<span class="gp">#</span>
+
+<span class="gp gp-VirtualEnv">(省略)</span>
+
+<span class="go">pjsub option parameters</span>
+<span class="go">    (-L/--rsc-list)                         lower            upper            default</span>
+<span class="go">        (elapse=)                           00:01:00         72:00:00         00:01:00</span>
+<span class="go">        (adaptive elapsed time min)         00:01:00         72:00:00         00:01:00</span>
+<span class="go">        (adaptive elapsed time max)         00:01:01         144:00:00        144:00:00</span>
+<span class="go">        (node elapse)                       1                unlimited        -</span>
+<span class="go">        (adaptive node elapse min)          1                unlimited        -</span>
+<span class="go">        (adaptive node elapse max)          2                unlimited        -</span>
+<span class="go">        (total cores elapse)                1                unlimited        -</span>
+<span class="go">        (total cores)                       1                unlimited        -</span>
+<span class="hll"><span class="go">        (node=)                             1                384              1</span>
+</span><span class="go">        (node-mem=)                         1                unlimited        unlimited</span>
+<span class="go">        (vnode=)                            1                2147483647       1</span>
+<span class="go">        (vnode-core=)                       1                2147483647       1</span>
+<span class="go">        (vnode-mem=)                        1                unlimited        unlimited</span>
+<span class="go">        (proc-core=)                        -                unlimited        0</span>
+<span class="go">        (proc-cpu=)                         -                unlimited        unlimited</span>
+<span class="go">        (proc-crproc=)                      -                4096             4096</span>
+<span class="go">        (proc-data=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-lockm=)                       -                unlimited        unlimited</span>
+<span class="go">        (proc-msgq=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-openfd=)                      -                unlimited        1024</span>
+<span class="go">        (proc-psig=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-filesz=)                      -                unlimited        unlimited</span>
+<span class="go">        (proc-stack=)                       -                unlimited        unlimited</span>
+<span class="go">        (proc-vmem=)                        -                unlimited        unlimited</span>
+<span class="go">        (estimated-power=)                  0                unlimited        0</span>
+<span class="go">        (exepjrsh=)                         0                1                0</span>
+<span class="go">        (nnum_cret=)                        0                unlimited        0</span>
+<span class="go">        (test_rsc01=)                       0                unlimited        0</span>
+
+<span class="gp gp-VirtualEnv">(省略)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjacl<span class="w"> </span>--rg<span class="w"> </span>large
+<span class="gp">#</span>
+<span class="gp"># </span>JOBACL<span class="w"> </span>information
+<span class="gp">#</span>
+
+<span class="gp gp-VirtualEnv">(省略)</span>
+
+<span class="go">pjsub option parameters</span>
+<span class="go">    (-L/--rsc-list)                         lower            upper            default</span>
+<span class="go">        (elapse=)                           00:01:00         24:00:00         00:01:00</span>
+<span class="go">        (adaptive elapsed time min)         00:01:00         24:00:00         00:01:00</span>
+<span class="go">        (adaptive elapsed time max)         00:01:01         96:00:00         96:00:00</span>
+<span class="go">        (node elapse)                       1                unlimited        -</span>
+<span class="go">        (adaptive node elapse min)          1                unlimited        -</span>
+<span class="go">        (adaptive node elapse max)          2                unlimited        -</span>
+<span class="go">        (total cores elapse)                1                unlimited        -</span>
+<span class="go">        (total cores)                       1                unlimited        -</span>
+<span class="hll"><span class="go">        (node=)                             385              12288            385</span>
+</span><span class="go">        (node-mem=)                         1                unlimited        unlimited</span>
+<span class="go">        (vnode=)                            1                2147483647       1</span>
+<span class="go">        (vnode-core=)                       1                2147483647       1</span>
+<span class="go">        (vnode-mem=)                        1                unlimited        unlimited</span>
+<span class="go">        (proc-core=)                        -                unlimited        0</span>
+<span class="go">        (proc-cpu=)                         -                unlimited        unlimited</span>
+<span class="go">        (proc-crproc=)                      -                4096             4096</span>
+<span class="go">        (proc-data=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-lockm=)                       -                unlimited        unlimited</span>
+<span class="go">        (proc-msgq=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-openfd=)                      -                unlimited        1024</span>
+<span class="go">        (proc-psig=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-filesz=)                      -                unlimited        unlimited</span>
+<span class="go">        (proc-stack=)                       -                unlimited        unlimited</span>
+<span class="go">        (proc-vmem=)                        -                unlimited        unlimited</span>
+<span class="go">        (estimated-power=)                  0                unlimited        0</span>
+<span class="go">        (exepjrsh=)                         0                1                0</span>
+<span class="go">        (nnum_cret=)                        0                unlimited        0</span>
+<span class="go">        (test_rsc01=)                       0                unlimited        0</span>
+
+<span class="gp gp-VirtualEnv">(省略)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjacl<span class="w"> </span>--rg<span class="w"> </span>int
+<span class="gp">#</span>
+<span class="gp"># </span>JOBACL<span class="w"> </span>information
+<span class="gp">#</span>
+
+<span class="gp gp-VirtualEnv">(省略)</span>
+
+<span class="go">    (--interact -L)                         lower            upper            default</span>
+<span class="go">        (elapse=)                           00:00:10         06:00:00         00:00:10</span>
+<span class="go">        (adaptive elapsed time min)         00:00:10         06:00:00         00:00:10</span>
+<span class="go">        (adaptive elapsed time max)         00:00:11         78:00:00         78:00:00</span>
+<span class="go">        (node elapse)                       1                unlimited        -</span>
+<span class="go">        (adaptive node elapse min)          1                unlimited        -</span>
+<span class="go">        (adaptive node elapse max)          2                unlimited        -</span>
+<span class="go">        (total cores elapse)                1                unlimited        -</span>
+<span class="go">        (total cores)                       1                unlimited        -</span>
+<span class="hll"><span class="go">        (node=)                             1                12               1</span>
+</span><span class="go">        (node-mem=)                         1                unlimited        unlimited</span>
+<span class="go">        (vnode=)                            1                2147483647       1</span>
+<span class="go">        (vnode-core=)                       1                2147483647       1</span>
+<span class="go">        (vnode-mem=)                        1                unlimited        unlimited</span>
+<span class="go">        (proc-core=)                        -                unlimited        0</span>
+<span class="go">        (proc-cpu=)                         -                unlimited        unlimited</span>
+<span class="go">        (proc-crproc=)                      -                4096             4096</span>
+<span class="go">        (proc-data=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-lockm=)                       -                unlimited        unlimited</span>
+<span class="go">        (proc-msgq=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-openfd=)                      -                unlimited        1024</span>
+<span class="go">        (proc-psig=)                        -                unlimited        unlimited</span>
+<span class="go">        (proc-filesz=)                      -                unlimited        unlimited</span>
+<span class="go">        (proc-stack=)                       -                unlimited        unlimited</span>
+<span class="go">        (proc-vmem=)                        -                unlimited        unlimited</span>
+<span class="go">        (estimated-power=)                  0                unlimited        0</span>
+<span class="go">        (exepjrsh=)                         0                1                0</span>
+<span class="go">        (nnum_cret=)                        0                unlimited        0</span>
+<span class="go">        (test_rsc01=)                       0                unlimited        0</span>
+
+<span class="gp gp-VirtualEnv">(省略)</span>
+</pre></div>
+</div>
+<div class="line-block" id="jobscriptattention">
+<div class="line"><br /></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>ジョブスクリプトのファイル名はジョブ名で使用可能な文字を使用してください。次の文字が使用可能です。</p>
+<ul>
+<li><p>半角英数字、半角ハイフン(-)、半角アンダースコア(_)、半角ドット(.)が使用可能です。</p></li>
+<li><p>上記以外の文字の使用は未サポートです。</p></li>
+</ul>
+</li>
+<li><p>ジョブスクリプトを実行するシェルは、ジョブスクリプトの1行目に &quot;#!&quot; でシェルが指定されていなければ、ユーザのログインシェルになります。</p></li>
+<li><p>ジョブスクリプト内で &quot;#PJM&quot; で始まる行には、ジョブを投入するときの<strong class="program">pjsub</strong>コマンドの引数を記述できます。ジョブスクリプト内での指定より、<strong class="program">pjsub</strong>コマンドの引数による指定の方が優先されます。</p></li>
+<li><p>一度、コメント行以外が現れると、以降の &quot;#PJM &quot; は単にコメント行として無視します。</p></li>
+<li><p>ジョブスクリプトにはジョブを投入するユーザに対する読込み権が必要です。実行権はなくてもかまいません。</p></li>
+<li><p>ジョブスクリプト内で、<code class="file docutils literal notranslate"><span class="pre">/dev/stdout</span></code>、または、<cite>/dev/stderr</cite>にリダイレクトを行わないでください。リダイレクトした場合、標準出力ファイルまたは標準エラー出力ファイルが先頭から上書きされます。</p></li>
+</ul>
+</div>
+</section>
+<section id="id5">
+<h2><span class="section-number">5.1.4. </span>ジョブスクリプトの雛形作成コマンド<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">ジョブスクリプトの雛形を作成するコマンド(make_jobscript)を提供します。主にファイルシステムに関連して必須である項目などを記載したスクリプトの雛形を出力します。</div>
+<div class="line">コマンドを使用する際、オプション <code class="docutils literal notranslate"><span class="pre">--gname</span></code> でジョブを実行するグループを指定してください。</div>
+</div>
+<p>使用方法</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>make_jobscript<span class="w"> </span><span class="o">[</span>OPTION<span class="w"> </span>...<span class="o">]</span><span class="w"> </span>--gname<span class="w"> </span>groupname
+</pre></div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>オプション</p></th>
+<th class="head"><p>機能</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>--distribute-common-file path_to_file1,path_to_file2,...</p></td>
+<td><p>すべての計算ノードから読み込まれるファイル（共通ファイル）を指定します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>--use-directory path_to_directory1,path_to_directory2,...</p></td>
+<td><p>ジョブで使用するディレクトリを指定します。</p></td>
+</tr>
+<tr class="row-even"><td><p>--use-spack</p></td>
+<td><p>Spack を使用する場合に指定します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>--gname groupname</p></td>
+<td><p>ジョブを実行するグループを指定します。</p></td>
+</tr>
+</tbody>
+</table>
+<p>指定されなかったオプションに関連する記述もコメントとして出力されます。
+参考となるドキュメントのURLも出力されるので、詳細はそちらをご参照ください。</p>
+</section>
+<section id="joballocationoperation">
+<span id="id6"></span><h2><span class="section-number">5.1.5. </span>ジョブ振り分け運用<a class="headerlink" href="#joballocationoperation" title="Link to this heading">¶</a></h2>
+<p>「富岳」では、ジョブ投入が特定のリソースグループに集中することで発生する混雑を緩和する目的で、ジョブ振り分け運用を実施しています。</p>
+<p>ジョブ振り分け運用では、投入済みのジョブを定期的にシステム側で別リソースグループに移動します。
+移動させるジョブには条件があり、移動先となるリソースグループと条件が合致した投入済みジョブのリソースグループをシステム側で変更します。
+実行リソースグループが変わる以外のパラメータ変更はありません。</p>
+<p>ジョブ振り分け運用を実施しているリソースグループ及び振り分け対象となる条件の詳細は
+<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/resource_group_config">リソースグループ</a>のRemarksと、表の各種パラメータをご参照ください。</p>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>ジョブ振り分けが適用されると実行リソースグループが変わります。
+そのため、ユーザ単位でリソースグループ毎に利用可能な計算資源を制限している場合、正しく制御できなくなります。</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.1. 概要</a><ul>
+<li><a class="reference internal" href="#id2">5.1.1. ジョブとは</a></li>
+<li><a class="reference internal" href="#id3">5.1.2. ジョブの種類</a></li>
+<li><a class="reference internal" href="#id4">5.1.3. ジョブスクリプトの作成</a></li>
+<li><a class="reference internal" href="#id5">5.1.4. ジョブスクリプトの雛形作成コマンド</a></li>
+<li><a class="reference internal" href="#joballocationoperation">5.1.5. ジョブ振り分け運用</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="index.html"
+                          title="前の章へ"><span class="section-number">5. </span>ジョブ実行</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="NormalJob.html"
+                          title="次の章へ"><span class="section-number">5.2. </span>通常ジョブ</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="NormalJob.html" title="5.2. 通常ジョブ"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="index.html" title="5. ジョブ実行"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 利用およびジョブ実行編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>ジョブ実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.1. </span>概要</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

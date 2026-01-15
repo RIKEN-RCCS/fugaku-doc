@@ -1,0 +1,960 @@
+.. highlight:: none
+
+.. _Powermodeset:
+
+電力制御機能
+=========================
+
+
+概要
+-----------
+
+「富岳」では、ジョブ実行時の電力制御機能（節電機能）を備えており、省電力稼働する設定が行われています。
+システムが利用可能な電力は有限であり、ジョブ実行中に運用側で想定した値を超過した場合には、ジョブが使用しているCPUクロックを強制的に下げることで消費電力を抑制する場合があります。
+
+利用者は、ジョブの特性に合わせて、ジョブ投入時もしくはジョブ実行中に変更を行うことができます。変更可能な項目を「パワーノブ」と呼び、変更操作のことを「パワーノブ操作」と呼びます。
+
+以下のパワーノブ値がデフォルトで設定されています。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 1 1 1
+
+   * - パワーノブ名称
+     - 説明
+     - 設定値（デフォルト）
+      
+   * - freq
+     - CPUの周波数(MHz)
+     - 2200 (Boostモード)
+      
+   * - throttling_state
+     - HBMメモリのアクセス制限
+     - 0 (制限なし)
+      
+   * - issue_state
+     - 計算コアの命令発行制限
+     - 0 (制限なし)
+      
+   * - ex_pipe_state
+     - 計算コアのEX数
+     - 0 (制限なし)
+      
+   * - eco_state
+     - 計算コアのエコモード状態
+     - 2 : On, FLAだけ利用
+      
+   * - retention_state	
+     - 計算コアのRetention状態遷移の可否
+     - :ref:`注1 <RetentionNote1>`
+      
+   * - retention_state_acores
+     - アシスタントコア(core 0以外)のRetention状態遷移の可否
+     - 0 (Retention遷移しない)
+
+.. _RetentionNote1:
+
+|
+
+.. note::
+
+   注1: retention_stateはジョブのノードサイズにより、次のようにデフォルト値が設定されています。
+
+     .. list-table::
+       :header-rows: 1
+       :widths: 1 1 1
+       
+       * - ジョブのノードサイズ
+         - 設定値（デフォルト）
+         - 変更の可否
+       
+       * - 9216ノード以下
+         - 1 (Retention状態に遷移する)
+         - 可
+         
+       * - 9217ノード以上
+         - 0 (Retention遷移しない)
+         - 不可
+
+
+   retention_stateが「1 (Retention状態に遷移する)」の場合、コア上でプロセスが動作していない場合に、より低電力状態(Retention状態)に遷移します。
+   
+   コアがRetention状態の場合、実行状態に遷移するために約3msかかります。
+
+.. attention:: 
+
+   IOを兼用する計算ノード（CN/BIO、CN/SIO、CN/GIO）は性能を重視した設定をしています。パワーノブ値は次のように設定しています。
+   
+   変更不可のパワーノブについては、ジョブ投入時のパワーノブ指定は無視され、PowerAPIでの変更はエラーとなります。
+
+     .. list-table::
+       :header-rows: 1
+       :widths: 2 3 3 3
+
+       * - パワーノブ名称
+         - 説明
+         - 設定値
+         - 変更の可否
+          
+       * - freq
+         - CPUの周波数(MHz)
+         - 2200 (Boostモード)
+         - 不可
+          
+       * - throttling_state
+         - HBMメモリのアクセス制限
+         - 0 (制限なし)
+         - 不可
+          
+       * - issue_state
+         - 計算コアの命令発行制限
+         - 0 (制限なし)
+         - 可
+          
+       * - ex_pipe_state
+         - 計算コアのEX数
+         - 0 (制限なし)
+         - 可
+          
+       * - eco_state
+         - 計算コアのエコモード状態
+         - 2 : On, FLAだけ利用
+         - 可
+          
+       * - retention_state
+         - 計算コアのRetention状態遷移の可否
+         - 0 (Retention遷移しない)
+         - 9216ノード以下のジョブのみ変更可
+          
+       * - retention_state_acores
+         - アシスタントコア(core 0以外)のRetention状態遷移の可否
+         - 0 (Retention遷移しない)
+         - 不可
+
+   IOノードの識別は\ :ref:`IOノード <UsageRulesIOnode>`\ を参照ください。
+
+.. _PowermodePowerknob:
+
+パワーモード指定（ジョブ実行時のパワーノブ操作）
+------------------------------------------------
+
+
+ジョブ投入時にパワーノブの利用を指示することができます。
+
+.. _PowermodeFunction:
+
+機能概要
+^^^^^^^^^^^^^^^^^^^^^^
+
+利用者は、ジョブ投入時にパワーノブ操作を行うことができます。
+pjsubコマンドの-Lオプションまたは—rsc-listオプションで、カスタム資源としてパワーノブ名称とパワーノブ値を指定することにより、ジョブ実行開始時点から指定されたパワーノブ値でジョブ実行されます。
+
+.. code-block:: console
+
+   $ pjsub -L "パワーノブ名称=パワーノブ値" job.sh
+
+
+利用者が操作可能なパワーノブの一覧を以下に示します。
+
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 20 30 30 20
+ 
+   * - パワーノブ名称
+     - 説明
+     - 指定可能なパワーノブ値
+     - デフォルト値
+
+   * - freq
+     - CPUの周波数(MHz)
+     - | 2000 : Normalモード
+       | 2200 : Boostモード
+     - | 2200
+       | ※性能最大
+
+   * - throttling_state
+     - HBMメモリのアクセス制限
+     - | 0 : 制限なし
+       | 1 : リクエスト数の90%
+       | 2 : リクエスト数の80%
+       | 3 : リクエスト数の70%
+       | 4 : リクエスト数の60%
+       | 5 : リクエスト数の50%
+       | 6 : リクエスト数の40%
+       | 7 : リクエスト数の30%
+       | 8 : リクエスト数の20%
+       | 9 : リクエスト数の10%
+     - | 0
+       | ※性能最大
+
+   * - issue_state
+     - 計算コアの命令発行制限
+     - | 0 : 4命令
+       | 1 : 2命令
+     - | 0
+       | ※性能最大
+
+   * - ex_pipe_state
+     - 計算コアのEX数
+     - | 0 : AB利用
+       | 1 : Aだけ利用
+     - | 0
+       | ※性能最大
+
+   * - eco_state
+     - 計算コアのエコモード状態
+     - | 0 : Off, FLAB利用
+       | 1 : Off, FLAだけ利用
+       | 2 : On, FLAだけ利用
+     - | 2
+
+   * - retention_state
+     - Retention状態
+     - | 0: Retention状態に遷移しない
+       | 1: Retention状態に遷移する
+     - :ref:`注1 <RetentionNote1>`
+
+.. _PowermodeUsage:
+
+使用例
+^^^^^^^^^^^^^^^
+
+ジョブ投入時のパワーノブ操作例を以下に示します。
+
+1. 48ノードを使用するジョブをBoostモードかつエコモードを有効にして投入 (デフォルト)
+   
+   .. code-block:: console
+   
+      $ pjsub -L "node=48,freq=2200,eco_state=2" job.sh
+   
+   
+   この場合、ジョブ実行開始時に以下のパワーノブ値が使用されます。
+   
+   
+    .. list-table::
+      :header-rows: 1
+      :widths: 1 1 
+     
+      * - パワーノブ名称
+        - ジョブ実行時の採用値
+   
+      * - freq
+        - 2200 (Boostモード)
+        
+      * - throttling_state
+        - 0 (制限なし)
+        
+      * - issue_state
+        - 0 (制限なし)
+        
+      * - ex_pipe_state
+        - 0 (制限なし)
+        
+      * - eco_state
+        - 2 (On, FLAだけ利用)
+        
+      * - retention_state
+        - :ref:`注1 <RetentionNote1>`
+   
+      * - retention_state_acores
+        - 0 (非Retention)
+   
+
+
+
+2. 48ノードを使用するジョブをNormalモード実行として投入
+   
+   .. code-block:: console
+   
+      $ pjsub -L "node=48,freq=2000,eco_state=0" job.sh
+   
+   CPU周波数変更とエコモードのパワーノブ操作を行った場合、ジョブ実行時の初期値として以下のパワーノブ値が使用されます。
+   
+   
+    .. list-table::
+      :header-rows: 1
+      :widths: 1 1 
+     
+      * - パワーノブ名称
+        - ジョブ実行時の採用値
+   
+      * - freq
+        - 2000 (Normalモード)
+        
+      * - throttling_state
+        - 0 (制限なし)
+        
+      * - issue_state
+        - 0 (制限なし)
+        
+      * - ex_pipe_state
+        - 0 (制限なし)
+        
+      * - eco_state
+        - 0 (制限なし)
+        
+      * - retention_state
+        - :ref:`注1 <RetentionNote1>`
+   
+      * - retention_state_acores
+        - 0 (非Retention)
+   
+
+
+
+3. 48ノードを使用するジョブをNormalモードかつエコモードを有効にして投入
+   
+   .. code-block:: console
+   
+      $ pjsub -L "node=48,freq=2000,eco_state=2" job.sh
+   
+   
+   この場合、ジョブ実行開始時に以下のパワーノブ値が使用されます。
+   
+   
+    .. list-table::
+      :header-rows: 1
+      :widths: 1 1 
+     
+      * - パワーノブ名称
+        - ジョブ実行時の採用値
+   
+      * - freq
+        - 2000 (Normalモード)
+        
+      * - throttling_state
+        - 0 (制限なし)
+        
+      * - issue_state
+        - 0 (制限なし)
+        
+      * - ex_pipe_state
+        - 0 (制限なし)
+        
+      * - eco_state
+        - 2 (On, FLAだけ利用)
+        
+      * - retention_state
+        - :ref:`注1 <RetentionNote1>`
+   
+      * - retention_state_acores
+        - 0 (非Retention)
+   
+
+
+
+4. 12ノード使用するジョブをBoostモード実行として投入 [#f1]_
+   
+   .. code-block:: console
+   
+      $ pjsub -L "node=12,freq=2200,eco_state=0" job.sh
+   
+   この場合、ジョブ実行開始時に以下のパワーノブ値が使用されます。
+
+   
+    .. list-table::
+      :header-rows: 1
+      :widths: 1 1 
+     
+      * - パワーノブ名称
+        - ジョブ実行時の採用値
+   
+      * - freq
+        - 2200 (Boostモード)
+   
+      * - throttling_state
+        - 0 (制限なし)
+   
+      * - issue_state
+        - 0 (制限なし)
+   
+      * - ex_pipe_state
+        - 0 (制限なし)
+   
+      * - eco_state
+        - 0 (制限なし)
+   
+      * - retention_state
+        - :ref:`注1 <RetentionNote1>`
+   
+      * - retention_state_acores
+        - 0 (非Retention)
+   
+
+
+
+5. ジョブ実行スクリプト内で指定して実行
+   
+   .. code-block:: bash
+      
+      #!/bin/sh -x
+      #PJM -L "node=2x2x2"               # 割当ノード形状 2x2x2ノード（3次元形状）
+      #PJM -L "elapse=01:00:00"          # 経過時間制限 1時間
+      #PJM -L "freq=2200"                # CPUクロック指定
+      #PJM -L "eco_state=2"              # エコモード指定
+      #PJM --mpi "shape=2x2x2"           # プロセスの形状 2x2x2
+      #PJM --mpi "max-proc-per-node=4"   # ノード毎に生成するMPIプロセス数の上限値
+      #PJM -g groupname                  # 課題のグループ指定
+      #PJM -x PJM_LLIO_GFSCACHE=/vol000N   # ジョブで使用するデータ領域のvolume
+      #PJM -s                              # 統計情報出力
+      #
+   
+      mpiexec ./a.out                    # a.outを実行
+
+
+
+6. 192ノードを使用するジョブを、計算コアRetention遷移を無効にして投入
+   
+   .. code-block:: console
+   
+      $ pjsub -L "node=192,retention_state=0" job.sh
+   
+
+.. attention:: 
+
+   - .. [#f1] **現在、Boostモード実行でのジョブ投入はエラーとなります。**
+   - Boostモードで実行した場合、システム側で設定された消費電力の閾値を超える可能性が高まります。閾値を超えた場合、CPU周波数がNormalモードよりも低く抑えられます。この制御が動作した場合、pjstat -sコマンドで表示される ‘POWER CAPPING DATE’ に超過した日時が表示されます。動作していない場合は日時の表示が – となります。
+
+
+Power API
+-------------
+
+| 「富岳」では、電力計測・制御を行うためのPower APIを提供します。
+| 利用者がPower APIを利用するプログラムをジョブとして実行することで、ジョブの電力計測・制御ができます。
+
+
+機能概要
+^^^^^^^^^^^^^^^^^^^^^^
+
+利用者は、ジョブ実行中でのパワーノブ操作を行うことができます。
+「富岳」ではPower APIによる電力計測・制御インターフェースを有しており、C言語やFortranプログラム内にPower API関数を記述することで、パワーノブ操作を行うことができます。
+また、その時点の電力を計測することもできます。
+
+「富岳」で利用できる Power API は、Sandia National Laboratories で公開している2.0版を拡張したものです。
+
+.. seealso:: 
+
+   - | Power APIで提供するAPI関数については、Sandia National LaboratoriesのWebページを参照してください。
+     | http://powerapi.sandia.gov/
+   - 「富岳」 固有のPower APIに関する情報は、マニュアル「ジョブ運用ソフトウェア APIユーザーズガイド PowerAPI編」を参照してください。
+
+
+Power APIプログラムの作成方法
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ここでは、Power APIプログラムの作成方法について説明します。
+
+.. contents::
+   :local:
+
+Power APIプログラム作成の流れ
++++++++++++++++++++++++++++++
+
+Power APIプログラムの基本的な流れは、次のようになります。
+
+ #. 初期化
+ #. 電力計測・制御の対象となるObjectを取得
+ #. 対象となるプログラム区間に対して、電力計測・制御の実施
+ #. 終了処理
+
+  .. seealso::
+    Power APIでは、電力計測・制御の対象となるデバイスのことをObjectと呼びます。
+
+
+Power APIの初期化
++++++++++++++++++
+
+初期化関数 ``PWR_CntxtInit()`` を呼び出すことで、Power API を初期化します。
+初期化により、Power API のコンテキストを取得します。
+
+``PWR_CntxtInit()`` 関数の引数に指定可能なPWR_CntxtType、および、PWR_Roleは次の通りです。
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 3 7
+
+   * - PWR_CntxtType
+     - 説明
+
+   * - PWR_CNTXT_DEFAULT
+     - Power API標準機能が利用可能
+
+   * - PWR_CNTXT_FX1000(FX1000)
+     - \ 「富岳」 計算ノード向けに拡張された機能が利用可能
+
+ .. note::
+   PWR_Roleには、アプリケーション利用者を意味する **PWR_ROLE_APP** のみ指定可能です。
+
+Objectの取得
+++++++++++++
+
+Power APIでは、電力計測・制御の対象となるデバイスのことを Object と呼びます。
+Power APIが対象とするシステムは、計算ノードのObjectツリーにより表現されます。
+Power API内で電力制御・計測の対象となるデバイスを指定するために、Object を取得します。
+計算ノードのObjectツリーの各節点は、それぞれ Object を示しています。
+
+「富岳」 計算ノードのObjectツリー
+
+.. _計算ノードのObjectツリー:
+
+.. figure:: img/NodeObjectTree01.png
+   :align: center
+   :alt: Objectツリーの図
+
+
+各オブジェクトの詳細は、次の通りです。
+
+「富岳」 計算ノードにおけるObject
+
+.. list-table::
+  :header-rows: 1
+  :widths: 3 5 2
+
+  * - PWR_ObjType
+    - ユニーク名
+    - 説明
+
+  * - PWR_OBJ_NODE
+    - plat.node
+    - ノード全体
+
+  * - PWR_OBJ_SOCKET
+    - plat.node.cpu
+    - CPU Socket
+
+  * - PWR_OBJ_MEM
+    - plat.node.memN （N = 0、1、2、3）
+    - メモリ
+
+  * - PWR_OBJ_POWER_PLANE
+    - plat.node.pci
+    - PCI express
+
+  * - PWR_OBJ_NIC
+    - plat.node.tofuopt
+    - 光モジュール
+
+  * - PWR_OBJ_POWER_PLANE
+    - plat.node.cpu.uncmg
+    - CPU内のアシスタントコア群、CMG、Tofuを除いた部分
+
+  * - PWR_OBJ_POWER_PLANE
+    - plat.node.cpu.acores
+    - アシスタントコア群
+
+  * - PWR_OBJ_POWER_PLANE
+    - | plat.node.cpu.cmgN
+      | （N = 0、1、2、3）
+    - CMG
+
+  * - PWR_OBJ_NIC
+    - plat.node.cpu.tofu
+    - Tofu
+
+  * - PWR_OBJ_CORE
+    - | plat.node.cpu.acores.coreL
+      | (計算ノード：L = 0、1 計算ノード兼I/Oノード：L = 0-3)
+    - アシスタントコア
+
+  * - PWR_OBJ_POWER_PLANE
+    - plat.node.cpu.cmgN.cores
+    - CMG内の計算コア群
+
+  * - PWR_OBJ_POWER_PLANE
+    - plat.node.cpu.cmgN.cores.l2cache
+    - L2キャッシュ
+
+  * - PWR_OBJ_CORE
+    - | plat.node.cpu.cmgN.cores.coreM
+      |  (M = 12から59) 1CMGあたり、12core存在します。
+      | Mは連番であり、cmgNにおけるMの取りうる範囲は、以下の式で表現できます。
+      |  12(N + 1) ≦M ＜ 12(N + 2)
+    - 計算コア
+
+.. attention::
+
+  Power APIで利用するObjectのユニーク名は、ツリーのルート(plat.node)を起点として、ツリーを辿っていった節点の名前を、"." で区切って並べていくことで表現することに注意してください。
+  
+  例えば、:ref:`Objectツリー <計算ノードのObjectツリー>` で、cmg0 の下にある cores の Object をユニーク名で表現した場合は、plat.node.cmg0.cores となります。
+  
+  次の2つの方法でObjectを取得できます。
+  
+  1. Objectのユニーク名を明示的に指定する
+  
+    - ユニーク名とは、Objectを識別する文字列のことです。
+    - 本方法は、事前に取得したいObjectのユニーク名が明確になっている場合に有効な方法です。
+    - 利用者は、PWR_CntxtGetObjByName関数の引数に取得したいObjectのユニーク名を指定します。
+  
+  2. Objectツリーの探索を実施する
+  
+    この方法は、事前に取得したいObjectのユニーク名がわからない場合や、プログラムの可搬性向上のためシステム固有の表現をプロラム内に記述しないのが望ましい場合に有効な方法です。
+
+電力計測・制御
+++++++++++++++
+
+Power APIでは、対象となる電力計測・制御の種類のことを Attribute と呼びます。
+
+例えば、Attributeには、電力量や周波数などが表現されます。
+利用者は、ObjectとAttributeを指定することで、電力計測・制御ができます。
+
+電力の計測・制御には、次の関数を利用します。
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 5 5
+
+   * - 関数
+     - 説明
+   
+   * - PWR_ObjAttrGetValue
+     - 電力計測、電力制御の値を取得します。
+   
+   * - PWR_ObjAttrSetValue
+     - 電力制御の値を設定します。
+
+終了処理
+++++++++
+
+終了関数 ``PWR_CntxtDestroy()`` を呼び出すことで、Power APIを終了します。
+終了処理により、初期化で取得したコンテキストを破棄します。
+
+
+プログラム内からのPower APIの利用方法
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+ここでは、プログラム内でPower APIを利用する方法について説明します。
+
+.. contents::
+   :local:
+
+ヘッダーファイル
+++++++++++++++++
+
+プログラム内でPower APIを利用するためには、次のヘッダーファイルを読み込む必要があります。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 3 7
+   
+   * - ファイル名
+     - パス
+   
+   * - pwr.h
+     - /opt/FJSVtcs/pwrm/aarch64/include
+
+コンパイル方法
+++++++++++++++
+
+実行ファイルを作成するには、Power APIのヘッダーファイルのインクルード、および、Power APIライブラリとのリンクを行う必要があります。
+Power APIライブラリは、\ :file:`libpwr.so`\ となります。
+
+コンパイル・リンク時に次のオプションを指定します。 
+
+.. list-table::
+   :header-rows: 1
+   :widths: 3 7
+   
+   * - 指定ケース
+     - オプション
+   
+   * - コンパイル時
+     - \-I/opt/FJSVtcs/pwrm/aarch64/include
+
+   * - リンク時
+     - \-L/opt/FJSVtcs/pwrm/aarch64/lib64 -lpwr
+
+実行方法
+++++++++
+
+ジョブスクリプトには、Power APIに関する特殊な指定をする必要はありません。
+
+.. code-block:: bash
+
+   #!/bin/sh
+   #PJM --L "node=1"
+   #PJM --L "rscgrp=small"
+   #PJM --L "elapse=3:00"
+   #PJM -g groupname
+   #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+   #PJM -s
+
+   # execute job
+   ./pwrget
+   ./pwrstat
+   ./pwrget_multi
+
+
+サンプルプログラム
+++++++++++++++++++
+
+Power APIを利用したサンプルプログラムは、C言語のものと、Fortran言語のものがあります。
+それぞれ、ログインノードの以下のディレクトリに用意しています。
+
+* Fortranのサンプルプログラム::
+
+   /home/system/sample/PowerAPI/fortran
+
+* Cのサンプルプログラム::
+
+   /home/system/sample/PowerAPI/c
+
+
+.. list-table:: ディレクトリに含まれるサンプルプログラム
+   :header-rows: 1
+
+   * - サンプルプログラム
+     - ファイル名（C）
+     - ファイル名（Fortran）
+
+   * - 電力量計測
+     - pwrget.c
+     - pwrget.f
+
+   * - 電力制御
+     - pwrset.c
+     - pwrset.f03
+
+   * - 統計情報取得
+     - pwrstat.c
+     - pwrstat.f03
+
+   * - 複数のObjectの電力量計測
+     - pwrget_multi.c
+     - pwrget_multi.f03
+
+   * - 複数のObjectの電力制御
+     - pwrset_multi.c
+     - pwrset_multi.f03
+
+   * - FortranにおけるPower APIの関数・変数・型定義 (ヘッダーファイルに該当)
+     - \-
+     - | pwrf.f03
+       | pwrtypesf.f03
+
+ログインノード上でこれらのサンプルプログラムを自分のディレクトリにコピーした後で、必要に応じて改変やコンパイルをしてください。
+
+
+Cのサンプルプログラムでは、コンパイルの対象とするサンプルプログラムのファイル名を指定して、コンパイルしてください。
+::
+
+   fccpx -I/opt/FJSVtcs/pwrm/aarch64/include -c pwrget.c
+   fccpx -L/opt/FJSVtcs/pwrm/aarch64/lib64 -lpwr -o pwrget pwrget.o
+
+Fortranのサンプルプログラムはpwrf.f03を最初にコンパイルし、その後にコンパイルの対象とするサンプルプログラムのファイル名を指定して、コンパイルしてください。
+
+pwrf.f03は、Fortranのサンプルプログラムが動作するのに必要なPower API関数について、言語間結合の定義を記載しています。
+必要に応じて定義を追加してください。
+::
+
+   frtpx -c pwrf.f03
+   frtpx -I/opt/FJSVtcs/pwrm/aarch64/include -c pwrget.f03
+   frtpx -L/opt/FJSVtcs/pwrm/aarch64/lib64 -lpwr -o pwrget pwrget.o
+
+
+電力計測点
+^^^^^^^^^^^^^^^
+
+計算ノードでは、推定電力量と実測電力量の種類を計測できます。
+
+電力計測が可能なハードウェアのモジュールのことを電力計測点と呼びます。
+Power API では次の Attribute で表現されます。
+
+[計測可能な電力量の種類]
+
+.. list-table:: 
+    :header-rows: 1
+    :widths: 3 2 5
+
+    * - Attribute
+      - 計測種類
+      - 電力計測点
+
+    * - PWR_ATTR_ENERGY
+      - 推定電力量
+      - * ノード
+        * CMG内の計算コア群
+        * L2 Cache
+        * メモリ
+        * Tofu
+        * CPU内のそのほかのモジュール
+        * アシスタントコア
+        * 光モジュール
+        * PCI Express
+ 
+    * - PWR_ATTR_MEASURED_ENERGY
+      - 実測電力量
+      - * ノード
+
+.. attention::
+
+  計算ノードにおけるノードの推定電力量は、ジョブの正規化された電力量を表します。ノードの推定電力量は、以下のObjectの推定電力量の合計値です。
+
+   ``CMG内の計算コア群 + L2 Cache + メモリ + Tofu + CPU内のそのほかのモジュール``
+
+  アシスタントコアは、ジョブ以外のプロセスでも使用します。
+  また、光モジュール、および、PCI Express の推定電力量はジョブが割当たったノードに依存して変化します。
+  このため、ノード推定電力量には計上されません。
+
+  PWR_ATTR_MEASURED_ENERGY は、「富岳」 計算ノードでの 拡張Attribute です。
+  初期化時に引数 PWR_CntxtType typeを、PWR_CNTXT_FX1000 に指定した場合にのみ計測可能となります。
+
+.. attention::
+
+   電力関連情報の取得間隔について
+   
+   - | PowerAPIにてジョブ内で取得できる各種電力（推定）
+     | PowerAPIを発行した時に取得しますので、発行間隔に依存します。
+     | ハードウェアによる更新間隔は1msです。
+
+   - | PowerAPIにてジョブ内で取得できる電力量（実測）
+     | PowerAPIを発行した時に取得しますので、発行間隔に依存します。
+     | ハードウェアによる更新間隔は5msです。
+
+
+電力制御点
+^^^^^^^^^^^^^^^^^^^^^^^
+
+パワーノブは、計算ノードの電力に関するハードウェアの状態を設定する機能です。
+パワーノブ操作が可能なハードウェアのモジュールのことを、電力制御点と呼びます。
+計算ノードのパワーノブは、Power API の以下の Attribute に対応しています。
+
+[パワーノブの種類]
+ 
+.. list-table:: 
+   :header-rows: 1
+   :widths: 2 2 2 5
+
+   * - Attribute
+     - パワーノブ機能
+     - 電力制御点
+     - 説明
+
+   * - PWR_ATTR_FREQ
+     - 周波数変更
+     - CPU Socket
+     - | CPUの周波数を制御します。
+       | 指定可能な値は、次のとおりです(単位:Hz)。
+       | ・2200000000
+       | ・2000000000
+
+   * - PWR_ATTR_THROTTLING_STATE
+     - メモリアクセス制御
+     - メモリ
+     - | メモリ発行リクエストの制限を行うために、メモリアクセスコントローラーとメモリ間のバス使用率を制御します。
+       | 指定可能な値は、以下のとおりです。
+       |  0: バス使用率100%
+       |  1: バス使用率90%
+       |  2: バス使用率80%
+       |  3: バス使用率70%
+       |  4: バス使用率60%
+       |  5: バス使用率50%
+       |  6: バス使用率40%
+       |  7: バス使用率30%
+       |  8: バス使用率20%
+       |  9: バス使用率10%
+
+   * - PWR_ATTR_ISSUE_STATE
+     - 命令発行制限
+     - CPUコア
+     - | CPUコアが同時に処理する命令数を制御します。
+       | 指定可能な値は、以下のとおりです。
+       |  0: 4命令
+       |  1: 2命令
+
+   * - PWR_ATTR_EX_PIPE_STATE
+     - EXA only
+     - CPUコア
+     - | 汎用レジスタを使用する命令が利用できるパイプ数を制御します。
+       |  0: パイプA、パイプBを利用
+       |  1: パイプAのみ利用
+
+   * - PWR_ATTR_ECO_STATE
+     - エコモード、FLA only状態
+     - CPUコア
+     - | FLA onlyは、FPとSIMDレジスタが利用できるパイプ数を制御します。エコモードは、FLA only有効時の電力削減効果を増やすための機能です。
+       | 指定可能な値は、以下のとおりです。
+       |  0: エコモード無効、FLA only無効
+       |  1: エコモード無効、FLA only有効
+       |  2: エコモード有効、FLA only有効
+
+   * - PWR_ATTR_RETENTION_STATE
+     - Retention状態
+     - CPUコア
+     - | CPUコア上でプロセスが動作していない場合に、より低電力状態（Retention状態）に遷移するかを制御します。
+       | 指定可能な値は、以下のとおりです。
+       |  0: Retention状態に遷移しない
+       |  1: Retention状態に遷移する
+
+.. attention::
+
+  - PWR_ATTR_THROTTLING_STATE、PWR_ATTR_ISSUE_STATE、PWR_ATTR_EX_PIPE_STATE、PWR_ATTR_ECO_STATE、および、PWR_ATTR_RETENTION_STATEは、\ 「富岳」計算ノードでの 拡張Attribute です。
+    初期化時に引数 PWR_CntxtType type を PWR_CNTXT_FX1000 に指定した場合にのみ、制御可能となります。
+  - PWR_ATTR_RETENTION_STATEは9216ノード以下のジョブで使用可能です。
+
+.. seealso::
+  
+  利用者は、PWR_MD_MIN、PWR_MD_MAX を使用して、現在設定可能なパワーノブの上限値／下限値を知ることができます。
+  
+留意事項
+^^^^^^^^^
+
+特定の状態遷移を行った場合に電力量が期待値より大きくなる
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+以下の状態に遷移した場合、電力量が期待値より下がらない現象を確認しています。
+
+.. code-block:: none
+   :emphasize-lines: 7
+
+   PWR_ATTR_ECO_STATE(1)         : エコモード無効、 FLA だけ利用
+        ⇩
+   PWR_ATTR_RETENTION_STATE(1)   : Retention状態への遷移を許可する
+        ⇩
+   PWR_ATTR_ECO_STATE(0)         : エコモード無効、 FLA と B を利用
+        ⇩
+   PWR_ATTR_RETENTION_STATE(1)   : Retention状態への遷移を許可する <- 電力が期待値より大きい
+
+次のいずれかの回避方法で回避できます。
+
+1. 回避方法1 PWR_ATTR_ECO_STATE(1) を利用しない
+
+   .. code-block:: none
+      :emphasize-lines: 1
+
+      PWR_ATTR_ECO_STATE(0)         : エコモード無効、 FLA と B を利用
+           ⇩
+      PWR_ATTR_RETENTION_STATE(1)   : Retention状態への遷移を許可する
+           ⇩
+      PWR_ATTR_ECO_STATE(0)         : エコモード無効、 FLA と B を利用
+           ⇩
+      PWR_ATTR_RETENTION_STATE(1)   : Retention状態への遷移を許可する
+
+2. 回避方法2 PWR_ATTR_ECO_STATE(1) から Retention状態へ遷移させない
+
+   .. code-block:: none
+      :emphasize-lines: 3
+
+      PWR_ATTR_ECO_STATE(1)         : エコモード無効、 FLA だけ利用
+           ⇩
+      PWR_ATTR_ECO_STATE(0)         : エコモード無効、 FLA と B を利用 ← 1 行追加
+      PWR_ATTR_RETENTION_STATE(1)   : Retention状態への遷移を許可する
+           ⇩
+      PWR_ATTR_ECO_STATE(0)         : エコモード無効、 FLA と B を利用
+           ⇩
+      PWR_ATTR_RETENTION_STATE(1)   : Retention状態への遷移を許可する
+
+3. 回避方法3 PWR_ATTR_ECO_STATE(2) を経由して PWR_ATTR_ECO_STATE(0) へ遷移させる
+
+   .. code-block:: none
+      :emphasize-lines: 5
+
+      PWR_ATTR_ECO_STATE(1)         : エコモード無効、 FLA だけ利用
+           ⇩
+      PWR_ATTR_RETENTION_STATE(1)   : Retention状態への遷移を許可する
+           ⇩
+      PWR_ATTR_ECO_STATE(2)         : エコモード有効、 FLA だけ利用 ← 1 行追加
+      PWR_ATTR_ECO_STATE(0)         : エコモード無効、 FLA と B を利用
+           ⇩
+      PWR_ATTR_RETENTION_STATE(1)   : Retention状態への遷移を許可する
+ 

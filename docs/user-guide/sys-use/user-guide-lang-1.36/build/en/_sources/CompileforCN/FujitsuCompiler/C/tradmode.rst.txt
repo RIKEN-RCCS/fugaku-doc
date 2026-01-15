@@ -1,0 +1,491 @@
+.. highlight:: none
+
+trad mode
+=========
+
+Here we explain about trad mode.
+
+How to compile
+--------------
+
+| This indicates how to compile C language program.
+| Use  \ :program:`fccpx`\  for C compiler. When using MPI library,  by using  \ :program:`mpifccpx`\ ,  you don't need to consider about MPI header file and library.
+
+
+- If using MPI library
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx  [compile option] source file name
+
+
+- If not using MPI library
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx  [compile option] source file name
+
+
+Compilation option
+------------------
+
+This indicates the main compile option of C compiler.
+
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 3,7
+
+   * - Compile option
+     - Description
+
+   * - -c
+     - Proceed up to object file creation.
+
+   * - -o exe_file
+     - | Change the executable file name / object file name to  \ ``exe_file``\.
+       | If executable file name is omitted, it will be  \ :file:`a.out`\.
+
+   * - -O [0|1|2|3]
+     - | Specify optimisation level.
+       | If the number after  \ ``-O``\  is omitted, it will be  \ ``-O2``\.
+       | The default is  \ ``-O2``\.
+       | `Change the default value of C/C++ compiler option that specifies the level of optimization <https://www.fugaku.r-ccs.riken.jp/en/operation/20211208_01>`_
+
+   * - -Kfast
+     - Instructs the creation of an object program that runs at high speed on the target machine.
+
+   * - -Ksimd[=1|2|auto]
+     - | Generate objects using SIMD extension instructions.
+       | ``-Ksimd=1``
+       |  Generate objects using SIMD extension instructions.
+       | ``-Ksimd=2``
+       |  Generate objects using SIMD extension instructions to the loop including if-statement, in addition to  \ ``-Ksimd=1``\.
+       | ``-Ksimd=auto``
+       |  Instructs the compiler to automatically determine whether to loop the loop. The SIMD of the loop including IF syntax is promoted.
+       | ``-Ksimd``
+       |  If the number after  \ ``-Ksimd``\  is omitted, it will be  \ ``-Ksimd=auto``\.
+       | IF over  \ ``-O2``\  option is available,  \ ``-Ksimd``\  option is applied when omitted.
+       | If  \ ``-Ksimd``\  option is available,  \ ``-Kloop_part_simd``\  option is also available.
+       | This option is meaningful when the -O2 option or higher is enabled.
+
+   * - -Kparallel
+     - | Proceed auto parallelization. The default is ``-Knoparallel``. This option will be disable when ``-O0`` and ``-O1`` option is enable.
+       | The ``-Kparallel`` option is needed if an object program compiled with it exists in the command line as an input file.
+
+   * - -Kopenmp
+     - | Enable directive of OpenMP C specification. Supported specifications are OpenMP 3.1/OpenMP 4.5 (part).
+       | The default is ``-Knoopenmp``.
+       | The ``-Kopenmp`` option is needed if an object program compiled with it exists in the command line as an input file.
+
+   * - -Kocl
+     - | Enable the optimization control line.
+       | The default is  \ ``-Knoocl``\.
+
+   * - -Klargepage
+     - Indicates whether to create an executable program that uses the large page feature. This option must be specified when linking a program. Default is  \ ``-Klargepage``\  .If not using large page function, use  \ ``-Knolargepage``\  option.
+
+   * - -Koptmsg[=1|2]
+     - | Message-output optimisation status.
+       | ``-Koptmsg=1``
+       |  A message is output indicating that the execution result has been optimized that may cause side effects.
+       | ``-Koptmsg=2``
+       |  A message is output indicating that optimization functions such as automatic parallelization, SIMD conversion, and loop unrolling have been activated in addition to  \ ``Koptmsg=1``\ .
+       | ``-Koptmsg``
+       |  If the number after  \ ``-Koptmsg``\ is omitted, it will be  \ ``-Koptmsg=1``\.
+       | The default is  \ ``-Knooptmsg``\.
+
+   * - -I directory
+     - Specify the directory to search for INCLUDE files.
+
+   * - -std=[level]
+     - | Specifies the level of language specification that the compiler (including preprocessor) interprets.
+       | To the level, specify one of these: c89, c99, c11, gnu89, gnu99 or gnu11. If omitted,  \ ``-std=gnu11``\  option is applied.
+
+   * - -Nlibomp
+     - Uses the LLVM OpenMP library for parallel processing. This option must be specified when linking. Default is ``-Nlibomp``.  When using the Fujitsu OpenMP library for parallel processing, specify ``-Nfjomplib``.
+
+   * - -NRtrap
+     - | Indicates whether to detect an interrupt event during execution.
+       | The default is ``-NRnotrap``.
+       | To enable the ``-NRtrap`` option, it must be set at both compilation and linking.
+
+   * - -Nsrc
+     - Output source list.
+
+   * - -Nsta
+     - Output statistics information.
+
+   * - -V
+     - Output compiler version information to the standard error.
+
+.. seealso::
+
+   About C compiler compile option, see C User's Guide "2.2 Compiler Options".
+
+
+Recommended compiling option
+----------------------------
+
+Performance Focused::
+
+   -Kfast,openmp[,parallel]
+
+   Specify this option to draw out the full performance of the A64FX. For example,
+   with the option, you can make full use of cores through thread parallelization or
+   SVE through SIMDization, improve instruction level parallelism by software pipelining,
+   change the operation order by optimization, and use the reciprocal approximation operation.
+
+Precision Focused::
+
+   -Kfast,openmp[,parallel],fp_precision
+
+   Use this option when you want to obtain the same precision as -O0 while optimizing
+   performance as much as possible. Specify the new option Kfp_precision, which
+   suppresses all optimizations that affect precision, as an option appended to the
+   recommended option focused on performance.
+
+   This suppresses multiple optimizations that significantly affect performance.
+
+- ``-Kfast`` option is the same result as specifying "``-O3 -Keval,fast_matmul,fp_contract,fp_relaxed,fz,ilfunc,mfunc,omitfp,rdconv,simd_packed_promotion``".
+- ``-Kopenmp`` option enables the OpenMP specification directives. 
+- ``-Kparallel`` option induces ``-O2``, ``-Kregion_extension``, ``-Kloop_part_parallel``, ``Kloop_perfect_nest`` and  ``-mt`` option. However, if specified ``-O3`` option (specified at the same time with ``-Kfast``), ``-O3`` is applied.
+- ``-Kfp_precision`` option is the same result as specifying "``-Knoeval,nofast_matmul,nofp_contract,nofp_relaxed,nofz,noilfunc,nomfunc,parallel_fp_precision``".
+
+ .. attention::
+
+   Optimization functions other than the recommended options may or may not be effective depending on the characteristics of the program data and must be tried.
+
+
+The option detail is indicated as below.
+
+- The option list of the same result with ``-Kfast``.
+
+ +-------------------------+-------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+ | Compile option                                                      | Description                                                                                                        |
+ +=========================+===========================================+====================================================================================================================+
+ | -O3                                                                 | | Generate optimized objects.                                                                                      |
+ |                                                                     | | Performs optimization such as SIMD conversion and unrolling.                                                     |
+ +-------------------------+-------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+ | -Keval :superscript:`*` |                                           | | Applies optimizations that change how the operations are evaluated.                                              |
+ |                         |                                           | | If this option is enabled,  \ ``-Ksimd_reduction_product``\  is also enabled.                                    |
+ |                         |                                           | | If this option and  \ ``-Kparallel``\  is enabled,  \ ``-Kfsimple``\  and  \ ``-Kreduction``\  are also enabled. |
+ +                         +-------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+ |                         | -Kfsimple :superscript:`*`                | Simplify floating-point arithmetic for object programs.                                                            |
+ +                         +-------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+ |                         | -Kreduction :superscript:`*`              | Optimizes reduction.                                                                                               |
+ +                         +-------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+ |                         | -Ksimd_reduction_product :superscript:`*` | SIMD conversion is performed for the reduction operation of multiplication.                                        |
+ +-------------------------+-------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+ | -Kfast_matmul :superscript:`*`                                      | Convert matrix product loops into fast library calls.                                                              |
+ +-------------------------+-------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+ | -Kfp_contract :superscript:`*`                                      | Performs optimization using instructions of Floating-Point Multiply-Add/Subtract.                                  |
+ +-------------------------+-------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+ | -Kfp_relaxed :superscript:`*`                                       | | For single-precision or double-precision floating-point division or SQRT functions,                              |
+ |                                                                     | | use reciprocal approximation and Floating-Point Multiply-Add / Subtract operation instructions.                  |
+ +-------------------------+-------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+ | -Kfz                                                                | Use flush-to-zero mode.                                                                                            |
+ +-------------------------+-------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+ | -Kilfunc=procedure :superscript:`*`                                 | Inline expansion of single-precision and double-precision real type built-in functions.                            |
+ +-------------------------+-------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+ | -Kmfunc :superscript:`*`                                            | Performs optimization using multiple arithmetic functions.                                                         |
+ +-------------------------+-------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+ | -Komitfp                                                            | | Indicates to perform optimization that does not guarantee the frame pointer register in the procedure call.      |
+ |                                                                     | | If this option is enable, tracebackinformation is not guaranteed.                                                |
+ +-------------------------+-------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+ | -Ksimd_packed_promotion                                             | Promotes packed-SIMD by assuming that the index calculation of single precision floating point type                |
+ |                                                                     | and 4-byte integer type array elements does not exceed the range of 4 bytes.                                       |
+ +-------------------------+-------------------------------------------+--------------------------------------------------------------------------------------------------------------------+
+ 
+ .. note::
+ 
+   :superscript:`*`:Optimization may affect the calculation result. For details, refer to "Chapter 3 Optimization" in the "C User's Guide".
+
+
+- The option list which induced from  \ ``-Kparallel``\ 
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 4 6
+    
+    * - Induced option 
+      - Description
+
+    * - \-O2
+      - Indicates optimisation level.
+
+    * - \-Kregion_extension
+      - Expand parallel region. 
+
+    * - \-Kloop_part_parallel
+      - Partly auto parallelization by deviding the loop. 
+
+    * - \-Kloop_perfect_nest
+      - Indicates whether or not to divide incomplete multiple loop into complete multiple loop .
+
+    * - \-mt
+      - Create multi thread safe object.
+
+
+Environment variable (option specification)
+-------------------------------------------
+
+This indicates the environment varialbe C language compiler ( :program:`fccpx` ) uses.
+
+1. fccpx_ENV
+
+   Able to set compile option to the environment varialble  fccpx_ENV .
+   The compile options defined in fccpx_ENV are automatically passed to the compiler.
+   Compiler options defined in environment variables and systems have the following precedence:
+
+   [Priority]
+   
+   #. Compile command operands
+   #. Environment variable for setting translation option (Mode unique:fccpx_trad_ENV,fcc_trad_ENV)
+   #. Environment variable for setting translation option (Mode common:fccpx_ENV,fcc_ENV)
+   #. Translation profile file (Mode unique:\ :file:`/etc${FJSVXTCLANGA}/fccpx_trad_PROF`)
+   #. Translation profile file (Mode common:\ :file:`/etc${FJSVXTCLANGA}/fccpx_PROF`)
+   #. Omitted value
+   
+  In the following example, the recommended option is set in the environment variable fccpx_ENV.
+   
+   .. code-block:: console
+   
+     [_LNlogin]$ export fccpx_ENV=-Kfast,parallel
+   
+   The enabled compilation options are able to check with  \ ``-Nsta``\  option.
+   
+   .. code-block:: console
+   
+     [_LNlogin]$ fccpx -Nsta sample.c
+
+     Fujitsu C/C++ Version 4.0.0   Tue Nov 12 18:12:59 2019
+     Statistics information
+       Option information
+         Environment variable : (omitted)
+         Command line options : -Nsta
+         Effective options    : -g0 -Qy -std=gnu11 -O0 -Kcmodel=small -Kconst -Knofconst
+                                -Knofenv_access -Khpctag -Klargepage -Knolib -Klooptype=f
+                                -Knoopenmp -Knoopenmp_simd -Knooptlib_string
+                                -Knopc_relative_literal_loads -Knoparallel -Ksimd_reg_size=512
+                                -KA64FX -KARMV8_3_A -KSVE -Ncancel_overtime_compilation
+                                -Nnocoverage -Nnoexceptions -Nnofjcex -Nfjprof -Nnohook_func
+                                -Nnohook_time -Nline -Nquickdbg=noheapchk -Nquickdbg=nosubchk
+                                -NRnotrap -Nnoreordered_variable_stack -Nrt_notune
+                                -Nsetvalue=noheap -Nsetvalue=nostack -Nsetvalue=noscalar
+                                -Nsetvalue=noarray -Nsetvalue=nostruct -Nsta
+
+
+2. TMPDIR
+   
+   The temporary directory used by the compiler can be changed by using the environment variable :envvar:`TMPDIR`.
+   ``/etc/profile`` to set the home directory in :envvar:`TMPDIR`.
+
+   When changing the temporary directory, please avoid using :file:`/tmp`.
+   For :envvar:`TMPDIR`, specify a writable directory of  :file:`/home/` or  :file:`/vol0n0m/data/`.
+
+
+C library for parallel processing
+---------------------------------
+
+With  \ |post-k|\ , the following two libraries are provided for "parallel processing".
+
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3,9
+
+
+   * - Library name
+     - Description
+
+   * - LLVM OpenMP library
+     - - A library for parallel functions based on LLVM OpenMP Runtime Library, which is open source software.
+       - Supported specifications are OpenMP 4.5/OpenMP 5.0 (part).
+       - Available in trad mode and clang mode.
+       - The trad mode is available in OpenMP 3.1/OpenMP 4.5 (part).
+       - For the specifications of the LLVM OpenMP library, please read "Chapter 4 Multiprocessing" in the C User's Guide.
+
+   * - Fujitsu OpenMP library
+     - - This is a library for parallel functions based on the Fujitsu OpenMP library for K computer systems prior to PRIMEHPC FX100.
+       - It is suitable for cases where importance is attached to compatibility with the conventional Fujitsu OpenMP library.
+       - The supported specifications are OpenMP 3.1/OpenMP 4.5 (part).
+       - Only available in trad mode.
+       - For the specifications of the Fujitsu OpenMP library, please read "Appendix J Fujitsu OpenMP Library" in the C User's Guide.
+
+
+
+- To specify the library for parallel process, it is needed to specify the following option when linking.
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 2 9
+
+   * - Option
+     - Description
+
+   * - -Nlibomp
+     - Indicates that the LLVM OpenMP library is to be used as the OpenMP library.
+       
+       When omitted, this ``-Nlibomp`` option will be applied.
+ 
+   * - -Nfjomplib
+     - Indicates that the Fujitsu OpenMP library is to be used as the OpenMP library.
+
+ .. attention::
+
+   If ``-Nclang`` option is enabled, ``-Nfjomplib`` option will be disabled and ``-Nlibomp`` option will be enabled.
+
+.. note::
+
+   The following environment variables added in OpenMP 4.0 and later are available in the LLVM OpenMP library. 
+   On the other hand, the Fujitsu OpenMP library does not support these environment variables. These environment variables are ignored when using the Fujitsu OpenMP library.
+
+   - OMP_CANCELLATION
+   - OMP_DISPLAY_ENV
+   - OMP_DEFAULT_DEVICE
+   - OMP_MAX_TASK_PRIORITY
+
+- The table below shows the combinations of C/C++ object files that can be combined with the parallel processing library.
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 5 5 5
+
+   * - Library name
+     - C/C++ object file trad mode
+     - C/C++ object file clang mode
+
+   * - LLVM OpenMP library
+     - Able to combine
+     - Able to combine
+
+   * - Fujitsu OpenMP library
+     - Able to combine
+     - Unable to combine
+
+
+Compilation example
+-------------------
+
+| This indicates how to compile C program.
+| Here is a general C language compilation procedure.
+
+ Multi node job (hybrid parallelization)
+
+ .. code-block:: console
+  
+    [_LNlogin]$ mpifccpx -Kfast,parallel,openmp  sample.c
+  
+ Single node job (sequential)
+
+ .. code-block:: console
+  
+    [_LNlogin]$ fccpx -Kfast  sample.c
+  
+ Single node job (auto parallel)
+
+ .. code-block:: console
+  
+    [_LNlogin]$ fccpx -Kfast,parallel  sample.c
+  
+ Single node job (OpenMP)
+
+ .. code-block:: console
+  
+      [_LNlogin]$ fccpx -Kfast,openmp  sample.c
+
+
+C sample program
+----------------
+
+Here is an example from compilation to job execution using a sample program.
+
+.. toctree::
+   :maxdepth: 2
+
+   CSampleProgram(sequential)
+   CSampleProgram(automaticParallel)
+   CSampleProgram(OpenMP)
+   CSampleProgram(hybridParallel)
+
+
+Built-in debug function
+-----------------------
+
+The built-in debugging function performs various inspections by compiling a program with debugging options at compile time and executing an execution module.
+If you use the built-in debug function, the optimization level may be down to  \ ``-O0``\ so that the execution time will take longer than the normal.
+
+
+- About built-in debug function
+
+ Changing the execution environment may cause abnormal termination. In such cases, the following are possible causes:
+
+ 1. The variable is quoted without setting an initial value.
+ 2. Array subscript exceeds array size
+
+ .. note::
+  
+  [Change execution environment] is the case below:
+  
+  - Used the tool such as profiler
+  - Changed the size of large page
+
+  In this case, the execution status of the execution module in the memory changes and may end abnormally.
+
+
+We introduce the built-in debug function which inspect these.
+
+For - C/C++ use, proceed nect inspection with built-in debug function.
+
+The following inspection is performed with the built-in debugging function.
+
+ - Check array range ( \ ``-Nquickdbg=subchk``\  option)
+
+ If the array index is not within the range of the array: the message  \ ``jwe1601i-w``\ is output.
+
+
+ For details, see "Chapter 8 Debugging Functions" in the "C User's Guide".
+
+
+ The following is an example of the message displayed by the created sample program which matched to  \ ``-Nquickdbg=subchk``\  option. (The sample program is easy to understand to give a message)
+
+ 1. Sample program
+
+
+  .. code-block:: c
+    :linenos:
+
+     #include <stdio.h>
+     int main() {
+       int data[3];
+       int p = 5;
+       data[p] = 20;       /* ← Detect jwe160i-w */
+     }
+
+ 2. Compiling
+
+  .. code-block:: console
+  
+    [_LNlogin]$ fccpx -Kfast -Nquickdbg=subchk -o sample sample.c
+
+  .. note::
+
+    When compiling, a warning that the variable is unused is output, but ignore it here.
+    
+    .. code-block:: none
+    
+      "sample.c", line 3: warning: variable "data" was set but never used
+      int data[3];
+
+ 3. Execution result
+    
+    After execution, the following message is output to the standard error output.
+
+  .. code-block:: console
+    
+    jwe1601i-w line 5 The outside of the range the array (data) was declared is used (offset:20, declared size:12).
+     error occurs at main     line 5 loc 0000000000400b18 offset 0000000000000024
+     main         at loc 0000000000400af4 called from o.s.
+    taken to (standard) corrective action, execution continuing.
+

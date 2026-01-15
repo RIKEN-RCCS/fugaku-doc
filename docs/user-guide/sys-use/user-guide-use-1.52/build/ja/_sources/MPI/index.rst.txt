@@ -1,0 +1,22 @@
+MPIジョブ実行
+================
+
+本章では、MPIプログラムの実行方法を説明します。
+
+.. toctree::
+   :maxdepth: 2
+
+   Overview
+   FormatOfMpiexecCommand
+   HowToExecuteABackgroundJob
+   InputOutputRedirection
+   SpecificationsForMPIJob
+   RankAssignment
+   JobShape(torus)
+   pjsubOptions(MPI-related)
+   DynamicProcessCreation(MPI_Comm_spawn)
+   RankInquiryFunctions
+   MPIStatisticalInformation
+   CollectiveCommunicationAlgorithm
+
+

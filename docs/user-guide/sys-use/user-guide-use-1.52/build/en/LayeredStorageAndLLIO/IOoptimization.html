@@ -1,0 +1,253 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8.8. I/O optimization &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="8.9. Selecting a usage file system (volume)" href="SelectAvailableVolumes.html" />
+    <link rel="prev" title="8.7. I/O profiling" href="IOprofiling.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="SelectAvailableVolumes.html" title="8.9. Selecting a usage file system (volume)"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="IOprofiling.html" title="8.7. I/O profiling"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">8. </span>Layered storage</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.8. </span>I/O optimization</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="i-o-optimization">
+<span id="iooptimization"></span><h1><span class="section-number">8.8. </span>I/O optimization<a class="headerlink" href="#i-o-optimization" title="Link to this heading">¶</a></h1>
+<p>Here is an example analysis of the data obtained in the previous section <a class="reference internal" href="IOprofiling.html#ioprofiling"><span class="std std-ref">I/O profiling</span></a>.</p>
+<section id="analysis-of-bottlenecks-using-llio-performance-information">
+<h2><span class="section-number">8.8.1. </span>Analysis of bottlenecks using LLIO performance information<a class="headerlink" href="#analysis-of-bottlenecks-using-llio-performance-information" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>Check I/O status by LLIO area.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>awk<span class="w"> </span>-f<span class="w"> </span>sample.awk<span class="w"> </span>&lt;jobname&gt;.&lt;jobid&gt;.llio_perf
+<span class="go">      Area                        Time(us)       % of Time</span>
+<span class="go">Meta  2ndLayerCache           670517500351             4.0</span>
+<span class="go">      SharedTmp             15490822246315            92.7</span>
+<span class="go">      LocalTmp                 32396742469             0.2</span>
+<span class="go">I/O   2ndLayerCache           357836957071             2.1</span>
+<span class="go">      SharedTmp               108339293976             0.6</span>
+<span class="go">      LocalTmp                 50591120306             0.3</span>
+</pre></div>
+</div>
+<p>You can determine that meta-access to shared temporary area accounts for more than 90% of the total.</p>
+</li>
+<li><p>Examine the shared temporary area meta-access information.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>less<span class="w"> </span>&lt;jobname&gt;.&lt;jobid&gt;.llio_perf
+<span class="go">...</span>
+
+<span class="go">Meta    SharedTmp      NodeTotal                      Count           Time(us)</span>
+<span class="go">                                   open            61710260      1832249063537</span>
+<span class="go">                                   close           61710260        85929083797</span>
+<span class="go">                                   lookup         370062812       886258890299</span>
+<span class="go">                                   mknod           98308608      5857672339146</span>
+<span class="go">                                   link                   0                  0</span>
+<span class="go">                                   unlink         100793535      5453654076003</span>
+<span class="go">                                   mkdir              67500           60930489</span>
+<span class="go">                                   rmdir              67340         3076489250</span>
+<span class="go">                                   readdir           148596          336715105</span>
+<span class="go">                                   rename            306757        35293688520</span>
+<span class="go">                                   getattr        478426796      1326148620906</span>
+<span class="go">                                   setattr         55883262        10117612251</span>
+<span class="go">                                   getxattr          350807           24737012</span>
+<span class="go">                                   setxattr               0                  0</span>
+<span class="go">                                   listxattr              0                  0</span>
+<span class="go">                                   removexattr            0                  0</span>
+<span class="go">                                   statfs                 0                  0</span>
+<span class="go">                                   sync                   0                  0</span>
+<span class="go">                                   lock                   0                  0</span>
+</pre></div>
+</div>
+<p>You can see that mknod (Create File) and unlink (Delete File) take up more than 70% of the time.
+You can see that job I/O time can be improved by creating fewer files in the shared temporary area.</p>
+<p>Other counters that appear as bottlenecks and their factors are shown.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>meta-access bottlenecks</p></th>
+<th class="head"><p>cause</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>lookup</p></td>
+<td><div class="line-block">
+<div class="line">The number of directory tiers is many</div>
+<div class="line">Create or delete files from multiple nodes under a same directory</div>
+<div class="line">Execute <code class="docutils literal notranslate"><span class="pre">ls</span></code> command for a same directory containing many files</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>mknod</p></td>
+<td><p>Many files creation</p></td>
+</tr>
+<tr class="row-even"><td><p>unlink</p></td>
+<td><p>Many files removal</p></td>
+</tr>
+<tr class="row-odd"><td><p>sync</p></td>
+<td><div class="line-block">
+<div class="line">If the cache area of the second-layer storage, the amount of writing out is large.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</section>
+<section id="analysis-for-darshan">
+<h2><span class="section-number">8.8.2. </span>Analysis for Darshan<a class="headerlink" href="#analysis-for-darshan" title="Link to this heading">¶</a></h2>
+<p>For details, please refer to the following URL:</p>
+<p><a class="reference external" href="https://www.mcs.anl.gov/research/projects/darshan/">https://www.mcs.anl.gov/research/projects/darshan/</a></p>
+<p>Analyze the profiling data from the login node.
+Load darshan-util and extract the data.</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNIlogin]$ </span>darshan-parser<span class="w"> </span>usr_a.out_JOBID.darshan<span class="w"> </span><span class="p">|</span><span class="w"> </span>less
+</pre></div>
+</div>
+</div></blockquote>
+<p>Below is an example of 384 nodes job (18,432 process).</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>...
+# description of columns:
+#   &lt;module&gt;: module responsible for this I/O record.
+#   &lt;rank&gt;: MPI rank.  -1 indicates that the file is shared
+#      across all processes and statistics are aggregated.
+#   &lt;record id&gt;: hash of the record&#39;s file path
+#   &lt;counter name&gt; and &lt;counter value&gt;: statistical counters.
+#      A value of -1 indicates that Darshan could not monitor
+#      that counter, and its value should be ignored.
+#   &lt;file name&gt;: full file path for the record.
+...
+#&lt;module&gt; &lt;rank&gt;  &lt;record id&gt;    &lt;counter&gt;                  &lt;value&gt;     &lt;file name&gt; ...
+POSIX     -1      0123456789123  POSIX_OPENS                    18432    /vol0n0m/data/group/config
+POSIX     -1      0123456789123  POSIX_F_FASTEST_RANK_TIME   0.019958    /vol0n0m/data/group/config
+POSIX     -1      0123456789123  POSIX_F_SLOWEST_RANK_TIME  52.856744    /vol0n0m/data/group/config
+...
+POSIX      0      1234567891234  POSIX_OPENS                        1    /vol0n0m/data/group/tmp.00000
+...
+POSIX      1      1234567891234  POSIX_OPENS                        1    /vol0n0m/data/group/dat.00001
+POSIX      1      1234567891234  POSIX_F_READ_TIME          32.124292    /vol0n0m/data/group/dat.00001
+...
+</pre></div>
+</div>
+<ol class="arabic">
+<li><p>Transfer of common files (/vol0n0m/data/group/config)</p>
+<p>&lt;rank&gt; refers to the MPI rank. rank:-1 indicates that the file is shared across all processes and statistics are aggregated. Configuration files to be read only from all processes, /vol0n0m/data/group/config, can be transferred with <code class="docutils literal notranslate"><span class="pre">llio_transfer</span></code> to improve performance.</p>
+</li>
+<li><p>Improved output of temporary files (/vol0n0m/data/group/tmp.PROC_NUM)</p>
+<p>Intermediate files generated by each process, /vol0n0m/data/group/tmp.PROC_NUM, can be replaced the output destination with a node temporary area <code class="docutils literal notranslate"><span class="pre">$PJM_LOCALTMP</span></code> to improve performance.
+An example is the case of using scratch files in Fortran programs, setting the environment variable TMPDIR to a node temporary area can improve performance.</p>
+</li>
+<li><p>Improved througput (/vol0n0m/data/group/dat.PROC_NUM)</p>
+<p>Unlike the job’s intermediate file, if the program outputs calculation results or checkpoints, they must be output to the cache area of the second-layer storage and the data must be retained.
+At this time, throughput performance may be improved by outputting files to multiple volumes.</p>
+<p>In the case of a multi-node job with thousands nodes or more performing I/O, it may take a long time to exhaust the performance of the filesystem.
+Since Fugaku provides multiple volumes as data areas and the disk space usage limit can be changed for each volume, the use of multiple volumes may increase the throughput.</p>
+<p>For details on changing data area allocation, please refer to the User support tools User’s Guide:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/support_tool/">https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/support_tool/</a></p>
+</div></blockquote>
+</li>
+</ol>
+<p>Enabling asynchronous close may reduce the waiting time for export to the second-layer storage.
+Please review <a class="reference internal" href="TheSecondLayerStrage.html#asynccloseandsyncclose"><span class="std std-ref">Asynchronous close / synchronous close</span></a> and consider whether it is available in your program.</p>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">8.8. I/O optimization</a><ul>
+<li><a class="reference internal" href="#analysis-of-bottlenecks-using-llio-performance-information">8.8.1. Analysis of bottlenecks using LLIO performance information</a></li>
+<li><a class="reference internal" href="#analysis-for-darshan">8.8.2. Analysis for Darshan</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="IOprofiling.html"
+                          title="previous chapter"><span class="section-number">8.7. </span>I/O profiling</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="SelectAvailableVolumes.html"
+                          title="next chapter"><span class="section-number">8.9. </span>Selecting a usage file system (volume)</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="SelectAvailableVolumes.html" title="8.9. Selecting a usage file system (volume)"
+             >next</a></li>
+        <li class="right" >
+          <a href="IOprofiling.html" title="8.7. I/O profiling"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">8. </span>Layered storage</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8.8. </span>I/O optimization</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

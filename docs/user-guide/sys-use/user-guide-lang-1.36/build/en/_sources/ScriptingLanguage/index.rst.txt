@@ -1,0 +1,401 @@
+.. _ScriptingLanguage:
+
+Script language
+===============
+
+At  |post-k| , preparing the OSS script language to the computing node.
+
+.. note::
+
+   The OSS delivery has moved to Spack. The articles in this chapter are old OSS information before moving to Spack.
+   
+   See `Using OSS <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/UsingOSS/>`_.
+
+Overview
+--------
+
+The following OSS compiled by the Fujitsu compiler is available for the compute nodes.
+
+- Python2
+- Python3
+- Ruby
+
+.. attention:: 
+
+
+  - When constructing these OSS environment, some modifications necessary for compiling with the Fujitsu compiler have been made, but no other special settings have been made.
+  - OSS, basically, offers only environment information such as install path.
+  - For setting the installation path required for OSS execution, modulefile is prepared for each OSS. Please use by refering to the following sob script example.
+
+
+Python
+------
+
+Python2 and Pythn3 are available to use.
+
+
+Python2
+^^^^^^^^^
+
+.. note::
+
+   Sunsetting Python 2
+   
+   See `https://www.python.org/doc/sunset-python-2/ <https://www.python.org/doc/sunset-python-2/>`_.
+
+This indicates how to use Python2.
+
+Package
+~~~~~~~
+
+To Python2, the following packages are added.
+
+.. list-table:: 
+   :header-rows: 1
+
+   * - Versuon
+     - Added package
+
+   * - Python 2.7.15
+     - - NumPy
+       - SciPy
+       - mpi4py
+       - virtualenv
+
+.. seealso::
+
+    For NumPy and SciPy, fjlapackexsve (BLAS, LAPACK thread parallel version Fujitsu library is used.
+
+
+Environment variable and use direction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Environment variable setting for executing Python2 uses module file (Python2-CN/2.7.15).
+Here indicates the job script example.
+
+- Execution by Python2 command
+
+.. code-block:: bash
+
+    #!/bin/bash
+    #PJM -L "node=1"
+    #PJM -L "elapse=10:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -S
+
+    module load Python2-CN
+    export FLIB_CNTL_BARRIER_ERR=FALSE
+
+    # execute job
+    python2 sample.py
+
+- If execute by using mpi4py (Uses mpiexec command)
+
+.. code-block:: bash
+
+    #!/bin/bash
+    #PJM -L "node=2"
+    #PJM -L "elapse=10:00"
+    #PJM --mpi "proc=8"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -S
+
+    module load Python2-CN
+    export FLIB_CNTL_BARRIER_ERR=FALSE
+
+    # execute job
+    mpiexec -n 8 python2 mpi-sample.py
+    
+
+Python3
+^^^^^^^^^
+
+.. note::
+
+   A new version of Python is available in Spack.
+   
+   The package provided by Spack (py-\*) should be used in conjunction with the Python provided by Spack.
+   
+   See `Using OSS <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/UsingOSS/>`_.
+
+This indicates how to use Python3.
+
+Package
+~~~~~~~
+
+To Python3, the following packages are added.
+
+.. list-table:: 
+   :header-rows: 1
+
+   * - Version
+     - Added package
+
+   * - Python 3.6.8
+     - - NumPy
+       - SciPy
+       - mpi4py
+
+.. seealso::
+
+    For NumPy and SciPy, fjlapackexsve (BLAS, LAPACK thread parallel version Fujitsu library is used.
+
+
+Environment variable and use direction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Environment variable setting for executing Python2 uses module file (Python3-CN/3.6.8).
+Here indicates the job script example.
+
+- Execution by Python3 command
+
+.. code-block:: bash
+
+    #!/bin/bash
+    #PJM -L "node=1"
+    #PJM -L "elapse=10:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -S
+
+    module load Python3-CN
+    export FLIB_CNTL_BARRIER_ERR=FALSE
+
+    # execute job
+    python3 sample.py
+
+- If execute by using mpi4py (Uses mpiexec command)
+
+.. code-block:: bash
+
+    #!/bin/bash
+    #PJM -L "node=2:noncont"
+    #PJM -L "elapse=10:00"
+    #PJM --mpi "proc=8"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -S
+
+    module load Python3-CN
+    export FLIB_CNTL_BARRIER_ERR=FALSE
+
+    # execute job
+    mpiexec -n 8 python3 mpi-sample.py
+
+
+Ruby
+-----
+
+Installing the following version Ruby.
+
+.. list-table:: 
+   :header-rows: 1
+
+   * - Version
+
+   * - Ruby 2.6.5
+
+Environment variable
+^^^^^^^^^^^^^^^^^^^^
+
+Environment variable setting for executing Ruby uses module file (Ruby-CN/2.6.5).
+Here indicates the job script example
+
+- Execution by Ruby command
+
+.. code-block:: bash
+
+    #!/bin/bash
+    #PJM -L "node=1"
+    #PJM -L "elapse=10:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -S
+
+    module load Ruby-CN
+
+    # execute job
+    ruby sample.rb
+
+
+Java
+----
+
+Here indicates the use of Java compiler.
+
+Compiler environment setting
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use environment of Java compiler is set using modulefile.
+
+To use, execute the following before executing translation.
+
+- Compiling on the login node
+
+  Use the openjdk provided by Spack. 
+  For more information on using Spack, please refer to the "`Fugaku Spack Users Guide <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/FugakuSpackGuide/>`_" on the Fugaku website.
+
+ .. code-block:: console
+
+    [_LNlogin]$ . /vol0004/apps/oss/spack/share/spack/setup-env.sh # Environment setting of Spack
+    [_LNlogin]$ spack load openjdk arch=linux-rhel8-skylake_avx512 # Environment setting of OpenJDK
+
+- Compiling on the compute node
+
+ .. code-block:: console
+
+    [_LNlogin]$ module load OpenJDK-CN
+
+The usable environment is as following.
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 5 5 2 3 4
+
+   * - Node
+     - Software name
+     - Language
+     - Version
+     - Command
+
+   * - Login node
+     - OpenJDK
+     - Java
+     - 11.0.2
+     - javac/mpijavac
+
+   * - Compute Node
+     - OpenJDK
+     - Java
+     - 11u
+     - javac/mpijavac
+
+
+Compile command
+^^^^^^^^^^^^^^^
+
+Here is an example of compiling a Java program using  \ :program:`mpijavac`\ .
+
+Normally, use  \ :program:`javac`\  for Java program translation, but about MPI program translation, use  \ :program:`mpijavac`\  command for MPI program translation command.
+
+
+- If use MPI library
+
+ .. code-block:: console
+
+    [_LNlogin]$ mpijavac [compile option] source file name
+
+
+- If not use MPI library
+
+ .. code-block:: console
+
+    [_LNlogin]$ javac [compile option] source file name
+
+The translation command name of the command used on the login node and the command used on the compute node is the same.
+
+- Translation command
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 3 3 3
+   
+   * - Type
+     - Command name
+     - MPI library
+
+
+   * - Cross compiler
+     - mpijavac
+     - Use
+
+   * - 
+     - javac
+     - Not use
+
+   * - Native compiler
+     - mpijavac
+     - Use
+
+   * - 
+     - javac
+     - Not use
+
+.. note::
+
+   When using mpijavac, execution is possible only on compute node. Cannot execute on login node.
+
+Here indicates main compile option.
+
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3,7
+
+   * - Compile option
+     - Description
+
+   * - &#45;\-\-showme
+     - Displays the calling line when the translation command of the MPI program calls the  \ :program:`javac`\  command. Actually does not proceed translation.
+
+   * - &#45;\-\-verbose
+     - Displays the calling line when the translation command of the MPI program calls the  \ :program:`javac`\  command. Proceeds translation.
+
+   * - &#45;\-\-help,\-help,\-h
+     - Displays help message. Actually does not proceed translation.
+
+   * - *avac_arguments*
+     - Specifies an option giving to  \ :program:`javac`\  command.
+
+
+.. seealso::
+  
+  - \ :program:`mpijavac`\  command  is  \ :program:`javac`\  command's wrapper command and calls JDK's  \ :program:`javac`\  command internally.Thus,  \ :program:`mpijavac`\ command can specify  \ :program:`javac`\  command option directly.
+  - \ :program:`mpijavac`\  command can translate Java program without specifying MPI library's class path.
+  - When Java program translation, to use jar file that the user prepares, it is requried to set the target jar file path with the environment variable  \ ``CLASSPATH``\  or  \ :program:`javac`\  command's  \ ``-classpath``\  option.
+  - If specified both of environment variable  \ ``CLASSPATH``\  and  \ ``-classpath``\  option,  \ ``-classpath``\  option has priority.
+
+
+Execution direction
+^^^^^^^^^^^^^^^^^^^
+
+Shows how to execute a Java program "javasample.class" compiled with  \ :program:`javac`\  and  \ :program:`mpijavac`\.
+
+[Sequential execution]
+
+ .. code-block:: bash
+
+    #!/bin/bash
+    #PJM -L "node=1"
+    #PJM -L "rscgrp=small"
+    #PJM -L "elapse=10:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -s
+
+    module load OpenJDK-CN
+
+    numactl --cpunodebind 4 --membind 4 java javasample
+
+
+[MPI Execution]
+
+ .. code-block:: bash
+
+    #!/bin/bash
+    #PJM -L "node=2"
+    #PJM -L "rscgrp=small"
+    #PJM -L "elapse=10:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM --mpi "proc=8"
+    #PJM -s
+
+    module load OpenJDK-CN
+
+    export PLE_MPI_STD_EMPTYFILE=off # Do not create a file if there is no output to stdout/stderr at execution time. 
+    export OMPI_MCA_plm_ple_memory_allocation_policy=bind_local
+    mpiexec java javasample
+

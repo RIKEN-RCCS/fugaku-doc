@@ -1,0 +1,12 @@
+Compiler type
+=============
+
+Multiple compilers are available with the |post-k|.
+For information on using the compiler, see:.
+
+- :ref:`Compilers that generate binaries for compute nodes <CompilerforCN>`
+- :ref:`Compilers that generate binaries for login nodes <CompilerforLN>`
+
+Programs that run on compute nodes are compiled using :ref:`Compilers that generate binaries for compute nodes <CompilerforCN>`.
+
+Use the cross-compilers :ref:`Fujitsu compiler <FujitsuCompiler>`, :ref:`LLVM <CompilerforCNLLVM>`, and :ref:`GCC <GCC_MPI>` to generate binaries that run on compute nodes on login nodes.

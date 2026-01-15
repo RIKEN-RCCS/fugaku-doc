@@ -1,0 +1,873 @@
+.. highlight:: none
+
+Fortran
+=======
+
+This section indicates how to use Fortran compiler.
+
+
+Environment variables
+---------------------
+
+The environment variable which is required when executing compiler is set when logging in.
+
+
+How to compile
+--------------
+
+| This indicates how to compile Fortran program. Use  \ :program:`frtpx`\  for Fortran compiling.
+| As used \ :program:`mpifrtpx`\, there is no need to be aware of MPI header files and libraries when using MPI library. 
+
+
+If use MPI library
+
+.. code-block:: console
+
+ [_LNlogin]$ mpifrtpx [compile option] source file name
+
+
+If don't use MPI library
+
+.. code-block:: console
+
+ [_LNlogin]$ frtpx [compile option] source file name
+
+
+Compilation option
+------------------
+
+This indicates the main compile option of Fortran compiler.
+
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 3,7
+
+
+   * - Compile option
+     - Description
+
+   * - -c
+     - Proceed up to object file creation.
+
+   * - -o exe_file
+     - | Change the executable file name / object file name to  \ ``exe_file``\.
+       | If executable file name is omitted, it will be  \ :file:`a.out`\.
+
+   * - -O [0|1|2|3]
+     - | Specify optimisation level.
+       | If the number after  \ ``-O``\ is omitted, it will be  \ ``-O3``\.
+       | The default is  \ ``-O2``\.
+
+   * - -Kfast
+     - Guide optimization options for speedup.
+
+   * - -Ksimd[=1|2|auto]
+     - | Generate objects using SIMD extension instructions.
+       | ``-Ksimd=1``
+       | Generate objects using SIMD extension instructions.
+       | ``-Ksimd=2``
+       |  Generate objects using SIMD extension instructions to the loop including if-statement, in addition to  \ ``-Ksimd=1``\  option.
+       | ``-Ksimd=auto``
+       |  Instructs the compiler to automatically determine whether to loop the loop. The SIMD of the loop including IF syntax is promoted.
+       | ``-Ksimd``
+       |  If  the number after  \ ``-Ksimd``\ is omitted, it will be  \ ``-Ksimd=auto``\.
+       | If over  \ ``-O2``\ option is available,  \ ``-Ksimd``\ option is applied when omitted. 
+       | If  \ ``-Ksimd``\ option is available,  \ ``-Kloop_part_simd``\ option is also available.
+       | This option is meaningful when the -O2 option or higher is enabled.
+
+
+   * - -Kparallel
+     - | Proceed auto parallelization. The default is ``-Knoparallel``.
+       | When only linking is to be performed, ``-Kparallel`` option must be specified if an object program that was compiled with the ``-Kparallel`` option specified is included.
+
+   * - -Kopenmp
+     - | Enable directive of OpenMP Fortran specification.
+       | The default is ``-Knoopenmp``.
+       | When only linking is to be performed, ``-Kopenmp`` option must be specified if an object program that was compiled with the ``-Kopenmp`` option specified is included.
+
+   * - -Kocl
+     - | Enable the optimization control line.
+       | The default is  \ ``-Knoocl``\.
+
+   * - -Klargepage
+     - Indicates whether to create an executable program that uses the large page feature. This option must be specified when linking a program. Default is  \ ``-Klargepage``\  .If not using large page function, use  \ ``-Knolargepage``\  option.
+
+   * - -Koptmsg[=1|2|guide]
+     - | A message of optimization status is output.
+       | ``-Koptmsg=1``
+       |  A message is output indicating that the execution result has been optimized that may cause side effects.
+       | ``-Koptmsg=2``
+       |  In addition to optmsg = 1, a message is output indicating that optimization functions such as automatic parallelization, SIMD conversion, and loop unrolling have been activated.
+       | ``-Koptmsg=guide``
+       |  In addition to optmsg=2 message, the obstruction factor and the corrective action are output as a guidance message when the following optimization cannot be applied.
+       |   - SIMD conversion
+       |   - Auto parallelization
+       |   - Software pipelining
+       |   - Inline expansion
+       | ``-Koptmsg``
+       |  If the number after  \ ``-Koptmsg``\ is omitted, it will be  \ ``-Koptmsg=1``\.
+       | The default is  \ ``-Koptmsg=1``\.
+
+   * - -I directory
+     - Specify the directory to search for INCLUDE files or module information files.
+
+   * - -Fixed
+     - | Indicates that the source program is written in a fixed format.
+       | The default is determined by referring to the extension.
+
+   * - -Free
+     - | Indicates that the source program is written in free form.
+       | The default is determined by referring to the extension.
+
+   * - -X6
+     - The part of the language specification that is interpreted differently is interpreted as the FORTRAN66 specification.
+
+   * - -X7
+     - The part of the language specification that is interpreted differently is interpreted as the FORTRAN77 specification.
+
+   * - -X9
+     - The part of the language specification that is interpreted differently is interpreted as the Fortran95 specification.
+
+   * - -X03
+     - The part of the language specification that is interpreted differently is interpreted as the Fortran2003 specification. Interpretation is the same as  \ ``-X08``\.
+
+   * - -X08
+     - The part of the language specification that is interpreted differently is interpreted as the Fortran2008 specification.
+
+   * - -fw
+     - Outputs only w level (low error) and s level (severe error) diagnostic messages.
+
+   * - -fs
+     - Output only s level (severe error) diagnostic messages.
+
+   * - -f msg_num
+     - By specifying the message number to  \ ``msg_num``\, suppresses the output of specific diagnostic messages.
+
+   * - -N maxserious=maxnum
+     - If the number of severe error messages detected during compilation is reached to  \ ``maxnum``\, stop compiling.
+
+   * - -H[a|e|f|o|s|u|x]
+     - Check argument integrity, subscript expression values, substring expression values, undefined variable references, or array expression shape conformance at compile and run time.
+
+   * - -Nlibomp
+     - Uses the LLVM OpenMP library for parallel processing. This option must be specified when linking. Default is  \ ``-Nlibomp``\ .  When using the Fujitsu OpenMP library for parallel processing, specify  \ ``-Nfjomplib``\ .
+
+
+   * - -NRtrap
+     - | Instructs the execution of diagnostic messages for built-in operations during execution and the detection of floating-point operation interrupt events.
+       | The default is ``-NRnotrap``.
+       | To enable the ``-NRtrap`` option, it must be set at both compilation and linking.
+
+   * - -Nlst=t
+     - Output the detailed optimisation information and statictics information. 
+
+   * - -V
+     - Output the compiler version information.
+
+.. seealso::
+
+   About Fortran compiler compile option, see Fortran User's Guide "2.2 Translation Option".
+
+
+Recommended compiling option
+----------------------------
+
+Performance Focused::
+
+   -Kfast,openmp[,parallel]
+
+   Specify this option to draw out the full performance of the A64FX. For example,
+   with the option, you can make full use of cores through thread parallelization or
+   SVE through SIMDization, improve instruction level parallelism by software pipelining,
+   change the operation order by optimization, and use the reciprocal approximation operation.
+
+Precision Focused::
+
+   -Kfast,openmp[,parallel],fp_precision
+
+   Use this option when you want to obtain the same precision as -O0 while optimizing
+   performance as much as possible. Specify the new option Kfp_precision, which
+   suppresses all optimizations that affect precision, as an option appended to the
+   recommended option focused on performance.
+
+   This suppresses multiple optimizations that significantly affect performance.
+
+- ``-Kfast`` option is the same value with ``-O3,-Keval,fp_contract,fp_relaxed,fz,ilfunc,mfunc,omitfp,simd_packed_promotion``.
+- ``-Kopenmp`` option enables the OpenMP specification directives. 
+- ``-Kparallel`` option  induces ``-O2``, ``-Kregion_extension``, and ``-Kloop_part_parallel`` option. However if the ``-O3`` option is enable (``-Kfast`` is specified first, etc) , the optimization level is 3.
+- ``-Kfp_precision`` option is the same value with ``-Knoeval,nofp_contract,nofp_relaxed,nofz,noilfunc,nomfunc,parallel_fp_precision``.
+
+ .. attention::
+
+   Optimization functions other than the recommended options may or may not be effective depending on the characteristics of the program data and must be tried.
+
+
+The option detail is as below: 
+
+- The list of option which is the same value with ``-Kfast``.
+
+ +-------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
+ | Option                                                              | Description                                                                                                                |
+ +=========================+===========================================+============================================================================================================================+
+ | -O3                                                                 | | Create optimized object.                                                                                                 |
+ |                                                                     | | Performs optimization such as SIMD and unrolling.                                                                        |
+ +-------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
+ | -Keval :superscript:`*` |                                           | | Applies optimizations that change how the operations are evaluated.                                                      |
+ |                         |                                           | | If  \ ``-Keval``\  is enabled,  \ ``-Ksimd_reduction_product``\ is also enabled.                                         |
+ |                         |                                           | | If  \ ``-Keval``\  and  \ ``-Kparallel``\  is enable,  \ ``-Kfsimple``\, \ ``-Kreduction``\  is also enabled.            |
+ +                         +-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
+ |                         | -Kfsimple :superscript:`*`                | Simplify floating-point arithmetic for object programs.                                                                    |
+ +                         +-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
+ |                         | -Kreduction :superscript:`*`              | Optimizes reduction.                                                                                                       |
+ +                         +-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
+ |                         | -Ksimd_reduction_product :superscript:`*` | SIMD conversion is performed for the reduction operation of multiplication.                                                |
+ +-------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
+ | -Kfp_contract :superscript:`*`                                      | Performs optimization using Floating-Point Multiply-Add / Subtract instructions.                                           |
+ +-------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
+ | -Kfp_relaxed :superscript:`*`                                       | For single-precision or double-precision floating-point division or SQRT functions,                                        |
+ |                                                                     | use reciprocal approximation arithmetic instructions and Floating-Point Multiply-Add / Subtract arithmetic instructions.   |
+ +-------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
+ | -Kfz :superscript:`*`                                               | | Use flush-to-zero mode.                                                                                                  |
+ |                                                                     | | In flush-to-zero mode, if the result or source operand is a denormalized number, it is replaced with 0 of the same sign. |
+ +-------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
+ | -Kilfunc=procedure :superscript:`*`                                 | Inline expansion of single-precision and double-precision real type built-in functions.                                    |
+ +-------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
+ | -Kmfunc :superscript:`*`                                            | Performs optimization using multiple arithmetic functions.                                                                 |
+ +-------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
+ | -Komitfp                                                            | | Indicates that optimization is performed without guaranteeing the frame pointer register in the procedure call.          |
+ |                                                                     | | If this option is enabled, the traceback information is not guaranteed.                                                  |
+ +-------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
+ | -Ksimd_packed_promotion                                             | Promotes packed-SIMD.                                                                                                      |
+ +-------------------------+-------------------------------------------+----------------------------------------------------------------------------------------------------------------------------+
+
+ .. note::
+
+   :superscript:`*`:Optimization may affect the calculation result. For details, refer to the "Optimization Functions" chapter in the "Fortran User's Guide".
+
+
+- The list of option which is induced from  \ ``-Kparallel``\ .
+ 
+ .. list-table::
+    :header-rows: 1
+    :widths: 4 6
+
+    * - Induced option
+      - Description
+
+    * - \-O2
+      - Direct optimisation level.
+
+    * - \-Kregion_extension
+      - Enlarge the parallel region.
+
+    * - \-Kloop_part_parallel
+      - Divide loops and partially parallelize automatically.
+
+    * - \-Kloop_perfect_nest
+      - Indicates whether to split an incomplete multiplex loop into a complete multiplex loop.
+
+
+| By adding the compile option, you can control the optimization function of the recommended option.
+| As the compile option is given priority, the one written later is used, so use the characteristics to specify it as in the following example.
+
+1. If the result accuracy is different.
+
+    On \ :program:`frtpx`\ , optimization (``-Keval``) to change the calculation evaluation method from  \ ``-Kfast``\  is specified  and this may affect precision sensitive calculations.
+    If so, specifying  \ ``-Knoeval``\  can limit the change.
+
+  .. code-block:: console
+
+    [_LNlogin]$ frtpx  -Kfast,parallel,noeval sample.f
+  
+2. If compiling takes long period of time
+
+   Pull down the optimization option level. In this example,  using \ ``-kfast``\  and pulling down the optimization option  \ ``-O3``\   to  \ ``-O2``\.
+
+  .. code-block:: console
+
+    [_LNlogin]$ frtpx  -Kfast,parallel -O2  sample.f
+
+
+Environment variable (option specification)
+-------------------------------------------
+
+This indicates the environment variable which Fortran compiler ( \ :program:`frtpx`\) uses.
+
+1. FORT90CPX
+   
+   You can set compile options in the environment variable FORT90CPX.
+   Compile options defined in FORT90CPX are automatically passed to the compiler.
+   Compiler variables defined in environment variables and systems have the following precedence:
+
+   [Priority]
+   
+   #. Translation direction line (Only when specifying  \ ``-Koptions``\ )
+   #. Compile command operands
+   #. Environment variable FORT90CPX or FORT90C
+   #. Translation profile file 
+   #. Default
+   
+   The following example sets the recommended option to the environment variable FORT90CPX.
+   
+   .. code-block:: console
+   
+     [_LNlogin]$ export FORT90CPX=-Kfast,parallel
+   
+   
+   The enabled compilation options are confirmable with  \ ``-Nlst``\  option.
+
+   .. code-block:: console
+
+     [_LNlogin]$ frtpx -Nlst=t -o sample sample.f
+
+
+   An extract of translation information output by  \ ``-Nlst``\ option is as following:
+
+   .. code-block:: console
+
+     Option information
+       Environment variable : (omitted)
+       Command line options : -Nlst=t -o sample
+       Effective options    : -fi -g0 -AE -Fixed -O2 -X08
+                              -x0 -xaccept=nomodule_allocatable
+                              -KA64FX -KARMV8_3_A -KSVE -Kalign_commons
+                              -Kalign_loops -Kassume=noshortloop
+                              -Kassume=nomemory_bandwidth
+                              -Kassume=notime_saving_compilation -Kauto
+                              -Kautoobjstack -Knocalleralloc -Kcmodel=small
+                              -Knoeval -Keval_noconcurrent -Knofenv_access
+                              -Knofp_contract -Knofp_relaxed -Knofsimple -Knofz
+                              -Khpctag -Knoilfunc -Kintentopt -Klargepage
+                              -Kloop_blocking -Kloop_fission
+                              -Kloop_nofission_stripmining
+                              -Kloop_fission_threshold=50 -Kloop_fusion
+                              -Kloop_interchange -Kloop_nopart_parallel
+                              -Kloop_part_simd -Kloop_noversioning -Knolto
+                              -Knomfunc -Knoocl -Knoomitfp -Knooptlib_string
+                              -Koptmsg=1 -Knopc_relative_literal_loads -Kplt
+                              -Knopreex -Kprefetch_noconditional
+                              -Kprefetch_noindirect -Kprefetch_sequential=auto
+                              -Kprefetch_nostride -Kprefetch_cache_level=all
+                              -Kprefetch_noinfer -Kprefetch_strong
+                              -Kprefetch_strong_L2 -Knosch_post_ra -Knosch_pre_ra
+                              -Knosibling_calls -Ksimd=auto
+                              -Ksimd_nopacked_promotion
+                              -Ksimd_noreduction_product -Ksimd_reg_size=512
+                              -Knostriping -Kswp -Kswp_freg_rate=100
+                              -Kswp_ireg_rate=100 -Kswp_preg_rate=100
+                              -Ktemparraystack -Kunroll -Knounroll_and_jam
+                              -Knozfill
+                              -Knoopenmp -Kopenmp_noassume_norecurrence
+                              -Kopenmp_nocollapse_except_innermost
+                              -Kopenmp_noordered_reduction -Knoopenmp_simd
+                              -Knothreadsafe -Knoparallel
+                              -Kparallel_nofp_precision -Knoarray_private
+                              -Knodynamic_iteration -Knoreduction
+                              -Knoregion_extension
+                              -Nallextput -Nnoalloc_assign
+                              -Ncancel_overtime_compilation -Nnocheck_global
+                              -Nnocoarray -Nnocompdisp -Nnocopyarg -Nnocoverage
+                              -Nfreealloc -Nf90move -Nnohook_func -Nnohook_time
+                              -Nline -Nnolinkprof -Nlst -Nlst=p -Nlst=t
+                              -Nnomallocfree -Nnoobsfun -Nquickdbg=noargchk
+                              -Nquickdbg=nosubchk -Nquickdbg=noundef -NRnotrap
+                              -Nnorecursive -Nnoreordered_variable_stack
+                              -Nrt_notune -Nnosave -Nsetvalue=noheap
+                              -Nsetvalue=nostack -Nsetvalue=noscalar
+                              -Nsetvalue=noarray -Nsetvalue=nostruct -Nuse_rodata
+
+     Main program "main"
+      (line-no.)(nest)(optimize)
+        (omitted)
+
+
+
+2. TMPDIR
+   
+   The temporary directory used by the compiler can be changed by using the environment variable :envvar:`TMPDIR`.
+   ``/etc/profile`` to set the home directory in :envvar:`TMPDIR`.
+
+   When changing the temporary directory, please avoid using :file:`/tmp`.
+   For :envvar:`TMPDIR`, specify a writable directory of  :file:`/home/` or  :file:`/vol0n0m/data/`.
+
+
+Fortran library for parallel processing
+---------------------------------------
+
+The Fortran library is called from the Fortran object program to execute the Fortran program.
+
+Library types include startup routines, Fortran input / output statements, built-in procedures, service routines, and parallel processing.
+In |post-k|\ , the following two libraries are provided for "parallel processing".
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3,9
+
+
+   * - Library name
+     - Description
+
+   * - LLVM OpenMP library
+     - | A library for parallel functions based on LLVM OpenMP Runtime Library, which is open source software.
+       | The supported specifications are OpenMP 4.5 and OpenMP5.0 (partial).
+       | For the specifications of the LLVM OpenMP library, please read "Chapter 12 Multiprocessing" in the Fortran User's Guide.
+
+   * - Fujitsu OpenMP library
+     - | This is a library for parallel functions based on the Fujitsu OpenMP library for K computer systems prior to PRIMEHPC FX100. It is suitable for cases where importance is attached to compatibility with the conventional Fujitsu OpenMP library.
+       | The supported specifications are OpenMP 3.1, OpenMP4.0 (part), and OpenMP4.5 (part).
+       | For the specifications of the Fujitsu OpenMP library, refer to the Fortran User's Guide "Appendix J Fujitsu OpenMP Library".
+
+
+
+
+To specify a parallel processing library, the following options must be specified at link time.
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 2 9
+
+   * - Option
+     - Description
+
+   * - -Nlibomp
+     - Indicates that the LLVM OpenMP library is to be used as the OpenMP library.
+
+       When omitted, this  \ ``-Nlibomp``\  is applied.
+
+   * - -Nfjomplib
+     - Indicates that the Fujitsu OpenMP library is to be used as the OpenMP library.
+
+.. note::
+
+   The following environment variables added in OpenMP 4.0 and later are available in the LLVM OpenMP library. 
+   On the other hand, the Fujitsu OpenMP library does not support these environment variables. These environment variables are ignored when using the Fujitsu OpenMP library.
+
+   - OMP_CANCELLATION
+   - OMP_DISPLAY_ENV
+   - OMP_DEFAULT_DEVICE
+   - OMP_MAX_TASK_PRIORITY
+
+Compilation example
+-------------------
+
+This shows how to compile Fortran programs.
+
+
+Multi-node job (hybrid parallel)
+
+.. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -Kfast,parallel  sample.f08
+
+Single node job (sequential)
+
+.. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast  sample.f08
+
+Single node job (automatic parallel)
+
+.. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,paralle sample.f08
+
+Single node job (OpenMP)
+
+.. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,openmp  sample.f08
+
+
+Endian conversion
+-----------------
+
+|post-k|\  works with the little Endian.
+
+Fortran programs can input and output big-endian files by specifying run-time options.
+
+Runtime options can be specified as environment variables or as arguments to executable modules.
+
+- Runtime options
+
+ There are the following two specification methods. When this option is specified, endian conversion is performed for logical type data, integer type data, and IEEE floating point format data in unformatted I / O statements.
+
+  .. list-table::
+    :header-rows: 1
+    :widths: 2 8
+
+    * - Option
+      - Description
+
+    * - -Wl,-T
+      - This applies to all device numbers connected to unformatted files.
+
+    * - -Wl,-T\ *u_no*
+      - \ ``u_no``\ is an integer value from 0 to 2147483647 that represents the device number and is the device number connected to the specified number is the target. Only one device number can be specified.
+
+ .. seealso::
+   
+   The effect is the same whether specified with an environment variable or specified with an argument. When specified by an argument, it is possible to obtain the runtime options with a built-in subroutine that handles command arguments such as GET_COMMAND and GET_COMMAND_ARGUMENT.
+
+
+- How to specify runtime options
+
+ The following is an example of specifying endian conversion.
+
+ In the following example, unformatted input and output is big endian data for device number "10".
+
+
+ - The specification example by environment variable (FORT90L)
+
+ .. code-block:: bash
+
+    #!/bin/bash -x
+    #
+    #PJM -L "node=1"
+    #PJM -L "elapse=01:00:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -s
+    #
+
+    export FORT90L=-Wl,-T10
+   
+    ./a.out
+
+
+ - The specification example by argument
+
+ .. code-block:: bash
+
+    #!/bin/bash -x
+    #
+    #PJM -L "node=1"
+    #PJM -L "elapse=01:00:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -s
+    #
+
+    ./a.out -Wl,-T10
+
+
+.. _ErrorMonitorFortran:
+
+Error monitor
+-------------
+
+The error monitor is called if the error occured during Fortran program is processing.
+
+Here indicates about the error monitor.
+
+
+What is error monitor
+^^^^^^^^^^^^^^^^^^^^^
+
+This part controls actions when an error occurs during Fortran program execution. The error monitor executes actions when an error occurs based on the error control table.
+
+Users can use the error monitor function at runtime to control actions for individual errors themselves. The control of that action is shown below.
+
+- Control the number of times execution of an executable program is aborted
+- Control the maximum number of messages output for an error
+- Control whether output the traceback map
+- Control whether user-supplied (or defined) error handling routines are called
+
+.. seealso::
+ 
+ | Error monitor will be disable to LLVM OpenMP library error.
+ | About LLVM OpenMP library error, see Fortran User's Guide "12.4 Runtime Message".
+
+
+Error control table
+^^^^^^^^^^^^^^^^^^^
+
+The error control table summarizes the error items corresponding to the error identification numbers, and is described in "Table 8.1 Error control table standard values" in the "Fortran User's Guide".
+
+The error monitor takes action based on the contents of this error control table.
+
+| For example, we explain with jwe0320i-w.
+| The error ID of jwe0320i-w is 320 so see where there discribes error 320 from the table.
+| The following table is an excerpt of a standard value from the error control table with error identification number "320".
+
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 1,2,2,2,2,2,2,2
+
+   * - No.
+     - Error abort count
+     - Maximum message output count
+     - Correction of error items
+     - Buffer contents output
+     - Traceback map output
+     - Standard revision
+     - Error level
+
+   * - 320
+     - 10
+     - 5
+     - Able
+     - Does not output
+     - Does output
+     - Yes
+     - w
+
+The meaning of each item is as follows.
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3,7
+
+   * - Item name
+     - Meaning
+
+   * - No.
+     - | Error ID
+       | In this example, jwe0320i-w's 320.
+
+   * - Error abort count
+     - | When an error is detected, the upper limit of the number of detections is shown.
+       | When the upper limit is reached, program execution is aborted.
+       | In this example, the program execution is aborted at the 10th detection.
+
+   * - Maximum message output count
+     - | When checked error, indicates Maximum message output count.
+       | In this example, no message is output at the sixth or later detection.
+
+   * - Correction of error items
+     - | When the user can change the action when an error occurs, it is described as "possible", and when the user cannot change it, it is described as "impossible".
+       | jwe0320i-w is "able" , the error control table can be changed by the user program.
+
+   * - Buffer contents output
+     - Indicates whether the contents of the input / output buffer are output or not output.
+
+   * - Traceback map output
+     - Indicates whether output traceback map or not.
+
+   * - Standard revision
+     - Indicates whether the standard revision is prepared or not on Fortran system.
+
+   * - Error level
+     - | Shows error level.
+       | From the lower level, one of these is mentioned :  i, w, e, s, u .
+
+
+How to control error
+^^^^^^^^^^^^^^^^^^^^
+
+Error control table is error handling service subroutine: ERRSET service subroutine can be used to change individual control information of error items.
+
+
+Format to call ERRSET service sub routine
+
+ .. code-block:: none
+
+  CALL ERRSET(errno , estop , mprint , trace , uexit , r)
+
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 1,9
+
+   * - Item name
+     - Description
+
+   * - errno
+     - Basic integer type scalar. Error identification number corresponding to the error item to be changed.
+
+   * - estop
+     - | Basic integer type scalar. Error abort count.
+       | If the specified value is under 0, nothing is changed.
+       | If it is greater than 255, error abort count will be infinity.
+
+   * - mprint
+     - | Basic integer type scalar. The maximum number of message outputs.
+       | If the specified value is 0, nothing is changed.
+       | If it is negative, the maximum output count is 0.
+       | If it is greater than 255, maximum output count will be infinity.
+
+   * - trace
+     - | Basic integer type scalar. The relationship between the values and the control information of the traceback map output is shown below.
+       | =0:Traceback map output control informatuion is not changed.
+       | =1:Change to not output traceback map.
+       | =2:Change to output traceback map.
+       | If other than 1 or 2, it will be treated as 0.
+
+   * - uexit
+     - | Specify 0, 1 or the name of a user-defined correction subroutine as the error correction action.
+       | If 0, it is not changed. In case of 1, it means to perform standard correction of this processing system.
+       | If you specify the name of a user-defined correction subroutine, this name must be declared as an external procedure name.
+
+   * - r
+     - | Basic integer type scalar. If errno is other than 132, specify the error identification number
+       | Here, if r> errno, it means that the error items corresponding to error identification numbers in the range from errno to r are changed according to estop, mprint, trace, and uexit.
+       | If r less than errno, r is ignored. If it is not necessary, specify the value r less than errno.
+       | If errno is 132 and r = 1, when data is output, if the Fortran record specified in the format specification is larger than the record length of the file, one blank is added to the beginning of the next Fortran record. Will be output as a new record.
+       | If r not equal 1, the space is not added to the head of next Fortran record.
+
+
+| Here, jwe0320i-w will rewrite the control table with "error abort count" set to 20, "message maximum output count set to 10", and other items unchanged.
+| Set the argument of the ERRSET service subroutine, and insert the control table at the location you want to change (in this case, the top of the program).
+
+
+.. code-block:: fortran
+   :linenos:
+
+         program main
+         integer:: i,j
+         real,dimension(10):: a,b,c
+         CALL ERRSET(320, 20, 10, 0, 0,320)
+         !
+         j=10
+         call sub1(i,j,a,b,c)
+         stop
+         end program main
+         
+         subroutine sub1(i,j,a,b,c)
+         integer:: i,j
+         integer:: k
+         real,dimension(j):: a,b,c
+         do k=i,j
+            a(k) = b(k)+c(k)
+         enddo
+         return
+         end subroutine sub1
+
+
+Until after ERRSET service routine is called and program execution ends, or resetting by other ERRSET service routine, it is proceeded as the status of error control table is rewritten.
+
+
+For more detail about error monitor, see "8.1 Error Processing" of the manual "Fortran User's Guide".
+
+
+Built-in debug function
+-----------------------
+
+The built-in debugging function performs various inspections by compiling a program with debugging options at compile time and executing an execution module.
+When using the built-in debugging function, the optimization level may be down to  \ ``-O0``\  so that you may feel the running time is taking long.
+
+
+- About built-in debugging function
+
+ If change execution environment, it may terminate abnormally. In this situation, these points are considered as the reason.
+
+ 1. The variable is quoted without setting an initial value.
+ 2. Array subscript exceeds array size
+
+ .. note::
+  
+  [Change the execution environment] is because...
+  
+  - Used tools like profiler, etc.
+  - Changed the size of large page.
+
+  In this case, the execution status of the execution module in the memory changes and may end abnormally.
+
+
+We introduce the built-in debugging function to check these.
+
+
+- In the case of using Fortran, the following check is performed with the built-in debugging function.
+
+ 1. | Citation checking of undefined data (\ ``-Hu``\  option)
+    | If you quote a variable (undefined data) for which an initial value is not set, the jwe0323i-w message is output.
+ 2. | Check array range (\ ``-Hs``\  option)
+    | If the array index is not within the range of the array, the jwe0320i-w or jwe0322i-w message is output.
+
+
+  See "Chapter 8 Debugging" of the manual "Fortran User's Guide" for more detail.
+
+
+ Next, the following is an example of the message displayed by the created sample program which applicable to  \ ``-Hsu``\  option.  (Sample program is easy-fixed to output the message.)
+
+
+ 1. Sample program
+
+
+  .. code-block:: fortran
+    :linenos:
+
+          program main
+            integer:: i,j
+            real,dimension(10):: a,b,c
+            j=10
+            call sub1(i,j,a,b,c)
+            stop
+          end program main
+          subroutine sub1(i,j,a,b,c)
+            integer:: i,j
+            integer:: k
+            real,dimension(j):: a,b,c
+            do k=i,j              ! jwe0323i-w
+              a(k) = b(k)+c(k)    ! jwe0320i-w
+            enddo
+            return
+          end subroutine sub1
+
+
+ 2. Compile / Job execution
+
+  .. code-block:: console
+  
+    [_LNlogin]$ frtpx -Kfast -Hsu -Nlst=t -o sample sample.f
+    [_LNlogin]$ pjsub sample.sh
+
+ 3. Execution result example (contents of standard error output)
+
+  .. code-block:: console
+
+    jwe0323i-w line 13 The variable (i) has an undefined value.
+     error occurs at sub1_    line 13 loc 0000000000400d50 offset 0000000000000184 
+     sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6 
+     MAIN__       at loc 0000000000400b24 called from o.s.  
+    taken to (standard) corrective action, execution continuing.
+    jwe0320i-w line 14 The subscript or substring b is out of the specified range (reference value: -1953789045, specification value: 1:10).
+     error occurs at sub1_    line 14 loc 0000000000400e18 offset 000000000000024c 
+     sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6 
+     MAIN__       at loc 0000000000400b24 called from o.s.  
+    taken to (standard) corrective action, execution continuing.
+    jwe0320i-w line 14 The subscript or substring c is out of the specified range (reference value: -1953789045, specification value: 1:10).
+     error occurs at sub1_    line 14 loc 0000000000400e60 offset 0000000000000294 
+     sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6 
+     MAIN__       at loc 0000000000400b24 called from o.s.  
+    taken to (standard) corrective action, execution continuing.
+    jwe0320i-w line 14 The subscript or substring a is out of the specified range (reference value: -1953789045, specification value: 1:10).
+     error occurs at sub1_    line 14 loc 0000000000400eac offset 00000000000002e0 
+     sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6 
+     MAIN__       at loc 0000000000400b24 called from o.s.  
+    taken to (standard) corrective action, execution continuing.
+    jwe0320i-w line 14 The subscript or substring b is out of the specified range (reference value: -1953789044, specification value: 1:10).
+     error occurs at sub1_    line 14 loc 0000000000400e18 offset 000000000000024c 
+     sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6 
+     MAIN__       at loc 0000000000400b24 called from o.s.  
+    taken to (standard) corrective action, execution continuing.
+    jwe0320i-w line 14 The subscript or substring c is out of the specified range (reference value: -1953789044, specification value: 1:10).
+     error occurs at sub1_    line 14 loc 0000000000400e60 offset 0000000000000294 
+     sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6 
+     MAIN__       at loc 0000000000400b24 called from o.s.  
+    taken to (standard) corrective action, execution continuing.
+    jwe0903i-u Error number 0320 was detected. Maximum error count exceeded.
+    error summary (Fortran)
+    error number  error level  error count
+      jwe0320i         w          10      
+      jwe0323i         w           1      
+    total error count = 11
+
+  .. note::
+   If jwe0320i-w and jwe0323i-w are discovered 10 times, program execution is ended. TO change the this number, see " :ref:`ErrorMonitorFortran` ".
+
+
+Fortran sample program
+----------------------
+
+Here is an example from compilation to job execution using a sample program.
+
+.. toctree::
+   :maxdepth: 2
+
+   FortranSampleProgram(sequential)
+   FortranSampleProgram(automaticParallel)
+   FortranSampleProgram(OpenMP)
+   FortranSampleProgram(hybridParallel)
+

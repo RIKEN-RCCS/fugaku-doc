@@ -1,0 +1,121 @@
+Overview
+========
+
+Fugaku WebAPI SDK is a simple python library to interact with Fugaku WebAPI.
+
+Currently, all features work with Python 3.7.
+
+Installing 
+==========
+
+Simply run pip install fugaku WebAPI SDK to install it.
+
+.. code-block:: shell 
+   
+   $ pip install fugaku-x.y.z.tar.gz
+
+:download:`fugaku  WebAPI SDK <fugaku-0.0.1.tar.gz>`
+
+Requirements: >= Python 3.7
+
+Project dependencies installed by pip:
+
+* requests
+* python-magic
+* six
+
+
+Getting Started 
+===============
+
+To execute WebAPI, an OAuth 2.0 access token and the OpenID Connect protocol is required.
+
+To get started with the SDK, follow the authorization page of `the WebAPI User Guide <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/webapi_experimental/>`_ to get the Authorization code.
+
+The following is an example of using an authorization code to create a client.
+
+.. code-block:: python
+
+   """ client_id, client_secret, redirect_url
+   """
+   CLIENT_CONFIG = {
+       "client_id": "CLINET_ID",
+       "client_secret": "CIENT_SECRET",
+       "redirect_uri": "REDIRECT_RUI",
+   }
+
+   metadata_url = "https://idp.fugaku.r-ccs.riken.jp/auth/realms/op/.well-known/openid-configuration"
+
+   proxies = {
+        "http": None,
+        "https": None
+   }
+
+   client = fugaku.Client(auth_code=authorization_code, client_config=CLIENT_CONFIG,
+         provider_metadata_url=metadata_url,
+         request_config={"proxies": proxies})
+   if not client or not client._access_token:
+      print(f"No access token.")
+      client = None     
+   else:
+      print(f"Access token. {client._access_token}")
+
+
+Parameter
+
+ +----------------------+------------+----------------------------------------------------------------------------+
+ | Parameter            | Type       | Description                                                                |
+ +======================+============+============================================================================+
+ |auth_code             | String     |(Required) auth_code is often obtained by the user using a browser.         |
+ +----------------------+------------+----------------------------------------------------------------------------+
+ |client_config         | Dictionary |(Required) client_config to be used to get access token.                    |
+ +----------------------+------------+----------------------------------------------------------------------------+
+ |provider_metadata_url | String     |provider_metadata_url that provides IdP metadata.                           |
+ +----------------------+------------+----------------------------------------------------------------------------+
+ |authorization_endpoint| String     |authorization_endpoint that performs user authentication.                   |
+ +----------------------+------------+----------------------------------------------------------------------------+
+ |token_endpoint        | String     |token_endpoint that provides access token, id token or refresh token.       |
+ +----------------------+------------+----------------------------------------------------------------------------+
+ |request_config        | Dictionary |any extra args to be passed to the HTTP requests.                           |
+ +----------------------+------------+----------------------------------------------------------------------------+
+   
+
+Here's a simple example of getting an authorization code:
+
+.. code-block:: python
+
+   print("Please access the following URL.")
+   print(f"https://idp.fugaku.r-ccs.riken.jp/auth/realms/op/protocol/openid-connect/auth?response_type=code&scope=openid&client_id={CLIENT_CONFIG['client_id']}&redirect_uri={quote(CLIENT_CONFIG['redirect_uri'])}")
+   print("Paste Browser URL:")
+   line = sys.stdin.readline().strip()
+   pos  = line.find("&code=")
+   if pos > 0:
+       authorization_code = line[pos+6:]
+       pos = authorization_code.find("&")
+       if pos > 0:
+           authorization_code = authorization_code[:pos-1]
+
+
+Error handling
+==============
+
+Fugaku WebAPI SDK exceptions are statically defined in the fugaku.error package. Fugaku WebAPI client you create will use these same statically defined exception classes. The most common exception you’ll encounter is FugakuClientError. 
+
+.. code-block:: python
+
+   try:
+       client = fugaku.Client(any_params)
+
+   except fugaku.NoTokenEndpoint as e:
+       # Neither provider_metadata_url nor token_endpoint is not set to constructor parameter.
+       logger.exception("exeption:{0}".format(e))
+
+
+.. code-block:: python
+
+   try:
+       response = client.any_api(any_params)
+
+   except fugaku.NoAccessCode as e:
+       # access_code is not set, or expired.
+       logger.exception("exeption:{0}".format(e))

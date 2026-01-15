@@ -1,0 +1,199 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.20. Note &#8212; Supercomputer Fugaku User Guide - Use and job execution -  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6. MPI job execution" href="../MPI/index.html" />
+    <link rel="prev" title="5.19. Job list display command affected by the failure" href="ShowAffectedJobs.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../MPI/index.html" title="6. MPI job execution"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="ShowAffectedJobs.html" title="5.19. Job list display command affected by the failure"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.20. </span>Note</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="note">
+<span id="jobexecconsiderpoints"></span><h1><span class="section-number">5.20. </span>Note<a class="headerlink" href="#note" title="Link to this heading">¶</a></h1>
+<section id="how-to-use-pjrsh-command">
+<h2><span class="section-number">5.20.1. </span>How to use pjrsh command<a class="headerlink" href="#how-to-use-pjrsh-command" title="Link to this heading">¶</a></h2>
+<p>Please note the following when using the pjrsh command.</p>
+<ul>
+<li><p>The number of jobs on the entire system and the number of concurrent pjrsh command executions in a single job are limited.</p>
+<ul>
+<li><p>One pjrsh command can run concurrently per job. (Only from the job master node)</p>
+<p>For example, if specifying  pjrsh commands in the background as below, they run sequentially one by one.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pjrsh<span class="w"> </span><span class="s2">&quot;(1)&quot;</span><span class="w"> </span><span class="s2">&quot;command1&quot;</span><span class="w"> </span><span class="p">&amp;</span>
+pjrsh<span class="w"> </span><span class="s2">&quot;(2)&quot;</span><span class="w"> </span><span class="s2">&quot;command2&quot;</span><span class="w"> </span><span class="p">&amp;</span>
+pjrsh<span class="w"> </span><span class="s2">&quot;(3)&quot;</span><span class="w"> </span><span class="s2">&quot;command3&quot;</span><span class="w"> </span><span class="p">&amp;</span>
+pjrsh<span class="w"> </span><span class="s2">&quot;(4)&quot;</span><span class="w"> </span><span class="s2">&quot;command4&quot;</span><span class="w"> </span><span class="p">&amp;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Up to 30 jobs using the pjrsh command can run concurrently on the entire system.</p>
+<p>If the number of jobs using the pjrsh command (the number of jobs with custom resource described below) exceeds 30 on the entire system, jobs submitted by pjsub command are accepted but wait in QUE.
+They transition to the RUN state when there are fewer than 30 jobs in the RUN state.</p>
+</li>
+</ul>
+</li>
+<li><p>Jobs using the pjrsh command require custom resource “<code class="docutils literal notranslate"><span class="pre">exepjrsh=1</span></code>” to be specified when submitting jobs.</p>
+<p>For jobs to execute the pjrsh command, specify “<code class="docutils literal notranslate"><span class="pre">exepjrsh=1</span></code>” as follows.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>-L<span class="w"> </span><span class="nv">exepjrsh</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>jobscript.sh
+</pre></div>
+</div>
+</li>
+</ul>
+<p>If the above cautions are not satisfied, the following will occur.</p>
+<ul>
+<li><p>When custom resource “exepjrsh” is not specified, or when the pjrsh command is executed on nodes other than the job master node.</p>
+<p>The pjrsh command returns “Permission denied” and cannot be executed.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/bin/bash: /usr/bin/pjrsh: Permission denied
+</pre></div>
+</div>
+</li>
+<li><p>When a number other than 1 is specified for the custom resource “<code class="docutils literal notranslate"><span class="pre">exepjrsh</span></code>”.</p>
+<p>An error is returned when running the pjsub command.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ERR.] PJM 0057 pjsub exepjrsh=2 is greater than the upper limit (1).
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="job-execution-in-startup-project-trial">
+<h2><span class="section-number">5.20.2. </span>Job Execution in Startup Project (trial)<a class="headerlink" href="#job-execution-in-startup-project-trial" title="Link to this heading">¶</a></h2>
+<p>Startup projects are the default project for account issuance (group ID: trial, Project ID: rs2xzzzz) that individuals automatically participate in when a Fugaku Account is issued via processes such as completing identity vetting by eKYC and agreeing to the pledge after obtaining an account for using FAAS.</p>
+<section id="id1">
+<h3><span class="section-number">5.20.2.1. </span>Job Execution in Startup Project (trial)<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>When executing jobs in the Startup Project (trial), please follow these steps:</p>
+<ul class="simple">
+<li><p>Specify <code class="docutils literal notranslate"><span class="pre">-g</span> <span class="pre">trial</span></code> when submitting a job.</p></li>
+<li><p>Please execute from the home directory, with the <code class="docutils literal notranslate"><span class="pre">--no-check-directory</span></code> option specified.</p></li>
+<li><p>The available resource groups for submission are as follows:</p>
+<ul>
+<li><p>spot-small</p></li>
+<li><p>spot-int</p></li>
+<li><p>spot-large</p></li>
+<li><p>spot-middle</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="interactive-job">
+<h3><span class="section-number">5.20.2.2. </span>Interactive Job<a class="headerlink" href="#interactive-job" title="Link to this heading">¶</a></h3>
+<p>If you wish to log in to the compute node in real-time and execute commands directly, please refer to the following command for execution:</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_LNlogin]$ pjsub --interact -g trial -L rscgrp=spot-int,node=1,elapse=01:00:00 --sparam &quot;wait-time=600&quot; --no-check-directory
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="batch-job">
+<h3><span class="section-number">5.20.2.3. </span>Batch Job<a class="headerlink" href="#batch-job" title="Link to this heading">¶</a></h3>
+<p>If you are creating a job script and submitting a job, please refer to the following command for execution:</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[_LNlogin]$ pjsub -g trial -L rscgrp=spot-small,node=1,elapse=01:00:00 --no-check-directory jobscript.sh
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.20. Note</a><ul>
+<li><a class="reference internal" href="#how-to-use-pjrsh-command">5.20.1. How to use pjrsh command</a></li>
+<li><a class="reference internal" href="#job-execution-in-startup-project-trial">5.20.2. Job Execution in Startup Project (trial)</a><ul>
+<li><a class="reference internal" href="#id1">5.20.2.1. Job Execution in Startup Project (trial)</a></li>
+<li><a class="reference internal" href="#interactive-job">5.20.2.2. Interactive Job</a></li>
+<li><a class="reference internal" href="#batch-job">5.20.2.3. Batch Job</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="ShowAffectedJobs.html"
+                          title="previous chapter"><span class="section-number">5.19. </span>Job list display command affected by the failure</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../MPI/index.html"
+                          title="next chapter"><span class="section-number">6. </span>MPI job execution</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../MPI/index.html" title="6. MPI job execution"
+             >next</a></li>
+        <li class="right" >
+          <a href="ShowAffectedJobs.html" title="5.19. Job list display command affected by the failure"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide - Use and job execution -  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Job execution</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.20. </span>Note</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

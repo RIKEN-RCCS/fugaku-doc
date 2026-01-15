@@ -1,0 +1,87 @@
+.. _SpecificationsForMPIJobMPI:
+
+Specification when submitting an MPI job
+========================================
+
+When submitting MPI job, by using  \ :program:`pjsub`\  command's  \ ``--mpi``\  option, you can specify the process shape to be started statically, the maximum value of the static process to be started, and the rank assignment rule.
+
+1. Statically activated process shapes
+
+  - ``pjsub --mpi shape``
+
+2. Maximum number of static processes to launch
+
+  - ``pjsub --mpi proc``
+
+3. Rules for assigning ranks of processes to be created
+
+  - ``pjsub --mpi rank-map-bynode``
+  - ``pjsub --mpi rank-map-hostfile``
+  - ``pjsub --mpi rank-map-bychip``
+
+
+Static process shape specification
+----------------------------------
+
+By using  \ :program:`pjsub`\ command (``--mpi shape``\) you can specify the shape of the process to be started statically.
+
+| The shape of the process must be the same number of dimensions as the node shape specified by the  \ ``node``\  parameter of  \ ``-L``\  in 1D, 2D and 3D shapes. If  \ ``--mpi``\  option's  \ ``shape``\  parameter is omitted, \ ``-L``\  option's  \ ``node``\  parameter value is used.
+| Dynamic processes are created outside the range specified by \ ``--mpi shape``\.
+
+
+ ``shape``\  parameter specification example
+
+ .. list-table:: 
+    :widths: 3 4
+
+    * - [1 dimention format]
+      - --mpi "shape=X"
+
+    * - [2 dimentions format]
+      - --mpi "shape=XxY"
+
+    * - [3 dimentions format]
+      - --mpi "shape=XxYxZ"
+
+ To MPI program (\ :file:`a.out`\), the following is an example of specifying a 3D process shape (X axis 4, Y axis 3, Z axis 2).
+
+ .. code-block:: bash
+
+  #!/bin/sh -x
+  #PJM -L "node=4x3x2"               # Specify number of node (3 dimentions specification)
+  #PJM -L "rscgrp=small"             # Specify resource group
+  #PJM --mpi "shape=4x3x2"           # Static process shape
+  #PJM -g groupname                  # group name
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N # volume names that job uses
+  #
+  mpiexec -n 24 ./a.out              #Execute a.out as parallel process number 24
+
+
+Specify the maximum number of static processes
+----------------------------------------------
+
+Maximum number of processes created at program startup is specified as  \ ``pjsub --mpi proc``\.
+
+- The number of processes that can be specified in  \ ``--mpi proc``\  is less than "the value specified in  \ ``--mpi shape``\  x 48 ".
+- If specify larger value than  the specified value in "\ ``--mpi shape``\ x48" to  \ ``--mpi proc``\, job acceptance will be rejected.
+- If  omitted  \ ``--mpi proc``\, the product of the values specified in \ ``--mpi shape``\ (the number of nodes obtained from the shape) is used. If also omitted  \ ``--mpi shape``\, the specified number of node at  \ ``-L node``\  is used.
+- When specifying  \ ``-L vnode``\ , if specified larger value than specified at  \ ``vnode``\  to  \ ``--mpi proc``\, job acceptance will be rejected.
+
+
+ .. code-block:: bash
+
+  #!/bin/sh -x
+  #PJM -L  "node=4"            # Assign node 4 node (1 dimention format)
+  #PJM -L  "rscgrp=small"      # Specify resource group
+  #PJM -L  "elapse=01:00:00"   # Elapsed time limit 1 hour
+  #PJM --mpi "shape=4"         # Static process shape
+  #PJM --mpi "proc=4"          # Maximum number of static processes 4
+  #PJM -g groupname            # group name
+  #PJM -x PJM_LLIO_GFSCACHE=/vol000N # volume names that job uses
+  #PJM -s                      # Statistical information output
+  #
+  mpiexec -n 4 ./a.out         # Execute a.out
+
+
+
+

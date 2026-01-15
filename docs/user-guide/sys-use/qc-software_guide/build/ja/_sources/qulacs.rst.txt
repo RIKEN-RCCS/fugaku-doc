@@ -1,0 +1,138 @@
+
+====================================
+Qulacs
+====================================
+
+はじめに
+====================================
+量子回路の高速シミュレーション用の Python/C++ ライブラリであるQulacsについての「富岳」での利用方法を利用例を交えて説明します。
+
+「富岳」でサポートしているQulacsのバージョンは、v0.5.5です。
+
+Qulacsの詳細につきましては、 `Qulacsの公式サイト <http://docs.qulacs.org/en/latest/>`_ をご参照ください。
+
+|
+
+利用方法
+====================================
+利用するにあたり、高性能計算向けのソフトウェアパッケージ管理システム(Spack)を利用します。
+
+|
+
+Spack環境の準備
+------------------------
+利用手引書 `富岳 Spack 利用ガイド <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/FugakuSpackGuide/>`_ に基づいてSpack環境を構築します。
+
+本ドキュメントでは、「パブリックインスタンスの利用」を想定してQulacsの利用法を解説します。
+
+|
+
+Qulacsのロード
+------------------------
+Qulacsを使用する場合、下記のコマンドでロードします。 ::
+
+$ spack load qulacs %fj
+
+|
+
+Qulacsのアンロード
+---------------------------
+Qulacsを使用しない場合、下記のコマンドでアンロードします。 ::
+
+$ spack unload qulacs %fj
+
+|
+
+利用例
+====================================
+「富岳」においてバッチジョブでQulacsを実行する場合の例を示します。
+
+ここでは例として、次の典型的な量子もつれ状態であるBell状態と呼ばれる量子状態を作るサンプルプログラム(main.cpp)を使用します。 ::
+
+ $ cat main.cpp
+ #include <iostream>
+ #include <cppsim/state.hpp>
+ #include <cppsim/circuit.hpp>
+ #include <cppsim/observable.hpp>
+ #include <cppsim/gate_factory.hpp>
+ #include <cppsim/gate_merge.hpp>
+
+ int main(){
+     QuantumState state(2);
+     state.set_computational_basis(0b00);
+
+     QuantumCircuit circuit(2);
+     circuit.add_H_gate(0);
+     circuit.add_CNOT_gate(0,1);
+     circuit.update_quantum_state(&state);
+
+     std::cout << state << std::endl;
+
+     Observable observable(2);
+     observable.add_operator(1.0, "Z 1 X 0");
+
+     auto value = observable.get_expectation_value(&state);
+     std::cout << value << std::endl;
+
+     return 0;
+ }
+
+
+|
+
+バッチジョブスクリプトの作成
+----------------------------------
+「富岳」でQulacsをバッチジョブで実行するための例として、次のジョブスクリプト(run.sh)を示します。
+
+※ シングルアカウントの場合は、run.shに実行グループid(idコマンドで確認)の指定が必要。
+
+（例：#PJM -g hp*****） ::
+
+
+ $ cat run.sh
+ #!/bin/sh
+ #PJM -g hp*****
+ #PJM -L "node=1"
+ #PJM -L "rscgrp=small"
+ #PJM -L "elapse=00:20:00"
+ #PJM --mpi "max-proc-per-node=12"
+ #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+ #PJM -S
+ 
+ export PATH=/opt/FJSVxtclanga/tcsds-1.2.36/bin:$PATH
+ export LD_LIBRARY_PATH=/opt/FJSVxtclanga/tcsds-1.2.36/lib64:$LD_LIBRARY_PATH
+ . /vol0004/apps/oss/spack/share/spack/setup-env.sh
+ spack load qulacs %fj
+
+ FCC -Nclang -O2 main.cpp -fopenmp -lcppsim_static -lcsim_static
+ ./a.out
+
+|
+
+バッチジョブスクリプトの実行
+----------------------------------
+下記のコマンドで実行します。 ::
+
+$ pjsub run.sh
+
+
+|
+
+結果の確認
+--------------------
+run.sh.job-id.outファイルにおいて、下記の結果が得られた場合、Qulacsは問題なく動作しています。 ::
+
+  *** Quantum State ***
+  * Qubit Count : 2
+  * Dimension   : 4
+  * State vector :
+ (0.707107,0)
+        (0,0)
+        (0,0)
+ (0.707107,0)
+ 
+ (0,0)
+
+.. toctree::
+   :maxdepth: 2	
+   :caption: コンテンツ:..

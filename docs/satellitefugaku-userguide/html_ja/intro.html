@@ -1,0 +1,779 @@
+﻿
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/fugaku/docs/img/favicon.ico">
+
+    <title>1. サテライト富岳とは &#8212; サテライト富岳利用手引書  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=658d757c" />
+    
+    <script src="_static/documentation_options.js?v=c033477b"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=91613774"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="prev" title="サテライト富岳利用手引書" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="サテライト富岳利用手引書"
+             accesskey="P">前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">サテライト富岳利用手引書  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>サテライト富岳とは</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">1. </span>サテライト富岳とは<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p>「サテライト富岳」とは、R-CCSが提唱する「バーチャル富岳」の実証・開発環境として整備された、商用クラウド上に「富岳」と同等のソフトウェアスタックを構築した計算機システムです。</p></li>
+<li><p>「富岳」アカウント保持者が利用できます。</p></li>
+<li><p>構成に関しては<a class="reference internal" href="#system"><span class="std std-ref">システム構成</span></a>および<a class="reference internal" href="#software"><span class="std std-ref">ソフトウェア構成</span></a>を参照ください。</p></li>
+</ul>
+<div class="admonition caution">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>サテライト富岳は試行用のごく小規模な、多数のユーザによる共用の環境です。</p></li>
+<li><p>各資源は潤沢ではありませんので、ご利用の際にはご注意ください。</p></li>
+<li><p>事前の予告なくサテライト富岳の運用を停止することがあります。</p></li>
+<li><p>アナウンス情報は<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/">富岳ウェブサイト</a>をご確認ください。</p></li>
+</ul>
+</div>
+</section>
+<section id="id3">
+<h1><span class="section-number">2. </span>ログインおよびログアウト<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h1>
+<p>サテライト富岳環境はインターネットから直接接続することはできないため、利用するには、まず初めに富岳ログインノードにログインする必要があります。
+富岳ログインノードへのログイン方法は<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/use_latest/AccessToTheSystem/LoggingInToTheFugakuComputerWithLocalAccount.html">利用手引書 利用およびジョブ実行編</a>をご参照ください。</p>
+<p>ログイン時は富岳ログインノードで以下のコマンドを実行します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>ssh<span class="w"> </span>sflogin1
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<ul class="simple">
+<li><p>UID/GIDは富岳と同一です。</p></li>
+<li><p>サテライト富岳では課題毎にデータ領域を設定していますので、シングルアカウントの場合はidコマンドおよびnewgrpコマンドを使用して、グループを変更してファイルにアクセスしてください。以下に実行例を示します。</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>id
+<span class="nv">uid</span><span class="o">=</span><span class="m">99999</span><span class="o">(</span>u19999<span class="o">)</span><span class="w"> </span><span class="nv">gid</span><span class="o">=</span><span class="m">59999</span><span class="o">(</span>fugaku<span class="o">)</span><span class="w"> </span><span class="nv">groups</span><span class="o">=</span><span class="m">59999</span><span class="o">(</span>fugaku<span class="o">)</span>,99999<span class="o">(</span>hp999999<span class="o">)</span>
+sflogin1$<span class="w"> </span>newgrp<span class="w"> </span>hp999999
+</pre></div>
+</div>
+</div>
+<p>ログアウト時は以下のコマンドを実行してください。
+富岳ログインノードへログインした状態に戻ります。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span><span class="nb">exit</span>
+</pre></div>
+</div>
+<p>また別のログイン方法として、Webブラウザ上でサテライト富岳ログインノードのターミナルを起動することができます。
+実行方法は<a class="reference internal" href="#fugakuood"><span class="std std-ref">富岳Open OnDemandとの連携</span></a>をご参照ください。</p>
+</section>
+<section id="id5">
+<h1><span class="section-number">3. </span>ファイルシステム利用<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="id6">
+<ul class="simple">
+<li><p><a class="reference internal" href="#id7" id="id36">概要</a></p></li>
+<li><p><a class="reference internal" href="#id8" id="id37">ホーム領域</a></p></li>
+<li><p><a class="reference internal" href="#id9" id="id38">データ領域</a></p></li>
+<li><p><a class="reference internal" href="#nfs" id="id39">富岳とのデータ連携</a></p></li>
+<li><p><a class="reference internal" href="#id11" id="id40">その他</a></p></li>
+</ul>
+</nav>
+<section id="id7">
+<h2><a class="toc-backref" href="#id36" role="doc-backlink"><span class="section-number">3.1. </span>概要</a><a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<p>サテライト富岳は試行環境であり、ファイルシステムの利用において富岳とは異なる部分があります。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<ul class="simple">
+<li><p><strong>今後の運用状況により以下の内容は変更となる場合があります。</strong></p></li>
+<li><p><strong>利用者のデータのバックアップは実施しません。利用者自身で適宜バックアップをお願いします。</strong></p></li>
+</ul>
+</div>
+<ul class="simple">
+<li><p><strong>ホーム領域、データ領域はサテライト富岳にも存在しますが、富岳とは別のファイルシステムであり、共通化されていません。</strong></p></li>
+<li><p>全体のディスク容量が小さいため、ホーム領域、データ領域ともに必要最小限での利用をお願いします。</p></li>
+<li><p>ジョブ実行に必要なデータは、データ領域をご利用ください。データ領域は共有ファイルシステム（Lustreファイルシステム）上に、課題ごとのディレクトリを用意しています。</p></li>
+<li><p>ジョブ実行に必要なデータは富岳第2階層ファイルシステムからコピーして利用できます（詳しくは<a class="reference internal" href="#nfs"><span class="std std-ref">富岳とのデータ連携</span></a>をご覧ください）。</p></li>
+<li><p>ホーム領域、データ領域ともにQuota制限をかけています。</p></li>
+<li><p>ホーム領域、データ領域ともに拡大できません。今後拡大できるようになりましたら富岳ウェブサイトでお知らせします。</p></li>
+</ul>
+</section>
+<section id="id8">
+<h2><a class="toc-backref" href="#id37" role="doc-backlink"><span class="section-number">3.2. </span>ホーム領域</a><a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
+<p>利用者のhome領域は富岳と同じパスで作成されます。
+ただし、ディレクトリ中のデータは同期されていません。</p>
+<p>Quota制限はユーザ当たり10GBです。</p>
+<p>ホーム領域はログインノードと計算ノードで共有されます。</p>
+</section>
+<section id="id9">
+<h2><a class="toc-backref" href="#id38" role="doc-backlink"><span class="section-number">3.3. </span>データ領域</a><a class="headerlink" href="#id9" title="Link to this heading">¶</a></h2>
+<p>データ領域は富岳とはパスが異なります。
+課題ごとに以下のような領域を用意しますので、ジョブの入出力ファイルの格納場所としてお使いください。</p>
+<p><code class="docutils literal notranslate"><span class="pre">/lustre01/groupname/</span></code></p>
+<p>Quota制限は課題当たり200GBです。</p>
+<p>データ領域はログインノードと計算ノードで共有されます。</p>
+</section>
+<section id="nfs">
+<span id="id10"></span><h2><a class="toc-backref" href="#id39" role="doc-backlink"><span class="section-number">3.4. </span>富岳とのデータ連携</a><a class="headerlink" href="#nfs" title="Link to this heading">¶</a></h2>
+<p>サテライト富岳ログインノードは、富岳の第2階層ファイルシステムをNFSマウントしています。
+ジョブ実行に必要なデータは、サテライト富岳データ領域にコピーしてください。以下にコピー例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>cp<span class="w"> </span>/vol000X/groupname/...<span class="w"> </span>/lustre01/groupname/...
+</pre></div>
+</div>
+<div class="admonition caution">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>富岳の第2階層ファイルシステムはサテライト富岳計算ノードからはアクセスできません。</p></li>
+<li><p>1回あたり50GB以上のデータコピーはご遠慮いただき、必要最小限にしてください。</p></li>
+</ul>
+</div>
+<p>富岳の第2階層ファイルシステムへは、サテライト富岳ログインノードにて以下のマウントポイントからアクセスできます。
+シンボリックリンクは作成していません。ディレクトリ、ファイルには実体パスでアクセスする必要があります。</p>
+<ul class="simple">
+<li><p>/vol0001</p></li>
+<li><p>/vol0002</p></li>
+<li><p>/vol0003</p></li>
+<li><p>/vol0004</p></li>
+<li><p>/vol0005</p></li>
+<li><p>/vol0006</p></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<ul class="simple">
+<li><p>富岳の第2階層の実体パス（ファイルパス）は <strong>富岳ログインノード上で</strong> 以下のように確認できます。</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>login$<span class="w"> </span>readlink<span class="w"> </span>-f<span class="w"> </span>&lt;filepath&gt;
+</pre></div>
+</div>
+</div>
+</section>
+<section id="id11">
+<h2><a class="toc-backref" href="#id40" role="doc-backlink"><span class="section-number">3.5. </span>その他</a><a class="headerlink" href="#id11" title="Link to this heading">¶</a></h2>
+<p>バーチャル富岳環境（Spack）をインストールしたファイルシステムがあります（/efs01）。
+この領域はバーチャル富岳環境（Spack）として提供するOSSをインストールする目的に限定しており、利用者は書き込みをすることができません。</p>
+<p>なお、バーチャル富岳環境（Spack）の利用方法は以下の通りです。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>.<span class="w"> </span>/efs01/apps/oss/spack/share/spack/setup-env.sh
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id12">
+<h1><span class="section-number">4. </span>コンパイル<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h1>
+<p>GCCでのみコンパイルが可能です。
+利用可能なコンパイラについては<a class="reference internal" href="#compilers"><span class="std std-ref">コンパイラ環境</span></a>も併せてご参照ください。
+以下、コンパイル実行例です。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>gcc<span class="w"> </span>-o<span class="w"> </span>a.out<span class="w"> </span>sample.c
+</pre></div>
+</div>
+</section>
+<section id="id13">
+<h1><span class="section-number">5. </span>ジョブ実行<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h1>
+<p>ジョブ実行には、バッチジョブとインタラクティブジョブによる2種類の方法があります。
+バッチジョブは、あらかじめジョブスクリプトを作成しジョブを投入する方法で、
+長時間実行する場合などに適しています。
+一方、インタラクティブジョブでは、ユーザがコマンド実行を会話的に行うことができるため、
+バッチジョブ投入前のデバッグ等に使用することができます。</p>
+<nav class="contents local" id="id14">
+<ul class="simple">
+<li><p><a class="reference internal" href="#id15" id="id41">ジョブキュー</a></p></li>
+<li><p><a class="reference internal" href="#id17" id="id42">バッチジョブ</a></p></li>
+<li><p><a class="reference internal" href="#id18" id="id43">インタラクティブジョブ</a></p></li>
+<li><p><a class="reference internal" href="#slurm" id="id44">Slurmコマンド</a></p></li>
+</ul>
+</nav>
+<section id="id15">
+<h2><a class="toc-backref" href="#id41" role="doc-backlink"><span class="section-number">5.1. </span>ジョブキュー</a><a class="headerlink" href="#id15" title="Link to this heading">¶</a></h2>
+<p>サテライト富岳では以下のジョブキューを利用可能です。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<ul class="simple">
+<li><p><strong>今後の運用状況により内容は変更となる場合があります。</strong></p></li>
+</ul>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>キュー名</p></th>
+<th class="head"><p>ノード名</p></th>
+<th class="head"><p>最大ノード数</p></th>
+<th class="head"><p>合計利用可能コア数</p></th>
+<th class="head"><p>最大経過時間</p></th>
+<th class="head"><p>ノードあたり最大メモリ量</p></th>
+<th class="head"><p>ジョブあたり最大ノード数</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>satf01</p></td>
+<td><p>satf01-dy-g3e-[1-8]</p></td>
+<td><p>8</p></td>
+<td><p>512</p></td>
+<td><p>24 H</p></td>
+<td><p>128 GB</p></td>
+<td><p>8</p></td>
+</tr>
+</tbody>
+</table>
+<p>計算ノードの状態はsinfoコマンドで確認できます。以下に例を示します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>sinfo
+PARTITION<span class="w"> </span>AVAIL<span class="w">  </span>TIMELIMIT<span class="w">  </span>NODES<span class="w">  </span>STATE<span class="w"> </span>NODELIST
+satf01*<span class="w">      </span>up<span class="w">   </span>infinite<span class="w">      </span><span class="m">7</span><span class="w">  </span>idle~<span class="w"> </span>satf01-dy-g3e-<span class="o">[</span><span class="m">2</span>-8<span class="o">]</span>
+satf01*<span class="w">      </span>up<span class="w">   </span>infinite<span class="w">      </span><span class="m">1</span><span class="w">    </span>mix<span class="w"> </span>satf01-dy-g3e-1
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">STATE</span></code> の主な表示内容と説明は以下の通りです。</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>STATE</p></th>
+<th class="head"><p>意味</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>idle~</p></td>
+<td><p>ノード停止状態</p></td>
+</tr>
+<tr class="row-odd"><td><p>idle</p></td>
+<td><p>アイドル状態（すべてのコアにジョブが割り当たっていない状態）</p></td>
+</tr>
+<tr class="row-even"><td><p>mix</p></td>
+<td><p>CPUコアの一部はジョブに割り当てられているものの、まだ空きCPUコアが存在する状態</p></td>
+</tr>
+<tr class="row-odd"><td><p>alloc</p></td>
+<td><p>すべてのコアにジョブが割り当てられている状態</p></td>
+</tr>
+</tbody>
+</table>
+<p>sinfoコマンドの詳細な利用方法は<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/pps-slurm/slurm.html">プリポスト環境 利用手引書</a>やSlurm公式ドキュメントをご参照ください。</p>
+<p>ジョブキューの情報は以下のコマンドで確認できます。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>scontrol<span class="w"> </span>show<span class="w"> </span>partition
+</pre></div>
+</div>
+<div class="admonition caution">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>計算ノードは現在最大8ノードまで起動しますが、常時8台が稼働しているわけではありません。</p></li>
+<li><p>ジョブ実行を終了した計算ノードは、アイドル状態が10分間継続すると停止状態となります。</p></li>
+<li><p>ジョブ実行に際し新たに計算ノードを起動する必要がある場合、ジョブ実行開始までに5分程度を要します。</p></li>
+</ul>
+</div>
+</section>
+<section id="id17">
+<h2><a class="toc-backref" href="#id42" role="doc-backlink"><span class="section-number">5.2. </span>バッチジョブ</a><a class="headerlink" href="#id17" title="Link to this heading">¶</a></h2>
+<p>サテライト富岳環境へバッチジョブとしてジョブを投入するには、ジョブスクリプトを作成し、
+サテライト富岳ログインノード上でSlurmコマンドを実行します。</p>
+<p>投入したジョブは自動的にスケジューリングされ、実行されます。</p>
+<p>同一ノードは複数ジョブで共用されます。性能測定したい場合はノードを専有するようにジョブを実行してください。</p>
+<p>以下にジョブ実行例を示します。</p>
+<ol class="arabic simple">
+<li><p>逐次ジョブ</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>cat<span class="w"> </span>job.sh
+<span class="c1">#!/bin/bash</span>
+<span class="c1">#SBATCH -p satf01</span>
+<span class="c1">#SBATCH -n 1</span>
+<span class="c1">#SBATCH --time 00:30:00</span>
+<span class="c1">#SBATCH --mem 1G</span>
+./a.out
+sflogin1$<span class="w"> </span>sbatch<span class="w"> </span>job.sh
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>OpenMP</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>cat<span class="w"> </span>mp.sh
+<span class="c1">#!/bin/bash</span>
+<span class="c1">#SBATCH -p satf01</span>
+<span class="c1">#SBATCH --time 00:30:00</span>
+<span class="c1">#SBATCH --cpus-per-task=2</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">2</span>
+./a.out
+sflogin1$<span class="w"> </span>sbatch<span class="w"> </span>mp.sh
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>OpenMPI</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>cat<span class="w"> </span>mpi.sh
+<span class="c1">#!/bin/bash</span>
+<span class="c1">#SBATCH -p satf01</span>
+<span class="c1">#SBATCH -n 2</span>
+<span class="c1">#SBATCH --time 00:30:00</span>
+mpiexec<span class="w"> </span>--use-hwthread-cpus<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span>./a.out
+sflogin1$<span class="w"> </span>sbatch<span class="w"> </span>mpi.sh
+</pre></div>
+</div>
+<p>投入したジョブの状況は以下で確認できます。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>squeue
+</pre></div>
+</div>
+</section>
+<section id="id18">
+<h2><a class="toc-backref" href="#id43" role="doc-backlink"><span class="section-number">5.3. </span>インタラクティブジョブ</a><a class="headerlink" href="#id18" title="Link to this heading">¶</a></h2>
+<p>インタラクティブジョブでは、必要となるリソースをSlurmコマンドのオプションとして、
+サテライト富岳ログインノード上で直接指定し、実行します。
+リソースが確保できればインタラクティブジョブに遷移します。
+その後は、会話的にコマンドが実行できます。
+以下にインタラクティブジョブのジョブ投入コマンドの例を示します。</p>
+<div class="admonition caution">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p><strong>必ず実行時間の制限(--timeオプション)を設定してください。</strong></p></li>
+</ul>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>srun<span class="w"> </span>-N1<span class="w"> </span>-n1<span class="w"> </span>--job-name<span class="w"> </span><span class="s2">&quot;InteractiveJob&quot;</span><span class="w"> </span>--time<span class="w"> </span><span class="m">00</span>:30:00<span class="w"> </span>--pty<span class="w"> </span>bash<span class="w"> </span>-i
+</pre></div>
+</div>
+</section>
+<section id="slurm">
+<h2><a class="toc-backref" href="#id44" role="doc-backlink"><span class="section-number">5.4. </span>Slurmコマンド</a><a class="headerlink" href="#slurm" title="Link to this heading">¶</a></h2>
+<p>サテライト富岳で利用可能な主なSlurmコマンドを以下に示します。
+各コマンドの詳細な利用方法は<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/pps-slurm/slurm.html">プリポスト環境 利用手引書</a>やSlurm公式ドキュメントをご参照ください。</p>
+<ul class="simple">
+<li><p>sinfo</p></li>
+<li><p>squeue</p></li>
+<li><p>sbatch</p></li>
+<li><p>srun</p></li>
+<li><p>scancel</p></li>
+</ul>
+<div class="admonition caution">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>ジョブ実行履歴確認コマンド（sacctコマンド）は現在利用できません。利用できるようになりましたら富岳ウェブサイトでお知らせします。</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="system">
+<span id="id20"></span><h1><span class="section-number">6. </span>システム構成<a class="headerlink" href="#system" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="id21">
+<ul class="simple">
+<li><p><a class="reference internal" href="#id22" id="id45">システム構成図</a></p></li>
+<li><p><a class="reference internal" href="#id23" id="id46">マシンスペック</a></p></li>
+</ul>
+</nav>
+<section id="id22">
+<h2><a class="toc-backref" href="#id45" role="doc-backlink"><span class="section-number">6.1. </span>システム構成図</a><a class="headerlink" href="#id22" title="Link to this heading">¶</a></h2>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/satf01_system.svg"><img alt="_images/satf01_system.svg" src="_images/satf01_system.svg" style="width: 800px;" />
+</a>
+</figure>
+</section>
+<section id="id23">
+<h2><a class="toc-backref" href="#id46" role="doc-backlink"><span class="section-number">6.2. </span>マシンスペック</a><a class="headerlink" href="#id23" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>ログインノード</p></li>
+</ul>
+<p>ノード名：sflogin1</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Server</p></td>
+<td><p>AWS EC2</p></td>
+</tr>
+<tr class="row-even"><td><p>CPU</p></td>
+<td><p>AWS Graviton3E (2.60GHz/64core)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Memory</p></td>
+<td><p>128GB</p></td>
+</tr>
+<tr class="row-even"><td><p>Local Storage</p></td>
+<td><p>1TB</p></td>
+</tr>
+<tr class="row-odd"><td><p>OS</p></td>
+<td><p>RHEL 8.10 (4.18.0-553.5.1.el8_10.aarch64)</p></td>
+</tr>
+<tr class="row-even"><td><p>Shared File System</p></td>
+<td><p>Lustre File System 12TB (quota 200GB/group), EFS (Only for Virtual Fugaku Environment(Spack), READ ONLY)</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>計算ノード</p></li>
+</ul>
+<p>ノード名：satfs01-dy-g3e-1 ~ satfs01-dy-g3e-8</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Server</p></td>
+<td><p>AWS EC2</p></td>
+</tr>
+<tr class="row-even"><td><p>CPU</p></td>
+<td><p>AWS Graviton3E (2.60GHz/64core)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Memory</p></td>
+<td><p>128GB</p></td>
+</tr>
+<tr class="row-even"><td><p>Local Storage</p></td>
+<td><p>35GB</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cluster Network</p></td>
+<td><p>EFA enabled</p></td>
+</tr>
+<tr class="row-even"><td><p>OS</p></td>
+<td><p>RHEL 8.10 (4.18.0-553.5.1.el8_10.aarch64)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Shared File System</p></td>
+<td><p>Lustre File System 12TB (quota 200GB/group), EFS (Only for Virtual Fugaku Environment(Spack), READ ONLY)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition caution">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>計算ノードは現在最大8ノードまで起動しますが、常時8台が稼働しているわけではありません。</p></li>
+<li><p>ジョブ実行を終了した計算ノードは、アイドル状態が10分間継続すると停止状態となります。</p></li>
+<li><p>ジョブ実行に際し新たに計算ノードを起動する必要がある場合、ジョブ実行開始までに5分程度を要します。</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="software">
+<span id="id24"></span><h1><span class="section-number">7. </span>ソフトウェア構成<a class="headerlink" href="#software" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="id25">
+<ul class="simple">
+<li><p><a class="reference internal" href="#spack" id="id47">バーチャル富岳環境（Spack）</a></p></li>
+<li><p><a class="reference internal" href="#compilers" id="id48">コンパイラ環境</a></p></li>
+<li><p><a class="reference internal" href="#mpi" id="id49">MPI環境</a></p></li>
+</ul>
+</nav>
+<section id="spack">
+<h2><a class="toc-backref" href="#id47" role="doc-backlink"><span class="section-number">7.1. </span>バーチャル富岳環境（Spack）</a><a class="headerlink" href="#spack" title="Link to this heading">¶</a></h2>
+<p>サテライト富岳では、バーチャル富岳ver.1として定義されているソフトウェアスタックを提供します。
+バーチャル富岳ver.1のソフトウェアスタックはSpackのレシピとして実装されています。
+以下のコマンドを実行することで、利用可能なOSSの一覧が取得できます。</p>
+<p>ここでは -x オプションにより明示的にインストールされたパッケージのみを表示していますが、実際にはこれらが依存する多数のパッケージもインストールされています。</p>
+<div class="admonition caution">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>最新の状態は実機でご確認ください。</p></li>
+</ul>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sflogin1$<span class="w"> </span>.<span class="w"> </span>/efs01/apps/oss/spack/share/spack/setup-env.sh
+sflogin1$<span class="w"> </span>spack<span class="w"> </span>find<span class="w"> </span>-x
+--<span class="w"> </span>linux-rhel8-neoverse_v1<span class="w"> </span>/<span class="w"> </span>gcc@8.5.0<span class="w"> </span>--------------------------
+gcc@14.1.0
+
+--<span class="w"> </span>linux-rhel8-neoverse_v1<span class="w"> </span>/<span class="w"> </span>gcc@14.1.0<span class="w"> </span>-------------------------
+genesis@2.1.3
+gnuplot@6.0.0
+gromacs@2024.2
+gsl@2.7.1
+lammps@20230802.3
+metis@5.1.0
+openbabel@3.1.1
+openfoam@2312
+openfoam-org@10
+paraview@5.12.1
+parmetis@4.0.3
+petsc@3.21.2
+py-ase@3.21.1
+py-matplotlib@3.9.0
+py-mpi4py@3.1.6
+py-numpy@1.26.4
+py-pandas@2.1.4
+py-scikit-learn@1.5.0
+py-scipy@1.13.1
+py-toml@0.10.2
+quantum-espresso@7.3.1
+scale@5.4.4
+tmux@3.4
+</pre></div>
+</div>
+</section>
+<section id="compilers">
+<span id="id26"></span><h2><a class="toc-backref" href="#id48" role="doc-backlink"><span class="section-number">7.2. </span>コンパイラ環境</a><a class="headerlink" href="#compilers" title="Link to this heading">¶</a></h2>
+<p>以下が利用可能です。</p>
+<ul class="simple">
+<li><p>gcc 8.5.0</p></li>
+<li><p>gcc 14.1.0 （<code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">spack</span> <span class="pre">load</span> <span class="pre">gcc</span></code> の実行により利用可能となります）</p></li>
+</ul>
+</section>
+<section id="mpi">
+<h2><a class="toc-backref" href="#id49" role="doc-backlink"><span class="section-number">7.3. </span>MPI環境</a><a class="headerlink" href="#mpi" title="Link to this heading">¶</a></h2>
+<p>デフォルトでOpenMPI 4.1.6（ <code class="docutils literal notranslate"><span class="pre">/opt/amazon/openmpi</span></code> ）が利用できます。</p>
+</section>
+</section>
+<section id="open-ondemand">
+<span id="fugakuood"></span><h1><span class="section-number">8. </span>富岳Open OnDemandとの連携<a class="headerlink" href="#open-ondemand" title="Link to this heading">¶</a></h1>
+<p>富岳Open OnDemandからサテライト富岳ログインノードのコマンドラインインタフェースを起動することができます。</p>
+<p>これにより、Webブラウザ上でサテライト富岳ログインノードが操作できます。</p>
+<p>富岳Open OnDemandの「Passenger Apps」から「Satellite Fugaku Shell Access」を選択してください。
+富岳Open OnDemandの利用方法は<a class="reference external" href="https://riken-rccs.github.io/ondemand_fugaku/index_ja.html">富岳Open OnDemandガイド</a>をご参照ください。</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/terminal_on_fugakuood.png"><img alt="_images/terminal_on_fugakuood.png" src="_images/terminal_on_fugakuood.png" style="width: 700px;" />
+</a>
+</figure>
+</section>
+<section id="singularity">
+<span id="id28"></span><h1><span class="section-number">9. </span>Singularityの利用<a class="headerlink" href="#singularity" title="Link to this heading">¶</a></h1>
+<p>サテライト富岳では、Singularity（singularity-ce version 4.1.4）の利用が可能です。</p>
+<p>Singularityは、HPC向けに開発されたコンテナランタイムです。ユーザー権限を維持しつつ、セキュアなコンテナ環境を提供し、軽量かつ効率的に動作します。</p>
+<p>本手順ではSingularityの基本操作および実行例を示します。</p>
+<p>詳細な情報は<a class="reference external" href="https://docs.sylabs.io/guides/4.1/user-guide/index.html">公式ユーザーガイド</a>を参照してください。</p>
+<nav class="contents local" id="id30">
+<ul class="simple">
+<li><p><a class="reference internal" href="#id31" id="id50">コンテナイメージの実行</a></p></li>
+<li><p><a class="reference internal" href="#id33" id="id51">コンテナイメージの作成</a></p></li>
+<li><p><a class="reference internal" href="#id34" id="id52">計算ノード上でのSingularityの利用</a></p></li>
+</ul>
+</nav>
+<section id="id31">
+<h2><a class="toc-backref" href="#id50" role="doc-backlink"><span class="section-number">9.1. </span>コンテナイメージの実行</a><a class="headerlink" href="#id31" title="Link to this heading">¶</a></h2>
+<p>Singularityはシンプルなコマンドでコンテナを操作できます。</p>
+<ol class="arabic simple">
+<li><p>イメージの取得</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>pull<span class="w"> </span>docker://ubuntu:latest
+</pre></div>
+</div>
+<p>このコマンドは <cite>ubuntu:latest</cite> のイメージを取得し、 <cite>ubuntu_latest.sif</cite> というファイルを作成します。</p>
+<ol class="arabic simple" start="2">
+<li><p>コンテナの実行</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>run<span class="w"> </span>ubuntu_latest.sif
+</pre></div>
+</div>
+<p><cite>ubuntu_latest.sif</cite> の <cite>runscript</cite> を実行します。<cite>runscript</cite> がない場合、シェルモードで開けます。</p>
+<ol class="arabic simple" start="3">
+<li><p>コンテナ内でコマンドを実行</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ubuntu_latest.sif<span class="w"> </span>ls<span class="w"> </span>/usr
+</pre></div>
+</div>
+<p>コンテナ内で <cite>/usr</cite> ディレクトリをリスト表示します。</p>
+<ol class="arabic simple" start="4">
+<li><p>シェルに入る</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>shell<span class="w"> </span>ubuntu_latest.sif
+</pre></div>
+</div>
+<p>Singularityのシェルを開き、インタラクティブに操作できます。</p>
+<ol class="arabic simple" start="5">
+<li><p>ファイルシステムのバインド</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--bind<span class="w"> </span>/data:/mnt<span class="w"> </span>ubuntu_latest.sif<span class="w"> </span>ls<span class="w"> </span>/mnt
+</pre></div>
+</div>
+<p>ホストの <cite>/data</cite> をコンテナ内の <cite>/mnt</cite> にバインドします。</p>
+</section>
+<section id="id33">
+<h2><a class="toc-backref" href="#id51" role="doc-backlink"><span class="section-number">9.2. </span>コンテナイメージの作成</a><a class="headerlink" href="#id33" title="Link to this heading">¶</a></h2>
+<p>Singularityには、主に2つのイメージ形式があります。</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>SIF（Singularity Image Format）</strong>:</dt><dd><p>Singularityの標準イメージ形式で、単一ファイルにコンテナデータが含まれます。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>サンドボックス（ディレクトリ形式）</strong>:</dt><dd><p>ディレクトリとして管理され、開発やデバッグ時に便利です。</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>build<span class="w"> </span>--sandbox<span class="w"> </span>my_sandbox/<span class="w"> </span>docker://ubuntu:latest
+</pre></div>
+</div>
+<p>ここでは、SIFイメージの作成について記載します。</p>
+<p>また、一般ユーザ権限でコンテナを作成するため、fakeroot機能を活用します。</p>
+<ol class="arabic simple">
+<li><p>ベースイメージの取得</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>build<span class="w"> </span>ubuntu_latest.sif<span class="w"> </span>docker://ubuntu:latest
+</pre></div>
+</div>
+<p>Docker Hubの <cite>ubuntu:latest</cite> をSingularityイメージ（SIF形式）に変換します。</p>
+<ol class="arabic simple" start="2">
+<li><p>イメージのビルド</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>build<span class="w"> </span>--fakeroot<span class="w"> </span>my_image.sif<span class="w"> </span>Singularity.def
+</pre></div>
+</div>
+<p>定義ファイル <cite>Singularity.def</cite> の定義に従い、 <cite>my_image.sif</cite> を作成します。</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<ul class="simple">
+<li><p>イメージの詳細は以下のように確認可能です。</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>inspect<span class="w"> </span>my_image.sif
+</pre></div>
+</div>
+<p>イメージのメタデータ（環境変数、ラベル、runscript など）を表示します。</p>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>定義ファイルの記述</p></li>
+</ol>
+<p>以下に定義ファイルの記述例を示します。</p>
+<ul class="simple">
+<li><p>Headerセクション</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bootstrap:<span class="w"> </span>docker
+From:<span class="w"> </span>ubuntu:20.04
+</pre></div>
+</div>
+<p>Ubuntu 20.04のDockerイメージをベースに作成します。</p>
+<ul class="simple">
+<li><p>%postセクション</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>%post
+<span class="w">    </span>apt-get<span class="w"> </span>update
+<span class="w">    </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>build-essential
+<span class="w">    </span>apt-get<span class="w"> </span>clean
+<span class="w">    </span>rm<span class="w"> </span>-rf<span class="w"> </span>/var/lib/apt/lists/*
+</pre></div>
+</div>
+<p>不要なデータを削除し、コンテナサイズを最適化します。</p>
+<ul class="simple">
+<li><p>%runscriptセクション</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>%runscript
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;This is a custom Singularity container!&quot;</span>
+<span class="w">    </span><span class="nb">exec</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>%environmentセクション</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>%environment
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/opt/myapp/bin:<span class="nv">$PATH</span>
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">MY_VAR</span><span class="o">=</span><span class="s2">&quot;custom_value&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="id34">
+<h2><a class="toc-backref" href="#id52" role="doc-backlink"><span class="section-number">9.3. </span>計算ノード上でのSingularityの利用</a><a class="headerlink" href="#id34" title="Link to this heading">¶</a></h2>
+<p>Singularityコンテナを計算ノード上で実行できます。</p>
+<p>サテライト富岳のジョブスケジューラはSlurmであり、ジョブスクリプトを以下のように記述します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH --job-name=my_singularity_job</span>
+<span class="c1">#SBATCH --output=output.txt</span>
+<span class="c1">#SBATCH --ntasks=1</span>
+<span class="c1">#SBATCH --time=00:10:00</span>
+singularity<span class="w"> </span>run<span class="w"> </span>my_container.sif<span class="w"> </span>python<span class="w"> </span>my_script.py
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id35">
+<h1><span class="section-number">10. </span>改訂履歴<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h1>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Version</p></th>
+<th class="head"><p>Date</p></th>
+<th class="head"><p>Detail</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1.0</p></td>
+<td><p>2024-07-16</p></td>
+<td><p>初版作成</p></td>
+</tr>
+<tr class="row-odd"><td><p>1.1</p></td>
+<td><p>2024-07-26</p></td>
+<td><p>2章 富岳Open OnDemandからのログインについて追記／8章 富岳Open OnDemandからサテライト富岳ログインノードのターミナルを起動する方法を追加</p></td>
+</tr>
+<tr class="row-even"><td><p>1.2</p></td>
+<td><p>2025-02-28</p></td>
+<td><p>9章 Singularityの利用方法を追加</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1. サテライト富岳とは</a></li>
+<li><a class="reference internal" href="#id3">2. ログインおよびログアウト</a></li>
+<li><a class="reference internal" href="#id5">3. ファイルシステム利用</a><ul>
+<li><a class="reference internal" href="#id7">3.1. 概要</a></li>
+<li><a class="reference internal" href="#id8">3.2. ホーム領域</a></li>
+<li><a class="reference internal" href="#id9">3.3. データ領域</a></li>
+<li><a class="reference internal" href="#nfs">3.4. 富岳とのデータ連携</a></li>
+<li><a class="reference internal" href="#id11">3.5. その他</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id12">4. コンパイル</a></li>
+<li><a class="reference internal" href="#id13">5. ジョブ実行</a><ul>
+<li><a class="reference internal" href="#id15">5.1. ジョブキュー</a></li>
+<li><a class="reference internal" href="#id17">5.2. バッチジョブ</a></li>
+<li><a class="reference internal" href="#id18">5.3. インタラクティブジョブ</a></li>
+<li><a class="reference internal" href="#slurm">5.4. Slurmコマンド</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#system">6. システム構成</a><ul>
+<li><a class="reference internal" href="#id22">6.1. システム構成図</a></li>
+<li><a class="reference internal" href="#id23">6.2. マシンスペック</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#software">7. ソフトウェア構成</a><ul>
+<li><a class="reference internal" href="#spack">7.1. バーチャル富岳環境（Spack）</a></li>
+<li><a class="reference internal" href="#compilers">7.2. コンパイラ環境</a></li>
+<li><a class="reference internal" href="#mpi">7.3. MPI環境</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#open-ondemand">8. 富岳Open OnDemandとの連携</a></li>
+<li><a class="reference internal" href="#singularity">9. Singularityの利用</a><ul>
+<li><a class="reference internal" href="#id31">9.1. コンテナイメージの実行</a></li>
+<li><a class="reference internal" href="#id33">9.2. コンテナイメージの作成</a></li>
+<li><a class="reference internal" href="#id34">9.3. 計算ノード上でのSingularityの利用</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id35">10. 改訂履歴</a></li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="index.html"
+                          title="前の章へ">サテライト富岳利用手引書</a></p>
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="index.html" title="サテライト富岳利用手引書"
+             >前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="index.html">サテライト富岳利用手引書  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1. </span>サテライト富岳とは</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, RIKEN R-CCS.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku Potal Top</a>
+    </div>
+  </body>
+</html>

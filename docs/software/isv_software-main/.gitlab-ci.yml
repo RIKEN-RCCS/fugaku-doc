@@ -1,0 +1,15 @@
+stages:
+  - test
+
+sphinx-test:
+  stage: test
+  image:
+    name: registry.ops.r-ccs.riken.jp/flagship/k-userinfo-j/textlint:1.0
+  script:
+    - sphinx-build ./ja/source ./build/ja
+    - sphinx-build ./en/source ./build/en
+  artifacts:
+    paths:
+      - build
+    expire_in: 7 days
+    name: $CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-sphinx
