@@ -1,0 +1,364 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>MATLAB - Application Information &#8212; ISV software 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
+    <link rel="stylesheet" type="text/css" href="_static/red.css?v=f055d561" />
+    
+    <script src="_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="index.html">ISV software 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">MATLAB - Application Information</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="matlab-application-information">
+<h1>MATLAB - Application Information<a class="headerlink" href="#matlab-application-information" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">R-CCS provides a pre-installed MATLAB (Intel version) environment for the front-end servers of Fugaku.</div>
+<div class="line">Two versions (Academic and Bring Your Own License versions) are available.</div>
+</div>
+<section id="application-method">
+<h2>1. Application method<a class="headerlink" href="#application-method" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">Please refer to the flowchart below to check if the academic version is available.</div>
+<div class="line">If the academic version is available, please apply from Zendesk.</div>
+<div class="line">If the conditions for the academic version are not met, only the BYOL version is available. The BYOL version does not require an application.</div>
+</div>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/matlab_en.png"><img alt="_images/matlab_en.png" src="_images/matlab_en.png" style="width: 800px;" />
+</a>
+</figure>
+<ol class="arabic simple">
+<li><p>Access the request form (<a class="reference external" href="https://fugaku.zendesk.com/hc/en-us/requests/new">https://fugaku.zendesk.com/hc/en-us/requests/new</a>) of Fugaku Support Site.</p></li>
+<li><p>First, select the “Request form” pull-down menu.</p></li>
+<li><p>Select “Use of commercial application” from the “Inquiry type” menu.</p></li>
+<li><p>Input the “Project ID”, “Subject” and “User name” forms.</p></li>
+<li><p>Select “MATLAB” from the “Application name” menu.</p></li>
+<li><p>Select “Application to start” from the “Request to start/stop use” menu.</p></li>
+<li><p>Check the “Agreed to the precautions” box.</p></li>
+<li><p>Push the “Submit” button.</p></li>
+</ol>
+</section>
+<section id="note">
+<h2>2. Note<a class="headerlink" href="#note" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>To use the BYOL version, Fugaku users must only bring their own license to the login nodes or the pre/post environment and activates the license by themself. R-CCS does not provide a license.</p></li>
+<li><p>For the Academic version, the users belonging to educational institutions (universities, colleges, colleges of technology, etc) can use it. On the other hand, those who belong to companies or research institutes except for RIKEN are not allowed to use it due to the license agreement.</p></li>
+<li><p>For questions or assistance in using the application, please contact the <a class="reference external" href="https://jp.mathworks.com/support/contact_us.html">MathWorks help center</a>.</p></li>
+</ul>
+</section>
+<section id="how-to-use">
+<h2>3. How to use<a class="headerlink" href="#how-to-use" title="Link to this heading">¶</a></h2>
+<p>In this guide, we will use X-Window to proceed with the activation.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[PC]$ </span>xhost<span class="w"> </span>+
+<span class="gp">[PC]$ </span>ssh<span class="w"> </span>-Y<span class="w"> </span>-i<span class="w"> </span>~/.ssh/<span class="o">{</span>your<span class="w"> </span>private<span class="w"> </span>key<span class="o">}</span><span class="w"> </span><span class="o">{</span>username<span class="o">}</span>@fugaku.r-ccs.riken.jp
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">We recommend running the MATLAB client in the pre/post environment since the client consumes significant computing resources.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[Login]$ </span>srun<span class="w"> </span>--x11<span class="w"> </span>-p<span class="w"> </span>gpu1<span class="w"> </span>-n<span class="w"> </span><span class="m">72</span><span class="w"> </span>--mem<span class="w"> </span>186G<span class="w"> </span>--time<span class="o">=</span><span class="m">00</span>:30:00<span class="w"> </span>--pty<span class="w"> </span>bash<span class="w"> </span>-i
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">For the academic version, users can start the Matlab client without additional steps after logging in.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[PP]$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">TMPDIR</span><span class="o">=</span>/tmp
+
+<span class="go">// for the Academic version</span>
+<span class="gp">[PP]$ </span><span class="nb">cd</span><span class="w"> </span>/vol0004/apps/MATLAB_academic/R2023a/bin
+<span class="gp">[PP]$ </span>./matlab
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">For the BYOL version, users need activation steps.</div>
+<div class="line">The license file should be uploaded to a Fugaku login node beforehand.</div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[PP]$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">TMPDIR</span><span class="o">=</span>/tmp
+
+<span class="go">// for BYOL</span>
+<span class="gp">[PP]$ </span><span class="nb">cd</span><span class="w"> </span>/vol0004/apps/MATLAB/R2023a/bin
+<span class="gp">[PP]$ </span>./activate_matlab.sh
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">The steps for the BYOL version are as follow.</div>
+<div class="line">Select <strong>“Activate automatically using the Internet”</strong> and press the <strong>“Next”</strong>  button.</div>
+</div>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/fig1.png"><img alt="_images/fig1.png" src="_images/fig1.png" style="width: 800px;" />
+</a>
+</figure>
+<p>Select <strong>“Enter the full path to your license file, including the file name”</strong> and enter the path to the license file in the text field. Then press the <strong>“Next”</strong> button.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/fig2.png"><img alt="_images/fig2.png" src="_images/fig2.png" style="width: 800px;" />
+</a>
+</figure>
+<p>If the following dialogue appears, the activation may be completed.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/fig3.png"><img alt="_images/fig3.png" src="_images/fig3.png" style="width: 800px;" />
+</a>
+</figure>
+<p>Then run <strong>matlab</strong> again to start the application.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[PP]$ </span>./matlab
+</pre></div>
+</div>
+<p>Please refer to the MathWorks website for details on how to use the tools.</p>
+</section>
+<section id="misc">
+<h2>4. MISC<a class="headerlink" href="#misc" title="Link to this heading">¶</a></h2>
+<p>The following products are installed. (Available applications depend on your license conditions.)</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Pre-installed Products</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<tbody>
+<tr class="row-odd"><td><p>MATLAB</p></td>
+</tr>
+<tr class="row-even"><td><p>Simulink</p></td>
+</tr>
+<tr class="row-odd"><td><p>5G Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>AUTOSAR Blockset</p></td>
+</tr>
+<tr class="row-odd"><td><p>Aerospace Blockset</p></td>
+</tr>
+<tr class="row-even"><td><p>Aerospace Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Antenna Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Audio Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Automated Driving Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Bioinformatics Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Communications Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Computer Vision Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Control System Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Curve Fitting Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>DSP System Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Data Acquisition Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Database Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Datafeed Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Deep Learning HDL Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Deep Learning Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Econometrics Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Financial Instruments Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Financial Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Fixed-Point Designer</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fuzzy Logic Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Global Optimization Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Image Acquisition Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Image Processing Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Industrial Communication Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Instrument Control Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>LTE Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Lidar Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>MATLAB Report Generator</p></td>
+</tr>
+<tr class="row-even"><td><p>Mapping Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Mixed-Signal Blockset</p></td>
+</tr>
+<tr class="row-even"><td><p>Model Predictive Control Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Model-Based Calibration Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Motor Control Blockset</p></td>
+</tr>
+<tr class="row-odd"><td><p>Navigation Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Optimization Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Parallel Computing Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Partial Differential Equation Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Phased Array System Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Powertrain Blockset</p></td>
+</tr>
+<tr class="row-odd"><td><p>Predictive Maintenance Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>RF Blockset</p></td>
+</tr>
+<tr class="row-odd"><td><p>RF Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>ROS Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Reinforcement Learning Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Requirements Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Risk Management Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Robotics System Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Robust Control Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Sensor Fusion and Tracking Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>SerDes Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Signal Processing Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>SimBiology</p></td>
+</tr>
+<tr class="row-even"><td><p>SimEvents</p></td>
+</tr>
+<tr class="row-odd"><td><p>Simscape</p></td>
+</tr>
+<tr class="row-even"><td><p>Simscape Driveline</p></td>
+</tr>
+<tr class="row-odd"><td><p>Simscape Electrical</p></td>
+</tr>
+<tr class="row-even"><td><p>Simscape Fluids</p></td>
+</tr>
+<tr class="row-odd"><td><p>Simscape Multibody</p></td>
+</tr>
+<tr class="row-even"><td><p>Simulink 3D Animation</p></td>
+</tr>
+<tr class="row-odd"><td><p>Simulink Check</p></td>
+</tr>
+<tr class="row-even"><td><p>Simulink Control Design</p></td>
+</tr>
+<tr class="row-odd"><td><p>Simulink Coverage</p></td>
+</tr>
+<tr class="row-even"><td><p>Simulink Design Optimization</p></td>
+</tr>
+<tr class="row-odd"><td><p>Simulink Design Verifier</p></td>
+</tr>
+<tr class="row-even"><td><p>Simulink Desktop Real-Time</p></td>
+</tr>
+<tr class="row-odd"><td><p>Simulink Real-Time</p></td>
+</tr>
+<tr class="row-even"><td><p>Simulink Report Generator</p></td>
+</tr>
+<tr class="row-odd"><td><p>Simulink Test</p></td>
+</tr>
+<tr class="row-even"><td><p>SoC Blockset</p></td>
+</tr>
+<tr class="row-odd"><td><p>Spreadsheet Link</p></td>
+</tr>
+<tr class="row-even"><td><p>Stateflow</p></td>
+</tr>
+<tr class="row-odd"><td><p>Statistics and Machine Learning Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Symbolic Math Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>System Composer</p></td>
+</tr>
+<tr class="row-even"><td><p>System Identification Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Text Analytics Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>UAV Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Vehicle Dynamics Blockset</p></td>
+</tr>
+<tr class="row-even"><td><p>Vehicle Network Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Vision HDL Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>WLAN Toolbox</p></td>
+</tr>
+<tr class="row-odd"><td><p>Wavelet Toolbox</p></td>
+</tr>
+<tr class="row-even"><td><p>Wireless HDL Toolbox</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">MATLAB - Application Information</a><ul>
+<li><a class="reference internal" href="#application-method">1. Application method</a></li>
+<li><a class="reference internal" href="#note">2. Note</a></li>
+<li><a class="reference internal" href="#how-to-use">3. How to use</a></li>
+<li><a class="reference internal" href="#misc">4. MISC</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="index.html">ISV software 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">MATLAB - Application Information</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, RIKEN R-CCS.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>

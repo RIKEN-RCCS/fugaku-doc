@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>VASP - Flow to Start Using &#8212; ISV software 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css?v=5283bb3d" />
+    <link rel="stylesheet" type="text/css" href="_static/red.css?v=f055d561" />
+    
+    <script src="_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="index.html">ISV software 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">VASP  - Flow to Start Using</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="toctree-wrapper compound">
+</div>
+<section id="vasp-flow-to-start-using">
+<h1>VASP  - Flow to Start Using<a class="headerlink" href="#vasp-flow-to-start-using" title="Link to this heading">¶</a></h1>
+<p>The step to using VASP on Fugaku are as follows.</p>
+<p>The available version of VASP on Fugaku is VASP6.</p>
+<div class="line-block">
+<div class="line">1.  License Agreement</div>
+<div class="line">2. Application for use</div>
+<div class="line">2.1 Verifying permission to Use</div>
+<div class="line">3. Notice of completion for software configuration</div>
+<div class="line">4. How to use</div>
+</div>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="_images/vasp.png"><img alt="_images/vasp.png" src="_images/vasp.png" style="width: 6.29921in;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Fig. 1. Workflow of using VASP</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="license-agreement">
+<h2>1. License Agreement<a class="headerlink" href="#license-agreement" title="Link to this heading">¶</a></h2>
+<p>A license agreement for VASP6 is required to use VASP on Fugaku. Please contact the following software vendor for details of the license agreement. If you already have a license, you do not need to have a new one.</p>
+<blockquote>
+<div><p><strong>[Software Vendors]</strong></p>
+<p>VASP Software GmbH</p>
+<p><strong>[Product Information]</strong></p>
+<p><a class="reference external" href="https://www.vasp.at/">https://www.vasp.at/</a></p>
+</div></blockquote>
+</section>
+<section id="application-for-use">
+<h2>2. Application for use<a class="headerlink" href="#application-for-use" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Access to Fugaku Support site (<a class="reference external" href="https://fugaku.zendesk.com/hc/en-us">https://fugaku.zendesk.com/hc/en-us</a>) and press “Request”</p></li>
+<li><p>Select “Use of commercial application” from “Request type”</p></li>
+<li><p>Select “Project ID” from “Project ID for this request”</p></li>
+<li><p>Enter “Start of use (VASP)” or “Terminate of use (VASP)” in “Subject”</p></li>
+<li><p>Select “VASP” from “Application name”</p></li>
+<li><p>Enter the VASP license registration information in “Supplement” with reference to the following [Sample] for start of use</p></li>
+<li><p>Attach a copy of the license certificate to “Attachment” for start of use</p></li>
+<li><p>Check “Agreed to the precautions” box in “Notice” section</p></li>
+<li><p>Press “Submit” button</p></li>
+</ol>
+<ul class="simple">
+<li><p>[Sample]</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="n">Start</span> <span class="n">using</span> <span class="p">(</span><span class="n">including</span> <span class="n">adding</span> <span class="n">users</span><span class="p">)</span> <span class="p">]</span>
+
+<span class="o">-</span> <span class="n">User</span> <span class="n">information</span>
+<span class="o">--</span> <span class="n">Full</span> <span class="n">name</span>
+<span class="o">--</span> <span class="n">E</span><span class="o">-</span><span class="n">mail</span> <span class="n">address</span>
+<span class="o">--</span> <span class="n">Account</span> <span class="n">name</span> <span class="p">(</span><span class="n">Fugaku</span> <span class="n">local</span> <span class="n">account</span><span class="p">)</span>
+<span class="o">-</span> <span class="n">Copy</span> <span class="n">of</span> <span class="n">License</span> <span class="n">Certificate</span> <span class="p">(</span><span class="n">Attachment</span><span class="p">)</span>
+
+<span class="p">[</span> <span class="n">Terminate</span> <span class="n">Use</span> <span class="p">]</span>
+<span class="o">-</span> <span class="n">Name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">account</span> <span class="n">to</span> <span class="n">be</span> <span class="n">terminated</span> <span class="p">(</span><span class="n">Fugaku</span> <span class="n">local</span> <span class="n">account</span><span class="p">)</span>
+
+<span class="o">-</span> <span class="n">For</span> <span class="n">your</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">e</span><span class="o">-</span><span class="n">mail</span> <span class="n">address</span><span class="p">,</span> <span class="n">please</span> <span class="n">write</span> <span class="n">down</span> <span class="n">the</span> <span class="n">information</span> <span class="n">you</span> <span class="n">registered</span> <span class="n">at</span> <span class="n">the</span> <span class="n">time</span> <span class="n">of</span> <span class="n">the</span> <span class="n">contract</span><span class="o">.</span>
+<span class="o">-</span> <span class="n">Please</span> <span class="n">write</span> <span class="n">the</span> <span class="n">names</span><span class="p">,</span> <span class="n">e</span><span class="o">-</span><span class="n">mail</span> <span class="n">addresses</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">account</span> <span class="n">names</span> <span class="n">of</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">requesting</span> <span class="n">users</span><span class="o">.</span>
+</pre></div>
+</div>
+<p><strong>[Notes]</strong></p>
+<p>Available only if you have a VASP6 license and are a registered user.For this reason, R-CCS provides the following information, including personal information, to the following software vendors on behalf of the applicant for the purpose of verifying the license agreement and user registration status:. Software vendors depend on the licensee (VASP Software GmbH or Materials Design).</p>
+<p>When we receive a license issued by Materials Design, we are not able to comply with GDPR and other rules for handling personal information outside Japan, so only users residing in Japan can apply.</p>
+<blockquote>
+<div><p><strong>[Information to be provided]</strong></p>
+<ul class="simple">
+<li><p>Name</p></li>
+<li><p>Email address</p></li>
+<li><p>Copy of License Certificate (Attachment)</p></li>
+</ul>
+<p><strong>[Recipient of the information]</strong></p>
+<ul>
+<li><dl>
+<dt>License issued by VASP Software GmbH</dt><dd><div class="line-block">
+<div class="line">VASP Software GmbH</div>
+<div class="line">For the privacy policy applied, refer to <a class="reference external" href="https://www.vasp.at/footer/privacypolicy/">https://www.vasp.at/footer/privacypolicy/</a></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>License issued by Materials Design</dt><dd><div class="line-block">
+<div class="line">MOLSIS Inc.</div>
+<div class="line">For the privacy policy applied, refer to <a class="reference external" href="https://www.molsis.co.jp/en/privacy.html">https://www.molsis.co.jp/en/privacy.html</a></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Please note that it may take a long time for the software vendor to confirm.</p>
+</div></blockquote>
+<section id="verifying-permission-to-use">
+<h3>2.1 Verifying permission to Use<a class="headerlink" href="#verifying-permission-to-use" title="Link to this heading">¶</a></h3>
+<p>We will determine whether or not to approve the application based on the following points of view. If two or more users are specified in the application, only approved users can use VASP. If there are any unapproved users, we will inform the applicant of the account name of the unapproved users and the reason.</p>
+<ul class="simple">
+<li><p>Based on the license certificate and user information submitted, the software vendor will confirm the license.</p></li>
+</ul>
+<p>Please note that it may take a long time for the software vendor to confirm.</p>
+</section>
+</section>
+<section id="notice-of-completion-for-software-configuration">
+<h2>3. Notice of completion for software configuration<a class="headerlink" href="#notice-of-completion-for-software-configuration" title="Link to this heading">¶</a></h2>
+<p>After the software environment settings are completed,
+the Fugaku Support will send a notice of completion for the software usage environment to the target user.</p>
+</section>
+<section id="how-to-use">
+<h2>4. How to use<a class="headerlink" href="#how-to-use" title="Link to this heading">¶</a></h2>
+<p>See below for details on use.</p>
+<p><a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/VASPGuide/usage_vasp_en.pdf">https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/VASPGuide/usage_vasp_en.pdf</a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">VASP  - Flow to Start Using</a><ul>
+<li><a class="reference internal" href="#license-agreement">1. License Agreement</a></li>
+<li><a class="reference internal" href="#application-for-use">2. Application for use</a><ul>
+<li><a class="reference internal" href="#verifying-permission-to-use">2.1 Verifying permission to Use</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#notice-of-completion-for-software-configuration">3. Notice of completion for software configuration</a></li>
+<li><a class="reference internal" href="#how-to-use">4. How to use</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="index.html">ISV software 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">VASP  - Flow to Start Using</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, RIKEN R-CCS.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku Portal Top</a>
+    </div>
+  </body>
+</html>
