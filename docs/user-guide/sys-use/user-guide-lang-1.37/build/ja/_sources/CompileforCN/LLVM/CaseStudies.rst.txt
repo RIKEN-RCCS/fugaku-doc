@@ -1,0 +1,478 @@
+:orphan:
+
+.. _CaseStudies:
+
+事例集
+-------
+
+富士通コンパイラではコンパイルが成功していましたが、LLVMコンパイラでは失敗した事例を示します。
+
+事例1
+^^^^^
+
+【事象】
+
+以下のエラーメッセージが出力され、翻訳が中断されます。
+
+.. code-block:: none
+
+   error: call to undeclared library function <msg>; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+
+<msg> : 宣言が行われていない関数の情報
+
+【再現プログラム】
+
+.. code-block:: c
+
+   int main(void) {
+      printf("Hello\n"); 
+      return 0;
+   }
+
+【カテゴリ】
+
+規格に反するコードに対する挙動の変化
+
+【言語】
+
+C
+
+【原因】
+
+このエラーは明示的に宣言せずにライブラリ関数を使用していることが原因です。古いCの規格では、明示的にライブラリ関数の宣言がされていなくても、コンパイラが推測してコンパイルを進めることが許されていましたが、ISO C99 以降のC規格では、この暗黙的な関数宣言はサポートされなくなりました。
+
+【回避方法】
+
+エラーを回避するには、以下のいずれかの方法を適用してください。
+
+1. 必要なヘッダファイルをインクルードします。
+#. コンパイル時に-Wno-implicit-function-declarationオプションを指定します。
+#. コンパイル時に-std=c89または-std=c90オプションを指定することで古いC規格に準拠するモードで動作させることができます。これにより、古いコードとの互換性を保ちつつ、コンパイルエラーを回避できます。ただし、新しいC標準で導入された機能は利用できません。
+
+【修正プログラム】
+
+.. code-block:: c
+
+   #include <stdio.h>
+   
+   int main(void) {
+      printf("Hello\n"); 
+      return 0;
+   }
+
+事例2
+^^^^^
+
+【事象】
+
+以下のエラーメッセージが出力され、翻訳が中断されます。
+
+.. code-block:: none
+
+   error: call to undeclared function '<msg>'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+
+<msg> : 宣言が行われていない関数の情報
+
+【再現プログラム】
+
+.. code-block:: c
+
+   #include<stdio.h>
+   
+   int main(void)
+   {
+      int i;
+      i = func1();
+      return i; 
+   }
+   
+   int func1(void)
+   {
+      return 0;
+   }
+
+【カテゴリ】
+
+規格に反するコードに対する挙動の変化
+
+【言語】
+
+C
+
+【原因】
+
+このエラーは明示的に宣言せずに関数を使用していることが原因です。古いCの規格では、明示的に関数の宣言がされていなくても、コンパイラが推測してコンパイルを進めることが許されていましたが、ISO C99 以降のC規格では、この暗黙的な関数宣言はサポートされなくなりました。
+
+【回避方法】
+
+エラーを回避するには、以下のいずれかの方法を適用してください。
+
+1. プロトタイプ宣言を関数呼び出しの前に行います。
+#. コンパイル時に-Wno-implicit-function-declarationオプションを指定します。
+#. コンパイル時に-std=c89または-std=c90オプションを指定することで古いC規格に準拠するモードで動作させることができます。これにより、古いコードとの互換性を保ちつつ、コンパイルエラーを回避できます。ただし、新しいC標準で導入された機能は利用できません。
+
+【修正プログラム】
+
+.. code-block:: c
+
+   #include<stdio.h>
+
+   int func1(void);
+
+   int main(void)
+   {
+      int i;
+      i = func1();
+      return i; 
+   }
+   
+   int func1(void)
+   {
+      return 0;
+   }
+
+事例3
+^^^^^
+
+【事象】
+
+以下のエラーメッセージが出力され、翻訳が中断されます。
+
+.. code-block:: none
+
+   error: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+
+【再現プログラム】
+
+.. code-block:: c++
+
+   #include <iostream>
+   int main(void) {
+     register long sum = 0;
+     return 0;
+   }
+
+【カテゴリ】
+
+規格に反するコードに対する挙動の変化
+
+【言語】
+
+C++
+
+【原因】
+
+C++17規格以降でregister記憶域種別指定子が廃止されたことが原因です。
+
+【回避方法】
+
+エラーを回避するには、以下のいずれかの方法を適用してください。
+
+1. 変数宣言のregister指定を削除します。
+#. コンパイル時に-Wno-registerオプションを指定します。
+#. コンパイル時に-std=c++14オプションを指定します。
+
+【修正プログラム】
+
+.. code-block:: c++
+
+   #include <iostream>
+   
+   int main(void) {
+     long sum = 0;
+     return 0;
+   }
+
+事例4
+^^^^^
+
+【事象】
+
+以下のエラーメッセージが出力され、翻訳が中断されます。
+
+.. code-block:: none
+
+   error: ISO C++17 does not allow dynamic exception specifications [-Wdynamic-exception-spec]
+
+【再現プログラム】
+
+.. code-block:: c++
+
+   int f1() throw (int) {
+     return 1;
+   }
+   
+   int main(void) {
+     int i = f1();
+     return 0;
+   }
+
+【カテゴリ】
+
+規格に反するコードに対する挙動の変化
+
+【言語】
+
+C++
+
+【原因】
+
+C++17規格以降、動的例外仕様が削除されたことが原因です。動的例外仕様は、関数が送出する可能性のある例外の型をコンパイル時に指定するものでしたが、C++11規格以降では、関数が例外を送出しないことを示す場合はnoexcept指定子の使用が、関数が何らかの（特定の、あるいはあらゆる）例外を送出する可能性があることを示す場合はnoexcept指定子を記載しないことが、それぞれ推奨されています。
+
+【回避方法】
+
+エラーを回避するには、以下のいずれかの方法を適用してください。
+
+1. 関数宣言時の 動的例外仕様(throw)を削除します。
+#. コンパイル時に-Wno-dynamic-exception-specオプションを指定します。
+#. コンパイル時に-std=c++14オプションを指定します。
+
+【修正プログラム】
+
+.. code-block:: c++
+
+   int f1(){
+     return 1;
+   }
+
+   int main(void) {
+     int i = f1();
+     return 0;
+   }
+
+【関連情報】
+
+https://cpprefjp.github.io/lang/cpp17/remove_deprecated_exception_specifications.html
+
+事例5
+^^^^^
+
+【事象】
+
+以下のエラーメッセージが出力され、翻訳が中断されます。
+
+.. code-block:: none
+
+   error: Operands of <op> must have comparable types; have INTEGER(<k>) and LOGICAL(<k>)
+
+| <op>: 演算子
+| <k>: 種別型パラメタ
+
+【再現プログラム】
+
+.. code-block:: fortran
+
+   program main
+
+     integer(kind=4) :: int_var
+     logical(kind=4) :: log_var
+
+     int_var = 1
+     log_var = .true.
+
+     if (int_var .ne. log_var) then
+       print *, "these types are not comparable!"
+     end if
+
+   end program main
+
+【カテゴリ】
+
+文法エラー
+
+【言語】
+
+Fortran
+
+【原因】
+
+異なるデータ型の値を<op>演算子で操作していることが原因です。LLVMでは論理型と整数型などの異なるデータ型を直接比較したり演算したりすることはできません。
+
+【回避方法】
+
+1. 正しい型のデータを指定します。
+
+【修正プログラム】
+
+.. code-block:: fortran
+
+   program main
+
+     integer(kind=4) :: int_var
+
+     int_var = 1
+     if (int_var .ne. 1) then
+       print *, "these types are not comparable!"
+     end if
+
+   end program main
+
+事例6
+^^^^^
+
+【事象】
+
+以下のエラーメッセージが出力され、翻訳が中断されます。
+
+.. code-block:: none
+
+   error: No operator .XOR. defined for LOGICAL(<k>) and LOGICAL(<k>)
+
+<k>: 種別型パラメタ
+
+【再現プログラム】
+
+.. code-block:: fortran
+
+   program main
+
+     LOGICAL(4) :: a, b, result
+
+     a = .TRUE.
+     b = .FALSE.
+     result = a .XOR. b
+     print *, "Result: ", result
+
+   end program main
+
+【カテゴリ】
+
+富士通拡張
+
+【言語】
+
+Fortran
+
+【原因】
+
+このエラーは、Fortran言語の標準仕様には存在しない.XOR.演算子（排他的論理和）を使用していることが原因です。
+
+【回避方法】
+
+1. .XOR.演算子を使用している箇所を、標準の.NEQV.演算子に置き換えます。
+
+【修正プログラム】
+
+.. code-block:: fortran
+
+   program main
+
+     LOGICAL(4) :: a, b, result
+
+     a = .TRUE.
+     b = .FALSE.
+     result = a .NEQV. b
+     print *, "Result: ", result
+
+   end program main
+
+【補足】
+
+LLVMにおいて、論理型の値を比較する場合、数値型の値と比較するために使用する演算子は使用できません。論理型の真偽値を比較するには、専用の論理比較演算子（.EQV. や .NEQV.）を使用してください。
+
+事例7
+^^^^^
+
+【事象】
+
+以下のエラーメッセージが出力され、翻訳が中断されます。
+
+.. code-block:: none
+
+   error: Must be a constant value
+
+【再現プログラム】
+
+.. code-block:: fortran
+
+   program main
+
+     real(kind=4),parameter :: mzero = z80000000
+
+   end program main
+
+【カテゴリ】
+
+富士通拡張
+
+【言語】
+
+Fortran
+
+【原因】
+
+2進数/8進数/16進数の整数定数において単一引用符「'」または二重引用符「"」のいずれかで囲っていないことが原因です。
+
+【回避方法】
+
+1. 2進数/8進数/16進数の整数定数において単一引用符「'」または二重引用符「"」のいずれかで囲うように修正します。
+
+【修正プログラム】
+
+.. code-block:: fortran
+
+   program main
+     real(kind=4),parameter :: mzero = z'80000000'
+   end program main
+
+事例8
+^^^^^
+
+【事象】
+
+以下のエラーメッセージが出力され、翻訳が中断されます。
+
+.. code-block:: none
+
+   error: Must have INTEGER type, but is REAL(<k>)
+
+<k>: 種別型パラメタ
+
+【再現プログラム】
+
+.. code-block:: fortran
+
+   program main
+
+     integer :: my_array(5)
+     real :: real_index
+
+     my_array = (/10, 20, 30, 40, 50/)
+     real_index = 2.5
+
+     print *, "Value at real_index:", my_array(real_index)
+
+   end program main
+
+【カテゴリ】
+
+文法エラー
+
+【言語】
+
+Fortran
+
+【原因】
+
+このエラーは、Fortranプログラム内で整数型（INTEGER）のデータが必要とされる文脈において、実数型（REAL）のデータが指定されたことが原因です。LLVMはデータ型に厳格であり、配列のインデックスや特定の組み込み関数への引数などで期待される型と異なる型、特に実数値を整数値として扱おうとすると、コンパイルエラーとなります。
+
+【回避方法】
+
+1. 正しい型のデータを指定します。
+
+【修正プログラム】
+
+.. code-block:: fortran
+
+   program main
+
+     integer :: my_array(5)
+     integer :: index
+
+     my_array = (/10, 20, 30, 40, 50/)
+     index = 2
+
+     print *, "Value at real_index:", my_array(index)
+
+   end program main
+

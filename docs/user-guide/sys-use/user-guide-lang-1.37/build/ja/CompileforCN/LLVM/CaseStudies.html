@@ -1,0 +1,448 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>事例集 &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=89e52957" />
+    
+    <script src="../../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">事例集</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="casestudies">
+<span id="id1"></span><h1>事例集<a class="headerlink" href="#casestudies" title="Link to this heading">¶</a></h1>
+<p>富士通コンパイラではコンパイルが成功していましたが、LLVMコンパイラでは失敗した事例を示します。</p>
+<section id="id2">
+<h2>事例1<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>【事象】</p>
+<p>以下のエラーメッセージが出力され、翻訳が中断されます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: call to undeclared library function &lt;msg&gt;; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+</pre></div>
+</div>
+<p>&lt;msg&gt; : 宣言が行われていない関数の情報</p>
+<p>【再現プログラム】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>【カテゴリ】</p>
+<p>規格に反するコードに対する挙動の変化</p>
+<p>【言語】</p>
+<p>C</p>
+<p>【原因】</p>
+<p>このエラーは明示的に宣言せずにライブラリ関数を使用していることが原因です。古いCの規格では、明示的にライブラリ関数の宣言がされていなくても、コンパイラが推測してコンパイルを進めることが許されていましたが、ISO C99 以降のC規格では、この暗黙的な関数宣言はサポートされなくなりました。</p>
+<p>【回避方法】</p>
+<p>エラーを回避するには、以下のいずれかの方法を適用してください。</p>
+<ol class="arabic simple">
+<li><p>必要なヘッダファイルをインクルードします。</p></li>
+<li><p>コンパイル時に-Wno-implicit-function-declarationオプションを指定します。</p></li>
+<li><p>コンパイル時に-std=c89または-std=c90オプションを指定することで古いC規格に準拠するモードで動作させることができます。これにより、古いコードとの互換性を保ちつつ、コンパイルエラーを回避できます。ただし、新しいC標準で導入された機能は利用できません。</p></li>
+</ol>
+<p>【修正プログラム】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h2>事例2<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>【事象】</p>
+<p>以下のエラーメッセージが出力され、翻訳が中断されます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: call to undeclared function &#39;&lt;msg&gt;&#39;; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+</pre></div>
+</div>
+<p>&lt;msg&gt; : 宣言が行われていない関数の情報</p>
+<p>【再現プログラム】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">   </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">func1</span><span class="p">();</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">func1</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>【カテゴリ】</p>
+<p>規格に反するコードに対する挙動の変化</p>
+<p>【言語】</p>
+<p>C</p>
+<p>【原因】</p>
+<p>このエラーは明示的に宣言せずに関数を使用していることが原因です。古いCの規格では、明示的に関数の宣言がされていなくても、コンパイラが推測してコンパイルを進めることが許されていましたが、ISO C99 以降のC規格では、この暗黙的な関数宣言はサポートされなくなりました。</p>
+<p>【回避方法】</p>
+<p>エラーを回避するには、以下のいずれかの方法を適用してください。</p>
+<ol class="arabic simple">
+<li><p>プロトタイプ宣言を関数呼び出しの前に行います。</p></li>
+<li><p>コンパイル時に-Wno-implicit-function-declarationオプションを指定します。</p></li>
+<li><p>コンパイル時に-std=c89または-std=c90オプションを指定することで古いC規格に準拠するモードで動作させることができます。これにより、古いコードとの互換性を保ちつつ、コンパイルエラーを回避できます。ただし、新しいC標準で導入された機能は利用できません。</p></li>
+</ol>
+<p>【修正プログラム】</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">func1</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">   </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">func1</span><span class="p">();</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">func1</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h2>事例3<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>【事象】</p>
+<p>以下のエラーメッセージが出力され、翻訳が中断されます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: ISO C++17 does not allow &#39;register&#39; storage class specifier [-Wregister]
+</pre></div>
+</div>
+<p>【再現プログラム】</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>【カテゴリ】</p>
+<p>規格に反するコードに対する挙動の変化</p>
+<p>【言語】</p>
+<p>C++</p>
+<p>【原因】</p>
+<p>C++17規格以降でregister記憶域種別指定子が廃止されたことが原因です。</p>
+<p>【回避方法】</p>
+<p>エラーを回避するには、以下のいずれかの方法を適用してください。</p>
+<ol class="arabic simple">
+<li><p>変数宣言のregister指定を削除します。</p></li>
+<li><p>コンパイル時に-Wno-registerオプションを指定します。</p></li>
+<li><p>コンパイル時に-std=c++14オプションを指定します。</p></li>
+</ol>
+<p>【修正プログラム】</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">long</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h2>事例4<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>【事象】</p>
+<p>以下のエラーメッセージが出力され、翻訳が中断されます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: ISO C++17 does not allow dynamic exception specifications [-Wdynamic-exception-spec]
+</pre></div>
+</div>
+<p>【再現プログラム】</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">f1</span><span class="p">()</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1</span><span class="p">();</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>【カテゴリ】</p>
+<p>規格に反するコードに対する挙動の変化</p>
+<p>【言語】</p>
+<p>C++</p>
+<p>【原因】</p>
+<p>C++17規格以降、動的例外仕様が削除されたことが原因です。動的例外仕様は、関数が送出する可能性のある例外の型をコンパイル時に指定するものでしたが、C++11規格以降では、関数が例外を送出しないことを示す場合はnoexcept指定子の使用が、関数が何らかの（特定の、あるいはあらゆる）例外を送出する可能性があることを示す場合はnoexcept指定子を記載しないことが、それぞれ推奨されています。</p>
+<p>【回避方法】</p>
+<p>エラーを回避するには、以下のいずれかの方法を適用してください。</p>
+<ol class="arabic simple">
+<li><p>関数宣言時の 動的例外仕様(throw)を削除します。</p></li>
+<li><p>コンパイル時に-Wno-dynamic-exception-specオプションを指定します。</p></li>
+<li><p>コンパイル時に-std=c++14オプションを指定します。</p></li>
+</ol>
+<p>【修正プログラム】</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">f1</span><span class="p">(){</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1</span><span class="p">();</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>【関連情報】</p>
+<p><a class="reference external" href="https://cpprefjp.github.io/lang/cpp17/remove_deprecated_exception_specifications.html">https://cpprefjp.github.io/lang/cpp17/remove_deprecated_exception_specifications.html</a></p>
+</section>
+<section id="id6">
+<h2>事例5<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<p>【事象】</p>
+<p>以下のエラーメッセージが出力され、翻訳が中断されます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: Operands of &lt;op&gt; must have comparable types; have INTEGER(&lt;k&gt;) and LOGICAL(&lt;k&gt;)
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">&lt;op&gt;: 演算子</div>
+<div class="line">&lt;k&gt;: 種別型パラメタ</div>
+</div>
+<p>【再現プログラム】</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">int_var</span>
+<span class="w">  </span><span class="kt">logical</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">log_var</span>
+
+<span class="w">  </span><span class="n">int_var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">  </span><span class="n">log_var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">int_var</span><span class="w"> </span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="w"> </span><span class="n">log_var</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;these types are not comparable!&quot;</span>
+<span class="w">  </span><span class="k">end if</span>
+
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+<p>【カテゴリ】</p>
+<p>文法エラー</p>
+<p>【言語】</p>
+<p>Fortran</p>
+<p>【原因】</p>
+<p>異なるデータ型の値を&lt;op&gt;演算子で操作していることが原因です。LLVMでは論理型と整数型などの異なるデータ型を直接比較したり演算したりすることはできません。</p>
+<p>【回避方法】</p>
+<ol class="arabic simple">
+<li><p>正しい型のデータを指定します。</p></li>
+</ol>
+<p>【修正プログラム】</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">int_var</span>
+
+<span class="w">  </span><span class="n">int_var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">int_var</span><span class="w"> </span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;these types are not comparable!&quot;</span>
+<span class="w">  </span><span class="k">end if</span>
+
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h2>事例6<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<p>【事象】</p>
+<p>以下のエラーメッセージが出力され、翻訳が中断されます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: No operator .XOR. defined for LOGICAL(&lt;k&gt;) and LOGICAL(&lt;k&gt;)
+</pre></div>
+</div>
+<p>&lt;k&gt;: 種別型パラメタ</p>
+<p>【再現プログラム】</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+
+<span class="w">  </span><span class="kt">LOGICAL</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">result</span>
+
+<span class="k">  </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">TRUE</span><span class="p">.</span>
+<span class="w">  </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">FALSE</span><span class="p">.</span>
+<span class="w">  </span><span class="k">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="p">.</span><span class="nb">XOR</span><span class="p">.</span><span class="w"> </span><span class="n">b</span>
+<span class="w">  </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Result: &quot;</span><span class="p">,</span><span class="w"> </span><span class="k">result</span>
+
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+<p>【カテゴリ】</p>
+<p>富士通拡張</p>
+<p>【言語】</p>
+<p>Fortran</p>
+<p>【原因】</p>
+<p>このエラーは、Fortran言語の標準仕様には存在しない.XOR.演算子（排他的論理和）を使用していることが原因です。</p>
+<p>【回避方法】</p>
+<ol class="arabic simple">
+<li><p>.XOR.演算子を使用している箇所を、標準の.NEQV.演算子に置き換えます。</p></li>
+</ol>
+<p>【修正プログラム】</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+
+<span class="w">  </span><span class="kt">LOGICAL</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">result</span>
+
+<span class="k">  </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">TRUE</span><span class="p">.</span>
+<span class="w">  </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">FALSE</span><span class="p">.</span>
+<span class="w">  </span><span class="k">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="p">.</span><span class="n">NEQV</span><span class="p">.</span><span class="w"> </span><span class="n">b</span>
+<span class="w">  </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Result: &quot;</span><span class="p">,</span><span class="w"> </span><span class="k">result</span>
+
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+<p>【補足】</p>
+<p>LLVMにおいて、論理型の値を比較する場合、数値型の値と比較するために使用する演算子は使用できません。論理型の真偽値を比較するには、専用の論理比較演算子（.EQV. や .NEQV.）を使用してください。</p>
+</section>
+<section id="id8">
+<h2>事例7<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
+<p>【事象】</p>
+<p>以下のエラーメッセージが出力され、翻訳が中断されます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: Must be a constant value
+</pre></div>
+</div>
+<p>【再現プログラム】</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+
+<span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mzero</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">z80000000</span>
+
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+<p>【カテゴリ】</p>
+<p>富士通拡張</p>
+<p>【言語】</p>
+<p>Fortran</p>
+<p>【原因】</p>
+<p>2進数/8進数/16進数の整数定数において単一引用符「'」または二重引用符「&quot;」のいずれかで囲っていないことが原因です。</p>
+<p>【回避方法】</p>
+<ol class="arabic simple">
+<li><p>2進数/8進数/16進数の整数定数において単一引用符「'」または二重引用符「&quot;」のいずれかで囲うように修正します。</p></li>
+</ol>
+<p>【修正プログラム】</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+<span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mzero</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">z</span><span class="s1">&#39;80000000&#39;</span>
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+</section>
+<section id="id9">
+<h2>事例8<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h2>
+<p>【事象】</p>
+<p>以下のエラーメッセージが出力され、翻訳が中断されます。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: Must have INTEGER type, but is REAL(&lt;k&gt;)
+</pre></div>
+</div>
+<p>&lt;k&gt;: 種別型パラメタ</p>
+<p>【再現プログラム】</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+
+<span class="w">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">my_array</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="w">  </span><span class="kt">real</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">real_index</span>
+
+<span class="w">  </span><span class="n">my_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">/</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="o">/</span><span class="p">)</span>
+<span class="w">  </span><span class="n">real_index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.5</span>
+
+<span class="w">  </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Value at real_index:&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">my_array</span><span class="p">(</span><span class="n">real_index</span><span class="p">)</span>
+
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+<p>【カテゴリ】</p>
+<p>文法エラー</p>
+<p>【言語】</p>
+<p>Fortran</p>
+<p>【原因】</p>
+<p>このエラーは、Fortranプログラム内で整数型（INTEGER）のデータが必要とされる文脈において、実数型（REAL）のデータが指定されたことが原因です。LLVMはデータ型に厳格であり、配列のインデックスや特定の組み込み関数への引数などで期待される型と異なる型、特に実数値を整数値として扱おうとすると、コンパイルエラーとなります。</p>
+<p>【回避方法】</p>
+<ol class="arabic simple">
+<li><p>正しい型のデータを指定します。</p></li>
+</ol>
+<p>【修正プログラム】</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+
+<span class="w">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">my_array</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="w">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="nb">index</span>
+
+<span class="nb">  </span><span class="n">my_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">/</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="o">/</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+
+<span class="w">  </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Value at real_index:&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">my_array</span><span class="p">(</span><span class="nb">index</span><span class="p">)</span>
+
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">事例集</a><ul>
+<li><a class="reference internal" href="#id2">事例1</a></li>
+<li><a class="reference internal" href="#id3">事例2</a></li>
+<li><a class="reference internal" href="#id4">事例3</a></li>
+<li><a class="reference internal" href="#id5">事例4</a></li>
+<li><a class="reference internal" href="#id6">事例5</a></li>
+<li><a class="reference internal" href="#id7">事例6</a></li>
+<li><a class="reference internal" href="#id8">事例7</a></li>
+<li><a class="reference internal" href="#id9">事例8</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">事例集</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

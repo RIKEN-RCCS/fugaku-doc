@@ -1,0 +1,260 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.8.3.7.3. OpenMP &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f85107c5" />
+    
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="3.1.8.3.7.4. Hybrid parallel" href="CSampleProgram%28hybridParallel%29.html" />
+    <link rel="prev" title="3.1.8.3.7.2. Automatic parallel" href="CSampleProgram%28automaticParallel%29.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CSampleProgram%28hybridParallel%29.html" title="3.1.8.3.7.4. Hybrid parallel"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="CSampleProgram%28automaticParallel%29.html" title="3.1.8.3.7.2. Automatic parallel"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><span class="section-number">3.1.8. </span>C language</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="tradmode.html" accesskey="U"><span class="section-number">3.1.8.3. </span>trad mode</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.8.3.7.3. </span>OpenMP</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="openmp">
+<h1><span class="section-number">3.1.8.3.7.3. </span>OpenMP<a class="headerlink" href="#openmp" title="Link to this heading">¶</a></h1>
+<p>The following is an example of compiling a single node job (OpenMP) C program.</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">Prepare source program.</div>
+<div class="line">Sample program is prepared as  <code class="file docutils literal notranslate"><span class="pre">/home/system/sample/C/openmp/trad_sample_omp.c</span></code>.</div>
+<div class="line"><a class="reference download internal" download="" href="../../../_downloads/df21be6a139fd339653f1d368f47af8e/trad_sample_omp.c"><code class="xref download docutils literal notranslate"><span class="pre">(Download</span> <span class="pre">sample</span> <span class="pre">code)</span></code></a></div>
+</div>
+</li>
+</ol>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="linenos"> 2</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;math.h&gt;</span>
+<span class="linenos"> 3</span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/time.h&gt;</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="cp">#define N 5888</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="kt">double</span><span class="w"> </span><span class="nf">gettimeofday_sec</span><span class="p">(){</span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">timeval</span><span class="w"> </span><span class="n">tv</span><span class="p">;</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="n">gettimeofday</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tv</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="linenos">10</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">tv</span><span class="p">.</span><span class="n">tv_sec</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">tv</span><span class="p">.</span><span class="n">tv_usec</span><span class="o">*</span><span class="mf">1e-6</span><span class="p">;</span>
+<span class="linenos">11</span><span class="p">}</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(){</span>
+<span class="linenos">14</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+<span class="linenos">15</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">b</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+<span class="linenos">16</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">c</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+<span class="linenos">17</span><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">;</span>
+<span class="linenos">18</span><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">;</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="c1">//</span>
+<span class="linenos">21</span><span class="c1">//  print message</span>
+<span class="linenos">22</span><span class="c1">//</span>
+<span class="linenos">23</span><span class="w">    </span><span class="n">printf</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="linenos">24</span><span class="w">    </span><span class="n">printf</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;%d, %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">);</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="c1">//</span>
+<span class="linenos">27</span><span class="c1">//  initialize matrix</span>
+<span class="linenos">28</span><span class="c1">//</span>
+<span class="linenos">29</span><span class="cp">#pragma omp parallel for shared(a,b,c)</span>
+<span class="linenos">30</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">31</span><span class="w">       </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">32</span><span class="w">          </span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span>
+<span class="linenos">33</span><span class="w">          </span><span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.3</span><span class="p">;</span>
+<span class="linenos">34</span><span class="w">          </span><span class="n">c</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+<span class="linenos">35</span><span class="w">       </span><span class="p">}</span>
+<span class="linenos">36</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">37</span>
+<span class="linenos">38</span><span class="c1">//</span>
+<span class="linenos">39</span><span class="c1">//  do matrix multiply</span>
+<span class="linenos">40</span><span class="c1">//</span>
+<span class="linenos">41</span><span class="w">    </span><span class="n">t1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gettimeofday_sec</span><span class="p">();</span>
+<span class="linenos">42</span><span class="cp">#pragma omp parallel for shared(a,b,c)</span>
+<span class="linenos">43</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">44</span><span class="w">       </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">45</span><span class="w">          </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">46</span><span class="w">             </span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+<span class="linenos">47</span><span class="w">          </span><span class="p">}</span>
+<span class="linenos">48</span><span class="w">       </span><span class="p">}</span>
+<span class="linenos">49</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">50</span><span class="w">    </span><span class="n">t2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gettimeofday_sec</span><span class="p">();</span>
+<span class="linenos">51</span>
+<span class="linenos">52</span><span class="c1">//</span>
+<span class="linenos">53</span><span class="c1">//  print result</span>
+<span class="linenos">54</span><span class="c1">//</span>
+<span class="linenos">55</span><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;c[1][1] = %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]);</span>
+<span class="linenos">56</span><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;time : %f sec.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">t2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t1</span><span class="p">);</span>
+<span class="linenos">57</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">58</span><span class="p">}</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Compile sample program.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-V<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>-o<span class="w"> </span>sample_omp<span class="w"> </span>trad_sample_omp.c
+<span class="go">fccpx: Fujitsu C/C++ Compiler 4.1.0</span>
+<span class="go">simulating gcc version 6.1</span>
+<span class="go">ccpcompx: Fujitsu C/C++ Compiler 4.1.0 (Dec 19 2019 16:14:08)</span>
+<span class="go">Optimization messages</span>
+<span class="go">  jwd6001s-i  &quot;trad_sample_omp.c&quot;, line 31: SIMD conversion is applied to this loop with the loop variable &#39;i&#39;.</span>
+<span class="go">  jwd8663o-i  &quot;trad_sample_omp.c&quot;, line 31: This loop is not software pipelined because the software pipelining does not improve the performance.</span>
+<span class="go">  jwd8202o-i  &quot;trad_sample_omp.c&quot;, line 31: Loop unrolling expanding 2 times is applied to this loop.</span>
+<span class="go">  jwd8101o-i  &quot;trad_sample_omp.c&quot;, line 41: Inline expansion is applied to the user defined function &#39;gettimeofday_sec&#39;.</span>
+<span class="go">  jwd8220o-i  &quot;trad_sample_omp.c&quot;, line 43: Optimizations that may cause side effect are applied.</span>
+<span class="go">  jwd8331o-i  &quot;trad_sample_omp.c&quot;, line 43: This loop is changed to the matmul library function call.</span>
+<span class="go">  jwd8101o-i  &quot;trad_sample_omp.c&quot;, line 50: Inline expansion is applied to the user defined function &#39;gettimeofday_sec&#39;.</span>
+<span class="go">GNU assembler version 2.30 (aarch64-linux-gnu) using BFD version version 2.30-49.el7</span>
+<span class="go">GNU ld version 2.30-49.el7</span>
+<span class="go">  Supported emulations:</span>
+<span class="go">   aarch64linux</span>
+<span class="go">   aarch64elf</span>
+<span class="go">   aarch64elf32</span>
+<span class="go">   aarch64elf32b</span>
+<span class="go">   aarch64elfb</span>
+<span class="go">   armelf</span>
+<span class="go">   armelfb</span>
+<span class="go">   aarch64linuxb</span>
+<span class="go">   aarch64linux32</span>
+<span class="go">   aarch64linux32b</span>
+<span class="go">   armelfb_linux_eabi</span>
+<span class="go">   armelf_linux_eabi</span>
+<span class="go">   i386pep</span>
+<span class="go">   i386pe</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="3">
+<li><div class="line-block">
+<div class="line">Prepare job script.</div>
+<div class="line">Job script sample is prepared as  <code class="file docutils literal notranslate"><span class="pre">/home/system/sample/C/openmp/trad_job_openmp.sh</span></code>.</div>
+<div class="line"><a class="reference download internal" download="" href="../../../_downloads/3ec2c4973511414123b12fc89cad2029/trad_job_openmp.sh"><code class="xref download docutils literal notranslate"><span class="pre">(Download</span> <span class="pre">sample</span> <span class="pre">code)</span></code></a></div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L &quot;node=1&quot;</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=10:00&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -s</span>
+
+<span class="c1"># execute job</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">12</span>
+./sample_omp
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Submit a job with  <strong class="program">pjsub</strong> command.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>trad_job_openmp.sh
+<span class="go"> [INFO] PJM 0000 pjsub Job 117 submitted.</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="5">
+<li><div class="line-block">
+<div class="line">Check execution result.</div>
+<div class="line">The standard output is outpput as  <code class="file docutils literal notranslate"><span class="pre">job</span> <span class="pre">name.job</span> <span class="pre">ID.out</span></code>.</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>cat<span class="w"> </span>trad_job_openmp.sh.117.out
+
+<span class="go">5888, 5888</span>
+<span class="go">c[1][1] = 176.640000</span>
+<span class="go">time : 10.873365 sec.</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CSampleProgram%28automaticParallel%29.html"
+                          title="previous chapter"><span class="section-number">3.1.8.3.7.2. </span>Automatic parallel</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CSampleProgram%28hybridParallel%29.html"
+                          title="next chapter"><span class="section-number">3.1.8.3.7.4. </span>Hybrid parallel</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CSampleProgram%28hybridParallel%29.html" title="3.1.8.3.7.4. Hybrid parallel"
+             >next</a></li>
+        <li class="right" >
+          <a href="CSampleProgram%28automaticParallel%29.html" title="3.1.8.3.7.2. Automatic parallel"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><span class="section-number">3.1.8. </span>C language</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="tradmode.html" ><span class="section-number">3.1.8.3. </span>trad mode</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.8.3.7.3. </span>OpenMP</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

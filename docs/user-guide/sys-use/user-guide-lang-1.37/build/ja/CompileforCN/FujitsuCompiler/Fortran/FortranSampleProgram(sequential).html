@@ -1,0 +1,255 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.7.11.1. 逐次実行 &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=89e52957" />
+    
+    <script src="../../../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="3.1.7.11.2. 自動並列" href="FortranSampleProgram%28automaticParallel%29.html" />
+    <link rel="prev" title="3.1.7. Fortran" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="FortranSampleProgram%28automaticParallel%29.html" title="3.1.7.11.2. 自動並列"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="index.html" title="3.1.7. Fortran"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><span class="section-number">3.1.7. </span>Fortran</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.7.11.1. </span>逐次実行</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">3.1.7.11.1. </span>逐次実行<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>シングルノードジョブ（逐次）のFortranプログラムをコンパイルする例を示します。</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">ソースプログラムを用意します。</div>
+<div class="line">サンプルプログラムを<code class="file docutils literal notranslate"><span class="pre">/home/system/sample/Fortran/single/sample.f</span></code>として用意しています。</div>
+<div class="line"><a class="reference download internal" download="" href="../../../_downloads/9434723847ca2fdfa96bd07226d946bd/sample.f"><code class="xref download docutils literal notranslate"><span class="pre">（サンプルコードのダウンロード）</span></code></a></div>
+</div>
+</li>
+</ol>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="w">      </span><span class="k">parameter</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5888</span><span class="p">)</span>
+<span class="linenos"> 2</span><span class="w">      </span><span class="kt">real</span><span class="o">*</span><span class="mi">8</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">),</span><span class="n">b</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">),</span><span class="n">c</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+<span class="linenos"> 3</span><span class="w">      </span><span class="kt">real</span><span class="o">*</span><span class="mi">8</span><span class="w"> </span><span class="n">t0</span><span class="p">,</span><span class="n">t1</span><span class="p">,</span><span class="nb">second</span>
+<span class="linenos"> 4</span><span class="c">!</span>
+<span class="linenos"> 5</span><span class="c">!  print message</span>
+<span class="linenos"> 6</span><span class="c">!</span>
+<span class="linenos"> 7</span><span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">500</span><span class="p">)</span>
+<span class="linenos"> 8</span><span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">510</span><span class="p">)</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="n">n</span>
+<span class="linenos"> 9</span><span class="w"> </span><span class="mi">500</span><span class="w">  </span><span class="k">format</span><span class="p">(</span><span class="s2">&quot; *** matrix multiply *** &quot;</span><span class="p">)</span>
+<span class="linenos">10</span><span class="w"> </span><span class="mi">510</span><span class="w">  </span><span class="k">format</span><span class="p">(</span><span class="s1">&#39; (NPROW,NPCOL) : (&#39;</span><span class="p">,</span><span class="n">I6</span><span class="p">,</span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="n">I6</span><span class="p">,</span><span class="s1">&#39;)&#39;</span><span class="p">)</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="c">!</span>
+<span class="linenos">13</span><span class="c">!  initialize matrix</span>
+<span class="linenos">14</span><span class="c">!</span>
+<span class="linenos">15</span><span class="w">      </span><span class="k">do </span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span>
+<span class="linenos">16</span><span class="w">        </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span>
+<span class="linenos">17</span><span class="w">          </span><span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="o">=</span><span class="mf">0.1d0</span>
+<span class="linenos">18</span><span class="w">          </span><span class="n">b</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="o">=</span><span class="mf">0.3d0</span>
+<span class="linenos">19</span><span class="w">          </span><span class="n">c</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="o">=</span><span class="mf">0.0d0</span>
+<span class="linenos">20</span><span class="w">        </span><span class="k">end do</span>
+<span class="linenos">21</span><span class="k">      end do</span>
+<span class="linenos">22</span><span class="c">!</span>
+<span class="linenos">23</span><span class="c">!  do matrix multiply</span>
+<span class="linenos">24</span><span class="c">!</span>
+<span class="linenos">25</span><span class="w">      </span><span class="n">t0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">second</span><span class="p">()</span>
+<span class="linenos">26</span><span class="w">      </span><span class="k">do </span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span>
+<span class="linenos">27</span><span class="w">        </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span>
+<span class="linenos">28</span><span class="w">          </span><span class="k">do </span><span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span>
+<span class="linenos">29</span><span class="w">            </span><span class="n">c</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
+<span class="linenos">30</span><span class="w">          </span><span class="k">end do</span>
+<span class="linenos">31</span><span class="k">        end do</span>
+<span class="linenos">32</span><span class="k">      end do</span>
+<span class="linenos">33</span><span class="k">      </span><span class="n">t1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">second</span><span class="p">()</span>
+<span class="linenos">34</span><span class="c">!</span>
+<span class="linenos">35</span><span class="c">!  print result</span>
+<span class="linenos">36</span><span class="c">!</span>
+<span class="linenos">37</span><span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">520</span><span class="p">)</span><span class="w"> </span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">38</span><span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">530</span><span class="p">)</span><span class="w"> </span><span class="n">t1</span><span class="o">-</span><span class="n">t0</span>
+<span class="linenos">39</span><span class="w">  </span><span class="mi">520</span><span class="w"> </span><span class="k">format</span><span class="p">(</span><span class="s2">&quot; c(1,1)=&quot;</span><span class="p">,</span><span class="n">g10</span><span class="p">.</span><span class="mi">4</span><span class="p">)</span>
+<span class="linenos">40</span><span class="w">  </span><span class="mi">530</span><span class="w"> </span><span class="k">format</span><span class="p">(</span><span class="s2">&quot; time :&quot;</span><span class="p">,</span><span class="n">f10</span><span class="p">.</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot; sec&quot;</span><span class="p">)</span>
+<span class="linenos">41</span><span class="w">      </span><span class="k">end</span>
+<span class="linenos">42</span><span class="c">!----</span>
+<span class="linenos">43</span><span class="w">      </span><span class="k">function </span><span class="nb">second</span><span class="p">()</span>
+<span class="linenos">44</span><span class="w">      </span><span class="kt">real</span><span class="o">*</span><span class="mi">8</span><span class="w"> </span><span class="nb">second</span><span class="p">,</span><span class="n">t</span>
+<span class="linenos">45</span><span class="w">      </span><span class="k">call </span><span class="n">gettod</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="linenos">46</span><span class="w">      </span><span class="nb">second</span><span class="o">=</span><span class="n">t</span><span class="o">*</span><span class="mf">1.e-6</span>
+<span class="linenos">47</span><span class="w">      </span><span class="k">end</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>サンプルプログラムをコンパイルします。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-V<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>-Nlst<span class="o">=</span>t<span class="w"> </span>-o<span class="w"> </span>sample<span class="w"> </span>sample.f
+
+<span class="go">frtpx: Fujitsu Fortran Compiler 4.1.0 tcsds-1.2.24</span>
+<span class="go">jwd_fortpx: Fujitsu Fortran Compiler 4.1.0 (Feb 26 2020 07:41:18)</span>
+<span class="go">Fortran diagnostic messages: program name(main)</span>
+<span class="go">  jwd6001s-i  &quot;sample.f&quot;, line 16: SIMD conversion is applied to DO loop with DO variable &#39;i&#39;.</span>
+<span class="go">  jwd8663o-i  &quot;sample.f&quot;, line 16: This loop is not software pipelined because the software pipelining does not improve the performance.</span>
+<span class="go">  jwd8202o-i  &quot;sample.f&quot;, line 16: Loop unrolled 2 times.</span>
+<span class="go">  jwd8220o-i  &quot;sample.f&quot;, line 26: Optimizations is performed in this program unit with possibility of side effects. See informational messages below to determine which such optimizations have been performed.</span>
+<span class="go">  jwd8331o-i  &quot;sample.f&quot;, line 26: This DO loop was changed to the library call(matmul).</span>
+<span class="go">GNU assembler version 2.30 (aarch64-linux-gnu) using BFD version version 2.30-49.el7</span>
+<span class="go">GNU ld version 2.30-49.el7</span>
+<span class="go">  Supported emulations:</span>
+<span class="go">   aarch64linux</span>
+<span class="go">   aarch64elf</span>
+<span class="go">   aarch64elf32</span>
+<span class="go">   aarch64elf32b</span>
+<span class="go">   aarch64elfb</span>
+<span class="go">   armelf</span>
+<span class="go">   armelfb</span>
+<span class="go">   aarch64linuxb</span>
+<span class="go">   aarch64linux32</span>
+<span class="go">   aarch64linux32b</span>
+<span class="go">   armelfb_linux_eabi</span>
+<span class="go">   armelf_linux_eabi</span>
+<span class="go">   i386pep</span>
+<span class="go">   i386pe</span>
+<span class="go">flistpx: Fujitsu Listing Processor 4.1.0 (Jan  9 2020 14:46:36)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-Nlst=t</span></code>を指定することで、自動並列化情報、最適化情報、統計情報が出力されます。ファイル名は、ソースプログラムの拡張子が .lstとして出力されます。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Koptmsg=2</span></code>を指定することで、自動並列、SIMD化、ループアンローリングなどの最適化機能について、メッセージが出力されます。上記例では、jwd6001s-i などが該当します。</p></li>
+<li><p>jwd6001s-i は、DOループがSIMD化されたことを意味します。SIMD化されたDOループとDO変数が表示されます。</p></li>
+</ul>
+</div>
+</div></blockquote>
+<ol class="arabic" start="3">
+<li><div class="line-block">
+<div class="line">ジョブスクリプトを用意します。</div>
+<div class="line">ジョブスクリプトのサンプルは<code class="file docutils literal notranslate"><span class="pre">/home/system/sample/Fortran/single/job_single.sh</span></code>として用意しています。</div>
+<div class="line"><a class="reference download internal" download="" href="../../../_downloads/d78caf9723d9d8084a0d7e67c167f44e/job_single.sh"><code class="xref download docutils literal notranslate"><span class="pre">（サンプルコードのダウンロード）</span></code></a></div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#PJM -L &quot;node=1&quot;</span>
+<span class="c1">#PJM -L &quot;rscgrp=small&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=10:00&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -s</span>
+
+<span class="c1"># execute job</span>
+./sample
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p><strong class="program">pjsub</strong>コマンドでジョブを投入します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>job_single.sh
+
+<span class="go">[INFO] PJM 0000 pjsub Job 111 submitted.</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="5">
+<li><div class="line-block">
+<div class="line">実行結果を確認します</div>
+<div class="line">標準出力は<code class="file docutils literal notranslate"><span class="pre">ジョブ名.ジョブID.out</span></code>として出力されます。</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>cat<span class="w"> </span>job_single.sh.111.out
+<span class="go">*** matrix multiply ***</span>
+<span class="gp gp-VirtualEnv">(NPROW,NPCOL)</span> <span class="go">: (  5888,  5888)</span>
+<span class="go">c(1,1)= 176.6</span>
+<span class="go">time :     92.18 sec</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="index.html"
+                          title="前の章へ"><span class="section-number">3.1.7. </span>Fortran</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="FortranSampleProgram%28automaticParallel%29.html"
+                          title="次の章へ"><span class="section-number">3.1.7.11.2. </span>自動並列</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="FortranSampleProgram%28automaticParallel%29.html" title="3.1.7.11.2. 自動並列"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="index.html" title="3.1.7. Fortran"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><span class="section-number">3.1.7. </span>Fortran</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.7.11.1. </span>逐次実行</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,703 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.9.3. tradモード &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=89e52957" />
+    
+    <script src="../../../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="3.1.9.4. clangモード" href="clangmode.html" />
+    <link rel="prev" title="3.1.9.2. コンパイラのモード" href="modeTradAndClangC%2B%2B.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="clangmode.html" title="3.1.9.4. clangモード"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="modeTradAndClangC%2B%2B.html" title="3.1.9.2. コンパイラのモード"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><span class="section-number">3.1.9. </span>C++</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.9.3. </span>tradモード</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="trad">
+<h1><span class="section-number">3.1.9.3. </span>tradモード<a class="headerlink" href="#trad" title="Link to this heading">¶</a></h1>
+<p>ここでは、tradモードについて説明します。</p>
+<section id="id1">
+<h2><span class="section-number">3.1.9.3.1. </span>コンパイル方法<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">C++プログラムのコンパイル方法を示します。C++コンパイラは<strong class="program">FCCpx</strong>を使用します。</div>
+<div class="line">MPIライブラリを使用する時は、<strong class="program">mpiFCCpx</strong>を利用することにより、MPIのヘッダファイル、ライブラリを意識する必要がありません。</div>
+</div>
+<p>MPIライブラリを使用する場合</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpiFCCpx<span class="w"> </span><span class="o">[</span>コンパイルオプション<span class="o">]</span><span class="w"> </span>ソースファイル名
+</pre></div>
+</div>
+<p>MPIライブラリを使用しない場合</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span><span class="o">[</span>コンパイルオプション<span class="o">]</span><span class="w"> </span>ソースファイル名
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2><span class="section-number">3.1.9.3.2. </span>コンパイルオプション<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>C++コンパイラの主なコンパイルオプションを示します。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>コンパイルオプション</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-c</p></td>
+<td><div class="line-block">
+<div class="line">オブジェクトファイルの作成までを行います。</div>
+<div class="line">翻訳処理の最後であるリンクを行いません。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-o exe_file</p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">exe_file</span></code>に指定した実行可能ファイル名／オブジェクトファイル名を作成します。</div>
+<div class="line">ファイル名を省略した場合は<code class="file docutils literal notranslate"><span class="pre">a.out</span></code>となります。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-O [0|1|2|3]</p></td>
+<td><div class="line-block">
+<div class="line">最適化のレベルを指定します。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-O</span></code>の後の数字を省略した場合は<code class="docutils literal notranslate"><span class="pre">-O2</span></code>になります。</div>
+<div class="line">デフォルトは<code class="docutils literal notranslate"><span class="pre">-O2</span></code>です。</div>
+<div class="line"><a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/operation/20211208_01">C/C++コンパイラの最適化レベル指定オプションのデフォルト値変更</a></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Kfast</p></td>
+<td><p>高速化のための最適化オプションを誘導します。</p></td>
+</tr>
+<tr class="row-even"><td><p>-Ksimd[=1|2|auto]</p></td>
+<td><div class="line-block">
+<div class="line">SIMD拡張命令を利用したオブジェクトを生成します。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Ksimd=1</span></code></div>
+<div class="line-block">
+<div class="line">SIMD拡張命令を利用したオブジェクトを生成します。</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Ksimd=2</span></code></div>
+<div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Ksimd=1</span></code>オプションに加え、if文などを含むループに対して、SIMD拡張命令を利用したオブジェクトを生成します。</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Ksimd=auto</span></code></div>
+<div class="line-block">
+<div class="line">ループをSIMD化するかどうかをコンパイラが自動的に判定することを指示します。if文を含むループのSIMD化が促進されます。</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Ksimd</span></code></div>
+<div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Ksimd</span></code>の後の数字を省略した場合は<code class="docutils literal notranslate"><span class="pre">-Ksimd=auto</span></code>になります。</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-O2</span></code>オプション以上が有効な場合、省略時は、<code class="docutils literal notranslate"><span class="pre">-Ksimd</span></code>オプションが適用されます。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Ksimd</span></code>オプションが有効な場合、<code class="docutils literal notranslate"><span class="pre">-Kloop_part_simd</span></code>オプションも有効になります。</div>
+<div class="line">本オプションは、<code class="docutils literal notranslate"><span class="pre">-O2</span></code>オプション以上が有効な場合に意味があります。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Kparallel</p></td>
+<td><div class="line-block">
+<div class="line">自動並列を行います。デフォルトは<code class="docutils literal notranslate"><span class="pre">-Knoparallel</span></code>です。</div>
+<div class="line">本オプションは、<code class="docutils literal notranslate"><span class="pre">-O0</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-O1</span></code>オプションが有効な場合、無効となります。</div>
+<div class="line">ファイル名の並びに<code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code>オプションを指定して翻訳されたオブジェクトプログラムが含まれている場合、<code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code>オプションを指定する必要があります。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-Kopenmp</p></td>
+<td><div class="line-block">
+<div class="line">OpenMP C 仕様のディレクティブを有効にします。サポートしている仕様はOpenMP 3.1/OpenMP 4.5(一部)です。</div>
+<div class="line">デフォルトは<code class="docutils literal notranslate"><span class="pre">-Knoopenmp</span></code>です。</div>
+<div class="line">ファイル名の並びに<code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code>オプションを指定して翻訳されたオブジェクトプログラムが含まれている場合、<code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code>オプションを指定する必要があります。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Kocl</p></td>
+<td><div class="line-block">
+<div class="line">最適化制御行を有効にします。</div>
+<div class="line">デフォルトは<code class="docutils literal notranslate"><span class="pre">-Knoocl</span></code>です。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-I directory</p></td>
+<td><p>INCLUDEファイルを検索するディレクトリを指定します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Klargepage</p></td>
+<td><p>ラージページ機能を使用する実行可能プログラムを作成するかどうかを指示します。本オプションはプログラムのリンク時に指定する必要があります。デフォルトは、<code class="docutils literal notranslate"><span class="pre">-Klargepage</span></code>です。ラージページ機能を使用しない場合は、<code class="docutils literal notranslate"><span class="pre">-Knolargepage</span></code>オプションを使用します。</p></td>
+</tr>
+<tr class="row-even"><td><p>-Koptmsg[=1|2]</p></td>
+<td><div class="line-block">
+<div class="line">最適化状況をメッセージ出力します。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Koptmsg=1</span></code></div>
+<div class="line-block">
+<div class="line">実行結果に副作用を生じる可能性がある最適化をしたことをメッセージ出力します。</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Koptmsg=2</span></code></div>
+<div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">Koptmsg=1</span></code>に加えて、自動並列化、SIMD化、ループアンローリングなどの最適化機能が動作したことをメッセージ出力します。</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Koptmsg</span></code></div>
+<div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Koptmsg</span></code>の後の数字を省略した場合は<code class="docutils literal notranslate"><span class="pre">-Koptmsg=1</span></code>になります。</div>
+</div>
+<div class="line">デフォルトは<code class="docutils literal notranslate"><span class="pre">-Knooptmsg</span></code>です。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-std=[level]</p></td>
+<td><div class="line-block">
+<div class="line">コンパイラ(プリプロセッサを含む)が解釈する言語仕様のレベルを指定します。</div>
+<div class="line">levelには、、c++98、c++03、c++11、c++14、c++17、gnu++98、gnu++03、gnu++11、gnu++14、gnu++17のいずれかを指定します。</div>
+<div class="line">省略時は、<code class="docutils literal notranslate"><span class="pre">-std=gnu++14</span></code>オプションが適用されます。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-stdlib=[name]</p></td>
+<td><div class="line-block">
+<div class="line">標準テンプレートライブラリ(STL)の種別を指定します。</div>
+<div class="line"><em>name</em>には、<code class="docutils literal notranslate"><span class="pre">libc++</span></code>、または、<code class="docutils literal notranslate"><span class="pre">libstdc++</span></code>を指定します。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-stdlib=libc++</span></code></div>
+<div class="line-block">
+<div class="line">libc++ バージョン7.0を使用します。</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-stdlib=libstdc++</span></code></div>
+<div class="line-block">
+<div class="line">libstdc++を使用します。</div>
+</div>
+<div class="line">省略時は、<code class="docutils literal notranslate"><span class="pre">-stdlib=libstdc++</span></code>オプションが適用されます。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--alternative_tokens</span></code></p></td>
+<td><div class="line-block">
+<div class="line">2文字表記（&quot;&lt;%&quot;のような表記）および演算子キーワード（&quot;not&quot;のような表記）を認識するか否かを指示します。</div>
+<div class="line">デフォルトは<code class="docutils literal notranslate"><span class="pre">--no_alternative_tokens</span></code>です。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-Klargepage</p></td>
+<td><p>ラージページ機能を使用する実行可能プログラムを作成するかどうかを指示します。本オプションはプログラムのリンク時に指定する必要があります。デフォルトは、<code class="docutils literal notranslate"><span class="pre">-Klargepage</span></code>です。ラージページ機能を使用しない場合は、<code class="docutils literal notranslate"><span class="pre">-Knolargepage</span></code>オプションを使用します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Nlibomp</p></td>
+<td><p>並列処理にLLVM OpenMPライブラリを使用します。本オプションはリンク時に指定する必要があります。デフォルトは<code class="docutils literal notranslate"><span class="pre">-Nlibomp</span></code>です。並列処理に富士通OpenMPライブラリを使用する場合は、<code class="docutils literal notranslate"><span class="pre">-Nfjomplib</span></code>を指定します。</p></td>
+</tr>
+<tr class="row-even"><td><p>-NRtrap</p></td>
+<td><div class="line-block">
+<div class="line">実行時の割込み事象を検出するか否かを指示します。</div>
+<div class="line">デフォルトは<code class="docutils literal notranslate"><span class="pre">-NRnotrap</span></code>です。</div>
+<div class="line">本オプションは、プログラムの翻訳時およびリンク時に指定する必要があります。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Nsrc</p></td>
+<td><p>ソースリストを出力します。</p></td>
+</tr>
+<tr class="row-even"><td><p>-Nsta</p></td>
+<td><p>統計情報を出力します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>-V</p></td>
+<td><p>コンパイラのバージョン情報を標準エラーに出力します。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>C++コンパイラのコンパイルオプションについては、C++使用手引書「2.2 翻訳時オプション」を参照してください。</p>
+</div>
+</section>
+<section id="id3">
+<h2><span class="section-number">3.1.9.3.3. </span>コンパイルの推奨オプション<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>性能重視:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-Kfast,openmp[,parallel]
+
+スレッド並列によるコア活用、SIMD化によるSVE活用、Software Pipeliningによる命令レベルの並列性向上、
+最適化による演算順序変更、逆数近似演算の利用など、A64FXの性能をフルに引き出すためのオプション指定です。
+</pre></div>
+</div>
+<p>精度重視:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-Kfast,openmp[,parallel],fp_precision
+
+-O0と同じ精度にしたいが、最適化はある程度動かしたいという場合に利用します。
+性能重視の推奨オプションに、精度に影響のあるすべての最適化を抑止する-Kfp_precisionオプションを
+付加するオプション指定です。
+
+性能に大きく影響する複数の最適化を抑止することになります。
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-Kfast</span></code>オプションは「<code class="docutils literal notranslate"><span class="pre">-O3</span> <span class="pre">-Keval,fast_matmul,fp_contract,fp_relaxed,fz,ilfunc,mfunc,omitfp,simd_packed_promotion</span></code>」と等価です。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code>オプションはOpenMP仕様の指示文を有効にします。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code>オプションは、<code class="docutils literal notranslate"><span class="pre">-O2</span></code>、<code class="docutils literal notranslate"><span class="pre">-Kregion_extension</span></code>、<code class="docutils literal notranslate"><span class="pre">-Kloop_part_parallel</span></code>、<code class="docutils literal notranslate"><span class="pre">Kloop_perfect_nest</span></code>、<code class="docutils literal notranslate"><span class="pre">-mt</span></code>オプションを誘導します。ただし、<code class="docutils literal notranslate"><span class="pre">-O3</span></code>オプションを同時に指定した場合（<code class="docutils literal notranslate"><span class="pre">-Kfast</span></code>と同時に指定した場合など）は、<code class="docutils literal notranslate"><span class="pre">-O3</span></code>が適用されます。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Kfp_precision</span></code>オプションは「<code class="docutils literal notranslate"><span class="pre">-Knoeval,nofast_matmul,nofp_contract,nofp_relaxed,nofz,noilfunc,nomfunc,parallel_fp_precision</span></code>」を指定した時と等価です。</p></li>
+</ul>
+<blockquote>
+<div><div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>推奨オプション以外の最適化機能は、プログラム・データの特性によって効果がある場合とそうでない場合があり、実際に試してみる必要があります。</p>
+</div>
+</div></blockquote>
+<p>以下に、オプションの詳細を示します。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-Kfast</span></code>と等価になるオプション一覧</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p>コンパイルオプション</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td colspan="2"><p>-O3</p></td>
+<td><div class="line-block">
+<div class="line">最適化したオプジェクトを生成します。</div>
+<div class="line">SIMD化、アンローリングなどの最適化を行います。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><p>-Keval <sup>*</sup></p></td>
+<td></td>
+<td><div class="line-block">
+<div class="line">演算の評価方法を変更する最適化を適用します。</div>
+<div class="line">本オプションが有効な場合、<code class="docutils literal notranslate"><span class="pre">-Ksimd_reduction_product</span></code>も有効になります。</div>
+<div class="line">本オプションと<code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code>が有効な場合、<code class="docutils literal notranslate"><span class="pre">-Kfsimple</span></code>、<code class="docutils literal notranslate"><span class="pre">-Kreduction</span></code> も有効になります。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-Kfsimple <sup>*</sup></p></td>
+<td><p>オブジェクトプログラムに対して浮動小数点演算の単純化を行います。</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kreduction <sup>*</sup></p></td>
+<td><p>リダクションの最適化を行います。</p></td>
+</tr>
+<tr class="row-even"><td><p>-Ksimd_reduction_product <sup>*</sup></p></td>
+<td><p>乗算のリダクション演算に対して、SIMD化を行います。</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>-Kfast_matmul <sup>*</sup></p></td>
+<td><p>行列積のループを高速なライブラリ呼び出しに変換します。</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>-Kfp_contract <sup>*</sup></p></td>
+<td><p>Floating-Point Multiply-Add/Subtract命令を利用した最適化を行います。</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>-Kfp_relaxed <sup>*</sup></p></td>
+<td><p>単精度または倍精度の浮動小数点除算またはSQRT関数について、
+逆数近似演算命令とFloating-Point Multiply-Add/Subtract演算命令を利用します。</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>-Kfz</p></td>
+<td><p>flush-to-zeroモードを使用します。</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>-Kilfunc=procedure <sup>*</sup></p></td>
+<td><p>単精度および倍精度実数型の組込み関数をインライン展開します。</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>-Kmfunc <sup>*</sup></p></td>
+<td><p>マルチ演算関数を使用する最適化を行います。</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>-Komitfp</p></td>
+<td><div class="line-block">
+<div class="line">手続呼出しにおけるフレームポインタレジスタを保証しない最適化を行うことを指示します。</div>
+<div class="line">本オプションが有効な場合、トレースバック情報が保証されません。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>-Ksimd_packed_promotion</p></td>
+<td><p>単精度浮動小数点型ならびに4バイト整数型の配列要素のインデックス計算が
+4バイトの範囲を超えないと仮定して、packed-SIMD化を促進します。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p><sup>*</sup>：最適化は演算結果に影響を与える場合があります。詳細は、マニュアル「C++言語使用手引書」の「第3章 最適化機能」の章を参照してください。</p>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>自動並列を行う <code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code>から誘導されるオプション一覧</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>誘導されるオプション</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-O2</p></td>
+<td><p>最適化レベルを指示します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kregion_extension</p></td>
+<td><p>パラレルリージョンを拡大します。</p></td>
+</tr>
+<tr class="row-even"><td><p>-Kloop_part_parallel</p></td>
+<td><p>ループを分割して部分的に自動並列化します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kloop_perfect_nest</p></td>
+<td><p>不完全多重ループを分割して完全多重ループにするか否かを指示します。</p></td>
+</tr>
+<tr class="row-even"><td><p>-mt</p></td>
+<td><p>マルチスレッドセーフオブジェクトを生成します。</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="id4">
+<h2><span class="section-number">3.1.9.3.4. </span>環境変数（オプション指定）<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>C++コンパイラ（<strong class="program">FCCpx</strong>）が利用する環境変数を示します。</p>
+<ol class="arabic">
+<li><p>FCCpx_ENV</p>
+<p>trad/clangモード共通の環境変数 FCCpx_ENV にコンパイルオプションを設定することができます。
+FCCpx_ENV に定義されたコンパイルオプションは、自動でコンパイラに渡されます。
+環境変数やシステムで定義されたコンパイラオプションには、次の優先順位があります。</p>
+<p>[優先順位]</p>
+<ol class="arabic simple">
+<li><p>翻訳コマンドのオペランド</p></li>
+<li><p>翻訳時オプション設定用の環境変数（モード固有：FCCpx_trad_ENV、FCC_trad_ENV）</p></li>
+<li><p>翻訳時オプション設定用の環境変数（モード共通：FCCpx_ENV、FCC_ENV）</p></li>
+<li><p>翻訳時プロフィルファイル（モード固有：<code class="file docutils literal notranslate"><span class="pre">/etc$</span><em><span class="pre">FJSVXTCLANGA</span></em><span class="pre">/FCCpx_trad_PROF</span></code>）</p></li>
+<li><p>翻訳時プロフィルファイル（モード共通：<code class="file docutils literal notranslate"><span class="pre">/etc$</span><em><span class="pre">FJSVXTCLANGA</span></em><span class="pre">/FCCpx_PROF</span></code>）</p></li>
+<li><p>省略値</p></li>
+</ol>
+<p>推奨オプションを環境変数 FCCpx_ENV に設定する例を示します。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">FCCpx_ENV</span><span class="o">=</span>-Kfast,parallel
+</pre></div>
+</div>
+<p>有効になったコンパイルオプションは、<code class="docutils literal notranslate"><span class="pre">-Nsta</span></code>オプションを指定し、標準出力で確認することができます。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Nsta<span class="w"> </span>sample.cc
+<span class="go">Fujitsu C/C++ Version 4.1.0   Tue Jan 21 15:10:28 2020</span>
+<span class="go">Statistics information</span>
+<span class="go">  Option information</span>
+<span class="go">    Environment variable : （省略）</span>
+<span class="go">    Command line options : -Nsta</span>
+<span class="go">    Effective options    : -g0 -Qy -std=gnu++14 -O0 -Kcmodel=small -Knofenv_access -Khpctag</span>
+<span class="go">                           -Klargepage -Knolib -Klooptype=f -Knoopenmp -Knoopenmp_simd</span>
+<span class="go">                           -Knooptlib_string -Knopc_relative_literal_loads -Knoparallel</span>
+<span class="go">                           -Ksimd_reg_size=512 -KA64FX -KARMV8_3_A -KSVE</span>
+<span class="go">                           -Ncancel_overtime_compilation -Nnocoverage -Nexceptions -Nnofjcex</span>
+<span class="go">                           -Nfjprof -Nnohook_func -Nnohook_time -Nline -Nquickdbg=noheapchk</span>
+<span class="go">                           -Nquickdbg=nosubchk -NRnotrap -Nnoreordered_variable_stack</span>
+<span class="go">                           -Nrt_notune -Nsetvalue=noheap -Nsetvalue=nostack</span>
+<span class="go">                           -Nsetvalue=noscalar -Nsetvalue=noarray -Nsetvalue=nostruct -Nsta</span>
+</pre></div>
+</div>
+</li>
+<li><p>TMPDIR</p>
+<p>環境変数<span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>を用いて、コンパイラが使用するテンポラリディレクトリを変更することができます。
+<code class="docutils literal notranslate"><span class="pre">/etc/profile</span></code>で<span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>にはホームディレクトリを設定しています。</p>
+<p>テンポラリディレクトリを変更する場合は、<code class="file docutils literal notranslate"><span class="pre">/tmp</span></code>を使用しないようにしてください。
+<span class="target" id="index-2"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>には<code class="file docutils literal notranslate"><span class="pre">/home/</span></code>、または、<code class="file docutils literal notranslate"><span class="pre">/vol0n0m/data/</span></code>の書き込み可能なディレクトリを指定してください。</p>
+</li>
+</ol>
+</section>
+<section id="c">
+<h2><span class="section-number">3.1.9.3.5. </span>並列処理用C++ライブラリ<a class="headerlink" href="#c" title="Link to this heading">¶</a></h2>
+<p>スーパーコンピュータ「富岳」では、以下のライブラリを提供します。</p>
+<ul class="simple">
+<li><p>標準テンプレートライブラリ(STL)として<code class="docutils literal notranslate"><span class="pre">libc++</span></code></p></li>
+<li><p>並列処理用に、以下2つのライブラリ</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ライブラリ名</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LLVM OpenMPライブラリ</p></td>
+<td><ul class="simple">
+<li><p>オープンソースソフトウェアであるLLVM OpenMP Runtime Libraryをベースにした並列化機能用のライブラリです。</p></li>
+<li><p>サポートしている仕様は、OpenMP 4.5/OpenMP 5.0(一部)です。</p></li>
+<li><p>tradモード、および、clangモードで利用できます。</p></li>
+<li><p>tradモードはOpenMP 3.1/OpenMP 4.5(一部)を利用できます。</p></li>
+<li><p>LLVM OpenMPライブラリの仕様については、C++言語使用手引書「第4章 並列化機能」をお読みください。</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>富士通OpenMPライブラリ</p></td>
+<td><ul class="simple">
+<li><p>スーパーコンピュータ「京」、および、PRIMEHPC FX100以前のシステム向け富士通OpenMPライブラリをベースとした並列化機能用のライブラリです。</p></li>
+<li><p>従来の富士通OpenMPライブラリとの互換を重視する場合に適しています。</p></li>
+<li><p>サポートしている仕様は、OpenMP 3.1/ OpenMP 4.5(一部)です。</p></li>
+<li><p>tradモードでのみ利用できます。</p></li>
+<li><p>富士通OpenMPライブラリの仕様については、C++言語使用手引書「付録J 富士通OpenMPライブラリ」をお読みください。</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li><p>並列処理用ライブラリを指定するには、以下のオプションをリンク時に指定する必要があります。</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 18.2%" />
+<col style="width: 81.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>オプション</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-Nlibomp</p></td>
+<td><p>OpenMPライブラリとして、LLVM OpenMPライブラリを使用することを指示します。</p>
+<p>省略時は、<code class="docutils literal notranslate"><span class="pre">-Nlibomp</span></code>オプションが適用されます。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Nfjomplib</p></td>
+<td><p>OpenMPライブラリとして、富士通OpenMPライブラリを使用することを指示します。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p><code class="docutils literal notranslate"><span class="pre">-Nclang</span></code>オプションが有効な場合、<code class="docutils literal notranslate"><span class="pre">-Nfjomplib</span></code>オプションは無効になり、<code class="docutils literal notranslate"><span class="pre">-Nlibomp</span></code>オプションが有効になります。</p>
+</div>
+</div></blockquote>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>OpenMP 4.0以降で追加された次の環境変数はLLVM OpenMPライブラリで利用可能です。
+一方、富士通OpenMPライブラリはこれらの環境変数に未対応です。富士通OpenMPライブラリ使用時はこれらの環境変数は無視されます。</p>
+<ul class="simple">
+<li><p>OMP_CANCELLATION</p></li>
+<li><p>OMP_DISPLAY_ENV</p></li>
+<li><p>OMP_DEFAULT_DEVICE</p></li>
+<li><p>OMP_MAX_TASK_PRIORITY</p></li>
+</ul>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>並列処理用ライブラリと結合可能なC／C++オブジェクトファイルの組合せを下表に示します。</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ライブラリ名</p></th>
+<th class="head"><p>C／C++オブジェクトファイル tradモード</p></th>
+<th class="head"><p>C／C++オブジェクトファイル clangモード</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LLVM OpenMPライブラリ</p></td>
+<td><p>結合可</p></td>
+<td><p>結合可</p></td>
+</tr>
+<tr class="row-odd"><td><p>富士通OpenMPライブラリ</p></td>
+<td><p>結合可</p></td>
+<td><p>結合不可</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="id5">
+<h2><span class="section-number">3.1.9.3.6. </span>コンパイル例<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>C++プログラムのコンパイル例を示します。</p>
+<p>マルチノードジョブ（ハイブリッド並列）</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpiFCCpx<span class="w"> </span>-Kfast,parallel,openmp<span class="w"> </span>sample.cc
+</pre></div>
+</div>
+<p>シングルノードジョブ（逐次）</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast<span class="w"> </span>sample.cc
+</pre></div>
+</div>
+<p>シングルノードジョブ（自動並列）</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast,parallel<span class="w"> </span>sample.cc
+</pre></div>
+</div>
+<p>シングルノードジョブ（OpenMP）</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast,openmp<span class="w"> </span>sample.cc
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h2><span class="section-number">3.1.9.3.7. </span>組込みデバッグ機能<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<p>組込みデバッグ機能は、コンパイル時にデバッグ用のオプションをつけてプログラムをコンパイルし、実行モジュールを実行することで各種検査を行うものです。
+組込みデバッグ機能を利用する場合は最適化のレベルが<code class="docutils literal notranslate"><span class="pre">-O0</span></code>に落ちる場合があるため、実行時間が通常より長くなります。</p>
+<ul class="simple">
+<li><p>組込みデバッグ機能について</p></li>
+</ul>
+<blockquote>
+<div><p>実行環境を変えると異常終了する場合があります。このような場合、原因として次のようなものが考えられます。</p>
+<ol class="arabic simple">
+<li><p>変数に初期値を設定せずに引用している</p></li>
+<li><p>配列の添字が配列サイズを超えている</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>[実行環境を変える]とは次のような場合です。</p>
+<ul class="simple">
+<li><p>プロファイラ等のツールを使用した</p></li>
+<li><p>ラージページのサイズを変更した</p></li>
+</ul>
+<p>この場合、実行モジュールのメモリ上の配置状況が変わるので、異常終了する場合があります。</p>
+</div>
+</div></blockquote>
+<p>これらを検査する組込みデバッグ機能について、ご紹介します。</p>
+<ul class="simple">
+<li><p>C/C++利用の場合で、次の検査を組込みデバッグ機能で行います。</p></li>
+</ul>
+<blockquote>
+<div><p>次の検査を、組込みデバッグ機能で行います。</p>
+<ul class="simple">
+<li><p>配列範囲の検査(<code class="docutils literal notranslate"><span class="pre">-Nquickdbg=subchk</span></code>オプション)</p></li>
+</ul>
+<p>配列の添字が配列の範囲内にない場合、<code class="docutils literal notranslate"><span class="pre">jwe1601i-w</span></code>のメッセージが出力されます。</p>
+<p>詳細は、マニュアル「C++言語使用手引書」の「第8章 プログラムのデバッグ」を参照してください。</p>
+<p><code class="docutils literal notranslate"><span class="pre">-Nquickdbg=subchk</span></code>のオプションに該当するように作成したサンプルプログラムで表示されるメッセージの例を示します。（サンプルプログラムはメッセージを出すために分かりやすい形にしています）</p>
+<ol class="arabic simple">
+<li><p>サンプルプログラム</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w"> </span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdlib&gt;</span>
+<span class="linenos">2</span><span class="w"> </span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="linenos">3</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">4</span><span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+<span class="linenos">5</span><span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="linenos">6</span><span class="w">   </span><span class="n">data</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w">       </span><span class="cm">/* ←jwe160i-wを検出 */</span>
+<span class="linenos">7</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>コンパイル</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast<span class="w"> </span>-Nquickdbg<span class="o">=</span>subchk<span class="w"> </span>-V<span class="w"> </span>-o<span class="w"> </span>sample<span class="w"> </span>sample.c
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>実行例</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">jwe1601i-w The outside of the range the array(data) was declared is used (offset : 20, declared size : 12).</span>
+<span class="go"> error occurs at main     line 6 loc 0000000000102750 offset 0000000000000070</span>
+<span class="go"> main         at loc 00000000001026e0 called from o.s.</span>
+<span class="go">taken to (standard) corrective action, execution continuing.</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3.1.9.3. tradモード</a><ul>
+<li><a class="reference internal" href="#id1">3.1.9.3.1. コンパイル方法</a></li>
+<li><a class="reference internal" href="#id2">3.1.9.3.2. コンパイルオプション</a></li>
+<li><a class="reference internal" href="#id3">3.1.9.3.3. コンパイルの推奨オプション</a></li>
+<li><a class="reference internal" href="#id4">3.1.9.3.4. 環境変数（オプション指定）</a></li>
+<li><a class="reference internal" href="#c">3.1.9.3.5. 並列処理用C++ライブラリ</a></li>
+<li><a class="reference internal" href="#id5">3.1.9.3.6. コンパイル例</a></li>
+<li><a class="reference internal" href="#id6">3.1.9.3.7. 組込みデバッグ機能</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="modeTradAndClangC%2B%2B.html"
+                          title="前の章へ"><span class="section-number">3.1.9.2. </span>コンパイラのモード</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="clangmode.html"
+                          title="次の章へ"><span class="section-number">3.1.9.4. </span>clangモード</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="clangmode.html" title="3.1.9.4. clangモード"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="modeTradAndClangC%2B%2B.html" title="3.1.9.2. コンパイラのモード"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><span class="section-number">3.1.9. </span>C++</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.9.3. </span>tradモード</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

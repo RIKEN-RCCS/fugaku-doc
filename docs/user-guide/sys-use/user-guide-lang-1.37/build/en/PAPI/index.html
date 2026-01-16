@@ -1,0 +1,243 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6. Use of PAPI &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="7. Script language" href="../ScriptingLanguage/index.html" />
+    <link rel="prev" title="5.5. High-speed quadruple precision basic arithmetic library" href="../Library/FastBasicOperationsLibraryForQuadruplePrecision.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../ScriptingLanguage/index.html" title="7. Script language"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../Library/FastBasicOperationsLibraryForQuadruplePrecision.html" title="5.5. High-speed quadruple precision basic arithmetic library"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6. </span>Use of PAPI</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="use-of-papi">
+<h1><span class="section-number">6. </span>Use of PAPI<a class="headerlink" href="#use-of-papi" title="Link to this heading">¶</a></h1>
+<p>Here describes about the use of PAPI.</p>
+<section id="overview">
+<h2><span class="section-number">6.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This section shows how to compile and link the program and notes, using PAPI(Performance Application Programming Interface), on Supercomputer Fugaku.</p>
+<p>Please refer to <a class="reference external" href="https://icl.utk.edu/papi/">https://icl.utk.edu/papi/</a> for more information about PAPI.</p>
+</section>
+<section id="compiling-link">
+<h2><span class="section-number">6.2. </span>Compiling link<a class="headerlink" href="#compiling-link" title="Link to this heading">¶</a></h2>
+<p>Indicates options that must be specified when compiling and linking.</p>
+<ol class="arabic simple">
+<li><p>Options required during compilation</p></li>
+</ol>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 22.2%" />
+<col style="width: 77.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Language</p></th>
+<th class="head"><p>Option</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Fortran</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-I/opt/FJSVxos/devkit/aarch64/rfs/usr/include</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>C/C++</p></td>
+<td><p>-</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Options required during linking</p></li>
+</ol>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 25.0%" />
+<col style="width: 58.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Language</p></th>
+<th class="head"><p>Compiler mode</p></th>
+<th class="head"><p>Option</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Fortran</p></td>
+<td><p>-</p></td>
+<td><p>-Nnofjprof -lpapi</p></td>
+</tr>
+<tr class="row-odd"><td><p>C/C++</p></td>
+<td><p>trad mode</p></td>
+<td><p>-Nnofjprof -lpapi</p></td>
+</tr>
+<tr class="row-even"><td><p>C/C++</p></td>
+<td><p>clang mode</p></td>
+<td><p>-ffj-no-fjprof -lpapi</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>When creating the executable file (a.out), specify  <code class="docutils literal notranslate"><span class="pre">-Nnofjprof</span></code> option (If clang mode,  <code class="docutils literal notranslate"><span class="pre">-ffj-no-fjprof</span></code>) and do not link the Fujitsu tool library.</p>
+</div>
+</div></blockquote>
+<p>The following are examples of compilation in each language.</p>
+<ol class="arabic simple">
+<li><p>Forttran compiling example</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-o<span class="w"> </span>papi_sample_f<span class="w"> </span>-Kfast,parallel,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>-I/opt/FJSVxos/devkit/aarch64/rfs/usr/include<span class="w"> </span>-Nlst<span class="o">=</span>t<span class="w"> </span>-Nnofjprof<span class="w"> </span>-lpapi<span class="w">  </span>papi_sample.f95
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>C compiling example (trad mode)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-o<span class="w"> </span>papi_sample_c<span class="w"> </span>-Kfast,parallel,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>-Nlst<span class="o">=</span>t<span class="w"> </span>-Nnofjprof<span class="w"> </span>-lpapi<span class="w"> </span>papi_sample_c.c
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>C++ compiling example (clang mode)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-o<span class="w"> </span>papi_sample_cc<span class="w"> </span>-Nclang<span class="w"> </span>-Ofast<span class="w"> </span>-mllvm<span class="w"> </span>-polly<span class="w"> </span>-mllvm<span class="w"> </span>-polly-parallel<span class="w"> </span>-Rpass<span class="o">=</span>.*<span class="w"> </span>-ffj-lst<span class="o">=</span>t<span class="w"> </span>-ffj-no-fjprof<span class="w"> </span>-lpapi<span class="w"> </span>papi_sample_cc.cc
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="how-to-execute">
+<h2><span class="section-number">6.3. </span>How to execute<a class="headerlink" href="#how-to-execute" title="Link to this heading">¶</a></h2>
+<p>This indicates the program execution example of using PAPI.</p>
+<p>[Execution example]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash -x</span>
+<span class="c1">#</span>
+<span class="c1">#PJM -L &quot;node=12&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=00:10:00&quot;</span>
+<span class="c1">#PJM --mpi &quot;proc=16&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">12</span>
+
+xospastop<span class="w">      </span><span class="c1">#Required</span>
+mpiexec<span class="w"> </span>./papi.out
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>For the program used PAPI, please proceed once executed  <strong class="program">xospastop</strong> command. if not proceeded  <strong class="program">xospastop</strong> command, an error may occur during PAPI processing.</p></li>
+<li><p>Also the job proceeded  <strong class="program">xospastop</strong> command, stops collection of PMU counter (Performance Monitoring Unit Counter). There is no option or message output, and the exit status is always 0.</p></li>
+</ul>
+</div>
+</section>
+<section id="notes">
+<h2><span class="section-number">6.4. </span>Notes<a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<p>Please note the following points about programs using PAPI.</p>
+<ul class="simple">
+<li><p>PAPI is not supported</p></li>
+<li><p>If you do not run xospastop, you will not get the correct results.</p></li>
+</ul>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">6. Use of PAPI</a><ul>
+<li><a class="reference internal" href="#overview">6.1. Overview</a></li>
+<li><a class="reference internal" href="#compiling-link">6.2. Compiling link</a></li>
+<li><a class="reference internal" href="#how-to-execute">6.3. How to execute</a></li>
+<li><a class="reference internal" href="#notes">6.4. Notes</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../Library/FastBasicOperationsLibraryForQuadruplePrecision.html"
+                          title="previous chapter"><span class="section-number">5.5. </span>High-speed quadruple precision basic arithmetic library</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../ScriptingLanguage/index.html"
+                          title="next chapter"><span class="section-number">7. </span>Script language</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../ScriptingLanguage/index.html" title="7. Script language"
+             >next</a></li>
+        <li class="right" >
+          <a href="../Library/FastBasicOperationsLibraryForQuadruplePrecision.html" title="5.5. High-speed quadruple precision basic arithmetic library"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6. </span>Use of PAPI</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

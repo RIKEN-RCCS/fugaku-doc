@@ -1,0 +1,705 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.9.3. trad mode &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f85107c5" />
+    
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="3.1.9.4. clang mode" href="clangmode.html" />
+    <link rel="prev" title="3.1.9.2. Compiler mode" href="modeTradAndClangC%2B%2B.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="clangmode.html" title="3.1.9.4. clang mode"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="modeTradAndClangC%2B%2B.html" title="3.1.9.2. Compiler mode"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><span class="section-number">3.1.9. </span>C++</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.9.3. </span>trad mode</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="trad-mode">
+<h1><span class="section-number">3.1.9.3. </span>trad mode<a class="headerlink" href="#trad-mode" title="Link to this heading">¶</a></h1>
+<p>Here we explain about trad mode.</p>
+<section id="how-to-compile">
+<h2><span class="section-number">3.1.9.3.1. </span>How to compile<a class="headerlink" href="#how-to-compile" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">This shows how to compile C++ program. C++ compiler uses  <strong class="program">FCCpx</strong>.</div>
+<div class="line">If use MPI library, by using  <strong class="program">mpiFCCpx</strong>, you don’t need to consider about MPI header file and library.</div>
+</div>
+<p>If using MPI library</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpiFCCpx<span class="w"> </span><span class="o">[</span>compile<span class="w"> </span>option<span class="o">]</span><span class="w"> </span><span class="nb">source</span><span class="w"> </span>file<span class="w"> </span>name
+</pre></div>
+</div>
+<p>If not using MPI library</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span><span class="o">[</span>compile<span class="w"> </span>option<span class="o">]</span><span class="w"> </span><span class="nb">source</span><span class="w"> </span>file<span class="w"> </span>name
+</pre></div>
+</div>
+</section>
+<section id="compilation-option">
+<h2><span class="section-number">3.1.9.3.2. </span>Compilation option<a class="headerlink" href="#compilation-option" title="Link to this heading">¶</a></h2>
+<p>The main compile options of the C ++ compiler are shown below.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Compile option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-c</p></td>
+<td><p>Proceeds until the object file creation. It does not proceed linking that is the last of translation.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o exe_file</p></td>
+<td><div class="line-block">
+<div class="line">Change executable file name / object file name to  <code class="docutils literal notranslate"><span class="pre">exe_file</span></code>.</div>
+<div class="line">If omitted executable file name, it will be  <code class="file docutils literal notranslate"><span class="pre">a.out</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-O [0|1|2|3]</p></td>
+<td><div class="line-block">
+<div class="line">Specify the level of optimization.</div>
+<div class="line">If omitted the number after  <code class="docutils literal notranslate"><span class="pre">-O</span></code>, it will be  <code class="docutils literal notranslate"><span class="pre">-O2</span></code>.</div>
+<div class="line">The default is  <code class="docutils literal notranslate"><span class="pre">-O2</span></code>.</div>
+<div class="line"><a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/operation/20211208_01">Change the default value of C/C++ compiler option that specifies the level of optimization</a></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Kfast</p></td>
+<td><p>Guide optimization options for speedup.</p></td>
+</tr>
+<tr class="row-even"><td><p>-Ksimd[=1|2|auto]</p></td>
+<td><div class="line-block">
+<div class="line">Generate objects using SIMD extension instructions.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Ksimd=1</span></code></div>
+<div class="line-block">
+<div class="line">Generate objects using SIMD extension instructions.</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Ksimd=2</span></code></div>
+<div class="line-block">
+<div class="line">In addition to  <code class="docutils literal notranslate"><span class="pre">-Ksimd=1</span></code> option, generates an object using SIMD extension instructions for loops containing if statements.</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Ksimd=auto</span></code></div>
+<div class="line-block">
+<div class="line">Instructs the compiler to automatically determine whether to SIMD conversion the loop. The use of SIMD for loops containing if statements is promoted.</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Ksimd</span></code></div>
+<div class="line-block">
+<div class="line">If omitted the number after  <code class="docutils literal notranslate"><span class="pre">-Ksimd</span></code>, it will be  <code class="docutils literal notranslate"><span class="pre">-Ksimd=auto</span></code>.</div>
+</div>
+<div class="line">If more than  <code class="docutils literal notranslate"><span class="pre">-O2</span></code> option is available,  <code class="docutils literal notranslate"><span class="pre">-Ksimd</span></code> option is applied when omitted.</div>
+<div class="line">If  <code class="docutils literal notranslate"><span class="pre">-Ksimd</span></code> option is available,  <code class="docutils literal notranslate"><span class="pre">-Kloop_part_simd</span></code> is also available.</div>
+<div class="line">This option is meaningful when the -O2 option or higher is enabled.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Kparallel</p></td>
+<td><div class="line-block">
+<div class="line">Proceed auto parallelization. The default is <code class="docutils literal notranslate"><span class="pre">-Knoparallel</span></code>. This option will be disabled when <code class="docutils literal notranslate"><span class="pre">-O0</span></code> or <code class="docutils literal notranslate"><span class="pre">-O1</span></code> option is enabled.</div>
+<div class="line">The <code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code> option is needed if an object program compiled with it exists in the command line as an input file.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-Kopenmp</p></td>
+<td><div class="line-block">
+<div class="line">Enable directives in the OpenMP C specification. Supported specifications are OpenMP 3.1/OpenMP 4.5 (part).</div>
+<div class="line">The default is <code class="docutils literal notranslate"><span class="pre">-Knoopenmp</span></code>.</div>
+<div class="line">The <code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code> option is needed if an object program compiled with it exists in the command line as an input file.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Kocl</p></td>
+<td><div class="line-block">
+<div class="line">Enable the optimization control line.</div>
+<div class="line">The default is  <code class="docutils literal notranslate"><span class="pre">-Knoocl</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-I directory</p></td>
+<td><p>Specify the directory to search for INCLUDE files.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Klargepage</p></td>
+<td><p>Indicates whether to create an executable program that uses the large page feature. This option must be specified when linking a program. Default is  <code class="docutils literal notranslate"><span class="pre">-Klargepage</span></code> .If not using large page function, use  <code class="docutils literal notranslate"><span class="pre">-Knolargepage</span></code> option.</p></td>
+</tr>
+<tr class="row-even"><td><p>-Koptmsg[=1|2]</p></td>
+<td><div class="line-block">
+<div class="line">Outputs the optimization status message.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Koptmsg=1</span></code></div>
+<div class="line-block">
+<div class="line">A message is output indicating that the execution result has been optimized that may cause side effects.</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Koptmsg=2</span></code></div>
+<div class="line-block">
+<div class="line">In addition to  <code class="docutils literal notranslate"><span class="pre">Koptmsg=1</span></code>, a message is output indicating that optimization functions such as automatic parallelization, SIMD conversion, and loop unrolling have been activated.</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Koptmsg</span></code></div>
+<div class="line-block">
+<div class="line">If the number after  <code class="docutils literal notranslate"><span class="pre">-Koptmsg</span></code> is omitted, it will be  <code class="docutils literal notranslate"><span class="pre">-Koptmsg=1</span></code>.</div>
+</div>
+<div class="line">Default is  <code class="docutils literal notranslate"><span class="pre">-Knooptmsg</span></code> .</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-std=[level]</p></td>
+<td><div class="line-block">
+<div class="line">Specifies the level of language specification that the compiler (including preprocessor) interprets.</div>
+<div class="line">For level, one of these is specified: c++98, c++03, c++11, c++14, c++17, gnu++98, gnu++03, gnu++11, gnu++14 or gnu++17.</div>
+<div class="line">If omitted,  <code class="docutils literal notranslate"><span class="pre">-std=gnu++14</span></code> option is applied.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-stdlib=[name]</p></td>
+<td><div class="line-block">
+<div class="line">Specify the type of the standard template library (STL).</div>
+<div class="line">Specify  <code class="docutils literal notranslate"><span class="pre">libc++</span></code> or  <code class="docutils literal notranslate"><span class="pre">libstdc++</span></code> to  <em>name</em>.</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-stdlib=libc++</span></code></div>
+<div class="line-block">
+<div class="line">Use libc++ version 7.0.</div>
+</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-stdlib=libstdc++</span></code></div>
+<div class="line-block">
+<div class="line">Use libstdc++.</div>
+</div>
+<div class="line">If omitted,  <code class="docutils literal notranslate"><span class="pre">-stdlib=libstdc++</span></code> option is applied.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--alternative_tokens</span></code></p></td>
+<td><div class="line-block">
+<div class="line">Indicates whether or not to recognize 2-character notation (notation such as “&lt;%”) and operator keywords (notation such as “not”).</div>
+<div class="line">The default is  <code class="docutils literal notranslate"><span class="pre">--no_alternative_tokens</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-Klargepage</p></td>
+<td><div class="line-block">
+<div class="line">Direct if creating the executable program using large page function.</div>
+<div class="line">This option is required to be specified when linking program. The default is <code class="docutils literal notranslate"><span class="pre">-Klargepage</span></code>. If not using large page function, use <code class="docutils literal notranslate"><span class="pre">-Knolargepage</span></code>option.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Nlibomp</p></td>
+<td><div class="line-block">
+<div class="line">Use LLVM OpenMP library for parallelization. This option is required to be specified when linking.</div>
+<div class="line">The default is <code class="docutils literal notranslate"><span class="pre">-Nlibomp</span></code>. To use Open MP library, specify <code class="docutils literal notranslate"><span class="pre">-Nfjomplib</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-NRtrap</p></td>
+<td><div class="line-block">
+<div class="line">Indicates whether to detect an interrupt event during execution.</div>
+<div class="line">The default is <code class="docutils literal notranslate"><span class="pre">-NRnotrap</span></code>.</div>
+<div class="line">To enable the <code class="docutils literal notranslate"><span class="pre">-NRtrap</span></code> option, it must be set at both compilation and linking.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Nsrc</p></td>
+<td><p>Output source list.</p></td>
+</tr>
+<tr class="row-even"><td><p>-Nsta</p></td>
+<td><p>Output statistics information.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-V</p></td>
+<td><p>Output compiler version information to the standard error.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>About C++ compiler compile option, see C++ User’s Guide “2.2 Translation Option”.</p>
+</div>
+</section>
+<section id="recommended-compiling-option">
+<h2><span class="section-number">3.1.9.3.3. </span>Recommended compiling option<a class="headerlink" href="#recommended-compiling-option" title="Link to this heading">¶</a></h2>
+<p>Performance Focused:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-Kfast,openmp[,parallel]
+
+Specify this option to draw out the full performance of the A64FX. For example,
+with the option, you can make full use of cores through thread parallelization or
+SVE through SIMDization, improve instruction level parallelism by software pipelining,
+change the operation order by optimization, and use the reciprocal approximation operation.
+</pre></div>
+</div>
+<p>Precision Focused:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>-Kfast,openmp[,parallel],fp_precision
+
+Use this option when you want to obtain the same precision as -O0 while optimizing
+performance as much as possible. Specify the new option Kfp_precision, which
+suppresses all optimizations that affect precision, as an option appended to the
+recommended option focused on performance.
+
+This suppresses multiple optimizations that significantly affect performance.
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-Kfast</span></code> option results the same as “<code class="docutils literal notranslate"><span class="pre">-O3</span> <span class="pre">-Keval,fast_matmul,fp_contract,fp_relaxed,fz,ilfunc,mfunc,omitfp,simd_packed_promotion</span></code>”.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code> option enables the OpenMP specification directives.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code> option induces <code class="docutils literal notranslate"><span class="pre">-O2</span></code>, <code class="docutils literal notranslate"><span class="pre">-Kregion_extension</span></code>, <code class="docutils literal notranslate"><span class="pre">-Kloop_part_parallel</span></code>, <code class="docutils literal notranslate"><span class="pre">-Kloop_perfect_nest</span></code> and <code class="docutils literal notranslate"><span class="pre">-mt</span></code> option. However, if specified <code class="docutils literal notranslate"><span class="pre">-O3</span></code> option (specified at the same time with <code class="docutils literal notranslate"><span class="pre">-Kfast</span></code> or etc.), <code class="docutils literal notranslate"><span class="pre">-O3</span></code> is applied.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-Kfp_precision</span></code> option is the same result as specifying “<code class="docutils literal notranslate"><span class="pre">-Knoeval,nofast_matmul,nofp_contract,nofp_relaxed,nofz,noilfunc,nomfunc,parallel_fp_precision</span></code>”.</p></li>
+</ul>
+<blockquote>
+<div><div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Optimization functions other than the recommended options may or may not be effective depending on the characteristics of the program data and must be tried.</p>
+</div>
+</div></blockquote>
+<p>The details of the options are shown below.</p>
+<ul class="simple">
+<li><p>The list of option results the same as  <code class="docutils literal notranslate"><span class="pre">-Kfast</span></code></p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p>Compile option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td colspan="2"><p>-O3</p></td>
+<td><div class="line-block">
+<div class="line">Generate optimized objects.</div>
+<div class="line">Performs optimization such as SIMD conversion and unrolling.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><p>-Keval <sup>*</sup></p></td>
+<td></td>
+<td><div class="line-block">
+<div class="line">Applies optimizations that change how the operations are evaluated.</div>
+<div class="line">If this option is enabled,  <code class="docutils literal notranslate"><span class="pre">-Ksimd_reduction_product</span></code> is also enabled,</div>
+<div class="line">If this option and  <code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code> are enabled,  <code class="docutils literal notranslate"><span class="pre">-Kfsimple</span></code>, <code class="docutils literal notranslate"><span class="pre">-Kreduction</span></code> is also enabled.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-Kfsimple <sup>*</sup></p></td>
+<td><p>Simplify floating-point arithmetic for object programs.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kreduction <sup>*</sup></p></td>
+<td><p>Proceed reduction optimization.</p></td>
+</tr>
+<tr class="row-even"><td><p>-Ksimd_reduction_product <sup>*</sup></p></td>
+<td><p>SIMD conversion is performed for the reduction operation of multiplication.</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>-Kfast_matmul <sup>*</sup></p></td>
+<td><p>Change to matrix product loops with fast library calls.</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>-Kfp_contract <sup>*</sup></p></td>
+<td><p>Proceed optimization that used Floating-Point Multiply-Add/Subtract direction.</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>-Kfp_relaxed <sup>*</sup></p></td>
+<td><p>For single-precision or double-precision floating-point division or SQRT functions,
+use reciprocal approximation arithmetic instructions and Floating-Point Multiply-Add / Subtract arithmetic instructions.</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>-Kfz</p></td>
+<td><p>Use flush-to-zero mode</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>-Kilfunc =procedure <sup>*</sup></p></td>
+<td><p>Inline expansion of single-precision and double-precision real type built-in functions.</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>-Kmfunc <sup>*</sup></p></td>
+<td><p>Proceed optimization that uses multi arithmetic function.</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>-Komitfp</p></td>
+<td><div class="line-block">
+<div class="line">Indicates that optimization is performed without guaranteeing the frame pointer register in the procedure call.</div>
+<div class="line">If this option is enabled, traceback information is not guaranteed.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>-Ksimd_packed_promotion</p></td>
+<td><p>Assuming that the index calculation of single-precision floating-point type
+and 4-byte integer type array elements does not exceed the 4-byte range, promote packed-SIMD.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><sup>*</sup>:Optimization may affect the calculation result. For details, see “Chapter 3 Optimization” in the “C ++ User’s Guide”.</p>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>The list of option that induced by  <code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code></p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Induced option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-O2</p></td>
+<td><p>Indicates optimisation level.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kregion_extension</p></td>
+<td><p>Expand parallel region.</p></td>
+</tr>
+<tr class="row-even"><td><p>-Kloop_part_parallel</p></td>
+<td><p>Device loop and auto parallelizing partly.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Kloop_perfect_nest</p></td>
+<td><p>Indicates whether to split an incomplete multiplex loop into a complete multiplex loop.</p></td>
+</tr>
+<tr class="row-even"><td><p>-mt</p></td>
+<td><p>Create multi thread safe object</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="environment-variable-option-specification">
+<h2><span class="section-number">3.1.9.3.4. </span>Environment variable (option specification)<a class="headerlink" href="#environment-variable-option-specification" title="Link to this heading">¶</a></h2>
+<p>This shows the environment variable which C++ compiler (<strong class="program">FCCpx</strong>) uses.</p>
+<ol class="arabic">
+<li><p>FCCpx_ENV</p>
+<p>Able to set compile option to environment variable FCCpx_ENV.
+Compile options defined in FCCpx_ENV are automatically passed to the compiler.
+Compiler options defined in environment variables and systems have the following precedence:</p>
+<p>[Priority]</p>
+<ol class="arabic simple">
+<li><p>Compile command operand</p></li>
+<li><p>Environment variable for setting translation option (Mode unique:fccpx_trad_ENV,fcc_trad_ENV)</p></li>
+<li><p>Environment variable for setting translation option (Mode common:fccpx_ENV,fcc_ENV)</p></li>
+<li><p>Translation profile file (Mode unique:<code class="file docutils literal notranslate"><span class="pre">/etc$</span><em><span class="pre">FJSVXTCLANGA</span></em><span class="pre">/fccpx_trad_PROF</span></code>)</p></li>
+<li><p>Translation profile file (Mode common:<code class="file docutils literal notranslate"><span class="pre">/etc$</span><em><span class="pre">FJSVXTCLANGA</span></em><span class="pre">/fccpx_PROF</span></code>)</p></li>
+<li><p>Omitted value</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">FCCpx_ENV</span><span class="o">=</span>-Kfast,parallel
+</pre></div>
+</div>
+<p>Enabled compile option can be checked with  <code class="docutils literal notranslate"><span class="pre">-Nsta</span></code> option.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Nsta<span class="w"> </span>sample.cc
+<span class="go">Fujitsu C/C++ Version 4.1.0   Tue Jan 21 15:10:28 2020</span>
+<span class="go">Statistics information</span>
+<span class="go">  Option information</span>
+<span class="go">    Environment variable : (Omitted)</span>
+<span class="go">    Command line options : -Nsta</span>
+<span class="go">    Effective options    : -g0 -Qy -std=gnu++14 -O0 -Kcmodel=small -Knofenv_access -Khpctag</span>
+<span class="go">                           -Klargepage -Knolib -Klooptype=f -Knoopenmp -Knoopenmp_simd</span>
+<span class="go">                           -Knooptlib_string -Knopc_relative_literal_loads -Knoparallel</span>
+<span class="go">                           -Ksimd_reg_size=512 -KA64FX -KARMV8_3_A -KSVE</span>
+<span class="go">                           -Ncancel_overtime_compilation -Nnocoverage -Nexceptions -Nnofjcex</span>
+<span class="go">                           -Nfjprof -Nnohook_func -Nnohook_time -Nline -Nquickdbg=noheapchk</span>
+<span class="go">                           -Nquickdbg=nosubchk -NRnotrap -Nnoreordered_variable_stack</span>
+<span class="go">                           -Nrt_notune -Nsetvalue=noheap -Nsetvalue=nostack</span>
+<span class="go">                           -Nsetvalue=noscalar -Nsetvalue=noarray -Nsetvalue=nostruct -Nsta</span>
+</pre></div>
+</div>
+</li>
+<li><p>TMPDIR</p>
+<p>The temporary directory used by the compiler can be changed by using the environment variable <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>.
+<code class="docutils literal notranslate"><span class="pre">/etc/profile</span></code> to set the home directory in <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>.</p>
+<p>When changing the temporary directory, please avoid using <code class="file docutils literal notranslate"><span class="pre">/tmp</span></code>.
+For <span class="target" id="index-2"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>, specify a writable directory of  <code class="file docutils literal notranslate"><span class="pre">/home/</span></code> or  <code class="file docutils literal notranslate"><span class="pre">/vol0n0m/data/</span></code>.</p>
+</li>
+</ol>
+</section>
+<section id="c-library-for-parallel-processing">
+<h2><span class="section-number">3.1.9.3.5. </span>C ++ library for parallel processing<a class="headerlink" href="#c-library-for-parallel-processing" title="Link to this heading">¶</a></h2>
+<p>On  Supercomputer Fugaku, we offer the following library.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">libc++</span></code>as a standard template library (STL)</p></li>
+<li><p>For parallel process, the folowing 2 libraries</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Library name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LLVM OpenMP library</p></td>
+<td><ul class="simple">
+<li><p>A library for parallel functions based on LLVM OpenMP Runtime Library, which is open source software.</p></li>
+<li><p>Supported specifications are OpenMP 4.5/OpenMP 5.0 (part).</p></li>
+<li><p>Available with trad mode and clang mode.</p></li>
+<li><p>The trad mode is available in OpenMP 3.1/OpenMP 4.5 (part).</p></li>
+<li><p>For the specifications of the LLVM OpenMP library, please read “Chapter 4 Parallelization Function” in the CPP User’s Guide.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Fujitsu OpenMP library</p></td>
+<td><ul class="simple">
+<li><p>This is a library for parallel functions based on the Fujitsu OpenMP library for Supercomputer K computer systems prior to PRIMEHPC FX100.</p></li>
+<li><p>It is suitable for cases where importance is attached to compatibility with the conventional Fujitsu OpenMP library.</p></li>
+<li><p>Supported specifications are OpenMP 3.1/OpenMP 4.5 (part).</p></li>
+<li><p>Available only with trad mode.</p></li>
+<li><p>For the specifications of the Fujitsu OpenMP library, see “Appendix J Fujitsu OpenMP Library” in the CPP User’s Guide.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li><p>To specify a parallel processing library, the following options must be specified at link time.</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 18.2%" />
+<col style="width: 81.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-Nlibomp</p></td>
+<td><p>Indicates that the LLVM OpenMP library is to be used as the OpenMP library.</p>
+<p>When omitted, <code class="docutils literal notranslate"><span class="pre">-Nlibomp</span></code> option will be applied.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Nfjomplib</p></td>
+<td><p>Indicates that the Fujitsu OpenMP library is to be used as the OpenMP library.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">-Nclang</span></code> option is enabled, <code class="docutils literal notranslate"><span class="pre">-Nfjomplib</span></code> option will be disabled and <code class="docutils literal notranslate"><span class="pre">-Nlibomp</span></code> option will be enabled.</p>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following environment variables added in OpenMP 4.0 and later are available in the LLVM OpenMP library.
+On the other hand, the Fujitsu OpenMP library does not support these environment variables. These environment variables are ignored when using the Fujitsu OpenMP library.</p>
+<ul class="simple">
+<li><p>OMP_CANCELLATION</p></li>
+<li><p>OMP_DISPLAY_ENV</p></li>
+<li><p>OMP_DEFAULT_DEVICE</p></li>
+<li><p>OMP_MAX_TASK_PRIORITY</p></li>
+</ul>
+</div>
+<ul class="simple">
+<li><p>The table below shows the combinations of C / C ++ object files that can be combined with the parallel processing library.</p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Library name</p></th>
+<th class="head"><p>C/C++ object file trad mode</p></th>
+<th class="head"><p>C/C++ object file clang mode</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LLVM OpenMP library</p></td>
+<td><p>Able to combine</p></td>
+<td><p>Able to combine</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fujitsu OpenMP library</p></td>
+<td><p>Able to combine</p></td>
+<td><p>Unable to combine</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="compilation-example">
+<h2><span class="section-number">3.1.9.3.6. </span>Compilation example<a class="headerlink" href="#compilation-example" title="Link to this heading">¶</a></h2>
+<p>This shows compile example of C++ program.</p>
+<p>Multi node job (hybrid parallel)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpiFCCpx<span class="w"> </span>-Kfast,parallel,openmp<span class="w">  </span>sample.cc
+</pre></div>
+</div>
+<p>Single node job (sequential)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast<span class="w"> </span>sample.cc
+</pre></div>
+</div>
+<p>Single node job (Auto parallel)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast,parallel<span class="w">  </span>sample.cc
+</pre></div>
+</div>
+<p>Single node job (OpenMP)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast,openmp<span class="w">  </span>sample.cc
+</pre></div>
+</div>
+</section>
+<section id="built-in-debug-function">
+<h2><span class="section-number">3.1.9.3.7. </span>Built-in debug function<a class="headerlink" href="#built-in-debug-function" title="Link to this heading">¶</a></h2>
+<p>The built-in debugging function performs various inspections by compiling a program with debugging options at compile time and executing an execution module.
+If use the built-in debug function, the optimization level goes down to <code class="docutils literal notranslate"><span class="pre">-O0</span></code> so that the execution time will take longer than the normal.</p>
+<ul class="simple">
+<li><p>About built-in debug function</p></li>
+</ul>
+<blockquote>
+<div><p>If changed execution environment, it may end abnormally. In this case, the follwoing reasons can be caused.</p>
+<ol class="arabic simple">
+<li><p>The variable is quoted without setting an initial value.</p></li>
+<li><p>Array subscript exceeds array size</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>[Change execution environment] is the following cases:</p>
+<ul class="simple">
+<li><p>Used tools such as profiler</p></li>
+<li><p>Changed the size of large page</p></li>
+</ul>
+<p>In this case, the execution status of the execution module in the memory changes and may end abnormally.</p>
+</div>
+</div></blockquote>
+<p>We Introduce the built-in debugging function to check these.</p>
+<ul class="simple">
+<li><p>When using C / C ++, the following inspection is performed with the built-in debugging function.</p></li>
+</ul>
+<blockquote>
+<div><p>Proceed the following inspection with built-in debug function.</p>
+<ul class="simple">
+<li><p>Check array range (<code class="docutils literal notranslate"><span class="pre">-Nquickdbg=subchk</span></code> option)</p></li>
+</ul>
+<p>If the array index is not within the range of the array, the message  <code class="docutils literal notranslate"><span class="pre">jwe1601i-w</span></code> will be output.</p>
+<p>For details, see “Chapter 8 Debugging Functions” in the “C ++ User’s Guide”.</p>
+<p>The following is an example of the message displayed by the sample program created to correspond to the option  <code class="docutils literal notranslate"><span class="pre">-Nquickdbg=subchk</span></code>.  (Sample program is easy to understand to output the message.)</p>
+<ol class="arabic simple">
+<li><p>Sample program</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w"> </span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdlib&gt;</span>
+<span class="linenos">2</span><span class="w"> </span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="linenos">3</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">4</span><span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+<span class="linenos">5</span><span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="linenos">6</span><span class="w">   </span><span class="n">data</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w">       </span><span class="cm">/* ← Detect jwe160i-w */</span>
+<span class="linenos">7</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Compiling</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast<span class="w"> </span>-Nquickdbg<span class="o">=</span>subchk<span class="w"> </span>-V<span class="w"> </span>-o<span class="w"> </span>sample<span class="w"> </span>sample.c
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Execution result</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">jwe1601i-w The outside of the range the array(data) was declared is used (offset : 20, declared size : 12).</span>
+<span class="go"> error occurs at main     line 6 loc 0000000000102750 offset 0000000000000070</span>
+<span class="go"> main         at loc 00000000001026e0 called from o.s.</span>
+<span class="go">taken to (standard) corrective action, execution continuing.</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3.1.9.3. trad mode</a><ul>
+<li><a class="reference internal" href="#how-to-compile">3.1.9.3.1. How to compile</a></li>
+<li><a class="reference internal" href="#compilation-option">3.1.9.3.2. Compilation option</a></li>
+<li><a class="reference internal" href="#recommended-compiling-option">3.1.9.3.3. Recommended compiling option</a></li>
+<li><a class="reference internal" href="#environment-variable-option-specification">3.1.9.3.4. Environment variable (option specification)</a></li>
+<li><a class="reference internal" href="#c-library-for-parallel-processing">3.1.9.3.5. C ++ library for parallel processing</a></li>
+<li><a class="reference internal" href="#compilation-example">3.1.9.3.6. Compilation example</a></li>
+<li><a class="reference internal" href="#built-in-debug-function">3.1.9.3.7. Built-in debug function</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="modeTradAndClangC%2B%2B.html"
+                          title="previous chapter"><span class="section-number">3.1.9.2. </span>Compiler mode</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="clangmode.html"
+                          title="next chapter"><span class="section-number">3.1.9.4. </span>clang mode</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="clangmode.html" title="3.1.9.4. clang mode"
+             >next</a></li>
+        <li class="right" >
+          <a href="modeTradAndClangC%2B%2B.html" title="3.1.9.2. Compiler mode"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><span class="section-number">3.1.9. </span>C++</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.9.3. </span>trad mode</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,333 @@
+Introduction
+============
+
+Purpose of this documentation
+-----------------------------
+
+This document describes the basic use direction of the Supercomputer Fugaku.
+
+
+Description used in this document
+---------------------------------
+
+- In command execution, the user terminal and login node to be operated are represented by a prompt.
+  
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3,7
+
+   * - Prompt
+     - Control target
+
+   * - [terminal]
+     - Meaning of executing the command at the user device
+
+   * - [_LNlogin]
+     - Meaning of executing the command at the login node (common)
+
+   * - [_LNIlogin]
+     - Meaning of executing the command at the login node (Intel)
+
+   * - [_LNAlogin]
+     - Meaning of executing the command at the login node (Arm)
+     
+   * - [_CNlogin]
+     - Meaning of executing the command at the computing node
+     
+
+- Home directory is showed as ~ (tilde).
+- The language environment is described based on the latest version of functions unless otherwise specified.
+
+Abbreviations and aliases
+-------------------------
+
+The aliases used in this document are as following.
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 5 5
+
+   * - Name
+     - Abbreviations and aliases
+
+   * - Next-generation ultra-high-speed computer system
+     - |post-k|
+
+   * - Computing node
+     - CN 
+
+   * - BIO and computing node
+     - CN/BIO
+
+   * - SIO and computing node
+     - CN/SIO
+
+   * - GIO and computing node
+     - CN/GIO
+
+   * - Login node and file transfer node
+     - Login node or LN
+
+   * - BIO and storage connected to computing node
+     - System disc
+
+   * - SIO and storage connected to computing node
+     - First tier storage
+       
+       First tier SSD or SSD
+
+Trademarks
+----------
+
+Company names and product names in the text may be trademarks or registered trademarks of the respective companies. Other trademarks and registered trademarks are generally trademarks or registered trademarks of their respective companies. Please note that trademark names (TM, (R)) are not always added to system names, product names, etc., described in this document.
+
+
+Change log
+--------------
+
+This indicates the update history of this document.
+
+**Version 1.37 January 15, 2026**
+
+- Added "3.3.2.2.2. Conditions of Enabling Compiler Options and Default Behavior".
+- Added "3.3.2.10. Case Studies".
+
+**Version 1.36 November 27, 2025**
+
+- Added "3.3.2. Migration from Fujitsu compiler".
+
+**Version 1.35 October 10, 2025**
+
+- Added "4.12.1 tcsds-1.2.42" to "3.1.2.1. Language environment" and "3.1.3. Compiler Environment Settings". 
+- Changed the OS in "3.1.13.2. Use environment" from Windows 10 to Windows 11.
+
+**Version 1.34 September 22, 2025**
+
+- Updated the version number of "3.3. LLVM" to v21.1.0.
+
+**Version 1.33 June 10, 2025**
+
+- Updated the description of the openmp option in "3.3.2. How to Use".
+
+**Version 1.32 April 4, 2025**
+
+- Added "4.12.0 tcsds-1.2.41" to "3.1.2.1. Language environment" and "3.1.3. Compiler Environment Settings". 
+- The description of ifort was deleted from "4.1.2. To compile" due to the termination of ifort.
+
+**Version 1.31 December 2, 2024**
+
+- Updated the version number of "3.3. LLVM" to v19.1.4.
+- ILP64 description added to "5.4.5. How to use shared libraries".
+
+**Version 1.30 October 8, 2024**
+
+- Updated the version number of "3.3. LLVM" to v19.1.0.
+
+**Version 1.29 October 4, 2024**
+
+- Added "4.11.2 tcsds-1.2.40" to "3.1.2.1. Language environment" and "3.1.3. Compiler Environment Settings". 
+- Updated the URL for "4.1.3. About Intel oneAPI compiler".
+- Updated "4.2. Arm Compiler for Linux".
+
+
+**Version 1.28 April 25, 2024**
+
+- Updated "3.3. LLVM".
+
+**Version 1.27 April 16, 2024**
+
+- Updated "4.1. Intel oneAPI".
+
+**Version 1.26 April 5, 2024**
+
+- Updated "3.2.2. Compiling on a Login Node".
+
+**Version 1.25 April 4, 2024**
+
+- Added "4.11.1 tcsds-1.2.39" to "3.1.2.1. Language environment" and "3.1.3. Compiler Environment Settings". 
+
+**Version 1.24 March 11, 2024**
+
+- Updated "3.2. Combination of GNU Compiler Collection and Fujitsu MPI".
+
+**Version 1.23 December 12, 2023**
+
+- The name https://www.fugaku.r-ccs.riken.jp/en/ was changed from "the user portal" to "the Fugaku website".
+
+**Version 1.22 October 6, 2023**
+
+- Modified "/vol0n0m/data/" from "/data/".
+- Added "4.10.0 tcsds-1.2.38" to "3.1.2.1. Language environment" and "3.1.3. Compiler Environment Settings". 
+- Changed Oracle JDK 8 to OpenJDK 8 in "3.1.13.2. Use environment".
+
+**Version 1.21 April 4, 2023**
+
+- Added "4.9.0 tcsds-1.2.37" to "3.1.2.1. Language environment" and "3.1.3. Compiler Environment Settings". 
+- Added mention in "7. Script language" that OSS delivery is moving to Spack.
+
+**Version 1.20 January 20, 2023**
+
+- Added OpenMP notes to "3.1.1. Language specification"
+- Added notes to "3.1.7.6. Fortran library for parallel processing"
+- Added notes to "3.1.8.3.5. C library for parallel processing", "3.1.8.4.5. C library for parallel processing", "3.1.9.3.5. C++ library for parallel processing", "3.1.9.4.5. C++ library for parallel process"
+- Updated the description of the -d option for "3.1.11.2.5. Profiler option", "3.1.11.3.5. Profiler option", "3.1.11.4.6. Profiler option"
+
+**Version 1.19 October 11, 2022**
+
+- Added "4.8.1 tcsds-1.2.36" to "3.1.2.1. Language environment" and "3.1.3. Compiler Environment Settings". 
+
+**Version 1.18 August 16, 2022**
+
+- The description of the -Puserfunc option in "3.1.11.3.5. Profiler option" was incorrect and has been corrected.
+- Added -NRtrap option to "8.4.1. Fortran".
+
+**Version 1.17 July 1, 2022**
+
+- Added information about compilation options that must be specified at linking time in "3.1.7.3. Compilation option", "3.1.8.3.2. Compilation option", "3.1.8.4.2. Compilation option", "3.1.9.3.2. Compilation option", "3.1.9.4.2. Compilation option".
+- Added a way to use Fujitsu MPI Library on compute nodes in "4.2. Arm Allinea Studio Essential".
+
+
+**Version 1.16 June 16, 2022**
+
+- Updated "3.2. Combination of GNU Compiler Collection and Fujitsu MPI".
+- Updated the information in "4.2. Arm Allinea Studio Essential" to 22.0.2.
+
+**Version 1.15 June 6, 2022**
+
+- Added statement that the Fujitsu compiler optimization option (-O) in C/C++ defaults to "-O2."
+
+**Version 1.14 May 20, 2022**
+
+- The key pair (private key/public key) for Eclipse used in "3.1.13.3.2. Installation of Fujitsu extensiton function" has been changed to an ECDSA key.
+- Added mpiclang/mpiclang++ command to "3.3. LLVM".
+- Added note to "7.2. Python".
+
+
+**Version 1.13 April 26, 2022**
+
+- Added reference to Allinea Studio Essential libraries from compute node in "4.2.1. Environment setting".
+
+**Version 1.12 April 12, 2022**
+
+- Removed "4.2 . Intel Parallel Studio XE 2020" because Intel Parallel Studio XE 2020 is no longer available.
+
+**Version 1.11 April 3, 2022**
+
+- Added "4.8.0 tcsds-1.2.35" to "3.1.2.1. Language environment" and "3.1.3. Compiler Environment Settings". 
+
+**Version 1.10 February 28, 2022**
+
+- Rewrite the table of contents for the compiler.
+- Add LLVM and GCC cross-compilers for the compute node.
+
+**Version 1.09 December 16, 2021**
+
+- Added "4.7.0 tcsds-1.2.34" to "3.2.1. Language environment" and "3.3. Compiler Environment Settings". 
+- Updated "See also" in "3.11.4.8. Create a CPU Performance Analysis Report".
+- Added "3.11.5.4. CPU Binding" and "3.11.5.5. CPU Performance Analysis Report Cache Miss Ratio".
+
+
+**Version 1.08 September 9, 2021**
+
+- Added "4.6.1 tcsds-1.2.33" to "3.2.1. Language environment" and "3.3. Compiler Environment Settings". 
+
+**Version 1.07 July 29, 2021**
+
+- Fixed a sample spack setting  for "Compiling on the login node" in "9.4.1. Compiler environment setting".
+
+**Version 1.06 June 30, 2021**
+
+- Added "6.1. Intel oneAPI compiler on login node".
+
+**Version 1.05.1 June 23, 2021**
+
+- Fixed the execution examples  in "3.11.4.7 Output profile result".
+
+**Version 1.05 June 3, 2021**
+
+- Updated "6.2. Arm compiler on login node".
+
+**Version 1.04 May 31, 2021**
+
+- Updated "3.11.5. Notes".
+
+**Version 1.03 May 10, 2021**
+
+- Added a new subsection "3.14. Mixed Language Programming (About Object Compatibility)".
+
+**Version 1.02 April 12, 2021**
+
+- Added a new section "4. Combination of GNU Compiler Collection and Fujitsu MPI".
+
+**Version 1.01 April 1, 2021**
+
+- Added "4.5.0 tcsds-1.2.31" to "3.2.1. Language environment" and "3.3. Compiler Environment Settings". 
+
+**Version 1.00 March 9, 2021**
+
+- Updated the URL to replace the Fugaku website.
+- Added "Programming Guide" to "3.13. Integrated development environment".
+
+**Version 0.13 March 2, 2021**
+
+- Removed old versions from "3.2.1. Language environment" and "3.3. Compiler Environment Settings".
+
+**Version 0.12 February 18, 2021**
+
+- Added "4.4.0a tcsds-1.2.30" to "3.2.1. Language environment" and "3.3. Compiler Environment Settings". 
+- Fixed the description of "3.5. Runtime environment variables" because it was incorrect.
+- Added that FP16 can be used in clang mode in "3.8.2. Compiler mode" and "3.9.2. Compiler mode".
+- The recommended options in "3.7.4. Recommended compiling option", "3.8.3.3. Recommended compiling option", and "3.9.3.3. Recommended compiling option" was adjusted to "Programming Guide".
+- Added "Programming Guide" to "3.12. Manual".
+- Fixed the setting value of the environment variable TMPDIR because it was written incorrectly.
+
+**Version 0.11 February 1, 2021**
+
+- Updated the Java column of "Login node (Intel)" because Java provided by Spack is available for "2. Compiler type".
+
+**Version 0.10 January 12, 2021**
+
+- Added "4.3.1 tcsds-1.2.29" in "3.2.1. Language environment" and "3.3 Compiler Environment Settings".
+- Deleted it because there was an incorrect description of "If you want to obtain input / output information, use a CPU performance analysis tool." in "9.4. Incompatible item".
+
+**Version 0.9 December 15, 2020**
+
+- The description of rscunit was deleted from the job script example, because it was no longer necessary to specify the resource unit.
+
+**Version 0.8 November 30, 2020**
+
+- Added "4.3.0a tcsds-1.2.28" in "3.2.1. Language environment" and "3.3 Compiler Environment Settings".
+
+**Version 0.7 November 2, 2020**
+
+- Fixed incorrect Java environment setting of the login node in "8.4.1. Compiler environment setting".
+
+**Version 0.6 September 25, 2020**
+
+- Added "4.2.1a tcsds-1.2.27" in "3.2.1. Language environment" and "3.3 Compiler Environment Settings".
+- Added notes after the release of "4.2.1a tcsds-1.2.27" to the notes in "3.2.1. Language environment".
+
+**Version 0.5 September 7, 2020**
+
+- Added a note in "3.11.4.7. Output profile result" that the CPU Performance Analysis Report will not be generated if the number of rows in the csv file exceeds the maximum number of rows that Excel can handle.
+
+**Version 0.4 August 31, 2020**
+
+- Added "4.2.0b tcsds-1.2.26b" in "3.2.1. Language environment" and "3.3 Compiler Environment Settings".
+
+**Version 0.3 July 13, 2020**
+
+- Modified the description of "2. Compiler type", due to the incorrect description of unprovided compiler.
+- Added "4.2.0 tcsds-1.2.26" in "3.2.1. Language environment" and "3.3 Compiler Environment Settings".
+- Updated the description of "5.2. Arm compiler on login node". 
+
+**Version 0.2 May 15, 2020**
+
+- Updated the contents in "3.2.1. Language environment" and "3.3. Compiler Environment Settings" to their state on May 15. 
+- Added sample program to "3.7.11. Fortran sample program" and "3.8.3.7. C sample program" since it was missing.
+- Modified the description of environment setting in "5.2. Arm compiler on login node" since it was incorrect. 
+
+| 
+| 
+| © 2020 - 2026 RIKEN Center for Computational Science
+| Unauthorized reproduction or duplication of the contents described in this manual is prohibited.

@@ -1,0 +1,447 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Case Studies &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=f85107c5" />
+    
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Case Studies</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="case-studies">
+<span id="casestudies"></span><h1>Case Studies<a class="headerlink" href="#case-studies" title="Link to this heading">¶</a></h1>
+<p>Here is an example where compilation succeeded with the Fujitsu compiler but failed with the LLVM compiler.</p>
+<section id="case-1">
+<h2>Case 1<a class="headerlink" href="#case-1" title="Link to this heading">¶</a></h2>
+<p>[Phenomenon]</p>
+<p>The following error message is output, and compilation is interrupted.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: call to undeclared library function &lt;msg&gt;; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+</pre></div>
+</div>
+<p>&lt;msg&gt; : Information about functions that have not been declared</p>
+<p>[Replication Program]</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>[Category]</p>
+<p>Behavioral changes for non-standard code</p>
+<p>[Language]</p>
+<p>C</p>
+<p>[Cause]</p>
+<p>This error is caused by using a library function without explicitly declaring it. In older C standards, compilers were permitted to infer and proceed with compilation even when library function declarations were not explicitly provided. However, in the C standard from ISO C99 onwards, this implicit function declaration is no longer supported.</p>
+<p>[Workaround]</p>
+<p>To avoid errors, apply one of the following methods:</p>
+<ol class="arabic simple">
+<li><p>Include the necessary header files.</p></li>
+<li><p>Specify the -Wno-implicit-function-declaration option during compilation.</p></li>
+<li><p>You can specify the -std=c89 or -std=c90 option at compile time to operate in a mode compliant with older C standards. This allows you to maintain compatibility with older code while avoiding compilation errors. However, features introduced in the new C standard cannot be used.</p></li>
+</ol>
+<p>[Modified Program]</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="case-2">
+<h2>Case 2<a class="headerlink" href="#case-2" title="Link to this heading">¶</a></h2>
+<p>[Phenomenon]</p>
+<p>The following error message is output, and compilation is interrupted.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: call to undeclared function &#39;&lt;msg&gt;&#39;; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+</pre></div>
+</div>
+<p>&lt;msg&gt; : Information about functions that have not been declared</p>
+<p>[Replication Program]</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">   </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">func1</span><span class="p">();</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">func1</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>[Category]</p>
+<p>Behavioral changes for non-standard code</p>
+<p>[Language]</p>
+<p>C</p>
+<p>[Cause]</p>
+<p>This error is caused by using a function without explicitly declaring it. In older C standards, compilers were permitted to infer and proceed with compilation even when function declarations were not explicitly provided. However, in the C standard from ISO C99 onwards, this implicit function declaration is no longer supported.</p>
+<p>[Workaround]</p>
+<p>To avoid errors, apply one of the following methods:</p>
+<ol class="arabic simple">
+<li><p>Declare the prototype before the function call.</p></li>
+<li><p>Specify the -Wno-implicit-function-declaration option during compilation.</p></li>
+<li><p>You can specify the -std=c89 or -std=c90 option at compile time to operate in a mode compliant with older C standards. This allows you to maintain compatibility with older code while avoiding compilation errors. However, features introduced in the new C standard cannot be used.</p></li>
+</ol>
+<p>[Modified Program]</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">func1</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">   </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">func1</span><span class="p">();</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">func1</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="case-3">
+<h2>Case 3<a class="headerlink" href="#case-3" title="Link to this heading">¶</a></h2>
+<p>[Phenomenon]</p>
+<p>The following error message is output, and compilation is interrupted.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: ISO C++17 does not allow &#39;register&#39; storage class specifier [-Wregister]
+</pre></div>
+</div>
+<p>[Replication Program]</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>[Category]</p>
+<p>Behavioral changes for non-standard code</p>
+<p>[Language]</p>
+<p>C++</p>
+<p>[Cause]</p>
+<p>This is due to the removal of the register storage class specifier in the C++17 standard and later.</p>
+<p>[Workaround]</p>
+<p>To avoid errors, apply one of the following methods:</p>
+<ol class="arabic simple">
+<li><p>Remove the register specification from variable declarations.</p></li>
+<li><p>Specify the -Wno-register option during compilation.</p></li>
+<li><p>Specify the -std=c++14 option during compilation.</p></li>
+</ol>
+<p>[Modified Program]</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">long</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="case-4">
+<h2>Case 4<a class="headerlink" href="#case-4" title="Link to this heading">¶</a></h2>
+<p>[Phenomenon]</p>
+<p>The following error message is output, and compilation is interrupted.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: ISO C++17 does not allow dynamic exception specifications [-Wdynamic-exception-spec]
+</pre></div>
+</div>
+<p>[Replication Program]</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">f1</span><span class="p">()</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1</span><span class="p">();</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>[Category]</p>
+<p>Behavioral changes for non-standard code</p>
+<p>[Language]</p>
+<p>C++</p>
+<p>[Cause]</p>
+<p>This is due to the removal of the dynamic exception specification in the C++17 standard and later. The dynamic exception specification was used to specify the types of exceptions a function might throw at compile time. However, since the C++11 standard, it is recommended to use the noexcept specifier when indicating that a function does not throw exceptions, and to omit the noexcept specifier when indicating that a function may throw some (specific or any) exceptions.</p>
+<p>[Workaround]</p>
+<p>To avoid errors, apply one of the following methods:</p>
+<ol class="arabic simple">
+<li><p>Remove the dynamic exception specification (throw) from function declarations.</p></li>
+<li><p>Specify the -Wno-dynamic-exception-spec option during compilation.</p></li>
+<li><p>Specify the -std=c++14 option during compilation.</p></li>
+</ol>
+<p>[Modified Program]</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">f1</span><span class="p">(){</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f1</span><span class="p">();</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>[Related Information]</p>
+<p><a class="reference external" href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0003r5.html">https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0003r5.html</a></p>
+</section>
+<section id="case-5">
+<h2>Case 5<a class="headerlink" href="#case-5" title="Link to this heading">¶</a></h2>
+<p>[Phenomenon]</p>
+<p>The following error message is output, and compilation is interrupted.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: Operands of &lt;op&gt; must have comparable types; have INTEGER(&lt;k&gt;) and LOGICAL(&lt;k&gt;)
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">&lt;op&gt;: Operator</div>
+<div class="line">&lt;k&gt;: Kind type parameter</div>
+</div>
+<p>[Replication Program]</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">int_var</span>
+<span class="w">  </span><span class="kt">logical</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">log_var</span>
+
+<span class="w">  </span><span class="n">int_var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">  </span><span class="n">log_var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">int_var</span><span class="w"> </span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="w"> </span><span class="n">log_var</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;these types are not comparable!&quot;</span>
+<span class="w">  </span><span class="k">end if</span>
+
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+<p>[Category]</p>
+<p>Syntax error</p>
+<p>[Language]</p>
+<p>Fortran</p>
+<p>[Cause]</p>
+<p>This is caused by attempting to operate on values of different data types using the &lt;op&gt; operator. In LLVM, you cannot directly compare or perform operations on different data types such as logical types and integer types.</p>
+<p>[Workaround]</p>
+<ol class="arabic simple">
+<li><p>Specify the correct data type.</p></li>
+</ol>
+<p>[Modified Program]</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+
+<span class="w">  </span><span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">int_var</span>
+
+<span class="w">  </span><span class="n">int_var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">int_var</span><span class="w"> </span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;these types are not comparable!&quot;</span>
+<span class="w">  </span><span class="k">end if</span>
+
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+</section>
+<section id="case-6">
+<h2>Case 6<a class="headerlink" href="#case-6" title="Link to this heading">¶</a></h2>
+<p>[Phenomenon]</p>
+<p>The following error message is output, and compilation is interrupted.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: No operator .XOR. defined for LOGICAL(&lt;k&gt;) and LOGICAL(&lt;k&gt;)
+</pre></div>
+</div>
+<p>&lt;k&gt;: Kind type parameter</p>
+<p>[Replication Program]</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+
+<span class="w">  </span><span class="kt">LOGICAL</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">result</span>
+
+<span class="k">  </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">TRUE</span><span class="p">.</span>
+<span class="w">  </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">FALSE</span><span class="p">.</span>
+<span class="w">  </span><span class="k">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="p">.</span><span class="nb">XOR</span><span class="p">.</span><span class="w"> </span><span class="n">b</span>
+<span class="w">  </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Result: &quot;</span><span class="p">,</span><span class="w"> </span><span class="k">result</span>
+
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+<p>[Category]</p>
+<p>Fujitsu extension</p>
+<p>[Language]</p>
+<p>Fortran</p>
+<p>[Cause]</p>
+<p>This error is caused by the use of the .XOR. operator (exclusive OR), which does not exist in the standard specification of the Fortran language.</p>
+<p>[Workaround]</p>
+<ol class="arabic simple">
+<li><p>Replace instances of the .XOR. operator with the standard .NEQV. operator.</p></li>
+</ol>
+<p>[Modified Program]</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+
+<span class="w">  </span><span class="kt">LOGICAL</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">result</span>
+
+<span class="k">  </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">TRUE</span><span class="p">.</span>
+<span class="w">  </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">FALSE</span><span class="p">.</span>
+<span class="w">  </span><span class="k">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="p">.</span><span class="n">NEQV</span><span class="p">.</span><span class="w"> </span><span class="n">b</span>
+<span class="w">  </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Result: &quot;</span><span class="p">,</span><span class="w"> </span><span class="k">result</span>
+
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+<p>[Additional Information]</p>
+<p>In LLVM, when comparing logical type values, the operators used to compare numeric type values cannot be used. To compare logical values, use the dedicated logical comparison operators (.EQV. and .NEQV.).</p>
+</section>
+<section id="case-7">
+<h2>Case 7<a class="headerlink" href="#case-7" title="Link to this heading">¶</a></h2>
+<p>[Phenomenon]</p>
+<p>The following error message is output, and compilation is interrupted.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: Must be a constant value
+</pre></div>
+</div>
+<p>[Replication Program]</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+
+<span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mzero</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">z80000000</span>
+
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+<p>[Category]</p>
+<p>Fujitsu extension</p>
+<p>[Language]</p>
+<p>Fortran</p>
+<p>[Cause]</p>
+<p>This is caused by integer constants in binary, octal, or hexadecimal format not being enclosed in either single quotes ‘ or double quotes “.</p>
+<p>[Workaround]</p>
+<ol class="arabic simple">
+<li><p>Modify binary/octal/hexadecimal integer constants to be enclosed in either single quotes ‘ or double quotes “.</p></li>
+</ol>
+<p>[Modified Program]</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+<span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mzero</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">z</span><span class="s1">&#39;80000000&#39;</span>
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+</section>
+<section id="case-8">
+<h2>Case 8<a class="headerlink" href="#case-8" title="Link to this heading">¶</a></h2>
+<p>[Phenomenon]</p>
+<p>The following error message is output, and compilation is interrupted.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>error: Must have INTEGER type, but is REAL(&lt;k&gt;)
+</pre></div>
+</div>
+<p>&lt;k&gt;: Kind type parameter</p>
+<p>[Replication Program]</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+
+<span class="w">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">my_array</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="w">  </span><span class="kt">real</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">real_index</span>
+
+<span class="w">  </span><span class="n">my_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">/</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="o">/</span><span class="p">)</span>
+<span class="w">  </span><span class="n">real_index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.5</span>
+
+<span class="w">  </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Value at real_index:&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">my_array</span><span class="p">(</span><span class="n">real_index</span><span class="p">)</span>
+
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+<p>[Category]</p>
+<p>Syntax error</p>
+<p>[Language]</p>
+<p>Fortran</p>
+<p>[Cause]</p>
+<p>This error occurs because a real-type (REAL) data was specified in a context within the Fortran program where an integer-type (INTEGER) data is required. LLVM is strict about data types. If the type of an array index or an argument to a specific built-in function differs from the expected type—especially if you try to treat a floating-point value as an integer—it will result in a compile-time error.</p>
+<p>[Workaround]</p>
+<ol class="arabic simple">
+<li><p>Specify the correct data type.</p></li>
+</ol>
+<p>[Modified Program]</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+
+<span class="w">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">my_array</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="w">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="nb">index</span>
+
+<span class="nb">  </span><span class="n">my_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">/</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="o">/</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+
+<span class="w">  </span><span class="k">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Value at real_index:&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">my_array</span><span class="p">(</span><span class="nb">index</span><span class="p">)</span>
+
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Case Studies</a><ul>
+<li><a class="reference internal" href="#case-1">Case 1</a></li>
+<li><a class="reference internal" href="#case-2">Case 2</a></li>
+<li><a class="reference internal" href="#case-3">Case 3</a></li>
+<li><a class="reference internal" href="#case-4">Case 4</a></li>
+<li><a class="reference internal" href="#case-5">Case 5</a></li>
+<li><a class="reference internal" href="#case-6">Case 6</a></li>
+<li><a class="reference internal" href="#case-7">Case 7</a></li>
+<li><a class="reference internal" href="#case-8">Case 8</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Case Studies</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

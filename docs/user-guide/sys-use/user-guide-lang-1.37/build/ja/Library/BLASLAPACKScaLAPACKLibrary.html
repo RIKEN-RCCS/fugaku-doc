@@ -1,0 +1,937 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.4. BLAS／LAPACK／ScaLAPACKライブラリ &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.5. 高速4倍精度基本演算ライブラリ" href="FastBasicOperationsLibraryForQuadruplePrecision.html" />
+    <link rel="prev" title="5.3. C-SSL II ライブラリ" href="C-SSLIILibrary.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="FastBasicOperationsLibraryForQuadruplePrecision.html" title="5.5. 高速4倍精度基本演算ライブラリ"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="C-SSLIILibrary.html" title="5.3. C-SSL II ライブラリ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>数学ライブラリ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.4. </span>BLAS／LAPACK／ScaLAPACKライブラリ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="blas-lapack-scalapack">
+<h1><span class="section-number">5.4. </span>BLAS／LAPACK／ScaLAPACKライブラリ<a class="headerlink" href="#blas-lapack-scalapack" title="Link to this heading">¶</a></h1>
+<p>Fortran／C言語／C++からBLAS/LAPACK/ScaLAPACKを利用することができます。</p>
+<ul class="simple">
+<li><p>BLAS（Basic Linear Algebra Subprograms）は、ベクトル演算や行列演算を行なうライブラリです。</p></li>
+<li><p>LAPACK（Linear Algebra PACKage）は、線形代数の問題を解くライブラリです。</p></li>
+<li><p>ScaLAPACK（Scalable LAPACK）は、線形代数分野の計算をメッセージパッシングで並列化したライブラリです。</p></li>
+</ul>
+<section id="fortran">
+<span id="howtocompileinfortranblaslapackscalapacklibrary"></span><h2><span class="section-number">5.4.1. </span>Fortranコンパイル方法<a class="headerlink" href="#fortran" title="Link to this heading">¶</a></h2>
+<p>FortranにおけるBLAS／LAPACK／ScaLAPACKのコンパイル方法を示します。</p>
+<p>コンパイル例は以下のとおりです。</p>
+<ol class="arabic simple">
+<li><p>MPI／ScaLAPACK／BLAS,LAPACK（逐次版）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifrtpx<span class="w"> </span>-Kfast,SVE<span class="w"> </span>sample.f90<span class="w"> </span>-SCALAPACK<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>MPI／OpenMP／ScaLAPACK／BLAS,LAPACK（スレッド並列版）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifrtpx<span class="w"> </span>-Kfast,parallel,openmp,SVE<span class="w"> </span>sample.f90<span class="w"> </span>-SCALAPACK<span class="w"> </span>-SSL2BLAMP
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>逐次／BLAS,LAPACK（逐次版）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,SVE<span class="w"> </span>sample.f90<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>OpenMP／BLAS,LAPACK（スレッド並列版）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,openmp,SVE<span class="w"> </span>sample.f90<span class="w"> </span>-SSL2BLAMP
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<ul class="simple">
+<li><p>BLAS、LAPACK逐次版を使用するには、<strong class="program">frtpx</strong>コマンドに<code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>を指定します。</p></li>
+<li><p>BLAS、LAPACKスレッド並列版を使用するには、<code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code>、および、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>を指定します。</p></li>
+<li><p>ScaLAPACKを使用するには、<strong class="program">mpifrtpx</strong>コマンドに <code class="docutils literal notranslate"><span class="pre">-SCALAPACK</span></code>をオプションとして指定します。また、BLAS、LAPACKの逐次版、スレッド並列版の種類に応じて、<code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>オプションも指定します。</p></li>
+<li><p>ログインノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>が有効であれば、<code class="docutils literal notranslate"><span class="pre">SVE</span></code>を使用したライブラリを結合します。</p></li>
+<li><p>ログインノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code>が有効であれば、汎用のライブラリを結合します。</p></li>
+<li><p>計算ノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>と<code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code>のどちらを指定しても<code class="docutils literal notranslate"><span class="pre">SVE</span></code>を使用したライブラリを結合します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>オプションのデフォルト（省略時）は、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>になります。</p></li>
+<li><p>ネイティブコンパイラでユーザプログラムを翻訳し、BLAS、LAPACKを結合する場合、<strong class="program">frt</strong>コマンドを使用します。</p></li>
+<li><p>ネイティブコンパイラでMPIプログラムを翻訳し、BLAS、LAPACKを結合する場合、<strong class="program">mpifrt</strong>コマンドを使用します。</p></li>
+</ul>
+</div>
+</section>
+<section id="c">
+<span id="howtocompileincblaslapackscalapacklibrary"></span><h2><span class="section-number">5.4.2. </span>C言語コンパイル方法<a class="headerlink" href="#c" title="Link to this heading">¶</a></h2>
+<p>C言語におけるBLAS／LAPACK／ScaLAPACKのコンパイル方法を示します。</p>
+<p>コンパイル例は以下のとおりです。</p>
+<ol class="arabic simple">
+<li><p>MPI／ScaLAPACK／BLAS,LAPACK（逐次版）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w"> </span>-Kfast,SVE<span class="w"> </span>sample.c<span class="w"> </span>-SCALAPACK<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>MPI／OpenMP／ScaLAPACK／BLAS,LAPACK（スレッド並列版）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w"> </span>-Kfast,parallel,openmp,SVE<span class="w"> </span>sample.c<span class="w"> </span>-SCALAPACK<span class="w"> </span>-SSL2BLAMP
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>逐次／BLAS,LAPACK（逐次版）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kfast,SVE<span class="w"> </span>sample.c<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>OpenMP／BLAS,LAPACK（スレッド並列版）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kfast,openmp,SVE<span class="w"> </span>sample.c<span class="w"> </span>-SSL2BLAMP
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<ul class="simple">
+<li><p>BLAS、LAPACK逐次版を使用するには、<strong class="program">fccpx</strong>コマンドに<code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>を指定します。</p></li>
+<li><p>BLAS、LAPACKスレッド並列版を使用するには、<code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code>、および、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>を指定します。</p></li>
+<li><p>ScaLAPACKを使用するには、<strong class="program">mpifccpx</strong>コマンドに <code class="docutils literal notranslate"><span class="pre">-SCALAPACK</span></code>をオプションとして指定します。また、BLAS、LAPACKの逐次版、スレッド並列版の種類に応じて、<code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>オプションも指定します。</p></li>
+<li><p>ログインノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>が有効であれば、<code class="docutils literal notranslate"><span class="pre">SVE</span></code>を使用したライブラリを結合します。</p></li>
+<li><p>ログインノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code>が有効であれば、汎用のライブラリを結合します。</p></li>
+<li><p>計算ノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>と<code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code>のどちらを指定しても<code class="docutils literal notranslate"><span class="pre">SVE</span></code>を使用したライブラリを結合します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>オプションのデフォルト（省略時）は、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>になります。</p></li>
+<li><p>ネイティブコンパイラでユーザプログラムを翻訳し、BLAS、LAPACK アーカイブを結合する場合、<strong class="program">fcc</strong>コマンドを使用します。</p></li>
+<li><p>ネイティブコンパイラでMPIプログラムを翻訳し、BLAS、LAPACKを結合する場合、<strong class="program">mpifcc</strong>コマンドを使用します。</p></li>
+</ul>
+</div>
+</section>
+<section id="howtocompileinc-blaslapackscalapacklibrary">
+<span id="id1"></span><h2><span class="section-number">5.4.3. </span>C++コンパイル方法<a class="headerlink" href="#howtocompileinc-blaslapackscalapacklibrary" title="Link to this heading">¶</a></h2>
+<p>C++におけるBLAS／LAPACK／ScaLAPACKのコンパイル方法を示します。</p>
+<p>コンパイル例は以下のとおりです。</p>
+<ol class="arabic simple">
+<li><p>MPI／ScaLAPACK／BLAS,LAPACK（逐次版）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpiFCCpx<span class="w"> </span>-Kfast,SVE<span class="w"> </span>sample.cc<span class="w"> </span>-SCALAPACK<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>MPI／OpenMP／ScaLAPACK／BLAS,LAPACK（スレッド並列版）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpiFCCpx<span class="w"> </span>-Kfast,parallel,openmp,SVE<span class="w"> </span>sample.cc<span class="w"> </span>-SCALAPACK<span class="w"> </span>-SSL2BLAMP
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>逐次／BLAS,LAPACK（逐次版）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast,SVE<span class="w"> </span>sample.cc<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>OpenMP／BLAS,LAPACK（スレッド並列版）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast,openmp,SVE<span class="w"> </span>sample.cc<span class="w"> </span>-SSL2BLAMP
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<ul class="simple">
+<li><p>BLAS、LAPACK逐次版を使用するには、<strong class="program">FCCpx</strong>コマンドに<code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>を指定します。</p></li>
+<li><p>BLAS、LAPACKスレッド並列版を使用するには、<code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code>、および、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>を指定します。</p></li>
+<li><p>ScaLAPACKを使用するには、<strong class="program">mpiFCCpx</strong>コマンドに <code class="docutils literal notranslate"><span class="pre">-SCALAPACK</span></code>をオプションとして指定します。また、BLAS、LAPACKの逐次版、スレッド並列版の種類に応じて、<code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>オプションも指定します。</p></li>
+<li><p>ログインノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>が有効であれば、<code class="docutils literal notranslate"><span class="pre">SVE</span></code>を使用したライブラリを結合します。</p></li>
+<li><p>ログインノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code>が有効であれば、汎用のライブラリを結合します。</p></li>
+<li><p>計算ノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>と<code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code>のどちらを指定しても<code class="docutils literal notranslate"><span class="pre">SVE</span></code>を使用したライブラリを結合します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>オプションのデフォルト（省略時）は、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>になります。</p></li>
+<li><p>ネイティブコンパイラでユーザプログラムを翻訳し、BLAS、LAPACK アーカイブを結合する場合、<strong class="program">FCC</strong>コマンドを使用します。</p></li>
+<li><p>ネイティブコンパイラでMPIプログラムを翻訳し、BLAS、LAPACKを結合する結合する場合、<strong class="program">mpiFCC</strong>コマンドを使用します。</p></li>
+</ul>
+</div>
+</section>
+<section id="scalapack-fortran">
+<h2><span class="section-number">5.4.4. </span>サンプルプログラム（ScaLAPACK／FORTRAN）<a class="headerlink" href="#scalapack-fortran" title="Link to this heading">¶</a></h2>
+<p>サンプルプログラムを使用して、コンパイルからジョブ実行までの例を示します。</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">ソースプログラムを用意します。</div>
+<div class="line">サンプルプログラムを<code class="file docutils literal notranslate"><span class="pre">/home/system/sample/SCALAPACK/sample_ScaLAPACK.f</span></code>として用意しています。</div>
+<div class="line"><a class="reference download internal" download="" href="../_downloads/7952039cf605f7ea8c6fff6ac4af8cf9/sample_ScaLAPACK.f"><code class="xref download docutils literal notranslate"><span class="pre">（サンプルコードのダウンロード）</span></code></a></div>
+</div>
+</li>
+<li><p>サンプルプログラムをコンパイルします。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifrtpx<span class="w"> </span>-V<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>-Nlst<span class="o">=</span>t<span class="w"> </span>-o<span class="w"> </span>sample_ScaLAPACK<span class="w">  </span>sample_ScaLAPACK.f<span class="w"> </span>-SCALAPACK<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="3">
+<li><div class="line-block">
+<div class="line">ジョブスクリプトを用意します。</div>
+<div class="line">ジョブスクリプトのサンプルは<code class="file docutils literal notranslate"><span class="pre">/home/system/sample/SCALAPACK/sample_ScaLAPACK.sh</span></code>として用意しています。</div>
+<div class="line"><a class="reference download internal" download="" href="../_downloads/3eec5c2234ec45e30a730afa590bd55f/sample_ScaLAPACK.sh"><code class="xref download docutils literal notranslate"><span class="pre">（サンプルコードのダウンロード）</span></code></a></div>
+</div>
+</li>
+<li><p><strong class="program">pjsub</strong>コマンドでジョブを投入します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>sample_ScaLAPACK.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 150 submitted.</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="id2">
+<h2><span class="section-number">5.4.5. </span>共有ライブラリの利用方法<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>BLAS、LAPACK、ScaLAPACK は「<a class="reference internal" href="#howtocompileinfortranblaslapackscalapacklibrary"><span class="std std-ref">Fortranコンパイル方法</span></a>」「<a class="reference internal" href="#howtocompileincblaslapackscalapacklibrary"><span class="std std-ref">C言語コンパイル方法</span></a>」「<a class="reference internal" href="#howtocompileinc-blaslapackscalapacklibrary"><span class="std std-ref">C++コンパイル方法</span></a>」で示した方法で結合すると、スタティックリンクになります。これとは別に、共有ライブラリも提供しています。共有ライブラリ版は動的ロードして使う場合を考慮し、アーカイブの構成および結合方法がスタティックリンク版と異なっています。</p>
+<p>また共有ライブラリのBLAS、LAPACKでは整数型および論理型の引数が4バイト整数であるLP64インターフェースのライブラリに加えて、整数型および論理型の引数を8バイト整数とするILP64インターフェースのライブラリを使うことができます。ILP64インターフェースを使用する場合は、ILP64の共有ライブラリを指定してください。</p>
+<nav class="contents local" id="id3">
+<ul class="simple">
+<li><p><a class="reference internal" href="#blaslapack-fortran" id="id5">BLAS、LAPACK 逐次版の Fortran からの利用方法</a></p></li>
+<li><p><a class="reference internal" href="#blaslapack-fotran" id="id6">BLAS、LAPACK スレッド並列版の Fotran からの利用方法</a></p></li>
+<li><p><a class="reference internal" href="#scalapackfortran" id="id7">ScaLAPACKのFortranからの利用方法</a></p></li>
+<li><p><a class="reference internal" href="#blaslapackcc" id="id8">BLAS、LAPACK逐次版のC、C++からの利用方法</a></p></li>
+<li><p><a class="reference internal" href="#usingblasandlapackthreadparallelversionfromccppprogramsusingsharedlibrariesblaslapackscalapacklibrary" id="id9">BLAS、LAPACKスレッド並列版のC、C++からの利用方法</a></p></li>
+<li><p><a class="reference internal" href="#scalapack-cc" id="id10">ScaLAPACK の C、C++からの利用方法</a></p></li>
+<li><p><a class="reference internal" href="#blaslapackscalapack" id="id11">BLAS、LAPACK、ScaLAPACK を動的ロードして利用する方法</a></p></li>
+</ul>
+</nav>
+<section id="blaslapack-fortran">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">5.4.5.1. </span>BLAS、LAPACK 逐次版の Fortran からの利用方法</a><a class="headerlink" href="#blaslapack-fortran" title="Link to this heading">¶</a></h3>
+<p>Fortranで書かれたユーザプログラムを翻訳し、BLAS 及び LAPACKの逐次版の共有ライブラリを結合するためには、<strong class="program">frtpx</strong> 、または、<strong class="program">frt</strong>コマンド行に、以下の表に示すオプションを指定します。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>種類</p></th>
+<th class="head"><p>結合オプション</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LP64、汎用版</p></td>
+<td><p>-lfjlapack</p></td>
+</tr>
+<tr class="row-odd"><td><p>LP64、SVE版</p></td>
+<td><p>-lfjlapacksve</p></td>
+</tr>
+<tr class="row-even"><td><p>ILP64、汎用版</p></td>
+<td><p>-lfjlapack_ilp64</p></td>
+</tr>
+<tr class="row-odd"><td><p>ILP64、SVE版</p></td>
+<td><p>-lfjlapacksve_ilp64</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>このオプションはユーザプログラムよりも後ろに指定します。</p>
+<p>利用方法の例は以下のとおりです。</p>
+<ol class="arabic simple">
+<li><p>Fortranで書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.f</span></code>を翻訳し、SVE版 BLAS、LAPACKライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.f<span class="w"> </span>-lfjlapacksve
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Fortranで書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.f</span></code>を翻訳し、汎用版 BLAS、LAPACKライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.f<span class="w"> </span>-lfjlapack
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Fortran で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.f</span></code>を翻訳し、ILP64 インターフェースのSVE版BLAS、LAPACKライブラリを結合します。ソースプログラムの基本整数型 および 基本論理型は、<code class="docutils literal notranslate"><span class="pre">-CcdII8、-CcdLL8</span></code> オプションで、8バイトに拡張します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>-CcdII8<span class="w"> </span>-CcdLL8<span class="w"> </span>a.f<span class="w"> </span>-lfjlapacksve_ilp64
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>OpenMP Fortran で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.f</span></code>を翻訳し、SVE版BLAS、LAPACK ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.f<span class="w"> </span>-lfjlapacksve
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>Fortran で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.f</span></code>をネイティブコンパイラで翻訳し、SVE版BLAS、LAPACK ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frt<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.f<span class="w"> </span>-lfjlapacksve
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="blaslapack-fotran">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">5.4.5.2. </span>BLAS、LAPACK スレッド並列版の Fotran からの利用方法</a><a class="headerlink" href="#blaslapack-fotran" title="Link to this heading">¶</a></h3>
+<p>Fortranで書かれたユーザプログラムを翻訳し、BLAS及びLAPACKのスレッド並列版の共有ライブラリを結合するためには、<code class="docutils literal notranslate"><span class="pre">frtpx</span></code>、または、<code class="docutils literal notranslate"><span class="pre">frt</span></code>コマンド行にオプション<code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code>に加えて、以下の表に示すオプションを指定します。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>種類</p></th>
+<th class="head"><p>結合オプション</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LP64、汎用版</p></td>
+<td><p>-lfjlapackex</p></td>
+</tr>
+<tr class="row-odd"><td><p>LP64、SVE版</p></td>
+<td><p>-lfjlapackexsve</p></td>
+</tr>
+<tr class="row-even"><td><p>ILP64、汎用版</p></td>
+<td><p>-lfjlapackex_ilp64</p></td>
+</tr>
+<tr class="row-odd"><td><p>ILP64、SVE版</p></td>
+<td><p>-lfjlapackexsve_ilp64</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">このオプションはユーザプログラムよりも後ろに指定します。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code>オプションのかわりに<code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code>オプションを指定することもできます。</div>
+</div>
+<p>利用方法の例は以下のとおりです。</p>
+<ol class="arabic simple">
+<li><p>Fortran で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.f</span></code>を翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.f<span class="w"> </span>-lfjlapackexsve
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Fortran で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.f</span></code>を翻訳し、汎用版BLAS、LAPACK スレッド並列版ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.f<span class="w"> </span>-lfjlapackex
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Fortran で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.f</span></code>を翻訳し、ILP64 インターフェースのSVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。ソースプログラムの基本整数型 および 基本論理型は、<code class="docutils literal notranslate"><span class="pre">-CcdII8、-CcdLL8</span></code> オプションで8バイトに拡張します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>-CcdII8<span class="w"> </span>-CcdLL8<span class="w"> </span>a.f<span class="w"> </span>-lfjlapackexsve_ilp64
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Fortran で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.f</span></code>をネイティブコンパイラで翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>frt<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.f<span class="w"> </span>-lfjlapackexsve
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>Fortran で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.f</span></code>を逐次実行プログラムとして翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>-c<span class="w"> </span>a.f
+<span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,openmp<span class="w"> </span>a.o<span class="w"> </span>-lfjlapackexsve
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>Fortran で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.f</span></code>を自動並列化して翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,parallel,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>-c<span class="w"> </span>a.f
+<span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,parallel<span class="w"> </span>a.o<span class="w"> </span>-lfjlapackexsve
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="scalapackfortran">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">5.4.5.3. </span>ScaLAPACKのFortranからの利用方法</a><a class="headerlink" href="#scalapackfortran" title="Link to this heading">¶</a></h3>
+<p>ScaLAPACKを使用するユーザプログラムを翻訳しScaLAPACKの共有ライブラリを結合するためには、<strong class="program">mpifrtpx</strong>、または、<strong class="program">mpifrt</strong>コマンドを使用し、以下の表に示すオプションを指定します。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>種類</p></th>
+<th class="head"><p>結合オプション</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LP64、汎用版</p></td>
+<td><p>-lfjscalapack</p></td>
+</tr>
+<tr class="row-odd"><td><p>LP64、SVE版</p></td>
+<td><p>-lfjscalapacksve</p></td>
+</tr>
+<tr class="row-even"><td><p>ILP64、汎用版</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>ILP64、SVE版</p></td>
+<td><p>-</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">ScaLAPACK を結合するオプションはユーザプログラムよりも後ろに指定し、BLAS、LAPACK を結合するためのオプションよりも前に指定します。</div>
+<div class="line">スレッド並列版BLAS、LAPACK を使用する場合、<code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code>オプションも一緒に指定します。</div>
+</div>
+<p>利用方法の例は以下のとおりです。</p>
+<ol class="arabic simple">
+<li><p>Fortran で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.f</span></code>を翻訳し、SVE版ScaLAPACK ライブラリを結合します。BLAS、LAPACK は逐次版を結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifrtpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.f<span class="w"> </span>-lfjscalapacksve<span class="w"> </span>-lfjlapacksve
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Fortran で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.f</span></code>を翻訳し、汎用版ScaLAPACK ライブラリを結合します。BLAS、LAPACK は逐次版を結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifrtpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.f<span class="w"> </span>-lfjscalapack<span class="w"> </span>-lfjlapack
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Fortran で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.f</span></code>を翻訳し、SVE版ScaLAPACK ライブラリを結合します。BLAS、LAPACK はスレッド並列版を結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifrtpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.f<span class="w"> </span>-lfjscalapacksve<span class="w"> </span>-lfjlapackexsve
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Fortran で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.f</span></code>をネイティブコンパイラで翻訳し、SVE版ScaLAPACK ライブラリを結合します。BLAS、LAPACK はスレッド並列版を結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>mpifrt<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.f<span class="w"> </span>-lfjscalapacksve<span class="w"> </span>-lfjlapackexsve
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="blaslapackcc">
+<span id="usingblasandlapacksequentialversionfromccppprogramsusingsharedlibrariesblaslapackscalapacklibrary"></span><h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">5.4.5.4. </span>BLAS、LAPACK逐次版のC、C++からの利用方法</a><a class="headerlink" href="#blaslapackcc" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">C、C++で書かれたユーザプログラムを翻訳し、BLAS 及びLAPACKの逐次版の共有ライブラリを結合するためには、<strong class="program">fccpx</strong>、<strong class="program">FCCpx</strong>、<strong class="program">fcc</strong>、または、<strong class="program">FCC</strong>コマンド行に、以下の表に示すオプションに加えて、 <code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>を指定します。</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>種類</p></th>
+<th class="head"><p>結合オプション</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LP64、汎用版</p></td>
+<td><p>-lfjlapack</p></td>
+</tr>
+<tr class="row-odd"><td><p>LP64、SVE版</p></td>
+<td><p>-lfjlapacksve</p></td>
+</tr>
+<tr class="row-even"><td><p>ILP64、汎用版</p></td>
+<td><p>-lfjlapack_ilp64</p></td>
+</tr>
+<tr class="row-odd"><td><p>ILP64、SVE版</p></td>
+<td><p>-lfjlapacksve_ilp64</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">結合オプションはユーザプログラムよりも後ろに指定します。<code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>オプションはどちらを指定してもかまいません。</div>
+<div class="line">ILP64 インターフェースのライブラリを使用する場合は、ILP64 に対応したヘッダファイルを使用するために<code class="file docutils literal notranslate"><span class="pre">-I$</span><em><span class="pre">FJSVXTCLANGA</span></em><span class="pre">/include/lapack_ilp64</span></code>を翻訳時のオプションに指定します。</div>
+</div>
+<p>利用方法の例は以下のとおりです。</p>
+<ol class="arabic simple">
+<li><p>C で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を翻訳し、SVE版BLAS、LAPACK ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c<span class="w"> </span>-lfjlapacksve<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>C で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を翻訳し、汎用版BLAS、LAPACK ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c<span class="w"> </span>-lfjlapack<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>C で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を翻訳し、ILP64 インターフェースのSVE版BLAS、LAPACK ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>-I<span class="si">${</span><span class="nv">FJSVXTCLANGA</span><span class="si">}</span>/include/lapack_ilp64<span class="w"> </span>a.c<span class="w"> </span>-lfjlapacksve_ilp64<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>C++で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.cpp</span></code>を翻訳し、SVE版BLAS、LAPACK ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.cpp<span class="w"> </span>-lfjlapacksve<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>OpenMP C で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を翻訳し、SVE版BLAS、LAPACKライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c<span class="w"> </span>-lfjlapacksve<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>OpenMP C で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>をネイティブコンパイラで翻訳し、SVE版BLAS、LAPACK ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>fcc<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c<span class="w"> </span>-lfjlapacksve<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="usingblasandlapackthreadparallelversionfromccppprogramsusingsharedlibrariesblaslapackscalapacklibrary">
+<span id="id4"></span><h3><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">5.4.5.5. </span>BLAS、LAPACKスレッド並列版のC、C++からの利用方法</a><a class="headerlink" href="#usingblasandlapackthreadparallelversionfromccppprogramsusingsharedlibrariesblaslapackscalapacklibrary" title="Link to this heading">¶</a></h3>
+<p>ユーザプログラムを翻訳し、BLAS 及びLAPACKのスレッド並列版の共有ライブラリを結合するためには、<strong class="program">fccpx</strong>、<strong class="program">FCCpx</strong>、<strong class="program">fcc</strong>、または、<strong class="program">FCC</strong>コマンド行にオプション <code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code>と、以下の表に示すオプションに加えて、<code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>を指定します。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>種類</p></th>
+<th class="head"><p>結合オプション</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LP64、汎用版</p></td>
+<td><p>-lfjlapackex</p></td>
+</tr>
+<tr class="row-odd"><td><p>LP64、SVE版</p></td>
+<td><p>-lfjlapackexsve</p></td>
+</tr>
+<tr class="row-even"><td><p>ILP64、汎用版</p></td>
+<td><p>-lfjlapackex_ilp64</p></td>
+</tr>
+<tr class="row-odd"><td><p>ILP64、SVE版</p></td>
+<td><p>-lfjlapackexsve_ilp64</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">結合オプションはユーザプログラムよりも後ろに指定します。<code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>オプションはどちらを指定してもかまいません。</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code>オプションのかわりに <code class="docutils literal notranslate"><span class="pre">-Kparallel</span></code>オプションを指定することもできます。</div>
+<div class="line">ILP64 インターフェースのライブラリを使用する場合は、ILP64 に対応したヘッダファイルを使用するために<code class="docutils literal notranslate"><span class="pre">-I${FJSVXTCLANGA}/include/lapack_ilp64</span></code>を翻訳時のオプションに指定します。</div>
+</div>
+<p>利用方法の例は以下のとおりです。</p>
+<ol class="arabic simple">
+<li><p>C で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c<span class="w"> </span>-lfjlapackexsve<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>CC で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を翻訳し、汎用版BLAS、LAPACK スレッド並列版ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c<span class="w"> </span>-lfjlapackex<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>C で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を翻訳し、ILP64 インターフェースのSVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>-I<span class="si">${</span><span class="nv">FJSVXTCLANGA</span><span class="si">}</span>/include/lapack_ilp64<span class="w"> </span>a.c<span class="w"> </span>-lfjlapackexsve_ilp64<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>C++で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.cpp</span></code>を翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.cpp<span class="w"> </span>-lfjlapackexsve<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>C で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を逐次実行プログラムとして翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-c<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c
+<span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kopenmp<span class="w"> </span>a.o<span class="w"> </span>-lfjlapackexsve<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>C で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を自動並列化して翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-c<span class="w"> </span>-Kfast,parallel,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c
+<span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kfast,parallel,openmp<span class="w"> </span>a.o<span class="w"> </span>-lfjlapackexsve<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="7">
+<li><p>Cで書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>をネイティブコンパイラで翻訳し、SVE版BLAS、LAPACK スレッド並列版ライブラリを結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>fcc<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c<span class="w"> </span>-lfjlapackexsve<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="scalapack-cc">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">5.4.5.6. </span>ScaLAPACK の C、C++からの利用方法</a><a class="headerlink" href="#scalapack-cc" title="Link to this heading">¶</a></h3>
+<p>C、C++で書かれたユーザプログラムを翻訳し、ScaLAPACKの共有ライブラリを結合するためには、<strong class="program">mpifccpx</strong>、<strong class="program">mpiFCCpx</strong>、<strong class="program">mpifcc</strong>、または、<strong class="program">mpiFCC</strong>コマンドを使用します。</p>
+<p>また、以下の表に示すオプション、および、使用するBLAS、LAPACKの種類に応じて、 <a class="reference internal" href="#usingblasandlapacksequentialversionfromccppprogramsusingsharedlibrariesblaslapackscalapacklibrary"><span class="std std-ref">BLAS、LAPACK逐次版のC、C++からの利用方法</span></a> 、または、<a class="reference internal" href="#usingblasandlapackthreadparallelversionfromccppprogramsusingsharedlibrariesblaslapackscalapacklibrary"><span class="std std-ref">BLAS、LAPACKスレッド並列版のC、C++からの利用方法</span></a> の表に示すオプションを指定します。さらに、<code class="docutils literal notranslate"><span class="pre">-SCALAPACK</span></code>に加えて <code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>を指定します。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>種類</p></th>
+<th class="head"><p>結合オプション</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LP64、汎用版</p></td>
+<td><p>-lfjscalapack</p></td>
+</tr>
+<tr class="row-odd"><td><p>LP64、SVE版</p></td>
+<td><p>-lfjscalapacksve</p></td>
+</tr>
+<tr class="row-even"><td><p>ILP64、汎用版</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>ILP64、SVE版</p></td>
+<td><p>-</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">ScaLAPACKの結合オプションはユーザプログラムよりも後ろに指定し、BLAS、LAPACK を結合するためのオプションよりも前に指定します。<code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>または、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>オプションはどちらを指定してもかまいません。</div>
+<div class="line">スレッド並列版BLAS、LAPACK を使用する場合、<code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code>オプションも一緒に指定します。</div>
+</div>
+<p>利用方法の例は以下のとおりです。</p>
+<ol class="arabic simple">
+<li><p>C で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を翻訳し、SVE版ScaLAPACK ライブラリを結合します。BLAS、LAPACK は逐次版を結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c<span class="w"> </span>-lfjscalapacksve<span class="w"> </span>-lfjlapacksve<span class="w"> </span>-SSL2<span class="w"> </span>-SCALAPACK
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>C で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を翻訳し、汎用版ScaLAPACK ライブラリを結合します。BLAS、LAPACK は逐次版を結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c<span class="w"> </span>-lfjscalapack<span class="w"> </span>-lfjlapack<span class="w"> </span>-SSL2<span class="w"> </span>-SCALAPACK
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>C で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を翻訳し、SVE版ScaLAPACK ライブラリを結合します。BLAS、LAPACK は逐次版を結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c<span class="w"> </span>-lfjscalapacksve<span class="w"> </span>-lfjlapacksve<span class="w"> </span>-SSL2<span class="w"> </span>-SCALAPACK
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>C++で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.cpp</span></code>を翻訳し、SVE版ScaLAPACK ライブラリを結合します。BLAS、LAPACK はスレッド並列版を結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpiFCCpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.cpp<span class="w"> </span>-lfjscalapacksve<span class="w"> </span>-lfjlapackexsve<span class="w"> </span>-SSL2<span class="w"> </span>-SCALAPACK
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>C で書かれたユーザプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>をネイティブコンパイラで翻訳し、SVE版ScaLAPACK ライブラリを結合します。BLAS、LAPACK はスレッド並列版を結合します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_CNlogin]$ </span>mpifcc<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c<span class="w"> </span>-lfjscalapacksve<span class="w"> </span>-lfjlapackexsve<span class="w"> </span>-SSL2<span class="w"> </span>-SCALAPACK
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="blaslapackscalapack">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">5.4.5.7. </span>BLAS、LAPACK、ScaLAPACK を動的ロードして利用する方法</a><a class="headerlink" href="#blaslapackscalapack" title="Link to this heading">¶</a></h3>
+<p>dlopen、dlsym 関数で動的ロードしてBLAS、LAPACK、ScaLAPACK ライブラリを利用する場合、dlopen 関数でにファイル名を指定してライブラリをロードします。</p>
+<p>共有ライブラリのファイル名を以下の表に示します。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 18.2%" />
+<col style="width: 27.3%" />
+<col style="width: 27.3%" />
+<col style="width: 27.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>種類</p></th>
+<th class="head"><p>BLAS、LAPACK逐次版</p></th>
+<th class="head"><p>BLAS、LAPACKスレッド並列版</p></th>
+<th class="head"><p>ScaLAPACK</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LP64、汎用版</p></td>
+<td><p>libfjlapack.so</p></td>
+<td><p>libfjlapackex.so</p></td>
+<td><p>libfjscalapack.so</p></td>
+</tr>
+<tr class="row-odd"><td><p>LP64、SVE 版</p></td>
+<td><p>libfjlapacksve.so</p></td>
+<td><p>libfjlapackexsve.so</p></td>
+<td><p>libfjscalapacksve.so</p></td>
+</tr>
+<tr class="row-even"><td><p>ILP64、汎用版</p></td>
+<td><p>libfjlapack_ilp64.so</p></td>
+<td><p>libfjlapackex_ilp64.so</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-odd"><td><p>ILP64、SVE 版</p></td>
+<td><p>libfjlapacksve_ilp64.so</p></td>
+<td><p>libfjlapackexsve_ilp64.so</p></td>
+<td><p>-</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li><p>dlopen、dlsym 関数を使ってBLAS、LAPACK、および、ScaLAPACKを使用する場合、結合時にライブラリを指定するオプションは必要ありません。</p></li>
+<li><p>BLAS、LAPACK スレッド並列版を使用するユーザプログラムを結合する場合、結合時のオプションに<code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code>を指定します。</p></li>
+<li><p><strong class="program">fccpx、FCCpx、mpifccpx</strong>または <strong class="program">mpiFCCpx</strong>コマンドを使ってユーザプログラムを結合する場合、<code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>または<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>オプションも一緒に指定します。</p></li>
+<li><p><strong class="program">mpifccpx</strong>または、<strong class="program">mpiFCCpx</strong>コマンドを使ってユーザプログラムと、ScaLAPACKライブラリを結合する場合、<code class="docutils literal notranslate"><span class="pre">-SCALAPACK</span></code>オプションも一緒に指定します。</p></li>
+</ul>
+<p>利用方法の例は以下のとおりです。</p>
+<ol class="arabic simple">
+<li><p>BLAS、LAPACK 逐次版を動的ロードする Cプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を翻訳、結合する。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>BLAS、LAPACK スレッド並列版を動的ロードする Cプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を翻訳、結合する。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>ScaLAPACK および BLAS、LAPACK 逐次版を動的ロードする Cプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を翻訳、結合する。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c<span class="w"> </span>-SSL2<span class="w"> </span>-SCALAPACK
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>ScaLAPACK および BLAS、LAPACK スレッド並列版を動的ロードする Cプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>を翻訳、結合する。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c<span class="w"> </span>-SSL2<span class="w"> </span>-SCALAPACK
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>BLAS、LAPACK 逐次版を動的ロードする Cプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>と、それを呼び出す Fortranプログラム<code class="file docutils literal notranslate"><span class="pre">b.f</span></code>を翻訳、結合する。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-c<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c
+<span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>b.f<span class="w"> </span>a.o
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>BLAS, LAPACK スレッド並列版を動的ロードする Cプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>と、それを呼び出す Fortranプログラム<code class="file docutils literal notranslate"><span class="pre">b.f</span></code>を翻訳、結合する。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-c<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c
+<span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>b.f<span class="w"> </span>a.o
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="7">
+<li><p>ScaLAPACK および BLAS、LAPACK 逐次版を動的ロードする Cプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>と、それを呼び出す Fortran プログラム<code class="file docutils literal notranslate"><span class="pre">b.f</span></code>を翻訳、結合する</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w"> </span>-c<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c
+<span class="gp">[_LNlogin]$ </span>mpifrtpx<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>b.f<span class="w"> </span>a.o
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>ScaLAPACK および BLAS、LAPACK スレッド並列版を動的ロードする Cプログラム<code class="file docutils literal notranslate"><span class="pre">a.c</span></code>と、それを呼び出す Fortran プログラム<code class="file docutils literal notranslate"><span class="pre">b.f</span></code>を翻訳、結合する</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w"> </span>-c<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>a.c
+<span class="gp">[_LNlogin]$ </span>mpifrtpx<span class="w"> </span>-Kfast,openmp,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>b.f<span class="w"> </span>a.o
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.4. BLAS／LAPACK／ScaLAPACKライブラリ</a><ul>
+<li><a class="reference internal" href="#fortran">5.4.1. Fortranコンパイル方法</a></li>
+<li><a class="reference internal" href="#c">5.4.2. C言語コンパイル方法</a></li>
+<li><a class="reference internal" href="#howtocompileinc-blaslapackscalapacklibrary">5.4.3. C++コンパイル方法</a></li>
+<li><a class="reference internal" href="#scalapack-fortran">5.4.4. サンプルプログラム（ScaLAPACK／FORTRAN）</a></li>
+<li><a class="reference internal" href="#id2">5.4.5. 共有ライブラリの利用方法</a><ul>
+<li><a class="reference internal" href="#blaslapack-fortran">5.4.5.1. BLAS、LAPACK 逐次版の Fortran からの利用方法</a></li>
+<li><a class="reference internal" href="#blaslapack-fotran">5.4.5.2. BLAS、LAPACK スレッド並列版の Fotran からの利用方法</a></li>
+<li><a class="reference internal" href="#scalapackfortran">5.4.5.3. ScaLAPACKのFortranからの利用方法</a></li>
+<li><a class="reference internal" href="#blaslapackcc">5.4.5.4. BLAS、LAPACK逐次版のC、C++からの利用方法</a></li>
+<li><a class="reference internal" href="#usingblasandlapackthreadparallelversionfromccppprogramsusingsharedlibrariesblaslapackscalapacklibrary">5.4.5.5. BLAS、LAPACKスレッド並列版のC、C++からの利用方法</a></li>
+<li><a class="reference internal" href="#scalapack-cc">5.4.5.6. ScaLAPACK の C、C++からの利用方法</a></li>
+<li><a class="reference internal" href="#blaslapackscalapack">5.4.5.7. BLAS、LAPACK、ScaLAPACK を動的ロードして利用する方法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="C-SSLIILibrary.html"
+                          title="前の章へ"><span class="section-number">5.3. </span>C-SSL II ライブラリ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="FastBasicOperationsLibraryForQuadruplePrecision.html"
+                          title="次の章へ"><span class="section-number">5.5. </span>高速4倍精度基本演算ライブラリ</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="FastBasicOperationsLibraryForQuadruplePrecision.html" title="5.5. 高速4倍精度基本演算ライブラリ"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="C-SSLIILibrary.html" title="5.3. C-SSL II ライブラリ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>数学ライブラリ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.4. </span>BLAS／LAPACK／ScaLAPACKライブラリ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>
