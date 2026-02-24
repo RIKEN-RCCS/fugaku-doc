@@ -13,7 +13,10 @@ Available versions of the commercial software
 | Commercial                                                   | Version                                     | Notes                                       |
 | software                                                     | (bold means the default version)            |                                             |
 +==============================================================+================+============================+=============================================+
-| Amber                                                        | Amber22        | **Amber22 & AmberTools23** | | Amber22 : updates 1 – 5 are applied       |
+| Amber                                                        | Amber24        | **Amber24 & AmberTools24** | | Amber24 : updates 1 – 3 are applied       |
+|                                                              |                |                            | | AmberTools24 : updates 1 - 6 are applied  |
++                                                              +----------------+----------------------------+---------------------------------------------+
+|                                                              | Amber22        | **Amber22 & AmberTools23** | | Amber22 : updates 1 – 5 are applied       |
 |                                                              |                |                            | | AmberTools23 : updates 1 - 5 are applied  |
 +                                                              +                +----------------------------+---------------------------------------------+
 |                                                              |                | Amber22 & AmberTools22     | | Amber22 : no updates are applied          |
