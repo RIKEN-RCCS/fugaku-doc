@@ -1,0 +1,594 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.8.4. clang mode &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f85107c5" />
+    
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="3.1.8.4.7.1. Sequential execution" href="CSampleProgram%28sequential%29Clang.html" />
+    <link rel="prev" title="3.1.8.3.7.4. Hybrid parallel" href="CSampleProgram%28hybridParallel%29.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CSampleProgram%28sequential%29Clang.html" title="3.1.8.4.7.1. Sequential execution"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="CSampleProgram%28hybridParallel%29.html" title="3.1.8.3.7.4. Hybrid parallel"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><span class="section-number">3.1.8. </span>C language</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.8.4. </span>clang mode</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="clang-mode">
+<h1><span class="section-number">3.1.8.4. </span>clang mode<a class="headerlink" href="#clang-mode" title="Link to this heading">¶</a></h1>
+<p>Here we explain about clang mode.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Almost all options of Clang / LLVM can be used, but operation is not guaranteed if an option not listed in “C Language User’s Guide”-“Chapter 9 Clang Mode” is specified.</p>
+</div>
+<section id="how-to-compile">
+<h2><span class="section-number">3.1.8.4.1. </span>How to compile<a class="headerlink" href="#how-to-compile" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">This indicates how to compile C language program.</div>
+<div class="line">C compiler uses  <strong class="program">fccpx</strong>.  When using MPI library, by using  <strong class="program">mpifccpx</strong>, you don’t need to consider about MPI header file and library.</div>
+</div>
+<p>To translate with clang mode, enable  <code class="docutils literal notranslate"><span class="pre">-Nclang</span></code> option.</p>
+<ul class="simple">
+<li><p>If using MPI library</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w"> </span><span class="o">[</span>compile<span class="w"> </span>option<span class="w"> </span>including<span class="w"> </span>-Nclang<span class="w"> </span>option<span class="o">]</span><span class="w"> </span><span class="nb">source</span><span class="w"> </span>file<span class="w"> </span>name
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>If not using MPI library</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span><span class="o">[</span>compile<span class="w"> </span>option<span class="w"> </span>including<span class="w"> </span>-Nclang<span class="w"> </span>option<span class="o">]</span><span class="w"> </span><span class="nb">source</span><span class="w"> </span>file<span class="w"> </span>name
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>There are no restrictions on the order in which options are listed, including  <code class="docutils literal notranslate"><span class="pre">-Nclang</span></code> options, and source file names.</p>
+<p>You may specify a mixture of options including  <code class="docutils literal notranslate"><span class="pre">-Nclang</span></code> options and source file names.</p>
+</div>
+</div></blockquote>
+</section>
+<section id="compilation-option">
+<h2><span class="section-number">3.1.8.4.2. </span>Compilation option<a class="headerlink" href="#compilation-option" title="Link to this heading">¶</a></h2>
+<p>The main compilation options of the C compiler are shown below.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Compile option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-c</p></td>
+<td><p>Creates an object file.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o exe_file</p></td>
+<td><div class="line-block">
+<div class="line">Change executable file name / object file name to  <code class="docutils literal notranslate"><span class="pre">exe_file</span></code>.</div>
+<div class="line">If omitted executable file name, it will be <code class="file docutils literal notranslate"><span class="pre">a.out</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-O [0|1|2|3|fast]</p></td>
+<td><div class="line-block">
+<div class="line">Specify optimization level.</div>
+<div class="line">If omitted the word after  <code class="docutils literal notranslate"><span class="pre">-O</span></code>, it will be  <code class="docutils literal notranslate"><span class="pre">-O2</span></code>.</div>
+<div class="line">When option is omitted, it is  <code class="docutils literal notranslate"><span class="pre">-O2</span></code>.</div>
+<div class="line"><a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/en/operation/20211208_01">Change the default value of C/C++ compiler option that specifies the level of optimization</a></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-fvectorize</p></td>
+<td><div class="line-block">
+<div class="line">Instructs the operation in the loop to generate an object using SIMD extension instructions.</div>
+<div class="line">If  <code class="docutils literal notranslate"><span class="pre">-O1</span></code> option is enabled, <code class="docutils literal notranslate"><span class="pre">-fno-vectorize</span></code> option is applied when omitted.</div>
+<div class="line">Over  <code class="docutils literal notranslate"><span class="pre">-O2</span></code>option is enabled,  <code class="docutils literal notranslate"><span class="pre">-fvectorize</span></code> option is applied when omitted.</div>
+<div class="line">It is the same instruction with trad mode’s  <code class="docutils literal notranslate"><span class="pre">-Ksimd</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-fopenmp</p></td>
+<td><div class="line-block">
+<div class="line">Enable directives in the OpenMP C specification. Supported specifications are OpenMP 4.5/OpenMP 5.0 (part).</div>
+<div class="line">When option omitted, it’s <code class="docutils literal notranslate"><span class="pre">-fnoopenmp</span></code>.</div>
+<div class="line">The <code class="docutils literal notranslate"><span class="pre">-fopenmp</span></code> option is needed if an object program compiled with it exists in the command line as an input file.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-ffj-ocl</p></td>
+<td><div class="line-block">
+<div class="line">Enables Fujitsu compiler-specific optimization control lines (pragma directives) supported by clang mode.</div>
+<div class="line">When option omitted, it’s  <code class="docutils literal notranslate"><span class="pre">-ffj-no-ocl</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-I directory</p></td>
+<td><p>Specify the directory to search for INCLUDE files.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Rpass=.*</p></td>
+<td><div class="line-block">
+<div class="line">Output optimization information.</div>
+<div class="line">It is the same instruction with trad mode’s  <code class="docutils literal notranslate"><span class="pre">-Koptmsg=2</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-std=[level]</p></td>
+<td><div class="line-block">
+<div class="line">Specifies the level of language specification that the compiler (including preprocessor) interprets.</div>
+<div class="line">For level, specify one of these: c89, c99, c11, gnu89, gnu99 or gnu11. When omitted,  <code class="docutils literal notranslate"><span class="pre">-std=gnu11</span></code> option is applied.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-ffj-src</p></td>
+<td><div class="line-block">
+<div class="line">Output source list.</div>
+<div class="line">It is the same instruction with trad mode’s  <code class="docutils literal notranslate"><span class="pre">-Nsrc</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-ffj-lst[=p|t]</p></td>
+<td><div class="line-block">
+<div class="line">Instructs the translation information to be output to a file. The translation information is output to a file with the suffix “.lst”.</div>
+<div class="line">If multiple C source files are specified, they are output to each file name.lst file.</div>
+<div class="line">If  <code class="docutils literal notranslate"><span class="pre">-ffj-lst</span></code> option is specified with the argument omitted,  <code class="docutils literal notranslate"><span class="pre">-ffj-lst=p</span></code> is applied.</div>
+</div>
+<dl class="simple">
+<dt>-ffj-lst=p</dt><dd><p>Instructs the source list and statistical information to be output as translation information.</p>
+</dd>
+<dt>-ffj-lst=t</dt><dd><p>In addition to  <code class="docutils literal notranslate"><span class="pre">-ffj-lst=p</span></code>, instructs to output more detailed optimization information.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-ffj-largepage</p></td>
+<td><p>Indicates whether to create an executable program that uses the large page feature. This option must be specified when linking a program. Default is  <code class="docutils literal notranslate"><span class="pre">-ffj-largepage</span></code> .If not using large page function, use  <code class="docutils literal notranslate"><span class="pre">-ffj-nolargepage</span></code> option. Also <code class="docutils literal notranslate"><span class="pre">-ffj-largepage</span></code>otpion is unabled when specified <code class="docutils literal notranslate"><span class="pre">-fsanitize</span></code>option at the same time.</p></td>
+</tr>
+<tr class="row-even"><td><p>-mcpu</p></td>
+<td><p>Direct outputting the object file for specified processor. For omitted value, <code class="docutils literal notranslate"><span class="pre">-mcpu=a64fx</span></code>is applied.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Nlibomp</p></td>
+<td><p>Uses the LLVM OpenMP library for parallel processing. This option must be specified when linking. When omitted,  <code class="docutils literal notranslate"><span class="pre">-Nlibomp</span></code> option is applied.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--version</span></code></p></td>
+<td><p>Outputs compiler version and copyright information to standard error.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>About C compiler clang mode compile option, see C User’s Guide “9.1.2 Translation Option”.</p>
+</div>
+</section>
+<section id="recommended-compiling-options">
+<h2><span class="section-number">3.1.8.4.3. </span>Recommended compiling options<a class="headerlink" href="#recommended-compiling-options" title="Link to this heading">¶</a></h2>
+<p>As an optimization option of Clang mode of C compiler, it is Recommended to specify  <code class="docutils literal notranslate"><span class="pre">-Ofast</span></code>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-Ofast</span></code> option is the same result with specifying “  <code class="docutils literal notranslate"><span class="pre">-O3</span> <span class="pre">-ffj-fast-matmul</span> <span class="pre">-ffast-math</span> <span class="pre">-ffp-contract=fast</span> <span class="pre">-ffj-fp-relaxed</span> <span class="pre">-ffj-ilfunc</span> <span class="pre">-fbuiltin</span> <span class="pre">-fomit-frame-pointer</span> <span class="pre">-finline-functions</span></code>“.</p></li>
+</ul>
+<blockquote>
+<div><div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Optimization functions other than the recommended options may or may not be effective depending on the characteristics of the program data and must be tried.</p>
+</div>
+</div></blockquote>
+<p>The details of the options are shown below.</p>
+<ul class="simple">
+<li><p>The list of option that results the same with  <code class="docutils literal notranslate"><span class="pre">-Ofast</span></code></p></li>
+</ul>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-O3</p></td>
+<td><p>Performs optimizations that are higher than optimization levels 1 and 2.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-ffj-fast-matmul <sup>*</sup></p></td>
+<td><p>Convert matrix product loops into fast library calls.</p></td>
+</tr>
+<tr class="row-even"><td><p>-ffast-math <sup>*</sup></p></td>
+<td><p>Performs optimization that changes the evaluation method of operations.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-ffp-contract=fast <sup>*</sup></p></td>
+<td><p>Performs optimization using arithmetic instructions of Floating-Point Multiply-Add/Subtract.</p></td>
+</tr>
+<tr class="row-even"><td><p>-ffj-fp-relaxed <sup>*</sup></p></td>
+<td><p>For single-precision floating-point division, double-precision floating-point division, and the sqrt function, reciprocal approximation using the reciprocal approximation instruction and Floating-Point Multiply-Add / Subtract instruction is performed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-ffj-ilfunc <sup>*</sup></p></td>
+<td><p>Mathematical functions are expanded inline. When  <code class="docutils literal notranslate"><span class="pre">-ffj-ilfunc</span></code> option operand chapter is omitted,  <code class="docutils literal notranslate"><span class="pre">-ffj-ilfunc=loop</span></code> option is applied.</p></td>
+</tr>
+<tr class="row-even"><td><p>-fbuiltin</p></td>
+<td><p>Recognize the behavior of standard library functions to facilitate optimization.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-fomit-frame-pointer</p></td>
+<td><p>Performs optimization that does not guarantee the frame pointer register in function calls.</p></td>
+</tr>
+<tr class="row-even"><td><p>-finline-functions</p></td>
+<td><p>Functions defined in the source program are targeted for inline expansion.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><sup>*</sup>:Optimization may affect the calculation result. For details, see the manual “C User’s Guide”-“Chapter 9 Clang Mode”-“Floating-point arithmetic optimization and its side effects”.</p>
+</div>
+</div></blockquote>
+</section>
+<section id="environment-variable-option-specification">
+<h2><span class="section-number">3.1.8.4.4. </span>Environment variable (option specification)<a class="headerlink" href="#environment-variable-option-specification" title="Link to this heading">¶</a></h2>
+<p>This shows the environment variable which C language compiler (<strong class="program">fccpx</strong>) uses.</p>
+<ol class="arabic">
+<li><p>fccpx_ENV</p>
+<p>You can set compile options in the environment variable fccpx_ENV.
+The compile options defined in fccpx_ENV are automatically passed to the compiler.
+Compiler options defined in environment variables and systems have the following precedence:</p>
+<p>[Priority]</p>
+<ol class="arabic simple">
+<li><p>Compile command operand</p></li>
+<li><p>Environment variable for setting translation option (Mode unique:fccpx_clang_ENV,fcc_clang_ENV)</p></li>
+<li><p>Environment variable for setting translation option (Mode common:fccpx_ENV,fcc_ENV)</p></li>
+<li><p>Translation profile file (Mode unique:<code class="file docutils literal notranslate"><span class="pre">/etc$</span><em><span class="pre">FJSVXTCLANGA</span></em><span class="pre">/fccpx_clang_PROF</span></code>)</p></li>
+<li><p>Translation profile file (Mode common:<code class="file docutils literal notranslate"><span class="pre">/etc$</span><em><span class="pre">FJSVXTCLANGA</span></em><span class="pre">/fccpx_PROF</span></code>)</p></li>
+<li><p>Omitted value</p></li>
+</ol>
+<p>In the following example, the recommended option is set in the environment variable fccpx_ENV.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">fccpx_ENV</span><span class="o">=</span>-Ofast<span class="w"> </span>-mllvm<span class="w"> </span>-polly<span class="w"> </span>-mllvm<span class="w"> </span>-polly-parallel
+</pre></div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><p>Enabled option is confirmable with standard outputting by specifying  <code class="docutils literal notranslate"><span class="pre">-v</span></code> or  <code class="docutils literal notranslate"><span class="pre">-###</span></code> option.</p>
+<blockquote>
+<div><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>If specified  <code class="docutils literal notranslate"><span class="pre">-v</span></code> option, command (translation) is executed.</p>
+<p>If specified  <code class="docutils literal notranslate"><span class="pre">-###</span></code> option, command (translation) is not executed.</p>
+</div>
+<p>[Output example when specifying  <code class="docutils literal notranslate"><span class="pre">-v</span></code>]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Nclang<span class="w"> </span>-v<span class="w"> </span>clang_sample.c
+<span class="go">clang: Fujitsu C/C++ Compiler 4.0.0 (Jun  6 2019 15:04:58) (based on LLVM 6.0.0)</span>
+<span class="go">Target: aarch64-unknown-linux-gnu</span>
+<span class="go">Thread model: posix</span>
+
+<span class="go">InstalledDir: (omitted)</span>
+<span class="go">Found candidate GCC installation: (omitted)</span>
+<span class="go">Found candidate GCC installation: (omitted)</span>
+<span class="go">Selected GCC installation: (omitted)</span>
+<span class="go">Candidate multilib: .;@m64</span>
+<span class="go">Selected multilib: .;@m64</span>
+<span class="go"> &quot;/opt/FJSVxtclanga/fujitsu_compilers_sve_cross_20191226/sve_cross/clang-comp/bin/clang-7&quot;</span>
+<span class="go"> -cc1 -triple aarch64-unknown-linux-gnu -emit-obj -mrelax-all -disable-free</span>
+<span class="go"> -disable-llvm-verifier -discard-value-names -main-file-name clang_sample.c</span>
+<span class="go"> -mrelocation-model static -mthread-model posix -mdisable-fp-elim -fmath-errno</span>
+<span class="go"> -masm-verbose -mconstructor-aliases -munwind-tables -fuse-init-array</span>
+<span class="go"> -target-cpu a64fx -mllvm -enable-prefetch-hpc-tag -target-feature +v8.2a</span>
+<span class="go"> -target-feature +fp-armv8 -target-feature +neon -target-feature +crc</span>
+<span class="go"> -target-feature +crypto -target-feature +ras -target-feature +lse</span>
+<span class="go"> -target-feature +rdm -target-feature +sve -target-abi aapcs</span>
+<span class="go"> -mllvm -use-sve-vectorizer -fallow-half-arguments-and-returns -ffj-line</span>
+<span class="go"> -dwarf-column-info -debug-info-kind=line-tables-only -dwarf-version=4 -debugger-tuning=gdb -v</span>
+<span class="go"> -resource-dir /opt/FJSVxtclanga/fujitsu_compilers_sve_cross_20191226/sve_cross/clang-comp/lib64/clang/7.1.0</span>
+<span class="go"> -I /opt/FJSVxtclanga/.common/SELN003/include -I /opt/FJSVxtclanga/.common/TELI006/include</span>
+<span class="go"> -isysroot /opt/FJSVxos/devkit/aarch64/rfs -internal-isystem /opt/FJSVxos/devkit/aarch64/rfs/usr/local/include</span>
+<span class="go"> -internal-isystem /opt/FJSVxtclanga/fujitsu_compilers_sve_cross_20191226/sve_cross/clang-comp/bin/../include/external</span>
+<span class="go"> -internal-isystem /opt/FJSVxtclanga/fujitsu_compilers_sve_cross_20191226/sve_cross/clang-comp/lib64/clang/7.1.0/include</span>
+<span class="go"> -internal-externc-isystem /opt/FJSVxos/devkit/aarch64/rfs/include</span>
+<span class="go"> -internal-externc-isystem /opt/FJSVxos/devkit/aarch64/rfs/usr/include</span>
+<span class="go"> -fdebug-compilation-dir /home/users/fj0025/05_C/clang -ferror-limit 19 -fmessage-length 157</span>
+<span class="go"> -fno-signed-char -fobjc-runtime=gcc -fdiagnostics-show-option -fcolor-diagnostics</span>
+<span class="go"> -o /home/users/xxxxxx/clang_sample-903f6a.o -x c clang_sample.c -faddrsig</span>
+<span class="go">clang -cc1 version 7.1.0 based upon LLVM 7.1.0 default target aarch64-unknown-linux-gnu</span>
+<span class="gp gp-VirtualEnv">(Omitted)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><p>TMPDIR</p>
+<p>The temporary directory used by the compiler can be changed by using the environment variable <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>.
+<code class="docutils literal notranslate"><span class="pre">/etc/profile</span></code> to set the home directory in <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>.</p>
+<p>When changing the temporary directory, please avoid using <code class="file docutils literal notranslate"><span class="pre">/tmp</span></code>.
+For <span class="target" id="index-2"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">TMPDIR</span></code>, specify a writable directory of  <code class="file docutils literal notranslate"><span class="pre">/home/</span></code> or  <code class="file docutils literal notranslate"><span class="pre">/vol0n0m/data/</span></code>.</p>
+</li>
+</ol>
+</section>
+<section id="c-library-for-parallel-processing">
+<h2><span class="section-number">3.1.8.4.5. </span>C library for parallel processing<a class="headerlink" href="#c-library-for-parallel-processing" title="Link to this heading">¶</a></h2>
+<p>With  Supercomputer Fugaku, two libraries are provided for parallel processing.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Library name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LLVM OpenMP library</p></td>
+<td><ul class="simple">
+<li><p>A library for parallel functions based on LLVM OpenMP Runtime Library, which is open source software.</p></li>
+<li><p>Supported specifications are OpenMP 4.5/OpenMP 5.0 (part).</p></li>
+<li><p>Available in clang mode and trad mode.</p></li>
+<li><p>The trad mode is available in OpenMP 3.1/OpenMP 4.5 (part).</p></li>
+<li><p>For the specifications of the LLVM OpenMP library, please read “Chapter 4 Multiprocessing” in the C User’s Guide.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Fujitsu OpenMP library</p></td>
+<td><ul class="simple">
+<li><p>Available on only trad mode.</p></li>
+<li><p>For the specifications of the Fujitsu OpenMP library, please read “Appendix J Fujitsu OpenMP Library” in the C User’s Guide.</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Specify the library to be used for parallel processing.</div>
+<div class="line">This option must be specified when linking.</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 18.2%" />
+<col style="width: 81.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-Nlibomp</p></td>
+<td><p>Indicates that the LLVM OpenMP library is to be used as the OpenMP library.</p>
+<p>When omitted,  <code class="docutils literal notranslate"><span class="pre">-Nlibomp</span></code> option is applied.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Nfjomplib</p></td>
+<td><p>Not available in clang mode.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">-Nclang</span></code> option is available, <code class="docutils literal notranslate"><span class="pre">-Nfjomplib</span></code> option is disabled and <code class="docutils literal notranslate"><span class="pre">-Nlibomp</span></code> option is enabled.</p>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The following environment variables added in OpenMP 4.0 and later are available in the LLVM OpenMP library.
+On the other hand, the Fujitsu OpenMP library does not support these environment variables. These environment variables are ignored when using the Fujitsu OpenMP library.</p>
+<ul class="simple">
+<li><p>OMP_CANCELLATION</p></li>
+<li><p>OMP_DISPLAY_ENV</p></li>
+<li><p>OMP_DEFAULT_DEVICE</p></li>
+<li><p>OMP_MAX_TASK_PRIORITY</p></li>
+</ul>
+</div>
+</section>
+<section id="compilation-example">
+<h2><span class="section-number">3.1.8.4.6. </span>Compilation example<a class="headerlink" href="#compilation-example" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">Shows how to compile a C program.</div>
+<div class="line">Here is a general C language compilation procedure.</div>
+</div>
+<p>Multi node job (hybrid parallel)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w"> </span>-Nclang<span class="w"> </span>-Ofast<span class="w"> </span>-mllvm<span class="w"> </span>-polly<span class="w"> </span>-mllvm<span class="w"> </span>-polly-parallel<span class="w"> </span>-fopenmp<span class="w">  </span>sample.c
+</pre></div>
+</div>
+<p>Single node job (sequential)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Nclang<span class="w"> </span>-Ofast<span class="w"> </span>sample.c
+</pre></div>
+</div>
+<p>Single node job (OpenMP)</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Nclang<span class="w"> </span>-Ofast<span class="w"> </span>-fopenmp<span class="w">  </span>sample.c
+</pre></div>
+</div>
+</section>
+<section id="c-sample-program">
+<h2><span class="section-number">3.1.8.4.7. </span>C sample program<a class="headerlink" href="#c-sample-program" title="Link to this heading">¶</a></h2>
+<p>Here is an example from compilation to job execution using a sample program.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="CSampleProgram%28sequential%29Clang.html">3.1.8.4.7.1. Sequential execution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CSampleProgram%28OpenMP%29Clang.html">3.1.8.4.7.2. OpenMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CSampleProgram%28hybridParallel%29Clang.html">3.1.8.4.7.3. Hybrid parallel</a></li>
+</ul>
+</div>
+</section>
+<section id="built-in-debug-function">
+<h2><span class="section-number">3.1.8.4.8. </span>Built-in debug function<a class="headerlink" href="#built-in-debug-function" title="Link to this heading">¶</a></h2>
+<p>The built-in debugging function performs various inspections by compiling a program with debugging options at compile time and executing an execution module.</p>
+<ul class="simple">
+<li><p>About built-in debug function</p></li>
+</ul>
+<blockquote>
+<div><p>Changing the execution environment may cause abnormal termination. In such cases, the following are possible causes:</p>
+<ol class="arabic simple">
+<li><p>The variable is quoted without setting an initial value.</p></li>
+<li><p>Array subscript exceeds array size</p></li>
+</ol>
+</div></blockquote>
+<p>We introduce the built-in debugging function to check these.</p>
+<ul class="simple">
+<li><p>When using C / C ++, use the built-in debugging function with the following inspection options.</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-fsanitize=undefined</span></code> option</p></li>
+</ul>
+<blockquote>
+<div><p>When using an array, check the size of the declared array and the validity of the index range when used</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-fsanitize=address</span></code> option</p></li>
+</ul>
+<blockquote>
+<div><p>Inspect heap memory for illegal memory release, out-of-area write, and memory leak</p>
+</div></blockquote>
+</div></blockquote>
+<p>For more detail, see “9.1.2.2.1 General Options for Compiler” of “Chapter 9 Clang Mode” in the manual “C User’s Guide”.</p>
+<p>This is an example of message which output with sample program that is created to match  <code class="docutils literal notranslate"><span class="pre">fsanitize=undefined</span></code> option . (Sample program is easy to understand to output message.)</p>
+<ol class="arabic simple">
+<li><p>Sample program</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="w"> </span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="linenos">2</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">3</span><span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+<span class="linenos">4</span><span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="linenos">5</span><span class="w">   </span><span class="n">data</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
+<span class="linenos">6</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>compiling</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Nclang<span class="w"> </span>-Ofast<span class="w"> </span>-fsanitize<span class="o">=</span>undefined<span class="w"> </span>-o<span class="w"> </span>sample_debug<span class="w"> </span>sample_debug.c
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When compiling, warining which means the below  <code class="docutils literal notranslate"><span class="pre">-ffj-largepage</span></code> option is disabled will be output.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>clang-6.0: warning: &#39;-fsanitize&#39; specified, &#39;-ffj-largepage&#39; ignored. [-Woption-ignored]
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Execution example</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>cat<span class="w"> </span>sample_debug.sh.5568.err
+<span class="go">sample_debug.c:5:3: runtime error: index 5 out of bounds for type &#39;int [3]&#39;</span>
+<span class="go">sample_debug.c:5:3: runtime error: store to address 0xffffffffe608 with insufficient space for an object of type &#39;int&#39;</span>
+<span class="go">0xffffffffe608: note: pointer points here</span>
+<span class="go">00 40 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  8c 32 40 00 00 00 00 00  00 00 00 00</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3.1.8.4. clang mode</a><ul>
+<li><a class="reference internal" href="#how-to-compile">3.1.8.4.1. How to compile</a></li>
+<li><a class="reference internal" href="#compilation-option">3.1.8.4.2. Compilation option</a></li>
+<li><a class="reference internal" href="#recommended-compiling-options">3.1.8.4.3. Recommended compiling options</a></li>
+<li><a class="reference internal" href="#environment-variable-option-specification">3.1.8.4.4. Environment variable (option specification)</a></li>
+<li><a class="reference internal" href="#c-library-for-parallel-processing">3.1.8.4.5. C library for parallel processing</a></li>
+<li><a class="reference internal" href="#compilation-example">3.1.8.4.6. Compilation example</a></li>
+<li><a class="reference internal" href="#c-sample-program">3.1.8.4.7. C sample program</a></li>
+<li><a class="reference internal" href="#built-in-debug-function">3.1.8.4.8. Built-in debug function</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CSampleProgram%28hybridParallel%29.html"
+                          title="previous chapter"><span class="section-number">3.1.8.3.7.4. </span>Hybrid parallel</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CSampleProgram%28sequential%29Clang.html"
+                          title="next chapter"><span class="section-number">3.1.8.4.7.1. </span>Sequential execution</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CSampleProgram%28sequential%29Clang.html" title="3.1.8.4.7.1. Sequential execution"
+             >next</a></li>
+        <li class="right" >
+          <a href="CSampleProgram%28hybridParallel%29.html" title="3.1.8.3.7.4. Hybrid parallel"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><span class="section-number">3.1.8. </span>C language</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.8.4. </span>clang mode</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,276 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.3. C-SSL II library &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f85107c5" />
+    
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5.4. BLAS/LAPACK/ScaLAPACK library" href="BLASLAPACKScaLAPACKLibrary.html" />
+    <link rel="prev" title="5.2. SSL II library" href="SSLIILibrary.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="BLASLAPACKScaLAPACKLibrary.html" title="5.4. BLAS/LAPACK/ScaLAPACK library"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="SSLIILibrary.html" title="5.2. SSL II library"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>Math library</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.3. </span>C-SSL II library</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="c-ssl-ii-library">
+<h1><span class="section-number">5.3. </span>C-SSL II library<a class="headerlink" href="#c-ssl-ii-library" title="Link to this heading">¶</a></h1>
+<p>The C-SSL II library provides interface routines for the C language to a subset of the SSL II rich subroutine group used in the Fortran language, making it available in the C / C ++ language.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Linear calculation</p></li>
+<li><p>Eigenvalue eigenvector</p></li>
+<li><p>Nonlinear calculation</p></li>
+<li><p>Extreme value problem</p></li>
+<li><p>Interpolation, approximation</p></li>
+<li><p>Conversion</p></li>
+<li><p>Numerical calculus</p></li>
+<li><p>Differential equation</p></li>
+<li><p>Special functions</p></li>
+<li><p>Pseudo random number</p></li>
+<li><p>Auxiliary routine</p></li>
+</ol>
+</div></blockquote>
+<section id="how-to-compile-c-language">
+<h2><span class="section-number">5.3.1. </span>How to compile C language<a class="headerlink" href="#how-to-compile-c-language" title="Link to this heading">¶</a></h2>
+<p>To use C-SSL II library, specify  <code class="docutils literal notranslate"><span class="pre">-SSL2</span></code> or  <code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code> option.</p>
+<p>To link SSL II/MPI library, specify  <code class="docutils literal notranslate"><span class="pre">-SSL2MPI</span></code> option to  <strong class="program">mpiFCCpx</strong> command, and also specify  <code class="docutils literal notranslate"><span class="pre">-SSL2</span></code> or  <code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>.</p>
+<p>Compile example is as following:</p>
+<ol class="arabic simple">
+<li><p>MPI / Auto parallel / SSL II (Mainly multi node job)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w">  </span>-Kfast,parallel,SVE<span class="w"> </span>sample.c<span class="w"> </span>-SSL2MPI<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>MPI / OpenMP / SSL II (Mainly multi node job)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w"> </span>-Kfast,parallel,openmp,SVE<span class="w"> </span>sample.c<span class="w"> </span>-SSL2MPI<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Sequential / SSL II (Single node job)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kfast,SVE<span class="w"> </span>sample.c<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Auto parallel / SSL II (Single node job)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kfast,parallel,SVE<span class="w"> </span>sample.c<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>OpenMP / SSL II (Single node job)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-Kfast,openmp,SVE<span class="w"> </span>sample.c<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p>When conbine with login node, if  <code class="docutils literal notranslate"><span class="pre">-KSVE</span></code> is enabled, combine libraries using  <code class="docutils literal notranslate"><span class="pre">SVE</span></code>.</p></li>
+<li><p>When conbine with login node, if  <code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code> is enabled, combine general purpose libraries.</p></li>
+<li><p>When conbine with computing node, specifying  <code class="docutils literal notranslate"><span class="pre">-KSVE</span></code> or  <code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code> combines libraries using  <code class="docutils literal notranslate"><span class="pre">SVE</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-KSVE</span></code> option’s default (when omitted) will be  <code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>.</p></li>
+<li><p>To translate the user program with the native compiler and combine C-SSL II, use  <strong class="program">FCC</strong> command.</p></li>
+<li><p>To translate a user program written in MPI using a native compiler and combine SSL II/MPI, use  <strong class="program">mpiFCC</strong> command.</p></li>
+</ul>
+</div>
+</section>
+<section id="sample-program-c-ssl-ii-c">
+<h2><span class="section-number">5.3.2. </span>Sample program (C-SSL II/C)<a class="headerlink" href="#sample-program-c-ssl-ii-c" title="Link to this heading">¶</a></h2>
+<p>This indicates a example of compiling to job execution using sample program.</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">Prepare a source program.</div>
+<div class="line">Prepare a sample program as  <code class="file docutils literal notranslate"><span class="pre">/home/system/sample/CSSL2/sample(C-SSLII-C).c</span></code>.</div>
+<div class="line"><a class="reference download internal" download="" href="../_downloads/aebb44c490ad2228375041dfa2b83aea/sample_C-SSLII-C.c"><code class="xref download docutils literal notranslate"><span class="pre">(Download</span> <span class="pre">a</span> <span class="pre">sample</span> <span class="pre">code)</span></code></a></div>
+</div>
+</li>
+<li><p>Compile a sample program.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-V<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span><span class="w"> </span>-Nlst<span class="o">=</span>t<span class="w"> </span>-o<span class="w"> </span>sample_C-SSLII-C<span class="w"> </span>sample_C-SSLII-C.c<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="3">
+<li><div class="line-block">
+<div class="line">Prepare a job script.</div>
+<div class="line">Prepare a job script as <code class="file docutils literal notranslate"><span class="pre">/home/system/sample/CSSL2/sample_C-SSLII-C.sh</span></code>.</div>
+<div class="line"><a class="reference download internal" download="" href="../_downloads/37e1ef0ed20b2085e9011859483b3649/sample_C-SSLII-C.sh"><code class="xref download docutils literal notranslate"><span class="pre">(Download</span> <span class="pre">a</span> <span class="pre">sample</span> <span class="pre">code)</span></code></a></div>
+</div>
+</li>
+<li><p>Submit a job with  <strong class="program">pjsub</strong> command.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>sample_C-SSLII-C.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 138 submitted.</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="how-to-compile-c">
+<h2><span class="section-number">5.3.3. </span>How to compile C++<a class="headerlink" href="#how-to-compile-c" title="Link to this heading">¶</a></h2>
+<p>To use C-SSL II library, specify  <code class="docutils literal notranslate"><span class="pre">-SSL2</span></code> or  <code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code> option.</p>
+<p>To link SSL II/MPI library, specify  <code class="docutils literal notranslate"><span class="pre">-SSL2MPI</span></code> option to  <strong class="program">mpiFCCpx</strong> command, and also specify  <code class="docutils literal notranslate"><span class="pre">-SSL2</span></code> or  <code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>.</p>
+<p>Compile example is as following:</p>
+<ol class="arabic simple">
+<li><p>MPI / Auto parallel / SSL II (Mainly multi node job)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpiFCCpx<span class="w"> </span>-Kfast,parallel,SVE<span class="w"> </span>sample.cc<span class="w"> </span>-SSL2MPI<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>MPI / OpenMP / SSL II (Mainly multi node job)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpiFCCpx<span class="w"> </span>-Kfast,parallel,openmp,SVE<span class="w"> </span>sample.cc<span class="w"> </span>-SSL2MPI<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Sequential / SSL II (Single node job)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast,SVE<span class="w"> </span>sample.cc<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Auto parallel / SSL II (Single node job)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast,parallel,SVE<span class="w"> </span>sample.cc<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>OpenMP / SSL II (Single node job)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-Kfast,openmp,SVE<span class="w"> </span>sample.cc<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p>When conbine with login node, if  <code class="docutils literal notranslate"><span class="pre">-KSVE</span></code> is enabled, combine libraries using  <code class="docutils literal notranslate"><span class="pre">SVE</span></code>.</p></li>
+<li><p>When conbine with login node, if  <code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code> is enabled, combine general purpose libraries.</p></li>
+<li><p>When conbine with computing node, specifying  <code class="docutils literal notranslate"><span class="pre">-KSVE</span></code> or  <code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code> combines libraries using  <code class="docutils literal notranslate"><span class="pre">SVE</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-KSVE</span></code> option’s default (when omitted) will be  <code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>.</p></li>
+<li><p>To translate the user program with the native compiler and combine C-SSL II, use  <strong class="program">FCC</strong> command.</p></li>
+<li><p>To translate a user program written in MPI using a native compiler and combine SSL II/MPI, use  <strong class="program">mpiFCC</strong> command.</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.3. C-SSL II library</a><ul>
+<li><a class="reference internal" href="#how-to-compile-c-language">5.3.1. How to compile C language</a></li>
+<li><a class="reference internal" href="#sample-program-c-ssl-ii-c">5.3.2. Sample program (C-SSL II/C)</a></li>
+<li><a class="reference internal" href="#how-to-compile-c">5.3.3. How to compile C++</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="SSLIILibrary.html"
+                          title="previous chapter"><span class="section-number">5.2. </span>SSL II library</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="BLASLAPACKScaLAPACKLibrary.html"
+                          title="next chapter"><span class="section-number">5.4. </span>BLAS/LAPACK/ScaLAPACK library</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="BLASLAPACKScaLAPACKLibrary.html" title="5.4. BLAS/LAPACK/ScaLAPACK library"
+             >next</a></li>
+        <li class="right" >
+          <a href="SSLIILibrary.html" title="5.2. SSL II library"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>Math library</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.3. </span>C-SSL II library</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

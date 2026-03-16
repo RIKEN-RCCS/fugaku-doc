@@ -1,0 +1,164 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.1. 言語仕様 &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=89e52957" />
+    
+    <script src="../../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="3.1.2. 言語環境の複数バージョン提供" href="LanguageEnvironmentSupportOverMultipleGenerations.html" />
+    <link rel="prev" title="3.1. 富士通コンパイラ" href="index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="LanguageEnvironmentSupportOverMultipleGenerations.html" title="3.1.2. 言語環境の複数バージョン提供"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="index.html" title="3.1. 富士通コンパイラ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U"><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.1. </span>言語仕様</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="languagespecifications">
+<span id="id1"></span><h1><span class="section-number">3.1.1. </span>言語仕様<a class="headerlink" href="#languagespecifications" title="Link to this heading">¶</a></h1>
+<p>富士通コンパイラは、以下の規格をサポートしています。</p>
+<ul class="simple">
+<li><p>Fortran</p>
+<ul>
+<li><p>ISO/IEC 1539-1:2018 (Fortran 2018 規格)のサブセット</p></li>
+<li><p>ISO/IEC 1539-1:2010 (Fortran 2008 規格)</p></li>
+<li><p>ISO/IEC 1539-1:2004、JIS X 3001-1:2009 (Fortran 2003 規格)</p></li>
+<li><p>ISO/IEC 1539-1:1997、JIS X 3001-1:1998 (Fortran 95 規格)</p></li>
+<li><p>Fortran 90 規格およびFORTRAN77 規格</p></li>
+<li><p>OpenMP Application Program Interface Version 3.1 July 2011</p></li>
+<li><p>OpenMP Application Program Interface Version 4.0 July 2013</p></li>
+<li><p>OpenMP Application Programming Interface Version 4.5 November 2015</p></li>
+<li><p>OpenMP Application Programming Interface Version 5.0 November 2018 のサブセット</p></li>
+</ul>
+</li>
+<li><p>C</p>
+<ul>
+<li><p>ISO/IEC 9899:2011 (C11 規格)</p></li>
+<li><p>ISO/IEC 9899:1999 (C99 規格)</p></li>
+<li><p>ISO/IEC 9899:1990 (C89 規格)</p></li>
+<li><p>GNU コンパイラの拡張仕様</p></li>
+<li><p>Clang 互換仕様</p></li>
+<li><p>OpenMP Application Program Interface Version 3.1 July 2011</p></li>
+<li><p>OpenMP Application Program Interface Version 4.0 July 2013</p></li>
+<li><p>OpenMP Application Programming Interface Version 4.5 November 2015</p></li>
+<li><p>OpenMP Application Programming Interface Version 5.0 November 2018 のサブセット</p></li>
+</ul>
+</li>
+<li><p>C++</p>
+<ul>
+<li><p>ISO/IEC 14882:2017 (C++17 規格) のサブセット</p></li>
+<li><p>ISO/IEC 14882:2014 (C++14 規格)</p></li>
+<li><p>ISO/IEC 14882:2011 (C++11 規格)</p></li>
+<li><p>ISO/IEC 14882:2003 (C++03 規格)</p></li>
+<li><p>GNU コンパイラの拡張仕様</p></li>
+<li><p>Clang 互換仕様</p></li>
+<li><p>OpenMP Application Program Interface Version 3.1 July 2011</p></li>
+<li><p>OpenMP Application Program Interface Version 4.0 July 2013</p></li>
+<li><p>OpenMP Application Programming Interface Version 4.5 November 2015</p></li>
+<li><p>OpenMP Application Programming Interface Version 5.0 November 2018 のサブセット</p></li>
+</ul>
+</li>
+<li><p>MPI</p>
+<ul>
+<li><p>MPI-3.1</p></li>
+<li><p>MPI-4.0 のサブセット</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>OpenMPは、OpenMPライブラリにより各々でサポートしている規格が異なります。
+C/C++コンパイラにおいては、tradモード/clangモードによってもサポートしている規格が異なります。</p>
+<p>詳しくはマニュアルを参照ください。</p>
+<ul class="simple">
+<li><p>マニュアル「Fortran使用手引書」:「12.3 OpenMP仕様による並列化」、「J.3 OpenMP仕様による並列化」</p></li>
+<li><p>マニュアル「C言語使用手引書」  :「4.3 OpenMP仕様による並列化」、「J.3 OpenMP仕様による並列化」</p></li>
+<li><p>マニュアル「C++言語使用手引書」:「4.3 OpenMP仕様による並列化」、「I.3 OpenMP仕様による並列化」</p></li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="index.html"
+                          title="前の章へ"><span class="section-number">3.1. </span>富士通コンパイラ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="LanguageEnvironmentSupportOverMultipleGenerations.html"
+                          title="次の章へ"><span class="section-number">3.1.2. </span>言語環境の複数バージョン提供</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="LanguageEnvironmentSupportOverMultipleGenerations.html" title="3.1.2. 言語環境の複数バージョン提供"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="index.html" title="3.1. 富士通コンパイラ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" ><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.1. </span>言語仕様</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

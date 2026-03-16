@@ -1,0 +1,875 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>8. 京からの移行 &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="prev" title="7. スクリプト言語" href="../ScriptingLanguage/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../ScriptingLanguage/index.html" title="7. スクリプト言語"
+             accesskey="P">前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8. </span>京からの移行</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">8. </span>京からの移行<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>京からの移行について説明します。</p>
+<section id="id2">
+<h2><span class="section-number">8.1. </span>概要<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>スーパーコンピュータ「京」で提供していた言語環境と、スーパーコンピュータ「富岳」の言語環境の主な違いを記載しています。</p>
+</section>
+<section id="id3">
+<h2><span class="section-number">8.2. </span>言語環境の対応<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>スーパーコンピュータ「富岳」では、スーパーコンピュータ「京」と同様に、Fortran、C、C++、MPI、OpenMPをサポートしています。</p>
+<p>サポートする言語仕様は以下のように変更されています。仕様によって非互換となる記述を利用している場合は留意ください。</p>
+<p>[対応している言語仕様]</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 37.5%" />
+<col style="width: 37.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>区分</p></th>
+<th class="head"><p>「京」</p></th>
+<th class="head"><p>「富岳」</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Fortran</p></td>
+<td><p>ISO/IEC 1539-1:2004 (Fortran 2003)</p></td>
+<td><p>ISO/IEC 1539-1:2010 (Fortran 2008)</p></td>
+</tr>
+<tr class="row-odd"><td><p>C</p></td>
+<td><p>ISO/IEC 9899:1999 (C99 規格)</p></td>
+<td><p>ISO/IEC 9899:2011 (C11 規格)</p></td>
+</tr>
+<tr class="row-even"><td><p>C++</p></td>
+<td><p>ISO/IEC 14882:2014 (C++14 規格)</p></td>
+<td><p>ISO/IEC 14882:2017 (C++14 規格)</p></td>
+</tr>
+<tr class="row-odd"><td><p>MPI</p></td>
+<td><p>2.2</p></td>
+<td><p>3.1</p></td>
+</tr>
+<tr class="row-even"><td><p>OpenMP</p></td>
+<td><p>3.1</p></td>
+<td><p>4.0</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>スーパーコンピュータ「富岳」の詳細は、<a class="reference internal" href="../CompileforCN/FujitsuCompiler/LanguageSpecifications.html#languagespecifications"><span class="std std-ref">言語仕様</span></a>を参照ください。</p>
+</div>
+</div></blockquote>
+</section>
+<section id="id4">
+<h2><span class="section-number">8.3. </span>版数の確認方法<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>バージョンの確認方法を示します。</p>
+<p>言語ソフトウェアのバージョンはコンパイル時に、<code class="docutils literal notranslate"><span class="pre">-V</span></code>オプションを指定します。</p>
+<p>以下の例ではバージョンが 4.8.1 であることがわかります。</p>
+<ul class="simple">
+<li><p>Fortranの表示例</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifrtpx<span class="w"> </span>-V<span class="w"> </span>program.f
+<span class="go">frtpx: Fujitsu Fortran Compiler 4.8.1 tcsds-1.2.36</span>
+<span class="go">jwd_fortpx: Fujitsu Fortran Compiler 4.8.1 (Jun 30 2022 15:02:42)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>C/C++の表示例</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifccpx<span class="w"> </span>-V<span class="w"> </span>main.c
+<span class="go">fccpx: Fujitsu C/C++ Compiler 4.8.1 tcsds-1.2.36</span>
+<span class="go">simulating gcc version 6.1</span>
+<span class="go">ccpcompx: Fujitsu C/C++ Compiler 4.8.1 (Jun 16 2022 14:47:00)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="id5">
+<h2><span class="section-number">8.4. </span>非互換項目<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>ここでは、コンパイルオプションや動作に関する主な非互換を示します。</p>
+<section id="fortran">
+<h3><span class="section-number">8.4.1. </span>Fortran<a class="headerlink" href="#fortran" title="Link to this heading">¶</a></h3>
+<p>ここで示す各機能の詳細は、マニュアル「Fortran使用手引書」を参照ください。</p>
+<ol class="arabic">
+<li><dl class="simple">
+<dt>-Kauto、-Ktemparraystack、-Kautoobjstack オプションのデフォルト化</dt><dd><p>スタックの使用量が従来より増加する場合があります。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>停留出力文実行時の IOSTAT 指定子の返却値</dt><dd><p>停留出力文で、書式仕様によって決まるFortran記録の長さが論理レコード長を超えた場合に、IOSTAT指定子に返却される値が変更になりました。
+IOSTAT指定子に「134」が返却されます。従来は「-2」が返却されていました。</p>
+<p>IOSTAT指定子の値に従って処理を行うようなプログラムでは、プログラムの変更が必要になります。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>実行時情報出力機能の仕様変更</dt><dd><div class="line-block">
+<div class="line">実行時情報出力機能として取得できていた情報（コスト情報の一部、並列化情報、入出力情報、ハードウェアモニタ情報）が、取得できなくなります。</div>
+<div class="line">また、範囲指定（start_collection/stop_collection）による情報取得ができなくなります。ソースプログラム中に範囲指定（start_collection/stop_collection）、および、その定義（fjcoll_lib）が存在する場合、コンパイル時にエラーとなります。</div>
+</div>
+<p>並列化情報、ハードウェアモニタ情報を取得したい場合は、CPU性能解析ツールを利用してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>LLVM OpenMPライブラリの導入</dt><dd><div class="line-block">
+<div class="line">並列化機能は、デフォルトでLLVM OpenMPライブラリを使用します。</div>
+<div class="line">従来の富士通OpenMPライブラリを使用する場合は、<code class="docutils literal notranslate"><span class="pre">-Nfjomplib</span></code>オプションを指定してください。</div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>OpenMP API version 4.0仕様のサポートに伴う、マクロおよび名前付き定数の値変更</dt><dd><div class="line-block">
+<div class="line">翻訳時オプション <code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code> 指定時に <code class="docutils literal notranslate"><span class="pre">-D_OPENMP=201307</span></code> が有効になります。</div>
+<div class="line">名前付き定数 openmp_version の値は 201307 になります。</div>
+</div>
+<p>プログラムの中で、マクロ _OPENMP または名前付き定数 openmp_version の値を使用している場合、変更後の値に対応するようプログラムを修正してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>翻訳時オプション -K{openmp_tls|openmp_notls} の廃止</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-K{openmp_tls|openmp_notls}</span></code> オプションを指定した場合、翻訳時に以下の警告メッセージが出力されます。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">警告: -Kopenmp_[no]tls オプションは廃止されました。</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>-Kvppocl オプションの廃止</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-Kvppocl</span></code>オプション、かつ、<code class="docutils literal notranslate"><span class="pre">-Kocl</span></code>オプションが有効な場合、最適化指示子 NOVREC を最適化指示子 NORECURRENCE と同等に扱っていました。<code class="docutils literal notranslate"><span class="pre">-Kvppocl</span></code>オプションが廃止されるため、それらを同等と扱うことができなくなりました。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>翻訳指示行 &quot;!optoins&quot; に指定できるオプションを変更</dt><dd><div class="line-block">
+<div class="line">オプションには-O[1-3]が指定できます。</div>
+<div class="line">翻訳指示行 &quot;!options&quot; で指定していた翻訳オプションを有効にしたい場合は、次の対処を行ってください。</div>
+</div>
+<ul class="simple">
+<li><p>!options行を記述していた手続を別のファイルに切り出し、!options行で指定していたオプションで翻訳する</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>-Nuse_rodata オプションの廃止と仕様変更</dt><dd><div class="line-block">
+<div class="line">定数引数以外の定数に代入を行うプログラムを実行すると、実行時異常終了する可能性があります。</div>
+<div class="line">定数に代入を行わないようにプログラムを変更してください。</div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>-Kswp および -Kswp_strong オプション仕様の変更</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-Kswp_strong</span></code> オプションの後ろに、<code class="docutils literal notranslate"><span class="pre">-Kswp</span></code>、<code class="docutils literal notranslate"><span class="pre">-O2</span></code>、<code class="docutils literal notranslate"><span class="pre">-O3</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-Kfast</span></code>オプションを指定すると、<code class="docutils literal notranslate"><span class="pre">-Kswp_strong</span></code>オプションは無効になり、<code class="docutils literal notranslate"><span class="pre">-Kswp</span></code>オプションが有効になります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">-Kswp_strong</span></code> オプションを有効にする場合は、<code class="docutils literal notranslate"><span class="pre">-Kswp</span></code>、<code class="docutils literal notranslate"><span class="pre">-O2</span></code>、<code class="docutils literal notranslate"><span class="pre">-O3</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-Kfast</span></code>オプションより後ろに指定してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>-Kdalign オプションの廃止</dt><dd><p>コンパイルオプション<code class="docutils literal notranslate"><span class="pre">-Kdalign</span></code>が無効になり、以下のように警告されます。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">警告: -K に指定されたサブオプション dalign は正しくありません。</span>
+</pre></div>
+</div>
+<p>common変数のメンバーの align を合わせるために、<code class="docutils literal notranslate"><span class="pre">-Kdalign</span></code>を指定していた場合は、<code class="docutils literal notranslate"><span class="pre">-Kalign_commons</span></code>を指定してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>-Kprefetch_strong をデフォルトに変更</dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Kprefetch_sequential</span></code>、<code class="docutils literal notranslate"><span class="pre">-Kprefetch_stride</span></code>、もしくは、<code class="docutils literal notranslate"><span class="pre">-Kprefetch_indirect</span></code>により生成される L1 プリフェッチ命令がデフォルトでストロングプリフェッチとして動作します。</div>
+<div class="line">ウィークプリフェッチとして動作するプリフェッチ命令を生成する場合は、<code class="docutils literal notranslate"><span class="pre">-Kprefetch_nostrong</span></code>を指定してください。</div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>-Kprefetch_nostrong および -Kprefetch_nostrong_L2 を有効にするため -Khpctag が必要になる</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-Kprefetch_nostrong</span></code>、および、<code class="docutils literal notranslate"><span class="pre">-Kprefetch_nostrong_L2</span></code>を有効にするためには、<code class="docutils literal notranslate"><span class="pre">-Khpctag</span></code>が必要になります。デフォルトは、<code class="docutils literal notranslate"><span class="pre">-Khpctag</span></code>が有効です。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>認識できないオプションが指定された場合の動作変更</dt><dd><div class="line-block">
+<div class="line">認識できないオプションが指定された場合は、警告メッセージを出力し、指定を無視します。</div>
+<div class="line">従来は警告メッセージを出力し、リンカへ渡していました。</div>
+<div class="line">リンカへオプションを渡す場合、<code class="docutils literal notranslate"><span class="pre">-Wl</span></code>オプションを使用してください。</div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>-NRtrapオプションの指定方法を変更</dt><dd><p>翻訳時とリンク時に指定する必要があります。</p>
+</dd>
+</dl>
+</li>
+</ol>
+</section>
+<section id="c">
+<h3><span class="section-number">8.4.2. </span>C言語<a class="headerlink" href="#c" title="Link to this heading">¶</a></h3>
+<p>ここで示す各機能の詳細は、マニュアル「C言語使用手引書」を参照ください。</p>
+<ol class="arabic">
+<li><dl>
+<dt>-Klibオプションのデフォルト化</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-O0</span></code>オプションが有効な場合、省略時は<code class="docutils literal notranslate"><span class="pre">-Knolib</span></code>オプションが適用されます。また、<code class="docutils literal notranslate"><span class="pre">-O1</span></code>以上が有効な場合、省略時は<code class="docutils literal notranslate"><span class="pre">-Klib</span></code>オプションが適用されます。</p>
+<p>本オプションが有効、かつ、利用者が標準ライブラリ関数と同名の関数を定義した場合、利用者の意図した結果にならない場合があります。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>実行時情報出力機能の仕様変更</dt><dd><p>実行時情報出力機能として取得できていた情報（コスト情報の一部、並列化情報、入出力情報、ハードウェアモニタ情報）が、取得できなくなります。範囲指定（start_collection/stop_collection）による情報取得ができなくなります。</p>
+<p>ソースプログラム中に範囲指定（start_collection/stop_collection）、および、その定義（fjcoll_lib）が存在する場合、コンパイル時にエラーとなります。
+並列化情報、ハードウェアモニタ情報を取得したい場合は、CPU性能解析ツールを利用してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>LLVM OpenMPライブラリの導入</dt><dd><div class="line-block">
+<div class="line">並列化機能は、デフォルトでLLVM OpenMPライブラリを使用します。</div>
+<div class="line">従来の富士通OpenMPライブラリを使用する場合は、<code class="docutils literal notranslate"><span class="pre">-Nfjomplib</span></code>オプションを指定してください。</div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>翻訳時オプション -noansi の廃止</dt><dd><p>言語仕様レベルを指定する場合は、<code class="docutils literal notranslate"><span class="pre">-std</span></code>オプションを使用してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>翻訳時オプション -f{signed-char|unsigned-char} の省略値変更</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-f{signed-char|unsigned-char}</span></code>オプションの省略時は、<code class="docutils literal notranslate"><span class="pre">-funsigned-char</span></code>オプションが適用され、既定義マクロ__SIGNED_CHARS__は定義されません。</p>
+<p>ソースプログラム中に単なるchar型の宣言がある場合、符号が変わることで、プログラムの動作が以前と異なる場合があります。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>翻訳時オプション -X の廃止（言語仕様のモードはGNU互換モードのみ）</dt><dd><p>GNU C拡張仕様が必ず有効になります。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>GNU C互換バージョンの変更</dt><dd><p>各マクロの値は以下となります。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 60.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>マクロ</p></th>
+<th class="head"><p>値</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>__GNUC__</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-odd"><td><p>__GNUC_MINOR__</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>__GNUC_PATCHLEVEL__</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+<p>プログラムの中で各マクロの値を使用している場合、上記の値に対応するようプログラムを修正してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>翻訳時オプション -std の省略値変更</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-std</span></code>オプションを省略した場合、<code class="docutils literal notranslate"><span class="pre">-std=gnu11</span></code>が適用されます。言語仕様レベルを指定する場合は、<code class="docutils literal notranslate"><span class="pre">-std</span></code>オプションを使用してください。</p>
+</dd>
+</dl>
+</li>
+<li><p>マクロ __STRICT_ANSI__、linux、unix、および、__STDC_VERSION__の定義変更</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 28.6%" />
+<col style="width: 71.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>マクロ</p></th>
+<th class="head"><p>変更内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>__STRICT_ANSI__</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-ansi</span></code>オプション、または、<code class="docutils literal notranslate"><span class="pre">-std={c89|c99}</span></code>オプションが有効な場合に定義されます。</p></td>
+</tr>
+<tr class="row-odd"><td><p>linux</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-std={gnu89|gnu99}</span></code>オプションが有効な場合に定義されます。</p></td>
+</tr>
+<tr class="row-even"><td><p>unix</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-std={gnu89|gnu99}</span></code>オプションが有効な場合に定義されます。</p></td>
+</tr>
+<tr class="row-odd"><td><p>__STDC_VERSION__</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-std={c89|gnu89}</span></code>オプションが有効な場合、定義されません。</p></td>
+</tr>
+</tbody>
+</table>
+<p>プログラムの中で各マクロを使用している場合、上記の定義に対応するようプログラムを修正してください。</p>
+</div></blockquote>
+</li>
+<li><dl class="simple">
+<dt>翻訳時オプション -Dname と -Uname を同時に指定した場合の動作変更</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-D</span></code>オプションと、<code class="docutils literal notranslate"><span class="pre">-U</span></code>オプションに同一の name を指定すると、後に指定した方が有効となります。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>翻訳時オプション -N{line|noline} の省略値変更</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-N{line|noline}</span></code>オプションの省略時は、<code class="docutils literal notranslate"><span class="pre">-Nline</span></code>オプションが適用されます。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>翻訳時オプション -K{openmp_tls|openmp_notls} の廃止</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-K{openmp_tls|openmp_notls}</span></code>オプションを指定した場合、翻訳時に以下の警告メッセージが出力されます。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">警告: -Kopenmp_[no]tls オプションは廃止されました。</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>-Kswp および -Kswp_strong オプション仕様の変更</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-Kswp_strong</span></code>オプションの後ろに、<code class="docutils literal notranslate"><span class="pre">-Kswp</span></code>、<code class="docutils literal notranslate"><span class="pre">-O2</span></code>、<code class="docutils literal notranslate"><span class="pre">-O3</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-Kfast</span></code>オプションを指定すると、<code class="docutils literal notranslate"><span class="pre">-Kswp_strong</span></code>オプションは無効になり、<code class="docutils literal notranslate"><span class="pre">-Kswp</span></code>オプションが有効になります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">-Kswp_strong</span></code>オプションを有効にする場合は、<code class="docutils literal notranslate"><span class="pre">-Kswp</span></code>、<code class="docutils literal notranslate"><span class="pre">-O2</span></code>、<code class="docutils literal notranslate"><span class="pre">-O3</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-Kfast</span></code>オプションより後ろに指定してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>-Kdalign オプションの廃止</dt><dd><p>コンパイルオプション<code class="docutils literal notranslate"><span class="pre">-Kdalign</span></code>が無効になり、以下のように警告されます。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">警告: -K に指定されたサブオプション dalign は正しくありません。</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>ビルトイン関数 __sync_fetch_and_nand および __sync_nand_and_fetch の仕様変更</dt><dd><p>次のように変更しました。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 60.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ビルトイン関数</p></th>
+<th class="head"><p>動作</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>type __sync_fetch_and_nand (type *ptr, type value, ...)</p></td>
+<td><div class="line-block">
+<div class="line">tmp = *ptr;</div>
+<div class="line">*ptr = ~(tmp &amp; value);</div>
+<div class="line">return tmp;</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>type __sync_nand_and_fetch (type *ptr, type value, ...)</p></td>
+<td><div class="line-block">
+<div class="line">*ptr = ~(*ptr &amp; value);</div>
+<div class="line">return *ptr;</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>-Kprefetch_strong をデフォルトに変更</dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">-Kprefetch_sequential</span></code>、<code class="docutils literal notranslate"><span class="pre">-Kprefetch_stride</span></code>、もしくは、<code class="docutils literal notranslate"><span class="pre">-Kprefetch_indirect</span></code>により生成される L1 プリフェッチ命令がデフォルトでストロングプリフェッチとして動作します。</div>
+<div class="line">ウィークプリフェッチとして動作するプリフェッチ命令を生成する場合は、<code class="docutils literal notranslate"><span class="pre">-Kprefetch_nostrong</span></code>を指定してください。</div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>-Kprefetch_nostrong および -Kprefetch_nostrong_L2 を有効にするため -Khpctag が必要になる</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-Kprefetch_nostrong</span></code>、および、<code class="docutils literal notranslate"><span class="pre">-Kprefetch_nostrong_L2</span></code>を有効にするためには、<code class="docutils literal notranslate"><span class="pre">-Khpctag</span></code>が必要になります。デフォルトでは、<code class="docutils literal notranslate"><span class="pre">-Khpctag</span></code>が有効です。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>認識できないオプションが指定された場合の動作変更</dt><dd><div class="line-block">
+<div class="line">認識できないオプションが指定された場合は、警告メッセージを出力し、無視します。</div>
+<div class="line">従来は警告メッセージを出力し、リンカへ渡していました。</div>
+<div class="line">リンカへオプションを渡す場合、<code class="docutils literal notranslate"><span class="pre">-Wl</span></code>オプションを使用してください。</div>
+</div>
+</dd>
+</dl>
+</li>
+</ol>
+</section>
+<section id="id6">
+<h3><span class="section-number">8.4.3. </span>C++<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>ここで示す各機能の詳細は、マニュアル「C++言語使用手引書」を参照ください。</p>
+<ol class="arabic">
+<li><dl>
+<dt>-Klibオプションのデフォルト化</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-O0</span></code>オプションが有効な場合、省略時は<code class="docutils literal notranslate"><span class="pre">-Knolib</span></code>オプションが適用されます。また、<code class="docutils literal notranslate"><span class="pre">-O1</span></code>以上が有効な場合、省略時は <code class="docutils literal notranslate"><span class="pre">-Klib</span></code>オプションが適用されます。</p>
+<p>本オプションが有効、かつ、利用者が標準ライブラリ関数と同名の関数を定義した場合、利用者の意図した結果にならない場合があります。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>実行時情報出力機能の仕様変更</dt><dd><p>実行時情報出力機能として取得できていた情報（コスト情報の一部、並列化情報、入出力情報、ハードウェアモニタ情報）が、取得できなくなります。範囲指定（start_collection/stop_collection）による情報取得ができなくなります。</p>
+<p>ソースプログラム中に範囲指定（start_collection/stop_collection）、および、その定義（fjcoll_lib）が存在する場合、コンパイル時にエラーとなります。
+並列化情報、ハードウェアモニタ情報を取得したい場合は、CPU性能解析ツールを利用してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>LLVM OpenMPライブラリの導入</dt><dd><div class="line-block">
+<div class="line">並列化機能は、デフォルトでLLVM OpenMPライブラリを使用します。</div>
+<div class="line">従来の富士通OpenMPライブラリを使用する場合は、<code class="docutils literal notranslate"><span class="pre">-Nfjomplib</span></code>オプションを指定してください。</div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>C++03仕様 または C++11仕様における標準テンプレートライブラリ（STL）の変更</dt><dd><p>C++03仕様、または、C++11仕様の場合、STLとして libc++ を使用します。「京」では STLport を使用していました。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>翻訳時オプション -f{signed-char|unsigned-char} の省略値変更</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-f{signed-char|unsigned-char}</span></code>オプションの省略時は、<code class="docutils literal notranslate"><span class="pre">-funsigned-char</span></code>オプションが適用され、既定義マクロ__SIGNED_CHARS__は定義されません。</p>
+<p>ソースプログラム中に単なるchar型の宣言がある場合、符号が変わることで、プログラムの動作が以前と異なる場合があります。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>翻訳時オプション -X の廃止（言語仕様のモードはGNU互換モードのみ）</dt><dd><p>GNU C++拡張仕様が必ず有効になります。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>GNU C++互換バージョンの変更</dt><dd><p>各マクロの値は以下となります。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 60.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>マクロ</p></th>
+<th class="head"><p>値</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>__GNUC__</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-odd"><td><p>__GNUC_MINOR__</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>__GNUC_PATCHLEVEL__</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>__GNUG__</p></td>
+<td><p>6</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>翻訳時オプション -std の省略値変更</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-std</span></code>オプションを省略した場合、<code class="docutils literal notranslate"><span class="pre">-std=gnu++14</span></code>が適用されます。</p>
+</dd>
+</dl>
+</li>
+<li><p>マクロ__STRICT_ANSI__ 、linux、unix、および、__cplusplusの定義変更</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>マクロ</p></th>
+<th class="head"><p>変更内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>__STRICT_ANSI__</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-std={c++98|c++03|c++11|c++14}</span></code>オプションが有効な場合に定義されます。</p></td>
+</tr>
+<tr class="row-odd"><td><p>linux</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-std={gnu++98|gnu++03|gnu++11|gnu++14}</span></code>オプションが有効な場合に定義されます。</p></td>
+</tr>
+<tr class="row-even"><td><p>unix</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-std={gnu++98|gnu++03|gnu++11|gnu++14}</span></code>オプションが有効な場合に定義されます。</p></td>
+</tr>
+<tr class="row-odd"><td><p>__cplusplus</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-std={c++98|c++03|gnu++98|gnu++03}</span></code>オプションが有効な場合、値は199711L になります。</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><dl class="simple">
+<dt>翻訳時オプション -Dname と -Uname を同時に指定した場合の動作変更</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-D</span></code>オプションと <code class="docutils literal notranslate"><span class="pre">-U</span></code>オプションに同一の name を指定すると、後に指定した方が有効となります。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>翻訳時オプション -N{line|noline} の省略値変更</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-N{line|noline}</span></code>オプションの省略時は、<code class="docutils literal notranslate"><span class="pre">-Nline</span></code>オプションが適用されます。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>翻訳時オプション -K{openmp_tls|openmp_notls} の廃止</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-K{openmp_tls|openmp_notls}</span></code>オプションを指定した場合、翻訳時に以下の警告メッセージが出力されます。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">警告: -Kopenmp_[no]tls オプションは廃止されました。</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>-Kswp および -Kswp_strong オプション仕様の変更</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-Kswp_strong</span></code>オプションの後ろに、<code class="docutils literal notranslate"><span class="pre">-Kswp</span></code>、<code class="docutils literal notranslate"><span class="pre">-O2</span></code>、<code class="docutils literal notranslate"><span class="pre">-O3</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-Kfast</span></code>オプションを指定すると、<code class="docutils literal notranslate"><span class="pre">-Kswp_strong</span></code>オプションは無効になり、<code class="docutils literal notranslate"><span class="pre">-Kswp</span></code>オプションが有効になります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">-Kswp_strong</span></code>オプションを有効にする場合は、<code class="docutils literal notranslate"><span class="pre">-Kswp</span></code>、<code class="docutils literal notranslate"><span class="pre">-O2</span></code>、<code class="docutils literal notranslate"><span class="pre">-O3</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-Kfast</span></code>オプションより後ろに指定してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>-Kdalignオプションの廃止</dt><dd><p>コンパイルオプション<code class="docutils literal notranslate"><span class="pre">-Kdalign</span></code>が無効になり、以下のように警告されます。</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">警告: -K に指定されたサブオプション dalign は正しくありません。</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>ビルトイン関数 __sync_fetch_and_nand および __sync_nand_and_fetch の仕様変更</dt><dd><p>次のように変更しました。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 60.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ビルトイン関数</p></th>
+<th class="head"><p>動作</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>type __sync_fetch_and_nand (type *ptr, type value, ...)</p></td>
+<td><div class="line-block">
+<div class="line">tmp = *ptr;</div>
+<div class="line">*ptr = ~(tmp &amp; value);</div>
+<div class="line">return tmp;</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>type __sync_nand_and_fetch (type *ptr, type value, ...)</p></td>
+<td><div class="line-block">
+<div class="line">*ptr = ~(*ptr &amp; value);</div>
+<div class="line">return *ptr;</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>-Kprefetch_strong をデフォルトに変更</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-Kprefetch_sequential</span></code>、<code class="docutils literal notranslate"><span class="pre">-Kprefetch_stride</span></code>、もしくは、<code class="docutils literal notranslate"><span class="pre">-Kprefetch_indirect</span></code>により生成される L1 プリフェッチ命令がデフォルトでストロングプリフェッチとして動作します。</p>
+<p>ウィークプリフェッチとして動作するプリフェッチ命令を生成する場合は、<code class="docutils literal notranslate"><span class="pre">-Kprefetch_nostrong</span></code>を指定してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>-Kprefetch_nostrong および -Kprefetch_nostrong_L2 を有効にするため -Khpctag が必要になる</dt><dd><p><code class="docutils literal notranslate"><span class="pre">-Kprefetch_nostrong</span></code>、および、<code class="docutils literal notranslate"><span class="pre">-Kprefetch_nostrong_L2</span></code>を有効にするためには、<code class="docutils literal notranslate"><span class="pre">-Khpctag</span></code>が必要になります。デフォルトでは、<code class="docutils literal notranslate"><span class="pre">-Khpctag</span></code>が有効です。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>認識できないオプションが指定された場合の動作変更</dt><dd><div class="line-block">
+<div class="line">認識できないオプションが指定された場合、警告メッセージを出力し、無視します。</div>
+<div class="line">従来は警告メッセージを出力し、リンカへ渡していました。</div>
+<div class="line">リンカへオプションを渡す場合、<code class="docutils literal notranslate"><span class="pre">-Wl</span></code>オプションを使用してください。</div>
+</div>
+</dd>
+</dl>
+</li>
+</ol>
+</section>
+<section id="mpi">
+<h3><span class="section-number">8.4.4. </span>MPI<a class="headerlink" href="#mpi" title="Link to this heading">¶</a></h3>
+<p>ここで示す各機能の詳細は、マニュアル「MPI使用手引書」を参照ください。</p>
+<ol class="arabic">
+<li><dl class="simple">
+<dt>Hasty Rendezvous通信機能を廃止</dt><dd><p>MCAパラメーター pml_ob1_use_hasty_rendezvous は使用できません。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>MCAパラメーター dpm_ple_socket_timeout を廃止</dt><dd><p>動的プロセスなどコミュニケータを共有しない2つのMPIプロセスグループ間の通信の待ち時間の設定が出来なくなります。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>拡張RDMAインターフェースを廃止</dt><dd><p>uTofuインターフェースを使用するプログラムに修正をしてください。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>ランク問合せインターフェースを変更</dt><dd><p>以下のルーチンに機能を集約し、子プロセスが割り当てられたノードの情報の取得および従来のルーチン機能が使用できるようにしました。指定については、マニュアル「MPI使用手引書」の&quot;ランク問合せインターフェース&quot;を参照してください。</p>
+<ul class="simple">
+<li><p>FJMPI_TOPOLOGY_GET_COORDS</p></li>
+<li><p>FJMPI_TOPOLOGY_GET_RANKS</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Fortranのプロファイリングインターフェース利用で、C言語のMPI関数はフックされなくなる</dt><dd><p>Fortranプログラムでプロファイリングインターフェースを利用する場合、C言語のインターフェースを用いてフックすることができません。
+Fortranプログラムでプロファイリングインターフェースを利用する場合は、Fortranのインターフェースを用いてフックしてください。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>MCAパラメーター orte_abort_print_stackをopal_abort_print_stack に変更</dt><dd><p>スタックのトレース情報を出力させる際のMCAパラメーター orte_abort_print_stack が使用できません。MCA パラメーターを opal_abort_print_stack に変更してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>MCAパラメーター dpm_ple_no_establish_connection のパラメーター名を変更</dt><dd><p>MCAパラメーターを mpi_no_establish_communication に修正してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>集団通信で使用するリダクション演算のアルゴリズムを変更</dt><dd><p>「京」で実行した場合と、「富岳」で実行した場合とでリダクション演算順序が異なります。</p>
+<p>このため、浮動小数点型、または複素数型データのMPI_SUMリダクション演算において精度誤差が発生し、計算結果が異なることがあります。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>MCAパラメーター coll_tbi_use_on_max_min の省略値を変更</dt><dd><p>MCAパラメーター coll_tbi_use_on_max_min の省略値を、0から1へ変更します。</p>
+<p>MCAパラメーター coll_tbi_use_on_max_min の省略値を、0から1へ変更することによって、バリア通信が適用され、バリア通信を適用しない場合と計算結果が異なることがあります。</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>演算に使われる値にNaNが含まれている場合は、以下に注意してください。</dt><dd><ul>
+<li><p>バリア通信を適用する場合は、NaN以外の値を比較した結果となります。ただし、全ての値がNaNの場合は、NaNのうちのどれか1つの値となります。</p></li>
+<li><p>バリア通信を適用しない場合は、実行時の条件次第で、NaN以外の値を比較した結果、またはNaNのうちのどれか1つの値となります。</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>演算に使われる値に、+0.0と-0.0の両方が含まれている場合は、以下に注意してください。</dt><dd><ul>
+<li><p>バリア通信を適用する場合は、0の符号を考慮して比較します。（+0.0 &gt; -0.0）</p></li>
+<li><p>バリア通信を適用しない場合は、0の符号は考慮されません。
++0.0 と -0.0 の大小比較において、どちらが選ばれるかは実行時の条件次第です。</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>MCAパラメーター coll_tuned_use_6d_algorithm と coll_tuned_scatterv_use_linear_sync を廃止</dt><dd><p>廃止したMCAパラメーターを指定しても、その指定は無視されます。このため、意図したアルゴリズムが選択されず、性能が出ない恐れがあります。</p>
+<p>これらのMCAパラメーターを廃止したことによる代替機能として、ブロッキング集団通信のアルゴリズム選択の機能を使用してください。
+ブロッキング集団通信のアルゴリズム選択の機能については、マニュアル「MPI使用手引書」の&quot;アルゴリズム選択によるチューニング&quot;を参照ください。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>通信タイムアウト設定機能に関するMCAパラメーター名を変更</dt><dd><p>通信待ちの打切り時間を指定するMCAパラメーターは、opal_progress_timeout です。</p>
+<p>通信タイムアウト設定機能によるプログラム終了を遅延させる場合に指定するMCAパラメーターは、opal_abort_delay です。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>MCAパラメーター mpi_deadlock_timeout および mpi_deadlock_timeout_delayの廃止</dt><dd><p>MCAパラメーター mpi_deadlock_timeout、および、mpi_deadlock_timeout_delay は使用できません。これらのMCAパラメーターを指定しても、通信タイムアウト設定機能は動作しません。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>高速型通信モードで通信できるプロセス数の上限の省略値を変更</dt><dd><p>高速型通信モードで通信できるプロセス数の上限の省略値は、256です。「京」は1024でした。</p>
+<p>1プロセスあたりのノード間通信相手プロセス数が256を超えるMPIプログラムでは、通信性能が低下する場合があります。
+MPIプログラム実行時のメモリ使用量に余裕がある場合は、MCAパラメーター common_tofu_max_fastmode_procs に256よりも大きな値を指定してMPIプログラムを実行してください。</p>
+</dd>
+</dl>
+</li>
+</ol>
+</section>
+<section id="id7">
+<h3><span class="section-number">8.4.5. </span>ツール<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<p>ツールに関する非互換項目は以下のとおりです。</p>
+<ol class="arabic">
+<li><dl class="simple">
+<dt>会話型デバッガを廃止</dt><dd><p>GUIを使った会話的に実行可能なデバッガは使用できません。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>デバッグエンジン（fdb）を廃止</dt><dd><p>デバッガは、<strong class="command">gdb</strong>を利用してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>トレーサの廃止</dt><dd><p>トレーサは使用できません。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Tofu PAの廃止</dt><dd><p>Tofu PAは使用できません。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>基本プロファイラ情報（GUI形式）の廃止</dt><dd><p>テキスト形式を使用してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>詳細プロファイラ情報（GUI形式）の廃止</dt><dd><p>テキスト形式、CSV形式、XML形式、または、CPU性能解析レポートを使用してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>詳細プロファイラの精密PA可視化機能（Excel形式）をCPU性能解析レポートに変更</dt><dd><p>&quot;詳細プロファイラの精密PA可視化機能（Excel形式)&quot;は、&quot;CPU性能解析レポート&quot;に変更にしています。</p>
+<p>CPU性能解析レポートの留意事項は以下のとおりです。</p>
+<ul class="simple">
+<li><p>詳細プロファイラによる計測、および、ファイル出力を 1回、5回、11回、17回のいずれかの回数、実施する必要があります。</p></li>
+<li><p>Excel形式のレポートファイルは、英語見出しのみ用意しています。</p></li>
+<li><p>CPU性能解析レポート（Excel形式）では、CMG単位で情報を出力します。1つのExcelファイルには最大12スレッドの情報を出力します。そのため、1プロセス内のスレッド数が12スレッドを下回る場合、同一CMG単位内の別のプロセスの情報が、あわせて表示される場合があります。</p></li>
+<li><p>CPUの変更により、取得可能なイベント情報に差分が発生します。それにともない、計測対象となる情報も変更になります。</p></li>
+<li><dl class="simple">
+<dt>精密PAの以下の項目が出力されなくなります。</dt><dd><ul>
+<li><p>SIMD演算関連の情報</p></li>
+<li><p>コンカチシフト命令率</p></li>
+<li><p>パーミュテーション命令率</p></li>
+<li><p>L2 throughput</p></li>
+<li><p>MINOPS</p></li>
+<li><p>Integer operation</p></li>
+<li><p>ロードバランスと命令バランス</p></li>
+<li><p>プログラム実行時間の比率</p></li>
+<li><p>計測区間の通過回数 および 平均実行時間</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>詳細プロファイラ使用時のコアバインド</dt><dd><p>詳細プロファイラ使用時に、コアバインドの指定を必須となるように変更します。詳細プロファイラ使用時はコアバインドを指定してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>start_collection 関数および stop_collection 関数を廃止</dt><dd><p>ソースコード内に、start_collection 関数、および、stop_collection 関数を挿入していた場合、fapp_start 関数、および、fapp_stop 関数に変更してください。</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>fippコマンド および fappコマンド -Hオプションと -I{cpupa|nocpupa} オプションを同時に指定した場合の挙動の変更</dt><dd><p><strong class="program">fipp</strong>コマンド、および、<strong class="program">fapp</strong>コマンドで、<code class="docutils literal notranslate"><span class="pre">-H</span></code>オプションと、<code class="docutils literal notranslate"><span class="pre">-Inocpupa</span></code>オプションを同時に指定した場合、指定した順番にかかわらず常に、<code class="docutils literal notranslate"><span class="pre">-I{cpupa|nocpupa}</span></code>オプションが有効になります。また、<code class="docutils literal notranslate"><span class="pre">-I{cpupa|nocpupa}</span></code>オプションを指定せず、<code class="docutils literal notranslate"><span class="pre">-H</span></code>オプションを指定した場合、<code class="docutils literal notranslate"><span class="pre">-Icpupa</span></code>オプションが有効になります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">-H</span></code>オプションを有効にしたい場合、<code class="docutils literal notranslate"><span class="pre">-Inocpupa</span></code>オプションを指定しないでください。</p>
+</dd>
+</dl>
+</li>
+</ol>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">8. 京からの移行</a><ul>
+<li><a class="reference internal" href="#id2">8.1. 概要</a></li>
+<li><a class="reference internal" href="#id3">8.2. 言語環境の対応</a></li>
+<li><a class="reference internal" href="#id4">8.3. 版数の確認方法</a></li>
+<li><a class="reference internal" href="#id5">8.4. 非互換項目</a><ul>
+<li><a class="reference internal" href="#fortran">8.4.1. Fortran</a></li>
+<li><a class="reference internal" href="#c">8.4.2. C言語</a></li>
+<li><a class="reference internal" href="#id6">8.4.3. C++</a></li>
+<li><a class="reference internal" href="#mpi">8.4.4. MPI</a></li>
+<li><a class="reference internal" href="#id7">8.4.5. ツール</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../ScriptingLanguage/index.html"
+                          title="前の章へ"><span class="section-number">7. </span>スクリプト言語</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../ScriptingLanguage/index.html" title="7. スクリプト言語"
+             >前へ</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">8. </span>京からの移行</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

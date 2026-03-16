@@ -1,0 +1,213 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.11.5. 注意事項 &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=89e52957" />
+    
+    <script src="../../../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="3.1.12. マニュアル" href="../ManualReference.html" />
+    <link rel="prev" title="3.1.11.4. CPU性能解析レポート" href="CPUPerformanceAnalysisReport.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../ManualReference.html" title="3.1.12. マニュアル"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="CPUPerformanceAnalysisReport.html" title="3.1.11.4. CPU性能解析レポート"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><span class="section-number">3.1.11. </span>プロファイラ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.11.5. </span>注意事項</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">3.1.11.5. </span>注意事項<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>以下にプロファイラ共通の注意事項を示します。なお、各プロファイラ（基本、詳細、CPU解析レポート）の注意事項については、マニュアル「プロファイラ使用手引書」-「第5章注意事項」を参照してください。</p>
+<section id="id2">
+<h2><span class="section-number">3.1.11.5.1. </span>翻訳時オプション<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>プログラムの翻訳時に以下のオプションを指定した場合、プロファイラが意図しない挙動となる場合があります。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22.2%" />
+<col style="width: 77.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>翻訳時オプション</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-O0</p></td>
+<td><p>C言語、または、C++プログラムの場合、基本プロファイラで、プログラムのループ情報を計測するためには翻訳時に最適化オプション(<code class="docutils literal notranslate"><span class="pre">-O1</span></code>以上)を指定してください。</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Nnoline、-ffj-no-line</p></td>
+<td><p>翻訳時オプション<code class="docutils literal notranslate"><span class="pre">-Nnoline</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-ffj-no-line</span></code>が有効な場合、<code class="docutils literal notranslate"><span class="pre">fipp</span></code>コマンドの<code class="docutils literal notranslate"><span class="pre">-Puserfunc</span></code>オプションによるコストを正しく計測できません。</p>
+<p>このようなプログラムの場合、<code class="docutils literal notranslate"><span class="pre">-Pnouserfunc</span></code>オプションを有効にすることでコストを正しく計測できます。</p>
+<p>また、翻訳時オプション<code class="docutils literal notranslate"><span class="pre">-Nnoline</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-ffj-no-line</span></code>が有効な場合、MPIライブラリのコストを正しく計測できません。</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>-Ncoarray</p></td>
+<td><p>翻訳時オプション<code class="docutils literal notranslate"><span class="pre">-Ncoarray</span></code>が有効な場合、以下に注意してください。</p>
+<ul class="simple">
+<li><p>ランク番号またはプロセス番号に+1をした値が像番号に相当します。</p></li>
+<li><p>COARRAY機能が利用しているMPIライブラリのコストが計上されることがあります。</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-Klto 、-flto</p></td>
+<td><p>翻訳時オプション<code class="docutils literal notranslate"><span class="pre">-Klto</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-flto</span></code>が有効な場合、基本プロファイラが出力する以下の情報を保証しません。</p>
+<ul class="simple">
+<li><p>コールグラフ情報</p></li>
+</ul>
+<blockquote>
+<div><p>表示される手続名に、リンク時最適化が内部的に生成した手続名が表示される場合があります。</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>ソースコード情報</p></li>
+</ul>
+<blockquote>
+<div><p>各行のコストが正しく表示されない場合があります。</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id3">
+<h2><span class="section-number">3.1.11.5.2. </span>大規模並列プログラムでの長時間・大容量メモリ使用の回避<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>大規模並列ログラムを解析（<code class="docutils literal notranslate"><span class="pre">fipppx</span> <span class="pre">-A</span></code>、<code class="docutils literal notranslate"><span class="pre">fapppx</span> <span class="pre">-A</span></code>、<code class="docutils literal notranslate"><span class="pre">fipp</span> <span class="pre">-A</span></code>、<code class="docutils literal notranslate"><span class="pre">fapp</span> <span class="pre">-A</span></code>）する際、プロファイラの解析に長時間かかったり、プロファイラの処理でメモリ不足になる場合があります。</p>
+<p>解析処理においては、<strong class="program">fapppx</strong>コマンドの以下オプションを用いることで、上記の長時間実行とメモリ不足を回避できます。</p>
+<dl class="simple">
+<dt>-p オプション</dt><dd><p>解析対象のプロセス数を絞ることで、解析に要するメモリ領域を押さえることができます。</p>
+</dd>
+<dt>-I オプション</dt><dd><p>出力項目を削減し、その分のメモリ使用量を削減できます。</p>
+</dd>
+</dl>
+</section>
+<section id="iocpu">
+<h2><span class="section-number">3.1.11.5.3. </span>IOを兼用する計算ノードのCPU周波数<a class="headerlink" href="#iocpu" title="Link to this heading">¶</a></h2>
+<p>IOを兼用する計算ノード（CN/BIO、CN/SIO、CN/GIO）のCPU周波数は2.2GHzに設定されています。
+IOを兼用する計算ノードのCPU周波数は利用者が変更することはできません。</p>
+<p>計算ノード（CN）のCPU周波数は2.0GHzに設定されています。性能評価時に留意ください。</p>
+<p>CPU周波数につきましては「利用手引書 利用およびジョブ実行編」の「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/use_latest/PowerControlFunction/index.html">7. 電力制御機能</a>」も参照ください。</p>
+</section>
+<section id="cpu">
+<h2><span class="section-number">3.1.11.5.4. </span>CPUバインド<a class="headerlink" href="#cpu" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">プロファイルデータを計測する場合、スレッドとCPUが１対１の関係になるようにバインドする必要があります。</div>
+<div class="line">バインドされていない場合、計測が正常に行われない場合があります。</div>
+</div>
+<p>CPU性能解析レポートでは次のようなメッセージを出力しレポートは作成されません。:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>paXX.csv : The environment seems to not bind process to core.
+</pre></div>
+</div>
+<p>CPUバインドするための詳細設定については、次を参照ください。</p>
+<p>スレッド並列プログラムを実行するときは、マニュアル「Fortran使用手引書」、「C言語使用手引書」、または「C++言語使用手引書」の「スレッドのCPUバインド」を参照してください。</p>
+<p>非スレッド並列かつMPIプログラムを実行(<strong class="program">mpiexec</strong>で実行)するときは、VCOORDファイルを使ってCPUバインド可能です。
+VCOORDファイルの指定方法はマニュアル「MPI使用手引書」の<code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">-vcoordfile</span> <span class="pre">|</span> <span class="pre">--vcoordfile</span> <span class="pre">}</span></code>オプションを参照してください。
+VCOORDファイルではすべてのプロセスに対してCPU(コア)数を1(core=1)に指定してください。</p>
+<p>非スレッド並列かつ非MPIプログラムを実行するときは、<strong class="program">taskset</strong>コマンドまたは<strong class="program">numactl</strong>コマンドでCPUバインド可能です。
+詳細は各コマンドのmanページを参照してください。</p>
+</section>
+<section id="id5">
+<h2><span class="section-number">3.1.11.5.5. </span>CPU性能解析レポートのキャッシュミスの比率<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>キャッシュミスの比率については、計測時の誤差やブレの影響により、値が範囲を超える可能性があります。
+キャッシュミスの比率が100%を超えた場合は100%に、0%を下回った場合には0%とみなしてください。</p>
+<p>マニュアル「プロファイラ使用手引書」の「4.2.2.5.2 Cache(標準レポートおよび詳細レポート)」を参照ください。</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3.1.11.5. 注意事項</a><ul>
+<li><a class="reference internal" href="#id2">3.1.11.5.1. 翻訳時オプション</a></li>
+<li><a class="reference internal" href="#id3">3.1.11.5.2. 大規模並列プログラムでの長時間・大容量メモリ使用の回避</a></li>
+<li><a class="reference internal" href="#iocpu">3.1.11.5.3. IOを兼用する計算ノードのCPU周波数</a></li>
+<li><a class="reference internal" href="#cpu">3.1.11.5.4. CPUバインド</a></li>
+<li><a class="reference internal" href="#id5">3.1.11.5.5. CPU性能解析レポートのキャッシュミスの比率</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="CPUPerformanceAnalysisReport.html"
+                          title="前の章へ"><span class="section-number">3.1.11.4. </span>CPU性能解析レポート</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../ManualReference.html"
+                          title="次の章へ"><span class="section-number">3.1.12. </span>マニュアル</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../ManualReference.html" title="3.1.12. マニュアル"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="CPUPerformanceAnalysisReport.html" title="3.1.11.4. CPU性能解析レポート"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><span class="section-number">3.1.11. </span>プロファイラ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.11.5. </span>注意事項</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,895 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.13. 統合開発環境 &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=89e52957" />
+    
+    <script src="../../../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="3.1.14. 言語間結合（オブジェクトの互換性について）" href="../InterlanguageLinkage/index.html" />
+    <link rel="prev" title="3.1.12. マニュアル" href="../ManualReference.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../InterlanguageLinkage/index.html" title="3.1.14. 言語間結合（オブジェクトの互換性について）"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="../ManualReference.html" title="3.1.12. マニュアル"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.13. </span>統合開発環境</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">3.1.13. </span>統合開発環境<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>統合開発環境の機能、および、利用方法について説明します。</p>
+<section id="id2">
+<h2><span class="section-number">3.1.13.1. </span>概要<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>統合開発環境は、Eclipse Foundationが提供する &quot;Eclipse IDE for Scientific Computing&quot;パッケージと &quot;Technical Computing Suite&quot; に対応する拡張機能の総称です。</p>
+<ul>
+<li><div class="line-block">
+<div class="line">&quot;Eclipse IDE for Scientific Computing&quot;パッケージは、以降 Eclipse と呼びます。</div>
+<div class="line">詳細は、EclipseFoundationの公式サイト(<a class="reference external" href="https://www.eclipse.org">https://www.eclipse.org</a>)を参照してください。</div>
+</div>
+</li>
+<li><p>&quot;Technical Computing Suite&quot; に対応する拡張機能は、以降 富士通拡張機能と呼びます。</p></li>
+<li><p>富士通拡張機能を用いたビルドやジョブ投入については、マニュアル「統合開発環境使用手引書」を参照ください。</p></li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>本章で説明する Eclipse は、&quot;Eclipse IDE 2020-06 R Packages&quot; を使用しています。Eclipseのバージョンによっては手順や画面が異なる場合がありますので、適宜読み替えてください。</p>
+</div>
+<section id="id3">
+<h3><span class="section-number">3.1.13.1.1. </span>用語説明<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>本章で使用するEclipseの用語は以下のとおりです。</p>
+<p>詳細はEclipse の Help、Eclipse Foundation の公式サイトを参照してください。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>用語</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ワークベンチ(Workbench)</p></td>
+<td><p>Eclipseのメイン画面全体を示します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>ビュー(View)</p></td>
+<td><p>ワークベンチ上に表示されるサブウィンドウを示します。ビューには、固有のツールバー、メニューを持つビューもあります。</p></td>
+</tr>
+<tr class="row-even"><td><p>パースペクティブ(Perspective)</p></td>
+<td><p>ワークベンチに表示するビューのセット、および、レイアウトを定義したものです。</p></td>
+</tr>
+<tr class="row-odd"><td><p>ワークスペース(Workspace)</p></td>
+<td><p>ワークスペースは開発資産、および、ユーザーの作業状態を保存する場所です。ユーザーが行った作業の状態やワークベンチの設定情報などを保存します。</p></td>
+</tr>
+<tr class="row-even"><td><p>ツールチェイン(Toolchain)</p></td>
+<td><p>ソースコードからバイナリを生成し、エディタ、コンパイラ、アセンブラ、リンカなどで構成されるツールの集合体を指します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>シンクロナイズドプロジェクト(Synchronized project)</p></td>
+<td><p>シンクロナイズドプロジェクトは、ローカルシステムと、1つ、または、複数のリモートシステムにミラー化されたファイルから構成されます。編集はローカルシステム上で行われ、各ファイルは、変更、作成、または、削除されたタイミングでアクティブなリモートシステムと同期します。</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="id4">
+<h2><span class="section-number">3.1.13.2. </span>利用環境<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">統合開発環境は、ローカルマシンに Eclipse を導入して使用します。</div>
+<div class="line">ローカルマシンは、ログインノードと SSH接続が可能であり、Eclipseの動作環境を満たしている必要があります。</div>
+</div>
+<p>[動作確認済環境]</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation System(OS)</p></th>
+<th class="head"><p>Java Runtime Environment (JRE)／Java Development Kit (JDK)</p></th>
+<th class="head"><p>Eclipse IDE for Scientific Computing</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Microsoft Windows 11 (64bit)</p></td>
+<td><p>OpenJDK 8 (1.8.0.332-1)</p></td>
+<td><p>Eclipse IDE 2020-06 R Packages</p></td>
+</tr>
+<tr class="row-odd"><td><p>macOS Catalina</p></td>
+<td><p>OpenJDK 8 (1.8.0.332-1)</p></td>
+<td><p>Eclipse IDE 2020-06 R Packages</p></td>
+</tr>
+<tr class="row-even"><td><p>Red Hat Enterprise Linux 8.1</p></td>
+<td><p>OpenJDK 8 (1.8.0.332-1)</p></td>
+<td><p>Eclipse IDE 2020-06 R Packages</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>なお、JRE/JDKについては、使用条件(ライセンス条件)を十分に確認の上、お客様の責任において入手(<a class="reference external" href="https://github.com/ojdkbuild">https://github.com/ojdkbuild</a>)し、ご利用ください。</p>
+</div>
+</section>
+<section id="id5">
+<h2><span class="section-number">3.1.13.3. </span>導入手順<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>統合開発環境の導入手順について説明します。</p>
+<section id="eclipse">
+<h3><span class="section-number">3.1.13.3.1. </span>Eclipseの導入<a class="headerlink" href="#eclipse" title="Link to this heading">¶</a></h3>
+<p>Eclipseの導入方法を示します。</p>
+<nav class="contents local" id="id6">
+<ul class="simple">
+<li><p><a class="reference internal" href="#jre-jdk" id="id17">JRE または JDKのインストール</a></p></li>
+<li><p><a class="reference internal" href="#id7" id="id18">Eclipseのインストール</a></p></li>
+<li><p><a class="reference internal" href="#id8" id="id19">Eclipseの起動</a></p></li>
+</ul>
+</nav>
+<section id="jre-jdk">
+<h4><a class="toc-backref" href="#id17" role="doc-backlink"><span class="section-number">3.1.13.3.1.1. </span>JRE または JDKのインストール</a><a class="headerlink" href="#jre-jdk" title="Link to this heading">¶</a></h4>
+<blockquote>
+<div><p>Eclipseを使用するためには、JRE(Java Runtime Environment)、または、JDK(Java Development Kit)が必要となるため、事前にインストールしてください。</p>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>利用する Eclipse IDE に必要な JRE／JDKのバージョンについては以下を参考にしてください。</p>
+<p><a class="reference external" href="https://wiki.eclipse.org/Eclipse/Installation">https://wiki.eclipse.org/Eclipse/Installation</a></p>
+</div>
+</div></blockquote>
+</section>
+<section id="id7">
+<h4><a class="toc-backref" href="#id18" role="doc-backlink"><span class="section-number">3.1.13.3.1.2. </span>Eclipseのインストール</a><a class="headerlink" href="#id7" title="Link to this heading">¶</a></h4>
+<blockquote>
+<div><p>Eclipse Foundationの公式サイトより、&quot;Eclipse IDE for Scientific Computing&quot; を任意の場所にインストールします。</p>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>インストール方法は、公式サイトから&quot;Eclipse IDE for Scientific Computing&quot;をダウンロードする方法と、Eclipse Installerを使用して、インストールパッケージの選択画面から &quot;Eclipse IDE for Scientific Computing&quot; を選択する方法があります。</p>
+<p>詳細は、以下のEclipse Foundationの公式サイトを参照してください。</p>
+<p><a class="reference external" href="https://www.eclipse.org/">https://www.eclipse.org/</a></p>
+</div>
+</div></blockquote>
+</section>
+<section id="id8">
+<h4><a class="toc-backref" href="#id19" role="doc-backlink"><span class="section-number">3.1.13.3.1.3. </span>Eclipseの起動</a><a class="headerlink" href="#id8" title="Link to this heading">¶</a></h4>
+<ol class="arabic">
+<li><p>インストールフォルダにある <code class="docutils literal notranslate"><span class="pre">eclipse</span></code>を実行します。</p>
+<p>Eclipseが起動し、ワークスペースを指定する画面が表示されます。ワースクペースを作成したいディレクトリを、[Workspace]に指定してください。指定したディレクトリが存在しない場合は、自動で作成されます。[Workspace]を設定後、[Launch]ボタンをクリックします。</p>
+</li>
+</ol>
+<blockquote>
+<div><figure class="align-default">
+<img alt="../../../_images/DevelopmentSupportToolsInstallEclipse_01.png" src="../../../_images/DevelopmentSupportToolsInstallEclipse_01.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>[Welcome]ビューは使用しないため、ビューを閉じてください。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-default">
+<img alt="../../../_images/DevelopmentSupportToolsInstallEclipse_02.png" src="../../../_images/DevelopmentSupportToolsInstallEclipse_02.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>初期画面が表示されます。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-default">
+<img alt="../../../_images/DevelopmentSupportToolsInstallEclipse_03.png" src="../../../_images/DevelopmentSupportToolsInstallEclipse_03.png" />
+</figure>
+</div></blockquote>
+</section>
+</section>
+<section id="id9">
+<h3><span class="section-number">3.1.13.3.2. </span>富士通拡張機能の導入<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<p>富士通拡張機能の導入方法を説明します。</p>
+<p>本作業は、Eclipse ワークスペースの新規作成時に実施してください。</p>
+<nav class="contents local" id="id10">
+<ul class="simple">
+<li><p><a class="reference internal" href="#developmentsupporttoolsinstallfujitsuextensionremoteserver" id="id20">ログインノードへの接続</a></p></li>
+<li><p><a class="reference internal" href="#developmentsupporttoolsinstallfujitsuextensionarrangement" id="id21">富士通拡張機能用ファイルの配置</a></p></li>
+<li><p><a class="reference internal" href="#developmentsupporttoolsinstallfujitsuextensionfileimport" id="id22">富士通拡張機能設定ファイルのインポート</a></p></li>
+<li><p><a class="reference internal" href="#id14" id="id23">インストールパッケージの適用</a></p></li>
+</ul>
+</nav>
+<section id="developmentsupporttoolsinstallfujitsuextensionremoteserver">
+<span id="id11"></span><h4><a class="toc-backref" href="#id20" role="doc-backlink"><span class="section-number">3.1.13.3.2.1. </span>ログインノードへの接続</a><a class="headerlink" href="#developmentsupporttoolsinstallfujitsuextensionremoteserver" title="Link to this heading">¶</a></h4>
+<div class="line-block">
+<div class="line">ログインノードへ接続するための設定を行います。</div>
+<div class="line">統合開発環境では、ログインノードをリモートサーバとして使用します。</div>
+</div>
+<p>ログインノードに接続する時に使用するSSHの秘密鍵はあらかじめ作成してください。
+<a class="reference internal" href="#developmentsupporttoolgeneratingprivatekeyandpublickey"><span class="std std-ref">Eclipse用の鍵ペア（秘密鍵／公開鍵）の作成</span></a>を参照ください。</p>
+<ol class="arabic simple">
+<li><p>Eclipse メニューバーから、<span class="menuselection">[Window] ‣ [Preferences]</span>を選択します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionRemoteServer_01.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionRemoteServer_01.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>[Preferences]画面の左ペインから、<span class="menuselection">[General] ‣ [Network Connections] ‣ [SSH2]</span>を選択します。ログイン用の秘密鍵をEclipseに登録します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionPrivatekey_01.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionPrivatekey_01.png" />
+</figure>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目</p></th>
+<th class="head"><p>値</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SSH2 home</p></td>
+<td><p>[Browse...]ボタンをクリックし、秘密鍵があるパスを選択します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>Private keys</p></td>
+<td><p>[Add Private Key...]ボタンをクリックし、秘密鍵のファイル名を入力します。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul>
+<li><div class="line-block">
+<div class="line">ECDSA（NIST P 521）の秘密鍵をご使用ください。Ed25519や、RSAの秘密鍵は、eclipseでは使用できません。</div>
+<div class="line">eclipseでRSA鍵を使用している場合、将来ログインノードに接続できなくなります。</div>
+</div>
+</li>
+<li><p>秘密鍵と公開鍵のペアを作成しなおした場合は、公開鍵の登録が必要です。詳しくは、利用手引書 利用およびジョブ実行編「4.4.2 公開鍵登録」を参照ください。</p></li>
+</ul>
+</div>
+</div></blockquote>
+<p>3．<span class="guilabel">[Apply and Close]</span> を選択します。</p>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionPrivatekey_02.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionPrivatekey_02.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Eclipse メニューバーから、<span class="menuselection">[Window] ‣ [Preferences]</span>を選択します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-default">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionRemoteServer_01.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionRemoteServer_01.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>[Preferences]画面の左ペインから、<span class="menuselection">[Remote Development] ‣ [Remote Connections]</span>を選択し、<span class="guilabel">[Add]</span>ボタンをクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-default">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionRemoteServer_02.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionRemoteServer_02.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>[New Connection]画面に、必要な情報を設定し、<span class="guilabel">[Finish]</span>ボタンをクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-default">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionRemoteServer_03.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionRemoteServer_03.png" />
+</figure>
+<p>[New Connection]画面の設定内容は以下のとおりです。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22.2%" />
+<col style="width: 33.3%" />
+<col style="width: 44.4%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目1</p></th>
+<th class="head"><p>項目2</p></th>
+<th class="head"><p>設定内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Connection name</p></td>
+<td></td>
+<td><p>[Remote Connection]の識別名を指定します。任意の名前を指定してください。</p></td>
+</tr>
+<tr class="row-odd"><td><p>Host information</p></td>
+<td><p>Host</p></td>
+<td><p>ログインノードのホスト名 <code class="docutils literal notranslate"><span class="pre">login.fugaku.r-ccs.riken.jp</span></code> を指定します。</p></td>
+</tr>
+<tr class="row-even"><td><p>Host information</p></td>
+<td><p>User</p></td>
+<td><p>ユーザ名を指定します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>Host information</p></td>
+<td><div class="line-block">
+<div class="line">・Public key based authentication</div>
+<div class="line">・Password based authentication</div>
+</div>
+</td>
+<td><p>ログインノードに接続する際に使用する認証方式を選択します。</p>
+<ul>
+<li><div class="line-block">
+<div class="line">Public key based authentication</div>
+<div class="line">公開鍵認証方式</div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">Passphrase</div>
+<div class="line">秘密鍵のパスフレーズ</div>
+</div>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>Host information</p></td>
+<td><p>Advanced</p></td>
+<td><p>拡張設定です。必要に応じて設定してください。</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ol class="arabic" start="7">
+<li><p>[Remote Connections]に設定した内容が追加されていることを確認します。</p>
+<p>追加された設定を選択し、<span class="guilabel">[Open]</span>ボタンをクリックします。</p>
+</li>
+</ol>
+<blockquote>
+<div><figure class="align-default">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionRemoteServer_04.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionRemoteServer_04.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>Statusが、 &quot;open&quot; に更新された事を確認し、<span class="guilabel">[Apply and Close]</span>をクリックして画面を閉じます。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-default">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionRemoteServer_05.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionRemoteServer_05.png" />
+</figure>
+</div></blockquote>
+</section>
+<section id="developmentsupporttoolsinstallfujitsuextensionarrangement">
+<span id="id12"></span><h4><a class="toc-backref" href="#id21" role="doc-backlink"><span class="section-number">3.1.13.3.2.2. </span>富士通拡張機能用ファイルの配置</a><a class="headerlink" href="#developmentsupporttoolsinstallfujitsuextensionarrangement" title="Link to this heading">¶</a></h4>
+<p>富士通拡張機能を使用するために必要なファイルを配置します。</p>
+<blockquote>
+<div><p>富士通拡張機能を使用するために必要なファイルは、ログインノードの以下です。</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$FJSVXTCLANGA/misc/ide/idefiles.zip
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p>$FJSVXTCLANGAには言語環境へのパスが設定されており、ログイン時に自動で設定されます。言語42版の場合は、<code class="file docutils literal notranslate"><span class="pre">/opt/FJSVxtclanga/tcsds-1.2.42</span></code>です。</p>
+</div>
+<p>上記の zip の解凍後の構成は以下の通りです。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 60.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ディレクトリ名／ファイル名</p></th>
+<th class="head"><p>説明</p></th>
+<th class="head"><p>配置先</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>eclipsesetting</p></td>
+<td><p>ログインノードの <code class="file docutils literal notranslate"><span class="pre">/home/groupname/username/.eclipsesettings</span></code> 配下に配置するファイルが格納されています。</p></td>
+<td><p>ログインノード</p></td>
+</tr>
+<tr class="row-odd"><td><p>plugins</p></td>
+<td><p>Eclipse の plugins フォルダ内に配置するファイルが格納されています。</p></td>
+<td><p>クライアントマシン</p></td>
+</tr>
+<tr class="row-even"><td><p>fj_extention</p></td>
+<td><p><a class="reference internal" href="#developmentsupporttoolsinstallfujitsuextensionfileimport"><span class="std std-ref">富士通拡張機能設定ファイルのインポート</span></a>で使用するXMLファイルが格納されています。</p></td>
+<td><p>クライアントマシン</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>[ファイルの配置方法]</p>
+<blockquote>
+<div><p>以下の手順でファイルを配置します。</p>
+<ol class="arabic simple">
+<li><p><code class="file docutils literal notranslate"><span class="pre">idefiles.zip</span></code>ファイルをログインノードの任意の場所に展開します。</p></li>
+<li><p><code class="file docutils literal notranslate"><span class="pre">eclipsesettings</span></code>ディレクトリを <code class="file docutils literal notranslate"><span class="pre">.eclipsesettings</span></code> にリネームし、ログインノードの <code class="file docutils literal notranslate"><span class="pre">/home/groupname/username/</span></code>ディレクトリ直下にコピーします。</p></li>
+<li><p><code class="file docutils literal notranslate"><span class="pre">idefiles.zip</span></code>ファイルをクライアントマシンに転送し、任意の場所に展開します。</p></li>
+</ol>
+</div></blockquote>
+</section>
+<section id="developmentsupporttoolsinstallfujitsuextensionfileimport">
+<span id="id13"></span><h4><a class="toc-backref" href="#id22" role="doc-backlink"><span class="section-number">3.1.13.3.2.3. </span>富士通拡張機能設定ファイルのインポート</a><a class="headerlink" href="#developmentsupporttoolsinstallfujitsuextensionfileimport" title="Link to this heading">¶</a></h4>
+<p>富士通拡張機能を使用するために必要な設定ファイルをEclipseにインポートします。</p>
+<ol class="arabic simple">
+<li><p>[Project Explorer]ビューを表示します。[Project Explorer]ビューは、メニューバーの<span class="menuselection">[Window] ‣ [Show View] ‣ [Project Explorer]</span>を選択して表示することができます。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-default">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_01.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_01.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>メニューバーの<span class="menuselection">[Files] ‣ [Import...]</span>を選択します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_02.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_02.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>[Import]画面の Select an import wizard から、<span class="menuselection">[Target System Configrations] ‣ [Target Configration from Plug-in]</span>を選択し、<span class="guilabel">[Next&gt;]</span>ボタンをクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_03.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_03.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>プルダウンメニューから、[Generic PBS Batch]を選択し、<span class="guilabel">[Finish]</span>ボタンをクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_04.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_04.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>targetConfiguratonsプロジェクトの作成選択画面で、<span class="guilabel">[Yes]</span>ボタンをクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_05.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_05.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>[Project Explorer]ビューに [targetConfigurations] が追加されていることを確認し、[targetConfigurations] を選択します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_06.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_06.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="7">
+<li><p>メニューバーから、<span class="menuselection">[File] ‣ [Import...]</span>を選択します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_07.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_07.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>[Import]画面で、<span class="menuselection">[General] ‣ [File System]</span>を選択し、<span class="guilabel">[Next &gt;]</span>ボタンをクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_08.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_08.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic" start="9">
+<li><div class="line-block">
+<div class="line">[From directory] 右側の <span class="guilabel">[Browse...]</span>ボタンをクリックし、<a class="reference internal" href="#developmentsupporttoolsinstallfujitsuextensionarrangement"><span class="std std-ref">富士通拡張機能用ファイルの配置</span></a>で展開した <code class="file docutils literal notranslate"><span class="pre">fj_extention</span></code>ディレクトリを指定します。指定すると、[From directory] の下のボックスの左側に選択したディレクトリ、右側にディレクトリ内のファイルが表示されます。</div>
+<div class="line">ここでは、ボックス右側の <code class="file docutils literal notranslate"><span class="pre">FUJITSU_Technical_Computing_Suite.xml</span></code>ファイルにチェックを入れ、ボックス下の[Into folder]に &quot;targetConfigrations&quot; が指定されていることを確認します。</div>
+<div class="line">&quot;targetConfigrations&quot; が指定されていない場合、右側の[Browse...]ボタンをクリックし &quot;targetConfigrations&quot; を選択します。</div>
+<div class="line">設定完了後、[Finish]ボタンをクリックします。</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_09.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_09.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="10">
+<li><p>[Project Explorer]ビューの[targetConfigurations]に、<code class="file docutils literal notranslate"><span class="pre">FUJITSU_Technical_Computing_Suite.xml</span></code>が追加されていることを確認します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_10.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_10.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="11">
+<li><p>[Project Explorer]ビューにある <code class="file docutils literal notranslate"><span class="pre">Generic</span> <span class="pre">PBS</span> <span class="pre">Batch</span> <span class="pre">(1).xml</span></code>は、今後使用しないため削除します。[Project Exploler]ビューから <code class="file docutils literal notranslate"><span class="pre">GenericSLURM</span> <span class="pre">Batch</span> <span class="pre">(1).xml</span></code>を右クリックし、[Delete]を選択します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_11.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_11.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="12">
+<li><p>確認画面で問題ないことを確認し、<span class="guilabel">[OK]</span>ボタンをクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_12.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionFileImport_12.png" />
+</figure>
+</div></blockquote>
+</section>
+<section id="id14">
+<h4><a class="toc-backref" href="#id23" role="doc-backlink"><span class="section-number">3.1.13.3.2.4. </span>インストールパッケージの適用</a><a class="headerlink" href="#id14" title="Link to this heading">¶</a></h4>
+<ol class="arabic simple">
+<li><p>メニューバーの[Window]-[Preferences]を選択します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_01.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_01.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>[Preferences]から[Install/Update]を選択し、[Verify provisioning operation is compatible with currently running JRE]のチェックを外してから[Apply]ボタンをクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_02.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_02.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>[Available Software Sites]を選択し、[Name]の下のチェックボックスのチェックをすべて外してから[Apply and Close]ボタンをクリックします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_03.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_03.png" />
+</figure>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<div class="line-block">
+<div class="line">Eclipseにインストールされているソフトウェアのアップデートを適用しないでください。</div>
+<div class="line">また、本節で記載しているものを除き、Eclipseに新規にソフトウェアをインストールしないでください。</div>
+</div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>メニューバーの[Help]-[Install New Software]を押します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_04.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_04.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>[Install]ウィンドウから[Add]ボタンを押します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_05.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_05.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>[Add Repository]ウィンドウに必要な情報を設定し[Add]ボタンを押します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_06.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_06.png" />
+</figure>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>項目</p></th>
+<th class="head"><p>設定内容</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Name</p></td>
+<td><p>任意の名前を指定してください。</p></td>
+</tr>
+<tr class="row-odd"><td><p>Location</p></td>
+<td><p>「Archive」ボタンを押し、ローカルに配置したインストールパッケージ「TCS_IDE_Plugins_YYYYMMDDhhmm.zip」を選択してください。
+インストールパッケージは、富士通拡張機能用ファイルの“patches”ディレクトリの中に格納されています。</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ol class="arabic simple" start="7">
+<li><p>Eclipseに適用可能なソフトウェアの一覧が表示されます。[Select All]ボタンを押してすべてを選択し、[Next]ボタンを押してください。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_07.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_07.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li><p>「Update my installation to be compatible with the items being installed」を選択し、[Next]を押します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_08.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_08.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="9">
+<li><p>インストール対象のソフトウェアが表示されます。「Parallel Tools PlatForm with TCS patches」と「Toolchain-feature」がインストール対象であることを確認し、[Next]ボタンを押します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_09.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_09.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="10">
+<li><p>「I accept the terms of the license agreement」を選択し、[Finish]ボタンを押します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_10.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_10.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="11">
+<li><p>セキュリティー警告画面が表示されます。[Install anyway] ボタンを押します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_11.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_11.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="12">
+<li><p>再起動するかを尋ねられますが、[No]ボタンを押します。そして、Eclipseの右上の×ボタンを押し、Eclipseを終了します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_12.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_12.png" />
+</figure>
+</div></blockquote>
+<ol class="arabic" start="13">
+<li><div class="line-block">
+<div class="line">ソフトウェアがEclipseに正しくインストールされたことを確認します。</div>
+<div class="line">メニューバーの[Help]-[About Eclipse IDE]-[Installation Details]を押します。[InstalledSoftware]タブの一覧に、指定した2つのソフトウェアが含まれることを確認してください。</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<img alt="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_13.png" src="../../../_images/DevelopmentSupportToolsInstallFujitsuExtensionApplyPackage_13.png" />
+</figure>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>ソフトウェアが表示されない場合は以下をお試しください。</p>
+<ul class="simple">
+<li><p>ターミナルもしくはコマンドプロンプトから「eclipse -clean」によってEclipseを起動し、[InstalledSoftware]タブを確認ください。</p></li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+</section>
+</section>
+<section id="developmentsupporttoolgeneratingprivatekeyandpublickey">
+<span id="id15"></span><h2><span class="section-number">3.1.13.4. </span>Eclipse用の鍵ペア（秘密鍵／公開鍵）の作成<a class="headerlink" href="#developmentsupporttoolgeneratingprivatekeyandpublickey" title="Link to this heading">¶</a></h2>
+<p>ECDSAの鍵ペア（公開鍵／秘密鍵）の作成手順を示します。puttygenを使用する場合には、ターミナルエミュレータPuTTY（パティ）を事前にインストールする必要があります。</p>
+<nav class="contents local" id="id16">
+<ul class="simple">
+<li><p><a class="reference internal" href="#ssh-keygen" id="id24">ssh-keygenを利用した鍵ペアの作成</a></p></li>
+<li><p><a class="reference internal" href="#puttygen" id="id25">PuTTYgenを使用した鍵ペアの作成</a></p></li>
+</ul>
+</nav>
+<section id="ssh-keygen">
+<h3><a class="toc-backref" href="#id24" role="doc-backlink"><span class="section-number">3.1.13.4.1. </span>ssh-keygenを利用した鍵ペアの作成</a><a class="headerlink" href="#ssh-keygen" title="Link to this heading">¶</a></h3>
+<p>利用者の端末にて<strong class="command">ssh-keygen</strong>コマンドを実行し、秘密鍵と公開鍵のペアを作成します。</p>
+<ol class="arabic simple">
+<li><p>ターミナルを起動して、<strong class="command">ssh-keygen</strong>コマンドを実行します。</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>Windowsの場合はコマンドプロンプト（<span class="menuselection">Windowsシステムツール ‣ コマンドプロンプト</span>）、Mac（OS X）の場合はTerminal（<span class="menuselection">アプリケーション ‣ ユーティリティ ‣ ターミナル</span>）を起動して<strong class="command">ssh-keygen</strong>コマンドを実行します。</p></li>
+<li><p>UNIX／Linuxの場合は、端末エミュレータを起動して <strong class="command">ssh-keygen</strong>コマンドを実行します。</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[terminal]$ </span>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ecdsa<span class="w"> </span>-b<span class="w"> </span><span class="m">521</span><span class="w"> </span>-m<span class="w"> </span>PEM
+<span class="go">Generating public/private ecdsa key pair.</span>
+<span class="go">Enter file in which to save the key (C:\Users\name/.ssh/id_ecdsa):</span>
+<span class="go">Enter passphrase (empty for no passphrase): # パスフレーズを入力</span>
+<span class="go">Enter same passphrase again:                # もう一度同じパスフレーズを入力</span>
+<span class="go">Your identification has been saved in C:\Users\name/.ssh/id_ecdsa.</span>
+<span class="go">Your public key has been saved in C:\Users\name/.ssh/id_ecdsa.pub.</span>
+<span class="go">The key fingerprint is:</span>
+<span class="go">SHA256:fMxUePmrQnAzHlQw531SdYV+hFD0iChkVf1cuXuVEuw name@hostname</span>
+<span class="go">The key&#39;s randomart image is:</span>
+<span class="go">+---[ECDSA 521]---+</span>
+<span class="go">|        o.+=B*ooO|</span>
+<span class="go">|       o  o*o=+=+|</span>
+<span class="go">|        ..o.+o=+*|</span>
+<span class="go">|       ..==  Eo==|</span>
+<span class="go">|        S+++  .oo|</span>
+<span class="go">|         .o   ...|</span>
+<span class="go">|         .   .  .|</span>
+<span class="go">|          . .    |</span>
+<span class="go">|           .     |</span>
+<span class="go">+----[SHA256]-----+</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<ul class="simple">
+<li><p>パスフレーズはパスワード同様に他人が推測しにくい文字列を設定してください。また、必ずパスフレーズを設定するようお願い致します。パスフレーズの長さは15文字以上を推奨します。</p></li>
+</ul>
+</div>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><div class="line-block">
+<div class="line"><strong class="command">ssh-keygen</strong>を実行すると、ホームディレクトリ配下の<code class="file docutils literal notranslate"><span class="pre">.ssh</span></code>ディレクトリに秘密鍵（id_ed25519）と公開鍵（id_ecdsa.pub）の2種類が作成されます。</div>
+<div class="line">公開鍵（id_ecdsa.pub）を富岳ウェブサイトを利用してログインノードに登録します。</div>
+<div class="line">秘密鍵（id_ed25519）をEclipseに登録します。</div>
+</div>
+</li>
+</ol>
+</section>
+<section id="puttygen">
+<h3><a class="toc-backref" href="#id25" role="doc-backlink"><span class="section-number">3.1.13.4.2. </span>PuTTYgenを使用した鍵ペアの作成</a><a class="headerlink" href="#puttygen" title="Link to this heading">¶</a></h3>
+<p><strong class="command">puttygen</strong>コマンドを実行し、秘密鍵と公開鍵のペアを作成します。</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line"><strong class="command">puttygen</strong>を起動します。</div>
+<div class="line">鍵の種類（Type of key to generate）として<span class="guilabel">「ECDSA」</span>、<span class="guilabel">「nistp521」</span>を選択し、 <span class="guilabel">「Generate」</span>ボタンをクリックします。</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_01.png"><img alt="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_01.png" src="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_01.png" style="width: 491.4px; height: 334.59999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>マウスカーソルをランダムに動かします。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_02.png"><img alt="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_02.png" src="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_02.png" style="width: 491.4px; height: 334.59999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic" start="3">
+<li><div class="line-block">
+<div class="line">公開鍵を保管します。</div>
+<div class="line">「Public key for pasting in to OpenSSH authorized_keys file:」に表示される内容を、クリップボードにコピーします（メモ帳を起動し貼り付けておくことをお勧めします）。</div>
+<div class="line">クリップボードに張り付けた内容（公開鍵となります）を、富岳ウェブサイトを利用して登録します。</div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_03.png"><img alt="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_03.png" src="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_03.png" style="width: 491.4px; height: 334.59999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>「Key passphrase」および「Confirm」に、パスフレーズを入力します。入力後、<span class="guilabel">「Save private key」</span>ボタンをクリックし、秘密鍵を保管します。ここで保存するファイルは公開鍵を再確認したい場合に使用します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_04.png"><img alt="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_04.png" src="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_04.png" style="width: 491.4px; height: 334.59999999999997px;" /></a>
+</figure>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>パスフレーズはパスワード同様に他人が推測しにくい文字列を設定してください。また、必ずパスフレーズを設定するようお願い致します。パスフレーズの長さは15文字以上を推奨します。</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p><span class="menuselection">[Conversions] ‣ [Export OpenSSH key]</span>を選び、Eclipseで使用できる形式で秘密鍵をファイルに保存します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_05.png"><img alt="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_05.png" src="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_05.png" style="width: 487.9px; height: 331.09999999999997px;" /></a>
+</figure>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>秘密鍵を保管するファイル名を「ファイル名(N)」に入力し、<span class="guilabel">「保存(S)」</span>ボタンをクリックします。秘密鍵が保管されます。ここで入力したファイル名をEclipseで使用します。</p></li>
+</ol>
+<blockquote>
+<div><figure class="align-center">
+<a class="reference internal image-reference" href="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_06.png"><img alt="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_06.png" src="../../../_images/DevelopmentSupportToolGeneratingPrivateKeyAndPublicKey_06.png" style="width: 660.8px; height: 414.4px;" /></a>
+</figure>
+</div></blockquote>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3.1.13. 統合開発環境</a><ul>
+<li><a class="reference internal" href="#id2">3.1.13.1. 概要</a><ul>
+<li><a class="reference internal" href="#id3">3.1.13.1.1. 用語説明</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id4">3.1.13.2. 利用環境</a></li>
+<li><a class="reference internal" href="#id5">3.1.13.3. 導入手順</a><ul>
+<li><a class="reference internal" href="#eclipse">3.1.13.3.1. Eclipseの導入</a><ul>
+<li><a class="reference internal" href="#jre-jdk">3.1.13.3.1.1. JRE または JDKのインストール</a></li>
+<li><a class="reference internal" href="#id7">3.1.13.3.1.2. Eclipseのインストール</a></li>
+<li><a class="reference internal" href="#id8">3.1.13.3.1.3. Eclipseの起動</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id9">3.1.13.3.2. 富士通拡張機能の導入</a><ul>
+<li><a class="reference internal" href="#developmentsupporttoolsinstallfujitsuextensionremoteserver">3.1.13.3.2.1. ログインノードへの接続</a></li>
+<li><a class="reference internal" href="#developmentsupporttoolsinstallfujitsuextensionarrangement">3.1.13.3.2.2. 富士通拡張機能用ファイルの配置</a></li>
+<li><a class="reference internal" href="#developmentsupporttoolsinstallfujitsuextensionfileimport">3.1.13.3.2.3. 富士通拡張機能設定ファイルのインポート</a></li>
+<li><a class="reference internal" href="#id14">3.1.13.3.2.4. インストールパッケージの適用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#developmentsupporttoolgeneratingprivatekeyandpublickey">3.1.13.4. Eclipse用の鍵ペア（秘密鍵／公開鍵）の作成</a><ul>
+<li><a class="reference internal" href="#ssh-keygen">3.1.13.4.1. ssh-keygenを利用した鍵ペアの作成</a></li>
+<li><a class="reference internal" href="#puttygen">3.1.13.4.2. PuTTYgenを使用した鍵ペアの作成</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../ManualReference.html"
+                          title="前の章へ"><span class="section-number">3.1.12. </span>マニュアル</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../InterlanguageLinkage/index.html"
+                          title="次の章へ"><span class="section-number">3.1.14. </span>言語間結合（オブジェクトの互換性について）</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../InterlanguageLinkage/index.html" title="3.1.14. 言語間結合（オブジェクトの互換性について）"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="../ManualReference.html" title="3.1.12. マニュアル"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.13. </span>統合開発環境</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

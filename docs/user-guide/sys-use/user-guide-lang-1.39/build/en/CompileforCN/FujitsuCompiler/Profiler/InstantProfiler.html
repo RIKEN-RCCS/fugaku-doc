@@ -1,0 +1,807 @@
+
+
+<!doctype html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.11.3. Instant Performance Profiler &#8212; Supercomputer Fugaku User Guide －Language and development environment－  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f85107c5" />
+    
+    <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="3.1.11.4. CPU Performance Analysis Report" href="CPUPerformanceAnalysisReport.html" />
+    <link rel="prev" title="3.1.11.2. Advanced Performance Profiler" href="AdvancedProfiler.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CPUPerformanceAnalysisReport.html" title="3.1.11.4. CPU Performance Analysis Report"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="AdvancedProfiler.html" title="3.1.11.2. Advanced Performance Profiler"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><span class="section-number">3.1.11. </span>Profiler</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.11.3. </span>Instant Performance Profiler</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="instant-performance-profiler">
+<h1><span class="section-number">3.1.11.3. </span>Instant Performance Profiler<a class="headerlink" href="#instant-performance-profiler" title="Link to this heading">¶</a></h1>
+<p>The Instant Performance Profiler measures and outputs statistical information for the entire program through sampling analysis.</p>
+<section id="overview">
+<h2><span class="section-number">3.1.11.3.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>Instant Performance Profiler is composed of 2 commands: <strong class="program">fipp</strong> command that measures profile data and <strong class="program">fipppx</strong> command that outputs profile result from measured data. The statistical information that can be output by the Instant Performance Profiler is as follows.</p>
+<ul class="simple">
+<li><p>Statistical time information</p></li>
+<li><p>CPU performance characteristics</p></li>
+<li><p>Cost information</p></li>
+<li><p>Call graph information</p></li>
+<li><p>Source code information</p></li>
+</ul>
+<p>The flow of using the Advanced Performance Profiler is as follows.</p>
+<figure class="align-default">
+<img alt="../../../_images/InstantProfiler_01.png" src="../../../_images/InstantProfiler_01.png" />
+</figure>
+</section>
+<section id="addition-of-measurement-interval-specification-routine">
+<h2><span class="section-number">3.1.11.3.2. </span>Addition of measurement interval specification routine<a class="headerlink" href="#addition-of-measurement-interval-specification-routine" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">To measure profile data in a specified section, add a measurement section specification routine / function to the source code.</div>
+<div class="line">The measurement interval specification function can be used as a Fortran language subroutine or C/C++ function.</div>
+<div class="line">When using C/C++ functions, you must declare the function prototype or include the header file of the profiler subroutine.</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 20.0%" />
+<col style="width: 30.0%" />
+<col style="width: 10.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Language type</p></th>
+<th class="head"><p>Header file</p></th>
+<th class="head"><p>Sub routine / function name</p></th>
+<th class="head"><p>Argument</p></th>
+<th class="head"><p>Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Fortran</p></td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">fipp_start</div>
+<div class="line">fipp_stop</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">Start measuring Cost information</div>
+<div class="line">End measuring Cost information</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>C/C++</p></td>
+<td><p>fj_tool/fipp.h</p></td>
+<td><div class="line-block">
+<div class="line">void fipp_start</div>
+<div class="line">void fipp_stop</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">Start measuring Cost information</div>
+<div class="line">End measuring Cost information</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<ul class="simple">
+<li><p>To collect measurement data using these subroutines / functions, specify <code class="docutils literal notranslate"><span class="pre">-Sregion</span></code> option to <code class="docutils literal notranslate"><span class="pre">fipp</span></code> command.</p></li>
+<li><p>When calling these subroutines / functions multiple times, be sure to call them in the order fipp_start and flipp_stop. If fipp_start is called again before calling fipp_stop, or if fipp_stop is called before calling fipp_start, a warning message is printed and the call is ignored. Also, if the process ends without calling fipp_stop, profile data for that section is not measured.</p></li>
+<li><p>When these subroutines / functions are called multiple times, the results of all specified measurement intervals are added together.</p></li>
+<li><p>For MPI programs, call these subroutines / functions in all processes that you want to measure. It does not measure profile data for processes that have not been called.</p></li>
+</ul>
+</div>
+</div></blockquote>
+<p>An example of using the measurement interval specification routine is shown below.</p>
+<ul>
+<li><p>Fortran example</p>
+<ol class="arabic simple">
+<li><p>Sample specification example</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">main</span>
+<span class="p">...</span>
+<span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">10000</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="k">call </span><span class="n">fipp_start</span><span class="w">   </span><span class="c">! Start measurring</span>
+<span class="w">  </span><span class="k">do </span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">10000</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="k">end do</span>
+<span class="k">  call </span><span class="n">fipp_stop</span><span class="w">    </span><span class="c">! End measurring</span>
+<span class="k">end do</span>
+<span class="k">end program </span><span class="n">main</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Example of measuring all processes (measurement starts before calling the mpi_init subroutine)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">call </span><span class="n">fipp_start</span><span class="w">     </span><span class="c">! Start measurring</span>
+<span class="k">call </span><span class="n">mpi_init</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+<span class="p">...</span>
+<span class="k">call </span><span class="n">mpi_finalize</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+<span class="k">call </span><span class="n">fipp_stop</span><span class="w">      </span><span class="c">! End measurring</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Example of measuring all processes (measurement starts immediately after calling the mpi_init subroutine)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">call </span><span class="n">mpi_init</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+<span class="k">call </span><span class="n">fipp_start</span><span class="w">     </span><span class="c">! Start measurring</span>
+<span class="p">...</span>
+<span class="k">call </span><span class="n">fipp_stop</span><span class="w">      </span><span class="c">! End measurring</span>
+<span class="k">call </span><span class="n">mpi_finalize</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Example of measuring only process 0</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">call </span><span class="n">mpi_init</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+<span class="k">call </span><span class="n">mpi_comm_rank</span><span class="p">(</span><span class="n">mpi_comm_world</span><span class="p">,</span><span class="n">rank</span><span class="p">,</span><span class="n">err</span><span class="p">)</span>
+<span class="k">if</span><span class="p">(</span><span class="n">rank</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">  call </span><span class="n">fipp_start</span><span class="w">   </span><span class="c">! Only process 0, start measurring</span>
+<span class="k">end if</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="k">if</span><span class="p">(</span><span class="n">rank</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">  call </span><span class="n">fipp_stop</span><span class="w">    </span><span class="c">! Only process 0, end measurring</span>
+<span class="k">end if</span>
+<span class="k">call </span><span class="n">mpi_finalize</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>C/C++ example</p>
+<ol class="arabic simple">
+<li><p>Sample specification example</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;fj_tool/fipp.h&quot;</span><span class="c1"> // Include header file</span>
+<span class="p">...</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">10000</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="n">fipp_start</span><span class="p">();</span><span class="w">   </span><span class="c1">// Start measurring</span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="mi">10000</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">){</span>
+<span class="w">       </span><span class="p">...</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">fipp_stop</span><span class="p">();</span><span class="w">    </span><span class="c1">// End measurring</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Example of measuring all processes (start measurement before calling the MPI_Init function)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">fipp_start</span><span class="p">();</span><span class="w">       </span><span class="c1">// Start measurring</span>
+<span class="n">MPI_Init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">argv</span><span class="p">);</span>
+<span class="p">...</span>
+<span class="n">MPI_Finalize</span><span class="p">();</span>
+<span class="n">fipp_stop</span><span class="p">();</span><span class="w">        </span><span class="c1">// End measurring</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Example of measuring all processes (measurement starts immediately after calling the MPI_Init function)</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">MPI_Init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">argv</span><span class="p">);</span>
+<span class="n">fipp_start</span><span class="p">();</span><span class="w">       </span><span class="c1">// Start measurring</span>
+<span class="p">...</span>
+<span class="n">fipp_stop</span><span class="p">();</span><span class="w">        </span><span class="c1">// End measurring</span>
+<span class="n">MPI_Finalize</span><span class="p">();</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Example of measuring only process 0</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">MPI_Init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">argv</span><span class="p">);</span>
+<span class="n">MPI_Comm_rank</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rank</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="n">rank</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+<span class="w">  </span><span class="n">fipp_start</span><span class="p">();</span><span class="w">     </span><span class="c1">// Only process 0, start measurring</span>
+<span class="p">}</span>
+<span class="p">...</span>
+<span class="k">if</span><span class="p">(</span><span class="n">rank</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+<span class="w">  </span><span class="n">fipp_stop</span><span class="p">();</span><span class="w">      </span><span class="c1">// Only process 0, end measurring</span>
+<span class="p">}</span>
+<span class="n">MPI_Finalize</span><span class="p">();</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="compiling-linking">
+<h2><span class="section-number">3.1.11.3.3. </span>Compiling / Linking<a class="headerlink" href="#compiling-linking" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">The tool library required to use the Instant Performance Profiler function is linked by default when compiling / linking.</div>
+<div class="line">Therefore, there is no need to specify special options as in the following example.</div>
+<div class="line">Compile / link is done at the login node or the compute node.</div>
+</div>
+<ul class="simple">
+<li><p>Compile / link example (MPI program)</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifrtpx<span class="w">  </span>-Kfast,parallel<span class="w">  </span><span class="s2">&quot;Source file name&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul class="simple">
+<li><p>Compile / link example (sequential / thread parallel program)</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w">  </span>-Kfast,parallel<span class="w">  </span><span class="s2">&quot;Source file name&quot;</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>When split compilation is performed, the optimization options specified at compile time should also be specified at link time so that the library of the appropriate profiler is linked.
+For example, in the case of a program that uses OpenMP, specify <code class="docutils literal notranslate"><span class="pre">-Kopenmp</span></code> option when linking.</p>
+</div>
+</div></blockquote>
+<section id="about-fortran-translation-options">
+<h3><span class="section-number">3.1.11.3.3.1. </span>About Fortran translation options<a class="headerlink" href="#about-fortran-translation-options" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">The following are the translation options for the profiler used when translating Fortran programs.</div>
+<div class="line">This option is enabled when linking.</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-Nfjprof</p></td>
+<td><p>Combine tool library.
+When omitted, <code class="docutils literal notranslate"><span class="pre">-Nfjprof</span></code> is enabled.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Nnofjprof</p></td>
+<td><p>Do not combine tool library.
+Cannot use profiler.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="about-c-c-translation-options">
+<h3><span class="section-number">3.1.11.3.3.2. </span>About C/C++ translation options<a class="headerlink" href="#about-c-c-translation-options" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">For the C/C++ language, there are two types of compilation modes: trad mode and clang mode.</div>
+<div class="line">The following are the translation-time options for the profiler used to translate the program for each mode.</div>
+<div class="line">This option is enabled when linking.</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 20.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>trad</p></td>
+<td><p>-Nfjprof</p></td>
+<td><p>Combine tool library. When omitted, <code class="docutils literal notranslate"><span class="pre">-Nfjprof</span></code> is enabled.</p></td>
+</tr>
+<tr class="row-odd"><td><p>trad</p></td>
+<td><p>-Nnofjprof</p></td>
+<td><p>Do not combine tool library. Cannot use profiler.</p></td>
+</tr>
+<tr class="row-even"><td><p>clang</p></td>
+<td><p>-ffj-fjprof</p></td>
+<td><p>Combine tool library. When omitted, <code class="docutils literal notranslate"><span class="pre">-ffj-fjprof</span></code> is enabled.</p></td>
+</tr>
+<tr class="row-odd"><td><p>clang</p></td>
+<td><p>-ffj-no-fjprof</p></td>
+<td><p>Do not combine tool library. Cannot use profiler.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+</section>
+<section id="measurement-of-profiler-data">
+<h2><span class="section-number">3.1.11.3.4. </span>Measurement of profiler data<a class="headerlink" href="#measurement-of-profiler-data" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">Profiler data is measured by using <strong class="program">fipp</strong> command.</div>
+<div class="line">This operation is performed on the compute node.</div>
+</div>
+<p>This indicates execution example of <strong class="program">fipp</strong> command.</p>
+<blockquote>
+<div><p>[Condition]</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fipp</span></code> command is added to the point where the execution module (<code class="file docutils literal notranslate"><span class="pre">a.out</span></code>) is specified.</p></li>
+<li><p>Gather the data to the directory (<code class="file docutils literal notranslate"><span class="pre">profiling_data</span></code>) where specified with <code class="docutils literal notranslate"><span class="pre">-d</span></code> option.</p></li>
+</ul>
+<p>[MPI program]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#</span>
+<span class="c1">#PJM -L &quot;node=2x2x2&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+fipp<span class="w"> </span>-C<span class="w"> </span>-d<span class="w"> </span>profiling_data<span class="w"> </span>-Icall,mpi<span class="w"> </span>mpiexec<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<p>[Sequential / Thread parallel program]</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="c1">#</span>
+<span class="c1">#PJM -L &quot;node=1&quot;</span>
+<span class="c1">#PJM -L &quot;elapse=01:00:00&quot;</span>
+<span class="c1">#PJM -x PJM_LLIO_GFSCACHE=/vol000N</span>
+<span class="c1">#PJM -g groupname</span>
+<span class="c1">#PJM -s</span>
+<span class="c1">#</span>
+
+fipp<span class="w"> </span>-C<span class="w"> </span>-d<span class="w"> </span>profiling_data<span class="w"> </span>-Icall,cpupa<span class="w"> </span>./a.out
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<blockquote>
+<div><p>If proceed the following to the profiler data that is measured by <strong class="program">fipp</strong> command, we do not guarantee the work result.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Edit profile data</p></li>
+<li><p>Add, delete, and rename profile data</p></li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+<section id="profiler-option">
+<h2><span class="section-number">3.1.11.3.5. </span>Profiler option<a class="headerlink" href="#profiler-option" title="Link to this heading">¶</a></h2>
+<p>We describe <strong class="program">fipp</strong> command option.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-C</div>
+<div class="line">(Required option)</div>
+</div>
+</td>
+<td><p>Specifies measurement of profile data. If this option is omitted, an error message is output and the execution of the program ends.</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-d  <em>profile_data</em></div>
+<div class="line">(Required option)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Specify the directory for storing profile data. If this option is omitted, an error message is output and the execution of the program ends.</div>
+<div class="line">In <code class="docutils literal notranslate"><span class="pre">profile_data</span></code>, specify the directory name for storing the profile data as a relative or absolute path. The specified directory must be new or empty.</div>
+<div class="line">When analyzing a program that moves the current directory during execution, <code class="docutils literal notranslate"><span class="pre">profile_data</span></code> is specified as an absolute path.</div>
+<div class="line">The Profiler creates a subdirectory for every 1000 files under <code class="docutils literal notranslate"><span class="pre">profile_data</span></code>. Therefore, even for large jobs, you only need to specify <code class="docutils literal notranslate"><span class="pre">profile_data</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>exec-file [ exec_option … ]</p></td>
+<td><p>Specify the executable file and options for profile data measurement. If MPI program, specify from  <strong class="program">mpiexec</strong>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-H[mode={all|user}]</p></td>
+<td><p>Specify the measurement details of the CPU operation status. Specify one of those:  <code class="docutils literal notranslate"><span class="pre">all</span></code> or  <code class="docutils literal notranslate"><span class="pre">user</span></code> to sub option  <code class="docutils literal notranslate"><span class="pre">mode=</span></code>. When omitted this option or sub option  <code class="docutils literal notranslate"><span class="pre">mode={all|user}</span></code>,  <code class="docutils literal notranslate"><span class="pre">mode=all</span></code> is enabled.</p>
+<dl class="simple">
+<dt>mode=all</dt><dd><p>Performs measurement in kernel mode and user mode.</p>
+</dd>
+<dt>mode=user</dt><dd><p>Performs information measurement in user mode.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-I<em>item</em></div>
+<div class="line">(Hyphen + capital letter I)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Indicates the Instant Performance Profiler items to collect. If specify the multiple  <em>item</em>, devide with comma.</div>
+<div class="line"><em>item</em> :{{<code class="docutils literal notranslate"><span class="pre">call</span></code> | <code class="docutils literal notranslate"><span class="pre">nocall</span></code>} | {<code class="docutils literal notranslate"><span class="pre">cpupa</span></code> | <code class="docutils literal notranslate"><span class="pre">nocpupa</span></code>} | {<code class="docutils literal notranslate"><span class="pre">mpi</span></code> | <code class="docutils literal notranslate"><span class="pre">nompi</span></code>}}</div>
+</div>
+<dl class="simple">
+<dt>call:</dt><dd><p>Gather Call graph information.</p>
+</dd>
+<dt>nocall:</dt><dd><p>Do not gather Call graph information. When omitted,  <code class="docutils literal notranslate"><span class="pre">nocall</span></code> is enabled.</p>
+</dd>
+<dt>cpupa:</dt><dd><p>Measures the CPU performance characteristics. When omitted,  <code class="docutils literal notranslate"><span class="pre">cpupa</span></code>  is enabled.</p>
+</dd>
+<dt>nocpupa:</dt><dd><p>Do not measure the CPU performance characteristics.</p>
+</dd>
+<dt>mpi:</dt><dd><p>Measures the MPI Cost information. When omitted when the target is an MPI program  <code class="docutils literal notranslate"><span class="pre">mpi</span></code>  is enabled.</p>
+</dd>
+<dt>nompi:</dt><dd><p>Do not measures the MPI Cost information.When omitted when the target is an MPI program  <code class="docutils literal notranslate"><span class="pre">nompi</span></code>  is enabled.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-i <em>interval</em></p></td>
+<td><p>Specify the sampling interval for measuring profile data. <em>interval</em> specifies the sampling interval as an integer (in milliseconds). When this option is omitted,  <code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">100</span></code> option will be enabled. Specify an integer value in the range of 10 to 3,600,000 to  <code class="docutils literal notranslate"><span class="pre">interval</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>-L{shared | noshared}</p></td>
+<td><p>Specify how to measure the generated shared library that the translation option  <code class="docutils literal notranslate"><span class="pre">-Nline</span></code> or  <code class="docutils literal notranslate"><span class="pre">-ffj-line</span></code>is specified.</p>
+<dl class="simple">
+<dt>shared</dt><dd><p>The following information in the shared library with line information is measured.</p>
+<ul class="simple">
+<li><p>Starting line number of the procedure</p></li>
+<li><p>End line number of the procedure</p></li>
+<li><p>Loop cost distribution information</p></li>
+<li><p>Line cost distribution information</p></li>
+</ul>
+</dd>
+<dt>noshared</dt><dd><p>The above information in the shared library with line information is not measured. When omitted,  <code class="docutils literal notranslate"><span class="pre">noshared</span></code> is enabled.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-l <em>limit</em></p></td>
+<td><div class="line-block">
+<div class="line">Specify the number of procedure information measurements.</div>
+<div class="line">For the procedure information of more than the output number, add up and measure as  <code class="docutils literal notranslate"><span class="pre">__other__</span></code>.</div>
+<div class="line">When omitted this option,  <code class="docutils literal notranslate"><span class="pre">-l</span> <span class="pre">0</span></code> option is enabled. Specify an integer value in the range of 0 to 2,147,483,647 to  <code class="docutils literal notranslate"><span class="pre">limit</span></code>. If specified 0 to  <code class="docutils literal notranslate"><span class="pre">limit</span></code>, measure the entire.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-m <em>memsize</em></p></td>
+<td><div class="line-block">
+<div class="line">Specify the work memory size to be used for measurement as an integer value (KB).</div>
+<div class="line">A working memory area is allocated for each thread.</div>
+<div class="line">When omitted this option,  <code class="docutils literal notranslate"><span class="pre">-m</span> <span class="pre">3000</span></code> option is enabled. Specify an integer value in the range 1 to 2,147,483 to  <code class="docutils literal notranslate"><span class="pre">memsize</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-P{userfunc | nouserfunc}</p></td>
+<td><p>This option specifies how to appropriate the procedure cost. It applies to a mix of an object for which the compiler option <code class="docutils literal notranslate"><span class="pre">-Nline</span></code> or <code class="docutils literal notranslate"><span class="pre">-ffj-line</span></code> is specified (object with line information) and an object for which the compiler option <code class="docutils literal notranslate"><span class="pre">-Nnoline</span></code> or <code class="docutils literal notranslate"><span class="pre">-ffj-no-line</span></code> is specified (object without line information). The standard library and a shared library when <code class="docutils literal notranslate"><span class="pre">-Lnoshared</span></code> is specified are handled as objects without line information.</p>
+<dl class="simple">
+<dt>userfunc</dt><dd><p>If a cost is appropriated to a procedure of the object without line information, the procedure that called the procedure of the object without line information is traced back from call graph information. If a procedure of the object with line information exists, the cost is appropriated to the procedure. If no procedures of the object with line information exist, the cost is not appropriated. When specifying the <code class="docutils literal notranslate"><span class="pre">-Puserfunc</span></code> option, you must specify the <code class="docutils literal notranslate"><span class="pre">-Icall</span></code> option at the same time. If you do not specify the <code class="docutils literal notranslate"><span class="pre">-Icall</span></code> option, an error message is output and the collecting command is terminated.</p>
+</dd>
+<dt>nouserfunc</dt><dd><p>If a cost is appropriated to a procedure of the object without line information, the cost is appropriated to the procedure. However, the procedure start and end lines are not output.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-even"><td><p>-S{all | region}</p></td>
+<td><p>Specify the measurement interval for profile data.</p>
+<dl class="simple">
+<dt>all</dt><dd><p>Measure the entire program. When omitted,  <code class="docutils literal notranslate"><span class="pre">all</span></code>  is enabled.</p>
+</dd>
+<dt>region</dt><dd><p>Measures the section specified by the measurement section specification routine. A measurement interval specification routine must be inserted in the source code.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-W{spawn|nospawn}</p></td>
+<td><p>Specify the measurement method for dynamically generated processes. When omitted and specified, if it is MPI program, <code class="docutils literal notranslate"><span class="pre">-Wspawn</span></code>is enabled and if it is not MPI program, <code class="docutils literal notranslate"><span class="pre">-Wnospawn</span></code> is enabled.</p>
+<dl class="simple">
+<dt>spawn</dt><dd><p>Measure dynamically generated process statistics</p>
+</dd>
+<dt>nospawn</dt><dd><p>Does not measure dynamically generated process statistics</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="output-profile-result">
+<h2><span class="section-number">3.1.11.3.6. </span>Output profile result<a class="headerlink" href="#output-profile-result" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">By using  <strong class="program">fipppx</strong> command, outputs the measured profile data results with  <strong class="program">fipp</strong> command.</div>
+<div class="line">Perform this operation on the login node.</div>
+</div>
+<p>An execution example is shown below of  <strong class="program">fipppx</strong> command.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>If it’s login node</dt><dd><p>Use  <strong class="program">fipppx</strong> command.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>If it’s computing node</dt><dd><p>Use  <strong class="program">fipp</strong> command.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>[Command execution example]</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fipppx<span class="w"> </span>-A<span class="w"> </span>-pall<span class="w"> </span>-Ibalance,call<span class="w"> </span>-d<span class="w"> </span>profiling_data
+</pre></div>
+</div>
+<p>In this example, output of all process information is specified ( <code class="docutils literal notranslate"><span class="pre">-p</span> <span class="pre">all</span></code>). As a result of high parallel execution, if all processes are targeted for output, the output may be enormous. If you know in advance what process to focus on, you can also output by specifying the process number like  <code class="docutils literal notranslate"><span class="pre">-p0,1</span></code> (Process 0 and 1) .</p>
+<section id="fipppx-command-option">
+<h3><span class="section-number">3.1.11.3.6.1. </span>fipppx command option<a class="headerlink" href="#fipppx-command-option" title="Link to this heading">¶</a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Function / measurement value (unit)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-A</div>
+<div class="line">(Required option)</div>
+</div>
+</td>
+<td><p>Specify output processing of profile results.</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-d  <em>profile_data</em></div>
+<div class="line">(Required option)</div>
+</div>
+</td>
+<td><p>Specify the directory where the profile data is stored in <em>profile_data</em> as a relative or absolute path.</p></td>
+</tr>
+<tr class="row-even"><td><p>-f <em>func_name</em></p></td>
+<td><div class="line-block">
+<div class="line">Specify the name of the procedure used by the program in <em>func_name</em>, output information about <em>func_name</em>.</div>
+<div class="line">However if does not measure information about the process of <em>func_name</em> by  <strong class="program">fipp</strong> command, or <em>func_name</em>  process cost is 0, information will not be output even specified  <code class="docutils literal notranslate"><span class="pre">ffunc_name</span></code>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">-I<em>item</em></div>
+<div class="line">(Hyphen + capital letter I)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Specify the items to be output as profile results.</div>
+<div class="line">If specify the multiple  <em>item</em>, devide with comma.</div>
+<div class="line">item:{{<code class="docutils literal notranslate"><span class="pre">balance</span></code> | <code class="docutils literal notranslate"><span class="pre">nobalance}|</span></code>} | {<code class="docutils literal notranslate"><span class="pre">call</span></code> | <code class="docutils literal notranslate"><span class="pre">nocall}|</span></code>} | {<code class="docutils literal notranslate"><span class="pre">cpupa</span></code> | <code class="docutils literal notranslate"><span class="pre">nocpupa}|</span></code>} | {<code class="docutils literal notranslate"><span class="pre">mpi</span></code> | <code class="docutils literal notranslate"><span class="pre">nompi</span></code>} | {<code class="docutils literal notranslate"><span class="pre">src[:path</span> <span class="pre">]</span></code> | <code class="docutils literal notranslate"><span class="pre">nosrc}}</span></code>}}</div>
+</div>
+<dl class="simple">
+<dt>balance:</dt><dd><p>Output cost balance information to Cost information.</p>
+</dd>
+<dt>nobalance:</dt><dd><p>Do not output cost balance information to Cost information. When omitted,  <code class="docutils literal notranslate"><span class="pre">-nobalance</span></code>  is enabled.</p>
+</dd>
+<dt>call:</dt><dd><p>Output Call graph information.</p>
+</dd>
+<dt>nocall:</dt><dd><p>Do not output Call graph information.When omitted,  <code class="docutils literal notranslate"><span class="pre">-nocall</span></code>  is enabled.</p>
+</dd>
+<dt>cpupa:</dt><dd><p>Output the CPU performance characteristics. When omitted  <code class="docutils literal notranslate"><span class="pre">-cpupa</span></code>  is enabled.</p>
+</dd>
+<dt>nocpupa:</dt><dd><p>Do not output the CPU performance characteristics.</p>
+</dd>
+<dt>mpi:</dt><dd><p>Output MPI Cost information. When omitted when the target is an MPI program  <code class="docutils literal notranslate"><span class="pre">-mpi</span></code>  is enabled.</p>
+</dd>
+<dt>nompi:</dt><dd><p>Do not output MPI Cost information. If omitted if the target is a non-MPI program  <code class="docutils literal notranslate"><span class="pre">-nompi</span></code>  is enabled.</p>
+</dd>
+<dt>src[:path ]:</dt><dd><p>Outputs Source code information and cost per line. For per line cost, it does not include the cost output with  <code class="docutils literal notranslate"><span class="pre">-Impi</span></code> option. Specify the directory path where the source code exists to  <code class="docutils literal notranslate"><span class="pre">path</span></code>. If  <code class="docutils literal notranslate"><span class="pre">path</span></code> is specified multiply, devide with colon (:) and specify.</p>
+</dd>
+<dt>nosrc:</dt><dd><p>Do not output Source code information. When omitted,  <code class="docutils literal notranslate"><span class="pre">nosrc</span></code>  is enabled.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">-l <em>limit</em></div>
+<div class="line">(Lowercase l)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Specify the number of procedure information items to be output.</div>
+<div class="line">When this option is omitted,  <code class="docutils literal notranslate"><span class="pre">-l</span> <span class="pre">10</span></code> option is enabled.</div>
+<div class="line">Specify an integer value in the range of 0 to 2,147,483,647. to <em>limit</em>. If specified 0 to <em>limit</em>, the entire will be output.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-o <em>outfile</em></p></td>
+<td><div class="line-block">
+<div class="line">Specify the output destination of the profile result. For <em>outfile</em>, specify the output file name as a relative or absolute path, or specify “stdout”.</div>
+<div class="line">When this option is omitted,  <code class="docutils literal notranslate"><span class="pre">-ostdout</span></code> option is enabled.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>-p<em>p_no</em></p></td>
+<td><div class="line-block">
+<div class="line">Specify the process to be output to the profile result.</div>
+<div class="line">To <em>p_no</em> , specify one of these :  <code class="docutils literal notranslate"><span class="pre">N</span></code>, <code class="docutils literal notranslate"><span class="pre">input=n</span></code>, <code class="docutils literal notranslate"><span class="pre">limit=m</span></code>, <code class="docutils literal notranslate"><span class="pre">all</span></code>.</div>
+<div class="line">When this option is omitted,  <code class="docutils literal notranslate"><span class="pre">-pinput=0</span></code>, <code class="docutils literal notranslate"><span class="pre">limit=16</span></code> option is enabled.  To  <code class="docutils literal notranslate"><span class="pre">-p</span></code> option, as  comma (,) as devision, <em>p_no</em> can specified multiply.</div>
+<div class="line">For example, it can be like this :  <code class="docutils literal notranslate"><span class="pre">-p3,5,limit=10</span></code>.</div>
+</div>
+<dl class="simple">
+<dt>N … :</dt><dd><p>The information of the process number specified in N is output at the beginning. If the information of the process number specified in N does not exist, ignore the specification. If multiple Ns are specified, they are output in the specified order.</p>
+</dd>
+<dt>input=n:</dt><dd><p>Reads the number of n process information in descending order of cost. If 0 is specified for n or a value exceeding the number of processes is specified, information for all processes is read. When this sub option is omitted,  <code class="docutils literal notranslate"><span class="pre">input=0</span></code> is enabled. Sub option  <code class="docutils literal notranslate"><span class="pre">input=n</span></code> and sub option  <code class="docutils literal notranslate"><span class="pre">limit=m</span></code> can be specified at the same time.</p>
+</dd>
+<dt>limit=m:</dt><dd><p>Outputs the number of m process information in descending order of cost. The information of the process that was not output is included in the denominator when calculating the ratio. If m is specified as 0 or a value exceeding the number of input processes, information for all processes is output. When this sub option is omitted,  <code class="docutils literal notranslate"><span class="pre">limit=16</span></code> is enabled.</p>
+</dd>
+<dt>all:</dt><dd><p>Read all process number information and output in order of highest cost. It is the same of when specified  <code class="docutils literal notranslate"><span class="pre">-pinput=0,limit=0</span></code> option. Neither sub option  <code class="docutils literal notranslate"><span class="pre">input=n</span></code> and  <code class="docutils literal notranslate"><span class="pre">limit=m</span></code> is not specified, this is enabled.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-odd"><td><p>-T<em>t_no</em></p></td>
+<td><div class="line-block">
+<div class="line">Specify the thread to output profile data.</div>
+<div class="line">To <em>t_no</em> , specifiy one of these:  <code class="docutils literal notranslate"><span class="pre">N</span></code>, <code class="docutils literal notranslate"><span class="pre">limit=n</span></code>, <code class="docutils literal notranslate"><span class="pre">all</span></code>. To  <code class="docutils literal notranslate"><span class="pre">-T</span></code> option, as  comma (,) as devision,  <code class="docutils literal notranslate"><span class="pre">t_no</span></code> can specified multiply.</div>
+<div class="line">For example, it canbe :  <code class="docutils literal notranslate"><span class="pre">-T3,5,limit=10</span></code>.</div>
+</div>
+<dl class="simple">
+<dt>N[,N] … :</dt><dd><p>The information of the thread number specified in N is output at the head. If the information of the thread specified in N does not exist, ignore the specification. If multiple Ns are specified, they are output in the specified order.</p>
+</dd>
+<dt>limit=n:</dt><dd><p>The number of N thread information is output in descending order of cost. If n is specified as 0 or a value exceeding the total number of threads, information on all threads is output.</p>
+</dd>
+<dt>all:</dt><dd><p>Outputs information about all threads. It is the same as when specifying  <code class="docutils literal notranslate"><span class="pre">-Tlimit=0</span></code> option. When omitted,  <code class="docutils literal notranslate"><span class="pre">-Tall</span></code> option is enabled.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-even"><td><p>-t{text|xml}</p></td>
+<td><p>Specify the output format of the profile result.</p>
+<dl class="simple">
+<dt>text:</dt><dd><p>Outputs profile results in TEXT format. When omitted,  <code class="docutils literal notranslate"><span class="pre">-ttext</span></code> is enabled.</p>
+</dd>
+<dt>xml:</dt><dd><p>Outputs profile results in XML format.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="profile-result">
+<h3><span class="section-number">3.1.11.3.6.2. </span>Profile result<a class="headerlink" href="#profile-result" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">The profile result consists of the following statistical information.</div>
+<div class="line">Each information can be limited to output with  <code class="docutils literal notranslate"><span class="pre">-I</span></code> option of  <strong class="program">fipppx</strong> command.</div>
+<div class="line">For details of each item, please refer to “Profiler User’s Guide”-“2.2.2 Detail of Profile Result”.</div>
+</div>
+<ul class="simple">
+<li><p>Profile data measurement environment information</p></li>
+<li><p>Statistical time information</p></li>
+<li><p>CPU performance characteristics</p></li>
+<li><p>Cost information (procedure cost distribution information, loop cost distribution information, line cost distribution information)</p></li>
+<li><p>Call graph information</p></li>
+<li><p>Source code information</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3.1.11.3. Instant Performance Profiler</a><ul>
+<li><a class="reference internal" href="#overview">3.1.11.3.1. Overview</a></li>
+<li><a class="reference internal" href="#addition-of-measurement-interval-specification-routine">3.1.11.3.2. Addition of measurement interval specification routine</a></li>
+<li><a class="reference internal" href="#compiling-linking">3.1.11.3.3. Compiling / Linking</a><ul>
+<li><a class="reference internal" href="#about-fortran-translation-options">3.1.11.3.3.1. About Fortran translation options</a></li>
+<li><a class="reference internal" href="#about-c-c-translation-options">3.1.11.3.3.2. About C/C++ translation options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#measurement-of-profiler-data">3.1.11.3.4. Measurement of profiler data</a></li>
+<li><a class="reference internal" href="#profiler-option">3.1.11.3.5. Profiler option</a></li>
+<li><a class="reference internal" href="#output-profile-result">3.1.11.3.6. Output profile result</a><ul>
+<li><a class="reference internal" href="#fipppx-command-option">3.1.11.3.6.1. fipppx command option</a></li>
+<li><a class="reference internal" href="#profile-result">3.1.11.3.6.2. Profile result</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="AdvancedProfiler.html"
+                          title="previous chapter"><span class="section-number">3.1.11.2. </span>Advanced Performance Profiler</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CPUPerformanceAnalysisReport.html"
+                          title="next chapter"><span class="section-number">3.1.11.4. </span>CPU Performance Analysis Report</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="CPUPerformanceAnalysisReport.html" title="3.1.11.4. CPU Performance Analysis Report"
+             >next</a></li>
+        <li class="right" >
+          <a href="AdvancedProfiler.html" title="3.1.11.2. Advanced Performance Profiler"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Supercomputer Fugaku User Guide －Language and development environment－  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>Compilers that generate binaries for compute nodes</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>Fujitsu compiler</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><span class="section-number">3.1.11. </span>Profiler</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.11.3. </span>Instant Performance Profiler</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, RIKEN Center for Computational Science.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/en/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

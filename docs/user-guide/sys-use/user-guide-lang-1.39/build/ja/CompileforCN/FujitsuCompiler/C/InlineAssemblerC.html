@@ -1,0 +1,397 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.8.5. インラインアセンブラ &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=89e52957" />
+    
+    <script src="../../../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="3.1.9. C++" href="../C%2B%2B/index.html" />
+    <link rel="prev" title="3.1.8.4.7.3. ハイブリッド並列" href="CSampleProgram%28hybridParallel%29Clang.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../C%2B%2B/index.html" title="3.1.9. C++"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="CSampleProgram%28hybridParallel%29Clang.html" title="3.1.8.4.7.3. ハイブリッド並列"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" accesskey="U"><span class="section-number">3.1.8. </span>C言語</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.8.5. </span>インラインアセンブラ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="inlineassemblerc">
+<span id="id1"></span><h1><span class="section-number">3.1.8.5. </span>インラインアセンブラ<a class="headerlink" href="#inlineassemblerc" title="Link to this heading">¶</a></h1>
+<p>C／C++では、ソースプログラムに記述された特定のアセンブラコードを、asm文によりコンパイラの出力コードに埋め込むことができます。</p>
+<section id="id2">
+<h2><span class="section-number">3.1.8.5.1. </span>注意事項<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>インラインアセンブラ（asm文）の利用に当たり、注意事項を示します。</p>
+<ol class="arabic simple">
+<li><p>asm 文（インラインアセンブラ）には、一般形式とGNU拡張形式の2種類があります。
+一般形式とはJISの C言語規格「The asm keyword」および、C++言語規格「asm宣言」で定義された形式です。</p></li>
+<li><p>コンパイラが生成したアセンブルファイルは GNU assembler でアセンブルされます。文法形式、利用できる疑似命令については GNU assembler のマニュアルを参照してください。</p></li>
+<li><p>コンパイラは asm 文の内容の正しさに対して検査をしません。次の各項目に対して誤りがないかどうかは、利用者自身での確認が必要となります。</p>
+<ul class="simple">
+<li><p>命令のニモニックのスペル</p></li>
+<li><p>命令で使用できるレジスタの制限やメモリアドレスの指定</p></li>
+<li><p>通常ペアになって使用される疑似命令の対応</p></li>
+<li><p>ラベル名などのシンボルの重複</p></li>
+<li><p>ABIへの準拠（レジスタの退避・復元、スタック利用のコンベンション等）</p></li>
+</ul>
+</li>
+<li><p>制御の流れを変える命令（call命令、ret 命令、分岐命令等）の後ろの delay slot は明示的に他の命令によって埋められる必要があります。</p></li>
+</ol>
+</section>
+<section id="id3">
+<h2><span class="section-number">3.1.8.5.2. </span>コンパイル<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">asm文（GNU拡張形式）を記載したプログラムの翻訳方法は以下のとおりです。</div>
+<div class="line">特別なオプションを指定する必要はありません。</div>
+</div>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>sample_asm.c<span class="w">            </span>（C言語）
+<span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>sample_asm.cc<span class="w">           </span>（C++）
+</pre></div>
+</div>
+</div></blockquote>
+<p>C／C++コンパイラでは、<code class="docutils literal notranslate"><span class="pre">-S</span></code>オプションを指定することで、アセンブラコードを出力することができます。</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>fccpx<span class="w"> </span>-S<span class="w"> </span>sample_asm.c<span class="w">         </span>（C言語）
+<span class="gp">[_LNlogin]$ </span>FCCpx<span class="w"> </span>-S<span class="w"> </span>sample_asm.cc<span class="w">        </span>（C++）
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<p>C／C++コンパイラでは、asm文のアセンブラ命令と、コンパイラが出力するアセンブラ命令について、整合性の確認は行われません。asm文は利用者の責任で利用頂く必要があります。</p>
+</div>
+</div></blockquote>
+</section>
+<section id="asm">
+<h2><span class="section-number">3.1.8.5.3. </span>asm文（一般形式）<a class="headerlink" href="#asm" title="Link to this heading">¶</a></h2>
+<p>C／C++では、asm 文を使用することで任意のアセンブラ命令をコンパイラが出力するアセンブラコードに出力することができます。一般形式では、asm 文で指定されたアセンブラ命令は、一切加工されずそのままの形で、アセンブラコマンドに渡されます。</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>asm(&quot;アセンブラ命令&quot;);
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="asm-gnu">
+<h2><span class="section-number">3.1.8.5.4. </span>asm文（GNU拡張形式）<a class="headerlink" href="#asm-gnu" title="Link to this heading">¶</a></h2>
+<p>asm文中のアセンブラ命令ではオペランドをC言語の式で記述することができます。C言語の式で記述することにより、該当するデータの実際のハードウェア上での場所（レジスタまたはメモリ位置）を指定する必要はありません。asm文の記述方式を示します。</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>asm(&quot;アセンブリテンプレート&quot; : 出力オペランド : 入力オペランド : 破壊レジスタ );
+</pre></div>
+</div>
+</div></blockquote>
+<p>asmは __asm__ と記述することが可能です。</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>__asm__(&quot;アセンブリテンプレート&quot; : 出力オペランド : 入力オペランド : 破壊レジスタ );
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>各レジスタ表記は文字列データとして記述し、以下のレジスタの表と同じレジスタ表記を記述します。</p></li>
+<li><p>出力オペランドおよび入力オペランドは、1個のオペランド記述、または2個以上のオペランド記述をコンマ（&quot; , &quot;）でつないで記述します。</p></li>
+<li><p>オペランドには出力オペランド、入力オペランドを通して 0から始まる番号（最大10個）が振られます。番号はアセンブラ命令の記述の中で、&quot; %n &quot;（nは１桁のオペランドの番号）の形式でオペランドの位置を指定するのに使用されます。</p></li>
+<li><p>出力オペランドを持たないアセンブラ命令の場合は、アセンブラ命令の記述と入力オペランド記述の間にコロン（&quot; : &quot;）を2個続けて記述します。</p></li>
+<li><p>アセンブリテンプレートにおいて、複数行のasm文を一度に記述するには、改行文字（\n）とタブ文字（\t）を挿入します。</p></li>
+</ol>
+</section>
+<section id="id4">
+<h2><span class="section-number">3.1.8.5.5. </span>入力／出力オペランド<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>出力オペランド／入力オペランドは、シンボルオペランド名、オペランド制約文字列、オペランドから構成されます。</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ シンボルオペランド名 ] &quot;オペランド制約文字列&quot; (オペランド)
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>アセンブラ命令の記述の中で、オペランドの位置を指定するのにはシンボルオペランドを使用する方法があります。シンボルオペランド名はアセンブラ命令中でシンボルオペランドを使用する場合にのみ必要です。アセンブラ命令中の表記は、`%'`[' シンボルオペランド名 `]'となります。</p></li>
+<li><p>( )内のオペランド部分に C／C++の式を記述します。</p></li>
+<li><p>シンボルオペランド名は asm文の外側のC／C++プログラム中の識別子名と関連がなく、既に使われている変数名と同じものを使用しても、同じ実体を指しているとは見なされません。</p></li>
+<li><p>入力オペランド式の型がアセンブラ命令のオペランドに要求される型として適当であることは利用者の責任になります。</p></li>
+</ol>
+</section>
+<section id="id5">
+<h2><span class="section-number">3.1.8.5.6. </span>制約文字<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<p>C／C++コンパイラが受け入れる制約文字を以下の表に示します。</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>制約文字</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>X</p></td>
+<td><p>任意のオペランドを表します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>g</p></td>
+<td><p>任意の汎用レジスタ、メモリ、定数のいずれかを表します。</p></td>
+</tr>
+<tr class="row-even"><td><p>0,1,2,3,4,5,6,7,8,9</p></td>
+<td><p>数値と同じ番号を持つ、既に指定されたオペランドと同じオペランドを表します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>[</p></td>
+<td><p>シンボルオペランド名の開始を表します。</p></td>
+</tr>
+<tr class="row-even"><td><p>r</p></td>
+<td><p>汎用レジスタを表します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>f</p></td>
+<td><p>浮動小数点レジスタの下位32bitを表わします。</p></td>
+</tr>
+<tr class="row-even"><td><p>m</p></td>
+<td><p>メモリを表します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>p</p></td>
+<td><div class="line-block">
+<div class="line">有効なメモリアドレスを表します。</div>
+<div class="line">ロードアドレス命令やプッシュアドレス命令で使われます。</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>o</p></td>
+<td><p>オフセットテーブルであるようなメモリを表します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>V</p></td>
+<td><p>オフセットテーブルでないメモリを表します。</p></td>
+</tr>
+<tr class="row-even"><td><p>i</p></td>
+<td><p>整数定数を表します。定数値はアセンブル時に確定していなければなりません。</p></td>
+</tr>
+<tr class="row-odd"><td><p>s</p></td>
+<td><p>コンパイル時には不明な整数定数を表します。</p></td>
+</tr>
+<tr class="row-even"><td><p>E</p></td>
+<td><div class="line-block">
+<div class="line">浮動小数点定数を表します。</div>
+<div class="line">ターゲットマシンとコンパイラを実行するマシンの浮動小数点フォーマットが一致している時に使用できます。</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>F</p></td>
+<td><p>浮動小数点定数を表します。</p></td>
+</tr>
+<tr class="row-even"><td><p>J</p></td>
+<td><p>ゼロを表します。</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<div class="line-block">
+<div class="line"><br /></div>
+<div class="line">制約文字の前に付加情報を指定することができます。付加情報がない場合には制約文字は入力のみのオペランドとして意味付けられます。</div>
+</div>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>付加情報</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>=</p></td>
+<td><p>出力のみのオペランドであることを意味します。</p></td>
+</tr>
+<tr class="row-odd"><td><p>+</p></td>
+<td><p>更新される（入力と出力が両方行われる）オペランドであることを意味します。</p></td>
+</tr>
+<tr class="row-even"><td><p>&amp;</p></td>
+<td><div class="line-block">
+<div class="line">入力オペランドとして使用されますが、命令群が終了するまでに更新されるオペランドであることを意味します。</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="id6">
+<h2><span class="section-number">3.1.8.5.7. </span>アセンブラコード上での名前を指定する方法<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<p>C／C++のソース上の変数および関数を、アセンブラ出力する際に別の名前する場合は、宣言子の直後にasm記述をします。<code class="docutils literal notranslate"><span class="pre">#pragma</span> <span class="pre">redefine_extname</span></code>指令は、当記述方法と同じ意味となります。</p>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">foo</span><span class="w"> </span><span class="k">asm</span><span class="p">(</span><span class="s">&quot;myfoo&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="id7">
+<h2><span class="section-number">3.1.8.5.8. </span>特定のレジスタを指定する方法<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<p>C／C++のソース上の変数を特定のハードウェアレジスタに割り当てる為には、変数の定義時に、記憶域クラス指示「register」を指定します。</p>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">register</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">foo</span><span class="w"> </span><span class="k">asm</span><span class="p">(</span><span class="s">&quot;g2&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">注意</p>
+<ul class="simple">
+<li><p>asm記述中に指定する名前は、以下の表に示すレジスタ名と同じにすることはできません。</p></li>
+<li><p>アセンブラの仕様でアセンブラ命令、擬似命令や特殊レジスタ名として指定されている名前を指定することはできません。</p></li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+<section id="gnu">
+<h2><span class="section-number">3.1.8.5.9. </span>指定例（GNU拡張形式）<a class="headerlink" href="#gnu" title="Link to this heading">¶</a></h2>
+<p>GNU拡張形式の指定例を示します。</p>
+<ul>
+<li><div class="line-block">
+<div class="line">例1（入力／出力オペランド）</div>
+<div class="line">入力オペランドと出力オペランドを持つアセンブラ命令の例を示します。</div>
+</div>
+</li>
+</ul>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">asm_in1</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">asm_in2</span><span class="o">=</span><span class="mi">10</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">asm_out1</span><span class="p">,</span><span class="w"> </span><span class="n">asm_out2</span><span class="p">;</span>
+<span class="k">asm</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="s">&quot;asm_op %0,%2</span><span class="se">\n\t</span><span class="s">asm_op %1,%3&quot;</span><span class="w">       </span><span class="c1">// assembler template</span>
+<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;=r&quot;</span><span class="w"> </span><span class="p">(</span><span class="n">asm_out1</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="s">&quot;=r&quot;</span><span class="w"> </span><span class="p">(</span><span class="n">asm_out2</span><span class="p">)</span><span class="w">      </span><span class="c1">// output operands</span>
+<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="w"> </span><span class="p">(</span><span class="n">asm_in1</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="w"> </span><span class="p">(</span><span class="n">asm_in2</span><span class="p">));</span><span class="w">        </span><span class="c1">// input operands</span>
+</pre></div>
+</div>
+<p>オペランドには出力オペランド、入力オペランドを通して 0から始まる番号（最大10個）が振られます。番号はアセンブラ命令の記述の中で、&quot; %n &quot;（nは１桁のオペランドの番号）の形式でオペランドの位置を指定するのに使用されます。</p>
+<ul class="simple">
+<li><p>入力オペランド  &quot;r&quot; (asm_in1)    → %0</p></li>
+<li><p>入力オペランド  &quot;r&quot; (asm_in2)    → %1</p></li>
+<li><p>出力オペランド  &quot;=r&quot; (asm_out1)  → %2</p></li>
+<li><p>出力オペランド  &quot;=r&quot; (asm_out2)  → %3</p></li>
+</ul>
+</div></blockquote>
+<ul>
+<li><div class="line-block">
+<div class="line">例2（出力オペランドなし）</div>
+<div class="line">出力オペランドを持たないアセンブラ命令の場合は、アセンブラ命令の記述と入力オペランド記述の間にコロン（&quot; : &quot;）が2個続けて並ぶことになります。</div>
+</div>
+</li>
+</ul>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">asm_in1</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">asm_in2</span><span class="o">=</span><span class="mi">10</span><span class="p">;</span>
+<span class="k">asm</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="s">&quot;asm_op %0</span><span class="se">\n\t</span><span class="s">asm_op %1&quot;</span><span class="w">           </span><span class="c1">// assembler template</span>
+<span class="w">  </span><span class="o">:</span><span class="w">                                      </span><span class="c1">// output operands</span>
+<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="w"> </span><span class="p">(</span><span class="n">asm_in1</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="w"> </span><span class="p">(</span><span class="n">asm_in2</span><span class="p">));</span><span class="w">      </span><span class="c1">// input operands</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ul>
+<li><div class="line-block">
+<div class="line">例3（volatile）</div>
+<div class="line">asmの直後にvolatileを記述することにより、アセンブラ命令が重大な副作用を持つことをC／C++コンパイラに指示することができます。</div>
+</div>
+</li>
+</ul>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">asm_out</span><span class="p">;</span>
+<span class="k">asm</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;asm_op %0&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;=r&quot;</span><span class="w"> </span><span class="p">(</span><span class="n">asm_out</span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3.1.8.5. インラインアセンブラ</a><ul>
+<li><a class="reference internal" href="#id2">3.1.8.5.1. 注意事項</a></li>
+<li><a class="reference internal" href="#id3">3.1.8.5.2. コンパイル</a></li>
+<li><a class="reference internal" href="#asm">3.1.8.5.3. asm文（一般形式）</a></li>
+<li><a class="reference internal" href="#asm-gnu">3.1.8.5.4. asm文（GNU拡張形式）</a></li>
+<li><a class="reference internal" href="#id4">3.1.8.5.5. 入力／出力オペランド</a></li>
+<li><a class="reference internal" href="#id5">3.1.8.5.6. 制約文字</a></li>
+<li><a class="reference internal" href="#id6">3.1.8.5.7. アセンブラコード上での名前を指定する方法</a></li>
+<li><a class="reference internal" href="#id7">3.1.8.5.8. 特定のレジスタを指定する方法</a></li>
+<li><a class="reference internal" href="#gnu">3.1.8.5.9. 指定例（GNU拡張形式）</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="CSampleProgram%28hybridParallel%29Clang.html"
+                          title="前の章へ"><span class="section-number">3.1.8.4.7.3. </span>ハイブリッド並列</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../C%2B%2B/index.html"
+                          title="次の章へ"><span class="section-number">3.1.9. </span>C++</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../C%2B%2B/index.html" title="3.1.9. C++"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="CSampleProgram%28hybridParallel%29Clang.html" title="3.1.8.4.7.3. ハイブリッド並列"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="index.html" ><span class="section-number">3.1.8. </span>C言語</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.8.5. </span>インラインアセンブラ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

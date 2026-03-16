@@ -1,0 +1,258 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.2. SSL IIライブラリ &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=89e52957" />
+    
+    <script src="../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.3. C-SSL II ライブラリ" href="C-SSLIILibrary.html" />
+    <link rel="prev" title="5.1. 概要" href="Overview.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="C-SSLIILibrary.html" title="5.3. C-SSL II ライブラリ"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="5.1. 概要"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">5. </span>数学ライブラリ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.2. </span>SSL IIライブラリ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="ssl-ii">
+<h1><span class="section-number">5.2. </span>SSL IIライブラリ<a class="headerlink" href="#ssl-ii" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">SSL IIライブラリは、スレッドセーフな数値計算ライブラリであり、10分野のサブルーチンが提供されます。</div>
+<div class="line">スレッド並列版は、並列効果の見込める重要な機能に関して、並列処理向けのアルゴリズムおよびインタフェースで提供されています。</div>
+</div>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>線形計算</p></li>
+<li><p>固有値固有ベクトル</p></li>
+<li><p>非線形計算</p></li>
+<li><p>極値問題</p></li>
+<li><p>補間、近似</p></li>
+<li><p>変換</p></li>
+<li><p>数値微積分</p></li>
+<li><p>微分方程式</p></li>
+<li><p>特殊関数</p></li>
+<li><p>擬似乱数</p></li>
+</ol>
+</div></blockquote>
+<section id="fortran">
+<h2><span class="section-number">5.2.1. </span>Fortranコンパイル方法<a class="headerlink" href="#fortran" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">FortranプログラムからSSL II を利用するには<code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>オプションを指定します。</div>
+<div class="line">SSL II／MPIライブラリを使用する場合は、<strong class="program">mpifrtpx</strong>コマンドに、<code class="docutils literal notranslate"><span class="pre">-SSL2MPI</span></code>オプションを指定し、同時に<code class="docutils literal notranslate"><span class="pre">-SSL2</span></code>、または、<code class="docutils literal notranslate"><span class="pre">-SSL2BLAMP</span></code>を指定します。</div>
+</div>
+<p>コンパイル例は以下のとおりです。</p>
+<ol class="arabic simple">
+<li><p>MPI／自動並列／SSL II（主にマルチノードジョブ）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifrtpx<span class="w"> </span>-Kfast,parallel,SVE<span class="w"> </span>sample.f90<span class="w"> </span>-SSL2MPI<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>MPI／OpenMP／SSL II（主にマルチノードジョブ）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>mpifrtpx<span class="w"> </span>-Kfast,parallel,openmp,SVE<span class="w"> </span>sample.f90<span class="w"> </span>-SSL2MPI<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>逐次／SSL II（シングルノードジョブ）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,SVE<span class="w"> </span>sample.f90<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>自動並列／SSL II（シングルノードジョブ）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,parallel,SVE<span class="w"> </span>sample.f90<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>OpenMP／SSL II（シングルノードジョブ）</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-Kfast,openmp,SVE<span class="w"> </span>sample.f90<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<ul class="simple">
+<li><p>SSL II のサブルーチンは、スレッド並列版と逐次版で、サブルーチン名およびインタフェースが異なります。</p></li>
+<li><p>分割コンパイルを行う場合は、リンク時にもSSL II のオプションを指定してください。</p></li>
+<li><p>ログインノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>が有効であれば、<code class="docutils literal notranslate"><span class="pre">SVE</span></code>を使用したライブラリを結合します。</p></li>
+<li><p>ログインノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code>が有効であれば、汎用のライブラリを結合します。</p></li>
+<li><p>計算ノードで結合する場合、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>と<code class="docutils literal notranslate"><span class="pre">-KNOSVE</span></code>のどちらを指定しても<code class="docutils literal notranslate"><span class="pre">SVE</span></code>を使用したライブラリを結合します。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>オプションのデフォルト（省略時）は、<code class="docutils literal notranslate"><span class="pre">-KSVE</span></code>になります。</p></li>
+<li><p>ネイティブコンパイラでプログラムを翻訳し、SSL II を結合する場合、<strong class="program">frt</strong>コマンドを使用します。</p></li>
+<li><p>ネイティブコンパイラでMPIプログラムを翻訳し、SSL II/MPI を結合する場合、<strong class="program">mpifrt</strong>コマンドを使用します。</p></li>
+</ul>
+</div>
+</section>
+<section id="ssl2-fortran">
+<h2><span class="section-number">5.2.2. </span>サンプルプログラム（SSL2／Fortran）<a class="headerlink" href="#ssl2-fortran" title="Link to this heading">¶</a></h2>
+<p>サンプルプログラムを用いたコンパイル例を示します。</p>
+<ol class="arabic">
+<li><div class="line-block">
+<div class="line">ソースプログラムを用意します。</div>
+<div class="line">サンプルプログラムを <code class="file docutils literal notranslate"><span class="pre">/home/system/sample/SSL2/sample_SSL2.f</span></code>として用意しています。</div>
+<div class="line"><a class="reference download internal" download="" href="../_downloads/9b8ced1a64f081946f11f9ecc9466b3b/sample_SSL2.f"><code class="xref download docutils literal notranslate"><span class="pre">（サンプルコードのダウンロード）</span></code></a></div>
+</div>
+</li>
+<li><p>サンプルプログラムをコンパイルします。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>frtpx<span class="w"> </span>-V<span class="w"> </span>-Kfast,optmsg<span class="o">=</span><span class="m">2</span>,SVE<span class="w"> </span>-Nlst<span class="o">=</span>t<span class="w"> </span>-o<span class="w"> </span>sample_SSL2<span class="w"> </span>sample_SSL2.f<span class="w"> </span>-SSL2
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="3">
+<li><div class="line-block">
+<div class="line">ジョブスクリプトを用意します。</div>
+<div class="line">ジョブスクリプトのサンプルは <code class="file docutils literal notranslate"><span class="pre">/home/system/sample/SSL2/sample_SSL2.sh</span></code>として用意しています。</div>
+<div class="line"><a class="reference download internal" download="" href="../_downloads/5f57e6e4137538b05ca9c99a47af2a2e/sample_SSL2.sh"><code class="xref download docutils literal notranslate"><span class="pre">（サンプルコードのダウンロード）</span></code></a></div>
+</div>
+</li>
+<li><p><strong class="program">pjsub</strong>コマンドでジョブを投入します。</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">[_LNlogin]$ </span>pjsub<span class="w"> </span>sample_SSL2.sh
+<span class="go">[INFO] PJM 0000 pjsub Job 140 submitted.</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="c">
+<h2><span class="section-number">5.2.3. </span>C言語から利用する場合のプログラム復帰値<a class="headerlink" href="#c" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">SSL II はFortran用のライブラリですが、C言語からも利用できます。</div>
+<div class="line">C言語からSSL II を利用する場合、Cの最初に実行される関数名によりプログラムの復帰値が異なります。</div>
+<div class="line">Cの復帰値を利用したい場合は留意ください。</div>
+<div class="line">詳しくはマニュアル「C言語使用手引書」の「Fortranとの結合」を参照してください。</div>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>関数名</p></th>
+<th class="head"><p>プログラムの復帰値</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>main</p></td>
+<td><p>Cの復帰値</p></td>
+</tr>
+<tr class="row-odd"><td><p>MAIN__</p></td>
+<td><div class="line-block">
+<div class="line">Fortranの復帰値</div>
+<div class="line">ただし、Fortranの復帰値が0の場合はCの復帰値を返します。</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.2. SSL IIライブラリ</a><ul>
+<li><a class="reference internal" href="#fortran">5.2.1. Fortranコンパイル方法</a></li>
+<li><a class="reference internal" href="#ssl2-fortran">5.2.2. サンプルプログラム（SSL2／Fortran）</a></li>
+<li><a class="reference internal" href="#c">5.2.3. C言語から利用する場合のプログラム復帰値</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="Overview.html"
+                          title="前の章へ"><span class="section-number">5.1. </span>概要</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="C-SSLIILibrary.html"
+                          title="次の章へ"><span class="section-number">5.3. </span>C-SSL II ライブラリ</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="C-SSLIILibrary.html" title="5.3. C-SSL II ライブラリ"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="Overview.html" title="5.1. 概要"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">5. </span>数学ライブラリ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.2. </span>SSL IIライブラリ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>

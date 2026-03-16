@@ -1,0 +1,355 @@
+
+
+<!doctype html>
+
+<html lang="ja" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1.14. 言語間結合（オブジェクトの互換性について） &#8212; 利用手引書 言語開発環境編  ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bizstyle.css?v=532c1bf3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=89e52957" />
+    
+    <script src="../../../_static/documentation_options.js?v=c033477b"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/translations.js?v=4dbe4bdc"></script>
+    <script src="../../../_static/bizstyle.js"></script>
+    <link rel="search" title="検索" href="../../../search.html" />
+    <link rel="next" title="3.2. GNU Compiler Collectionと富士通MPIの連携" href="../../GCC_MPI/index.html" />
+    <link rel="prev" title="3.1.13. 統合開発環境" href="../DevelopmentSupportTools/index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../GCC_MPI/index.html" title="3.2. GNU Compiler Collectionと富士通MPIの連携"
+             accesskey="N">次へ</a></li>
+        <li class="right" >
+          <a href="../DevelopmentSupportTools/index.html" title="3.1.13. 統合開発環境"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U"><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.14. </span>言語間結合（オブジェクトの互換性について）</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="interlanguagelinkage">
+<span id="id1"></span><h1><span class="section-number">3.1.14. </span>言語間結合（オブジェクトの互換性について）<a class="headerlink" href="#interlanguagelinkage" title="Link to this heading">¶</a></h1>
+<p>ここでは富士通コンパイラで作成したFotran、C（trad/clang）、C++（trad/clang）の各オブジェクトの互換性とリンクに関する注意事項を示します。</p>
+<p>言語間結合の詳細は次のマニュアルを参照ください。</p>
+<blockquote>
+<div><dl>
+<dt>Fortran使用手引書</dt><dd><div class="line-block">
+<div class="line">第11章 言語間結合</div>
+<div class="line">第12章 並列化機能</div>
+</div>
+</dd>
+<dt>C言語使用手引書</dt><dd><div class="line-block">
+<div class="line">第4章 並列化機能</div>
+<div class="line">第7章 言語間結合における注意事項</div>
+<div class="line">9.6 言語間結合における注意事項</div>
+</div>
+</dd>
+<dt>C++言語使用手引書</dt><dd><div class="line-block">
+<div class="line">第4章 並列化機能</div>
+<div class="line">第7章 言語間結合における注意事項</div>
+<div class="line">9.6 言語間結合およびtradモードのオブジェクトとの結合における注意事項</div>
+</div>
+</dd>
+<dt>プロファイラ使用手引書</dt><dd><p>5.1.6 MPIプログラムの言語間結合</p>
+</dd>
+</dl>
+</div></blockquote>
+<section id="id2">
+<h2><span class="section-number">3.1.14.1. </span>オブジェクトの互換性<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>次のオブジェクトは相互にリンク可能です。</p>
+<ul class="simple">
+<li><p>Fortranで作成したオブジェクト</p></li>
+<li><p>Cのtradモードで作成したオブジェクト</p></li>
+<li><p>Cのclangモードで作成したオブジェクト</p></li>
+<li><p><a class="reference internal" href="#cppobjects"><span class="std std-ref">C++のオブジェクト</span></a>のどれか一種類</p></li>
+</ul>
+</section>
+<section id="c">
+<span id="cppobjects"></span><h2><span class="section-number">3.1.14.2. </span>C++のオブジェクト<a class="headerlink" href="#c" title="Link to this heading">¶</a></h2>
+<p>C++のオブジェクトは同じSTLを使用しているオブジェクトのみがリンク可能です。</p>
+<p>使用するSTLは次の3つに分類されます。これらのオブジェクトを混在して使用することはできません。</p>
+<ul class="simple">
+<li><p>C++のtradモードで作成したオブジェクト</p></li>
+<li><p>C++のclangモードでSTLにlibc++を使用し作成したオブジェクト</p></li>
+<li><p>C++のclangモードでSTLにlibstdc++を使用し作成したオブジェクト</p></li>
+</ul>
+</section>
+<section id="id3">
+<h2><span class="section-number">3.1.14.3. </span>言語間結合<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<p>マニュアル「Fortran使用手引書」「C言語使用手引書」「C++言語使用手引書」を参照ください。</p>
+<p>ここではリンク時の翻訳コマンドのみを示します。</p>
+<p>言語間結合する場合、リンク時に使用する翻訳コマンドと必須オプションは、結合させる言語により異なります。</p>
+<p>下表は、クロスコンパイラを利用する場合の組合せです。
+ネイティブコンパイラを利用する場合は、frtpx/fccpx/FCCpxコマンドをそれぞれfrt/fcc/FCCコマンドに読み替えてください。
+MPIを使用する場合はMPI用のコマンドに読み替えてください。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.4%" />
+<col style="width: 23.1%" />
+<col style="width: 15.4%" />
+<col style="width: 46.2%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>リンク時に使用する翻訳コマンド</p></th>
+<th class="head"><p>Fortranオブジェクト</p></th>
+<th class="head"><p>Cオブジェクト</p></th>
+<th class="head"><p>C++オブジェクト</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Fortran</p></td>
+<td><p>frtpx</p></td>
+<td><p>frtpx</p></td>
+<td><ul>
+<li><div class="line-block">
+<div class="line">C++のオブジェクトをtradモードで作成した場合</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">frtpx</span> <span class="pre">--linkstl=libfjc++</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">STLにlibc++を使用し、C++のオブジェクトをclangモードで作成した場合</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">frtpx</span> <span class="pre">--linkstl=libc++</span></code></div>
+</div>
+</li>
+<li><div class="line-block">
+<div class="line">STLにlibstdc++を使用し、C++のオブジェクトをclangモードで作成した場合</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">frtpx</span> <span class="pre">--linkstl=libstdc++</span></code></div>
+</div>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>C</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">fccpx</span> <span class="pre">--linkfortran</span></code></p></td>
+<td><p>fccpx</p></td>
+<td><p>未対応。FCCpxを使用する。</p></td>
+</tr>
+<tr class="row-even"><td><p>C++</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FCCpx</span> <span class="pre">--linkfortran</span></code></p></td>
+<td><p>FCCpx</p></td>
+<td><p>FCCpx</p></td>
+</tr>
+</tbody>
+</table>
+<p>リンクの例を以下に示します。</p>
+<p>リンク時にFortranを使用し、FortranオブジェクトとCオブジェクトをリンクする場合:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>frtpx -c fortmain.f95
+fccpx -c cfunc.c
+frtpx -o a.out fortmain.o cfunc.o
+</pre></div>
+</div>
+<p>リンク時にFortranを使用し、FortranオブジェクトとCオブジェクトをリンクする場合（Cがmainの場合）:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>frtpx -c fortsub.f95
+fccpx -c cmain.c
+frtpx -mlcmain=main -o a.out cmain.o fortsub.o
+</pre></div>
+</div>
+<p>リンク時にCを使用し、FortranオブジェクトとCオブジェクトをリンクする場合:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>frtpx -c fortmain.f95
+fccpx -c cfunc.c
+fccpx --linkfortran -o a.out fortmain.o cfunc.o
+</pre></div>
+</div>
+<p>リンク時にCを使用し、FortranオブジェクトとCオブジェクトをリンクする場合（Cがmainの場合）:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>frtpx -c fortsub.f95
+fccpx -c cmain.c
+fccpx --linkfortran -o a.out cmain.o fortsub.o
+</pre></div>
+</div>
+<p>リンク時にFortranを使用し、Fortranオブジェクトとtradモードで作成したC++オブジェクトをリンクする場合:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>frtpx -c fortmain.f95
+FCCpx -c cppfunc.cc
+frtpx --linkstl=libfjc++ -o a.out fortmain.o cppfunc.o
+</pre></div>
+</div>
+<p>リンク時にFortranを使用し、Fortranオブジェクトとtradモードで作成したC++オブジェクトをリンクする場合（C++がmainの場合）:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>frtpx -c fortsub.f95
+FCCpx -c cppmain.cc
+frtpx -mlcmain=main --linkstl=libfjc++ -o a.out cppmain.o fortsub.o
+</pre></div>
+</div>
+<p>リンク時にFortranを使用し、Fortranオブジェクトとclangモードにおいて-stdlib=libc++オプションを指定して作成したC++オブジェクトをリンクする場合:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>frtpx -c fortmain.f95
+FCCpx -Nclang -stdlib=libc++ -c cppfunc.cc
+frtpx --linkstl=libc++ -o a.out fortmain.o cppfunc.o
+</pre></div>
+</div>
+<p>リンク時にFortranを使用し、Fortranオブジェクトとclangモードにおいて-stdlib=libstdc++オプションを使用して作成したC++オブジェクトをリンクする場合:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>frtpx -c fortmain.f95
+FCCpx -Nclang -c cppfunc.cc
+frtpx --linkstl=libstdc++ -o a.out fortmain.o cppfunc.o
+
+libstdc++はC++コンパイラのclangモードにおいて、デフォルトで使用されるSTLです。
+</pre></div>
+</div>
+<p>リンク時にC++を使用し、Fortranオブジェクトとtradモードで作成したC++オブジェクトをリンクする場合:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>frtpx -c fortmain.f95
+FCCpx -c cppfunc.cc
+FCCpx --linkfortran -o a.out fortmain.o cppfunc.o
+</pre></div>
+</div>
+<p>リンク時にC++を使用し、Fortranオブジェクトとtradモードで作成したC++オブジェクトをリンクする場合（C++がmainの場合）:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>frtpx -c fortsub.f95
+FCCpx -c cppmain.cc
+FCCpx --linkfortran -o a.out cppmain.o fortsub.o
+</pre></div>
+</div>
+<p>リンク時にC++を使用し、Fortranオブジェクトとclangモードにおいて-stdlib=libc++オプションを指定して作成したC++オブジェクトをリンクする場合:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>frtpx -c fortmain.f95
+FCCpx -Nclang -stdlib=libc++ -c cppfunc.cc
+FCCpx -Nclang -stdlib=libc++ --linkfortran -o a.out fortmain.o cppfunc.o
+</pre></div>
+</div>
+<p>リンク時にC++を使用し、Fortranオブジェクトとclangモードにおいて-stdlib=libstdc++オプションを使用して作成したC++オブジェクトをリンクする場合:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>frtpx -c fortmain.f95
+FCCpx -Nclang -c cppfunc.cc
+FCCpx -Nclang --linkfortran -o a.out fortmain.o cppfunc.o
+
+libstdc++はC++コンパイラのclangモードにおいて、デフォルトで使用されるSTLです。
+</pre></div>
+</div>
+<p>リンク時にC++を使用し、Cオブジェクトとtradモードで作成したC++オブジェクトをリンクする場合:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>fccpx -c cmain.c
+FCCpx -c cppfunc.cc
+FCCpx -o a.out cmain.o cppfunc.o
+</pre></div>
+</div>
+<p>リンク時にC++を使用し、Cオブジェクトとclangモードにおいて-stdlib=libc++オプションを指定して作成したC++オブジェクトをリンクする場合:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>fccpx -c cmain.c
+FCCpx -Nclang -stdlib=libc++ -c cppfunc.cc
+FCCpx -Nclang -stdlib=libc++ -o a.out cmain.o cppfunc.o
+</pre></div>
+</div>
+<p>リンク時にC++を使用し、Cオブジェクトとclangモードにおいて-stdlib=libstdc++オプションを使用して作成したC++オブジェクトをリンクする場合:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>fccpx -c cmain.c
+FCCpx -Nclang -c cppfunc.cc
+FCCpx -Nclang -o a.out cmain.o cppfunc.o
+
+libstdc++はC++コンパイラのclangモードにおいて、デフォルトで使用されるSTLです。
+</pre></div>
+</div>
+</section>
+<section id="mpi">
+<h2><span class="section-number">3.1.14.4. </span>MPIプログラムの言語間結合<a class="headerlink" href="#mpi" title="Link to this heading">¶</a></h2>
+<p>MPIプログラムを言語間結合する場合は、リンク時に以下のオプションを指定してください。
+プロファイラを使用するときに必要なライブラリをリンクします。</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 58.8%" />
+<col style="width: 41.2%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>使用するリンクコマンド</p></th>
+<th class="head"><p>指定が必要なオプション</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">mpifccpxコマンド(ネイティブコンパイラではmpifccコマンド)</div>
+<div class="line">mpiFCCpxコマンド(ネイティブコンパイラではmpiFCCコマンド)</div>
+</div>
+</td>
+<td><p>-lfjprofmpifオプション</p></td>
+</tr>
+<tr class="row-odd"><td><p>mpifrtpxコマンド(ネイティブコンパイラではmpifrtコマンド)</p></td>
+<td><p>-lfjprofmpiオプション</p></td>
+</tr>
+</tbody>
+</table>
+<p>使用例:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mpifrtpx -o a.out fortmain.o cfunc.o -lfjprofmpi
+mpifccpx --linkfortran -o a.out fortmain.o cfunc.o -lfjprofmpif
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h2><span class="section-number">3.1.14.5. </span>富士通コンパイラと他コンパイラのオブジェクト互換性<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<p>「<a class="reference external" href="https://www.fugaku.r-ccs.riken.jp/docs/guides_r01#programing-guide">プログラミングガイド プログラミング共通編</a>」の「富士通コンパイラと他コンパイラが生成するオブジェクトの互換性について」を参照ください。</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">3.1.14. 言語間結合（オブジェクトの互換性について）</a><ul>
+<li><a class="reference internal" href="#id2">3.1.14.1. オブジェクトの互換性</a></li>
+<li><a class="reference internal" href="#c">3.1.14.2. C++のオブジェクト</a></li>
+<li><a class="reference internal" href="#id3">3.1.14.3. 言語間結合</a></li>
+<li><a class="reference internal" href="#mpi">3.1.14.4. MPIプログラムの言語間結合</a></li>
+<li><a class="reference internal" href="#id4">3.1.14.5. 富士通コンパイラと他コンパイラのオブジェクト互換性</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../DevelopmentSupportTools/index.html"
+                          title="前の章へ"><span class="section-number">3.1.13. </span>統合開発環境</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../../GCC_MPI/index.html"
+                          title="次の章へ"><span class="section-number">3.2. </span>GNU Compiler Collectionと富士通MPIの連携</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../GCC_MPI/index.html" title="3.2. GNU Compiler Collectionと富士通MPIの連携"
+             >次へ</a></li>
+        <li class="right" >
+          <a href="../DevelopmentSupportTools/index.html" title="3.1.13. 統合開発環境"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">利用手引書 言語開発環境編  ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" ><span class="section-number">3. </span>計算ノード向けバイナリを生成するコンパイラ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" ><span class="section-number">3.1. </span>富士通コンパイラ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1.14. </span>言語間結合（オブジェクトの互換性について）</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, 理化学研究所計算科学研究センター.
+    &nbsp;&nbsp;<a href="https://www.fugaku.r-ccs.riken.jp/">Fugaku website Top</a>
+    </div>
+  </body>
+</html>
