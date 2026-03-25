@@ -63,4 +63,4 @@ understanding in advance.
 
 See below for details on use.
 
-`https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/GaussianGuide/usage_gaussian_en.pdf <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/GaussianGuide/usage_gaussian_en.pdf>`__
+`https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/GaussianGuide/usage_gaussian_en.pdf <https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/GaussianGuide/usage_gaussian_en.pdf>`__
