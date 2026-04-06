@@ -1,0 +1,38 @@
+Compiler mode
+=============
+
+C++ compiler of  \ |post-k|\  has two modes with different user interfaces.
+
+The mode to use is selected by the option of the translation command.
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 1 1 5
+
+
+   * - Mode name
+     - Translation option
+     - Description
+
+   * - trad mode
+     - | \-Nnoclang
+       | Or
+       | when omitted
+     - - It is based on the Fujitsu compiler for systems prior to K and PRIMEHPC FX100.
+       - The trad mode is suitable for cases where importance is attached to compatibility with conventional Fujitsu compilers.
+       - Supported format is C++03/C++11/C++14/C++17(part) and OpenMP 3.1/OpenMP 4.5(part).
+       - For details on trad mode, read from "Chapter 2 From Compilation to Execution" to "Chapter 8 Debugging Functions" and "Appendix" in the C ++ User's Guide
+       - If omitted the translation option,  \ ``-Nnoclang``\  option will be applied.
+
+   * - clang mode
+     - \-Nclang
+     - - Based on Clang / LLVM compiler, which is open source software.
+       - The clang mode is suitable for translating programs that use the latest language specifications and open source software.
+       - Supported format is C++03/C++11/C++14/C++17 and OpenMP 4.5/OpenMP 5.0(part)
+       - ACLE and FP16 support clang mode only.
+       - For details on clang mode, please read "Chapter 9 Clang Mode" in the C ++ User's Guide.
+
+.. attention::
+
+  - The option system at the time of translation between clang mode and trad mode is different. Therefore, care must be taken when changing the compiler mode used for program translation.
+  - Even if the same option is specified at the time of translation, the optimization results may differ between clang mode and trad mode.

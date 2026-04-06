@@ -1,0 +1,418 @@
+.. _ScriptingLanguage:
+
+スクリプト言語
+================
+
+|post-k| では、OSSのスクリプト言語を計算ノードに用意しています。
+
+.. note::
+
+   OSSの提供はSpackに移行しています。本章の記事はSpackに移行する前の旧版のOSS情報です。
+   
+   `OSSの利用 <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/UsingOSS/>`_\ を参照ください。
+
+概要
+-----
+
+|post-k| では以下のOSSのスクリプト言語を、計算ノードで利用することができます。
+
+- Python2
+- Python3
+- Ruby
+
+.. attention::
+
+  - 上記スクリプト言語環境を構築する際、富士通コンパイラでコンパイルするために必要な修正を一部に実施しています。
+  - これら OSS は原則として、インストールパス等の環境情報のみ提供します。
+  - 実行に必要なインストールパスの設定は OSS ごとに、modulefile を用意しています。
+    利用方法は、後述のジョブスクリプト例を参考にしてください。
+
+
+Python
+--------
+
+Python2、および、Python3 を利用することができます。
+
+Python2
+^^^^^^^^^
+
+.. note::
+
+   Python2 は終了しています。
+   
+   `https://www.python.org/doc/sunset-python-2/ <https://www.python.org/doc/sunset-python-2/>`_ を参照ください。
+
+
+Python2の利用方法を示します。
+
+パッケージ
+~~~~~~~~~~~
+
+Python2 には、以下のパッケージを追加しています。
+
+.. list-table:: 
+   :header-rows: 1
+
+   * - バージョン
+     - 追加パッケージ
+
+   * - Python 2.7.15
+     - - NumPy
+       - SciPy
+       - mpi4py
+       - virtualenv
+
+.. seealso::
+
+    NumPy、SciPy には、fjlapackexsve（BLAS, LAPACK スレッド並列版富士通ライブラリ）を使用しています。
+
+
+環境変数の設定と利用方法
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Python2の実行に必要な環境変数の設定はモジュールファイル（Python2-CN/2.7.15-Mar）を利用します。
+Python2-CN/2.7.15-Marはデフォルトに設定されています。
+
+以下にジョブスクリプト例を示します。
+
+- Python2 コマンドによる実行
+
+.. code-block:: bash
+
+    #!/bin/bash
+    #PJM -L "node=1"
+    #PJM -L "rscgrp=small"
+    #PJM -L "elapse=10:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -S
+
+    module load Python2-CN
+    export FLIB_CNTL_BARRIER_ERR=FALSE
+
+    # execute job
+    python2 sample.py
+
+- mpi4py を使用して実行する場合（mpiexec コマンドを使用します）
+
+.. code-block:: bash
+
+    #!/bin/bash
+    #PJM -L "node=2"
+    #PJM -L "rscgrp=small"
+    #PJM -L "elapse=10:00"
+    #PJM --mpi "proc=8"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -S
+
+    module load Python2-CN
+    export FLIB_CNTL_BARRIER_ERR=FALSE
+
+    export LD_PRELOAD=/usr/lib/FJSVtcs/ple/lib64/libpmix.so # mpi4py実行時に必要
+
+    # execute job
+    mpiexec -n 8 python2 mpi-sample.py
+
+
+Python3
+^^^^^^^^^
+
+.. note::
+
+   新しい版のPythonはSpackで提供しています。
+   
+   Spackで提供するパッケージ(py-\*)は、Spackで提供するPythonと組み合わせて使用してください。
+   
+   `OSSの利用 <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/UsingOSS/>`_\ を参照ください。
+
+Python3の利用方法を示します。
+
+パッケージ
+~~~~~~~~~~~
+
+Python3 には、以下のパッケージを追加しています。
+
+.. list-table:: 
+   :header-rows: 1
+
+   * - バージョン
+     - 追加パッケージ
+
+   * - Python 3.6.8
+     - - NumPy
+       - SciPy
+       - mpi4py
+
+.. seealso::
+
+    NumPy、SciPy には、fjlapackexsve（BLAS, LAPACK スレッド並列版富士通ライブラリ）を使用しています。
+
+
+環境変数の設定と利用方法
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Python3の実行に必要な環境変数の設定はモジュールファイル（Python3-CN/3.6.8-Mar）を利用します。
+Python3-CN/3.6.8-Marはデフォルトに設定されています。
+
+以下にジョブスクリプト例を示します。
+
+- Python3 コマンドによる実行
+
+.. code-block:: bash
+
+    #!/bin/bash
+    #PJM -L "node=1"
+    #PJM -L "rscgrp=small"
+    #PJM -L "elapse=10:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -S
+
+    module load Python3-CN
+    export FLIB_CNTL_BARRIER_ERR=FALSE
+
+    # execute job
+    python3 sample.py
+
+- mpi4py を使用して実行する場合（mpiexec コマンドを使用します）
+
+.. code-block:: bash
+
+    #!/bin/bash
+    #PJM -L "node=2:noncont"
+    #PJM -L "rscgrp=small"
+    #PJM -L "elapse=10:00"
+    #PJM --mpi "proc=8"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -S
+
+    module load Python3-CN
+    export FLIB_CNTL_BARRIER_ERR=FALSE
+
+    export LD_PRELOAD=/usr/lib/FJSVtcs/ple/lib64/libpmix.so # mpi4py実行時に必要
+
+    # execute job
+    mpiexec -n 8 python3 mpi-sample.py
+
+
+Ruby
+-----
+
+次のバージョンのRubyをインストールしています。
+
+.. list-table:: 
+   :header-rows: 1
+
+   * - バージョン
+
+   * - Ruby 2.6.5
+
+環境変数の設定と利用方法
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Rubyの実行に必要な環境変数の設定はモジュールファイル（Ruby-CN/2.6.5-Mar）を利用します。
+Ruby-CN/2.6.5-Marはデフォルトに設定されています。
+
+以下にジョブスクリプト例を示します。
+
+- Ruby コマンドによる実行
+
+.. code-block:: bash
+
+    #!/bin/bash
+    #PJM -L "node=1"
+    #PJM -L "rscgrp=small"
+    #PJM -L "elapse=10:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -S
+
+    module load Ruby-CN
+
+    # execute job
+    ruby sample.rb
+
+
+Java
+----------------
+
+Javaコンパイラの利用方法を示します。
+
+コンパイル環境設定
+^^^^^^^^^^^^^^^^^^^^^
+
+Javaコンパイラの利用環境は、modulefile を利用して設定します。
+
+利用する場合は、翻訳前に以下を実行してください。
+
+- ログインノードで翻訳する場合
+
+  Spackで提供しているopenjdkを使用します。
+  Spackの使用方法は富岳ウェブサイトの「\ `富岳 Spack 利用ガイド <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/FugakuSpackGuide/>`_\ 」を参照ください。
+
+ .. code-block:: console
+
+    [_LNlogin]$ . /vol0004/apps/oss/spack/share/spack/setup-env.sh # Spackの環境設定
+    [_LNlogin]$ spack load openjdk arch=linux-rhel8-skylake_avx512 # OpenJDKの環境設定
+
+- 計算ノードで翻訳する場合
+
+ .. code-block:: console
+
+    [_LNlogin]$ module load OpenJDK-CN
+
+利用できる環境は、以下のとおりです。
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 5 5 2 3 4
+
+   * - ノード名
+     - ソフトウェア名
+     - 言語
+     - バージョン
+     - コマンド
+
+   * - ログインノード
+     - OpenJDK
+     - Java
+     - 11.0.2
+     - javac／mpijavac
+
+
+   * - 計算ノード
+     - OpenJDK
+     - Java
+     - 11u
+     - javac／mpijavac
+
+
+コンパイルコマンド
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+\ :program:`mpijavac`\ を使用したJavaプログラムのコンパイル例を示します。
+
+通常、Javaプログラムの翻訳には、\ :program:`javac`\ コマンドを利用しますが、MPIプログラムの翻訳には、MPIプログラム用の翻訳コマンドとして、\ :program:`mpijavac`\ コマンドを利用します。
+
+
+- MPIライブラリを使用する場合
+
+ .. code-block:: console
+
+    [_LNlogin]$ mpijavac [コンパイルオプション] ソースファイル名
+
+
+- MPIライブラリを使用しない場合
+
+ .. code-block:: console
+
+    [_LNlogin]$ javac [コンパイルオプション] ソースファイル名
+
+ログインノード上で使用するコマンドと計算ノード上で使用するコマンドの翻訳コマンド名は同じです。
+
+- 翻訳コマンド
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 3 3 3
+   
+   * - 種別
+     - コマンド名
+     - MPIライブラリ
+
+
+   * - クロスコンパイラ
+     - mpijavac
+     - 使用する
+
+   * - 
+     - javac
+     - 使用しない
+
+   * - ネイティブコンパイラ
+     - mpijavac
+     - 使用する
+
+   * - 
+     - javac
+     - 使用しない
+
+.. note::
+
+   mpijavacを利用した場合、実行は計算ノードのみで可能です。ログインノードでは実行できません。
+
+主なコンパイルオプションを示します。
+
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3,7
+
+   * - コンパイルオプション
+     - 説明
+
+   * - \-\-showme
+     - MPIプログラムの翻訳コマンドが\ :program:`javac`\ コマンドを呼び出すときの呼出し行を表示します。実際には翻訳処理は行いません。
+
+   * - \-\-verbose
+     - MPIプログラムの翻訳コマンドが\ :program:`javac`\ コマンドを呼び出すときの呼出し行を表示します。翻訳処理も行います。
+
+   * - \-\-help、\-help、\-h
+     - ヘルプメッセージを表示します。実際には翻訳処理は行いません。
+
+   * - *avac_arguments*
+     - \ :program:`javac`\ コマンドに渡すオプションを指定します。
+
+
+.. seealso::
+  
+  - \ :program:`mpijavac`\ コマンドは、\ :program:`javac`\ コマンドのラッパーコマンドになっており、内部的にJDKの\ :program:`javac`\ コマンドを呼び出します。このため、\ :program:`mpijavac`\ コマンドは、\ :program:`javac`\ コマンドのオプションをそのまま指定することができます。
+  - \ :program:`mpijavac`\ コマンドは、MPIライブラリのクラスパスを設定せずにJavaプログラムを翻訳できます。
+  - Javaプログラムの翻訳時、利用者が用意したjarファイルを使用するには、環境変数\ ``CLASSPATH``\ 、または、\ :program:`javac`\ コマンドの\ ``-classpath``\ オプションで、対象となるjarファイルのパスを設定する必要があります。
+  - 環境変数\ ``CLASSPATH``\ と\ ``-classpath``\ オプションの両方を設定した場合、\ ``-classpath``\ オプションが優先されます。
+
+
+実行方法
+^^^^^^^^^^^^^^^^^^^
+
+:program:`javac` 、および、\ :program:`mpijavac`\ でコンパイルしたJavaプログラム「javasample.class」の実行方法の例を示します。
+
+【逐次実行】
+
+ .. code-block:: bash
+
+    #!/bin/bash
+    #PJM -L "node=1"
+    #PJM -L "rscgrp=small"
+    #PJM -L "elapse=10:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -s
+
+    module load OpenJDK-CN
+
+    numactl --cpunodebind 4 --membind 4 java javasample
+
+
+
+【MPI実行】
+
+ .. code-block:: bash
+
+    #!/bin/bash
+    #PJM -L "node=2"
+    #PJM -L "rscgrp=small"
+    #PJM -L "elapse=10:00"
+    #PJM --mpi "proc=8"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -s
+
+    module load OpenJDK-CN
+
+    export PLE_MPI_STD_EMPTYFILE=off # 実行時に標準出力/標準エラー出力への出力がない場合はファイルを作成しない
+    export OMPI_MCA_plm_ple_memory_allocation_policy=bind_local
+    mpiexec java javasample
+

@@ -1,0 +1,174 @@
+.. highlight:: none
+
+.. _GCC_MPI:
+
+GNU Compiler Collectionと富士通MPIの連携
+========================================
+
+
+機能の概要
+-----------
+
+本機能により、GNU Compiler Collection (GCC) に含まれるコンパイラと富士通MPIを組み合わせて使うことができます。
+
+使い方は2種類あり、1つはログインノードで計算ノード用のプログラムをクロスコンパイルする方法、もう1つは計算ノード上でコンパイルする方法です。
+
+
+ログインノードでのクロスコンパイル方法
+---------------------------------------
+
+クロスコンパイルが可能なGCCコンパイラは、/vol0004/apps/oss/gcc-arm-11.2.1 (または旧版gcc-arm-10.3.1) にあります。
+
+コンパイルを実行する前に、以下を実行して利用環境を設定します。  ::
+
+    [_LNlogin]$ . /vol0004/apps/oss/gcc-arm-11.2.1/setup-env.sh
+
+この方法で利用できるコンパイラのバージョンは以下の通りです。
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 3 2 2 8
+
+   * - ソフトウェア名
+     - 言語
+     - バージョン
+     - コマンド
+
+   * - gcc (GCC)
+     - C
+     - 10.3.1 または 11.2.1
+     - gcc
+
+   * - g++ (GCC)
+     - C++
+     - 10.3.1 または 11.2.1
+     - g++
+
+   * - GNU Fortran (GCC)
+     - Fortran
+     - 10.3.1 または 11.2.1
+     - gfortran
+
+これらのコンパイラを用いてMPIプログラムをクロスコンパイルするには、一例として以下のように行います。  ::
+
+    [_LNlogin]$ gcc -c test.c -o test.o
+    [_LNlogin]$ mpifccpx test.o -o test.exe
+
+.. attention::
+
+    バージョン11.2.1でオプション-std=c++17を使用する場合、下記のように-lstdc++ パスを加える必要があります。  ::
+
+        [_LNlogin]$ export LOPT="-L/vol0004/apps/oss/spack-v0.19/opt/spack/linux-rhel8-a64fx/gcc-8.5.0/gcc-12.2.0-sxcx7kmt3qiktffgzzvrj2wmup3g32bc/lib64 -lstdc++"
+        [_LNlogin]$ g++ -std=c++17 -fopenmp -c test.cpp -o test.o
+        [_LNlogin]$ mpiFCCpx ${LOPT} -fopenmp test.o -o test.exe
+
+.. attention::
+
+    バージョン11.2.1を用いてmpiFCCpxでリンクした際に、
+    undefined reference to '__libc_single_threaded' が表示されてエラーとなる場合、
+    バージョンを10.3.1へダウングレードすると問題が解決する可能性があります。
+
+Fortranを利用する場合は、以下のように行います。  ::
+
+    [_LNlogin]$ gfortran -c test.f90 -o test.o \
+                  -I/vol0004/apps/oss/mpigcc/fjmpi-gcc11/include \
+                  -I/vol0004/apps/oss/mpigcc/fjmpi-gcc11/include/mpi/fujitsu
+    [_LNlogin]$ mpifrtpx test.o -o test.exe \
+                  -L/opt/FJSVxtclanga/tcsds-latest/lib64
+
+上記のsetup-env.shを実行している場合、インクルードパス・ライブラリパスを設定した環境変数を利用できます。  ::
+
+    [_LNlogin]$ $FC -c test.f90 -o test.o
+    [_LNlogin]$ $MPIFC test.o -o test.exe
+
+GCCコンパイラでオブジェクトファイルをコンパイルし、リンカとして富士通コンパイラを用いることで富士通MPIとの連携が可能になります。
+
+
+計算ノード上でのコンパイル方法
+-------------------------------
+
+以下のコマンドを、会話型ジョブにおいてコマンドラインで実行するか、ジョブスクリプト中に記述することにより、必要な環境変数が設定され [#spack]_ 、  ::
+
+    [_CNlogin]$ . /vol0004/apps/oss/spack/share/spack/setup-env.sh
+    [_CNlogin]$ spack load fujitsu-mpi%gcc@8.5.0
+
+または  ::
+
+    [_CNlogin]$ spack load fujitsu-mpi%gcc@12.2.0
+
+以下のコンパイル用コマンドが利用可能になります。これらは計算ノードでのみ利用可能で、クロスコンパイルはできません。
+
+- ``mpicc``\ （C用）
+- ``mpicxx``\ （C++用）
+- ``mpifort``\ （Fortran用）
+
+これらのコマンドは、それぞれGCCの\ ``gcc``\ 、\ ``g++``\ 、\ ``gfortran``\ コマンドに対するラッパとして機能します。したがって、元のコマンドと同じオプションを受け付けます。
+
+この方法で利用できるコンパイラのバージョンは以下の通りです。
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 3 2 2 8
+
+   * - ソフトウェア名
+     - 言語
+     - バージョン
+     - コマンド
+
+   * - gcc (GCC)
+     - C
+     - 8.5.0 または 12.2.0
+     - gcc
+
+   * - g++ (GCC)
+     - C++
+     - 8.5.0 または 12.2.0
+     - g++
+
+   * - GNU Fortran (GCC)
+     - Fortran
+     - 8.5.1 または 12.2.0
+     - gfortran
+
+
+プログラムの実行
+-----------------
+
+逐次実行は、環境変数LD_LIBRARY_PATH にGCCクロスコンパイラのライブラリを追加し、実行します。
+
+MPI並列実行は、通常の場合と同じく ``mpiexec`` コマンドにより実行することができます。逐次実行と違い、環境変数LD_LIBRARY_PATH は必要ありません。 ``mpiexec``\ コマンドの形式 (オプション指定など) や実行時の設定 (MCAパラメータなど) は、通常の場合に準じます。
+
+[逐次実行]
+
+.. code-block:: bash
+
+    #!/bin/sh -x
+    #PJM -L  "node=1"
+    #PJM -L  "rscgrp=small"
+    #PJM -L  "elapse=01:00:00"
+    #PJM -s
+    #
+    export GCC="/vol0004/apps/oss/gcc-arm-11.2.1"
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$GCC/aarch64-linux-gnu/lib:$GCC/aarch64-linux-gnu/lib64"
+
+    ./a.out
+
+[MPI並列実行]
+
+.. code-block:: bash
+
+    #!/bin/sh -x
+    #PJM -L  "node=12"
+    #PJM -L  "rscgrp=small"
+    #PJM -L  "elapse=01:00:00"
+    #PJM -s
+    #
+
+    mpiexec ./a.out
+
+.. rubric:: 註
+
+.. [#spack] 本機能の環境設定に、パッケージ管理ツール Spack を利用しています。Spack の詳細については
+	    `富岳Spack利用ガイド
+	    <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/FugakuSpackGuide/>`_\ を御覧ください。
+

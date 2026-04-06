@@ -1,0 +1,353 @@
+Debugger for Parallel Applications function
+===========================================
+
+This explains about Debugger for Parallel Applications function.
+
+
+Overview
+--------
+
+For Debugger for Parallel Applications, to obtain information using for each investigation and debugger control by command file, \ :command:`GDB`\  is used.
+
+The Debugger for Parallel Applications components as following.
+
+- Abnormal Termination Investigative Function
+   Helps investigate the cause of abnormal program termination. Acquires execution information such as backtrace when a signal is received due to abnormal termination of the program.
+- Deadlock Investigative Function
+   Supports the investigation of the occurrence of deadlock in the program and the cause of deadlock occurrence. If the program does not end or does not respond, execution information such as backtrace is collected without ending the program for all processes of the job.
+- Duplication Removal Function
+   Data processing for improving readability is performed for the investigation result file of the Abnormal Termination Investigative Function and the Deadlock Investigative Function. In this function, the dedicated command (\ :program:`fjdbg_summary`\ ) is used.
+- Debugging Control Function with Command Files
+   Provides a debugger control function to perform different debugger control for each process. In this function, use the file described  \ :command:`GDB`\  command, and which is called command file.
+
+
+.. attention::
+
+  When using the Abnormal Termination Investigative Function, Deadlock Investigative Function, and Debugging Control Function with Command Files, specify with  \ :program:`mpiexec`\  command's option. The Abnormal Termination Investigative Function and Deadlock Investigative Function can be used at the same time, but the Debugging Control Function with Command Files cannot be used at the same time as other investigation functions.
+
+
+Translation options
+-------------------
+
+When use Debugger for Parallel Applications, it is reccomended to specify  \ ``-g``\  option when MPI program translation. If not specifying  \ ``-g``\  option when translation, argument variable, argument variable value, local variable, and local variable value information cannot be obtained.
+
+For details on translation options, see "1.2 Compiler Option" in "Debugger for Parallel Applications User's Guide".
+
+
+Abnormal Termination Investigative Function
+-------------------------------------------
+
+When the Abnormal Termination Investigative Function is used, program execution information (backtrace, local variable value and argument variable value for each frame, disassembly output including address at the time of signal occurrence, register contents at the timing when the program receives a signal due to abnormal termination and Memory map) can be obtained.
+
+For details, refer to "Chapter 2 Abnormal Termination Investigative Function" in "Debugger for Parallel Applications User's Guide".
+
+
+Execution option
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The options used for the Abnormal Termination Investigative Function are shown below.
+
+This option is  execution option of  \ :program:`mpiexec`\  command.
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 3,8
+
+   * - Option
+     - Description
+
+   * - -fjdbg-sig *signal*
+     - Enable Abnormal Termination Investigative Function. Specify signal to capture to  \ ``signal``\.
+
+       - ill : Capture SIGILL signal.
+       - abrt:Capture SIGABRT signal.
+       - fpe :Capture SIGFPE signal.
+       - segv:Capture SIGSEGV signal.
+       - bus :Capture SIGBUS signal.
+       - all :Capture SIGILL, SIGABRT, SIGFPE, SIGSEGV and SIGBUS signals.
+
+   * - -fjdbg-out-dir *output-dir*
+     - Specify the directory to store the investigation result file. Specify the storage directory name as a relative or absolute path to  \ ``output-dir``\ .
+       
+       Specify this option with  \ ``-fjdbg-sig``\  at the same time.
+
+
+[Option specification example to  \ :program:`mpiexec`\  command]
+
+.. code-block:: console
+
+   [_LNlogin]$ mpiexec -fjdbg-sig all -fjdbg-out-dir "./log" -n 4 ./a.out
+
+
+Investigation result file
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Abnormal Termination Investigative Function creates a directory for storing investigation result files during program execution.
+
+The configuration of the storage directory is as follows.
+
+- Create a directory named  \ :file:`signal`\  just under  \ :file:`output-dir`\ . If program closed normally,  only create  \ :file:`signal`\  directory and the follwoing process won't be done.
+- Output the investigation result in  \ :file:`signal`\  directory.
+- Create directory by 1000 rank unit just under  \ :file:`signal`\  directory and output the investigation file by rank. The investigation result file name follows the rules of "Job ID. Rank number".
+
+
+[Execution result of program with job ID 99999 and rank number 0-2]
+
+.. code-block:: console
+
+   output-dir/signal/0000000/99999.0
+   output-dir/signal/0000000/99999.1
+   output-dir/signal/0000000/99999.2
+
+
+.. seealso::
+
+  The survey result file can be referred to as it is, but it is assumed that the duplication elimination function described later will be used.
+
+
+Deadlock Investigative Function
+-------------------------------
+
+When the Deadlock Investigative Function is used, the program execution information (backtrace, local variable value and argument variable value for each frame, memory map) for all processes of the job when the program does not terminate or does not respond.
+
+For more detail, see "Chapter 3 Deadlock Investigative Function" in "Debugger for Parallel Applications User's Guide".
+
+
+How to use
+~~~~~~~~~~
+
+Use the Deadlock Investigative Function as follows.
+
+1. Create a job script for program execution. The required processing is as follows.
+
+   - Change the setting so that the job script does not end when a SIGHUP (hangup) or SIGXCPU (CPU timeout) signal is received by using  \ :program:`trap`\ .
+   - Execute  \ :program:`mpiexec`\  command. In order to enable the Deadlock Investigative Function, it is necessary to specify the following runtime option.
+
+   .. code-block:: console
+     
+       [_LNlogin]$ trap 'echo SIGHUP/SIGXCPU received.' HUP XCPU
+                   mpiexec -fjdbg-dlock -fjdbg-out-dir "./log" -n 4 ./a.out
+
+2. Submit a job script of 1.
+3. Check the job ID of 2. by executing  \ :program:`pjstat`\  command.
+4. Enter the following command when deadlock is suspected.
+
+   .. code-block:: console
+
+      [_LNlogin]$ pjsig -s SIGHUP job-ID
+
+
+Execution option
+~~~~~~~~~~~~~~~~
+
+The options used for the Deadlock Investigative Function are shown below.
+
+The following option is  \ :program:`mpiexec`\  command execution option. See MPI User's Guide about the option use direction.
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 3,8
+
+   * - Option
+     - Description
+
+   * - -fjdbg-dlock
+     - Enable Deadlock Investigative Function. Specify this option with  \ ``-fjdbg-out-dir``\  option at the same time. If only this option is specified, an error message is output and program execution is terminated.
+
+   * - -fjdbg-out-dir *output-dir*
+     - Specify the directory to store the investigation result file. Specify the storage directory name as a relative or absolute path to  \ :file:`output-dir`\ .
+
+[Option specification example to  \ :file:`mpiexec`\  command.]
+
+.. code-block:: console
+
+  [_LNlogin]$ mpiexec -fjdbg-dlock -fjdbg-out-dir "./log" -n 4 ./a.out
+
+
+Investigation result file
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This section describes the investigation result file output by the Deadlock Investigative Function.
+
+The Deadlock Investigative Function creates a directory for storing investigation result files during program execution. After that, the investigation result file is output to the storage directory at the timing of submitting  \ :program:`pjsig`\  command. The components of storing directory is as following.
+
+- Create a directory named  \ :file:`deadlock`\  just under  \ :file:`output-dir`\ . 
+- Store the investigation result in  \ :file:`deadlock`\  directory.
+- Create directory by 1000 rank unit just under  \ :file:`deadlock`\  directory and output the investigation file by rank. The investigation result file name follows the rules of "Job ID. Rank number".
+
+
+[Execution result of program with job ID 99999 and rank number 0-2]
+
+.. code-block:: console
+
+  output-dir/deadlock/0000000/99999.0
+  output-dir/deadlock/0000000/99999.1
+  output-dir/deadlock/0000000/99999.2
+
+
+.. seealso::
+
+  The survey result file can be referred to as it is, but it is assumed that the duplication elimination function described later will be used.
+
+
+Duplication Removal Function
+----------------------------
+
+The Duplication Removal Function performs the following processing for the investigation result file of the Abnormal Termination Investigative Function and the Deadlock Investigative Function.
+
+- Remove duplicate backtraces
+- Format and display program execution information
+
+  - Backtrace
+  - Local variable value and argument variable value for each frame
+  - Disassembly output before and after signal detection
+  - Register contents
+  - Memory map
+
+
+How to use
+~~~~~~~~~~
+
+Use  \ :program:`fjdbg_summary`\  command to the Duplication Removal Function. \ :program:`fjdbg_summary`\  command is executed on login node.
+
+
+[\ :program:`fjdbg_summary`\  command format]
+
+ .. code-block:: none
+  
+  fjdbg_summary [ -h | -v ] [ -n ] [ -a ] [ -b ] [ -r rankspec ] [ -p outrank ] input-dir
+
+
+[Execution option]
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3,8
+
+   * - Option
+     - Description
+
+   * - -h
+     - Displays command usage and exits.
+
+   * - -v
+     - Display version information and exit.
+
+   * - -n
+     - Only the form processing of various information is performed without performing duplicate elimination of backtraces.
+
+   * - -a
+     - In addition to the function name, backtrace duplication is eliminated using the backtrace address as a key.
+
+   * - -b
+     - A backtrace is output to the end regardless of the presence or absence of symbols in the object file.
+
+   * - -r *rankspec*
+     - Specify the rank number to be output as the duplicate elimination result. Cannot omit  \ ``rankspec``\ .
+
+
+   * - -p *outrank*
+     - Specify the number of ranks to output local variable values and argument variable values for each frame.
+       Outputs arguments, variables, and local variables for each frame per  \ ``outrank``\  as survey result file with minimum rank first.
+
+   * - *input-dir*
+     - Specify the directory to be subjected to duplicate removal processing using a relative path or an absolute path. Specify  \ :file:`signal`\  directory or  \ :file:`deadlock`\  directory in the investigation result directory created by the Abnormal Termination Investigative Function or the Deadlock Investigative Function.
+
+
+[Command execution example]
+
+ .. code-block:: console
+
+   [_LNlogin]$ fjdbg_summary -a -r 1-10 ./dbg_result/signal
+
+
+Output contents
+~~~~~~~~~~~~~~~
+
+When the Duplication Removal Function is used, the input information is output in the following order.
+
+1. Backtrace, local variable value and argument variable value for each frame
+2. Disassembly output before and after signal detection
+3. Register contents
+4. Memory map
+
+The information of 1. to 3. is output for each thread, and 4. is output at the end. The information in 2. to 4. is not subject to the Duplication Removal Function, and information is always output for each rank. Note that some items may not be output depending on the investigation function used or the occurrence of problems.
+
+For details on the output contents, refer to "Parallel Applications User's Guide"-"2.3.2 Output Contents".
+
+
+Debugging Control Function with Command Files
+----------------------------------------------
+
+When using the Debugging Control Function with Command Files, debugger control using the command file is performed when a job is submitted. This makes it possible to perform different debugging for each process or target only a specific process.
+
+The Debugging Control Function with Command Files uses GDB batch mode. In GDB batch mode, a file that describes GDB commands called command files is used.
+
+For details, see "Chapter 4 Debugging Control Function with Command Files" in "Debugger for Parallel Applications User's Guide".
+
+
+Execution option
+~~~~~~~~~~~~~~~~
+
+The options used in the Debugging Control Function with Command Files are shown below.
+
+This option is execution option of  \ :program:`mpiexec`\  command.
+
+About the detail of command option use method, see "MPI User's Guide".
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 3,8
+
+   * - Option
+     - Description
+
+   * - -gdbx "[ *rank-no*: ] *command-file* [ ;... ]"
+     - Enable the Debugging Control Function with Command Files. Specify the rank number to execute the Debugging Control Function with Command Files to  \ ``rank-no``\.
+       
+       Specify the relative path or absolute path of the command file to  \ ``command-file``\ . If there is specification of  \ ``rank-no``\ , devide  \ ``rank-no``\  and  \ ``commandfile``\  with coln (:).
+       
+       - | Only specify one to  \ ``rank-no``\.
+         | Specify rank number. (e.x. : \ ``-gdbx``\ "1:command.txt")
+       - | If specifying area to  \ ``rank-no``\.
+         | Connect start number and end number with hyphen (-) (e.x. : \ ``-gdbx``\ "1-10: command.txt")
+       - | Specify multiply to \ ``rank-no``\ .
+         | Devide rank number or specification area with comma (,). (e.x. : -``gdbx``  "1,4-6,8:command.txt")
+       - | If omitted  \ ``rank-no``\ .
+         | Execute Debugging Control Function with Command Files for all ranks. (e.x. : ``-gdbx`` "command.txt")
+
+   * - -fjdbg-out-dir output-dir
+     - Specify the storage directory of the debug result file is a relative or absolute path to  \ :file:``output-dir``\ . If omitted this option, the stored directory follows to  \ :program:`mpiexec`\  command specification.
+
+       - If the storage directory does not exist, create  \ :file:`output-dir`\  newly.
+       - If the storage directory exists, it is not allowed that the file named  \ :file:`gdbx`\  exists just under that.
+       - If the file named  \ :file:`gdbx`\  exists to the storage directory, that directory must be empty.
+
+
+[Option specification example to  \ :program:`mpiexec`\  command]
+
+.. code-block:: console
+
+  [_LNlogin]$ mpiexec -gdbx "0,1:./work/command.txt" -n 2 ./a.out arg1 arg2 arg3
+  [_LNlogin]$ mpiexec -gdbx "0,1:./work/command1.txt;2:./work/command2.txt" -fjdbg-out-dir "./log" -n 2 ./a.out arg1 arg2 arg3
+
+
+Debug result file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When the Debugging Control Function with Command Files is executed by the command file, the debug result is output to the standard output. If specified  \ ``-fjdbg-out-dir``\  option, create directory named  \ :file:`gdbx`\  just under specified directory and output debbug result file. The debug result file name follows the rules of "Job ID. Rank number".
+
+[Execution result of program with job ID 99999 and rank number 0-2]
+
+.. code-block:: console
+
+   output-dir/gdbx/99999.0
+   output-dir/gdbx/99999.1
+   output-dir/gdbx/99999.2
+
+.. seealso::
+
+   When output to standard output, by adding  \ ``--ofprefix data,rank,nid``\  option  to  \ :program:`mpiexec`\ , it is possible to judge from which rank and node ID it was output.
+   See the detail for "MPI User's Guide".
+
+

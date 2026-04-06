@@ -1,0 +1,119 @@
+Compile command
+===============
+
+Fortran/C/C++ compiler can be used on  |post-k|\ .
+
+Compile commands include a cross compiler used on the login node and a native compiler used on the compute node.
+
+1. | Compile command
+   | Compile command for Fortran,C,C++ language, option to enable automatic parallelization, option to enable OpenMP are as following table.
+
+  .. list-table:: 
+     :header-rows: 1
+     :widths: 1,4,2,4,3
+
+
+     * - Language
+       - Compile command (Native compiler)
+       - Compile mode
+       - Enable automatic parallelization option
+       - Enable OpenMP option
+
+     * - Fortran
+       - frtpx (frt)
+       - \-
+       - -Kparallel \ :superscript:`*1`\
+       - -Kopenmp \ :superscript:`*2`\
+
+     * - C
+       - fccpx (fcc)
+       - trad mode
+       - -Kparallel \ :superscript:`*1`\
+       - -Kopenmp \ :superscript:`*2`\
+
+     * - C
+       - fccpx (fcc)
+       - clang mode
+       - \-
+       - -fopenmp \ :superscript:`*2`\
+
+     * - C++
+       - FCCpx (FCC)
+       - trad mode
+       - -Kparallel \ :superscript:`*1`\
+       - -Kopenmp \ :superscript:`*2`\
+
+     * - C++
+       - FCCpx (FCC)
+       - clang mode
+       - \-
+       - -fopenmp \ :superscript:`*2`\
+
+  .. note::
+    :superscript:`*` 1:Auto parallelization option default is disabled.
+    
+    :superscript:`*` 2:OpenMP option default is disabled.
+   
+
+  .. seealso::
+    If you compile separately and include objects that specify the automatic parallel enablement option and the OpenMP enablement option, specify the same option when linking.
+
+
+
+2. | MPI program compile command
+   | To compile a program using MPI, use the commands in the following table. Users can compile / link without being aware of the location of MPI header files / libraries.
+
+
+  .. list-table:: 
+     :header-rows: 1
+     :widths: 1,4,2,4,3
+
+     * - Language
+       - Compile command (Native compiler)
+       - Compile mode
+       - Enable auto parallelization option
+       - Enable OpenMP option
+
+     * - Fortran
+       - mpifrtpx (mpifrt)
+       - \-
+       - -Kparallel \ :superscript:`*1`
+       - -Kopenmp \ :superscript:`*2`
+
+     * - C
+       - mpifccpx (mpifcc)
+       - trad mode
+       - -Kparallel \ :superscript:`*1`
+       - -Kopenmp \ :superscript:`*2`
+
+     * - C
+       - mpifccpx (mpifcc)
+       - clang mode
+       - \-
+       - -fopenmp \ :superscript:`*2`\
+
+     * - C++
+       - mpiFCCpx (mpiFCC)
+       - trad mode
+       - -Kparallel \ :superscript:`*1`
+       - -Kopenmp \ :superscript:`*2`
+
+     * - C++
+       - mpiFCCpx (mpiFCC)
+       - clang mode
+       - \-
+       - -fopenmp \ :superscript:`*2`\
+
+  .. note::
+    :superscript:`*` 1:Auto parallelization option default is disabled.
+    
+    :superscript:`*` 2:OpenMP option default is disabled.
+    
+    
+  .. seealso::
+    - When performing separate compilation, link using the MPI compile command when linking MPI programs.
+    - If you compile separately and include objects that specify the automatic parallel enablement option and the OpenMP enablement option, specify the same option when linking.
+
+
+
+

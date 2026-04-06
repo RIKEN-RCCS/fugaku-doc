@@ -1,0 +1,59 @@
+.. _LanguageSpecifications:
+
+言語仕様
+==================
+
+富士通コンパイラは、以下の規格をサポートしています。
+ 
+- Fortran
+
+  - ISO/IEC 1539-1:2018 (Fortran 2018 規格)のサブセット
+  - ISO/IEC 1539-1:2010 (Fortran 2008 規格)
+  - ISO/IEC 1539-1:2004、JIS X 3001-1:2009 (Fortran 2003 規格)
+  - ISO/IEC 1539-1:1997、JIS X 3001-1:1998 (Fortran 95 規格)
+  - Fortran 90 規格およびFORTRAN77 規格
+  - OpenMP Application Program Interface Version 3.1 July 2011
+  - OpenMP Application Program Interface Version 4.0 July 2013
+  - OpenMP Application Programming Interface Version 4.5 November 2015
+  - OpenMP Application Programming Interface Version 5.0 November 2018 のサブセット
+ 
+- C
+
+  - ISO/IEC 9899:2011 (C11 規格)
+  - ISO/IEC 9899:1999 (C99 規格)
+  - ISO/IEC 9899:1990 (C89 規格)
+  - GNU コンパイラの拡張仕様
+  - Clang 互換仕様
+  - OpenMP Application Program Interface Version 3.1 July 2011
+  - OpenMP Application Program Interface Version 4.0 July 2013
+  - OpenMP Application Programming Interface Version 4.5 November 2015
+  - OpenMP Application Programming Interface Version 5.0 November 2018 のサブセット
+ 
+- C++
+
+  - ISO/IEC 14882:2017 (C++17 規格) のサブセット
+  - ISO/IEC 14882:2014 (C++14 規格)
+  - ISO/IEC 14882:2011 (C++11 規格)
+  - ISO/IEC 14882:2003 (C++03 規格)
+  - GNU コンパイラの拡張仕様
+  - Clang 互換仕様
+  - OpenMP Application Program Interface Version 3.1 July 2011
+  - OpenMP Application Program Interface Version 4.0 July 2013
+  - OpenMP Application Programming Interface Version 4.5 November 2015
+  - OpenMP Application Programming Interface Version 5.0 November 2018 のサブセット
+
+- MPI
+
+  - MPI-3.1
+  - MPI-4.0 のサブセット
+
+.. note::
+
+   OpenMPは、OpenMPライブラリにより各々でサポートしている規格が異なります。
+   C/C++コンパイラにおいては、tradモード/clangモードによってもサポートしている規格が異なります。
+
+   詳しくはマニュアルを参照ください。
+
+   - マニュアル「Fortran使用手引書」:「12.3 OpenMP仕様による並列化」、「J.3 OpenMP仕様による並列化」
+   - マニュアル「C言語使用手引書」  :「4.3 OpenMP仕様による並列化」、「J.3 OpenMP仕様による並列化」
+   - マニュアル「C++言語使用手引書」:「4.3 OpenMP仕様による並列化」、「I.3 OpenMP仕様による並列化」

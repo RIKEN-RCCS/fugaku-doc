@@ -1,0 +1,91 @@
+High-speed quadruple precision basic arithmetic library
+=======================================================
+
+| The high-speed quad-precision basic arithmetic library (fast_dd) is a library that performs arithmetic operations by expressing quad-precision values in double-double format.
+| The double-double format is a format that represents a quadruple precision variable with two double precision real variables.
+| Since the calculation is performed using the double precision arithmetic instructions of the processor, it can be performed faster than the quadruple precision real type of the language processor.
+| 
+| The high-speed quad-precision basic operation library can be used from Fortran or C ++ programs.
+
+
+How to combine Fortran versions
+-------------------------------
+
+fast_dd can be used in conjunction with user programs written in Fortran or C ++. Use the Fortran / C ++ compiler made by Fujitsu for translation and combination.
+
+
+Compile example is as following:
+
+1. Conbine SVE fast_dd archives.
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,optmsg=2,SVE a.f90 -SSL2
+
+2. Combine generic fast_dd archives.
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,optmsg=2,NOSVE a.f90 -SSL2
+
+3. Translate user program using thread parallel routine, conbine fast_dd archive.
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,openmp,optmsg=2,SVE b.f90 -SSL2
+
+4. Translate user program by native compiler, conbine SVE version fast_dd archives.
+
+ .. code-block:: console
+
+  [_CNlogin]$ frt -Kfast,optmsg=2,SVE a.f90 -SSL2
+
+
+.. seealso::
+
+   - To translate a user program with a cross compiler and combine fast_dd, specify  \ ``-SSL2``\  to  \ :program:`frtpx`\  command line.
+   - If you are using the BLAS / LAPACK thread parallel version in your user program, specify  \ ``-SSL2BLAMP``\  .
+   - To use fast_dd thread parallelized routines, add the -Kopenmp or -Kparallel option.
+   - When joining with a login node, if  \ ``-KSVE``\  is enabled, combine libraries that are using  \ ``SVE``\ .
+   - When joining with a login node, if  \ ``-KNOSVE``\  is enabled, combine general purpose libraries.
+   - If combine with computing node, specifying  \ ``-KSVE``\  or  \ ``-KNOSVE``\  combine library using  \ ``SVE``\.
+   - ``-KSVE``\  option's default (when omitted) will be  \ ``-KSVE``\ .
+   - To translate a user program written in MPI using a native compiler and combine fast_dd, use  \ :program:`mpifrtpx, mpifrt`\  command.
+
+
+How to conbine C ++ version
+---------------------------
+
+Compile example is as following:
+
+
+1. Translate user program \ :file:`a.cpp`\ ,conbine SVE fast_dd archives.
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,openmp,optmsg=2,SVE a.cpp -SSL2
+
+2. Translate user program  \ :file:`a.cpp`\ , combine generic fast_dd archives.
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,openmp,optmsg=2,NOSVE a.cpp -SSL2
+
+
+3. Translate user program by native compiler , conbine SVE fast_dd archives.
+
+ .. code-block:: console
+
+  [_CNlogin]$ FCC -Kfast,openmp,optmsg=2,SVE a.cpp -SSL2
+
+
+.. seealso::
+
+   - To translate a user program with a cross compiler and combine fast_dd, specify  \ ``-SSL2``\  to  \ :program:`FCCpx`\  command line.
+   - If you are using the BLAS / LAPACK thread parallel version in your user program, specify  \ ``-SSL2BLAMP``\.
+   - fast_dd is a thread-safe object, specify  \ ``-Kopenmp, -Kparallel``\  or  \ ``-mt``\ .
+   - When joining with a login node, if  \ ``-KSVE``\  is enabled, combine libraries that are using  \ ``SVE``\ .
+   - When joining with a login node, if  \ ``-KNOSVE``\  is enabled, combine general purpose libraries.
+   - If combine with computing node, specifying  \ ``-KSVE``\  or  \ ``-KNOSVE``\  combine library using  \ ``SVE``\.
+   - ``-KSVE``\  option's default (when omitted) will be  \ ``-KSVE``\ .
+   - To translate a user program written in MPI using a native compiler and combine fast_dd, use  \ :program:`mpiFCCpx, mpiFCC`\  command.

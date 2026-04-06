@@ -1,0 +1,192 @@
+:orphan:
+
+.. _CompilerforLLVM19:
+
+LLVM v19.1.4
+================
+
+LLVMを基盤にもつ、C／C++用コンパイラの利用方法を示します。
+計算ノード向けバイナリを出力するLLVMはログインノード(Intel)、計算ノードの双方で利用可能です。
+
+
+コンパイル環境設定
+---------------------
+
+LLVMコンパイラは、/vol0004/apps/oss/llvm-v19.1.4にあります。
+
+(llvm-v19.1.0は非推奨とします。llvm-v19.1.4をご利用ください。)
+
+コンパイルを実行する前に以下を実行して利用環境を設定してください。
+
+
+ログインノード
+
+.. code-block:: console
+
+   [_LNIlogin]$ . /vol0004/apps/oss/llvm-v19.1.4/init.sh
+
+計算ノード
+
+.. code-block:: console
+
+   [_CNlogin]$ . /vol0004/apps/oss/llvm-v19.1.4/init.sh
+
+利用できる環境は、以下のとおりです。
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3 2 2 8
+
+   * - ソフトウェア名
+     - 言語
+     - バージョン
+     - コマンド
+
+   * - Clang
+     - C
+     - 19.1.4
+     - clang
+
+   * - Clang++
+     - C++
+     - 19.1.4
+     - clang++
+
+   * - Flang
+     - Fortran
+     - 19.1.4
+     - flang
+
+
+コンパイルコマンド
+------------------------
+
+LLVMを使用したC言語プログラムのコンパイル例を示します。
+コマンドはログインノード、計算ノード共通です。
+
+【逐次実行】
+
+ログインノード
+ .. code-block:: console
+
+    [_LNIlogin]$ clang -O3  ソースファイル名
+
+
+計算ノード
+ .. code-block:: console
+
+    [_CNlogin]$ clang -O3  ソースファイル名
+
+
+【OpenMP】
+
+富士通のOpenMPが利用可能となっています。
+
+富士通のOpenMPを利用される場合は、オプションは"-Kopenmp"を設定ください。
+
+ただし、#pragma 文で schedule(dynamic) を使用した場合などに、リンクエラーが発生することが報告されています。
+
+そのような場合は、"-Kopenmp"の代わりに"-fopenmp"をご使用ください。
+
+ログインノード
+ .. code-block:: console
+
+    [_LNIlogin]$ clang -O3 -Kopenmp ソースファイル名
+
+計算ノード
+ .. code-block:: console
+
+    [_CNlogin]$ clang -O3 -Kopenmp ソースファイル名
+
+
+【富士通 MPI】
+
+富士通MPIライブラリはmpiclang/mpiclang++コマンドにより利用可能です。
+
+富士通のOpenMPを利用される場合は、オプションは"-Kopenmp"を設定ください。
+
+ただし、#pragma 文で schedule(dynamic) を使用した場合などに、リンクエラーが発生することが報告されています。
+
+そのような場合は、"-Kopenmp"の代わりに"-fopenmp"をご使用ください。
+
+ログインノード
+ .. code-block:: console
+
+    [_LNIlogin]$ mpiclang -O3 -Kopenmp source_file
+
+計算ノード
+ .. code-block:: console
+
+    [_CNlogin]$ mpiclang -O3 -Kopenmp source_file
+
+.. seealso::
+    
+    上記例は、C++（clang++/mpiclang++）の場合も同様の方法となります。
+
+
+実行方法
+-------------------
+
+clangでコンパイルしたC言語プログラムの実行は、ジョブスクリプト、インタラクティブジョブ双方で可能です。
+
+ジョブスクリプト例を示します。
+
+【逐次実行】
+
+ .. code-block:: bash
+
+    #!/bin/sh -x
+    #PJM -L  "node=1"
+    #PJM -L  "rscgrp=small"
+    #PJM -L  "elapse=01:00:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+    #PJM -g groupname
+    #PJM -s
+    #
+
+    . /vol0004/apps/oss/llvm-v19.1.4/init.sh
+    ./a.out
+
+
+【OpenMP】
+
+ .. code-block:: bash
+
+    #!/bin/sh -x
+    #PJM -L  "node=1"
+    #PJM -L  "rscgrp=small"
+    #PJM -L  "elapse=01:00:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+    #PJM -g groupname
+    #PJM -s
+    #
+
+    export OMP_NUM_THREADS=12
+    . /vol0004/apps/oss/llvm-v19.1.4/init.sh
+    ./a.out
+
+
+【富士通 MPI】
+
+ .. code-block:: bash
+
+    #!/bin/sh -x
+    #PJM -L  "node=1"
+    #PJM -L  "rscgrp=small"
+    #PJM -L  "elapse=01:00:00"
+    #PJM --mpi  "proc=4"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol0004
+    #PJM -g groupname
+    #PJM -s
+    #
+
+    export OMP_NUM_THREADS=12
+    . /vol0004/apps/oss/llvm-v19.1.4/init.sh
+    mpiexec ./a.out
+
+
+.. seealso::
+
+    clang++/mpiclang++でコンパイルしたC++プログラムの実行も同様の方法となります。
+
+

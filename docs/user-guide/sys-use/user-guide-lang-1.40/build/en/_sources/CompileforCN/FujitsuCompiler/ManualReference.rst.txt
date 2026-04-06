@@ -1,0 +1,52 @@
+Manual
+======
+
+| We offer the following manuals at the Fugaku website.
+| Please refer to "Resource" -> "`Manuals <https://www.fugaku.r-ccs.riken.jp/en/docs/manuals_r01#LANGMAN>`_" from the menu of the Fugaku website.
+| To use the detailed function, please refer to the related manual.
+
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 5,8
+
+   * - Type
+     - Manual name
+
+   * - Language related manual
+     - | Fortran Language Reference
+       | Fortran User's Guide
+       | Fortran User's Guide Additional Volume COARRAY
+       | Fortran Compiler Messages
+       | C User's Guide
+       | C++ User's Guide
+       | C/C++ Compiler Optimization Messages
+       | Fortran/C/C++ Runtime Messages
+
+   * - Message passing library
+     - | MPI User's Guide
+       | MPI User Guide Additional Volume Java Interface
+       | uTofu User's Guide
+
+   * - Programing support tool
+     - | Integrated development environment User's Guide
+       | Profiler User's Guide
+       | Debugger for Parallel Applications User's Guide
+
+   * -  Math library
+     - | Math library user manual
+       | Fujitsu SSL II User's Guide
+       | FUJITSU SSL II Extended Capabilities User's Guide
+       | FUJITSU SSL II Extended Capabilities User's Guide II
+       | FUJITSU SSL II Thread-Parallel Capabilities User's Guide
+       | FUJITSU C-SSL II User's Guide
+       | FUJITSU C-SSL II Thread-Parallel Capabilities User's Guide
+       | FUJITSU SSL II/MPI User's Guide
+       | BLAS LAPACK ScaLAPACK User's Guide
+       | Fast Basic Operations Library for Quadruple Precision User's Guide
+
+   * - Programming Guide
+     - | Programming Guide (Programming common part)
+       | Programming Guide (Fortran)
+       | Programming Guide (Tuning)
+       | Programming Guide (Processors)

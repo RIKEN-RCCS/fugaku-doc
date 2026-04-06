@@ -1,0 +1,478 @@
+:orphan:
+
+.. _CaseStudies:
+
+Case Studies
+-------------
+
+Here is an example where compilation succeeded with the Fujitsu compiler but failed with the LLVM compiler.
+
+Case 1
+^^^^^^^
+
+[Phenomenon]
+
+The following error message is output, and compilation is interrupted.
+
+.. code-block:: none
+
+   error: call to undeclared library function <msg>; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+
+<msg> : Information about functions that have not been declared
+
+[Replication Program]
+
+.. code-block:: c
+
+   int main(void) {
+      printf("Hello\n"); 
+      return 0;
+   }
+
+[Category]
+
+Behavioral changes for non-standard code
+
+[Language]
+
+C
+
+[Cause]
+
+This error is caused by using a library function without explicitly declaring it. In older C standards, compilers were permitted to infer and proceed with compilation even when library function declarations were not explicitly provided. However, in the C standard from ISO C99 onwards, this implicit function declaration is no longer supported.
+
+[Workaround]
+
+To avoid errors, apply one of the following methods:
+
+1. Include the necessary header files.
+#. Specify the -Wno-implicit-function-declaration option during compilation.
+#. You can specify the -std=c89 or -std=c90 option at compile time to operate in a mode compliant with older C standards. This allows you to maintain compatibility with older code while avoiding compilation errors. However, features introduced in the new C standard cannot be used.
+
+[Modified Program]
+
+.. code-block:: c
+
+   #include <stdio.h>
+   
+   int main(void) {
+      printf("Hello\n"); 
+      return 0;
+   }
+
+Case 2
+^^^^^^^
+
+[Phenomenon]
+
+The following error message is output, and compilation is interrupted.
+
+.. code-block:: none
+
+   error: call to undeclared function '<msg>'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+
+<msg> : Information about functions that have not been declared
+
+[Replication Program]
+
+.. code-block:: c
+
+   #include<stdio.h>
+   
+   int main(void)
+   {
+      int i;
+      i = func1();
+      return i; 
+   }
+   
+   int func1(void)
+   {
+      return 0;
+   }
+
+[Category]
+
+Behavioral changes for non-standard code
+
+[Language]
+
+C
+
+[Cause]
+
+This error is caused by using a function without explicitly declaring it. In older C standards, compilers were permitted to infer and proceed with compilation even when function declarations were not explicitly provided. However, in the C standard from ISO C99 onwards, this implicit function declaration is no longer supported.
+
+[Workaround]
+
+To avoid errors, apply one of the following methods:
+
+1. Declare the prototype before the function call.
+#. Specify the -Wno-implicit-function-declaration option during compilation.
+#. You can specify the -std=c89 or -std=c90 option at compile time to operate in a mode compliant with older C standards. This allows you to maintain compatibility with older code while avoiding compilation errors. However, features introduced in the new C standard cannot be used.
+
+[Modified Program]
+
+.. code-block:: c
+
+   #include<stdio.h>
+
+   int func1(void);
+
+   int main(void)
+   {
+      int i;
+      i = func1();
+      return i; 
+   }
+   
+   int func1(void)
+   {
+      return 0;
+   }
+
+Case 3
+^^^^^^^
+
+[Phenomenon]
+
+The following error message is output, and compilation is interrupted.
+
+.. code-block:: none
+
+   error: ISO C++17 does not allow 'register' storage class specifier [-Wregister]
+
+[Replication Program]
+
+.. code-block:: c++
+
+   #include <iostream>
+   int main(void) {
+     register long sum = 0;
+     return 0;
+   }
+
+[Category]
+
+Behavioral changes for non-standard code
+
+[Language]
+
+C++
+
+[Cause]
+
+This is due to the removal of the register storage class specifier in the C++17 standard and later.
+
+[Workaround]
+
+To avoid errors, apply one of the following methods:
+
+1. Remove the register specification from variable declarations.
+#. Specify the -Wno-register option during compilation.
+#. Specify the -std=c++14 option during compilation.
+
+[Modified Program]
+
+.. code-block:: c++
+
+   #include <iostream>
+   
+   int main(void) {
+     long sum = 0;
+     return 0;
+   }
+
+Case 4
+^^^^^^^
+
+[Phenomenon]
+
+The following error message is output, and compilation is interrupted.
+
+.. code-block:: none
+
+   error: ISO C++17 does not allow dynamic exception specifications [-Wdynamic-exception-spec]
+
+[Replication Program]
+
+.. code-block:: c++
+
+   int f1() throw (int) {
+     return 1;
+   }
+   
+   int main(void) {
+     int i = f1();
+     return 0;
+   }
+
+[Category]
+
+Behavioral changes for non-standard code
+
+[Language]
+
+C++
+
+[Cause]
+
+This is due to the removal of the dynamic exception specification in the C++17 standard and later. The dynamic exception specification was used to specify the types of exceptions a function might throw at compile time. However, since the C++11 standard, it is recommended to use the noexcept specifier when indicating that a function does not throw exceptions, and to omit the noexcept specifier when indicating that a function may throw some (specific or any) exceptions.
+
+[Workaround]
+
+To avoid errors, apply one of the following methods:
+
+1. Remove the dynamic exception specification (throw) from function declarations.
+#. Specify the -Wno-dynamic-exception-spec option during compilation.
+#. Specify the -std=c++14 option during compilation.
+
+[Modified Program]
+
+.. code-block:: c++
+
+   int f1(){
+     return 1;
+   }
+
+   int main(void) {
+     int i = f1();
+     return 0;
+   }
+
+[Related Information]
+
+https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0003r5.html
+
+Case 5
+^^^^^^^
+
+[Phenomenon]
+
+The following error message is output, and compilation is interrupted.
+
+.. code-block:: none
+
+   error: Operands of <op> must have comparable types; have INTEGER(<k>) and LOGICAL(<k>)
+
+| <op>: Operator
+| <k>: Kind type parameter
+
+[Replication Program]
+
+.. code-block:: fortran
+
+   program main
+
+     integer(kind=4) :: int_var
+     logical(kind=4) :: log_var
+
+     int_var = 1
+     log_var = .true.
+
+     if (int_var .ne. log_var) then
+       print *, "these types are not comparable!"
+     end if
+
+   end program main
+
+[Category]
+
+Syntax error
+
+[Language]
+
+Fortran
+
+[Cause]
+
+This is caused by attempting to operate on values of different data types using the <op> operator. In LLVM, you cannot directly compare or perform operations on different data types such as logical types and integer types.
+
+[Workaround]
+
+1. Specify the correct data type.
+
+[Modified Program]
+
+.. code-block:: fortran
+
+   program main
+
+     integer(kind=4) :: int_var
+
+     int_var = 1
+     if (int_var .ne. 1) then
+       print *, "these types are not comparable!"
+     end if
+
+   end program main
+
+Case 6
+^^^^^^^
+
+[Phenomenon]
+
+The following error message is output, and compilation is interrupted.
+
+.. code-block:: none
+
+   error: No operator .XOR. defined for LOGICAL(<k>) and LOGICAL(<k>)
+
+<k>: Kind type parameter
+
+[Replication Program]
+
+.. code-block:: fortran
+
+   program main
+
+     LOGICAL(4) :: a, b, result
+
+     a = .TRUE.
+     b = .FALSE.
+     result = a .XOR. b
+     print *, "Result: ", result
+
+   end program main
+
+[Category]
+
+Fujitsu extension
+
+[Language]
+
+Fortran
+
+[Cause]
+
+This error is caused by the use of the .XOR. operator (exclusive OR), which does not exist in the standard specification of the Fortran language.
+
+[Workaround]
+
+1. Replace instances of the .XOR. operator with the standard .NEQV. operator.
+
+[Modified Program]
+
+.. code-block:: fortran
+
+   program main
+
+     LOGICAL(4) :: a, b, result
+
+     a = .TRUE.
+     b = .FALSE.
+     result = a .NEQV. b
+     print *, "Result: ", result
+
+   end program main
+
+[Additional Information]
+
+In LLVM, when comparing logical type values, the operators used to compare numeric type values cannot be used. To compare logical values, use the dedicated logical comparison operators (.EQV. and .NEQV.).
+
+Case 7
+^^^^^^^
+
+[Phenomenon]
+
+The following error message is output, and compilation is interrupted.
+
+.. code-block:: none
+
+   error: Must be a constant value
+
+[Replication Program]
+
+.. code-block:: fortran
+
+   program main
+
+     real(kind=4),parameter :: mzero = z80000000
+
+   end program main
+
+[Category]
+
+Fujitsu extension
+
+[Language]
+
+Fortran
+
+[Cause]
+
+This is caused by integer constants in binary, octal, or hexadecimal format not being enclosed in either single quotes ' or double quotes ".
+
+[Workaround]
+
+1. Modify binary/octal/hexadecimal integer constants to be enclosed in either single quotes ' or double quotes ".
+
+[Modified Program]
+
+.. code-block:: fortran
+
+   program main
+     real(kind=4),parameter :: mzero = z'80000000'
+   end program main
+
+Case 8
+^^^^^^^
+
+[Phenomenon]
+
+The following error message is output, and compilation is interrupted.
+
+.. code-block:: none
+
+   error: Must have INTEGER type, but is REAL(<k>)
+
+<k>: Kind type parameter
+
+[Replication Program]
+
+.. code-block:: fortran
+
+   program main
+
+     integer :: my_array(5)
+     real :: real_index
+
+     my_array = (/10, 20, 30, 40, 50/)
+     real_index = 2.5
+
+     print *, "Value at real_index:", my_array(real_index)
+
+   end program main
+
+[Category]
+
+Syntax error
+
+[Language]
+
+Fortran
+
+[Cause]
+
+This error occurs because a real-type (REAL) data was specified in a context within the Fortran program where an integer-type (INTEGER) data is required. LLVM is strict about data types. If the type of an array index or an argument to a specific built-in function differs from the expected type—especially if you try to treat a floating-point value as an integer—it will result in a compile-time error.
+
+[Workaround]
+
+1. Specify the correct data type.
+
+[Modified Program]
+
+.. code-block:: fortran
+
+   program main
+
+     integer :: my_array(5)
+     integer :: index
+
+     my_array = (/10, 20, 30, 40, 50/)
+     index = 2
+
+     print *, "Value at real_index:", my_array(index)
+
+   end program main
+

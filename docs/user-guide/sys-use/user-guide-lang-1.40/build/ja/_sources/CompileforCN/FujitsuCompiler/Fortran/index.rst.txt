@@ -1,0 +1,872 @@
+.. highlight:: none
+
+
+Fortran
+==================
+
+Fortranコンパイラの利用方法を示します。
+
+環境変数
+----------
+
+コンパイラの実行に必要な環境変数はログイン時に設定されています。
+
+コンパイル方法
+--------------
+
+| Fortranプログラムのコンパイル方法を示します。Fortranコンパイラは\ :program:`frtpx`\ を使用します。
+| MPIライブラリを使用する時は、:program:`mpifrtpx`\ を利用することにより、MPIのヘッダファイル、ライブラリを意識する必要がありません。
+
+
+MPIライブラリを使用する場合
+
+.. code-block:: console
+
+ [_LNlogin]$ mpifrtpx [コンパイルオプション] ソースファイル名
+
+
+MPIライブラリを使用しない場合
+
+.. code-block:: console
+
+ [_LNlogin]$ frtpx [コンパイルオプション] ソースファイル名
+
+
+コンパイルオプション
+------------------------
+
+Fortranコンパイラの主なコンパイルオプションを示します。
+
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 3 7
+
+
+   * - コンパイルオプション
+     - 説明
+
+   * - -c
+     - オブジェクトファイルの作成までを行います。
+
+   * - -o exe_file
+     - | 実行可能ファイル名／オブジェクトファイル名を\ ``exe_file``\ に変更します。
+       | 実行可能ファイル名を省略した場合は\ :file:`a.out`\ となります。
+   * - -O [0|1|2|3]
+     - | 最適化のレベルを指定します。
+       | ``-O``\ の後の数字を省略した場合は\ ``-O3``\ になります。
+       | デフォルトは\ ``-O2``\ です。
+
+   * - -Kfast
+     - 高速化のための最適化オプションを誘導します。
+
+   * - -Ksimd[=1|2|auto]
+     - | SIMD拡張命令を利用したオブジェクトを生成します。
+       | ``-Ksimd=1``
+       |  SIMD拡張命令を利用したオブジェクトを生成します。
+       | ``-Ksimd=2``
+       |  ``-Ksimd=1``\ オプションに加え、if文などを含むループに対して、SIMD拡張命令を利用したオブジェクトを生成します。
+       | ``-Ksimd=auto``
+       |  ループをSIMD化するかどうかをコンパイラが自動的に判定することを指示します。IF構文を含むループのSIMD化が促進されます。
+       | ``-Ksimd``
+       |  ``-Ksimd``\ の後の数字を省略した場合は\ ``-Ksimd=auto``\ になります。
+       | ``-O2``\ オプション以上が有効な場合、省略時は、\ ``-Ksimd``\ オプションが適用されます。
+       | ``-Ksimd``\ オプションが有効な場合、\ ``-Kloop_part_simd``\ オプションも有効になります。
+       | 本オプションは\ ``-O2``\ オプション以上が有効な場合に意味があります。
+
+
+   * - -Kparallel
+     - | 自動並列を行います。デフォルトは\ ``-Knoparallel``\ です。
+       | 本オプションは、\ ``-O0``\ 、または、\ ``-O1``\ オプションが有効な場合、無効となります。
+       | リンクだけ行う場合でも、\ ``-Kparallel``\ オプションを指定して翻訳されたオブジェクトプログラムが含まれる場合には、本オプションを指定する必要があります。
+
+   * - -Kopenmp
+     - | OpenMP Fortran仕様のディレクティブを有効にします。
+       | デフォルトは\ ``-Knoopenmp``\ です。
+       | リンクだけ行う場合でも、\ ``-Kopenmp``\ オプションを指定して翻訳されたオブジェクトプログラムが含まれる場合は、本オプションを指定する必要があります。
+
+   * - -Kocl
+     - | 最適化制御行を有効にします。
+       | デフォルトは\ ``-Knoocl``\ です。
+
+   * - -Klargepage
+     - ラージページ機能を使用する実行可能プログラムを作成するかどうかを指示します。本オプションはプログラムのリンク時に指定する必要があります。デフォルトは、\ ``-Klargepage``\ です。ラージページ機能を使用しない場合は、\ ``-Knolargepage``\ オプションを使用します。
+
+   * - -Koptmsg[=1|2|guide]
+     - | 最適化状況をメッセージ出力します。
+       | ``-Koptmsg=1``
+       |  実行結果に副作用を生じる可能性がある最適化をしたことをメッセージ出力します。
+       | ``-Koptmsg=2``
+       |  ``Koptmsg=1``\ に加えて、自動並列化、SIMD化、ループアンローリングなどの最適化機能が動作したことをメッセージ出力します。
+       | ``-Koptmsg=guide``
+       |  ``Koptmsg=2``\ のメッセージに加えて、以下の最適化が適用できなかった場合の阻害要因と対処方法をガイダンスメッセージとして出力します
+       |   - SIMD化
+       |   - 自動並列化
+       |   - ソフトウェアパイプライニング
+       |   - インライン展開
+       | ``-Koptmsg``
+       |  ``-Koptmsg``\ の後の数字を省略した場合は\ ``-Koptmsg=1``\ になります。
+       | デフォルトは\ ``-Koptmsg=1``\ です。
+
+   * - -I directory
+     - INCLUDEファイルまたはモジュール情報ファイルを検索するディレクトリを指定します。
+
+   * - -Fixed
+     - | ソースプログラムが固定形式で記述されていることを指示します。
+       | デフォルトは拡張子を参照して判断されます。
+
+   * - -Free
+     - | ソースプログラムが自由形式で記述されていることを指示します。
+       | デフォルトは拡張子を参照して判断されます。
+
+   * - -X6
+     - 言語仕様で解釈の異なる部分をFORTRAN66仕様と解釈します。
+
+   * - -X7
+     - 言語仕様で解釈の異なる部分をFORTRAN77仕様と解釈します。
+
+   * - -X9
+     - 言語仕様で解釈の異なる部分をFortran95仕様と解釈します。
+
+   * - -X03
+     - 言語仕様で解釈の異なる部分をFortran2003仕様と解釈します。解釈は\ ``-X08``\ と同じです。
+
+   * - -X08
+     - 言語仕様で解釈の異なる部分をFortran2008仕様と解釈します。
+
+   * - -fw
+     - wレベル（低度のエラー）およびsレベル（重度のエラー）の診断メッセージのみを出力します。
+
+   * - -fs
+     - sレベル（重度のエラー）の診断メッセージのみを出力します。
+
+   * - -f msg_num
+     - ``msg_num``\ にメッセージ番号を指定することにより、特定の診断メッセージの出力を抑止します。
+
+   * - -Nmaxserious=maxnum
+     - コンパイル時に検出された重度のエラーメッセージの数が\ ``maxnum``\ に達した場合にコンパイルを中止します。
+
+   * - -H[a|e|f|o|s|u|x]
+     - コンパイル時および実行時に引数の整合性、添字式、部分列式の値、未定義な変数の参照または配列式の形状適合などを検査します。
+
+   * - -Nlibomp
+     - 並列処理にLLVM OpenMPライブラリを使用します。本オプションはリンク時に指定する必要があります。デフォルトは\ ``-Nlibomp``\ です。並列処理に富士通OpenMPライブラリを使用する場合は、\ ``-Nfjomplib``\ を指定します。
+
+   * - -NRtrap
+     - | 実行時の組込み演算の診断メッセージの出力の指示と、浮動小数点演算の割込み事象の検出を指示します。
+       | デフォルトは\ ``-NRnotrap``\ です。
+       | 本オプションは、プログラムの翻訳時およびリンク時に指定する必要があります。
+
+   * - -Nlst=t
+     - 詳細な最適化情報および統計情報を出力します。
+
+   * - -V
+     - コンパイラのバージョン情報を出力します。
+
+.. seealso::
+
+   Fortranコンパイラのコンパイルオプションについては、Fortran使用手引書「2.2 翻訳時オプション」を参照してください。
+
+
+コンパイルの推奨オプション
+--------------------------------
+
+性能重視::
+
+   -Kfast,openmp[,parallel]
+
+   スレッド並列によるコア活用、SIMD化によるSVE活用、Software Pipeliningによる命令レベルの並列性向上、
+   最適化による演算順序変更、逆数近似演算の利用など、A64FXの性能をフルに引き出すためのオプション指定です。
+
+精度重視::
+
+   -Kfast,openmp[,parallel],fp_precision
+
+   -O0と同じ精度にしたいが、最適化はある程度動かしたいという場合に利用します。
+   性能重視の推奨オプションに、精度に影響のあるすべての最適化を抑止する-Kfp_precisionオプションを
+   付加するオプション指定です。
+
+   性能に大きく影響する複数の最適化を抑止することになります。
+
+- ``-Kfast``\ オプションは「\ ``-O3 -Keval,fp_contract,fp_relaxed,fz,ilfunc,mfunc,omitfp,simd_packed_promotion``\ 」を指定した時と等価です。
+- ``-Kopenmp``\ オプションはOpenMP仕様の指示文を有効にします。
+- ``-Kparallel``\ オプションは、\ ``-O2``\ 、\ ``-Kregion_extension``\ 、\ ``-Kloop_part_parallel``\ 、および、\ ``-Kloop_perfect_nest``\ オプションを誘導します。ただし、\ ``-O3``\ オプションが有効である場合（\ ``-Kfast``\ と同時に指定されている場合など）は、最適化レベルは 3となります。
+- ``-Kfp_precision``\ オプションは「\ ``-Knoeval,nofp_contract,nofp_relaxed,nofz,noilfunc,nomfunc,parallel_fp_precision``\ 」を指定した時と等価です。
+
+ .. attention::
+
+   推奨オプション以外の最適化機能は、プログラム・データの特性によって効果がある場合と、ない場合があり、実際に試してみる必要があります。
+
+
+以下に、オプションの詳細を示します。
+
+- ``-Kfast``\ と等価になるすべてのオプション
+
+ +-------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+ | オプション                                                          |説明                                                                                                         |
+ +=========================+===========================================+=============================================================================================================+
+ | -O3                                                                 | | 最適化したオプジェクトを生成します。                                                                      |
+ |                                                                     | | SIMD化、アンローリングなどの最適化を行ないます。                                                          |
+ +-------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+ | -Keval :superscript:`*` |                                           | | 演算の評価方法を変更する最適化を適用します。                                                              |
+ |                         |                                           | | ``-Keval``\ が有効な場合、\ ``-Ksimd_reduction_product``\ も有効になります。                              |
+ |                         |                                           | | ``-Keval``\ と\ ``-Kparallel``\ が有効な場合、``-Kfsimple`` 、\ ``-Kreduction``\ も有効になります。       |
+ +                         +-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+ |                         | -Kfsimple :superscript:`*`                | オブジェクトプログラムに対して浮動小数点演算の単純化を行ないます。                                          |
+ +                         +-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+ |                         | -Kreduction :superscript:`*`              | リダクションの最適化を行ないます。                                                                          |
+ +                         +-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+ |                         | -Ksimd_reduction_product :superscript:`*` | 乗算のリダクション演算に対して、SIMD化を行います。                                                          |
+ +-------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+ | -Kfp_contract :superscript:`*`                                      | Floating-Point Multiply-Add/Subtract命令を利用した最適化を行います。                                        |
+ +-------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+ | -Kfp_relaxed :superscript:`*`                                       | 単精度または倍精度の浮動小数点除算またはSQRT関数について、                                                  |
+ |                                                                     | 逆数近似演算命令とFloating-Point Multiply-Add/Subtract演算命令を利用します。                                |
+ +-------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+ | -Kfz :superscript:`*`                                               | | flush-to-zeroモードを使用します。                                                                         |
+ |                                                                     | | flush-to-zeroモードは、演算結果またはソースオペランドが非正規化数の場合、それらを同符号の0で置き換えます。|
+ +-------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+ | -Kilfunc=procedure :superscript:`*`                                 | 単精度および倍精度実数型の組込み関数をインライン展開します。                                                |
+ +-------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+ | -Kmfunc :superscript:`*`                                            | マルチ演算関数を使用する最適化を行ないます。                                                                |
+ +-------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+ | -Komitfp                                                            | | 手続呼出しにおけるフレームポインタレジスタを保証しない最適化を行うことを指示します。                      |
+ |                                                                     | | 本オプションが有効な場合、トレースバック情報が保証されません。                                            |
+ +-------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+ | -Ksimd_packed_promotion                                             | packed-SIMD化を促進します。                                                                                 |
+ +-------------------------+-------------------------------------------+-------------------------------------------------------------------------------------------------------------+
+
+ .. note::
+
+   :superscript:`*`：最適化は演算結果に影響を与える場合があります。詳細は、マニュアル「Fortran使用手引書」の「最適化機能」の章を参照してください。
+
+
+- 自動並列を行う ``-Kparallel``\ から誘導されるオプション一覧
+ 
+ .. list-table::
+    :header-rows: 1
+    :widths: 3 7
+    
+    * - 誘導されるオプション
+      - 説明
+
+    * - \-O2
+      - 最適化レベルを指示します。
+
+    * - \-Kregion_extension
+      - パラレルリージョンを拡大します。
+
+    * - \-Kloop_part_parallel
+      - ループを分割して部分的に自動並列化します。
+
+    * - \-Kloop_perfect_nest
+      - 不完全多重ループを分割して完全多重ループにするか否かを指示します。
+
+| コンパイルオプションを追加することにより、推奨オプションの最適化機能を制御することができます。
+| コンパイルオプションは後に書いたものが優先されるため、その特性を利用して以下の例のように指定します。
+
+1. 結果の精度が異なる場合
+
+   :program:`frtpx`\ では、``-Kfast``\ により演算評価方法を変更する最適化（\ ``-Keval``\ ）が指示されており、精度に敏感な計算に影響を及ぼす場合があります。
+   その場合は、\ ``-Knoeval``\ を指定することで変更を抑止することができます。
+
+  .. code-block:: console
+
+    [_LNlogin]$ frtpx  -Kfast,openmp,noeval sample.f
+  
+2. コンパイルが長時間になる場合
+
+   最適化オプションのレベルを下げます。この例では、\ ``-kfast``\ により指示される最適化オプション\ ``-O3``\ を、\ ``-O2``\ に下げています。
+
+  .. code-block:: console
+
+    [_LNlogin]$ frtpx  -Kfast,openmp -O2  sample.f
+
+
+環境変数（オプション指定）
+----------------------------
+
+Fortranコンパイラ（:program:`frtpx`\ ）が利用する環境変数を示します。
+
+1. FORT90CPX
+   
+   環境変数 FORT90CPX にコンパイルオプションを設定することができます。
+   FORT90CPX に定義されたコンパイルオプションは、自動でコンパイラに渡されます。
+   環境変数やシステムで定義されたコンパイラオプションには、次の優先順位があります。
+
+   [優先順位]
+   
+   1. 翻訳指示行（\ ``-Koptions``\ 指定時のみ）
+   #. 翻訳コマンドのオペランド
+   #. 翻訳時オプション設定用の環境変数（FORT90CPX、または、FORT90C）
+   #. 翻訳時プロフィルファイル
+   #. デフォルト
+   
+   推奨オプションを環境変数 FORT90CPX に設定する例を示します。
+   
+   .. code-block:: console
+   
+     [_LNlogin]$ export FORT90CPX=-Kfast,parallel
+   
+   
+   有効になったコンパイルオプションは、``-Nlst``\ オプションにより確認することができます。
+
+   .. code-block:: console
+
+     [_LNlogin]$ frtpx -Nlst=t -o sample sample.f
+
+   ``-Nlst``\ オプションで生成された「\ :file:`sample.lst`\ 」内の翻訳情報の抜粋は以下のとおり
+
+   .. code-block:: console
+
+     Option information
+       Environment variable : (省略)
+       Command line options : -Nlst -o sample
+       Effective options    : -fi -g0 -AE -Fixed -O2 -X08
+                              -x0 -xaccept=nomodule_allocatable
+                              -KA64FX -KARMV8_3_A -KSVE -Kalign_commons
+                              -Kalign_loops -Kassume=noshortloop
+                              -Kassume=nomemory_bandwidth
+                              -Kassume=notime_saving_compilation -Kauto
+                              -Kautoobjstack -Knocalleralloc -Kcmodel=small
+                              -Knoeval -Keval_noconcurrent -Knofenv_access
+                              -Knofp_contract -Knofp_relaxed -Knofsimple -Knofz
+                              -Khpctag -Knoilfunc -Kintentopt -Klargepage
+                              -Kloop_blocking -Kloop_fission
+                              -Kloop_nofission_stripmining
+                              -Kloop_fission_threshold=50 -Kloop_fusion
+                              -Kloop_interchange -Kloop_nopart_parallel
+                              -Kloop_part_simd -Kloop_noperfect_nest
+                              -Kloop_noversioning -Knolto -Knomfunc -Knoocl
+                              -Knoomitfp -Knooptlib_string -Koptmsg=1
+                              -Knopc_relative_literal_loads -Kplt -Knopreex
+                              -Kprefetch_noconditional -Kprefetch_noindirect
+                              -Kprefetch_sequential=auto -Kprefetch_nostride
+                              -Kprefetch_cache_level=all -Kprefetch_noinfer
+                              -Kprefetch_strong -Kprefetch_strong_L2 -Knopreload
+                              -Ksch_post_ra -Ksch_pre_ra -Ksibling_calls
+                              -Ksimd=auto -Ksimd_nopacked_promotion
+                              -Ksimd_noreduction_product -Ksimd_reg_size=512
+                              -Ksimd_nouncounted_loop
+                              -Ksimd_use_multiple_structures -Knostriping -Kswp
+                              -Kswp_freg_rate=100 -Kswp_ireg_rate=100
+                              -Kswp_preg_rate=100 -Ktemparraystack -Kunroll
+                              -Knounroll_and_jam -Knozfill
+                              -Knoopenmp -Kopenmp_noassume_norecurrence
+                              -Kopenmp_nocollapse_except_innermost
+                              -Kopenmp_noordered_reduction -Knoopenmp_simd
+                              -Knothreadsafe -Knoparallel
+                              -Kparallel_nofp_precision -Knoarray_private
+                              -Knodynamic_iteration -Knoreduction
+                              -Knoregion_extension
+                              -Nallextput -Nnoalloc_assign
+                              -Ncancel_overtime_compilation -Nnocheck_global
+                              -Nnocoarray -Nnocompdisp -Nnocopyarg -Nnocoverage
+                              -Kswp_preg_rate=100 -Ktemparraystack -Kunroll
+                              -Knounroll_and_jam -Knozfill
+                              -Knoopenmp -Kopenmp_noassume_norecurrence
+                              -Kopenmp_nocollapse_except_innermost
+                              -Kopenmp_noordered_reduction -Knoopenmp_simd
+                              -Knothreadsafe -Knoparallel
+                              -Kparallel_nofp_precision -Knoarray_private
+                              -Knodynamic_iteration -Knoreduction
+                              -Knoregion_extension
+                              -Nallextput -Nnoalloc_assign
+                              -Ncancel_overtime_compilation -Nnocheck_global
+                              -Nnocoarray -Nnocompdisp -Nnocopyarg -Nnocoverage
+                              -Nfjprof -Nfreealloc -Nf90move -Nnohook_func
+                              -Nnohook_time -Nline -Nlst -Nnomallocfree
+                              -Nnoobsfun -Nquickdbg=noargchk -Nquickdbg=nosubchk
+                              -Nquickdbg=noundef -NRnotrap -Nnorecursive
+                              -Nnoreordered_variable_stack -Nrt_notune -Nnosave
+                              -Nsetvalue=noheap -Nsetvalue=nostack
+                              -Nsetvalue=noscalar -Nsetvalue=noarray
+                              -Nsetvalue=nostruct -Nuse_rodata
+
+     Main program "main"
+      (line-no.)(nest)(optimize)
+        (省略)
+
+2. TMPDIR
+   
+   環境変数\ :envvar:`TMPDIR`\ を用いて、コンパイラが使用するテンポラリディレクトリを変更することができます。
+   ``/etc/profile``\ で\ :envvar:`TMPDIR`\ にはホームディレクトリを設定しています。
+   
+   テンポラリディレクトリを変更する場合は、\ :file:`/tmp`\ を使用しないようにしてください。
+   :envvar:`TMPDIR`\ には\ :file:`/home/`\ 、または、\ :file:`/vol0n0m/data/`\ の書き込み可能なディレクトリを指定してください。
+
+
+並列処理用Fortranライブラリ
+-------------------------------
+
+Fortranライブラリは、Fortranプログラムを実行するために、Fortranオブジェクトプログラムから呼び出されます。
+
+ライブラリの種類には、スタートアップルーチン、Fortranの入出力文、組込み手続、サービスルーチン、および、並列処理があります。
+|post-k|\ では、その中の「並列処理」用に次の2つのライブラリを提供します。
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3,9
+
+
+   * - ライブラリ名
+     - 説明
+
+   * - LLVM OpenMPライブラリ
+     - | オープンソースソフトウェアであるLLVM OpenMP Runtime Libraryをベースにした並列化機能用のライブラリです。
+       | サポートしている仕様は、OpenMP 4.5、OpenMP5.0(一部)です。
+       | LLVM OpenMPライブラリの仕様については、Fortran使用手引書「第12章並列化機能」をお読みください。
+
+   * - 富士通OpenMPライブラリ
+     - | スーパーコンピュータ「京」、および、PRIMEHPC FX100以前のシステム向け富士通OpenMPライブラリをベースとした並列化機能用のライブラリです。従来の富士通OpenMPライブラリとの互換を重視する場合に適しています。
+       | サポートしている仕様は、OpenMP 3.1、OpenMP4.5(一部)です。
+       | 富士通OpenMPライブラリの仕様については、Fortran使用手引書「付録J 富士通OpenMPライブラリ」をお読みください。
+
+
+並列処理用ライブラリを指定するには、以下のオプションをリンク時に指定する必要があります。
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 2 9
+
+   * - オプション
+     - 説明
+
+   * - -Nlibomp
+     - OpenMPライブラリとして、LLVM OpenMPライブラリを使用することを指示します。
+
+       省略時は、こちらの\ ``-Nlibomp``\ が適用されます。
+
+   * - -Nfjomplib
+     - OpenMPライブラリとして、富士通OpenMPライブラリを使用することを指示します。
+
+.. note::
+
+   OpenMP 4.0以降で追加された次の環境変数はLLVM OpenMPライブラリで利用可能です。
+   一方、富士通OpenMPライブラリはこれらの環境変数に未対応です。富士通OpenMPライブラリ使用時はこれらの環境変数は無視されます。
+   
+   - OMP_CANCELLATION
+   - OMP_DISPLAY_ENV
+   - OMP_DEFAULT_DEVICE
+   - OMP_MAX_TASK_PRIORITY
+
+コンパイル例
+----------------------
+
+Fortranプログラムのコンパイル方法を示します。
+
+
+マルチノードジョブ（ハイブリッド並列）
+
+.. code-block:: console
+
+  [_LNlogin]$ mpifrtpx -Kfast,parallel,openmp sample.f08
+
+シングルノードジョブ（逐次）
+
+.. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast sample.f08
+
+シングルノードジョブ（自動並列）
+
+.. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,parallel sample.f08
+
+シングルノードジョブ（OpenMP）
+
+.. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,openmp sample.f08
+
+
+エンディアン変換
+------------------------------
+
+|post-k|\ は、リトルエンディアンで動作しています。
+
+Fortranプログラムは実行時オプションを指定することにより、ビッグエンディアンのファイルを入出力することができます。
+
+実行時オプションは、環境変数、または、実行可能ファイルの引数として指定できます。
+
+- 実行時オプション
+
+ 以下の二つの指定方法があります。本オプションを指定した場合、書式なし入出力文において論理型データ、整数型データ、IEEE 浮動小数点形式データがエンディアン変換されます。
+
+ .. list-table::
+    :header-rows: 1
+    :widths: 2 8
+
+    * - オプション
+      - 説明
+
+    * - -Wl,-T
+      - 書式なしファイルと接続しているすべての装置番号が対象となります。
+
+    * - -Wl,-T\ *u_no*
+      - \ ``u_no``\ は、装置番号を表す 0～2147483647 の整数値で、指定した番号に接続している装置番号が対象となります。指定できる装置番号は一つのみです。
+
+
+ .. seealso::
+   
+   環境変数で指定した場合と、引数で指定した場合のいずれも効果は同じです。引数で指定した場合は、GET_COMMAND、GET_COMMAND_ARGUMENT等のコマンド引数を扱う組込みサブルーチンで実行時オプションを取得することが可能です。
+
+
+
+- 実行時オプションの指定方法
+
+  | エンディアン変換の指定例を示します。
+  | 次の例では、装置番号"10"について、書式なし入出力をビッグエンディアンデータとしています。
+
+ - 環境変数（FORT90L）による指定例
+
+ .. code-block:: bash
+
+    #!/bin/bash -x
+    #
+    #PJM -L "node=1"
+    #PJM -L "elapse=01:00:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -s
+    #
+    
+    export FORT90L=-Wl,-T10
+   
+    ./a.out
+
+
+ - 引数による指定例
+
+ .. code-block:: bash
+
+    #!/bin/bash -x
+    #
+    #PJM -L "node=1"
+    #PJM -L "elapse=01:00:00"
+    #PJM -x PJM_LLIO_GFSCACHE=/vol000N
+    #PJM -g groupname
+    #PJM -s
+    #
+    
+    ./a.out -Wl,-T10
+
+
+.. _ErrorMonitorFortran:
+
+エラーモニタ
+------------
+
+Fortranプログラムの実行中にエラーが発生した場合、エラーモニタが呼び出されます。
+
+ここでは、エラーモニタについて示します。
+
+
+エラーモニタとは
+^^^^^^^^^^^^^^^^
+
+エラーモニタは、Fortranプログラム実行中のエラー発生時に処置を制御している部分で、エラー制御表を基にエラー発生時に処置を実行します。
+
+利用者は、実行時にエラーモニタの機能を使って、個々のエラーに対する処置の制御を自ら行うことができます。その処置の制御を、以下に示します。
+
+- 実行可能プログラムの実行を打ち切る回数の制御
+- エラーに対するメッセージの最大出力回数の制御
+- トレースバックマップを出力するかどうかの制御
+- 利用者が用意する（または定義する）エラー処理ルーチンを呼ぶかどうかの制御
+
+.. seealso::
+ 
+ エラーモニタは、LLVM OpenMPライブラリのエラーに対しては無効となります。
+ 
+ LLVM OpenMPライブラリのエラーについては、Fortran使用手引書の「12.4 実行時メッセージ」を参照してください。
+
+
+エラー制御表
+^^^^^^^^^^^^^^^^
+
+エラー制御表は、エラー識別番号に対応するエラー項目をまとめたもので、マニュアル「Fortran使用手引書」の「表8.1 エラー制御表の標準値」に記載されています。
+
+| エラーモニタは、このエラー制御表の内容を基に処置を行います。
+| ここでは例として、"jwe0320i-w" を取り上げます。
+
+| "jwe0320i-w" のエラー識別番号は「320」であるため、エラー制御表から番号の「320」の欄を参照します。
+| 以下の表は、 エラー識別番号「320」のエラー制御表からの標準値の抜粋です。
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 1,2,2,2,2,2,2,2
+
+   * - 番号
+     - エラー打切り回数
+     - メッセージ最大出力回数
+     - エラー項目の修正
+     - バッファ内容出力
+     - トレースバックマップの出力
+     - 標準修正
+     - エラーレベル
+
+   * - 320
+     - 10
+     - 5
+     - 可能
+     - 出力しない
+     - 出力する
+     - あり
+     - w
+
+各項目の意味は以下のとおりです。
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3,7
+
+   * - 項目名
+     - 意味
+
+   * - 番号
+     - | エラー識別番号
+       | この例では、jwe0320i-w の 320 になります。
+
+   * - エラー打切り回数
+     - | エラーを検出時、検出する回数の上限を示します。
+       | 上限になったとき、プログラムの実行を打切ります。
+       | この例では、10回目の検出でプログラムの実行を打切ります。
+
+   * - メッセージ最大出力回数
+     - | エラーを検出時、メッセージを出力する最大回数を示します。
+       | この例では、6回目以降の検出時にはメッセージが出力されません。
+
+   * - エラー項目の修正
+     - | 利用者がエラー発生時の処置を変更できる場合は「可能」、利用者が変更できない場合は「不可能」と表記しています。
+       | jwe0320i-w は「可能」となっていますので、ユーザープログラムでエラー制御表を変更することができます。
+
+   * - バッファ内容出力
+     - 入出力バッファの内容を出力するか、出力しないかを示します。
+
+   * - トレースバックマップの出力
+     - トレースバックマップを出力するか、出力しないかを示します。
+
+   * - 標準修正
+     - Fortranシステムで標準修正が用意されているか、用意されていないかを示します。
+
+   * - エラーレベル
+     - | エラーのレベルを示します。
+       | レベルの低い順に i, w, e, s, u のいずれか一文字で表記されます。
+
+
+エラー制御の方法
+^^^^^^^^^^^^^^^^
+
+エラー制御表は、エラー処理サービスのサブルーチン「ERRSETサービスサブルーチン」を使用して、エラー項目の個々の制御情報を変更することができます。
+
+「ERRSETサービスサブルーチン」の呼び出し形式
+
+ .. code-block:: none
+
+  CALL ERRSET(errno , estop , mprint , trace , uexit , r)
+
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 1,9
+
+   * - 引数
+     - 説明
+
+   * - errno
+     - 基本整数型スカラ。変更すべきエラー項目に対応するエラー識別番号です。
+
+   * - estop
+     - | 基本整数型スカラ。エラー打切り回数です。
+       | 指定された値が、0 以下であれば変更されません。
+       | 255 より大きければエラー打切り回数は無制限となります。
+
+   * - mprint
+     - | 基本整数型スカラ。メッセージの最大出力回数です。
+       | 指定された値が 0 ならば変更されません。
+       | 負ならば最大出力回数は 0 回となります。
+       | 255 より大きければ最大出力回数は無制限となります。
+
+   * - trace
+     - | 基本整数型スカラ。値とトレースバックマップの出力の制御情報の関係を以下に示します。
+       | ＝0：トレースバックマップの出力の制御情報は変更されません。
+       | ＝1：トレースバックマップを出力しないように変更されます。
+       | ＝2：トレースバックマップを出力するように変更されます。
+       | 1、2以外の場合は、0 とみなします。
+
+   * - uexit
+     - | エラーの修正処置として 0、1、または、利用者定義の修正サブルーチンの名前を指定します。
+       | 0 の場合は変更されません。1 の場合は本処理系の標準修正を行うようにすることを意味します。
+       | 利用者定義の修正サブルーチンの名前を指定する場合、この名前は外部手続名として宣言されていなければなりません。
+
+   * - r
+     - | 基本整数型スカラ。errnoが 132 以外の場合はエラー識別番号を指定します
+       | ここで、r＞errnoであれば、errnoからrまでの範囲のエラー識別番号に対応するエラー項目群を estop、mprint、trace、uexitに従って変更することを意味します。
+       | r≦errnoであれば、rを無視します。必要のない場合は、r≦errnoの値を指定します。
+       | errnoが 132 の場合、r＝1 であれば、データを出力するとき、書式仕様で定められたFortran記録がファイルのレコードの長さより大きい場合、次のFortran記録の先頭に一つの空白を付加して新しいレコードとして、出力されます。
+       | r≠1であれば、次のFortran記録の先頭に、空白は付加されません。
+
+
+| ここでは、"jwe0320i-w" の「エラー打切り回数」を "20"、「メッセージ最大出力回数」を "10"、その他の項目は "変更無し"、として制御表を書き換えます。
+| ERRSETサービスサブルーチンの引数をセットして、制御表を変更したい箇所（今回の場合、プログラムの先頭）に挿入します。
+
+
+.. code-block:: fortran
+   :linenos:
+
+         program main
+         integer:: i,j
+         real,dimension(10):: a,b,c
+         CALL ERRSET(320, 20, 10, 0, 0,320)
+         !
+         j=10
+         call sub1(i,j,a,b,c)
+         stop
+         end program main
+         
+         subroutine sub1(i,j,a,b,c)
+         integer:: i,j
+         integer:: k
+         real,dimension(j):: a,b,c
+         do k=i,j
+            a(k) = b(k)+c(k)
+         enddo
+         return
+         end subroutine sub1
+
+
+ERRSETサービスサブルーチンが呼び出された後からプログラムの実行が終了するまで、もしくは、他のERRSETサービスサブルーチンで再設定するまでの間、エラー制御表が書き換えられた状態で処理されます。
+
+
+エラーモニタについての詳細は、マニュアル「Fortran使用手引書」の「8.1 エラー制御」を参照してください。
+
+
+組込みデバッグ機能
+------------------
+
+組込みデバッグ機能は、コンパイル時にデバッグ用のオプションをつけてプログラムをコンパイルし、実行モジュールを実行することで各種検査を行うものです。
+組込みデバッグ機能を利用する場合は、最適化のレベルが\ ``-O0``\ に落ちる場合があるため、実行時間が通常より長くなります。
+
+- 組込みデバッグ機能について
+
+ 実行環境を変えると異常終了する場合があります。このような場合、原因として次のようなものが考えられます。
+
+ 1. 変数に初期値を設定せずに引用している
+ 2. 配列の添字が配列サイズを超えている
+
+ .. note::
+  
+  "実行環境を変える"とは次のような場合です。
+  
+  - プロファイラ等のツールを使用した
+  - ラージページのサイズを変更した
+
+  この場合、実行モジュールのメモリ上の配置状況が変わるため、異常終了する場合があります。
+
+
+これらを検査する組込みデバッグ機能の使用例は以下のとおりです。
+
+- 次の検査を組込みデバッグ機能で行います。
+
+ 1. | 未定義データの引用検査(\ ``-Hu``\ オプション)
+    | 初期値を設定していない変数（未定義データ）を引用した場合、"jwe0323i-w" のメッセージが出力されます。
+ 2. | 配列範囲の検査(\ ``-Hs``\ オプション)
+    | 配列の添字が配列の範囲内にない場合、"jwe0320i-w"、または、"jwe0322i-w" のメッセージが出力されます。
+
+ 詳細は、マニュアル「Fortran使用手引書」の「第8章 プログラムのデバッグ」を参照してください。
+
+
+ 次に\ ``-Hsu``\ のオプションに該当するように作成したサンプルプログラムで表示されるメッセージの例を示します。（サンプルプログラムはメッセージを出すために分かりやすい形にしています）
+
+
+ 1. サンプルプログラム
+
+  .. code-block:: fortran
+    :linenos:
+
+          program main
+            integer:: i,j
+            real,dimension(10):: a,b,c
+            j=10
+            call sub1(i,j,a,b,c)
+            stop
+          end program main
+          subroutine sub1(i,j,a,b,c)
+            integer:: i,j
+            integer:: k
+            real,dimension(j):: a,b,c
+            do k=i,j              ! ← jwe0323i-wを検出
+              a(k) = b(k)+c(k)    ! ← jwe0320i-wを検出
+            enddo
+            return
+          end subroutine sub1
+
+
+ 2. コンパイル／ジョブ実行
+
+  .. code-block:: console
+  
+    [_LNlogin]$ frtpx -Kfast -Hsu -Nlst=t -o sample sample.f
+    [_LNlogin]$ pjsub sample.sh
+
+ 3. 実行結果例（標準エラー出力の内容）
+
+  .. code-block:: console
+
+    jwe0323i-w line 13 The variable (i) has an undefined value.
+     error occurs at sub1_    line 13 loc 0000000000400d50 offset 0000000000000184 
+     sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6 
+     MAIN__       at loc 0000000000400b24 called from o.s.  
+    taken to (standard) corrective action, execution continuing.
+    jwe0320i-w line 14 The subscript or substring b is out of the specified range (reference value: -1953789045, specification value: 1:10).
+     error occurs at sub1_    line 14 loc 0000000000400e18 offset 000000000000024c 
+     sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6 
+     MAIN__       at loc 0000000000400b24 called from o.s.  
+    taken to (standard) corrective action, execution continuing.
+    jwe0320i-w line 14 The subscript or substring c is out of the specified range (reference value: -1953789045, specification value: 1:10).
+     error occurs at sub1_    line 14 loc 0000000000400e60 offset 0000000000000294 
+     sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6 
+     MAIN__       at loc 0000000000400b24 called from o.s.  
+    taken to (standard) corrective action, execution continuing.
+    jwe0320i-w line 14 The subscript or substring a is out of the specified range (reference value: -1953789045, specification value: 1:10).
+     error occurs at sub1_    line 14 loc 0000000000400eac offset 00000000000002e0 
+     sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6 
+     MAIN__       at loc 0000000000400b24 called from o.s.  
+    taken to (standard) corrective action, execution continuing.
+    jwe0320i-w line 14 The subscript or substring b is out of the specified range (reference value: -1953789044, specification value: 1:10).
+     error occurs at sub1_    line 14 loc 0000000000400e18 offset 000000000000024c 
+     sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6 
+     MAIN__       at loc 0000000000400b24 called from o.s.  
+    taken to (standard) corrective action, execution continuing.
+    jwe0320i-w line 14 The subscript or substring c is out of the specified range (reference value: -1953789044, specification value: 1:10).
+     error occurs at sub1_    line 14 loc 0000000000400e60 offset 0000000000000294 
+     sub1_        at loc 0000000000400bcc called from loc 0000000000400bc0 in MAIN__       line 6 
+     MAIN__       at loc 0000000000400b24 called from o.s.  
+    taken to (standard) corrective action, execution continuing.
+    jwe0903i-u Error number 0320 was detected. Maximum error count exceeded.
+    error summary (Fortran)
+    error number  error level  error count
+      jwe0320i         w          10      
+      jwe0323i         w           1      
+    total error count = 11
+
+  .. note::
+     
+     "jwe0320i-w"、"jwe0323i-w"は10回検出すると、プログラムの実行を終了します。検出回数を変更したい場合は「:ref:`ErrorMonitorFortran`」を参照してください。
+
+
+Fortranサンプルプログラム
+-------------------------
+
+サンプルプログラムを使用して、コンパイルからジョブ実行までの例を示します。
+
+.. toctree::
+   :maxdepth: 2
+
+   FortranSampleProgram(sequential)
+   FortranSampleProgram(automaticParallel)
+   FortranSampleProgram(OpenMP)
+   FortranSampleProgram(hybridParallel)
+
+
