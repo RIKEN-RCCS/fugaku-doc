@@ -31,11 +31,11 @@ Cradle CFD scFLOW 利用開始までの流れ
 
    **[提供ソフトウェアベンダー]**
 
-   Hexagon Manufacturing Intelligence社
+   Cadence (株式会社ソフトウェアクレイドル) 
 
    **[製品情報サイト]**
 
-   https://www.hexagonmi.com/mscsoftware/jp
+   https://www.cradle.co.jp/product/scflow.html
 
 2. ライセンスサーバー情報の問合せ
 -------------------------------------

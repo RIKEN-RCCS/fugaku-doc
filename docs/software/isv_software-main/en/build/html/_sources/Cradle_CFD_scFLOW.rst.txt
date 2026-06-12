@@ -32,11 +32,11 @@ Please contact the following software vendor for details of the license agreemen
 
    **[Software Vendors]**
 
-   Hexagon Manufacturing Intelligence
+   Cadence/Software Cradle Co., Ltd.
 
    **[Product Information]**
 
-   https://www.hexagonmi.com/mscsoftware/en
+   https://www.cradle-cfd.com/product/scflow.html
 
 2. Inquiry for license server information
 -----------------------------------------
