@@ -1,17 +1,17 @@
-Spack v0.17
+Spack v0.19
 ====================
 
 ログインノードにインストール済みOSS一覧表
 -----------------------------------------
 
 .. csv-table::
-   :file: oss_list_ln_0.17.csv
+   :file: oss_list_ln_0.19.csv
 
 計算ノードにインストール済みOSS一覧表
 -----------------------------------------
 
 .. csv-table::
-   :file: oss_list_cn_0.17.csv
+   :file: oss_list_cn_0.19.csv
 
 \*1 以下の4つのアプリケーションソフトウェア (アプリソフト) は、高度情報科学技術研究機構 (RIST) によって提供されています。
 
@@ -34,10 +34,3 @@ Spack v0.17
    Quotes aren't needed because spack doesn't use a shell.
    Consider removing them
 
-\*3 NAMDのソースを取得するにはユーザ登録が必要です。ご自身でソースを取得された後、以下の手順で `プライベートインスタンス <https://www.fugaku.r-ccs.riken.jp/doc_root/ja/user_guides/FugakuSpackGuide/intro.html#id5>`_ にインストールしてください。
-
-::
-
-   $ tar xzf NAMD_2.14_Source.tar.gz
-   $ cd NAMD_2.14_Source
-   $ spack dev-build namd

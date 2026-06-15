@@ -362,12 +362,11 @@ $ module unload tmux
 <nav class="contents local" id="id1">
 <ul class="simple">
 <li><p><a class="reference internal" href="#cloning-the-repository" id="id5">Cloning the repository</a></p></li>
-<li><p><a class="reference internal" href="#compiler-setup" id="id6">Compiler setup</a></p></li>
-<li><p><a class="reference internal" href="#using-the-packages-provided-in-the-public-instance" id="id7">Using the packages provided in the public instance</a></p></li>
-<li><p><a class="reference internal" href="#registering-external-packages" id="id8">Registering external packages</a></p></li>
-<li><p><a class="reference internal" href="#sourcing-the-environments" id="id9">Sourcing the environments</a></p></li>
-<li><p><a class="reference internal" href="#installation-and-management-of-packages" id="id10">Installation and management of packages</a></p></li>
-<li><p><a class="reference internal" href="#resolving-multiple-packages-with-the-same-name" id="id11">Resolving multiple packages with the same name</a></p></li>
+<li><p><a class="reference internal" href="#using-the-packages-provided-in-the-public-instance" id="id6">Using the packages provided in the public instance</a></p></li>
+<li><p><a class="reference internal" href="#registering-external-packages" id="id7">Registering external packages</a></p></li>
+<li><p><a class="reference internal" href="#sourcing-the-environments" id="id8">Sourcing the environments</a></p></li>
+<li><p><a class="reference internal" href="#installation-and-management-of-packages" id="id9">Installation and management of packages</a></p></li>
+<li><p><a class="reference internal" href="#resolving-multiple-packages-with-the-same-name" id="id10">Resolving multiple packages with the same name</a></p></li>
 </ul>
 </nav>
 <p><strong>The information below is only for the users who build OSS by themselves,
@@ -388,35 +387,12 @@ $<span class="w"> </span>git<span class="w"> </span>checkout<span class="w"> </s
 <p>Just after cloning, its branch is set to the default <code class="docutils literal notranslate"><span class="pre">develop</span></code>.
 In this sample, we switch to the <code class="docutils literal notranslate"><span class="pre">fugaku-v1.0.1</span></code> branch.</p>
 </section>
-<section id="compiler-setup">
-<h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">3.2. </span>Compiler setup</a><a class="headerlink" href="#compiler-setup" title="Link to this heading">¶</a></h2>
-<p>First, source the Spack environment in the login node:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>.<span class="w"> </span>~/spack/share/spack/setup-env.sh
-</pre></div>
-</div>
-<p>After these settings, type:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>compilers
-</pre></div>
-</div>
-<p>If you have an output</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">==</span>&gt;<span class="w"> </span>Available<span class="w"> </span>compilers
---<span class="w"> </span>fj<span class="w"> </span>rhel8-x86_64<span class="w"> </span>----------------------------------------------
-<span class="o">[</span>e<span class="o">]</span><span class="w">  </span>fj@4.12.0<span class="w">  </span><span class="o">[</span>e<span class="o">]</span><span class="w">  </span>fj@4.11.2<span class="w">  </span><span class="o">[</span>e<span class="o">]</span><span class="w">  </span>fj@4.11.1<span class="w">  </span><span class="o">[</span>e<span class="o">]</span><span class="w">  </span>fj@4.10.0
-
---<span class="w"> </span>gcc<span class="w"> </span>rhel8-aarch64<span class="w"> </span>--------------------------------------------
-<span class="o">[</span>+<span class="o">]</span><span class="w">  </span>gcc@15.1.0<span class="w">  </span><span class="o">[</span>+<span class="o">]</span><span class="w">  </span>gcc@14.3.0<span class="w">  </span><span class="o">[</span>+<span class="o">]</span><span class="w">  </span>gcc@13.4.0
-
---<span class="w"> </span>gcc<span class="w"> </span>rhel8-x86_64<span class="w"> </span>---------------------------------------------
-<span class="o">[</span>e<span class="o">]</span><span class="w">  </span>gcc@8.5.0<span class="w">  </span><span class="o">[</span>+<span class="o">]</span><span class="w">  </span>gcc@15.1.0<span class="w">  </span><span class="o">[</span>+<span class="o">]</span><span class="w">  </span>gcc@14.3.0
-
---<span class="w"> </span>llvm<span class="w"> </span>rhel8-aarch64<span class="w"> </span>-------------------------------------------
-<span class="o">[</span>+<span class="o">]</span><span class="w">  </span>llvm@20.1.6<span class="w">  </span><span class="o">[</span>+<span class="o">]</span><span class="w">  </span>llvm@19.1.7<span class="w">  </span><span class="o">[</span>+<span class="o">]</span><span class="w">  </span>llvm@18.1.8<span class="w">  </span><span class="o">[</span>+<span class="o">]</span><span class="w">  </span>llvm@17.0.6<span class="w">  </span><span class="o">[</span>+<span class="o">]</span><span class="w">  </span>llvm@16.0.6<span class="w">  </span><span class="o">[</span>+<span class="o">]</span><span class="w">  </span>llvm@14.0.6
-</pre></div>
-</div>
-<p>the setup of compilers is successful.</p>
-</section>
 <section id="using-the-packages-provided-in-the-public-instance">
-<h2><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">3.3. </span>Using the packages provided in the public instance</a><a class="headerlink" href="#using-the-packages-provided-in-the-public-instance" title="Link to this heading">¶</a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">3.2. </span>Using the packages provided in the public instance</a><a class="headerlink" href="#using-the-packages-provided-in-the-public-instance" title="Link to this heading">¶</a></h2>
+<p>First, source the Spack environment in the login node:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>.<span class="w"> </span><span class="nv">$TMPDIR</span>/spack/share/spack/setup-env.sh
+</pre></div>
+</div>
 <p>Spack has a “chaining” functionality where an instance can refer packages installed in other instances.
 Here, we introduce to set the public instance as an upstream of the private instance of each user
 so that the packages installed in the public instance is available from the private instance.
@@ -426,8 +402,31 @@ For this functionality, create and edit a file <code class="docutils literal not
 <span class="w">    </span><span class="nt">install_tree</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/vol0004/apps/oss/spack/opt/spack</span>
 </pre></div>
 </div>
+<p>After these settings, type:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>compilers
+</pre></div>
+</div>
+<p>If you have an output</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">==</span>&gt;<span class="w"> </span>Available<span class="w"> </span>compilers
+--<span class="w"> </span>fj<span class="w"> </span>rhel8-x86_64<span class="w"> </span>----------------------------------------------
+<span class="o">[</span>e<span class="o">]</span><span class="w">  </span>fj@4.12.1<span class="w">  </span><span class="o">[</span>e<span class="o">]</span><span class="w">  </span>fj@4.12.0<span class="w">  </span><span class="o">[</span>e<span class="o">]</span><span class="w">  </span>fj@4.11.2<span class="w">  </span><span class="o">[</span>e<span class="o">]</span><span class="w">  </span>fj@4.11.1<span class="w">  </span><span class="o">[</span>e<span class="o">]</span><span class="w">  </span>fj@4.10.0
+
+--<span class="w"> </span>gcc<span class="w"> </span>rhel8-aarch64<span class="w"> </span>--------------------------------------------
+<span class="o">[</span>^<span class="o">]</span><span class="w">  </span>gcc@15.1.0<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>gcc@14.3.0<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>gcc@13.4.0
+
+--<span class="w"> </span>gcc<span class="w"> </span>rhel8-x86_64<span class="w"> </span>---------------------------------------------
+<span class="o">[</span>e<span class="o">]</span><span class="w">  </span>gcc@8.5.0<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>gcc@15.1.0<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>gcc@14.3.0
+
+--<span class="w"> </span>llvm<span class="w"> </span>rhel8-aarch64<span class="w"> </span>-------------------------------------------
+<span class="o">[</span>^<span class="o">]</span><span class="w">  </span>llvm@20.1.6<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>llvm@19.1.7<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>llvm@18.1.8<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>llvm@17.0.6<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>llvm@16.0.6<span class="w">  </span><span class="o">[</span>^<span class="o">]</span><span class="w">  </span>llvm@14.0.6
+</pre></div>
+</div>
+<p>the setup of compilers is successful.</p>
 <p>Then, type</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>/vol0004/apps/oss/spack/var/spack/repos/local
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>/vol0004/apps/oss/spack/var/spack/fugaku-packages/repos/spack_repo/fugaku/local
+$<span class="w"> </span>spack<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>/vol0004/apps/oss/spack/var/spack/fugaku-packages/repos/spack_repo/fugaku/update
+$<span class="w"> </span>spack<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>/vol0004/apps/oss/spack/var/spack/fugaku-packages/repos/spack_repo/fugaku/rist
+$<span class="w"> </span>spack<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>/vol0004/apps/oss/spack/var/spack/fugaku-packages/repos/spack_repo/fugaku/rccs
 </pre></div>
 </div>
 <p>to register the local repository.</p>
@@ -438,27 +437,27 @@ For this functionality, create and edit a file <code class="docutils literal not
 <p>to ensure that you find the OSS provided by the public instance.</p>
 </section>
 <section id="registering-external-packages">
-<h2><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">3.4. </span>Registering external packages</a><a class="headerlink" href="#registering-external-packages" title="Link to this heading">¶</a></h2>
+<h2><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">3.3. </span>Registering external packages</a><a class="headerlink" href="#registering-external-packages" title="Link to this heading">¶</a></h2>
 <p>Copy <code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> from the system to use external packages such
 as Fujitsu MPI.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cp<span class="w"> </span>/vol0004/apps/oss/spack/etc/spack/packages.yaml<span class="w"> </span>~/.spack/linux/
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cp<span class="w"> </span>/vol0004/apps/oss/spack/etc/spack/packages.yaml<span class="w"> </span>~/.spack/
 </pre></div>
 </div>
 </section>
 <section id="sourcing-the-environments">
-<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">3.5. </span>Sourcing the environments</a><a class="headerlink" href="#sourcing-the-environments" title="Link to this heading">¶</a></h2>
+<h2><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">3.4. </span>Sourcing the environments</a><a class="headerlink" href="#sourcing-the-environments" title="Link to this heading">¶</a></h2>
 <p>Spack is available or refreshed after sourcing the script by typing as follows.</p>
 <p>For <code class="docutils literal notranslate"><span class="pre">bash</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>.<span class="w"> </span>~/spack/share/spack/setup-env.sh
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>.<span class="w"> </span><span class="nv">$TMPDIR</span>/spack/share/spack/setup-env.sh
 </pre></div>
 </div>
 <p>For <code class="docutils literal notranslate"><span class="pre">csh</span></code>/<code class="docutils literal notranslate"><span class="pre">tcsh</span></code>:</p>
-<div class="highlight-csh notranslate"><div class="highlight"><pre><span></span>% . ~/spack/share/spack/setup-env.csh
+<div class="highlight-csh notranslate"><div class="highlight"><pre><span></span>% . <span class="nv">$TMPDIR</span>/spack/share/spack/setup-env.csh
 </pre></div>
 </div>
 </section>
 <section id="installation-and-management-of-packages">
-<h2><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">3.6. </span>Installation and management of packages</a><a class="headerlink" href="#installation-and-management-of-packages" title="Link to this heading">¶</a></h2>
+<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">3.5. </span>Installation and management of packages</a><a class="headerlink" href="#installation-and-management-of-packages" title="Link to this heading">¶</a></h2>
 <p>By typing</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>spack<span class="w"> </span>list
 </pre></div>
@@ -508,7 +507,7 @@ and this causes an error.
 To solve this situation, refer to <a class="reference internal" href="#sec-multiple-package"><span class="std std-ref">Resolving multiple packages with the same name</span></a>.</p>
 </section>
 <section id="resolving-multiple-packages-with-the-same-name">
-<span id="sec-multiple-package"></span><h2><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">3.7. </span>Resolving multiple packages with the same name</a><a class="headerlink" href="#resolving-multiple-packages-with-the-same-name" title="Link to this heading">¶</a></h2>
+<span id="sec-multiple-package"></span><h2><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">3.6. </span>Resolving multiple packages with the same name</a><a class="headerlink" href="#resolving-multiple-packages-with-the-same-name" title="Link to this heading">¶</a></h2>
 <p>Sometimes multiple packages with the same name are installed in a Spack instance or among
 chained instances.
 It happens when different versions of a package or multiple builds for different architectures
@@ -679,12 +678,11 @@ $<span class="w"> </span>spack<span class="w"> </span>load<span class="w"> </spa
 </li>
 <li><a class="reference internal" href="#using-private-instance">3. Using Private Instance</a><ul>
 <li><a class="reference internal" href="#cloning-the-repository">3.1. Cloning the repository</a></li>
-<li><a class="reference internal" href="#compiler-setup">3.2. Compiler setup</a></li>
-<li><a class="reference internal" href="#using-the-packages-provided-in-the-public-instance">3.3. Using the packages provided in the public instance</a></li>
-<li><a class="reference internal" href="#registering-external-packages">3.4. Registering external packages</a></li>
-<li><a class="reference internal" href="#sourcing-the-environments">3.5. Sourcing the environments</a></li>
-<li><a class="reference internal" href="#installation-and-management-of-packages">3.6. Installation and management of packages</a></li>
-<li><a class="reference internal" href="#resolving-multiple-packages-with-the-same-name">3.7. Resolving multiple packages with the same name</a></li>
+<li><a class="reference internal" href="#using-the-packages-provided-in-the-public-instance">3.2. Using the packages provided in the public instance</a></li>
+<li><a class="reference internal" href="#registering-external-packages">3.3. Registering external packages</a></li>
+<li><a class="reference internal" href="#sourcing-the-environments">3.4. Sourcing the environments</a></li>
+<li><a class="reference internal" href="#installation-and-management-of-packages">3.5. Installation and management of packages</a></li>
+<li><a class="reference internal" href="#resolving-multiple-packages-with-the-same-name">3.6. Resolving multiple packages with the same name</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#known-issues-and-remedies">4. Known issues and remedies</a><ul>

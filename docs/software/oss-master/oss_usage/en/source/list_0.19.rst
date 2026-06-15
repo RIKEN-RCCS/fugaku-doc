@@ -1,17 +1,17 @@
-Spack v0.17.0
+Spack v0.19.0
 ====================
 
 Packages installed on the login nodes
 -----------------------------------------
 
 .. csv-table::
-   :file: oss_list_ln_0.17.csv
+   :file: oss_list_ln_0.19.csv
 
 Packages installed on the compute nodes
 -----------------------------------------
 
 .. csv-table::
-   :file: oss_list_cn_0.17.csv
+   :file: oss_list_cn_0.19.csv
 	  
 \*1 The following four applications are supported by Research Organization for Information Science and Technology (RIST).
 
@@ -34,14 +34,3 @@ For more details on their usage, please refer to:
    Quotes aren't needed because spack doesn't use a shell.
    Consider removing them
 
-\*3 User registration is needed to obtain the source code of
-NAMD. Please obtain it for yourself and install it into your own `private
-instance
-<https://www.fugaku.r-ccs.riken.jp/doc_root/en/user_guides/FugakuSpackGuide/intro.html#id5>`_
-of Spack in the following way.
-
-::
-
-   $ tar xzf NAMD_2.14_Source.tar.gz
-   $ cd NAMD_2.14_Source
-   $ spack dev-build namd
