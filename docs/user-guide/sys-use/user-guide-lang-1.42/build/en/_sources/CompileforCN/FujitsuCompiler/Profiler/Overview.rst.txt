@@ -1,0 +1,35 @@
+Overview
+========
+
+The profiler is a tool that measures performance useful for tuning to improve program execution performance, and outputs that information.
+On  |post-k|\ ,  it is composed of 3 functions: "Instant Performance Profiler", "Advanced Performance Profiler", "CPU Performance Analysis Report".
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 3 2 4 3
+
+   * - Function category
+     - Measurement command
+     - Interval specification function
+     - Post-processing command
+
+   * - Instant Performance Profiler
+     - fipp -C
+     - fipp_start/fipp_stop
+     - fipppx -A
+
+   * - Advanced Performance Profiler
+     - fapp -C
+     - fapp_start/fapp_stop
+     - fapppx -A
+
+   * - CPU Performance Analysis Report
+     - fapp -C
+     - fapp_start/fapp_stop
+     - fapppx -A -tcsv
+
+ .. seealso::
+   The measurement command is executed on the compute node.
+   
+   Post-processing commands are executed on the login node.
+

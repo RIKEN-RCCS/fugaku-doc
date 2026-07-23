@@ -1,0 +1,89 @@
+高速4倍精度基本演算ライブラリ
+================================
+
+| 高速4倍精度基本演算ライブラリ（fast_dd）は、4倍精度の値を double-double 形式で表現し演算を行うライブラリです。
+| double-double 形式は倍精度実数型の変数2つで、4倍精度変数を表現する形式です。
+| 演算はプロセッサの持つ倍精度演算命令を使って行うため、言語処理系が持つ4倍精度実数型に比べて高速に演算できます。
+
+高速4倍精度基本演算ライブラリは、Fortran、または、C++プログラムから利用できます。
+
+
+Fortran 版の結合方法
+-------------------------------
+
+fast_dd は、Fortran または C++で記述された利用者プログラムに結合して使用することができます。翻訳、結合には富士通製 Fortran/C++コンパイラを使用します。
+
+利用方法の例は以下のとおりです。
+
+1. SVE版 fast_dd のアーカイブを結合する
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,optmsg=2,SVE a.f90 -SSL2
+
+2. 汎用版 fast_dd のアーカイブを結合する
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,optmsg=2,NOSVE a.f90 -SSL2
+
+
+3. スレッド並列ルーチンを使用するユーザプログラムを翻訳し、fast_dd のアーカイブを結合する
+
+ .. code-block:: console
+
+  [_LNlogin]$ frtpx -Kfast,openmp,optmsg=2,SVE b.f90 -SSL2
+
+4. ネイティブコンパイラにより、ユーザプログラムを翻訳し、SVE版 fast_dd のアーカイブを結合する
+
+ .. code-block:: console
+
+  [_CNlogin]$ frt -Kfast,optmsg=2,SVE a.f90 -SSL2
+
+.. seealso::
+
+ - ユーザプログラムをクロスコンパイラにより翻訳し、fast_dd を結合する場合、\ :program:`frtpx`\ コマンド行に\ ``-SSL2``\ を指定します。
+ - ユーザプログラムでBLAS/LAPACK のスレッド並列版を使用する場合は、\ ``-SSL2BLAMP``\ オプションを指定します。
+ - fast_dd のスレッド並列化されたルーチンを使用する場合は、``-Kopenmp``\ または ``-Kparallel``\ オプションを追加します。
+ - ログインノードで結合する場合、\ ``-KSVE``\ が有効であれば、\ ``SVE``\ を使用したライブラリを結合します。
+ - ログインノードで結合する場合、\ ``-KNOSVE``\ が有効であれば、汎用のライブラリを結合します。
+ - 計算ノードで結合する場合、\ ``-KSVE``\ と\ ``-KNOSVE``\ のどちらを指定しても\ ``SVE``\ を使用したライブラリを結合します。
+ - ``-KSVE``\ オプションのデフォルト（省略時）は、\ ``-KSVE``\ になります。
+ - MPIプログラムを翻訳し、fast_dd を結合するためには :program:`mpifrtpx、mpifrt`\ コマンドを使用します。
+
+
+C++版の結合方法
+-------------------------------------------
+
+利用方法の例は以下のとおりです。
+
+1. ユーザプログラム\ :file:`a.cpp`\ を翻訳し, SVE版 fast_dd のアーカイブを結合する
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,openmp,optmsg=2,SVE a.cpp -SSL2
+
+2. ユーザプログラム\ :file:`a.cpp`\ を翻訳し, 汎用版 fast_dd のアーカイブを結合する
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,openmp,optmsg=2,NOSVE a.cpp -SSL2
+
+3. ネイティブコンパイラでユーザプログラムを翻訳し、SVE 版 fast_dd のアーカイブを結合する
+
+ .. code-block:: console
+
+  [_CNlogin]$ FCC -Kfast,openmp,optmsg=2,SVE a.cpp -SSL2
+
+
+.. seealso::
+
+ - ユーザプログラムをクロスコンパイラにより翻訳し、fast_dd を結合するためには、\ :program:`FCCpx`\ コマンド行に\ ``-SSL2``\ を指定します。
+ - ユーザプログラムでBLAS/LAPACK のスレッド並列版を使用する場合は、\ ``-SSL2BLAMP``\ オプションを指定します。
+ - fast_dd はスレッドセーフなオブジェクトであるため、``-Kopenmp、-Kparallel``\ 、または、\ ``-mt``\ のいずれかを指定します。
+ - ログインノードで結合する場合、\ ``-KSVE``\ が有効であれば、\ ``SVE``\ を使用したライブラリを結合します。
+ - ログインノードで結合する場合、\ ``-KNOSVE``\ が有効であれば、汎用のライブラリを結合します。
+ - 計算ノードで結合する場合、\ ``-KSVE``\ と\ ``-KNOSVE``\ のどちらを指定しても\ ``SVE``\ を使用したライブラリを結合します。
+ - ``-KSVE``\ オプションのデフォルト（省略時）は、\ ``-KSVE``\ になります。
+ - MPIプログラムを翻訳し、fast_dd を結合するためには、\ :program:`mpiFCCpx、mpiFCC`\ コマンドを使用します。
+

@@ -1,0 +1,837 @@
+CPU性能解析レポート
+===============================
+
+CPU性能解析レポートは、複数の実行により計測した多数のCPU性能解析情報を集約し、表と付随するグラフを用いて可視化するものです。
+
+
+概要
+-------------------------------
+
+CPU性能解析レポートは、印刷時にA3サイズ1枚に収まるよう設計されており、表示する情報の種類や粒度によって以下のレポートを用意しています。
+
+- 単体レポート
+- 簡易レポート
+- 標準レポート
+- 詳細レポート
+
+また、CPU性能解析レポートの作成手順は以下のとおりです。
+
+.. figure:: ./img/CPUPerformanceAnalysisReport_01.png
+
+.. seealso::
+
+  CPU性能解析情報の計測には、詳細プロファイラを使用します。
+
+
+CPU性能解析レポート種別
+-------------------------------
+
+CPU性能解析レポートは、表示する情報の種類や粒度によって、単体レポート、簡易レポート、標準レポート、詳細レポートを用意しています。
+CPU性能解析レポートのファイルはMicrosoft Excelのファイル形式(.xlsm)です。
+
+各レポートの概要は以下のとおりです。
+
+
+.. list-table::
+   :header-rows: 1
+   :widths: 2 8
+
+   * - レポート種別
+     - 説明
+
+   * - 単体レポート
+     - | 作成に必要な計測回数がもっとも少ないCPU性能解析レポートです。
+       | 実行時間、演算性能、メモリースループット、命令数についてのおおまかな情報を出力します。
+       | 単体レポートを使用する場合、詳細プロファイラによる計測を1回実施してください。
+
+   * - 簡易レポート
+     - | 作成に必要な計測回数が少ないCPU性能解析レポートです。
+       | 手軽にCPU性能解析レポートを使用したい場合、簡易レポートを推奨します。情報量は標準レポートより少なくなりますが、レポート作成のための計測回数は標準レポートよりも削減できます。
+       | 簡易レポートを使用する場合、詳細プロファイラによる計測を5回実施してください。
+
+   * - 標準レポート
+     - | 標準的なCPU性能解析レポートです。通常の使用では標準レポートを推奨します。
+       | 標準レポートを使用する場合、詳細プロファイラによる計測を11回実施してください。
+
+   * - 詳細レポート
+     - | もっとも詳細なCPU性能解析レポートです。
+       | 標準レポートでは情報量に不足がある場合、詳細レポートを推奨します。レポート作成のための計測回数はもっとも多くなりますが、CPU性能解析レポートの全情報を表示します。
+       | 詳細レポートを表示する場合、詳細プロファイラによる計測を17回実施してください。
+
+.. seealso::
+
+  各レポートで使用する入力ファイルは共通です。そのため、例えば標準レポートを作成後に詳細レポートに変更したい場合、追加の計測は差分の6回分だけ必要となります。
+
+
+各CPU性能解析レポートで参照可能な情報の一覧を以下に示します。
+
+
+.. list-table::
+   :header-rows: 1
+   :widths: 3 1 1 1 1 7
+
+   * - 表タイトル
+     - 単体
+     - 簡易
+     - 標準
+     - 詳細
+     - 表の概要
+
+   * - Information
+     - ○
+     - ○
+     - ○
+     - ○
+     - 計測環境の情報およびユーザーの指定内容を表示します。
+
+   * - Statistics
+     - △
+     - ○
+     - ○
+     - ○
+     - [単体]
+        メモリースループット、命令数、演算数などCPUの動作状況に関係する情報を表示します。
+       [簡易・標準・詳細]
+        単体レポートの内容に加えて、浮動小数点演算における Active element の比率を表示します。
+
+   * - Cycle Accounting
+     - ×
+     - △
+     - ○
+     - ○
+     - プログラムの実行時間の内訳を表示します。
+       
+       [簡易]
+        プログラムの実行時間を9種類に分類して表示します。
+       [標準・詳細]
+        プログラムの実行時間を20種類に分類して表示します。
+
+   * - Busy
+     - ×
+     - △
+     - ○
+     - ○
+     - プログラムのメモリ・キャッシュおよび演算パイプラインのビジー率に関する情報を表示します。
+       
+       [簡易]
+        1次キャッシュ、2次キャッシュ、メモリー、浮動小数点演算パイプラインなどのビジー率、および、SFI(Store Fetch Interlock)の発生率を表示します。
+
+       [標準]
+        簡易レポートの内容に加えて、整数演算パイプライン、アドレス計算用演算パイプライン、および、Predicate演算用演算パイプラインのビジー率を表示します
+
+       [詳細]
+        標準レポートの内容に加えて、L1パイプラインにおける Active element の比率を表示します。
+
+   * - Cache
+     - ×
+     - △
+     - ○
+     - ○
+     - キャッシュミスに関する情報を表示します。
+
+       [簡易]
+        簡易レポートの場合、1次データキャッシュ、2次キャッシュのキャッシュミス数、および、ロードストア命令数との比率を表示します。
+
+       [標準・詳細]
+        標準レポート、または、詳細レポートの場合、簡易レポートの内容に加えてキャッシュミス数の内訳を追加します。
+
+   * - Instruction
+     - ×
+     - △
+     - △
+     - ○
+     - 命令ミックスに関する情報を表示します。
+
+       [簡易]
+        命令ミックスに関する情報を9種類に分類して表示します。
+
+       [標準]
+        命令ミックスに関する情報を25種類に分類して表示します。
+
+       [詳細]
+        命令ミックスに関する情報を28種類に分類して表示します。
+
+   * - FLOPS
+     - ×
+     - △
+     - ○
+     - ○
+     - 浮動小数点演算に関する情報を表示します。
+
+       [簡易]
+        Active elementの比率を加味した浮動小数点演算性能を表示します。
+
+       [標準・詳細]
+        簡易レポートの内容に加えて各精度浮動小数点演算数の比率を表示します。
+
+   * - Extra
+     - ×
+     - ×
+     - ×
+     - ○
+     - ギャザー命令の内訳、および、命令ミックスに含まれない命令に関する情報を表示します
+
+   * - Hardware Prefetch Rate (\%) (\/HardwarePrefetch)
+     - ×
+     - ×
+     - ×
+     - ○
+     - ハードウェアプリフェッチの内訳を表示します。
+
+   * - Data Transfer CMGs
+     - ×
+     - ×
+     - ×
+     - ○
+     - ユーザーが指定したCMGに対する、全CMG、メモリ、Tofu、およびPCI間のスループット情報を表示します。
+
+   * - Power Consumption (W)
+     - ×
+     - ×
+     - ○
+     - ○
+     - コア、L2キャッシュ、および、メモリの消費電力を表示します。
+
+
+.. note::
+
+  表内の見出し、記号の略称と説明は以下のとおりです。
+
+  - 単体：単体レポート
+  - 簡易：簡易レポート
+  - 標準：標準レポート
+  - 詳細：詳細レポート
+  - ○：すべての情報が出力される
+  - △：一部の情報が出力される
+  - ×：情報が出力されない
+
+
+計測区間指定ルーチンの追加
+-------------------------------
+
+プロファイルデータを計測する区間の指定に必要な計測区間指定ルーチン／関数をソースコードに追加します。
+
+計測区間指定機能は、Fortran言語のサブルーチン、C／C++の関数として使用可能です。
+C／C++の関数を使用する場合は、関数のプロトタイプを宣言するか、または、プロファイラサブルーチンのヘッダファイルをインクルードする必要があります。
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 1 2 2 2 2
+
+   * - 言語種別
+     - ヘッダファイル
+     - サブルーチン／関数名
+     - 引数
+     - 機能
+
+   * - Fortran
+     - なし
+     - | fapp_start
+       | fapp_stop
+     - \(name, number, level)
+     - | 情報測定開始
+       | 情報測定終了
+
+   * - C/C++
+     - fj_tool/fapp.h
+     - | void fapp_start
+       | void fapp_stop
+     - \(const char \*name, int number, int level)
+     - | 情報測定開始
+       | 情報測定終了
+
+
+  
+ [引数の詳細]
+ 
+ .. list-table::
+   :header-rows: 1
+   :widths: 2 8
+
+   * - 引数
+     - 説明
+
+   * - name
+     - グループ名（基本文字スカラ）。グループ名は、英字、数字、および下線から構成されます。他の文字は使用できません。
+
+   * - number
+     - 詳細番号（4バイトの整数型）
+
+   * - level
+     - プライオリティレベル（4バイトの整数型で0以上の整数）
+  
+ .. note::
+
+   グループ名と詳細番号を組み合わせ、測定範囲名として区別します。プライオリティレベルが、\ :program:`fapp`\ コマンドの\ ``-L``\ オプションの値より大きい場合は測定を行いません。
+
+ .. attention::
+ 
+   - 同じ計測区間名のサブルーチン／関数を複数回呼び出す場合、必ず fapp_start、fapp_stop の順番で呼び出してください。fapp_stop を呼び出す前に再度 fapp_start を呼び出した場合、または、fapp_start を呼び出す前に fapp_stop を呼び出した場合、警告メッセージを出力し、その呼び出しを無視します。
+   - 計測区間名が異なる場合、fapp_start\ 、または、\ fapp_stopが連続しても問題ありません。
+   - fapp_stop を呼び出さずにプロセスが終了した場合、その区間のプロファイルデータは計測しません。
+   - 同一の計測区間名に対する計測を複数回実施した場合、全ての計測結果を合算します。
+   - 引数 level の値は、fapp_start と fapp_stop で同じ値を指定してください。異なる値を指定した場合、 :program:`fapp`\ コマンドの ``-L`` オプションの指定によっては意図しない結果となる可能性があります。
+   - 引数\ ``name``\ に "all" かつ、\ ``number``\ に 0 を指定した場合、プログラム全体が対象になります。
+   - スレッド情報の計測はマスタースレッドで処理を開始します。マスタースレッド以外のスレッドが呼び出される範囲を計測する場合、マスタースレッドが動作する区間を含めた計測範囲にしてください。
+   - MPIプログラムの場合、計測対象とするすべてのプロセスで同じ計測区間名のサブルーチン／関数を呼び出してください。呼び出しが行われなかったプロセスのプロファイルデータは計測されません。
+
+
+計測区間指定ルーチンの使用例を示します。
+
+- Fortranの例
+
+  1. サンプル指定例
+
+    .. code-block:: fortran
+   
+     program main
+     ...
+     call fapp_start("foo",1,0)         ! 計測区間名"foo1"の計測を開始する
+     do i=1,10000
+       ...
+       call fapp_start("bar",1,0)       ! 計測区間名"bar1"の計測を開始する
+       do j=1,10000
+        ...
+       end do
+       call fapp_stop("bar",1,0)        ! 計測区間名"bar1"の計測を終了する
+     end do
+     call fapp_stop("foo",1,0)          ! 計測区間名"foo1"の計測を終了する
+     end program main
+
+  2. すべてのプロセスを計測対象とする例(mpi_initサブルーチンを呼び出す前に計測を開始する)
+
+    .. code-block:: fortran
+
+     call fapp_start("foo",1,0)         ! 計測を開始する
+     call mpi_init(err)
+     ...
+     call mpi_finalize(err)
+     call fapp_stop("foo",1,0)          ! 計測を終了する
+
+
+  3. すべてのプロセスを計測対象とする例(mpi_initサブルーチンを呼び出した直後に計測を開始する)
+
+    .. code-block:: fortran
+
+     call mpi_init(err)
+     call fapp_start("foo",1,0)         ! 計測を開始する
+     ...
+     call fapp_stop("foo",1,0)          ! 計測を終了する
+     call mpi_finalize(err)
+
+  4. プロセス0のみ計測対象とする例
+
+    .. code-block:: fortran
+
+     call mpi_init(err)
+     call mpi_comm_rank(mpi_comm_world,rank,err)
+     if(rank==0) then
+       call fapp_start("foo",1,0)       ! プロセス0のみ、計測を開始する
+     end if
+       ...
+     if(rank==0) then
+       call fapp_stop("foo",1,0)        ! プロセス0のみ、計測を終了する
+     end if
+     call mpi_finalize(err)
+
+- C/C++の例
+
+  1. サンプル指定例
+
+    .. code-block:: C
+
+     #include "fj_tool/fapp.h"          // ヘッダーファイルのインクルード
+     ...
+     int main(void)
+     {
+       int i,j;
+       fapp_start("foo",1,0);           // 計測区間名"foo1"の計測を開始する
+       for(i=0;i<10000;i++){
+         ...
+         fapp_start("bar",1,0);         // 計測区間名"bar1"の計測を開始する
+         for(j=0;j<10000;j++){
+            ...
+         }
+         fapp_stop("bar",1,0);          // 計測区間名"bar1"の計測を終了する
+       }
+       return 0;
+       fapp_stop("foo",1,0);            // 計測区間名"foo1"の計測を終了する
+     }
+
+  2. すべてのプロセスを計測対象とする例(MPI_Init関数を呼び出す前に計測を開始する)
+
+    .. code-block:: C
+     
+     fapp_start("foo",1,0);             // 計測を開始する
+     MPI_Init(&argc, &argv);
+     ...
+     MPI_Finalize();
+     fapp_stop("foo",1,0);              // 計測を終了する
+
+  3. すべてのプロセスを計測対象とする例(MPI_Init関数を呼び出した直後に計測を開始する)
+
+    .. code-block:: C
+     
+     MPI_Init(&argc, &argv);
+     fapp_start("foo",1,0);             // 計測を開始する
+     ...
+     fapp_stop("foo",1,0);              // 計測を終了する
+     MPI_Finalize();
+
+  4. プロセス0のみ計測対象とする例
+
+    .. code-block:: C
+     
+     MPI_Init(&argc, &argv);
+     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+     if(rank==0){
+       fapp_start("foo",1,0);           // プロセス0のみ、計測を開始する
+     }
+     ...
+     if(rank==0){
+       fapp_stop("foo",1,0);            // プロセス0のみ、計測を終了する
+     }
+     MPI_Finalize();
+
+
+コンパイル／リンク
+-------------------------------
+
+| 詳細プロファイラ機能を利用するために必要なツールライブラリはコンパイル／リンク時にデフォルトでリンクされます。
+| したがって、コンパイル／リンク時にプロファイラ用のオプション等はありません。
+| なお、コンパイル／リンクは、ログインノード、または、計算ノードで行います。
+
+
+- コンパイル／リンク例（MPIプログラムの場合）
+
+ .. code-block:: console
+
+   [_LNlogin]$ mpifrtpx -Kfast,parallel "ソースファイル名"
+
+- コンパイル／リンク例（逐次／スレッド並列プログラムの場合）
+
+ .. code-block:: console
+
+   [_LNlogin]$ frtpx -Kfast,parallel "ソースファイル名"
+
+ .. attention::
+
+   分割コンパイルを行う場合は、適切なプロファイラのライブラリがリンクされるように、原則としてコンパイル時に指定した最適化オプションは、リンク時にも指定してください。
+
+   例）OpenMPを利用するプログラムは、リンク時にも\ ``-Kopenmp``\ オプションを指定する。
+
+Fortranの翻訳時オプションについて
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+| Fortranプログラムを翻訳する際に使用するプロファイラ向け翻訳時オプションを以下に示します。
+| 本オプションはリンク時に有効になります。
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 2 8
+
+   * - オプション
+     - 説明
+
+   * - \-Nfjprof
+     - ツールライブラリを結合します。
+       省略時は\ ``-Nfjprof``\ が有効になります。
+
+   * - \-Nnofjprof
+     - ツールライブラリを結合しません。
+       プロファイラを使用できません。
+
+
+C/C++の翻訳時オプションについて
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+| C／C++言語の場合、tradモードとclangモードという2種類のモードが存在します。
+| それぞれのモードでプログラムを翻訳する際に使用するプロファイラ向け翻訳時オプションを以下に示します。
+| 本オプションはリンク時に有効になります。
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 1 2 7
+
+   * - モード
+     - オプション
+     - 説明
+
+   * - trad
+     - \-Nfjprof
+     - ツールライブラリを結合します。
+       省略時は\ ``-Nfjprof``\ が有効になります。
+
+   * - trad
+     - \-Nnofjprof
+     - ツールライブラリを結合しません。
+       プロファイラは使用できません。
+
+   * - clang
+     - \-ffj-fjprof
+     - ツールライブラリを結合します。
+       省略時は\ ``-ffj-fjprof``\ が有効になります。
+   * - clang
+     - \-ffj-no-fjprof
+     - ツールライブラリを結合しません。
+       プロファイラは使用できません。
+
+
+.. _CPUPerformanceAnalysisReportUsageProcedure:
+
+プロファイルデータの計測
+-------------------------------
+
+| 詳細プロファイラの\ :program:`fapp`\ コマンドを使用して計測します。CPU性能解析レポート用にプロファイルデータを計測する場合、\ :program:`fapp`\ コマンドに\ ``-Hevent``\ オプションを指定する必要があります。
+| 本操作は計算ノードで実施します。
+
+以下に、レポートごとの実行例を示します。
+
+- 単体レポート
+
+  単体レポートを作成する場合、\ ``-Hevent=pa1`` を指定した1回の計測を実施してください。
+
+ .. code-block:: console
+
+  # 単体レポート作成時の計測例
+  fapp -C -d ./rep1 -Hevent=pa1 ./a.out
+
+
+
+
+- 簡易レポート
+
+  簡易レポートを作成する場合、\ ``-Hevent=pa1``\ から\ ``-Hevent=pa5``\ を指定した5回の計測を実施してください。
+
+ .. code-block:: console
+
+  # 簡易レポート作成時の計測例
+  fapp -C -d ./rep1 -Hevent=pa1 ./a.out
+  fapp -C -d ./rep2 -Hevent=pa2 ./a.out
+  fapp -C -d ./rep3 -Hevent=pa3 ./a.out
+  fapp -C -d ./rep4 -Hevent=pa4 ./a.out
+  fapp -C -d ./rep5 -Hevent=pa5 ./a.out
+
+- 標準レポート
+
+  標準レポートを作成する場合、\ ``-Hevent=pa1``\ から\ ``-Hevent=pa11``\ を指定した11回の計測を実施してください。
+
+ .. code-block:: console
+
+  # 標準レポート作成時の計測例
+  fapp -C -d ./rep1  -Hevent=pa1  ./a.out
+  fapp -C -d ./rep2  -Hevent=pa2  ./a.out
+  fapp -C -d ./rep3  -Hevent=pa3  ./a.out
+  fapp -C -d ./rep4  -Hevent=pa4  ./a.out
+  fapp -C -d ./rep5  -Hevent=pa5  ./a.out
+  fapp -C -d ./rep6  -Hevent=pa6  ./a.out
+  fapp -C -d ./rep7  -Hevent=pa7  ./a.out
+  fapp -C -d ./rep8  -Hevent=pa8  ./a.out
+  fapp -C -d ./rep9  -Hevent=pa9  ./a.out
+  fapp -C -d ./rep10 -Hevent=pa10 ./a.out
+  fapp -C -d ./rep11 -Hevent=pa11 ./a.out
+
+- 詳細レポート
+
+  詳細レポートを作成する場合、\ ``-Hevent=pa1``\ から\ ``-Hevent=pa17``\ を指定した17回の計測を実施してください。
+
+ .. code-block:: console
+
+  # 詳細レポート作成時の計測例
+  fapp -C -d ./rep1  -Hevent=pa1  ./a.out
+  fapp -C -d ./rep2  -Hevent=pa2  ./a.out
+  fapp -C -d ./rep3  -Hevent=pa3  ./a.out
+  fapp -C -d ./rep4  -Hevent=pa4  ./a.out
+  fapp -C -d ./rep5  -Hevent=pa5  ./a.out
+  fapp -C -d ./rep6  -Hevent=pa6  ./a.out
+  fapp -C -d ./rep7  -Hevent=pa7  ./a.out
+  fapp -C -d ./rep8  -Hevent=pa8  ./a.out
+  fapp -C -d ./rep9  -Hevent=pa9  ./a.out
+  fapp -C -d ./rep10 -Hevent=pa10 ./a.out
+  fapp -C -d ./rep11 -Hevent=pa11 ./a.out
+  fapp -C -d ./rep12 -Hevent=pa12 ./a.out
+  fapp -C -d ./rep13 -Hevent=pa13 ./a.out
+  fapp -C -d ./rep14 -Hevent=pa14 ./a.out
+  fapp -C -d ./rep15 -Hevent=pa15 ./a.out
+  fapp -C -d ./rep16 -Hevent=pa16 ./a.out
+  fapp -C -d ./rep17 -Hevent=pa17 ./a.out
+
+
+.. attention::
+
+  - \ :program:`fapp`\ コマンドに\ ``-Inocpupa``\ オプションを指定しないでください。\ ``-Inocpupa``\ を指定すると、\ ``-Hevent``\ オプションが無効になります。
+  - ``-Hevent``\ オプションは、1回の計測で1つだけ指定できます。複数個指定した場合は、最後に指定した\ ``-Hevent`` オプションが有効になります。
+  - 計測は、順不同です。例えば、\ ``-Hevent=pa2``\ を指定して計測した後に\ ``-Hevent=pa1``\ を指定して計測しても問題ありません。
+  - 計測した\ ``-Hevent``\ オプションによって「\ :ref:`CPUPerformanceAnalysisReportOutputProfileResults`\ 」で出力するCSV形式ファイルの名前が決まっています。そのため、計測したプロファイルデータを格納するディレクトリ名は、指定した引数が判断できるよう命名することを推奨します。
+
+
+プロファイラのオプション
+-------------------------------
+
+:program:`fapp`\ コマンドのオプションについて説明します。
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 3 7
+
+   * - オプション
+     - 説明
+
+   * - | -C
+       | (必須オプション)
+     - プロファイルデータの計測を指示します。本オプションを省略した場合、エラーメッセージを出力しプログラムの実行を終了します。
+
+   * - | \-d  *profile_data*
+       | (必須オプション)
+     - | プロファイルデータを格納するディレクトリを指定します。
+       | ``profile_data``\ にはプロファイルデータを格納するディレクトリ名を、相対、または、絶対パスで指定します。指定したディレクトリは新規作成、または、空のディレクトリでなければいけません。
+       | 実行中にカレントディレクトリを移動するプログラムを解析する場合、\ ``profile_data``\ は絶対パスで指定してください。
+       | プロファイラは\ ``profile_data``\ の下に1000ファイルごとのサブディレクトリを作成します。このため、大規模ジョブが対象の場合も\ ``profile_data``\ を指定するだけで使用できます。
+
+   * - \-H\ *item*
+     - | CPU性能解析情報の計測オプションを指定します。
+       | ``-Inocpupa``\ オプションが指定されていた場合、警告メッセージを出力して本オプションは無効になります。
+       | サブオプション\ ``event=event``\ 、または、\ ``event_raw=event_raw``\ はどちらか1つを必ず指定してください。
+       | *item*：{event=\ *event* | event_raw=\ *event_raw* } [,method={fast | normal},mode={all | user}]
+
+       event=\ *event*
+        CPU性能解析レポートに使用する情報を計測します。\ *event*\ には以下のいずれか1つを指定します。\ ``pa1``\ と\ ``statistics``\ は同値です。
+        
+        { pa1 | pa2 | pa3 | pa4 | pa5 | pa6 | pa7 | pa8 | pa9 | pa10 | pa11 | pa12 | pa13 | pa14 | pa15 | pa16 | pa17 | statistics}
+       
+       event_raw=\ *event_raw*
+        PMUイベント情報のイベント番号を指定して、CPU性能解析情報を計測します。*event_raw* には、CPUに対応したイベント番号を10進数または16進数表記で指定します。*event_raw* は、コンマ(,)で区切ることで、最大8個まで指定できます。
+
+       method=fast
+        CPU性能解析情報の計測方式を指定します。本サブオプションを指定した場合、ハードウェアの情報を直接計測する方式により、高精度のCPU性能解析情報の計測を行います。
+
+       method=normal
+        CPU性能解析情報の計測方式を指定します。本サブオプションを指定した場合、OSを経由して計測する方法によりCPU性能解析情報の計測を行います。省略時は、\ ``method=normal``\ になります。
+
+       mode=all
+        CPU性能解析情報の計測モードを指定します。本サブオプションを指定した場合、カーネルモードおよびユーザーモードにおける性能計測を行います。\ ``mode=``\ の省略時は、\ ``mode=all``\ が有効になります。
+
+       mode=user
+        CPU性能解析情報の計測モードを指定します。本サブオプションを指定した場合、ユーザーモードにおける性能計測を行います。
+
+   * - | \-I\ *item*
+       | （ハイフン＋大文字アイ）
+     - | 詳細プロファイラで計測する項目を指定します。複数の\ *item*\ を指定する場合は、カンマで区切ってください。
+       | *item* ：{{``cpupa`` | ``nocpupa``} | {``cputime`` | ``nocputime``} | {``mpi`` | ``nompi``}}
+       
+       | 本オプション省略時の動作は、計測する項目により異なります。
+       | CPU動作状況の計測は、\ ``-H``\ オプションが指定されている場合は、 \ ``-Icpupa``\ が有効になり、\ ``-H``\ オプションが指定されていない場合は、 \ ``-Inocpupa``\ が有効になります。
+       | ``-I{cputime|nocputime}``\ オプション省略時は、\ ``-Icputime``\ オプションが有効になります。\ ``-Icpupa``\ オプションが有効な場合のみ、\ ``-Inocputime``\ が指定できます。
+       | MPIコスト情報の計測は、\ 対象がMPIプログラムの場合は、\ ``mpi``\ が有効になり、対象が非MPIプログラムの場合は、\ ``nompi``\ が有効になります。
+       
+       cpupa：
+        CPU動作状況を計測します。
+       nocpupa：
+        CPU動作状況を計測しません。
+       cputime：
+        ユーザCPU時間およびシステムCPU時間を計測します。
+       nocputime：
+        ユーザCPU時間およびシステムCPU時間を計測しないかわりに、CPU性能解析情報の計測にかかる時間を短縮します。
+       mpi：
+        MPIコスト情報を計測します。
+       nompi：
+        MPIコスト情報を計測しません。
+
+   * - \-L *level*
+     - | 計測対象の起動レベルを指定します。
+       | level には 0 から 2,147,483,647 の範囲の整数値を指定します。本オプションは計測区間指定ルーチンの第3引数 level に対して意味を持ちます。 "level">="計測区間指定ルーチンの第3引数level"の区間のみ計測対象として有効にします。
+       | 本オプション省略時は、\ ``-L 0``\  が有効になります。
+
+   * - \exec-file [ exec_option ... ]
+     - プロファイルデータの計測対象となる実行ファイルとオプションを指定します。MPIプログラムの場合、\ :program:`mpiexec`\ から指定します。
+
+
+.. _CPUPerformanceAnalysisReportOutputProfileResults:
+
+プロファイル結果の出力
+-------------------------------
+
+| 詳細プロファイラの\ ``fapppx``\ コマンドを使用して、CPU性能解析レポートに使用するCSV形式ファイルを出力します。CPU性能解析レポートの入力となるCSV形式ファイルを出力する場合、\ ``fapppx``\ コマンドに\ ``-tcsv``\ オプションを指定してください。
+
+
+| 以下に、レポートごとの実行例を示します。
+| なお、入力となるプロファイルデータについては「\ :ref:`AdvancedProfilerOutputProfileResults`\ 」および「\ :ref:`CPUPerformanceAnalysisReportUsageProcedure`\ 」を参考にしてください。
+
+- 単体レポート
+
+  単体レポートを作成する場合、\ ``-Hevent=pa1``\ のプロファイルデータを使用して、\ :file:`pa1.csv`\ の1個のCSV形式ファイルを出力してください。
+
+ .. code-block:: console
+
+   # "rep1"ディレクトリに格納したプロファイルデータを、
+   # CPU性能解析レポート用にCSV形式で出力する例
+
+   $ fapppx -A -d ./rep1 -Icpupa -tcsv -o pa1.csv
+
+
+- 簡易レポート
+
+  簡易レポートを作成する場合、\ ``-Hevent=pa1``\ から\ ``-Hevent=pa5``\ のプロファイルデータを使用して、\ :file:`pa1.csv`\ から\ :file:`pa5.csv`\ の5個のCSV形式ファイルを出力してください。
+
+ .. code-block:: console
+
+   # "rep1"から"rep5"ディレクトリに格納したプロファイルデータを、
+   #  CPU性能解析レポート用にCSV形式で出力する例
+
+   $ fapppx -A -d ./rep1 -Icpupa -tcsv -o pa1.csv
+   $ fapppx -A -d ./rep2 -Icpupa -tcsv -o pa2.csv
+   $ fapppx -A -d ./rep3 -Icpupa -tcsv -o pa3.csv
+   $ fapppx -A -d ./rep4 -Icpupa -tcsv -o pa4.csv
+   $ fapppx -A -d ./rep5 -Icpupa -tcsv -o pa5.csv
+
+- 標準レポート
+
+  標準レポートを作成する場合、\ ``-Hevent=pa1``\ から\ ``-Hevent=pa11``\ のプロファイルデータを使用して、\ :file:`pa1.csv`\ から\ :file:`pa11.csv`\ の11個のCSV形式ファイルを出力してください。
+
+ .. code-block:: console
+
+   # "rep1"から"rep11"ディレクトリに格納したプロファイルデータを、
+   #  CPU性能解析レポート用にCSV形式で出力する例
+
+   $ fapppx -A -d ./rep1  -Icpupa -tcsv -o pa1.csv
+   $ fapppx -A -d ./rep2  -Icpupa -tcsv -o pa2.csv
+   $ fapppx -A -d ./rep3  -Icpupa -tcsv -o pa3.csv
+   $ fapppx -A -d ./rep4  -Icpupa -tcsv -o pa4.csv
+   $ fapppx -A -d ./rep5  -Icpupa -tcsv -o pa5.csv
+   $ fapppx -A -d ./rep6  -Icpupa -tcsv -o pa6.csv
+   $ fapppx -A -d ./rep7  -Icpupa -tcsv -o pa7.csv
+   $ fapppx -A -d ./rep8  -Icpupa -tcsv -o pa8.csv
+   $ fapppx -A -d ./rep9  -Icpupa -tcsv -o pa9.csv
+   $ fapppx -A -d ./rep10 -Icpupa -tcsv -o pa10.csv
+   $ fapppx -A -d ./rep11 -Icpupa -tcsv -o pa11.csv
+
+
+- 詳細レポート
+
+  詳細レポートを作成する場合、\ ``-Hevent=pa1``\ から\ ``-Hevent=pa17``\ のプロファイルデータを使用して、\ :file:`pa1.csv`\ から\ :file:`pa17.csv`\ の11個のCSV形式ファイルを出力してください。
+
+ .. code-block:: console
+
+   # "rep1"から"rep17"ディレクトリに格納したプロファイルデータを、
+   #  CPU性能解析レポート用にCSV形式で出力する例
+
+   $ fapppx -A -d ./rep1  -Icpupa -tcsv -o pa1.csv
+   $ fapppx -A -d ./rep2  -Icpupa -tcsv -o pa2.csv
+   $ fapppx -A -d ./rep3  -Icpupa -tcsv -o pa3.csv
+   $ fapppx -A -d ./rep4  -Icpupa -tcsv -o pa4.csv
+   $ fapppx -A -d ./rep5  -Icpupa -tcsv -o pa5.csv
+   $ fapppx -A -d ./rep6  -Icpupa -tcsv -o pa6.csv
+   $ fapppx -A -d ./rep7  -Icpupa -tcsv -o pa7.csv
+   $ fapppx -A -d ./rep8  -Icpupa -tcsv -o pa8.csv
+   $ fapppx -A -d ./rep9  -Icpupa -tcsv -o pa9.csv
+   $ fapppx -A -d ./rep10 -Icpupa -tcsv -o pa10.csv
+   $ fapppx -A -d ./rep11 -Icpupa -tcsv -o pa11.csv
+   $ fapppx -A -d ./rep12 -Icpupa -tcsv -o pa12.csv
+   $ fapppx -A -d ./rep13 -Icpupa -tcsv -o pa13.csv
+   $ fapppx -A -d ./rep14 -Icpupa -tcsv -o pa14.csv
+   $ fapppx -A -d ./rep15 -Icpupa -tcsv -o pa15.csv
+   $ fapppx -A -d ./rep16 -Icpupa -tcsv -o pa16.csv
+   $ fapppx -A -d ./rep17 -Icpupa -tcsv -o pa17.csv
+
+
+.. attention::
+
+   - :program:`fapppx`\ コマンドに、\ ``-Inocpupa``\ オプションを指定した場合、CPU性能解析レポートに必要な情報が出力されません。
+   - 出力は順不同です。例えば、pa2.csv を出力した後に、pa1.csv を出力しても問題ありません。
+
+.. attention::
+
+   計測区間が多く、プロセス数も多い場合に、csvファイルがExcelの扱える最大行数（1048576行）を超える場合があります。
+   最大行数を越えた場合はExcelで読み込むことができないため\ ``The file format is not supported``\ のメッセージを出力してCPU性能解析レポートが作成されません。
+
+   このような場合はcsvファイルへの出力を削減するように対処してください。
+   
+   対処方法の例を次に示します。
+   
+   1. fapp_start/fapp_stopの計測区間を削減
+        プログラム修正により計測区間を適宜削減します。
+
+   #. fapp_start(name,number,level)/fapp_stop(name,number,level)の引数levelの使用
+        プログラム修正を伴いますが、fapp_start/fapp_stopの記述はそのままで、引数levelで計測区間をレベル分けし、\ :program:`fapp`\ のオプション\ ``-L``\ を用いることで必要としないレベルの区間の出力を抑止します。
+
+   #. fapppx -A -Icpupa,nompi によるMPI情報の出力抑止
+        MPI情報が不要な場合に有効です。
+
+   #. fapppx -A -p オプションによる出力プロセスの指定
+        採取対象のプロセスが判明している場合に有効です。
+        
+        fapppx -A -p<n>,limit=<m>
+        
+        nは出力するプロセスを指定します。複数のプロセスを指定する場合はカンマで区切ります。例えば\ ``-p3,5,limit=10``\ のような指定ができます。
+        mは出力するプロセス数を指定します。nで指定したプロセスを含むコスト上位m件のプロセスを出力します。
+        
+
+CPU性能解析レポートの作成
+-------------------------------
+
+詳細プロファイラの\ ``fapppx``\ コマンドにより出力したCSVファイルを、以下の手順でCPU性能解析レポートに取り込みます。
+
+
+1. CSVファイルと、CPU性能解析レポートファイル（cpu_pa_report.xlsm）を同一ディレクトリ内に格納します。
+
+ .. seealso::
+
+   CPU性能解析レポートファイルは以下に格納されています。
+   
+   :file:`\${FJSVXTCLANGA}/misc/cpupa/cpu_pa_report.xlsm`
+
+2. 1.で準備したディレクトリを、Microsoft Excelが実行できる環境にコピーします。
+3. CPU性能解析レポートファイル（cpu_pa_report.xlsm）を起動します。
+
+ .. seealso::
+
+   CPU性能解析レポートはMicrosoft Execlのマクロ機能を使用しています。セキュリティ設定によってマクロが無効化された場合、手動でマクロを有効にしてください。
+
+4. CPU性能解析レポートに出力する内容を選択するためのダイアログが表示されます。必要な情報を入力してください。
+
+ a. CSV形式ファイル内に複数プロセスのデータが存在する場合、プロセス番号入力画面で、参照したいプロセス番号を入力してください。プロセスが1つしかない場合は、プロセス番号入力画面を表示しません。
+
+   .. figure:: ./img/CPUPerformanceAnalysisReportCreateReport_01.png
+
+ b. 指定したプロセス内が複数のCMGで実行された場合、CMG番号入力画面で、参照したいCMG番号を入力してください。CMGが1つしかない場合は、CMG番号入力画面を表示しません。
+
+   .. figure:: ./img/CPUPerformanceAnalysisReportCreateReport_02.png
+
+ c. 指定したプロセス内に計測区間指定ルーチンで指定した計測区間が複数存在する場合、計測区間選択画面で、参照したい計測区間名を選択してください。計測区間が1つしかない場合は、計測区間選択画面を表示しません。
+
+   .. figure:: ./img/CPUPerformanceAnalysisReportCreateReport_03.png
+
+5. CSV形式ファイルの読み込みを開始します。読み込み対象となるファイルは、CPU性能解析レポートファイルと同一ディレクトリ内にあるpa1.csvからpa17.csvという名前のファイルのみです。正常終了した場合、作成したレポートごとに以下のメッセージを表示します。
+
+
+ .. list-table::
+   :header-rows: 1
+   :widths: 5 5
+
+   * - メッセージ
+     - メッセージ内容
+
+   * - CPU Performance Analysis Report (Single Report) created
+     - CPU性能解析レポート(単体レポート)を作成しました。
+
+   * - CPU Performance Analysis Report (Brief Report) created.
+     - CPU性能解析レポート(簡易レポート)を作成しました。
+
+   * - CPU Performance Analysis Report (Standard Report) created.
+     - CPU性能解析レポート(標準レポート)を作成しました。
+
+   * - CPU Performance Analysis Report (Detail Report) created.
+     - CPU性能解析レポート(詳細レポート)を作成しました。
+
+.. seealso::
+
+  - 作成したCPU性能解析レポートの出力結果の概要、詳細については、「プロファイラ使用手引書」-「4.2 CPU性能解析レポート出力結果」を参照してください。
+  - StatisticsのFloating-point operation peak ratio (%)は、2.2GHzの性能（「富岳」におけるピーク性能）に対する比率を表しています。
+  - 作成するCPU性能解析レポートの種別は、ディレクトリ内のCSV形式のファイルの有無によって決定します。優先順位は以下のとおりです。
+  
+    1. pa1.csv～pa17.csvファイルが全て存在する場合、詳細レポートを作成します。
+    #. pa1.csv～pa11.csvファイルが全て存在する場合、標準レポートを作成します。
+    #. pa1.csv～pa5.csvファイルが全て存在する場合、簡易レポートを作成します。
+    #. pa1.csvファイルが存在する場合、単体レポートを作成します。
+
+

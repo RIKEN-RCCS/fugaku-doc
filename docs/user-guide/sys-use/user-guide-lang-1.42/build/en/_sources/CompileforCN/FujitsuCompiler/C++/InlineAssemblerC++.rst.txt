@@ -1,0 +1,7 @@
+Inline Assembler
+================
+
+C / C ++ can embed specific assembler code described in the source program into the output code of the compiler by using the asm statement.
+
+Please refer to  :ref:`InlineAssemblerC` .
+

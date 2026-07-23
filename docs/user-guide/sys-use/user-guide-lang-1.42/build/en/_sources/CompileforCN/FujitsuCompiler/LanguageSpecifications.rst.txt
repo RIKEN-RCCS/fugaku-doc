@@ -1,0 +1,59 @@
+.. _LanguageSpecifications:
+
+Language specification
+======================
+
+Compiler language standard is as following.
+ 
+- Fortran
+
+  - ISO/IEC 1539:2018 (Fortran 2018 standard) subset
+  - ISO/IEC 1539-1:2010 (Fortran 2008 standard)
+  - ISO/IEC 1539-1:2004, JIS X 3001-1:2009 (Fortran 2003 standard)
+  - ISO/IEC 1539-1:1997, JIS X 3001-1:1998 (Fortran 95 standard)
+  - Fortran 90 standard and FORTRAN77 standard
+  - OpenMP Application Program Interface Version 3.1 July 2011
+  - OpenMP Application Program Interface Version 4.0 July 2013
+  - OpenMP Application Programming Interface Version 4.5 November 2015
+  - OpenMP Application Programming Interface Version 5.0 November 2018 subset
+ 
+- C
+
+  - ISO/IEC 9899:2011 (C11 standard)
+  - ISO/IEC 9899:1999 (C99 standard)
+  - ISO/IEC 9899:1990 (C89 standard)
+  - GNU compiler expanded specification
+  - Clang compatible specifications
+  - OpenMP Application Program Interface Version 3.1 July 2011
+  - OpenMP Application Program Interface Version 4.0 July 2013
+  - OpenMP Application Programming Interface Version 4.5 November 2015
+  - OpenMP Application Programming Interface Version 5.0 November 2018 subset
+ 
+- C++
+
+  - ISO/IEC 14882:2017 (C++17 standard) subset
+  - ISO/IEC 14882:2014 (C++14 standard)
+  - ISO/IEC 14882:2011 (C++11 standard)
+  - ISO/IEC 14882:2011 (C++03 standard)
+  - GNU compiler expanded specification
+  - Clang compatible specifications
+  - OpenMP Application Program Interface Version 3.1 July 2011
+  - OpenMP Application Program Interface Version 4.0 July 2013
+  - OpenMP Application Programming Interface Version 4.5 November 2015
+  - OpenMP Application Programming Interface Version 5.0 November 2018 subset
+
+- MPI
+
+  - MPI-3.1
+  - MPI-4.0 subset
+
+.. note::
+
+   OpenMP supports different specifications depending on the OpenMP library.
+   The C/C++ compiler supports different OpenMP specifications  depending on the trad/clang mode.
+
+   See the manual for details.
+
+   - the manual "Fortran User's Guide" : "12.3 Parallelization by OpenMP Specifications", "J.3 Parallelization by OpenMP Specification"
+   - the manual "C User's Guide"  : "4.3 Parallelization by OpenMP Specification", "J.3 Parallelization by OpenMP Specification"
+   - the manual "C++ User's Guide" : "4.3 Parallelization by OpenMP Specification", "I.3 Parallelization by OpenMP Specification"

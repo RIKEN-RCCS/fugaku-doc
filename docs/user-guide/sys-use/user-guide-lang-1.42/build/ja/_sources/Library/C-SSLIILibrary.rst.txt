@@ -1,0 +1,151 @@
+C-SSL II ライブラリ
+======================
+
+C-SSL II ライブラリは、Fortran言語で利用されているSSL II の豊富なサブルーチン群のサブセットに対してC言語のためのインターフェースルーチンを提供し、C言語／C++言語で利用できるようにしています。
+
+ 1. 線形計算
+ #. 固有値固有ベクトル
+ #. 非線形計算
+ #. 極値問題
+ #. 補間、近似
+ #. 変換
+ #. 数値微積分
+ #. 微分方程式
+ #. 特殊関数
+ #. 擬似乱数
+ #. 補助ルーチン
+
+
+C言語コンパイル方法
+-------------------
+
+| C-SSL II ライブラリを利用するには\ ``-SSL2``\ 、または、\ ``-SSL2BLAMP``\ オプションを指定します。
+| SSL II/MPIライブラリを使用する場合には、\ :program:`mpifccpx`\ コマンドに\ ``-SSL2MPI``\ オプションを指定し、同時に\ ``-SSL2``\ 、または、\ ``-SSL2BLAMP``\ を指定してください。
+
+コンパイル例は以下のとおりです。
+
+
+1. MPI／自動並列／SSL II（主にマルチノードジョブ）
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx  -Kfast,parallel,SVE sample.c -SSL2MPI -SSL2
+
+
+2. MPI／OpenMP／SSL II（主にマルチノードジョブ）
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpifccpx -Kfast,parallel,openmp,SVE sample.c -SSL2MPI -SSL2
+
+
+3. 逐次／SSL II（シングルノードジョブ）
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,SVE sample.c -SSL2
+
+
+4. 自動並列／SSL II（シングルノードジョブ）
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,parallel,SVE sample.c -SSL2
+
+
+5. OpenMP／SSL II（シングルノードジョブ）
+
+ .. code-block:: console
+
+  [_LNlogin]$ fccpx -Kfast,openmp,SVE sample.c -SSL2
+
+.. seealso::
+
+ - ログインノードで結合する場合、\ ``-KSVE``\ が有効であれば、\ ``SVE``\ を使用したライブラリを結合します。
+ - ログインノードで結合する場合、\ ``-KNOSVE``\ が有効であれば、汎用のライブラリを結合します。
+ - 計算ノードで結合する場合、\ ``-KSVE``\ と\ ``-KNOSVE``\ のどちらを指定しても\ ``SVE``\ を使用したライブラリを結合します。
+ - ``-KSVE``\ オプションのデフォルト（省略時）は、\ ``-KSVE``\ になります。
+ - ネイティブコンパイラでプログラムを翻訳し、C-SSL II を結合する場合、\ :program:`fcc`\ コマンドを使用します。
+ - ネイティブコンパイラでMPIプログラムを翻訳し、SSL II/MPI を結合する場合、\ :program:`mpifcc`\ コマンドを使用します。
+
+
+サンプルプログラム（C-SSL II/C）
+--------------------------------
+
+サンプルプログラムを使用して、コンパイルからジョブ実行までの例を示します。
+
+
+1. | ソースプログラムを用意します。
+   | サンプルプログラムを\ :file:`/home/system/sample/CSSL2/sample_C-SSLII-C.c`\ として用意しています。
+   | :download:`（サンプルコードのダウンロード） <./src/sample_C-SSLII-C.c>`
+
+2. サンプルプログラムをコンパイルします。
+
+ .. code-block:: console
+
+    [_LNlogin]$ fccpx -V -Kfast,optmsg=2 -Nlst=t -o sample_C-SSLII-C sample_C-SSLII-C.c -SSL2
+
+3. | ジョブスクリプトを用意します。
+   | ジョブスクリプトのサンプルは\ :file:`/home/system/sample/CSSL2/sample_C-SSLII-C.sh`\ として用意しています。
+   | :download:`（サンプルコードのダウンロード） <./src/sample_C-SSLII-C.sh>`
+
+4. :program:`pjsub`\ コマンドでジョブを投入します。
+
+ .. code-block:: console
+
+    [_LNlogin]$ pjsub sample_C-SSLII-C.sh
+    [INFO] PJM 0000 pjsub Job 138 submitted.
+
+
+C++コンパイル方法
+-------------------
+
+| C-SSL II ライブラリを利用するには\ ``-SSL2``\、または、\ ``-SSL2BLAMP``\ オプションを指定します。
+| SSL II/MPIライブラリを使用する場合には、\ :program:`mpiFCCpx`\ コマンドに\ ``-SSL2MPI``\ オプションを指定し、同時に\ ``-SSL2``\ 、または、\ ``-SSL2BLAMP``\ を指定してください。
+
+コンパイル例は以下のとおりです。
+
+1. MPI／自動並列／SSL II（主にマルチノードジョブ）
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpiFCCpx -Kfast,parallel,SVE sample.cc -SSL2MPI -SSL2
+
+
+2. MPI／OpenMP／SSL II（主にマルチノードジョブ）
+
+ .. code-block:: console
+
+  [_LNlogin]$ mpiFCCpx -Kfast,parallel,openmp,SVE sample.cc -SSL2MPI -SSL2
+
+
+3. 逐次／SSL II（シングルノードジョブ）
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,SVE sample.cc -SSL2
+
+
+4. 自動並列／SSL II（シングルノードジョブ）
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,parallel,SVE sample.cc -SSL2
+
+
+5. OpenMP／SSL II（シングルノードジョブ）
+
+ .. code-block:: console
+
+  [_LNlogin]$ FCCpx -Kfast,openmp,SVE sample.cc -SSL2
+
+
+.. seealso::
+
+ - ログインノードで結合する場合、\ ``-KSVE``\ が有効であれば、\ ``SVE``\ を使用したライブラリを結合します。
+ - ログインノードで結合する場合、\ ``-KNOSVE``\ が有効であれば、汎用のライブラリを結合します。
+ - 計算ノードで結合する場合、\ ``-KSVE``\ と\ ``-KNOSVE``\ のどちらを指定しても\ ``SVE``\ を使用したライブラリを結合します。
+ - ``-KSVE``\ オプションのデフォルト（省略時）は、\ ``-KSVE``\ になります。
+ - ネイティブコンパイラでプログラムを翻訳し、C-SSL II を結合する場合、\ :program:`FCC`\ コマンドを使用します。
+ - ネイティブコンパイラでMPIプログラムを翻訳し、SSL II/MPI を結合する場合、\ :program:`mpiFCC`\ コマンドを使用します。
+

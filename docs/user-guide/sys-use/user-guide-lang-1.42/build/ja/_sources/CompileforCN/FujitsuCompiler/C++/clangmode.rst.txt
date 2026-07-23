@@ -1,0 +1,394 @@
+clangモード
+===============
+
+ここでは、clangモードについて説明します。
+
+.. attention::
+   
+   Clang/LLVMのオプションについては、ほぼすべてのオプションを利用することができますが「C++言語使用手引書」-「9章 Clangモード」に掲載していないオプションを指定した場合、動作保証しません。
+
+
+コンパイル方法
+--------------
+
+| C++プログラムのコンパイル方法を示します。C++コンパイラは\ :program:`FCCpx`\ を使用します。
+| MPIライブラリを使用する時は、\ :program:`mpiFCCpx`\ を利用することにより、MPIのヘッダファイル、ライブラリを意識する必要がありません。
+
+
+MPIライブラリを使用する場合
+
+.. code-block:: console
+
+  [_LNlogin]$ mpiFCCpx [-Nclangオプションを含むコンパイルオプション] ソースファイル名
+
+
+MPIライブラリを使用しない場合
+
+.. code-block:: console
+
+  [_LNlogin]$ FCCpx [-Nclangオプションを含むコンパイルオプション] ソースファイル名
+
+.. seealso::
+
+   ``-Nclang``\ オプションを含むオプションの並びと、ソースファイル名の並びの指定順序に制約はありません。
+
+   ``-Nclang``\ オプションを含むオプションの並びと、ソースファイル名の並びを混在して指定してもかまいません。
+  
+
+コンパイルオプション
+------------------------
+
+C++コンパイラの主なコンパイルオプションを示します。
+
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 3,7
+
+   * - コンパイルオプション
+     - 説明
+
+   * - -c
+     - | オブジェクトファイルの作成までを行います。
+       | 翻訳処理の最後であるリンクを行いません。
+
+   * - -o exe_file
+     - | 実行可能ファイル名／オブジェクトファイル名を\ ``exe_file``\ に変更します。
+       | 実行可能ファイル名を省略した場合は\ :file:`a.out`\ となります。
+
+   * - -O [0|1|2|3|fast]
+     - | 最適化のレベルを指定します。
+       | ``-O``\ の後の文字を省略した場合は\ ``-O2``\ になります。
+       | オプション省略時は\ ``-O2``\ です。
+       | `C/C++コンパイラの最適化レベル指定オプションのデフォルト値変更 <https://www.fugaku.r-ccs.riken.jp/operation/20211208_01>`_
+
+   * - -fvectorize
+     - | ループ内の演算に対し、SIMD拡張命令を利用したオブジェクトを生成を指示します。
+       | ``-O1`` オプションが有効な場合、省略時は\ ``-fno-vectorize``\ オプションが適用されます。
+       | ``-O2`` オプション以上が有効な場合、省略時は\ ``-fvectorize``\ オプションが適用されます。
+       | tradモードの\ ``-Ksimd``\ と同じ指示です。
+
+   * - -fopenmp
+     - | OpenMP C 仕様のディレクティブを有効にします。サポートしている仕様はOpenMP 4.5/OpenMP 5.0(一部)です。
+       | オプション省略時は\ ``-fnoopenmp``\ です。
+       | ファイル名の並びに\ ``-fopenmp``\ オプションを指定して翻訳されたオブジェクトプログラムが含まれている場合、\ ``-fopenmp``\ オプションを指定する必要があります。
+
+   * - -ffj-ocl
+     - | clangモードがサポートする富士通コンパイラ独自の最適化制御行(プラグマディレクティブ)を有効化します。。
+       | オプション省略時は\ ``-ffj-no-ocl``\ です。
+
+   * - -I directory
+     - INCLUDEファイルを検索するディレクトリを指定します。
+
+   * - -Rpass=.*
+     - | 最適化情報を出力します。
+       | tradモードの\ ``-Koptmsg=2``\ と同じ指示です。
+
+   * - -std=[level]
+     - | コンパイラ(プリプロセッサを含む)が解釈する言語仕様のレベルを指定します。
+       | levelには、c++03、 c++11、c++14、c++17、gnu++03、gnu++11、gnu++14、gnu++17 のいずれかを指定します。
+       | 省略時は、\ ``-std=gnu++14``\ オプションが適用されます。
+
+   * - -ffj-src
+     - | ソースリストを出力します。
+       | tradモードの\ ``-Nsrc``\ と同じ指示です。
+
+   * - -ffj-lst[=p|t]
+     - | 翻訳情報をファイルに出力することを指示します。翻訳情報は、サフィックス".lst"の付いたファイルへ出力します。
+       | Cソースファイルを複数指定した場合には、各ファイル名.lstファイルに出力します。
+       | ``-ffj-lst``\ オプションが引数を省略して指定された場合、\ ``-ffj-lst=p``\ が適用されます。
+
+       -ffj-lst=p
+        翻訳情報として、ソースリストと統計情報を出力することを指示します。
+       -ffj-lst=t
+        ``-ffj-lst=p``\ での出力に加えて、より詳細な最適化情報を出力することを指示します。
+
+   * - -ffj-largepage
+     - 作成する実行可能プログラムがラージページ機能を使用するか否かを指示します。本オプションはプログラムのリンク時に指定する必要があります。デフォルトは、\ ``-ffj-largepage``\ です。ラージページ機能を使用しない場合は、\ ``-ffj-nolargepage``\ オプションを使用します。また、\ ``-ffj-largepage``\ オプションは、\ ``-fsanitize``\ オプションと同時に指定した場合、無効となります。
+
+   * - -mcpu
+     - | 指定したプロセッサ向けのオブジェクトファイルを出力することを指示します。
+       | 省略値は、``-mcpu=a64fx`` が適用されます。
+
+   * - -Nlibomp
+     - 並列処理にLLVM OpenMPライブラリを使用します。本オプションは、リンク時に指定する必要があります。省略時は、\ ``-Nlibomp``\ オプションが適用されます。
+
+   * - ``--version``
+     - コンパイラのバージョン情報を標準出力に出力します。
+
+.. seealso::
+
+   C++コンパイラのclangモードのコンパイルオプションについては、C++使用手引書「9.1.2 翻訳時オプション」を参照してください。
+
+
+コンパイルの推奨オプション
+--------------------------------
+
+C++コンパイラのClangモードの最適化オプションとして、\ ``-Ofast``\ を指定することを推奨します。
+
+- ``-Ofast``\ オプションは「\ ``-O3 -ffj-fast-matmul -ffast-math -ffp-contract=fast -ffj-fp-relaxed -ffj-ilfunc -fbuiltin -fomit-frame-pointer -finline-functions``\ 」を指定した時と等価になります。
+
+ .. attention::
+
+   推奨オプション以外の最適化機能は、プログラム・データの特性によって効果がある場合とそうでない場合があり、実際に試してみる必要があります。
+
+
+以下に、オプションの詳細を示します。
+
+- ``-Ofast``\ と等価になるオプション一覧
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3 7
+
+   * - オプション
+     - 説明
+
+   * - -O3
+     - 最適化レベル1、および 2 よりも高度な最適化を実施します。
+
+   * - -ffj-fast-matmul :superscript:`*`
+     - 行列積のループを高速なライブラリ呼び出しに変換します。
+
+   * - -ffast-math :superscript:`*`
+     - 演算の評価方法を変更する最適化を行います。
+
+   * - -ffp-contract=fast :superscript:`*`
+     - Floating-Point Multiply-Add\/Subtract演算命令を使用した最適化を行います。
+
+   * - -ffj-fp-relaxed :superscript:`*`
+     - 単精度浮動小数点除算、倍精度浮動小数点除算およびsqrt関数について、逆数近似演算命令とFloating-Point Multiply-Add\/Subtract命令を利用した逆数近似演算を行います。
+
+   * - -ffj-ilfunc :superscript:`*`
+     - 数学関数をインライン展開します。``-ffj-ilfunc``\ オプションのオペランド章省略時は、\ ``-ffj-ilfunc=loop``\ オプションが適用されます。
+
+   * - -fbuiltin
+     - 標準ライブラリ関数の動作を認識して、最適化を促進させます。
+
+   * - -fomit-frame-pointer
+     - 関数呼出しにおける、フレームポインタレジスタを保証しない最適化を行います。
+
+   * - -finline-functions
+     - ソースプログラム上で定義された関数をインライン展開の対象にします。
+
+
+ .. note::
+   :superscript:`*`：最適化は演算結果に影響を与える場合があります。詳細は、マニュアル「C++言語使用手引書」‐「第9章 clangモード」‐「浮動小数点演算に対する最適化とその副作用」を参照してください。
+
+
+環境変数（オプション指定）
+----------------------------
+
+C++コンパイラ（:program:`FCCpx`）が利用する環境変数を示します。
+
+1. FCCpx_ENV
+   
+   trad/clangモード共通の環境変数 FCCpx_ENV にコンパイルオプションを設定することができます。
+   FCCpx_ENV に定義されたコンパイルオプションは、自動でコンパイラに渡されます。
+   環境変数やシステムで定義されたコンパイラオプションには、次の優先順位があります。
+
+   [優先順位]
+   
+   1. 翻訳コマンドのオペランド
+   #. 翻訳時オプション設定用の環境変数（モード固有：FCCpx_clang_ENV、FCC_clang_ENV）
+   #. 翻訳時オプション設定用の環境変数（モード共通：FCCpx_ENV、FCC_ENV）
+   #. 翻訳時プロフィルファイル（モード固有：\ :file:`/etc${FJSVXTCLANGA}/FCCpx_clang_PROF`）
+   #. 翻訳時プロフィルファイル（モード共通：\ :file:`/etc${FJSVXTCLANGA}/FCCpx_PROF`）
+   #. 省略値
+
+   推奨オプションを環境変数 FCCpx_ENV に設定する例を示します。
+   
+   .. code-block:: console
+   
+     [_LNlogin]$ export FCCpx_ENV=-Ofast
+
+   有効になったコンパイルオプションは、\ ``-v``\ 、または、\ ``-###``\ オプション指定による標準出力で確認することができます。
+   
+   .. note::
+     
+     ``-v``\ オプションを指定した場合は、コマンド（翻訳）を実行します。
+   
+     ``-###``\ オプションを指定した場合は、コマンド（翻訳）は実行しません。
+
+   【\-v 指定例】
+
+   .. code-block:: console
+
+     [_LNlogin]$ FCCpx -Nclang -v sample.cc
+     clang: Fujitsu C/C++ Compiler 4.1.0 (Dec 23 2019 15:40:15) (based on LLVM 7.1.0)
+     Target: aarch64-unknown-linux-gnu
+     Thread model: posix
+     InstalledDir: (省略)
+     Found candidate GCC installation: (省略)
+     Found candidate GCC installation: (省略)
+     Selected GCC installation: (省略)
+     Candidate multilib: .;@m64
+     Selected multilib: .;@m64
+      "/opt/FJSVxtclanga/fujitsu_compilers_sve_cross_20191226/sve_cross/clang-comp/bin/clang-7" 
+      -cc1 -triple aarch64-unknown-linux-gnu -emit-obj -mrelax-all -disable-free
+     ・・・ (省略)
+
+
+2. TMPDIR
+   
+   環境変数\ :envvar:`TMPDIR`\ を用いて、コンパイラが使用するテンポラリディレクトリを変更することができます。
+   ``/etc/profile``\ で\ :envvar:`TMPDIR`\ にはホームディレクトリを設定しています。
+   
+   テンポラリディレクトリを変更する場合は、\ :file:`/tmp`\ を使用しないようにしてください。
+   :envvar:`TMPDIR`\ には\ :file:`/home/`\ 、または、\ :file:`/vol0n0m/data/`\ の書き込み可能なディレクトリを指定してください。
+
+
+並列処理用C++ライブラリ
+-----------------------------
+
+|post-k|\ では、以下のライブラリを提供します。
+
+- 標準テンプレートライブラリ(STL)として\ ``libc++``
+- 並列処理用に、以下2つのライブラリ
+
+
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3,9
+
+
+   * - ライブラリ名
+     - 説明
+
+   * - LLVM OpenMPライブラリ
+     - - オープンソースソフトウェアであるLLVM OpenMP Runtime Libraryをベースにした並列化機能用のライブラリです。
+       - サポートしている仕様は、OpenMP 4.5/OpenMP 5.0(一部)です。
+       - tradモード、および、clangモードで利用できます。
+       - tradモードはOpenMP 3.1/OpenMP 4.5(一部)を利用できます。
+       - LLVM OpenMPライブラリの仕様については、C++言語使用手引書「第4章 並列化機能」をお読みください。
+
+   * - 富士通OpenMPライブラリ
+     - - tradモードでのみ利用できます。
+       - 富士通OpenMPライブラリの仕様については、C++言語使用手引書「付録J 富士通OpenMPライブラリ」をお読みください。
+
+
+| 並列処理に使用するライブラリを指定します。
+| 本オプションは、リンク時に指定する必要があります。
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 2 9
+
+   * - オプション
+     - 説明
+
+   * - -Nlibomp
+     - OpenMPライブラリとして、LLVM OpenMPライブラリを使用することを指示します。
+       
+       省略時は、\ ``-Nlibomp``\ オプションが適用されます。
+
+   * - -Nfjomplib
+     - clangモードでは使用できません。
+
+ .. attention::
+   ``-Nclang``\ オプションが有効な場合、\ ``-Nfjomplib``\ オプションは無効になり、\ ``-Nlibomp``\ オプションが有効になります。
+
+..
+
+   .. note::
+
+      OpenMP 4.0以降で追加された次の環境変数はLLVM OpenMPライブラリで利用可能です。
+      一方、富士通OpenMPライブラリはこれらの環境変数に未対応です。富士通OpenMPライブラリ使用時はこれらの環境変数は無視されます。
+      
+      - OMP_CANCELLATION
+      - OMP_DISPLAY_ENV
+      - OMP_DEFAULT_DEVICE
+      - OMP_MAX_TASK_PRIORITY
+
+コンパイル例
+----------------------
+
+C++プログラムのコンパイル例を示します。
+
+マルチノードジョブ（ハイブリッド並列）
+
+.. code-block:: console
+  
+   [_LNlogin]$ mpiFCCpx -Nclang -Ofast -floop-parallelize-all -fopenmp sample.cc
+  
+シングルノードジョブ（逐次）
+
+.. code-block:: console
+  
+   [_LNlogin]$ FCCpx -Nclang -Ofast sample.cc
+
+シングルノードジョブ（OpenMP）
+
+.. code-block:: console
+  
+   [_LNlogin]$ FCCpx -Nclang -Ofast -fopenmp sample.cc
+
+
+組込みデバッグ機能
+------------------
+
+組込みデバッグ機能は、コンパイル時にデバッグ用のオプションをつけてプログラムをコンパイルし、実行モジュールを実行することで各種検査を行うものです。
+
+
+- 組込みデバッグ機能について
+
+ 実行環境を変えると異常終了する場合があります。このような場合、原因として次のようなものが考えられます。
+
+ 1. 変数に初期値を設定せずに引用している
+ 2. 配列の添字が配列サイズを超えている
+
+これらを検査する組込みデバッグ機能について、ご紹介します。
+
+- C/C++利用の場合、次の検査オプションを使用して組込みデバッグ機能で行います。
+
+ - \ ``-fsanitize=undefined``\ オプション
+
+  配列の使用時において、宣言した配列のサイズと使用時の添字範囲の正当性を検査
+
+ - \ ``-fsanitize=address``\ オプション
+
+  ヒープメモリに対して、メモリの不当な解放、領域外書込み、および、メモリリークを検査
+
+詳細は、マニュアル「C++言語使用手引書」の「第9章 Clangモード」-「9.1.2.2.1 コンパイラ全般に関連するオプション」の説明を参照してください。
+
+
+``fsanitize=undefined``\ のオプションに該当するように作成したサンプルプログラムで表示されるメッセージの例を示します。（サンプルプログラムはメッセージを出すために分かりやすい形にしています）
+
+1. サンプルプログラム
+
+  .. code-block:: c
+    :linenos:
+
+    #include <cstdlib>
+    #include <iostream>
+    int main() {
+      int data[3];
+      int p = 5;
+      data[p] = 20;
+    }
+
+2. コンパイル
+
+  .. code-block:: console
+  
+    [_LNlogin]$ FCCpx -Nclang -Ofast -fsanitize=undefined -o sample_debug sample_debug.cc
+
+  .. note::
+    コンパイル時に以下の\ ``-ffj-largepage``\ オプションは無効になる warning が出力されます。
+    
+    .. code-block:: none
+    
+      clang-6.0: warning: '-fsanitize' specified, '-ffj-largepage' ignored. [-Woption-ignored]
+
+3. 実行例
+
+  .. code-block:: console
+    
+    [_LNlogin]$ cat sample_debug.sh.5591.err
+    sample_debug.cc:5:3: runtime error: index 5 out of bounds for type 'int [3]'
+    sample_debug.cc:5:3: runtime error: store to address 0xffffffffe618 with insufficient space for an object of type 'int'
+    0xffffffffe618: note: pointer points here
+     00 40 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ac 36 40 00 00 00 00 00  00 00 00 00
+
+

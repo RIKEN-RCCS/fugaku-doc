@@ -1,0 +1,396 @@
+.. highlight:: none
+
+clang mode
+==========
+
+This section explains clang mode.
+
+.. attention::
+   
+   Almost all options of Clang / LLVM can be used, but operation is not guaranteed if an option not listed in "C Language User's Guide"-"Chapter 9 Clang Mode" is specified.
+
+
+How to compile
+--------------
+
+| This indicates how to compile C++ program. For C++ compiler, use  \ :program:`FCCpx`\ .
+| When using MPI library, by using  \ :program:`mpiFCCpx`\, you don't need to consider about MPI header file and library.
+
+
+If using MPI library
+
+.. code-block:: console
+
+  [_LNlogin]$ mpiFCCpx [compile option including -Nclang] source file name
+
+
+If not using MPI library
+
+.. code-block:: console
+
+  [_LNlogin]$ FCCpx [compile option including -Nclang] source file name
+
+.. seealso::
+
+   There is no limitation that the option order including  \ ``-Nclang``\  option and specification order of source file name list.
+
+   It is ok to mix-specify the option order including  \ ``-Nclang``\  option and the source file name order.
+  
+
+Compilation option
+------------------
+
+The main compile options of the C ++ compiler are shown below.
+
+
+.. list-table:: 
+   :header-rows: 1
+   :widths: 3,7
+
+   * - Compile option
+     - Description
+
+   * - -c
+     - It proceeds until the object file creation. It does not proceed linking that is the last of translation.
+
+   * - -o exe_file
+     - | Change executable file name / object file name to  \ ``exe_file``\.
+       | If executable file name is omitted,it will be  \ :file:`a.out`\.
+
+   * - -O [0|1|2|3|fast]
+     - | Specify the level of optimization.
+       | If the word after  \ ``-O``\  is omitted, it will be  \ ``-O2``\.
+       | When option omitted, it is  \ ``-O2``\.
+       | `Change the default value of C/C++ compiler option that specifies the level of optimization <https://www.fugaku.r-ccs.riken.jp/en/operation/20211208_01>`_
+
+   * - -fvectorize
+     - | Instructs the operation in the loop to generate an object using SIMD extension instructions.
+       | If  \ ``-O1``\ option is enabled,  \ ``-fno-vectorize``\   option will be applied when omitted.
+       | If over  \ ``-O2``\  option is enabled,  \ ``-fvectorize``\  option will be applied when omitted.
+       | The same direction with trad mode  \ ``-Ksimd``\.
+
+
+   * - -fopenmp
+     - | Enable directives in the OpenMP C specification.  Supported specifications are OpenMP 4.5/OpenMP 5.0 (part).
+       | When option omitted, it is ``-fnoopenmp``.
+       | The ``-fopenmp`` option is needed if an object program compiled with it exists in the command line as an input file.
+
+   * - -ffj-ocl
+     - | Enables Fujitsu compiler-specific optimization control lines (pragma directives) supported by clang mode.
+       | When option omitted, it is  \ ``-ffj-no-ocl``\.
+
+   * - -I directory
+     - Specify the directory to search for INCLUDE files.
+
+   * - -Rpass=.*
+     - | Output optimization information.
+       | The same direction with trad mode  \ ``-Koptmsg=2``\.
+
+   * - -std=[level]
+     - | Specifies the level of language specification that the compiler (including preprocessor) interprets.
+       | To level, specify one of these : c++03, c++11,c++14,c++17,gnu++03,gnu++11,gnu++14,gnu++17.
+       | When option omitted,  \ ``-std=gnu++14``\  option will be applied
+
+   * - -ffj-src
+     - | Output the source list.
+       | The same direction with trad mode  \ ``-Nsrc``\ .
+
+   * - -ffj-lst[=p|t]
+     - | Instructs the translation information to be output to a file. The translation information is output to a file with the suffix ".lst".
+       | If multiple C source files are specified, they are output to each file name.lst file.
+       | If  \ ``-ffj-lst``\  option is specified with the argument omitted,  \ ``-ffj-lst=p``\  is applied.
+
+       -ffj-lst=p
+        Instructs the source list and statistical information to be output as translation information.
+       -ffj-lst=t
+        In addition to output at  \ ``-ffj-lst=p``\, Instructs to output more detailed optimization information.
+
+   * - -ffj-largepage
+     - Indicates whether to create an executable program that uses the large page feature. This option must be specified when linking a program. Default is  \ ``-ffj-largepage``\  .If not using large page function, use  \ ``-ffj-nolargepage``\  option. Also -ffj-largepage otpion is unabled when specified -fsanitize option at the same time.
+
+   * - -mcpu
+     - Direct outputting the object file for specified processor. For omitted value, \ ``-mcpu=a64fx``\ is applied.
+
+   * - -Nlibomp
+     - Uses the LLVM OpenMP library for parallel processing. This option must be specified when linking. When omitted, ``-Nlibomp`` option is applied. 
+
+   * - ``--version``
+     - Outputs compiler version and copyright information to standard error.
+
+.. seealso::
+
+   About C++ compiler clang mode compile option, see C++ User's Guide "9.1.2 Translation Option".
+
+
+Recommended compiling option
+----------------------------
+
+As an optimization option of Clang mode of C ++ compiler, it is recommended to specify  \ ``-Ofast``\.
+
+- ``-Ofast``\  is the same result as specifying  " \ ``-O3 -ffj-fast-matmul -ffast-math -ffp-contract=fast -ffj-fp-relaxed -ffj-ilfunc -fbuiltin -fomit-frame-pointer -finline-functions``\  ".
+
+
+ .. attention::
+
+   Optimization functions other than the recommended options may or may not be effective depending on the characteristics of the program data and must be tried.
+
+
+Here is the detail of option.
+
+- The list of option that results the same as \ ``-Ofast``\ .
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3 7
+
+   * - Option
+     - Description
+
+   * - -O3
+     - Performs optimizations that are higher than optimization levels 1 and 2.
+
+   * - -ffj-fast-matmul :superscript:`*`
+     - Convert matrix product loops into fast library calls.
+
+   * - -ffast-math :superscript:`*`
+     - Performs optimization that changes the evaluation method of operations.
+
+   * - -ffp-contract=fast :superscript:`*`
+     - Performs optimization that uses Floating-Point Multiply-Add\/Subtract calculation direction.
+
+   * - -ffj-fp-relaxed :superscript:`*`
+     - For single-precision floating-point division, double-precision floating-point division, and the sqrt function, reciprocal approximation using the reciprocal approximation instruction and the Floating-Point Multiply-Add \ / Subtract instruction is performed.
+
+   * - -ffj-ilfunc :superscript:`*`
+     - Proceed inline expanding the mathematical functions. When  \ ``-ffj-ilfunc``\  option operand chapter is omitted,  \ ``-ffj-ilfunc=loop``\  option is applied.
+
+   * - -fbuiltin
+     - Recognize the behavior of standard library functions to facilitate optimization.
+
+   * - -fomit-frame-pointer
+     - Performs optimization that does not guarantee the frame pointer register in function calls.
+
+   * - -finline-functions
+     - Functions defined in the source program are targeted for inline expansion.
+
+
+ .. note::
+   :superscript:`*`:Optimization may affect the calculation result. For details, refer to the manual "C++ User's Guide"-"Chapter 9 Clang Mode"-"Floating-point arithmetic optimization and its side effects".
+
+
+Environment variable (option specification)
+-------------------------------------------
+
+This shows the environment variable which C++ compilier (:program:`FCCpx`) uses.
+
+1. FCCpx_ENV
+   
+   Able to set compile option to environment variable FCCpx_ENV.
+   Compile options defined in FCCpx_ENV are automatically passed to the compiler.
+   Compiler options defined in environment variables and systems have the following precedence:
+
+   [Priority]
+   
+   #. Compile command operand
+   #. Environment variable for setting translation option (Mode unique:FCCpx_clang_ENV,FCC_clang_ENV)
+   #. Environment variable for setting translation option (Mode common:fccpx_ENV,fcc_ENV)
+   #. Translation profile file (Mode unique:\ :file:`/etc${FJSVXTCLANGA}/fccpx_clang_PROF`)
+   #. Translation profile file (Mode common:\ :file:`/etc${FJSVXTCLANGA}/fccpx_PROF`)
+   #. Omitted value
+   
+In the following example, the recommended option is set in the environment variable fccpx_ENV.
+
+   .. code-block:: console
+   
+     [_LNlogin]$ export FCCpx_ENV=-Ofast -mllvm -polly -mllvm -polly-parallel
+
+   Enabled compile option is confirmable with standard output, by specifying  \ ``-v``\  or  \ ``-###``\  option.
+   
+   .. note::
+     
+     If specified  \ ``-v``\  option, command (translation) is executed.
+   
+     If specified  \ ``-###``\  option, command (translation) is not executed.
+
+   [``-v``\ specification example]
+
+   .. code-block:: console
+
+     [_LNlogin]$ FCCpx -Nclang -v sample.cc
+     clang: Fujitsu C/C++ Compiler 4.1.0 (Dec 23 2019 15:40:15) (based on LLVM 7.1.0)
+     Target: aarch64-unknown-linux-gnu
+     Thread model: posix
+     InstalledDir: (Omitted)
+     Found candidate GCC installation: (Omitted)
+     Found candidate GCC installation: (Omitted)
+     Selected GCC installation: (Omitted)
+     Candidate multilib: .;@m64
+     Selected multilib: .;@m64
+      "/opt/FJSVxtclanga/fujitsu_compilers_sve_cross_20191226/sve_cross/clang-comp/bin/clang-7" 
+      -cc1 -triple aarch64-unknown-linux-gnu -emit-obj -mrelax-all -disable-free
+      (Omitted)
+
+
+
+2. TMPDIR
+   
+   The temporary directory used by the compiler can be changed by using the environment variable :envvar:`TMPDIR`.
+   ``/etc/profile`` to set the home directory in :envvar:`TMPDIR`.
+
+   When changing the temporary directory, please avoid using :file:`/tmp`.
+   For :envvar:`TMPDIR`, specify a writable directory of  :file:`/home/` or  :file:`/vol0n0m/data/`.
+
+
+C++ library for parallel process
+--------------------------------
+
+With  \ |post-k|\ , the following library is offered.
+
+- \ ``libc++``\ for the standard template library (STL)
+- The folowing 2 libraries for parallel process
+
+
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 3,9
+
+
+   * - Library name
+     - Description
+
+   * - LLVM OpenMP library
+     - - A library for parallel functions based on LLVM OpenMP Runtime Library, which is open source software.
+       - Supported specifications are OpenMP 4.5/OpenMP 5.0 (part).
+       - Available with clang mode and trad mode.
+       - The trad mode is available in OpenMP 3.1/OpenMP 4.5 (part).
+       - For the specification of LLVM OpenMP library, please read "Chapter 4 Multiprocessing" in the C++ User's Guide.
+
+   * - Fujitsu OpenMP library
+     - - Available on only trad mode
+       - For the specifications of the Fujitsu OpenMP library, please read "Appendix J Fujitsu OpenMP Library" in the C++ User's Guide.
+
+
+| Specify the library that used on parallel process.
+| This is required to specify this option when linking.
+
+ .. list-table:: 
+   :header-rows: 1
+   :widths: 2 9
+
+   * - Option
+     - Description
+
+   * - -Nlibomp
+     - Specifies to use LLVM OpenMP library as OpenMP library.
+       
+       When omitted, ``-Nlibomp`` option is applied.
+
+   * - -Nfjomplib
+     - Not available in clang mode.
+
+ .. attention::
+   If ``-Nclang`` option is available, ``-Nfjomplib`` is disabled and ``-Nlibomp`` option is enabled.
+
+.. note::
+
+   The following environment variables added in OpenMP 4.0 and later are available in the LLVM OpenMP library. 
+   On the other hand, the Fujitsu OpenMP library does not support these environment variables. These environment variables are ignored when using the Fujitsu OpenMP library.
+
+   - OMP_CANCELLATION
+   - OMP_DISPLAY_ENV
+   - OMP_DEFAULT_DEVICE
+   - OMP_MAX_TASK_PRIORITY
+
+Compilation example
+-------------------
+
+This indicates the compile example of C++ program.
+
+Multi node job (Hybrid parallel)
+
+.. code-block:: console
+  
+   [_LNlogin]$ mpiFCCpx -Nclang -Ofast -mllvm -polly -mllvm -polly-parallel -fopenmp sample.cc
+  
+Single node job (sequesntial)
+
+.. code-block:: console
+  
+   [_LNlogin]$ FCCpx -Nclang -Ofast sample.cc
+  
+  
+Single node job (OpenMP)
+
+.. code-block:: console
+  
+   [_LNlogin]$ FCCpx -Nclang -Ofast -fopenmp sample.cc
+
+
+Built-in debug function
+-----------------------
+
+The built-in debug function performs various checks by compiling a program with debugging options added at compile time and executing the execution module.
+
+
+- About embedded debug function
+
+ Changing the execution environment may cause abnormal termination. In such a case, the possible causes are:
+
+ 1. Quoting without setting initial value to variable
+ 2. Array subscript exceeds array size
+
+Introduces the built-in debug function that checks these.
+
+- When using C / C ++, use the built-in debug function using the following inspection options.
+
+ - \ ``-fsanitize=undefined``\  option
+
+  When using an array, check the validity of the declared array size and the subscript range used
+
+ - \ ``-fsanitize=address``\ option
+
+  Checks heap memory for illegal release of memory, out-of-area writes, and memory leaks
+
+About the detail, see the manual "C++ User's Guide" "9 Clang mode" - "9.1.2.2.1 Options related to the compiler in general.
+
+
+The following is an example of a message displayed by a sample program created to correspond to option ``fsanitize=undefined``\ . (The sample program is in an easy-to-understand format for sending messages.)
+
+1. Sample program
+
+  .. code-block:: c
+    :linenos:
+
+    #include <cstdlib>
+    #include <iostream>
+    int main() {
+      int data[3];
+      int p = 5;
+      data[p] = 20;
+    }
+
+2. Compile
+
+  .. code-block:: console
+  
+    [_LNlogin]$ FCCpx -Nclang -Ofast -fsanitize=undefined -o sample_debug sample_debug.cc
+
+  .. note::
+    When compiling, the following  \ ``-ffj-largepage``\  option is unabled warning is output.
+    
+    .. code-block:: none
+    
+      clang-6.0: warning: '-fsanitize' specified, '-ffj-largepage' ignored. [-Woption-ignored]
+
+3. Execution example
+
+  .. code-block:: console
+    
+    [_LNlogin]$ cat sample_debug.sh.5591.err
+    sample_debug.cc:5:3: runtime error: index 5 out of bounds for type 'int [3]'
+    sample_debug.cc:5:3: runtime error: store to address 0xffffffffe618 with insufficient space for an object of type 'int'
+    0xffffffffe618: note: pointer points here
+     00 40 00 00  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ac 36 40 00 00 00 00 00  00 00 00 00
+
+
