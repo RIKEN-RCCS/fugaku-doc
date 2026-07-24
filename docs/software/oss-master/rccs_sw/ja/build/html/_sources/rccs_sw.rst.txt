@@ -7,6 +7,29 @@ R-CCS ソフトウェア
 これらのソフトウェアに関するお問い合わせは、 `富岳サポートサイト <https://fugaku.zendesk.com/hc/ja/>`_ または各ソフトウェアの問い合わせ先へお願いします。
 
    
+fugaku-mcp
+========================
+
+.. list-table::
+   :widths: 1, 4
+
+   * - 概要
+     -  スーパーコンピュータ「富岳」を AIエージェント（Claude Code 等）から自然言語で操作できるようにする MCP（Model Context Protocol）サーバ
+   * - バージョン
+     - 
+   * - 開発チーム
+     - 運用技術部門
+   * - ライセンス
+     - MIT License
+   * - サポート内容
+     - 質問対応、バグ修正、機能強化など
+   * - ウェブページ
+     - https://github.com/RIKEN-RCCS/fugaku-mcp
+   * - 使い方
+     - https://github.com/RIKEN-RCCS/fugaku-mcp/blob/main/QUICKSTART.md
+   * - 問い合わせ先
+     - https://github.com/RIKEN-RCCS/fugaku-mcp/issues
+
 MPICH on Tofu
 ========================
 

@@ -12,6 +12,29 @@ of the packages.
 
 .. McKernel
 
+fugaku-mcp
+=================
+
+.. list-table::
+   :widths: 1, 4
+
+   * - Description
+     - MCP server for operating the Fugaku supercomputer through natural-language instructions from AI agents such as Claude Code
+   * - Version
+     - 
+   * - Developed by
+     - Operations and Computer Technologies Division
+   * - License
+     - MIT license
+   * - Provided support includes
+     - answering questions, bug fixing, feature enhancement, etc.
+   * - Webpage
+     - https://github.com/RIKEN-RCCS/fugaku-mcp
+   * - How to use
+     - https://github.com/RIKEN-RCCS/fugaku-mcp/blob/main/QUICKSTART.md
+   * - Contact Information
+     - https://github.com/RIKEN-RCCS/fugaku-mcp/issues
+
 MPICH on Tofu
 =================
 
