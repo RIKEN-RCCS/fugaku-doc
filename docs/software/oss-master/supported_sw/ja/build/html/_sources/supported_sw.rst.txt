@@ -15,7 +15,7 @@ ABINIT-MP
    * - 概要
      - フラグメント分子軌道 (FMO) 計算を高速に行えるソフトウェア
    * - バージョン
-     - Ver. 1 Rev. 22 / Ver. 2 Rev. 4 / Ver. 2 Rev. 8 / dd1-2024
+     - Ver.1 Rev.22 / Ver.2 Rev.4 / Ver.2 Rev.8 / Ver.2 Rev.12 / dd1-2024
    * - 開発取りまとめ責任者
      - 望月 祐志 (立教大学)
    * - ライセンス
@@ -23,11 +23,12 @@ ABINIT-MP
    * - サポート内容
      - 相談可
    * - 使い方
-     - | ``spack load abinitmp@1-22`` / ``spack load abinitmp@2-4`` / ``spack load abinitmp@2-8`` / ``spack load abinitmp@dd1-2024``
+     - | ``spack load abinitmp@1-22`` / ``spack load abinitmp@2-4`` / ``spack load abinitmp@2-8`` / ``spack load abinitmp@2-12`` / ``spack load abinitmp@dd1-2024``
    * - ウェブページ
      - | https://www.cenav.org/abinit-mp-open_ver-1-rev-22/
        | https://www.cenav.org/abinit-mp-open_ver-2-rev-4/
        | https://www.cenav.org/abinit-mp-open_ver-2-rev-8/
+       | https://www.cenav.org/abinit-mp-open_ver-2-rev-12/
        | https://fmodd.jp/member_contents/manual_ABINIT-MP_V1DD_2024/
        | https://www.hpci-office.jp/for_users/appli_software/appli_abinit-mp (HPCIポータルサイト内)
    * - 問い合わせ先

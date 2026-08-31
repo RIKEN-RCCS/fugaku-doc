@@ -20,7 +20,7 @@ ABINIT-MP
    * - Description
      - A software for efficient fragment molecular orbital (FMO) calculations
    * - Version
-     - Ver. 1 Rev. 22 / Ver. 2 Rev. 4 / Ver. 2 Rev. 8 / dd1-2024
+     - Ver.1 Rev.22 / Ver.2 Rev.4 / Ver.2 Rev.8 / Ver.2 Rev.12 / dd1-2024
    * - Manager of developments
      - Yuji Mochizuki (Rikkyo University)
    * - License
@@ -28,12 +28,13 @@ ABINIT-MP
    * - Provided support
      - Upon request
    * - How to use
-     - | ``spack load abinitmp@1-22`` / ``spack load abinitmp@2-4`` / ``spack load abinitmp@2-8`` / ``spack load abinitmp@dd1-2024``
+     - | ``spack load abinitmp@1-22`` / ``spack load abinitmp@2-4`` / ``spack load abinitmp@2-8`` / ``spack load abinitmp@2-12`` / ``spack load abinitmp@dd1-2024``
    * - Webpage
      - | https://www.hpci-office.jp/en/for_users/appli_software/appli_abinit-mp (HPCI PORTAL SITE)
        | https://www.cenav.org/abinit-mp-open_ver-1-rev-22/
        | https://www.cenav.org/abinit-mp-open_ver-2-rev-4/
        | https://www.cenav.org/abinit-mp-open_ver-2-rev-8/
+       | https://www.cenav.org/abinit-mp-open_ver-2-rev-12/
        | https://fmodd.jp/member_contents/manual_ABINIT-MP_V1DD_2024/
        | (Japanese only / please use the translation environments)
    * - Contact Information
